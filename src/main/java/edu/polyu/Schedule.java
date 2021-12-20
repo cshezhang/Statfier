@@ -163,7 +163,7 @@ public class Schedule {
         System.out.println(seedFolderPath + " is located and Analysis Output Folder is: " + seedFolderName);
         if(PMD_MUTATION) {       
             invokePMD(seedFolderPath, seedFolderName);
-            List<PMD_Report> reports = readPMDResultFile(userdir + sep + "PMD_Results" + sep + seedFolderName + "_Result.json");
+            List<PMD_Report> reports = readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_Result.json");
             for (PMD_Report report : reports) {
                 if(!file2line.containsKey(report.getFilename())) {
                     file2line.put(report.getFilename(), new HashSet<>());

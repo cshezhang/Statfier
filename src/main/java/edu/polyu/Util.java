@@ -52,7 +52,7 @@ public class Util {
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
     public final static boolean PURE_RANDOM_TESTING = Boolean.parseBoolean(getProperty("PURE_RANDOM_TESTING"));
     public final static boolean GUIDED_RANDOM_TESTING = Boolean.parseBoolean(getProperty("GUIDED_RANDOM_TESTING"));
-    public final static boolean MAIN_EXECUTE = Boolean.parseBoolean(getProperty("MAIN_EXECUTE"));
+    public final static boolean MAIN_EXECUTION = Boolean.parseBoolean(getProperty("MAIN_EXECUTE"));
 
     public static String userdir = getProperty("USERDIR");
     public final static String sep = File.separator;

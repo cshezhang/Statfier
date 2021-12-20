@@ -24,7 +24,7 @@ public class AutomaticTester {
             if(GUIDED_RANDOM_TESTING) {
                 tester.guidedRandomTesting(SINGLE_TESTING_PATH);
             }
-            if(MAIN_EXECUTE) {
+            if(MAIN_EXECUTION) {
                 tester.executeMutation(SINGLE_TESTING_PATH);
             }
         } else {
@@ -41,7 +41,7 @@ public class AutomaticTester {
             if (GUIDED_RANDOM_TESTING) {
                 tester.guidedRandomTesting(targetSeedPath);
             }
-            if (MAIN_EXECUTE) {
+            if (MAIN_EXECUTION) {
                 tester.executeMutation(targetSeedPath);
             }
         }

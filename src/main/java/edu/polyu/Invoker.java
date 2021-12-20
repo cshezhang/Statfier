@@ -12,6 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 import edu.polyu.report.SpotBugs_Report;
 import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PMDConfiguration;
+import org.junit.Test;
+
 import static edu.polyu.Util.*;
 
 /*
@@ -126,13 +129,12 @@ public class Invoker {
 
     // targetPath can be java source file or a folder contains source files
     public static void invokePMD(String targetPath, String outputFile) {
-        String[] pmdArgs = {
-                "-d", targetPath,
-                "-R", userdir + sep + "allRules.xml",
-                "-f", "json",
-                "-r", PMDResultsFolder.getAbsolutePath() + sep + outputFile + "_Result.json",
-                "-cache", "./PMD_Analysis.cache",
-        };
-        PMD.runPmd(pmdArgs);
+        PMDConfiguration configuration = new PMDConfiguration();
+        configuration.setInputPaths(targetPath);
+        configuration.setRuleSets("category/java/performance.xml/AddEmptyString");
+        configuration.setReportFormat("json");
+        configuration.setReportFile(PMDResultsFolder.getAbsolutePath() + sep + outputFile + "_Result.json");
+        PMD.runPmd(configuration);
     }
+
 }
