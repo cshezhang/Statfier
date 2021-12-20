@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import edu.polyu.report.SpotBugs_Report;
+import edu.umd.cs.findbugs.classfile.impl.AnalysisCache;
 import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
 import org.junit.Test;
@@ -134,6 +135,7 @@ public class Invoker {
         configuration.setRuleSets("category/java/performance.xml/AddEmptyString");
         configuration.setReportFormat("json");
         configuration.setReportFile(PMDResultsFolder.getAbsolutePath() + sep + outputFile + "_Result.json");
+        configuration.setAnalysisCacheLocation("./PMD_Cache.bin");
         PMD.runPmd(configuration);
     }
 
