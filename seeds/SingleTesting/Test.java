@@ -1,5 +1,5 @@
 public class Test {
-    public void foo() {
-        String s = "" + 123;
-    }
+//    public void foo() {
+//        String s = "" + 123;
+//    }
 }

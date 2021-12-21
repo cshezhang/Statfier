@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * @Description: Utility Class for SAMutator
- * @Author: Austin
+ * @Author: Vanguard
  * @Date: 2021-08-11 11:06
  */
 public class Util {
@@ -41,6 +41,7 @@ public class Util {
         }
     }
     public static final int threadCount = Integer.parseInt(getProperty("THREAD_COUNT"));
+    public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     public static long startTimeStamp = System.currentTimeMillis();
     public static long compileTime = 0;
     public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
@@ -52,7 +53,7 @@ public class Util {
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
     public final static boolean PURE_RANDOM_TESTING = Boolean.parseBoolean(getProperty("PURE_RANDOM_TESTING"));
     public final static boolean GUIDED_RANDOM_TESTING = Boolean.parseBoolean(getProperty("GUIDED_RANDOM_TESTING"));
-    public final static boolean MAIN_EXECUTION = Boolean.parseBoolean(getProperty("MAIN_EXECUTE"));
+    public final static boolean MAIN_EXECUTION = Boolean.parseBoolean(getProperty("MAIN_EXECUTION"));
 
     public static String userdir = getProperty("USERDIR");
     public final static String sep = File.separator;
@@ -65,6 +66,9 @@ public class Util {
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + sep + "PMD_Seeds";
     public final static String BASELINE_SEED_PATH = BASE_SEED_PATH + sep + "Baseline_Seeds";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + sep + "SpotBugs_Seeds";
+    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + sep + "SonarQube_Seeds";
+    public final static String ERRORPRONE_SEED_PATH = BASE_SEED_PATH + sep + "Errorprone_Seeds";
+    public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + sep + "Checkstyle_Seeds";
 
     // mutants
     public final static File mutantFolder = new File(userdir + sep + "mutants");

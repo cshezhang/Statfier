@@ -17,7 +17,7 @@ import edu.polyu.report.SpotBugs_Violation;
 
 /**
  * Description: This file is the main class for our framework
- * Author: Austin
+ * Author: Vanguard
  * Date: 2021/8/25 10:03 上午
  */
 public class Schedule {
@@ -98,7 +98,13 @@ public class Schedule {
                     tester.locateMutationCode(head.getFolderPath());
                 }
             }
-            ArrayList<ASTWrapper> newWrappers = head.mutate();
+            ArrayList<ASTWrapper> newWrappers = null;
+            if(PMD_MUTATION) {
+                newWrappers = head.mutateWithNoCompile();
+            }
+            if(SPOTBUGS_MUTATION) {
+                newWrappers = head.mutateWithCompile();
+            }
             que.addAll(newWrappers);
         }
     }
@@ -140,9 +146,9 @@ public class Schedule {
         scheduleGuidedRandomTesting(srcWrappers);
     }
 
-    public void executeMutation(String targetPath) {
-        locateMutationCode(targetPath);
-        List<String> seedPaths = getFilenamesFromFolder(targetPath, true);
+    public void executeMutation(String seedFolderPath) {
+        locateMutationCode(seedFolderPath);
+        List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
         for (int index = 0; index < seedPaths.size(); index++) {
@@ -167,12 +173,19 @@ public class Schedule {
             for (PMD_Report report : reports) {
                 if(!file2line.containsKey(report.getFilename())) {
                     file2line.put(report.getFilename(), new HashSet<>());
+                    file2bugs.put(report.getFilename(), new HashMap<>());
                 }
                 for (PMD_Violation violation : report.getViolations()) {
                     file2line.get(report.getFilename()).add(violation.beginLine);
-                    file2line.get(report.getFilename()).add(violation.endLine);
+                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilename());
+                    if(!bug2cnt.containsKey(violation.getBugType())) {
+                        bug2cnt.put(violation.getBugType(), new HashSet<>());
+                    }
+                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+//                    file2line.get(report.getFilename()).add(violation.endLine);  // Not sure whether add endLine
                 }
             }
+            return;
         }
         if(SPOTBUGS_MUTATION) {
             List<SpotBugs_Report> reports = invokeSpotBugs(seedFolderPath, seedFolderName);
@@ -180,7 +193,7 @@ public class Schedule {
             for(SpotBugs_Report report : reports) {
                 if(!file2line.containsKey(report.getFilename())) {
                     file2line.put(report.getFilename(), new HashSet<>());
-                    file2bugs.put(  report.getFilename(), new HashMap<>());
+                    file2bugs.put(report.getFilename(), new HashMap<>());
                 }
                 for(SpotBugs_Violation violation : report.getViolations()) {
                     file2line.get(report.getFilename()).add(violation.getBeginLine());

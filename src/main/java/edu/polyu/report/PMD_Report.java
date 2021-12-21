@@ -3,8 +3,8 @@ package edu.polyu.report;
 import java.util.ArrayList;
 
 /**
- * Description:
- * Author: Austin Zhang
+ * Description: PMD report class to save different info in a PMD report
+ * Author: Vanguard
  * Date: 2021/9/23 7:30 下午
  */
 public class PMD_Report {

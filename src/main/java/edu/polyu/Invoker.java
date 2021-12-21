@@ -11,7 +11,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import edu.polyu.report.SpotBugs_Report;
-import edu.umd.cs.findbugs.classfile.impl.AnalysisCache;
 import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
 import org.junit.Test;
@@ -20,7 +19,7 @@ import static edu.polyu.Util.*;
 
 /*
  * @Description: This class is used for different invocation functions.
- * @Author: Austin
+ * @Author: Vanguard
  * @Date: 2021-10-27 14:20:55
  */
 public class Invoker {
@@ -86,10 +85,6 @@ public class Invoker {
             System.out.println("Output Name: " + seedFolderName);
         }
         List<String> seedFileNamesWithSuffix = getFilenamesFromFolder(seedFolderPath, false); // Filenames with suffix
-//        File reportFolder = new File(SpotBugsResultsFolder.getAbsolutePath() + sep + seedFolderName);
-//        if(!reportFolder.exists()) {
-//            reportFolder.mkdir();
-//        }
         ExecutorService threadPool = null;
         if(Boolean.parseBoolean(getProperty("SINGLE_THREADPOOL"))) {
             threadPool = Executors.newSingleThreadExecutor();
@@ -129,14 +124,28 @@ public class Invoker {
     }
 
     // targetPath can be java source file or a folder contains source files
-    public static void invokePMD(String targetPath, String outputFile) {
-        PMDConfiguration configuration = new PMDConfiguration();
-        configuration.setInputPaths(targetPath);
-        configuration.setRuleSets("category/java/performance.xml/AddEmptyString");
-        configuration.setReportFormat("json");
-        configuration.setReportFile(PMDResultsFolder.getAbsolutePath() + sep + outputFile + "_Result.json");
-        configuration.setAnalysisCacheLocation("./PMD_Cache.bin");
-        PMD.runPmd(configuration);
+    public static void invokePMD(String seedFolderPath, String seedFolderName) {
+        String[] pmdArgs = {
+                "-d", seedFolderPath,
+                "-R", "./allRules.xml",
+                "-f", "json",
+                "-r", PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_Result.json",
+                "-cache", "./PMD_Cache.bin"
+        };
+        PMD.runPmd(pmdArgs);
+    }
+
+    @Test
+    public void testInvokePMD() {
+        String targetPath = "/home/huaien/projects/SAMutator/seeds/PMD_Seeds";
+        String[] pmdArgs = {
+                "-d", targetPath,
+                "-R", "./allRules.xml",
+                "-f", "html",
+                "-r", "./PMD_Result.html",
+                "-cache", "./PMD_Cache.bin"
+        };
+        PMD.main(pmdArgs);
     }
 
 }

@@ -16,5 +16,4 @@ public class Foo {
     private byte[] get() {
         globalFileItem.get(); // bad
     }
-}
-        
+}        

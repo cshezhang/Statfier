@@ -82,7 +82,7 @@ public class AddArgAssignment extends Mutator {
                 } else {
                     value = value.toLowerCase();
                     long longValue;
-                    if(value.contains("a") || value.contains("b") || value.contains("c") || value.contains("d") || value.contains("e") ||
+                    if(value.contains("0x") || value.contains("0X") || value.contains("a") || value.contains("b") || value.contains("c") || value.contains("d") || value.contains("e") ||
                             value.contains("f")) {
                         longValue = Long.parseLong(value, 16);
                     } else {

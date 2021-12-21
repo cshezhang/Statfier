@@ -260,8 +260,8 @@ public class ASTWrapper {
                 }
                 if(statement instanceof VariableDeclarationStatement) {
                     VariableDeclarationFragment vd = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
-                    String varname = vd.getName().getIdentifier();
-                    if(sources.contains(varname)) {
+                    String varName = vd.getName().getIdentifier();
+                    if(sources.contains(varName)) {
                         candidateStatements.add(statement);
                     }
                 }
@@ -271,12 +271,16 @@ public class ASTWrapper {
     }
 
     public boolean diffAnalysis() {
-        if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
+        if (this.depth != 0 && this.violations < this.parViolations) { // Checking depth is to mutate initial seeds
             System.out.println("--------Diff Begin--------");
             System.out.println("Warning: Diff happened!" + "\nChild: " + this.filePath + "\nParent: " + this.parentPath);
             HashMap<String, HashSet<Integer>> this_bug2cnt = file2bugs.get(this.filePath);
             HashMap<String, HashSet<Integer>> par_bug2cnt = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
+            if(this_bug2cnt == null && par_bug2cnt == null) {
+                System.err.println("What the fuck? Both reports don't have bugs?");
+                System.exit(-1);
+            }
             if(this_bug2cnt == null) {
                 this_bug2cnt = new HashMap<>();
             }
@@ -346,6 +350,7 @@ public class ASTWrapper {
                 String filename = "mutant_" + mutantCounter++;
                 String mutantPath = mutantFolder + sep + filename + ".java";
                 String content = this.document.get();
+                TypeDeclaration clazz = getTypeOfStatement(oldStatement);
                 ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
                 Statement newStatement = newWrapper.searchStatement(oldStatement);
                 if(newStatement == null) {
@@ -363,7 +368,7 @@ public class ASTWrapper {
                 boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
                 if (hasMutated) {
                     newWrapper.rewriteJavaCode();
-                    newWrapper.resetClassName();
+                    newWrapper.resetClassName(clazz.getName().toString());
                     newWrapper.removePackageDefinition();
                     newWrapper.rewriteJavaCode();
                     newWrapper.writeToJavaFile();
@@ -404,6 +409,7 @@ public class ASTWrapper {
                 String filename = "mutant_" + mutantCounter++;
                 String mutantPath = mutantFolder + sep + filename + ".java";
                 String content = this.document.get();
+                TypeDeclaration clazz = getTypeOfStatement(oldStatement);
                 ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
                 Statement newStatement = newWrapper.searchStatement(oldStatement);
                 if(newStatement == null) {
@@ -418,7 +424,7 @@ public class ASTWrapper {
                 boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
                 if (hasMutated) {
                     newWrapper.rewriteJavaCode();
-                    newWrapper.resetClassName();
+                    newWrapper.resetClassName(clazz.getName().toString());
                     newWrapper.removePackageDefinition();
                     newWrapper.rewriteJavaCode();
                     newWrapper.writeToJavaFile();
@@ -433,7 +439,7 @@ public class ASTWrapper {
         return newWrappers;
     }
 
-    public ArrayList<ASTWrapper> mutate() {
+    public ArrayList<ASTWrapper> mutateWithNoCompile() {
         ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
         try {
             if(this.candidateStatements == null) {
@@ -442,7 +448,7 @@ public class ASTWrapper {
             if(diffAnalysis()) { // If bugs detected, then stop the mutation
                 return newWrappers;
             }
-            if(this.depth >= 2) {
+            if(this.depth >= SEARCH_DEPTH) {
                 return newWrappers;
             }
             for (Statement oldStatement : this.candidateStatements) {
@@ -450,14 +456,73 @@ public class ASTWrapper {
                     if (!mutator.check(oldStatement)) {
                         continue;
                     }
-                    String filename = "mutant_" + mutantCounter++;
-                    String mutantPath = mutantFolder + sep + filename + ".java";
+                    String mutantFilename = "mutant_" + mutantCounter++;
+                    String mutantPath = mutantFolder + sep + mutantFilename + ".java";
+                    String content = this.document.get();
+                    if(SINGLE_TESTING) {
+                        System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
+                        System.out.println(filename + " is generated from: " + mutator.getClass());
+                    }
+                    ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
+                    int oldLineNumber = this.cu.getLineNumber(oldStatement.getStartPosition());
+                    Statement newStatement = newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);;
+                    if(newStatement == null) {
+                        System.out.println(oldStatement.toString());
+                        String s0 = this.document.get();
+                        System.out.println(this.document.get().hashCode());
+                        String s1 = newWrapper.document.get();
+                        System.out.println(newWrapper.document.get().hashCode());
+                        newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);;
+                        System.out.println(oldStatement);
+                        System.err.println("Old and new ASTWrapper are not matched!");
+                        System.exit(-1);
+                    }
+                    boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
+                    // 先把上边的mutate完成trasnform, 然后再进行类名和包名的替换
+                    if (hasMutated) {
+//                        newWrapper.rewriteJavaCode();
+//                        newWrapper.removePackageDefinition();
+                        newWrapper.rewriteJavaCode();
+                        newWrapper.writeToJavaFile();
+                        newWrappers.add(newWrapper);
+                    } else {
+                        Files.deleteIfExists(Paths.get(mutantPath));
+                    }
+                    checkExecutionTime();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return newWrappers;
+    }
+
+    public ArrayList<ASTWrapper> mutateWithCompile() {
+        ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
+        try {
+            if(this.candidateStatements == null) {
+                this.candidateStatements = this.getCandidateStatement();
+            }
+            if(diffAnalysis()) { // If bugs detected, then stop the mutation
+                return newWrappers;
+            }
+            if(this.depth >= SEARCH_DEPTH) {
+                return newWrappers;
+            }
+            for (Statement oldStatement : this.candidateStatements) {
+                for (Mutator mutator : Mutator.getMutators()) {
+                    if (!mutator.check(oldStatement)) {
+                        continue;
+                    }
+                    String mutantFilename = "mutant_" + mutantCounter++;
+                    String mutantPath = mutantFolder + sep + mutantFilename + ".java";
                     String content = this.document.get();
                     if(SINGLE_TESTING) {
                         System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
                         System.out.println(filename + " is generated from: " + mutator.getClass());
                     }
                     // 这个时候newWrapper的code应该和原来的一样
+                    TypeDeclaration clazz = getTypeOfStatement(oldStatement);
                     ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
                     Statement newStatement = newWrapper.searchStatement(oldStatement);;
                     if(newStatement == null) {
@@ -467,6 +532,7 @@ public class ASTWrapper {
                         String s1 = newWrapper.document.get();
                         System.out.println(newWrapper.document.get().hashCode());
                         newWrapper.searchStatement(oldStatement);;
+                        System.out.println(oldStatement);
                         System.err.println("Old and new ASTWrapper are not matched!");
                         System.exit(-1);
                     }
@@ -474,7 +540,7 @@ public class ASTWrapper {
                     // 先把上边的mutate完成trasnform, 然后再进行类名和包名的替换
                     if (hasMutated) {
                         newWrapper.rewriteJavaCode();
-                        newWrapper.resetClassName();
+                        newWrapper.resetClassName(clazz.getName().toString());
                         newWrapper.removePackageDefinition();
                         newWrapper.rewriteJavaCode();
                         newWrapper.writeToJavaFile();
@@ -498,8 +564,7 @@ public class ASTWrapper {
         }
     }
 
-    public void resetClassName() {
-        String srcName = Path2Last(this.parentPath);
+    public void resetClassName(String srcName) {
         TypeDeclaration clazz = null;
         // srcName represents parent class name.
         for(int i = 0; i < types.size(); i++) {
@@ -508,7 +573,7 @@ public class ASTWrapper {
             }
         }
         if(clazz == null) {
-            System.err.println("Severe Error! No Parent Main Class is found!");
+            System.err.println("Severe Error! No Parent Main Class is found in: " + this.filePath);
             int a = 1 / 0;
         }
         // This is used to change names of constructor.
@@ -531,12 +596,33 @@ public class ASTWrapper {
         }
     }
 
+    // This function is invoked by newWrapper
+    public Statement searchStatementByLinenumber(Statement oldStatement, int oldLineNumber) {
+        if(oldStatement == null) {
+            System.err.println("Statement to be searched is NULL!");
+            System.exit(-1);
+        }
+        Statement newStatement = null;
+        for(int i = 0; i < this.allStatements.size(); i++) {
+            Statement statement = this.allStatements.get(i);
+            if(statement.toString().equals(oldStatement.toString())) {
+                int newLineNumber = this.cu.getLineNumber(statement.getStartPosition());
+                if(newLineNumber == oldLineNumber) {
+                    newStatement = statement;
+                    break;
+                }
+            }
+        }
+        return newStatement;
+    }
+
     /*
     Search oldStatement (Source) in new ASTWrapper
      */
     public Statement searchStatement(Statement oldStatement) {
         if(oldStatement == null) {
             System.err.println("Statement to be searched is NULL!");
+            System.exit(-1);
         }
         MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
         TypeDeclaration oldClazz = (TypeDeclaration) oldMethod.getParent();
@@ -545,7 +631,9 @@ public class ASTWrapper {
             List<Statement> newStatements = this.method2statements.get(key);
             for (int i = 0; i < newStatements.size(); i++) {
                 Statement newStatement = newStatements.get(i);
-                if (newStatement.toString().equals(oldStatement.toString())) {
+                String s1 = newStatement.toString();
+                String s2 = oldStatement.toString();
+                if (s1.equals(s2)) {
                     return newStatement;
                 }
             }

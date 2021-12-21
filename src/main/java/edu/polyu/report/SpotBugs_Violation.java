@@ -10,7 +10,7 @@ import static edu.polyu.Util.sep;
  * @Date: 2021-10-18 11:21:56
  */
 
-public class SpotBugs_Violation {
+public class SpotBugs_Violation extends ViolationReport {
     
     private String filename;
     private int beginLine;
@@ -37,10 +37,12 @@ public class SpotBugs_Violation {
         return this.filename;
     }
 
+    @Override
     public int getBeginLine() {
         return this.beginLine;
     }
 
+    @Override
     public String getBugType() {
         return this.bugType;
     }

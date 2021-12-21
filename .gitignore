@@ -3,6 +3,7 @@ mutants/
 results/
 target/
 PMD_Cache.bin
+PMD_Result.html
 .vscode/
 .DS_Store
 .settings/

@@ -26,46 +26,42 @@
 
     <properties>
         <jackson.version>2.12.3</jackson.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
     </properties>
 
-    <!--    The following dependencies are defined by myself-->
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.1</version>
-            <scope>test</scope>
+            <groupId>net.sourceforge.pmd</groupId>
+            <artifactId>pmd-java</artifactId>
+            <version>6.41.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all -->
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs -->
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs</artifactId>
-            <version>4.5.0</version>
-            <type>pom</type>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations -->
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>4.5.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.hamcrest</groupId>-->
+<!--            <artifactId>hamcrest-all</artifactId>-->
+<!--            <version>1.3</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.spotbugs</groupId>-->
+<!--            <artifactId>spotbugs</artifactId>-->
+<!--            <version>4.5.0</version>-->
+<!--            <type>pom</type>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-annotations &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.spotbugs</groupId>-->
+<!--            <artifactId>spotbugs-annotations</artifactId>-->
+<!--            <version>4.5.0</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/com.github.spotbugs/test-harness -->
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>test-harness</artifactId>
-            <version>4.5.0</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.spotbugs</groupId>-->
+<!--            <artifactId>test-harness</artifactId>-->
+<!--            <version>4.5.0</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
         <dependency>
@@ -77,11 +73,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.pmd</groupId>
-            <artifactId>pmd-java</artifactId>
-            <version>6.41.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -108,24 +99,24 @@
             <artifactId>org.eclipse.text</artifactId>
             <version>3.5.101</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>test-harness</artifactId>
-            <version>4.5.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.spotbugs</groupId>-->
+<!--            <artifactId>test-harness</artifactId>-->
+<!--            <version>4.5.0</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.hamcrest</groupId>-->
+<!--            <artifactId>hamcrest-core</artifactId>-->
+<!--            <version>1.3</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.testng</groupId>-->
+<!--            <artifactId>testng</artifactId>-->
+<!--            <version>RELEASE</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
