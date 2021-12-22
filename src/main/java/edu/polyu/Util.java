@@ -87,7 +87,6 @@ public class Util {
 
     public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>();
     public static HashMap<String, HashMap<String, HashSet<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
-//    public static HashMap<String, HashMap<String, ArrayList<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
     // file2bugs is used to compare parent's and child's violation reports.
     public static HashMap<String, Integer> file2hash = new HashMap<>();
@@ -98,6 +97,9 @@ public class Util {
     public final static boolean CHECKSTYLE_MUTATION = false;
     public final static boolean ERRORPRONE_MUTATION = false;
     public final static boolean SONARQUBE_MUTATION = false;
+
+    // (rule -> (transSeq -> Mutant_List))
+    public static HashMap<String, HashMap<String, ArrayList<String>>> compactIssues = new HashMap<>();
     public static List<List<SpotBugs_Report>> all_SpotBugs_Reports = new ArrayList<>();
 
     public static void initEnv(){

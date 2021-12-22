@@ -46,6 +46,7 @@ public class ASTWrapper {
     private String folderPath;
     private String parentPath;
     private String mutantFolder;
+    private List<Integer> transSeq;
     private List<TypeDeclaration> types;
     private List<Statement> allStatements;
     private HashMap<String, List<Statement>> method2statements;
@@ -56,6 +57,7 @@ public class ASTWrapper {
         this.mutantFolder = userdir + sep + "mutants" + sep + "iter1";
         this.parentPath = null;
         this.parViolations = 0;
+        this.transSeq = new ArrayList<>();
         File targetFile = new File(filePath);
         try {
             this.document = new Document(FileUtils.readFileToString(targetFile, "UTF-8"));
@@ -91,6 +93,7 @@ public class ASTWrapper {
         this.mutantFolder = userdir + sep + "mutants" + sep + "iter" + this.depth;
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
+        this.transSeq = new ArrayList<>();
         this.document = new Document(content);
         File targetFile = new File(filePath);
         this.folderPath = targetFile.getParentFile().getAbsolutePath();
@@ -153,6 +156,7 @@ public class ASTWrapper {
                 file.createNewFile();
             }
             FileWriter fileWriter = new FileWriter(this.filePath);
+            String s = this.document.get();
             fileWriter.write(this.document.get());
             fileWriter.close();
         } catch (IOException e) {
@@ -273,49 +277,78 @@ public class ASTWrapper {
     public boolean diffAnalysis() {
         if (this.depth != 0 && this.violations < this.parViolations) { // Checking depth is to mutate initial seeds
             System.out.println("--------Diff Begin--------");
-            System.out.println("Warning: Diff happened!" + "\nChild: " + this.filePath + "\nParent: " + this.parentPath);
-            HashMap<String, HashSet<Integer>> this_bug2cnt = file2bugs.get(this.filePath);
-            HashMap<String, HashSet<Integer>> par_bug2cnt = file2bugs.get(this.parentPath);
+            System.out.println("Warning: Diff happened!" + "\nMutant: " + this.filePath + "\nSource: " + this.parentPath);
+            HashMap<String, HashSet<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
+            HashMap<String, HashSet<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
-            if(this_bug2cnt == null && par_bug2cnt == null) {
+            if(mutant_bug2lines == null && source_bug2lines == null) {
                 System.err.println("What the fuck? Both reports don't have bugs?");
                 System.exit(-1);
             }
-            if(this_bug2cnt == null) {
-                this_bug2cnt = new HashMap<>();
+            if(mutant_bug2lines == null) {
+                mutant_bug2lines = new HashMap<>();
             }
-            if(par_bug2cnt == null) {
-                par_bug2cnt = new HashMap<>();
+            if(source_bug2lines == null) {
+                source_bug2lines = new HashMap<>();
             }
-            for (Map.Entry<String, HashSet<Integer>> entry : this_bug2cnt.entrySet()) {
-                if (!par_bug2cnt.containsKey(entry.getKey())) {
-                    System.out.println("Potential FP: " + entry);  // Because child have, but parent does not have.
+            ArrayList<Map.Entry<String, HashSet<Integer>>> potentialFPs = new ArrayList<>();
+            ArrayList<Map.Entry<String, HashSet<Integer>>> potentialFNs = new ArrayList<>();
+            for (Map.Entry<String, HashSet<Integer>> entry : mutant_bug2lines.entrySet()) {
+                if (!source_bug2lines.containsKey(entry.getKey())) {
+                    potentialFPs.add(entry);  // Because mutant has, but source does not have.
                 } else {
-                    HashSet<Integer> par_bugs = par_bug2cnt.get(entry.getKey());
-                    HashSet<Integer> this_bugs = this_bug2cnt.get(entry.getKey());
-                    if (par_bugs.size() == this_bugs.size()) {
+                    HashSet<Integer> source_bugs = source_bug2lines.get(entry.getKey());
+                    HashSet<Integer> mutant_bugs = mutant_bug2lines.get(entry.getKey());
+                    if (source_bugs.size() == mutant_bugs.size()) {
                         continue;
                     }
-                    if (par_bugs.size() > this_bugs.size()) {
-                        System.out.print("Potential FN: " + entry.getKey());
+                    if (source_bugs.size() > mutant_bugs.size()) {
+                        potentialFNs.add(entry);
                     } else {
-                        System.out.print("Potential FP: " + entry.getKey());
+                        potentialFPs.add(entry);
                     }
-                    System.out.print(", Parent: ");
-                    for (Integer line : par_bugs) {
-                        System.out.print(line + " ");
-                    }
-                    System.out.print(", Child: ");
-                    for (Integer line : this_bugs) {
-                        System.out.print(line + " ");
-                    }
-                    System.out.print("\n");
                 }
             }
-            for (Map.Entry<String, HashSet<Integer>> entry : par_bug2cnt.entrySet()) {
-                if (!this_bug2cnt.containsKey(entry.getKey())) {
-                    System.out.println("Potential FN: " + entry); // Because parent has, but child does not have.
+            for (Map.Entry<String, HashSet<Integer>> entry : source_bug2lines.entrySet()) {
+                if (!mutant_bug2lines.containsKey(entry.getKey())) {
+                    potentialFNs.add(entry);  // Because parent has, but child does not have.
                 }
+            }
+            System.out.print("Potential FP: ");
+            for(int i = 0; i < potentialFPs.size(); i++) {
+                String bugType = potentialFPs.get(i).getKey();
+                HashSet<Integer> lines = potentialFPs.get(i).getValue();
+                System.out.println("[" + bugType + ", (" + lines + ")]");
+                if(!compactIssues.containsKey(bugType)) {
+                    HashMap<String, ArrayList<String>> seq2paths = new HashMap<>();
+                    compactIssues.put(bugType, seq2paths);
+                }
+                HashMap<String, ArrayList<String>> seq2paths = compactIssues.get(bugType);
+                String seqKey = this.transSeq.toString();
+                if(!seq2paths.containsKey(seqKey)) {
+                    ArrayList<String> paths = new ArrayList<>();
+                    seq2paths.put(seqKey, paths);
+                }
+                ArrayList<String> paths = seq2paths.get(seqKey);
+                paths.add(this.filePath);
+            }
+            System.out.print("Potential FN: ");
+            for(int i = 0; i < potentialFNs.size(); i++) {
+                String bugType = potentialFNs.get(i).getKey();
+                HashSet<Integer> lines = potentialFNs.get(i).getValue();
+                System.out.println("[" + bugType + ", (" + lines + ")]");
+                if(!compactIssues.containsKey(bugType)) {
+                    HashMap<String, ArrayList<String>> seq2paths = new HashMap<>();
+                    compactIssues.put(bugType, seq2paths);
+                }
+                HashMap<String, ArrayList<String>> seq2paths = compactIssues.get(bugType);
+                String seqKey = this.transSeq.toString();
+                if(!seq2paths.containsKey(seqKey)) {
+                    ArrayList<String> paths = new ArrayList<>();
+                    seq2paths.put(seqKey, paths);
+                }
+                ArrayList<String> paths = seq2paths.get(seqKey);
+                paths.add(this.filePath);
             }
             System.out.println("--------Diff End--------");
             return true;
@@ -368,7 +401,7 @@ public class ASTWrapper {
                 boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
                 if (hasMutated) {
                     newWrapper.rewriteJavaCode();
-                    newWrapper.resetClassName(clazz.getName().toString());
+                    newWrapper.resetClassName();
                     newWrapper.removePackageDefinition();
                     newWrapper.rewriteJavaCode();
                     newWrapper.writeToJavaFile();
@@ -424,7 +457,7 @@ public class ASTWrapper {
                 boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
                 if (hasMutated) {
                     newWrapper.rewriteJavaCode();
-                    newWrapper.resetClassName(clazz.getName().toString());
+                    newWrapper.resetClassName();
                     newWrapper.removePackageDefinition();
                     newWrapper.rewriteJavaCode();
                     newWrapper.writeToJavaFile();
@@ -467,7 +500,7 @@ public class ASTWrapper {
                     int oldLineNumber = this.cu.getLineNumber(oldStatement.getStartPosition());
                     Statement newStatement = newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);;
                     if(newStatement == null) {
-                        System.out.println(oldStatement.toString());
+                        System.out.println(oldStatement);
                         String s0 = this.document.get();
                         System.out.println(this.document.get().hashCode());
                         String s1 = newWrapper.document.get();
@@ -480,8 +513,7 @@ public class ASTWrapper {
                     boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
                     // 先把上边的mutate完成trasnform, 然后再进行类名和包名的替换
                     if (hasMutated) {
-//                        newWrapper.rewriteJavaCode();
-//                        newWrapper.removePackageDefinition();
+                        newWrapper.transSeq.add(mutator.getIndex());
                         newWrapper.rewriteJavaCode();
                         newWrapper.writeToJavaFile();
                         newWrappers.add(newWrapper);
@@ -522,8 +554,7 @@ public class ASTWrapper {
                         System.out.println(filename + " is generated from: " + mutator.getClass());
                     }
                     // 这个时候newWrapper的code应该和原来的一样
-                    TypeDeclaration clazz = getTypeOfStatement(oldStatement);
-                    ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
+                    ASTWrapper newWrapper = new ASTWrapper(mutantFilename, mutantPath, content, this);
                     Statement newStatement = newWrapper.searchStatement(oldStatement);;
                     if(newStatement == null) {
                         System.out.println(oldStatement.toString());
@@ -537,10 +568,10 @@ public class ASTWrapper {
                         System.exit(-1);
                     }
                     boolean hasMutated = mutator.transform(newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newStatement), newStatement);
-                    // 先把上边的mutate完成trasnform, 然后再进行类名和包名的替换
+                    // 1: rewrite for transformation, 2: rewrite for class name and pkg definition
                     if (hasMutated) {
                         newWrapper.rewriteJavaCode();
-                        newWrapper.resetClassName(clazz.getName().toString());
+                        newWrapper.resetClassName();
                         newWrapper.removePackageDefinition();
                         newWrapper.rewriteJavaCode();
                         newWrapper.writeToJavaFile();
@@ -564,7 +595,12 @@ public class ASTWrapper {
         }
     }
 
-    public void resetClassName(String srcName) {
+    /*
+    The goal of resetClassName is to make mutants can be compiled successfully.
+    Hence, the srcName can be confirmed by the filename.
+     */
+    public void resetClassName() {
+        String srcName = Path2Last(this.parentPath);
         TypeDeclaration clazz = null;
         // srcName represents parent class name.
         for(int i = 0; i < types.size(); i++) {
@@ -574,7 +610,7 @@ public class ASTWrapper {
         }
         if(clazz == null) {
             System.err.println("Severe Error! No Parent Main Class is found in: " + this.filePath);
-            int a = 1 / 0;
+            System.exit(-1);
         }
         // This is used to change names of constructor.
         for(int i = 0; i < clazz.getMethods().length; i++) {

@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import edu.polyu.report.SpotBugs_Report;
 import net.sourceforge.pmd.PMD;
-import net.sourceforge.pmd.PMDConfiguration;
 import org.junit.Test;
 
 import static edu.polyu.Util.*;
@@ -116,7 +115,7 @@ public class Invoker {
             reports.addAll(readSpotBugsResultFile(seedFolderPath, report_path));
         }
         System.out.println(String.format(
-                "Invocation and Compiling Time is: " + String.format("%d min, %d sec",
+                "This Iteration Invocation and Compiling Time is: " + String.format("%d min, %d sec",
                 TimeUnit.MILLISECONDS.toMinutes(executionTime),
                 TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))
                 )));

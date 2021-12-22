@@ -13,6 +13,11 @@ cp ./clean.sh ~/evaluation/SpotBugs_30/
 cp ./clean.sh ~/evaluation/SpotBugs_60/
 cp ./clean.sh ~/evaluation/SpotBugs_120/
 cp ./clean.sh ~/evaluation/SpotBugs_180/
+cp ./config.properties ~/evaluation/SpotBugs_15/
+cp ./config.properties ~/evaluation/SpotBugs_30/
+cp ./config.properties ~/evaluation/SpotBugs_60/
+cp ./config.properties ~/evaluation/SpotBugs_120/
+cp ./config.properties ~/evaluation/SpotBugs_180/
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/PureRandom_SpotBugs_15/
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/PureRandom_SpotBugs_30/
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/PureRandom_SpotBugs_60/
@@ -23,6 +28,11 @@ cp ./clean.sh ~/evaluation/PureRandom_SpotBugs_30/
 cp ./clean.sh ~/evaluation/PureRandom_SpotBugs_60/
 cp ./clean.sh ~/evaluation/PureRandom_SpotBugs_120/
 cp ./clean.sh ~/evaluation/PureRandom_SpotBugs_180/
+cp ./config.properties ~/evaluation/PureRandom_SpotBugs_15/
+cp ./config.properties ~/evaluation/PureRandom_SpotBugs_30/
+cp ./config.properties ~/evaluation/PureRandom_SpotBugs_60/
+cp ./config.properties ~/evaluation/PureRandom_SpotBugs_120/
+cp ./config.properties ~/evaluation/PureRandom_SpotBugs_180/
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/GuidedRandom_SpotBugs_15/
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/GuidedRandom_SpotBugs_30/
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/GuidedRandom_SpotBugs_60/
@@ -33,3 +43,8 @@ cp ./clean.sh ~/evaluation/GuidedRandom_SpotBugs_30/
 cp ./clean.sh ~/evaluation/GuidedRandom_SpotBugs_60/
 cp ./clean.sh ~/evaluation/GuidedRandom_SpotBugs_120/
 cp ./clean.sh ~/evaluation/GuidedRandom_SpotBugs_180/
+cp ./config.properties ~/evaluation/GuidedRandom_SpotBugs_15/
+cp ./config.properties ~/evaluation/GuidedRandom_SpotBugs_30/
+cp ./config.properties ~/evaluation/GuidedRandom_SpotBugs_60/
+cp ./config.properties ~/evaluation/GuidedRandom_SpotBugs_120/
+cp ./config.properties ~/evaluation/GuidedRandom_SpotBugs_180/

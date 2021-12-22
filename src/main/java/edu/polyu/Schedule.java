@@ -2,7 +2,17 @@ package edu.polyu;
 
 import static edu.polyu.Invoker.invokePMD;
 import static edu.polyu.Invoker.invokeSpotBugs;
-import static edu.polyu.Util.*;
+import static edu.polyu.Util.PMDResultsFolder;
+import static edu.polyu.Util.PMD_MUTATION;
+import static edu.polyu.Util.Path2Last;
+import static edu.polyu.Util.SINGLE_TESTING;
+import static edu.polyu.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.Util.all_SpotBugs_Reports;
+import static edu.polyu.Util.file2bugs;
+import static edu.polyu.Util.file2line;
+import static edu.polyu.Util.getFilenamesFromFolder;
+import static edu.polyu.Util.readPMDResultFile;
+import static edu.polyu.Util.sep;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -86,9 +96,9 @@ public class Schedule {
         que.addAll(srcWrappers);
         while(!que.isEmpty()) {
             ASTWrapper head = que.pollFirst();
-            int file_hash = head.getDocument().get().hashCode();
-            file2hash.put(head.getFilePath(), file_hash);
-            // System.out.println("Searching file: [" + head.getFilePath() + "] Head Depth: " + head.depth);
+//            int file_hash = head.getDocument().get().hashCode();
+//            file2hash.put(head.getFilePath(), file_hash);
+//             System.out.println("Searching file: [" + head.getFilePath() + "] Head Depth: " + head.depth);
             if(current_depth != head.depth) {
                 current_depth = head.depth;
                 if(current_depth != 0) {
@@ -182,7 +192,6 @@ public class Schedule {
                         bug2cnt.put(violation.getBugType(), new HashSet<>());
                     }
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-//                    file2line.get(report.getFilename()).add(violation.endLine);  // Not sure whether add endLine
                 }
             }
             return;

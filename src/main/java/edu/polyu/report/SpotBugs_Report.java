@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @Date: 2021-10-18 11:21:22
  */
 
-public class SpotBugs_Report {
+public class SpotBugs_Report extends AnalysisReport {
 
     private String filename;
     private List<SpotBugs_Violation> violations;

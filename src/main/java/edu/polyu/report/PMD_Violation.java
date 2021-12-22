@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Description:
- * Author: Austin Zhang
+ * Author: Vanguard
  * Date: 2021/9/23 7:30 下午
  */
 public class PMD_Violation extends ViolationReport {

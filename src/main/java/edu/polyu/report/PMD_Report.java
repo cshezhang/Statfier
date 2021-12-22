@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Author: Vanguard
  * Date: 2021/9/23 7:30 下午
  */
-public class PMD_Report {
+public class PMD_Report extends AnalysisReport {
 
     private String filename;
     private ArrayList<PMD_Violation> violations;
