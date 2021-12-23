@@ -14,6 +14,7 @@ public class PMD_Violation extends ViolationReport {
     public int beginCol;
     public int endCol;
     public String bugType;
+    public String description;
 
     PMD_Violation(int beginLine, int endLine, int beginCol, int endCol, String bugType) {
         this.beginLine = beginLine;
@@ -28,7 +29,8 @@ public class PMD_Violation extends ViolationReport {
         this.beginCol = reportNode.get("begincolumn").asInt();
         this.endLine = reportNode.get("endline").asInt();
         this.endCol = reportNode.get("endcolumn").asInt();
-        this.bugType = reportNode.get("ruleset") + ":[" + reportNode.get("rule") + ", " + reportNode.get("description").toString() + "]";
+        this.bugType = reportNode.get("rule").asText();
+        this.description = reportNode.get("ruleset") + ":[" + reportNode.get("rule") + ", " + reportNode.get("description").toString() + "]";
     }
 
     @Override

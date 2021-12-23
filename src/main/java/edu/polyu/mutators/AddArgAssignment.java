@@ -84,6 +84,9 @@ public class AddArgAssignment extends Mutator {
                     long longValue;
                     if(value.contains("0x") || value.contains("0X") || value.contains("a") || value.contains("b") || value.contains("c") || value.contains("d") || value.contains("e") ||
                             value.contains("f")) {
+                        if(value.startsWith("0x") || value.startsWith("0X")) {
+                            value = value.substring(2);
+                        }
                         longValue = Long.parseLong(value, 16);
                     } else {
                         longValue = Long.parseLong(value);

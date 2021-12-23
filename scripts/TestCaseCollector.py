@@ -1,9 +1,10 @@
 import os
 import urllib.request
+import pandas as pd
 
 from bs4 import BeautifulSoup
 
-save_path = os.getcwd() + os.sep + "PMD_Mutants" + os.sep + "iter0" + os.sep
+save_path = os.getcwd() + os.sep + "PMD_Seeds" + os.sep
 
 bug_categories = [
   "bestpractices",
@@ -37,6 +38,8 @@ def getRuleNames():
   return cate2rules
 
 def getTestCases(cate2rules):
+  filenames = []
+  problem_cnts = []
   fails = []
   if not os.path.exists(save_path):
     os.mkdir(save_path)
@@ -49,22 +52,30 @@ def getTestCases(cate2rules):
       except urllib.error.HTTPError:
         # print("Cannot find XML file in the rule: " + cate + "  " + rule)
         fails.append((cate + "  " + rule, xml_link))
+      # case link: https://raw.githubusercontent.com/pmd/pmd/81739da5caff948dbcd2136c17532b65c726c781/pmd-java/src/test/resources/net/sourceforge/pmd/lang/java/rule/codestyle/xml/AbstractNaming.xml
       xml_doc = xml_response.read()
       soup = BeautifulSoup(xml_doc, "xml", from_encoding="utf-8")
       test_codes = soup.find_all("test-code")
       for index in range(0, len(test_codes)):
         test_code = test_codes[index]
+        problems_cnt_tag = test_code.find("expected-problems")
+        problem_cnt = int(problems_cnt_tag.string)
         code = test_code.code
         if code == None:
           continue
-        testfile = open(save_path + rule + str(index) + ".java", "w")
-        testfile.write(str(code.get_text()))
-        testfile.close()
+        filename = rule + str(index) + ".java"
+        filenames.append(filename)
+        problem_cnts.append(problem_cnt)
+        # testfile = open(save_path + rule + str(index) + ".java", "w")
+        # testfile.write(str(code.get_text()))
+        # testfile.close()
   if len(fails) > 0:
     print("failed len=" + str(len(fails)) + " and rules are:")
     for fail_info, link in fails:
       print(fail_info)
       print(link)
+  dataframe = pd.DataFrame({"filename":filenames, "problem_cnt":problem_cnts})
+  dataframe.to_csv("PMDSeedData.csv",index=False,sep=',')
 
 def main():
   cate2rules = getRuleNames()

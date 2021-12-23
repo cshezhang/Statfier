@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @Description: Utility Class for SAMutator
@@ -40,6 +41,7 @@ public class Util {
             e.printStackTrace();
         }
     }
+    public static ExecutorService threadPool = null;
     public static final int threadCount = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     public static long startTimeStamp = System.currentTimeMillis();
@@ -47,7 +49,7 @@ public class Util {
     public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static int mutantCounter = 0;
 
-    public static List<SpotBugs_Report> reports = new ArrayList<>();
+//    public static List<SpotBugs_Report> reports = new ArrayList<>();
 
     public final static boolean AST_TESTING = Boolean.parseBoolean(getProperty("AST_TESTING"));
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
@@ -101,6 +103,7 @@ public class Util {
     // (rule -> (transSeq -> Mutant_List))
     public static HashMap<String, HashMap<String, ArrayList<String>>> compactIssues = new HashMap<>();
     public static List<List<SpotBugs_Report>> all_SpotBugs_Reports = new ArrayList<>();
+    public static List<List<PMD_Report>> all_PMD_Reports = new ArrayList<>();
 
     public static void initEnv(){
         if(!mutantFolder.exists()) {

@@ -1,7 +1,29 @@
 package edu.polyu;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import static edu.polyu.Util.*;
+
+import static edu.polyu.Util.AST_TESTING;
+import static edu.polyu.Util.CHECKSTYLE_MUTATION;
+import static edu.polyu.Util.CHECKSTYLE_SEED_PATH;
+import static edu.polyu.Util.ERRORPRONE_MUTATION;
+import static edu.polyu.Util.ERRORPRONE_SEED_PATH;
+import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
+import static edu.polyu.Util.MAIN_EXECUTION;
+import static edu.polyu.Util.PMD_MUTATION;
+import static edu.polyu.Util.PMD_SEED_PATH;
+import static edu.polyu.Util.PURE_RANDOM_TESTING;
+import static edu.polyu.Util.SINGLE_TESTING;
+import static edu.polyu.Util.SINGLE_TESTING_PATH;
+import static edu.polyu.Util.SONARQUBE_MUTATION;
+import static edu.polyu.Util.SONARQUBE_SEED_PATH;
+import static edu.polyu.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.Util.SPOTBUGS_SEED_PATH;
+import static edu.polyu.Util.compactIssues;
+import static edu.polyu.Util.initEnv;
+import static edu.polyu.Util.startTimeStamp;
 
 /*
  * @Description: This class only contains Automatic Tester related functions, other modules have been moved to Util class.
@@ -55,6 +77,12 @@ public class AutomaticTester {
                     tester.executeMutation(targetSeedPath);
                 }
             }
+            int rules = 0;
+            for(Map.Entry<String, HashMap<String, ArrayList<String>>> entry : compactIssues.entrySet()) {
+                rules++;
+                System.out.println(entry.getKey() + " " + entry.getValue().keySet().size());
+            }
+            System.out.println("Rule Number: " + rules);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

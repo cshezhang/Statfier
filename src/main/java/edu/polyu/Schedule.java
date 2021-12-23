@@ -2,17 +2,15 @@ package edu.polyu;
 
 import static edu.polyu.Invoker.invokePMD;
 import static edu.polyu.Invoker.invokeSpotBugs;
-import static edu.polyu.Util.PMDResultsFolder;
 import static edu.polyu.Util.PMD_MUTATION;
 import static edu.polyu.Util.Path2Last;
 import static edu.polyu.Util.SINGLE_TESTING;
 import static edu.polyu.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.Util.all_PMD_Reports;
 import static edu.polyu.Util.all_SpotBugs_Reports;
 import static edu.polyu.Util.file2bugs;
 import static edu.polyu.Util.file2line;
 import static edu.polyu.Util.getFilenamesFromFolder;
-import static edu.polyu.Util.readPMDResultFile;
-import static edu.polyu.Util.sep;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -177,9 +175,9 @@ public class Schedule {
     public void locateMutationCode(String seedFolderPath) {
         String seedFolderName = Path2Last(seedFolderPath);
         System.out.println(seedFolderPath + " is located and Analysis Output Folder is: " + seedFolderName);
-        if(PMD_MUTATION) {       
-            invokePMD(seedFolderPath, seedFolderName);
-            List<PMD_Report> reports = readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_Result.json");
+        if(PMD_MUTATION) {
+            List<PMD_Report> reports = invokePMD(seedFolderPath, seedFolderName);
+            all_PMD_Reports.add(reports);
             for (PMD_Report report : reports) {
                 if(!file2line.containsKey(report.getFilename())) {
                     file2line.put(report.getFilename(), new HashSet<>());

@@ -6,15 +6,28 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import edu.polyu.report.PMD_Report;
 import edu.polyu.report.SpotBugs_Report;
 import net.sourceforge.pmd.PMD;
 import org.junit.Test;
+import thread.PMD_Invoker;
+import thread.SpotBugs_Invoker;
 
-import static edu.polyu.Util.*;
+import static edu.polyu.Util.PMDResultsFolder;
+import static edu.polyu.Util.SINGLE_TESTING;
+import static edu.polyu.Util.SpotBugsResultsFolder;
+import static edu.polyu.Util.getFilenamesFromFolder;
+import static edu.polyu.Util.getProperty;
+import static edu.polyu.Util.jarStr;
+import static edu.polyu.Util.listAveragePartition;
+import static edu.polyu.Util.readPMDResultFile;
+import static edu.polyu.Util.readSpotBugsResultFile;
+import static edu.polyu.Util.sep;
+import static edu.polyu.Util.threadCount;
+import static edu.polyu.Util.threadPool;
 
 /*
  * @Description: This class is used for different invocation functions.
@@ -71,6 +84,31 @@ public class Invoker {
         invokeCommands(cmd_list.toArray(new String[cmd_list.size()]));
     }
 
+    public static void initThreadPool() {
+        if(Boolean.parseBoolean(getProperty("SINGLE_THREADPOOL"))) {
+            threadPool = Executors.newSingleThreadExecutor();
+        }
+        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
+            threadPool = Executors.newFixedThreadPool(threadCount);
+        }
+        if(Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+            threadPool = Executors.newCachedThreadPool();
+        }
+        if(threadPool == null) {
+            System.err.println("Thread Pool cannot be inited!");
+            System.exit(-1);
+        }
+    }
+
+    public static void waiitThreadPoolEnding() {
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     // seedFolderPath is the java source code folder (seed path), like: SpotBugs_Seeds, iter1, iter2...
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in SpotBugsClassFolder
@@ -84,30 +122,17 @@ public class Invoker {
             System.out.println("Output Name: " + seedFolderName);
         }
         List<String> seedFileNamesWithSuffix = getFilenamesFromFolder(seedFolderPath, false); // Filenames with suffix
-        ExecutorService threadPool = null;
-        if(Boolean.parseBoolean(getProperty("SINGLE_THREADPOOL"))) {
-            threadPool = Executors.newSingleThreadExecutor();
-        }
-        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(threadCount);
-        }
-        if(Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-            threadPool = Executors.newCachedThreadPool();
-        }
+        initThreadPool();
         List<List<String>> lists = listAveragePartition(seedFileNamesWithSuffix, threadCount);
         long startExecutionTime = System.currentTimeMillis();
         for(int i = 0; i < lists.size(); i++) {
-            threadPool.submit(new SpotBugsInvoker(seedFolderPath, seedFolderName, lists.get(i)));
+            threadPool.submit(new SpotBugs_Invoker(seedFolderPath, seedFolderName, lists.get(i)));
         }
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waiitThreadPoolEnding();
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         long executionTime = System.currentTimeMillis() - startExecutionTime;
+        List<SpotBugs_Report> reports = new ArrayList<>();
         for(int i = 0; i < seedFileNamesWithSuffix.size(); i++) {
             String seedFilenameWithSuffix = seedFileNamesWithSuffix.get(i);
             String seedFilename = seedFilenameWithSuffix.substring(0, seedFilenameWithSuffix.length() - 5);
@@ -122,17 +147,26 @@ public class Invoker {
         return reports;
     }
 
-    // targetPath can be java source file or a folder contains source files
-    public static void invokePMD(String seedFolderPath, String seedFolderName) {
-        String[] pmdArgs = {
-                "-d", seedFolderPath,
-                "-R", "./allRules.xml",
-                "-f", "json",
-                "-r", PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_Result.json",
-                "-cache", "./PMD_Cache.bin"
-        };
-        PMD.runPmd(pmdArgs);
+    public static List<PMD_Report> invokePMD(String seedFolderPath, String seedFolderName) {
+        long startExecutionTime = System.currentTimeMillis();
+        initThreadPool();
+        for(int i = 0; i < 20; i++) {
+            threadPool.submit(new PMD_Invoker(seedFolderPath + sep + "PMD_Seeds_" + i, seedFolderName + "_"  + i));
+        }
+        waiitThreadPoolEnding();
+        long executionTime = System.currentTimeMillis() - startExecutionTime;
+        List<PMD_Report> reports = new ArrayList<>();
+        for(int i = 0; i < 20; i++) {
+            readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_" + i + "_Result.json");
+        }
+        System.out.println(String.format(
+                "This Iteration Invocation and Compiling Time is: " + String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                        TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))
+                )));
+        return reports;
     }
+
 
     @Test
     public void testInvokePMD() {
