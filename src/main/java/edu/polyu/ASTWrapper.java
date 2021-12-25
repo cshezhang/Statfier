@@ -1,5 +1,6 @@
 package edu.polyu;
 
+import edu.polyu.report.PMD_Report;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -21,6 +22,7 @@ import static edu.polyu.Mutator.mutator_size;
 import static edu.polyu.Util.Path2Last;
 import static edu.polyu.Util.SEARCH_DEPTH;
 import static edu.polyu.Util.SINGLE_TESTING;
+import static edu.polyu.Util.all_PMD_Reports;
 import static edu.polyu.Util.checkExecutionTime;
 import static edu.polyu.Util.compactIssues;
 import static edu.polyu.Util.compilerOptions;
@@ -227,6 +229,7 @@ public class ASTWrapper {
     */
     public ArrayList<Statement> getCandidateStatement() {
         //        System.out.println("Find Candidate Statements in File: " + filename);
+        List<List<PMD_Report>> pmd_reports = all_PMD_Reports;
         HashSet<Integer> validLines = file2line.get(this.filePath);
         ArrayList<Statement> candidateStatements = new ArrayList<>();
         if (validLines == null) {
