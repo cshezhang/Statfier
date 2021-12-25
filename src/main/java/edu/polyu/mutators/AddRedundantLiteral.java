@@ -28,7 +28,7 @@ public class AddRedundantLiteral extends Mutator {
 
     @Override
     public int getIndex() {
-        return 5;
+        return 6;
     }
 
     /*

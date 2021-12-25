@@ -24,6 +24,8 @@ public class AddControlBranch extends Mutator {
         return singleInstance;
     }
 
+    private AddControlBranch() {}
+
     @Override
     public int getIndex() {
         return 4;

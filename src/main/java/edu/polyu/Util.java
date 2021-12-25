@@ -13,6 +13,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 
 import java.io.File;
@@ -41,15 +42,11 @@ public class Util {
             e.printStackTrace();
         }
     }
-    public static ExecutorService threadPool = null;
-    public static final int threadCount = Integer.parseInt(getProperty("THREAD_COUNT"));
-    public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-    public static long startTimeStamp = System.currentTimeMillis();
-    public static long compileTime = 0;
-    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
-    public static int mutantCounter = 0;
 
-//    public static List<SpotBugs_Report> reports = new ArrayList<>();
+    public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
+    public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
+    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
+    public static String userdir = getProperty("USERDIR");
 
     public final static boolean AST_TESTING = Boolean.parseBoolean(getProperty("AST_TESTING"));
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
@@ -57,16 +54,31 @@ public class Util {
     public final static boolean GUIDED_RANDOM_TESTING = Boolean.parseBoolean(getProperty("GUIDED_RANDOM_TESTING"));
     public final static boolean MAIN_EXECUTION = Boolean.parseBoolean(getProperty("MAIN_EXECUTION"));
 
-    public static String userdir = getProperty("USERDIR");
+    // The following Bool variables are used to select static analysis tools.
+    public final static boolean PMD_MUTATION = Boolean.parseBoolean(getProperty("PMD_MUTATION"));
+    public final static boolean SPOTBUGS_MUTATION = Boolean.parseBoolean(getProperty("SPOTBUGS_MUTATION"));
+    public final static boolean CHECKSTYLE_MUTATION = false;
+    public final static boolean ERRORPRONE_MUTATION = false;
+    public final static boolean SONARQUBE_MUTATION = false;
+
+    public final static String toolPath = getProperty("TOOL_PATH");
+
+    public static ExecutorService threadPool = null;
+    public static String sourceSeedPath = null;
+    public static int subSeedIndex;
+    public static long startTimeStamp = System.currentTimeMillis();
+    public static long compileTime = 0;
+    public static int mutantCounter = 0;
+
     public final static String sep = File.separator;
     public static final SecureRandom random = new SecureRandom();
     public static int newVarCounter = 0;
 
     // seeds, these variables
     public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
+    public final static String AST_TESTING_PATH = "/home/huaien/projects/SAMutator" + sep + "src" + sep + "test" + sep + "java" + sep + "ASTTestingCases";
     public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + sep + "SingleTesting";
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + sep + "PMD_Seeds";
-    public final static String BASELINE_SEED_PATH = BASE_SEED_PATH + sep + "Baseline_Seeds";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + sep + "SpotBugs_Seeds";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + sep + "SonarQube_Seeds";
     public final static String ERRORPRONE_SEED_PATH = BASE_SEED_PATH + sep + "Errorprone_Seeds";
@@ -82,9 +94,9 @@ public class Util {
     public final static File SpotBugsClassFolder = new File(userdir + sep + "results" + sep + "SpotBugs_Classes");
 
     // tools
-    public final static String toolPath = getProperty("TOOL_PATH");
     public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
     public static List<String> jarList = getFilenamesFromFolder(toolPath + sep + "libs", true);
+    public static List<String> subSeedFolderNameList;
     public static StringBuilder jarStr = new StringBuilder();
 
     public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>();
@@ -93,25 +105,49 @@ public class Util {
     // file2bugs is used to compare parent's and child's violation reports.
     public static HashMap<String, Integer> file2hash = new HashMap<>();
 
-    // The following Bool variables are used to select static analysis tools.
-    public final static boolean PMD_MUTATION = Boolean.parseBoolean(getProperty("PMD_MUTATION"));
-    public final static boolean SPOTBUGS_MUTATION = Boolean.parseBoolean(getProperty("SPOTBUGS_MUTATION"));
-    public final static boolean CHECKSTYLE_MUTATION = false;
-    public final static boolean ERRORPRONE_MUTATION = false;
-    public final static boolean SONARQUBE_MUTATION = false;
+
 
     // (rule -> (transSeq -> Mutant_List))
     public static HashMap<String, HashMap<String, ArrayList<String>>> compactIssues = new HashMap<>();
     public static List<List<SpotBugs_Report>> all_SpotBugs_Reports = new ArrayList<>();
     public static List<List<PMD_Report>> all_PMD_Reports = new ArrayList<>();
 
+    public static Map compilerOptions = JavaCore.getOptions();
+
+
     public static void initEnv(){
         if(!mutantFolder.exists()) {
             mutantFolder.mkdir();
         }
+        if(SINGLE_TESTING) {
+            sourceSeedPath = SINGLE_TESTING_PATH;
+        } else {
+            if (PMD_MUTATION) {
+                sourceSeedPath = PMD_SEED_PATH;
+            }
+            if (SPOTBUGS_MUTATION) {
+                sourceSeedPath = SPOTBUGS_SEED_PATH;
+            }
+            if (SONARQUBE_MUTATION) {
+                sourceSeedPath = SONARQUBE_SEED_PATH;
+            }
+            if (ERRORPRONE_MUTATION) {
+                sourceSeedPath = ERRORPRONE_SEED_PATH;
+            }
+            if (CHECKSTYLE_MUTATION) {
+                sourceSeedPath = CHECKSTYLE_SEED_PATH;
+            }
+        }
+        subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
+        subSeedIndex = subSeedFolderNameList.size();
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();
+            for(int j = 0; j < subSeedIndex; j++) {
+                String subFolderName = subSeedFolderNameList.get(j);
+                File subSeedFolder = new File(iter.getAbsolutePath() + sep + subFolderName);
+                subSeedFolder.mkdir();
+            }
         }
         if(!resultFolder.exists()) {
             resultFolder.mkdir();
@@ -129,6 +165,9 @@ public class Util {
             jarStr.append(jarList.get(i) + ":");
         }
         jarStr.append(jarList.get(0));
+        compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
+        compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
+        compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
     }
 
     public static <T> List<List<T>> listAveragePartition(List<T> source, int n) {
@@ -408,18 +447,37 @@ public class Util {
         }
     }
 
+    // get Direct file list of tarege folder path, mainly used to count sub_seed folders
+    public static List<String> getDirectFilenamesFromFolder(String path, boolean getAbsolutePath) {
+        LinkedList<String> fileList = new LinkedList<>();
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+        for(File file : files) {
+            fileList.add(file.getAbsolutePath());
+        }
+        if(getAbsolutePath) {
+            return fileList;
+        } else {
+            LinkedList<String> pureNames = new LinkedList<>();
+            for (String srcName : fileList) {
+                String[] tokens = srcName.split(sep);
+                pureNames.add(tokens[tokens.length - 1]);
+            }
+            return pureNames;
+        }
+    }
+
     // The list contains absolute paths.
     public static List<String> getFilenamesFromFolder(String path, boolean getAbsolutePath) {
         if(SINGLE_TESTING) {
             System.out.println("Searching Folder: " + path);
         }
-        LinkedList<File> dirList = new LinkedList<>();
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.isDirectory()) {
-                dirList.add(file);
+                fileList.addAll(getFilenamesFromFolder(file.getAbsolutePath(), getAbsolutePath));
             } else {
                 fileList.add(file.getAbsolutePath());
             }

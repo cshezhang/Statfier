@@ -1,4 +1,4 @@
-package thread;
+package edu.polyu.thread;
 
 import net.sourceforge.pmd.PMD;
 
@@ -26,7 +26,11 @@ public class PMD_Invoker implements Runnable {
                 "-r", PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_Result.json"
 //                "-cache", "./PMD_Cache.bin"
         };
-        PMD.runPmd(pmdArgs);
+        try {
+            PMD.runPmd(pmdArgs);
+        } catch (Exception e) {
+            System.out.print("111");
+        }
     }
 
 }

@@ -32,7 +32,7 @@ public class TransferLocalVarToGlobal extends Mutator {
 
     @Override
     public int getIndex() {
-        return 6;
+        return 10;
     }
 
     @Override

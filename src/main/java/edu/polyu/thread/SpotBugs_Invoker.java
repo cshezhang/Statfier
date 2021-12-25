@@ -1,4 +1,4 @@
-package thread;
+package edu.polyu.thread;
 
 import java.io.File;
 import java.util.List;

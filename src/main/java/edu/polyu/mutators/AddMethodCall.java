@@ -47,6 +47,6 @@ public class AddMethodCall extends Mutator {
 
     @Override
     public int getIndex() {
-        return 7;
+        return 5;
     }
 }

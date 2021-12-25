@@ -13,8 +13,8 @@ import edu.polyu.report.PMD_Report;
 import edu.polyu.report.SpotBugs_Report;
 import net.sourceforge.pmd.PMD;
 import org.junit.Test;
-import thread.PMD_Invoker;
-import thread.SpotBugs_Invoker;
+import edu.polyu.thread.PMD_Invoker;
+import edu.polyu.thread.SpotBugs_Invoker;
 
 import static edu.polyu.Util.PMDResultsFolder;
 import static edu.polyu.Util.SINGLE_TESTING;
@@ -26,7 +26,7 @@ import static edu.polyu.Util.listAveragePartition;
 import static edu.polyu.Util.readPMDResultFile;
 import static edu.polyu.Util.readSpotBugsResultFile;
 import static edu.polyu.Util.sep;
-import static edu.polyu.Util.threadCount;
+import static edu.polyu.Util.THREAD_COUNT;
 import static edu.polyu.Util.threadPool;
 
 /*
@@ -85,18 +85,12 @@ public class Invoker {
     }
 
     public static void initThreadPool() {
-        if(Boolean.parseBoolean(getProperty("SINGLE_THREADPOOL"))) {
-            threadPool = Executors.newSingleThreadExecutor();
-        }
+        threadPool = Executors.newSingleThreadExecutor();
         if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(threadCount);
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
         }
         if(Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
             threadPool = Executors.newCachedThreadPool();
-        }
-        if(threadPool == null) {
-            System.err.println("Thread Pool cannot be inited!");
-            System.exit(-1);
         }
     }
 
@@ -123,7 +117,7 @@ public class Invoker {
         }
         List<String> seedFileNamesWithSuffix = getFilenamesFromFolder(seedFolderPath, false); // Filenames with suffix
         initThreadPool();
-        List<List<String>> lists = listAveragePartition(seedFileNamesWithSuffix, threadCount);
+        List<List<String>> lists = listAveragePartition(seedFileNamesWithSuffix, THREAD_COUNT);
         long startExecutionTime = System.currentTimeMillis();
         for(int i = 0; i < lists.size(); i++) {
             threadPool.submit(new SpotBugs_Invoker(seedFolderPath, seedFolderName, lists.get(i)));
@@ -150,14 +144,14 @@ public class Invoker {
     public static List<PMD_Report> invokePMD(String seedFolderPath, String seedFolderName) {
         long startExecutionTime = System.currentTimeMillis();
         initThreadPool();
-        for(int i = 0; i < 20; i++) {
-            threadPool.submit(new PMD_Invoker(seedFolderPath + sep + "PMD_Seeds_" + i, seedFolderName + "_"  + i));
+        for(int i = 0; i < THREAD_COUNT; i++) {
+            threadPool.submit(new PMD_Invoker(seedFolderPath, seedFolderName + "_"  + i));
         }
         waiitThreadPoolEnding();
         long executionTime = System.currentTimeMillis() - startExecutionTime;
         List<PMD_Report> reports = new ArrayList<>();
-        for(int i = 0; i < 20; i++) {
-            readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_" + i + "_Result.json");
+        for(int i = 0; i < THREAD_COUNT; i++) {
+            reports.addAll(readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_" + i + "_Result.json"));
         }
         System.out.println(String.format(
                 "This Iteration Invocation and Compiling Time is: " + String.format("%d min, %d sec",

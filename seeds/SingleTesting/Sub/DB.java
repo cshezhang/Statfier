@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class DB {
+
     ArrayList data = new ArrayList();
 
     public Set uniqueElements() {
@@ -16,4 +17,5 @@ public class DB {
 
     public DB() {
     }
+
 }
