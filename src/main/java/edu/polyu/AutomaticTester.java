@@ -41,7 +41,6 @@ public class AutomaticTester {
             }
             int rules = 0;
             for(Map.Entry<String, HashMap<String, ArrayList<String>>> entry : compactIssues.entrySet()) {
-                rules++;
                 System.out.println(entry.getKey() + " " + entry.getValue().keySet().size());
             }
             System.out.println("Rule Number: " + rules);
@@ -51,8 +50,8 @@ public class AutomaticTester {
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             System.out.println(String.format(
                     "Overall Execution Time is: " + String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes(executionTime),
-                        TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))))
+                    TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                    TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))))
             );
         }
     }

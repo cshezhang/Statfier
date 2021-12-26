@@ -43,7 +43,7 @@ public class Util {
         }
     }
 
-    public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
+    public static int THREAD_COUNT;
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static String userdir = getProperty("USERDIR");
@@ -105,15 +105,12 @@ public class Util {
     // file2bugs is used to compare parent's and child's violation reports.
     public static HashMap<String, Integer> file2hash = new HashMap<>();
 
-
-
     // (rule -> (transSeq -> Mutant_List))
     public static HashMap<String, HashMap<String, ArrayList<String>>> compactIssues = new HashMap<>();
     public static List<List<SpotBugs_Report>> all_SpotBugs_Reports = new ArrayList<>();
     public static List<List<PMD_Report>> all_PMD_Reports = new ArrayList<>();
 
     public static Map compilerOptions = JavaCore.getOptions();
-
 
     public static void initEnv(){
         if(!mutantFolder.exists()) {
@@ -140,6 +137,7 @@ public class Util {
         }
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         subSeedIndex = subSeedFolderNameList.size();
+        THREAD_COUNT = subSeedIndex;
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();

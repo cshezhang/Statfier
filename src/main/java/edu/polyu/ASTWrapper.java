@@ -10,6 +10,7 @@ import org.eclipse.text.edits.TextEdit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -90,7 +91,12 @@ public class ASTWrapper {
         this.ast = cu.getAST();
         this.astRewrite = ASTRewrite.create(ast);
         this.cu.recordModifications();
-        this.types = this.cu.types();
+        this.types = new ArrayList<>();
+        for(ASTNode node : (List<ASTNode>) this.cu.types()) { // Attention: AbstractTypeDeclaration
+            if(node instanceof TypeDeclaration) {
+                this.types.add((TypeDeclaration) node);
+            }
+        }
         this.allStatements = new ArrayList<>();
         this.method2statements = new HashMap<>();
         for (TypeDeclaration clazz : this.types) {
@@ -212,11 +218,7 @@ public class ASTWrapper {
                     List<ASTNode> nodes = getChildrenNodes(statement);
                     for (ASTNode node : nodes) {
                         System.out.println(
-                                node
-                                        + "  "
-                                        + node.getClass()
-                                        + "  "
-                                        + String.format("0x%x", System.identityHashCode(node)));
+                                node + "  " + node.getClass() + "  " + String.format("0x%x", System.identityHashCode(node)));
                     }
                     System.out.println("-----------------");
                 }
@@ -239,15 +241,22 @@ public class ASTWrapper {
         //        if(validLines != null || validLines.size() == 0) {
         if (validLines != null && validLines.size() > 0) {
             for (TypeDeclaration clazz : this.types) {
-                for (MethodDeclaration method : clazz.getMethods()) {
-                    List<Statement> statements = getAllStatements(method);
-                    for (Statement statement : statements) {
-                        ArrayList<Statement> st = new ArrayList<>();
-                        st.add(statement);
-                        int currentLine = this.cu.getLineNumber(statement.getStartPosition());
-                        if (validLines.contains(currentLine)) {
-                            candidateStatements.addAll(getSubStatements(null, st));
+                List<ASTNode> nodes = clazz.bodyDeclarations();
+                for(ASTNode node : nodes) {
+                    if(node instanceof MethodDeclaration) {
+                        MethodDeclaration method = (MethodDeclaration) node;
+                        List<Statement> statements = getAllStatements(method);
+                        for (Statement statement : statements) {
+                            ArrayList<Statement> st = new ArrayList<>();
+                            st.add(statement);
+                            int currentLine = this.cu.getLineNumber(statement.getStartPosition());
+                            if (validLines.contains(currentLine)) {
+                                candidateStatements.addAll(getSubStatements(null, st));
+                            }
                         }
+                    }
+                    if(node instanceof FieldDeclaration) {
+                        
                     }
                 }
             }

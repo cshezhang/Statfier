@@ -33,16 +33,16 @@ public abstract class Mutator {
      */
     static {
         mutators = new ArrayList<>();
-        mutators.add(AddArgAssignment.getInstance());
-        mutators.add(AddAssignment.getInstance());
-        mutators.add(AddBrackets.getInstance());
-        mutators.add(AddControlBranch.getInstance());
-        mutators.add(AddRedundantLiteral.getInstance());
+//        mutators.add(AddArgAssignment.getInstance());
+//        mutators.add(AddAssignment.getInstance());
+//        mutators.add(AddBrackets.getInstance());
+//        mutators.add(AddControlBranch.getInstance());
+//        mutators.add(AddRedundantLiteral.getInstance());
         mutators.add(AnonymousClassWrapper.getInstance());
         mutators.add(EnumClassWrapper.getInstance());
         mutators.add(NestedClassWrapper.getInstance());
 //        mutators.add(AddMethodCall.getInstance());
-        mutators.add(TransferLocalVarToGlobal.getInstance());
+//        mutators.add(TransferLocalVarToGlobal.getInstance());
         mutator_size = mutators.size();
     }
 
@@ -52,8 +52,6 @@ public abstract class Mutator {
 
     private static ArrayList<Mutator> testMutators = new ArrayList<>();
     public static ArrayList<Mutator> getMutators() {
-//        return mutators;
-        testMutators.add(NestedClassWrapper.getInstance());
         return testMutators;
     }
 

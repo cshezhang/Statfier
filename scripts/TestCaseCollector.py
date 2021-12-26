@@ -1,10 +1,12 @@
 import os
+import random
+import shutil
 import urllib.request
 import pandas as pd
 
 from bs4 import BeautifulSoup
 
-save_path = os.getcwd() + os.sep + "PMD_Seeds" + os.sep
+save_path = "/home/huaien/projects/SAMutator/seeds" + os.sep + "PMD_Seeds" + os.sep
 
 bug_categories = [
   "bestpractices",
@@ -16,12 +18,12 @@ bug_categories = [
   "performance",
   "security"
 ]
-
 def getRuleNames():
   cate2rules = dict()
   namelink_source = "https://pmd.github.io/latest/pmd_rules_java_"
   for category in bug_categories:
-    cate2rules[category] = []
+    rule2remove = set()
+    cate2rules[category] = set()
     namelink = namelink_source + category + ".html"
     # print("namelink: " + namelink)
     response = urllib.request.urlopen(namelink)
@@ -34,13 +36,28 @@ def getRuleNames():
     for i in range(0, len(tokens)):
       tokens[i] = tokens[i][1:]
     tokens = tokens[1:]
-    cate2rules[category].extend(tokens)
+    tags = soup.find_all("span")
+    for i in range(0, len(tags)):
+      tag = tags[i]
+      if tag and tag.string == "Deprecated" and tag.parent.string == "Deprecated":
+        rule2remove.add(str(tag.parent.previous_element.previous_element))
+    rules = set()
+    rules.update(tokens)
+    cate2rules[category].update(rules - rule2remove)
+    # print(len(rule2remove))
+    # print(len(rules))
+    # print(len(rules - rule2remove))
+    # print("")
   return cate2rules
 
 def getTestCases(cate2rules):
+  bugs = set()
+  file2rule = dict()
   filenames = []
   problem_cnts = []
   fails = []
+  cates = []
+  rules = []
   if not os.path.exists(save_path):
     os.mkdir(save_path)
   for cate, rulesets in cate2rules.items():
@@ -65,20 +82,49 @@ def getTestCases(cate2rules):
           continue
         filename = rule + str(index) + ".java"
         filenames.append(filename)
+        cates.append(cate)
+        rules.append(rule)
+        file2rule[filename] = cate + "_" + rule
+        bugs.add(cate + "_" + rule)
         problem_cnts.append(problem_cnt)
-        # testfile = open(save_path + rule + str(index) + ".java", "w")
-        # testfile.write(str(code.get_text()))
-        # testfile.close()
+        testfile = open(save_path + rule + str(index) + ".java", "w")
+        testfile.write(str(code.get_text()))
+        testfile.close()
   if len(fails) > 0:
     print("failed len=" + str(len(fails)) + " and rules are:")
     for fail_info, link in fails:
       print(fail_info)
       print(link)
-  dataframe = pd.DataFrame({"filename":filenames, "problem_cnt":problem_cnts})
+  dataframe = pd.DataFrame({"filename":filenames, "cate":cates, "rules":rules, "problem_cnt":problem_cnts})
   dataframe.to_csv("PMDSeedData.csv",index=False,sep=',')
+  return bugs, file2rule
+
+
+def get_filepaths_from_folder():
+    targetDirPath = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds'
+    filepaths = []
+    for (targetDir, dirnamess, filenames) in os.walk(targetDirPath):
+        for filename in filenames:
+            filepaths.append(targetDir + os.sep + filename)
+    random.shuffle(filepaths)
+    return filepaths
 
 def main():
   cate2rules = getRuleNames()
-  getTestCases(cate2rules)
+  bugs, file2rule = getTestCases(cate2rules)
+  print(bugs)
+  filepaths = get_filepaths_from_folder()
+  print(filepaths)
+  print(file2rule)
+  for bug in bugs:
+    bug_dir_path = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds/' + bug
+    print(bug_dir_path)
+    if not os.path.exists(bug_dir_path):
+      os.mkdir(bug_dir_path)
+  for filepath in filepaths:
+      # sub_folder_path = '/home/huaien/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)  
+    filename = filepath.split("/")[-1]
+    target_folder = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds/' + file2rule[filename]
+    shutil.move(filepath, target_folder + os.sep + filename)
 
 main()

@@ -27,6 +27,7 @@ import static edu.polyu.Util.readPMDResultFile;
 import static edu.polyu.Util.readSpotBugsResultFile;
 import static edu.polyu.Util.sep;
 import static edu.polyu.Util.THREAD_COUNT;
+import static edu.polyu.Util.subSeedFolderNameList;
 import static edu.polyu.Util.threadPool;
 
 /*
@@ -141,17 +142,17 @@ public class Invoker {
         return reports;
     }
 
-    public static List<PMD_Report> invokePMD(String seedFolderPath, String seedFolderName) {
+    public static List<PMD_Report> invokePMD(int iterDepth, String seedFolderPath) {
         long startExecutionTime = System.currentTimeMillis();
         initThreadPool();
         for(int i = 0; i < THREAD_COUNT; i++) {
-            threadPool.submit(new PMD_Invoker(seedFolderPath, seedFolderName + "_"  + i));
+            threadPool.submit(new PMD_Invoker(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waiitThreadPoolEnding();
         long executionTime = System.currentTimeMillis() - startExecutionTime;
         List<PMD_Report> reports = new ArrayList<>();
         for(int i = 0; i < THREAD_COUNT; i++) {
-            reports.addAll(readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + seedFolderName + "_" + i + "_Result.json"));
+            reports.addAll(readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json"));
         }
         System.out.println(String.format(
                 "This Iteration Invocation and Compiling Time is: " + String.format("%d min, %d sec",

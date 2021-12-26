@@ -81,7 +81,7 @@ public class Schedule {
             if(current_depth != head.depth) {
                 current_depth = head.depth;
                 if(current_depth != 0) {
-                    tester.locateMutationCode(head.getFolderPath());
+                    tester.locateMutationCode(head.depth, head.getFolderPath());
                 }
             }
             ArrayList<ASTWrapper> newWrappers = head.guidedRandomMutate();
@@ -104,7 +104,7 @@ public class Schedule {
                     if(SINGLE_TESTING) {
                         System.out.println("Current Depth: " + head.depth);
                     }
-                    tester.locateMutationCode(head.getFolderPath());
+                    tester.locateMutationCode(head.depth, head.getFolderPath());
                 }
             }
             ArrayList<ASTWrapper> newWrappers = null;
@@ -141,7 +141,7 @@ public class Schedule {
             System.err.println("You should give a folder!");
             System.exit(-1);
         }
-        locateMutationCode(seedFolderPath); // init analysis for seed files
+        locateMutationCode(0, seedFolderPath); // init analysis for seed files
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("Random Testing Initial Seed Count: " + seedPaths.size());
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
@@ -156,7 +156,7 @@ public class Schedule {
     }
 
     public void executeMutation(String seedFolderPath) {
-        locateMutationCode(seedFolderPath);
+        locateMutationCode(0, seedFolderPath);
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
@@ -175,11 +175,11 @@ public class Schedule {
     }
 
     // This function only can invoke static analysis tool and cannot include other parts.
-    public void locateMutationCode(String seedFolderPath) {
+    public void locateMutationCode(int iterDepth, String seedFolderPath) {
         String seedFolderName = Path2Last(seedFolderPath);
         System.out.println(seedFolderPath + " is located and Analysis Output Folder is: " + seedFolderName);
         if(PMD_MUTATION) {
-            List<PMD_Report> reports = invokePMD(seedFolderPath, seedFolderName);
+            List<PMD_Report> reports = invokePMD(iterDepth, seedFolderPath);
             all_PMD_Reports.add(reports);
             for (PMD_Report report : reports) {
                 if(!file2line.containsKey(report.getFilename())) {
