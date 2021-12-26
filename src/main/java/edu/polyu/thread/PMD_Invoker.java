@@ -27,7 +27,7 @@ public class PMD_Invoker implements Runnable {
     public void run() {
         String[] pmdArgs = {
                 "--no-cache",
-                "-d", seedFolderPath + sep + seedFolderName,
+                "-d", seedFolderPath,
                 "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
                 "-f", "json",
                 "-r", PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"

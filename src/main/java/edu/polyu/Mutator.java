@@ -50,9 +50,8 @@ public abstract class Mutator {
         return mutators.get(random.nextInt(mutators.size()));
     }
 
-    private static ArrayList<Mutator> testMutators = new ArrayList<>();
     public static ArrayList<Mutator> getMutators() {
-        return testMutators;
+        return mutators;
     }
 
 }

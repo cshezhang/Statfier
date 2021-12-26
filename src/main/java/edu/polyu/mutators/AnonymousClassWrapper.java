@@ -47,7 +47,7 @@ public class AnonymousClassWrapper extends Mutator {
 
     @Override
     public boolean check(Statement statement) {
-        return false;
+        return true;
     }
 
     @Override

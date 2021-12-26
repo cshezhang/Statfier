@@ -9,6 +9,7 @@ import edu.polyu.report.PMD_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -109,10 +112,15 @@ public class Util {
     public static HashMap<String, HashMap<String, ArrayList<String>>> compactIssues = new HashMap<>();
     public static List<List<SpotBugs_Report>> all_SpotBugs_Reports = new ArrayList<>();
     public static List<List<PMD_Report>> all_PMD_Reports = new ArrayList<>();
-
     public static Map compilerOptions = JavaCore.getOptions();
 
-    public static void initEnv(){
+    public static void initEnv() {
+        try {
+            FileUtils.deleteDirectory(new File(userdir + sep + "mutants"));
+            FileUtils.deleteDirectory(new File(userdir + sep + "results"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(!mutantFolder.exists()) {
             mutantFolder.mkdir();
         }
@@ -204,13 +212,13 @@ public class Util {
     }
 
     public static void checkExecutionTime() {
-        long executionTime = System.currentTimeMillis() - startTimeStamp - compileTime;
-        if (executionTime >= MAX_EXECUTION_TIME) {
-            System.out.println("Execution time is: " + (executionTime / 1000.0) / 60.0 + " mins");
-            System.out.println("Compile time is: " + (compileTime / 1000.0) / 60.0 + " mins");
-            System.out.println("Whole execution time is: " + ((executionTime + compileTime) / 1000.0) / 60.0 + " mins");
-            System.exit(0);
-        }
+//        long executionTime = System.currentTimeMillis() - startTimeStamp - compileTime;
+//        if (executionTime >= MAX_EXECUTION_TIME) {
+//            System.out.println("Execution time is: " + (executionTime / 1000.0) / 60.0 + " mins");
+//            System.out.println("Compile time is: " + (compileTime / 1000.0) / 60.0 + " mins");
+//            System.out.println("Whole execution time is: " + ((executionTime + compileTime) / 1000.0) / 60.0 + " mins");
+//            System.exit(0);
+//        }
     }
 
     public static List<ASTNode> getChildrenNodes(ASTNode root) {

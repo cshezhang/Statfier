@@ -39,9 +39,9 @@ public class AutomaticTester {
             if (MAIN_EXECUTION) {
                 tester.executeMutation(sourceSeedPath);
             }
-            int rules = 0;
+            int rules = compactIssues.keySet().size();
             for(Map.Entry<String, HashMap<String, ArrayList<String>>> entry : compactIssues.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue().keySet().size());
+                System.out.println(entry.getKey() + " " + entry.getValue().keySet().size() + " File Count:" + entry.getValue().values().size());
             }
             System.out.println("Rule Number: " + rules);
         } catch (Exception e) {
