@@ -40,10 +40,17 @@ public class AutomaticTester {
                 tester.executeMutation(sourceSeedPath);
             }
             int rules = compactIssues.keySet().size();
+            int allValidMutantNumber = 0;
             for(Map.Entry<String, HashMap<String, ArrayList<String>>> entry : compactIssues.entrySet()) {
-                System.out.println(entry.getKey() + " " + entry.getValue().keySet().size() + " File Count:" + entry.getValue().values().size());
+                HashMap<String, ArrayList<String>> seq2mutants = entry.getValue();
+                System.out.println("Rule: " + entry.getKey() + " Seq Number: " + seq2mutants.size());
+                for(Map.Entry<String, ArrayList<String>> subEntry : seq2mutants.entrySet()) {
+                    System.out.println(subEntry.getKey() + ": " + subEntry.getValue());
+                    allValidMutantNumber += subEntry.getValue().size();
+                }
             }
             System.out.println("Rule Number: " + rules);
+            System.out.println("Valie Mutant Number: " + allValidMutantNumber);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

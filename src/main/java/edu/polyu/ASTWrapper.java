@@ -577,7 +577,7 @@ public class ASTWrapper {
                     String mutantFilename = "mutant_" + mutantCounter++;
                     String mutantPath = mutantFolder + sep + mutantFilename + ".java";
                     String content = this.document.get();
-                    if (SINGLE_TESTING && this.depth > 1) {
+                    if (SINGLE_TESTING && this.depth >= 1) {
                         System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
                         System.out.println(filename + " is generated from: " + mutator.getClass());
                     }

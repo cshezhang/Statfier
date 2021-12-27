@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
 
+import static edu.polyu.Util.SINGLE_TESTING;
 import static edu.polyu.Util.random;
 
 public abstract class Mutator {
@@ -32,16 +33,29 @@ public abstract class Mutator {
      */
     static {
         mutators = new ArrayList<>();
-//        mutators.add(AddArgAssignment.getInstance());
-//        mutators.add(AddAssignment.getInstance());
-//        mutators.add(AddBrackets.getInstance());
-//        mutators.add(AddControlBranch.getInstance());
-//        mutators.add(AddRedundantLiteral.getInstance());
-//        mutators.add(AnonymousClassWrapper.getInstance());
-//        mutators.add(EnumClassWrapper.getInstance());
-//        mutators.add(NestedClassWrapper.getInstance());
-        mutators.add(AddMethodCall.getInstance());
-//        mutators.add(TransferLocalVarToGlobal.getInstance());
+        if(SINGLE_TESTING) {
+//            mutators.add(AddArgAssignment.getInstance());
+//            mutators.add(AddAssignment.getInstance());
+//            mutators.add(AddBrackets.getInstance());
+//            mutators.add(AddControlBranch.getInstance());
+//            mutators.add(AddRedundantLiteral.getInstance());
+//            mutators.add(AnonymousClassWrapper.getInstance());
+//            mutators.add(EnumClassWrapper.getInstance());
+//            mutators.add(NestedClassWrapper.getInstance());
+            mutators.add(AddMethodCall.getInstance());
+//            mutators.add(TransferLocalVarToGlobal.getInstance());
+        } else {
+            mutators.add(AddArgAssignment.getInstance());
+            mutators.add(AddAssignment.getInstance());
+            mutators.add(AddBrackets.getInstance());
+            mutators.add(AddControlBranch.getInstance());
+            mutators.add(AddRedundantLiteral.getInstance());
+            mutators.add(AnonymousClassWrapper.getInstance());
+            mutators.add(EnumClassWrapper.getInstance());
+            mutators.add(NestedClassWrapper.getInstance());
+            mutators.add(AddMethodCall.getInstance());
+            mutators.add(TransferLocalVarToGlobal.getInstance());
+        }
     }
 
     public static Mutator getMutatorRandomly() {

@@ -12,6 +12,7 @@ import static edu.polyu.Util.file2bugs;
 import static edu.polyu.Util.file2line;
 import static edu.polyu.Util.getFilenamesFromFolder;
 import static edu.polyu.Util.sep;
+import static edu.polyu.Util.userdir;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -104,7 +105,8 @@ public class Schedule {
                     if(SINGLE_TESTING) {
                         System.out.println("Current Depth: " + head.depth);
                     }
-                    tester.locateMutationCode(head.depth, head.getFolderPath());
+                    String currentIterFolder = userdir + sep + "mutants" + sep + "iter" + current_depth;
+                    tester.locateMutationCode(head.depth, currentIterFolder);
                 }
             }
             ArrayList<ASTWrapper> newWrappers = null;
@@ -128,9 +130,13 @@ public class Schedule {
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
         for(int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            // System.out.println("Seed Path: " + seedPath);
-//            ASTWrapper astWrapper = new ASTWrapper(seedPath);
-//            srcWrappers.add(astWrapper);
+            String[] tokens = seedPath.split(sep);
+            String seedFolderName = tokens[tokens.length - 2];
+            if(SINGLE_TESTING) {
+                System.out.println("Seed Path: " + seedPath);
+            }
+            ASTWrapper astWrapper = new ASTWrapper(seedPath, seedFolderName);
+            srcWrappers.add(astWrapper);
         }
         System.out.println("Initial Wrappers Size: " + srcWrappers.size());
         schedulePureRandomTesting(srcWrappers);
@@ -147,9 +153,11 @@ public class Schedule {
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
         for(int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
+            String[] tokens = seedPath.split(sep);
+            String seedFolderName = tokens[tokens.length - 2];
             // System.out.println("Seed Path: " + seedPath);
-//            ASTWrapper astWrapper = new ASTWrapper(seedPath);
-//            srcWrappers.add(astWrapper);
+            ASTWrapper astWrapper = new ASTWrapper(seedPath, seedFolderName);
+            srcWrappers.add(astWrapper);
         }
         System.out.println("Initial Wrappers Size: " + srcWrappers.size());
         scheduleGuidedRandomTesting(srcWrappers);
@@ -194,6 +202,9 @@ public class Schedule {
                     }
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
+            }
+            if(SINGLE_TESTING) {
+                System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
             }
             return;
         }

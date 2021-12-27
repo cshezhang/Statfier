@@ -28,7 +28,7 @@ public class PMD_Invoker implements Runnable {
     @Override
     public void run() {
         String pmdConfig = pmdPath + " pmd"
-                + " -d " + seedFolderPath
+                + " -d " + seedFolderPath + sep + seedFolderName
                 + " -R " + "category/java/" + this.ruleCategory + ".xml/" + this.ruleType
                 + " -f " + "json"
                 + " -r " +  PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
