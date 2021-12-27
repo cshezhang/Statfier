@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.SpotBugs_Report;
-import net.sourceforge.pmd.PMD;
 import org.junit.Test;
 import edu.polyu.thread.PMD_Invoker;
 import edu.polyu.thread.SpotBugs_Invoker;
@@ -23,6 +22,7 @@ import static edu.polyu.Util.getFilenamesFromFolder;
 import static edu.polyu.Util.getProperty;
 import static edu.polyu.Util.jarStr;
 import static edu.polyu.Util.listAveragePartition;
+import static edu.polyu.Util.pmdPath;
 import static edu.polyu.Util.readPMDResultFile;
 import static edu.polyu.Util.readSpotBugsResultFile;
 import static edu.polyu.Util.sep;
@@ -53,10 +53,10 @@ public class Invoker {
                 builder.append(line);
             }
             int exitValue = process.waitFor();
-            if(exitValue != 0) {
+            if(exitValue != 4 && exitValue != 0) {
                 System.err.println("Fail to Invoke Commands: " + args);
                 System.err.println("Log: " + builder);
-                int a = 1 / 0;
+                System.exit(-1);
             }
             process.getOutputStream().close();
         } catch (IOException e) {
@@ -145,13 +145,13 @@ public class Invoker {
     public static List<PMD_Report> invokePMD(int iterDepth, String seedFolderPath) {
         long startExecutionTime = System.currentTimeMillis();
         initThreadPool();
-        for(int i = 0; i < THREAD_COUNT; i++) {
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new PMD_Invoker(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waiitThreadPoolEnding();
         long executionTime = System.currentTimeMillis() - startExecutionTime;
         List<PMD_Report> reports = new ArrayList<>();
-        for(int i = 0; i < THREAD_COUNT; i++) {
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             reports.addAll(readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json"));
         }
         System.out.println(String.format(
@@ -166,14 +166,15 @@ public class Invoker {
     @Test
     public void testInvokePMD() {
         String targetPath = "/home/huaien/projects/SAMutator/seeds/PMD_Seeds";
-        String[] pmdArgs = {
-                "-d", targetPath,
-                "-R", "./allRules.xml",
-                "-f", "html",
-                "-r", "./PMD_Result.html",
-                "-cache", "./PMD_Cache.bin"
+        String[] pmdArgs = {"/bin/sh", "-c",
+                pmdPath + " pmd"
+                        + " -d " + targetPath
+                        + " -R " + " ./allRules.xml"
+                        + " -f " + "html"
+                        + " -r " + "./PMD_Result.html"
+                        + " --no-cache"
         };
-        PMD.main(pmdArgs);
+        invokeCommands(pmdArgs);
     }
 
 }

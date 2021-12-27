@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static edu.polyu.Mutator.mutator_size;
+import static edu.polyu.Mutator.getMutatorSize;
 import static edu.polyu.Util.Path2Last;
 import static edu.polyu.Util.SEARCH_DEPTH;
 import static edu.polyu.Util.SINGLE_TESTING;
@@ -182,7 +182,8 @@ public class ASTWrapper {
             System.err.println("Fail to Rewrite Java Document!");
             e.printStackTrace();
         }
-        updateAST(this.document.get());
+        String newCode = this.document.get();
+        updateAST(newCode);
     }
 
     // This method can be invoked only if the source code file has generated.
@@ -197,6 +198,7 @@ public class ASTWrapper {
             fileWriter.write(this.document.get());
             fileWriter.close();
         } catch (IOException e) {
+            System.err.println("Fail to Write to Java File!");
             e.printStackTrace();
         }
     }
@@ -216,13 +218,15 @@ public class ASTWrapper {
             for(TypeDeclaration type : types) {
                 System.out.println(type);
             }
-            for (MethodDeclaration method : clazz.getMethods()) {
+            MethodDeclaration[] methods = clazz.getMethods();
+            for (MethodDeclaration method : methods) {
                 System.out.println("----------Method Name: " + method.getName() + "----------");
                 Block block = method.getBody();
                 if (block == null) {
                     continue;
                 }
-                for (int i = 0; i < block.statements().size(); i++) {
+                List<Statement> statements = block.statements();
+                for (int i = 0; i < statements.size(); i++) {
                     Statement statement = (Statement) block.statements().get(i);
                     System.out.println(statement.toString());
                     List<ASTNode> nodes = getChildrenNodes(statement);
@@ -443,7 +447,7 @@ public class ASTWrapper {
                 return newWrappers;
             }
             while (true) {
-                if (++randomCount > statementSize * mutator_size) {
+                if (++randomCount > statementSize * getMutatorSize()) {
                     break;
                 }
                 Statement oldStatement = candidateStatements.get(random.nextInt(statementSize));
@@ -507,7 +511,7 @@ public class ASTWrapper {
                 return newWrappers;
             }
             while (true) {
-                if (++guidedRandomCount > statementSize * mutator_size) {
+                if (++guidedRandomCount > statementSize * getMutatorSize()) {
                     break;
                 }
                 Statement oldStatement = this.candidateStatements.get(random.nextInt(statementSize));
@@ -601,7 +605,7 @@ public class ASTWrapper {
                     } else {
                         Files.deleteIfExists(Paths.get(mutantPath));
                     }
-                    checkExecutionTime();
+//                    checkExecutionTime();
                 }
             }
         } catch (Exception e) {

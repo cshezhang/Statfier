@@ -3,8 +3,16 @@ package edu.polyu.mutators;
 import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +20,8 @@ import java.util.List;
 import static edu.polyu.Util.*;
 
 public class AddMethodCall extends Mutator {
+
+    private static int literalCounter = 0;
 
     private static AddMethodCall addMethodCall = new AddMethodCall();
     private AddMethodCall() {}
@@ -23,15 +33,33 @@ public class AddMethodCall extends Mutator {
     @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         List<ASTNode> nodes = getChildrenNodes(sourceStatement);
-        List<ASTNode> candidateNodes = new ArrayList<>();
+        List<ASTNode> literalNodes = new ArrayList<>();
         for(ASTNode node : nodes) {
             if(checkExpressionLiteral(node)) {
-                candidateNodes.add(node);
+                literalNodes.add(node);
             }
         }
-        ASTNode targetNode = candidateNodes.get(random.nextInt(candidateNodes.size()));
-
-        return false;
+        if(literalNodes.size() == 0) {
+            return false;
+        }
+        int randomIndex = random.nextInt(literalNodes.size());
+        ASTNode targetNode = literalNodes.get(randomIndex);
+        MethodDeclaration newMethod = ast.newMethodDeclaration();
+        String newMethodName = "getLiteral" + literalCounter++;
+        newMethod.setName(ast.newSimpleName(newMethodName));
+        ReturnStatement returnStatement = ast.newReturnStatement();
+        Block newBlock = ast.newBlock();
+        newBlock.statements().add(returnStatement);
+        newMethod.setBody(newBlock);
+        returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
+        MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
+        TypeDeclaration clazz = (TypeDeclaration) oldMethod.getParent();
+        ListRewrite listRewrite = astRewrite.getListRewrite(clazz, clazz.getBodyDeclarationsProperty());
+        listRewrite.insertFirst(newMethod, null);
+        MethodInvocation methodInvocation = ast.newMethodInvocation();
+        methodInvocation.setName(ast.newSimpleName(newMethodName));
+        astRewrite.replace(targetNode, methodInvocation, null);
+        return true;
     }
 
     @Override

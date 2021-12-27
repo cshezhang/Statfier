@@ -1,8 +1,10 @@
 package edu.polyu.thread;
 
-import net.sourceforge.pmd.PMD;
+import edu.polyu.Invoker;
 
+import static edu.polyu.Invoker.invokeCommands;
 import static edu.polyu.Util.PMDResultsFolder;
+import static edu.polyu.Util.pmdPath;
 import static edu.polyu.Util.sep;
 
 public class PMD_Invoker implements Runnable {
@@ -25,19 +27,14 @@ public class PMD_Invoker implements Runnable {
     // seedFolderPath can be java source file or a folder contains source files
     @Override
     public void run() {
-        String[] pmdArgs = {
-                "--no-cache",
-                "-d", seedFolderPath,
-                "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
-                "-f", "json",
-                "-r", PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
-//                "-cache", "./PMD_Cache.bin"
-        };
-        try {
-            PMD.runPmd(pmdArgs);
-        } catch (Exception e) {
-            System.out.print("111");
-        }
+        String pmdConfig = pmdPath + " pmd"
+                + " -d " + seedFolderPath
+                + " -R " + "category/java/" + this.ruleCategory + ".xml/" + this.ruleType
+                + " -f " + "json"
+                + " -r " +  PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
+                + " --no-cache";
+        String[] pmdArgs = {"/bin/sh", "-c", pmdConfig};
+        invokeCommands(pmdArgs);
     }
 
 }

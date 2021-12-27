@@ -17,7 +17,6 @@ import static edu.polyu.Util.random;
 public abstract class Mutator {
 
     private static ArrayList<Mutator> mutators;
-    public static int mutator_size;
 
     public abstract boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement);
     public abstract boolean check(Statement statement);
@@ -38,12 +37,11 @@ public abstract class Mutator {
 //        mutators.add(AddBrackets.getInstance());
 //        mutators.add(AddControlBranch.getInstance());
 //        mutators.add(AddRedundantLiteral.getInstance());
-        mutators.add(AnonymousClassWrapper.getInstance());
-        mutators.add(EnumClassWrapper.getInstance());
-        mutators.add(NestedClassWrapper.getInstance());
-//        mutators.add(AddMethodCall.getInstance());
+//        mutators.add(AnonymousClassWrapper.getInstance());
+//        mutators.add(EnumClassWrapper.getInstance());
+//        mutators.add(NestedClassWrapper.getInstance());
+        mutators.add(AddMethodCall.getInstance());
 //        mutators.add(TransferLocalVarToGlobal.getInstance());
-        mutator_size = mutators.size();
     }
 
     public static Mutator getMutatorRandomly() {
@@ -52,6 +50,10 @@ public abstract class Mutator {
 
     public static ArrayList<Mutator> getMutators() {
         return mutators;
+    }
+
+    public static int getMutatorSize() {
+        return mutators.size();
     }
 
 }

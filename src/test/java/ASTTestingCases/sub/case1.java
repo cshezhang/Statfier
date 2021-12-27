@@ -7,21 +7,12 @@ package ASTTestingCases.sub;
  */
 public class case1 {
 
+    public int getInt() {
+        return 1;
+    }
 
-
-    Object obj = new Object() {
-        public void foo() {
-            final String str = "123";
-            System.out.println(str);
-        }
-    };
-
-    enum enumClazz {
-        RED;
-        final String str = "123";
-        public void foo() {
-            System.out.println(str);
-        }
+    public void foo() {
+        getInt();
     }
 
 }

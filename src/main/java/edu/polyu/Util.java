@@ -46,7 +46,7 @@ public class Util {
         }
     }
 
-    public static int THREAD_COUNT;
+    public static int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static String userdir = getProperty("USERDIR");
@@ -98,6 +98,7 @@ public class Util {
 
     // tools
     public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
+    public final static String pmdPath = toolPath + sep + "pmd" + sep + "bin" + sep + "run.sh";
     public static List<String> jarList = getFilenamesFromFolder(toolPath + sep + "libs", true);
     public static List<String> subSeedFolderNameList;
     public static StringBuilder jarStr = new StringBuilder();
@@ -145,7 +146,6 @@ public class Util {
         }
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         subSeedIndex = subSeedFolderNameList.size();
-        THREAD_COUNT = subSeedIndex;
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();

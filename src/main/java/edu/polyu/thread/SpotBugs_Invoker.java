@@ -34,7 +34,9 @@ public class SpotBugs_Invoker implements Runnable {
             }
             compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
             String reportPath = SpotBugsResultsFolder.getAbsolutePath() + sep + seedFileName + "_Result.xml";
-            String[] invokeCmds = {"/bin/sh", "-c", SpotBugsPath + " -textui" + " -xml:withMessages" + " -output " + reportPath + " " + classFolder.getAbsolutePath()};
+            String[] invokeCmds = {"/bin/sh", "-c",
+                    SpotBugsPath + " -textui" + " -xml:withMessages" + " -output " + reportPath + " "
+                            + classFolder.getAbsolutePath()};
             invokeCommands(invokeCmds);
         }
     }
