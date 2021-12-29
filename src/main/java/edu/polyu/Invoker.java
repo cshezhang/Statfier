@@ -135,7 +135,7 @@ public class Invoker {
             reports.addAll(readSpotBugsResultFile(seedFolderPath, report_path));
         }
         System.out.println(String.format(
-                "This Iteration Invocation and Compiling Time is: " + String.format("%d min, %d sec",
+                "SpotBugs Invocation Time is: " + String.format("%d min, %d sec",
                 TimeUnit.MILLISECONDS.toMinutes(executionTime),
                 TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))
                 )));
@@ -155,7 +155,7 @@ public class Invoker {
             reports.addAll(readPMDResultFile(PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json"));
         }
         System.out.println(String.format(
-                "This Iteration Invocation and Compiling Time is: " + String.format("%d min, %d sec",
+                "PMD Invocation Time is: " + String.format("%d min, %d sec",
                         TimeUnit.MILLISECONDS.toMinutes(executionTime),
                         TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))
                 )));

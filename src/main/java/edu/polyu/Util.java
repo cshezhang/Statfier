@@ -48,7 +48,7 @@ public class Util {
 
     public static int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
+//    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static String userdir = getProperty("USERDIR");
 
     public final static boolean AST_TESTING = Boolean.parseBoolean(getProperty("AST_TESTING"));
@@ -63,6 +63,7 @@ public class Util {
     public final static boolean CHECKSTYLE_MUTATION = false;
     public final static boolean ERRORPRONE_MUTATION = false;
     public final static boolean SONARQUBE_MUTATION = false;
+    public final static boolean COMPILE = SPOTBUGS_MUTATION ? true : false;
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
@@ -70,7 +71,6 @@ public class Util {
     public static String sourceSeedPath = null;
     public static int subSeedIndex;
     public static long startTimeStamp = System.currentTimeMillis();
-    public static long compileTime = 0;
     public static int mutantCounter = 0;
 
     public final static String sep = File.separator;
@@ -106,14 +106,74 @@ public class Util {
     public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>();
     public static HashMap<String, HashMap<String, HashSet<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
-    // file2bugs is used to compare parent's and child's violation reports.
-    public static HashMap<String, Integer> file2hash = new HashMap<>();
+    // filename(init + _ + linenumber + _ + mutatorIndex) + line -> true or false
+    public static HashMap<String, Boolean> file2mutation = new HashMap<>();
 
     // (rule -> (transSeq -> Mutant_List))
-    public static HashMap<String, HashMap<String, ArrayList<String>>> compactIssues = new HashMap<>();
-    public static List<List<SpotBugs_Report>> all_SpotBugs_Reports = new ArrayList<>();
-    public static List<List<PMD_Report>> all_PMD_Reports = new ArrayList<>();
+    public static HashMap<String, HashMap<String, ArrayList<TriTuple>>> compactIssues = new HashMap<>();
     public static Map compilerOptions = JavaCore.getOptions();
+
+    static class TriTuple {
+        public String first;
+        public String second;
+        public String third;
+
+        public TriTuple(String first, String second, String third) {
+            this.first = first;
+            this.second = second;
+            this.third = third;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if(o instanceof TriTuple) {
+                TriTuple rhs = (TriTuple) o;
+                if(rhs.first.equals(this.first) && rhs.second.equals(this.second) && rhs.third.equals(this.third)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return (this.first + this.second + this.third).hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return "Seed: " + first + "\n Mutant: " + second + "\n " + third;
+        }
+
+    }
+
+    static class Pair {
+        public String first;
+        public String second;
+
+        public Pair(String first, String second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if(o instanceof Pair) {
+                Pair rhs = (Pair) o;
+                if(rhs.first.equals(this.first) && rhs.second.equals(this.second)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return (this.first + this.second).hashCode();
+        }
+
+    }
+
 
     public static void initEnv() {
         try {

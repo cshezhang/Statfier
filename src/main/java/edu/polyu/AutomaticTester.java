@@ -14,6 +14,7 @@ import static edu.polyu.Util.compactIssues;
 import static edu.polyu.Util.initEnv;
 import static edu.polyu.Util.sourceSeedPath;
 import static edu.polyu.Util.startTimeStamp;
+import static edu.polyu.Util.TriTuple;
 
 /*
  * @Description: This class only contains Automatic Tester related functions, other modules have been moved to Util class.
@@ -41,16 +42,19 @@ public class AutomaticTester {
             }
             int rules = compactIssues.keySet().size();
             int allValidMutantNumber = 0;
-            for(Map.Entry<String, HashMap<String, ArrayList<String>>> entry : compactIssues.entrySet()) {
-                HashMap<String, ArrayList<String>> seq2mutants = entry.getValue();
+            for(Map.Entry<String, HashMap<String, ArrayList<TriTuple>>> entry : compactIssues.entrySet()) {
+                HashMap<String, ArrayList<TriTuple>> seq2mutants = entry.getValue();
                 System.out.println("Rule: " + entry.getKey() + " Seq Number: " + seq2mutants.size());
-                for(Map.Entry<String, ArrayList<String>> subEntry : seq2mutants.entrySet()) {
-                    System.out.println(subEntry.getKey() + ": " + subEntry.getValue());
+                for(Map.Entry<String, ArrayList<TriTuple>> subEntry : seq2mutants.entrySet()) {
+                    System.out.println("Transoformation Sequence: " + subEntry.getKey());
+                    for(TriTuple triTuple : subEntry.getValue()) {
+                        System.out.println(triTuple);
+                    }
                     allValidMutantNumber += subEntry.getValue().size();
                 }
             }
             System.out.println("Rule Number: " + rules);
-            System.out.println("Valie Mutant Number: " + allValidMutantNumber);
+            System.out.println("Valid Mutant Number: " + allValidMutantNumber);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

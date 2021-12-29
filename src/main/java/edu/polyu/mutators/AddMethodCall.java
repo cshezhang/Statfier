@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -54,11 +55,11 @@ public class AddMethodCall extends Mutator {
         returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
         TypeDeclaration clazz = (TypeDeclaration) oldMethod.getParent();
-        ListRewrite listRewrite = astRewrite.getListRewrite(clazz, clazz.getBodyDeclarationsProperty());
+        ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
         listRewrite.insertFirst(newMethod, null);
-        MethodInvocation methodInvocation = ast.newMethodInvocation();
-        methodInvocation.setName(ast.newSimpleName(newMethodName));
-        astRewrite.replace(targetNode, methodInvocation, null);
+        MethodInvocation newMethodInvocation = ast.newMethodInvocation();
+        newMethodInvocation.setName(ast.newSimpleName(newMethodName));
+        astRewrite.replace(targetNode, newMethodInvocation, null);
         return true;
     }
 
