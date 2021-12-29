@@ -1,6 +1,6 @@
 package edu.polyu;
 
-import edu.polyu.report.PMD_Report;
+import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -23,7 +23,7 @@ import static edu.polyu.Util.COMPILE;
 import static edu.polyu.Util.Path2Last;
 import static edu.polyu.Util.SEARCH_DEPTH;
 import static edu.polyu.Util.SINGLE_TESTING;
-import static edu.polyu.Util.checkExecutionTime;
+//import static edu.polyu.Util.checkExecutionTime;
 import static edu.polyu.Util.compactIssues;
 import static edu.polyu.Util.compilerOptions;
 import static edu.polyu.Util.createMethodSignature;
@@ -35,14 +35,14 @@ import static edu.polyu.Util.getChildrenNodes;
 import static edu.polyu.Util.getDirectMethodOfStatement;
 import static edu.polyu.Util.getFirstBrotherOfStatement;
 import static edu.polyu.Util.getSubStatements;
-import static edu.polyu.Util.getTypeOfStatement;
 import static edu.polyu.Util.random;
 import static edu.polyu.Util.sep;
 import static edu.polyu.Util.userdir;
-import static edu.polyu.Util.TriTuple;
 
 /**
- * Description: Mutator Scheduler Author: Huaien Zhang Date: 2021-08-10 16:10
+ * Description: Mutator Scheduler
+ * Author: Vanguard
+ * Date: 2021-08-10 16:10
  */
 public class ASTWrapper {
 
@@ -67,6 +67,7 @@ public class ASTWrapper {
     private List<Statement> allStatements;
     private HashMap<String, List<Statement>> method2statements;
     private List<Statement> candidateStatements;
+    private HashSet<Integer> mutantHashes;
 
     public ASTWrapper(String filePath, String folderName) {
         this.depth = 0;
@@ -109,6 +110,7 @@ public class ASTWrapper {
             }
         }
         this.candidateStatements = null;
+        this.mutantHashes = new HashSet<>();
     }
 
     // Other cases need invoke this constructor, filename is defined in mutate function
@@ -159,6 +161,7 @@ public class ASTWrapper {
             }
         }
         this.candidateStatements = null;
+        this.mutantHashes = new HashSet<>();
     }
 
     public void updateAST(String source) {
@@ -294,7 +297,7 @@ public class ASTWrapper {
             return candidateStatements;
         }
         // Perform intra-procedural def-use analysis to get all candidate statements in this function
-        // 这里感觉可以重构一个更好的过程内数据流分析
+        // We may construct a better data flow analysis here
         HashSet<String> sources = new HashSet<>();
         Expression rightExpression = null;
         for (Statement statement : candidateStatements) {
@@ -428,6 +431,71 @@ public class ASTWrapper {
         } else {
             return false;
         }
+    }
+
+    public ArrayList<ASTWrapper> pureTransformation() {
+        ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
+        try {
+            if (this.candidateStatements == null) {
+                this.candidateStatements = this.allStatements;
+            }
+            if (diffAnalysis()) {
+                return newWrappers;
+            }
+            if(this.depth >= SEARCH_DEPTH) {
+                return newWrappers;
+            }
+            int statementSize = this.candidateStatements.size();
+            if (statementSize <= 0) {
+                return newWrappers;
+            }
+            ArrayList<Mutator> mutators = Mutator.getMutators();
+            for(Statement oldStatement : candidateStatements) {
+                for (Mutator mutator : mutators) {
+                    if (!mutator.check(oldStatement)) {
+                        System.out.println(mutator.getClass());
+                        continue;
+                    }
+                    String filename = "mutant_" + mutantCounter++;
+                    String mutantPath = mutantFolder + sep + filename + ".java";
+                    String content = this.document.get();
+                    ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
+                    Statement newStatement = newWrapper.searchStatement(oldStatement);
+                    if (newStatement == null) {
+                        continue;
+                        // Here, we directly return the newWrappers and regards this situation as failed mutation
+                        // Not exception, because we select statements randomly
+                    }
+                    boolean hasMutated = mutator.transform(
+                            newWrapper.ast,
+                            newWrapper.astRewrite,
+                            getFirstBrotherOfStatement(newStatement),
+                            newStatement
+                    );
+                    if (hasMutated) {
+                        if (COMPILE) {
+                            newWrapper.rewriteJavaCode();
+                            newWrapper.resetClassName();
+                            newWrapper.removePackageDefinition();
+                        }
+                        newWrapper.rewriteJavaCode();
+                        int mutantHash = newWrapper.document.get().hashCode();
+                        if(!mutantHashes.contains(mutantHash)) {
+                            newWrappers.add(newWrapper);
+                            mutantHashes.add(mutantHash);
+                            newWrapper.writeToJavaFile();
+                        }
+
+                    } else {
+                        Files.deleteIfExists(Paths.get(mutantPath));
+                    }
+                }
+                System.out.println("-------------");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return newWrappers;
     }
 
     public ArrayList<ASTWrapper> pureRandomTransformation() {
@@ -617,7 +685,7 @@ public class ASTWrapper {
                     } else {
                         Files.deleteIfExists(Paths.get(mutantPath));
                     }
-                    checkExecutionTime();
+//                    checkExecutionTime();
                 }
             }
         } catch (Exception e) {

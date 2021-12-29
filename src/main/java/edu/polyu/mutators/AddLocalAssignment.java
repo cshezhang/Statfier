@@ -20,11 +20,6 @@ public class AddLocalAssignment extends Mutator {
         return instance;
     }
 
-    @Override
-    public int getIndex() {
-        return 2;
-    }
-
     /*
     * Source: Var A = B; => Var A; A = B; VD_Statement => VD + Assignment
     * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
@@ -80,4 +75,5 @@ public class AddLocalAssignment extends Mutator {
         }
         return false;
     }
+
 }

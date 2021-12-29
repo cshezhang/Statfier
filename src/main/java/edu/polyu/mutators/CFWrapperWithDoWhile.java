@@ -40,8 +40,4 @@ public class CFWrapperWithDoWhile extends Mutator {
         return true;
     }
 
-    @Override
-    public int getIndex() {
-        return 0;
-    }
 }

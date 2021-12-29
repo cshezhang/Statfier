@@ -21,11 +21,6 @@ public class AddBrackets extends Mutator {
     }
 
     @Override
-    public int getIndex() {
-        return 3;
-    }
-
-    @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         Expression expression = null;
         if(sourceStatement instanceof ExpressionStatement) {

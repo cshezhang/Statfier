@@ -8,10 +8,29 @@ package ASTTestingCases.sub;
 public class case1 {
 
     public void foo() {
-        for(int i = 0; i < 1; i++) {
-            System.out.println(1);
-        }
+        boolean a = false || false;
     }
+
+//    public void foo1() {
+//        System.exit(0);
+//    }
+//
+//    public void foo() {
+//        foo1();
+//    }
+
+
+//    Object obj = new Object() {
+//        public void foo() {
+//            System.out.println(1);
+//        }
+//    };
+
+//    public void foo() {
+//        for(int i = 0; i < 1; i++) {
+//            System.out.println(1);
+//        }
+//    }
 
 //    static {
 //        a = 10;

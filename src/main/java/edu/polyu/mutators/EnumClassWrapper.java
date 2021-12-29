@@ -60,8 +60,4 @@ public class EnumClassWrapper extends Mutator {
         return true;
     }
 
-    @Override
-    public int getIndex() {
-        return 8;
-    }
 }

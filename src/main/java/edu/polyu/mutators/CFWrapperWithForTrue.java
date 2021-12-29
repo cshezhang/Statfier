@@ -35,9 +35,10 @@ public class CFWrapperWithForTrue extends Mutator {
         ForStatement newForStatement = ast.newForStatement();
 
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
-        String controlVar = String.format("%d", varCounter++);
+        String controlVar = String.format("cfwwft%d", varCounter++);
         newVdFragment.setName(ast.newSimpleName(controlVar));
         newVdFragment.setInitializer(ast.newNumberLiteral("0"));
+
         VariableDeclarationExpression newVdExpression = ast.newVariableDeclarationExpression(newVdFragment);
         newVdExpression.setType(ast.newPrimitiveType(PrimitiveType.INT));
         newForStatement.initializers().add(newVdExpression);
@@ -53,9 +54,10 @@ public class CFWrapperWithForTrue extends Mutator {
         postfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
         newForStatement.updaters().add(postfixExpression);
 
-        Block newForBody = ast.newBlock();
+        Block newForBodyBlock = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
-        newForBody.statements().add(newStatement);
+        newForBodyBlock.statements().add(newStatement);
+        newForStatement.setBody(newForBodyBlock);
         astRewrite.replace(sourceStatement, newForStatement, null);
         return true;
     }
@@ -68,8 +70,4 @@ public class CFWrapperWithForTrue extends Mutator {
         return true;
     }
 
-    @Override
-    public int getIndex() {
-        return 0;
-    }
 }

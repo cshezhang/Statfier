@@ -8,9 +8,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -20,15 +18,20 @@ import java.util.List;
 
 import static edu.polyu.Util.*;
 
-public class AddMethodCall extends Mutator {
+/**
+ * Description:
+ * Author: Vanguard
+ * Date: 2021-12-29 16:10
+ */
+public class AddMethodCallToLiteral extends Mutator {
 
     private static int literalCounter = 0;
 
-    private static AddMethodCall addMethodCall = new AddMethodCall();
-    private AddMethodCall() {}
+    private static final AddMethodCallToLiteral addMethodCallToLiteral = new AddMethodCallToLiteral();
+    private AddMethodCallToLiteral() {}
 
-    public static AddMethodCall getInstance() {
-        return addMethodCall;
+    public static AddMethodCallToLiteral getInstance() {
+        return addMethodCallToLiteral;
     }
 
     @Override
@@ -74,8 +77,4 @@ public class AddMethodCall extends Mutator {
         return false;
     }
 
-    @Override
-    public int getIndex() {
-        return 5;
-    }
 }

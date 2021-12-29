@@ -1,5 +1,7 @@
 package edu.polyu;
 
+import edu.polyu.util.TriTuple;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,11 +12,12 @@ import static edu.polyu.Util.AST_TESTING_PATH;
 import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
 import static edu.polyu.Util.MAIN_EXECUTION;
 import static edu.polyu.Util.PURE_RANDOM_TESTING;
+import static edu.polyu.Util.PURE_TESTING;
+import static edu.polyu.Util.SINGLE_TESTING_PATH;
 import static edu.polyu.Util.compactIssues;
 import static edu.polyu.Util.initEnv;
 import static edu.polyu.Util.sourceSeedPath;
 import static edu.polyu.Util.startTimeStamp;
-import static edu.polyu.Util.TriTuple;
 
 /*
  * @Description: This class only contains Automatic Tester related functions, other modules have been moved to Util class.
@@ -28,6 +31,10 @@ public class AutomaticTester {
         Schedule tester = Schedule.getInstance();
         if(AST_TESTING) {
             tester.testAST(AST_TESTING_PATH);
+            System.exit(0);
+        }
+        if(PURE_TESTING) {
+            tester.pureTesting(SINGLE_TESTING_PATH);
             System.exit(0);
         }
         try {

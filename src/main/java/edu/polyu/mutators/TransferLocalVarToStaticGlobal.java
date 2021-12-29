@@ -11,14 +11,13 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
+import static edu.polyu.Util.checkLiteralType;
 import static edu.polyu.Util.getChildrenNodes;
 import static edu.polyu.Util.mutantCounter;
 import static edu.polyu.Util.random;
@@ -37,11 +36,6 @@ public class TransferLocalVarToStaticGlobal extends Mutator {
     }
 
     @Override
-    public int getIndex() {
-        return 12;
-    }
-
-    @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
@@ -52,19 +46,20 @@ public class TransferLocalVarToStaticGlobal extends Mutator {
             }
         }
         int randomIndex = random.nextInt(literalNodes.size());
-        Expression targetNode = (Expression) literalNodes.get(randomIndex);
+        Expression targetLiteral = (Expression) literalNodes.get(randomIndex);
         TypeDeclaration clazz = Util.getTypeOfStatement(sourceStatement);
         String newVarName = "t2sg" + mutantCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         newVdFragment.setName(newVar);
-        newVdFragment.setInitializer((targetNode));
+        newVdFragment.setInitializer((Expression) ASTNode.copySubtree(ast, targetLiteral));
         FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(newVdFragment);
+        fieldDeclaration.setType(checkLiteralType(ast, targetLiteral));
         fieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
         fieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
         ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
         listRewrite.insertFirst(fieldDeclaration, null);
-        astRewrite.replace(targetNode, newVar, null);
+        astRewrite.replace(targetLiteral, newVar, null);
         return true;
     }
 

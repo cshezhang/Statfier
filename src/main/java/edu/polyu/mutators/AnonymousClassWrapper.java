@@ -15,7 +15,7 @@ import static edu.polyu.Util.getDirectMethodOfStatement;
 
 public class AnonymousClassWrapper extends Mutator {
 
-    public static int anonymousClassCounter = 0;
+    public static int varCounter;
 
     private static AnonymousClassWrapper instance = new AnonymousClassWrapper();
 
@@ -23,7 +23,9 @@ public class AnonymousClassWrapper extends Mutator {
         return instance;
     }
 
-    private AnonymousClassWrapper() {}
+    private AnonymousClassWrapper() {
+        varCounter = 0;
+    }
 
     @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
@@ -32,13 +34,17 @@ public class AnonymousClassWrapper extends Mutator {
             return false;
         }
         MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
-        VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
-        ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
-        instanceCreation.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         anonymousClassDeclaration.bodyDeclarations().add(newMethod);
+        ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
+        instanceCreation.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+        instanceCreation.setAnonymousClassDeclaration(anonymousClassDeclaration);
+
+        VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
         fragment.setInitializer(instanceCreation);
-        fragment.setName(ast.newSimpleName("obj" + anonymousClassCounter++));
+        fragment.setName(ast.newSimpleName("acw" + varCounter++));
+
         FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
         fieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
         astRewrite.replace(oldMethod, fieldDeclaration, null);
@@ -50,8 +56,4 @@ public class AnonymousClassWrapper extends Mutator {
         return true;
     }
 
-    @Override
-    public int getIndex() {
-        return 7;
-    }
 }

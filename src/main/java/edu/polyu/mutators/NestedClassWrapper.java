@@ -41,8 +41,4 @@ public class NestedClassWrapper extends Mutator {
         return true;
     }
 
-    @Override
-    public int getIndex() {
-        return 10;
-    }
 }

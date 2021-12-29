@@ -9,6 +9,7 @@ import edu.polyu.report.PMD_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 
+import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -21,10 +22,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -52,6 +58,7 @@ public class Util {
     public static String userdir = getProperty("USERDIR");
 
     public final static boolean AST_TESTING = Boolean.parseBoolean(getProperty("AST_TESTING"));
+    public static final boolean PURE_TESTING = Boolean.parseBoolean(getProperty("PURE_TESTING"));
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
     public final static boolean PURE_RANDOM_TESTING = Boolean.parseBoolean(getProperty("PURE_RANDOM_TESTING"));
     public final static boolean GUIDED_RANDOM_TESTING = Boolean.parseBoolean(getProperty("GUIDED_RANDOM_TESTING"));
@@ -113,67 +120,26 @@ public class Util {
     public static HashMap<String, HashMap<String, ArrayList<TriTuple>>> compactIssues = new HashMap<>();
     public static Map compilerOptions = JavaCore.getOptions();
 
-    static class TriTuple {
-        public String first;
-        public String second;
-        public String third;
-
-        public TriTuple(String first, String second, String third) {
-            this.first = first;
-            this.second = second;
-            this.third = third;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if(o instanceof TriTuple) {
-                TriTuple rhs = (TriTuple) o;
-                if(rhs.first.equals(this.first) && rhs.second.equals(this.second) && rhs.third.equals(this.third)) {
-                    return true;
-                }
+    public static Type checkLiteralType(AST ast, Expression literalExpression) {
+        if(literalExpression instanceof NumberLiteral) {
+            String token = ((NumberLiteral) literalExpression).getToken();
+            if(token.contains(".")) {
+                return ast.newPrimitiveType(PrimitiveType.DOUBLE);
+            } else {
+                return ast.newPrimitiveType(PrimitiveType.INT);
             }
-            return false;
         }
-
-        @Override
-        public int hashCode() {
-            return (this.first + this.second + this.third).hashCode();
+        if(literalExpression instanceof StringLiteral) {
+            return ast.newSimpleType(ast.newSimpleName("String"));
         }
-
-        @Override
-        public String toString() {
-            return "Seed: " + first + "\n Mutant: " + second + "\n " + third;
+        if(literalExpression instanceof CharacterLiteral) {
+            return ast.newPrimitiveType(PrimitiveType.CHAR);
         }
-
+        if(literalExpression instanceof BooleanLiteral) {
+            return ast.newPrimitiveType(PrimitiveType.BOOLEAN);
+        }
+        return ast.newSimpleType(ast.newSimpleName("Object"));
     }
-
-    static class Pair {
-        public String first;
-        public String second;
-
-        public Pair(String first, String second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if(o instanceof Pair) {
-                Pair rhs = (Pair) o;
-                if(rhs.first.equals(this.first) && rhs.second.equals(this.second)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public int hashCode() {
-            return (this.first + this.second).hashCode();
-        }
-
-    }
-
 
     public static void initEnv() {
         try {
@@ -185,7 +151,7 @@ public class Util {
         if(!mutantFolder.exists()) {
             mutantFolder.mkdir();
         }
-        if(SINGLE_TESTING) {
+        if(PURE_TESTING || SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {
             if (PMD_MUTATION) {
@@ -210,8 +176,8 @@ public class Util {
             File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();
             for(int j = 0; j < subSeedIndex; j++) {
-                String subFolderName = subSeedFolderNameList.get(j);
-                File subSeedFolder = new File(iter.getAbsolutePath() + sep + subFolderName);
+                String subSeedFolderName = subSeedFolderNameList.get(j);
+                File subSeedFolder = new File(iter.getAbsolutePath() + sep + subSeedFolderName);
                 subSeedFolder.mkdir();
             }
         }
@@ -271,7 +237,7 @@ public class Util {
         return signature.toString();
     }
 
-    public static void checkExecutionTime() {
+//    public static void checkExecutionTime() {
 //        long executionTime = System.currentTimeMillis() - startTimeStamp - compileTime;
 //        if (executionTime >= MAX_EXECUTION_TIME) {
 //            System.out.println("Execution time is: " + (executionTime / 1000.0) / 60.0 + " mins");
@@ -279,7 +245,7 @@ public class Util {
 //            System.out.println("Whole execution time is: " + ((executionTime + compileTime) / 1000.0) / 60.0 + " mins");
 //            System.exit(0);
 //        }
-    }
+//    }
 
     public static List<ASTNode> getChildrenNodes(ASTNode root) {
         ArrayList<ASTNode> nodes = new ArrayList<>();
@@ -561,17 +527,15 @@ public class Util {
     }
 
     public static Statement getFirstBrotherOfStatement(Statement statement) {
-        if(statement == null) {
-            int a = 10;
-        }
         ASTNode parent = statement.getParent();
         ASTNode currentStatement = statement;
-        if(parent == null) {
-            int a = 10;
-        }
         while(!(parent instanceof Block)) {
             parent = parent.getParent();
             currentStatement = currentStatement.getParent();
+            if(parent == null || parent.equals(parent.getParent())) {
+                System.err.println("Error in Finding Brother Statement!");
+                System.exit(-1);
+            }
         }
         if(!(currentStatement instanceof Statement)) {
             System.err.println("Error: Current Statement cannot be casted to Statement!");
@@ -583,6 +547,10 @@ public class Util {
         ASTNode parent = statement.getParent();
         while(!(parent instanceof Block)) {
             parent = parent.getParent();
+            if(parent == null || parent.equals(parent.getParent())) {
+                System.err.println("Error in Finding Direct Block!");
+                System.exit(-1);
+            }
         }
         return (Block) parent;
     }
@@ -591,6 +559,10 @@ public class Util {
         ASTNode parent = statement.getParent();
         while(!(parent instanceof MethodDeclaration)) {
             parent = parent.getParent();
+            if(parent == null || parent.equals(parent.getParent())) {
+                System.err.println("Error in Finding Direct Method!");
+                System.exit(-1);
+            }
         }
         return (MethodDeclaration) parent;
     }
@@ -599,6 +571,10 @@ public class Util {
         ASTNode parent = statement.getParent();
         while(!(parent instanceof TypeDeclaration)) {
             parent = parent.getParent();
+            if(parent == null || parent.equals(parent.getParent())) {
+                System.err.println("Error in Finding Type!");
+                System.exit(-1);
+            }
         }
         return (TypeDeclaration) parent;
     }

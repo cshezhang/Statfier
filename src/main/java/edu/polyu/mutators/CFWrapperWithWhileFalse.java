@@ -13,6 +13,9 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
+import static edu.polyu.Util.getDirectBlockOfStatement;
+import static edu.polyu.Util.getDirectMethodOfStatement;
+
 public class CFWrapperWithWhileFalse extends Mutator {
 
     private static final CFWrapperWithWhileFalse instance = new CFWrapperWithWhileFalse();
@@ -28,14 +31,16 @@ public class CFWrapperWithWhileFalse extends Mutator {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
         WhileStatement newWhileStatement = ast.newWhileStatement();
         newWhileStatement.setExpression(ast.newBooleanLiteral(false));
-        BreakStatement breakStatement = ast.newBreakStatement();
         Block newWhileBlock = ast.newBlock();
         newWhileBlock.statements().add(newStatement);
-        newWhileBlock.statements().add(breakStatement);
         newWhileStatement.setBody(newWhileBlock);
-        MethodDeclaration method = ast.newMethodDeclaration();
-        ListRewrite listRewrite = astRewrite.getListRewrite(method.getBody(), Block.STATEMENTS_PROPERTY);
-        listRewrite.insertAfter(newWhileStatement, sourceStatement, null);
+        Block block = getDirectBlockOfStatement(sourceStatement);
+        ListRewrite listRewrite = astRewrite.getListRewrite(block, Block.STATEMENTS_PROPERTY);
+        try {
+            listRewrite.insertAfter(newWhileStatement, sourceStatement, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -45,11 +50,6 @@ public class CFWrapperWithWhileFalse extends Mutator {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public int getIndex() {
-        return 0;
     }
 
 }

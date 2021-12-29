@@ -51,10 +51,10 @@ public class Schedule {
         }
     }
 
-    public void schedulePureRandomTesting(List<ASTWrapper> srcWarppers) {
+    public void schedulePureTesting(List<ASTWrapper> srcWrappers) {
         int current_depth = -1;
         ArrayDeque<ASTWrapper> que = new ArrayDeque<>();
-        que.addAll(srcWarppers);
+        que.addAll(srcWrappers);
         while(!que.isEmpty()) {
             ASTWrapper head = que.pollFirst();
             if(current_depth != head.depth) {
@@ -67,7 +67,27 @@ public class Schedule {
                     break;
                 }
             }
+            ArrayList<ASTWrapper> newWrappers = head.pureTransformation();
+            que.addAll(newWrappers);
+        }
+    }
 
+    public void schedulePureRandomTesting(List<ASTWrapper> srcWrappers) {
+        int current_depth = -1;
+        ArrayDeque<ASTWrapper> que = new ArrayDeque<>();
+        que.addAll(srcWrappers);
+        while(!que.isEmpty()) {
+            ASTWrapper head = que.pollFirst();
+            if(current_depth != head.depth) {
+                current_depth = head.depth;
+                if(current_depth != 0) {
+                    System.out.println(head.getFolderPath());
+                    // No need to invocate locateMutationCode, just randomly select mutants
+                }
+                if (current_depth >= SEARCH_DEPTH) {
+                    break;
+                }
+            }
             ArrayList<ASTWrapper> newWrappers = head.pureRandomTransformation();
             que.addAll(newWrappers);
         }
@@ -118,6 +138,29 @@ public class Schedule {
             ArrayList<ASTWrapper> newWrappers = head.mainTransformation();
             que.addAll(newWrappers);
         }
+    }
+
+    public void pureTesting(String targetPath) {
+        if (targetPath.endsWith(".java")) {
+            System.err.println("You should give a folder for Seed Init!");
+            System.exit(-1);
+        }
+        List<String> seedPaths = getFilenamesFromFolder(targetPath, true);
+        System.out.println("Pure Random Testing Initial Seed Count: " + seedPaths.size());
+        ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
+        for(int index = 0; index < seedPaths.size(); index++) {
+            String seedPath = seedPaths.get(index);
+            String[] tokens = seedPath.split(sep);
+            String seedFolderName = tokens[tokens.length - 2];
+            if(SINGLE_TESTING) {
+                System.out.println("Seed Path: " + seedPath);
+            }
+            ASTWrapper initSeedWrapper = new ASTWrapper(seedPath, seedFolderName);
+            srcWrappers.add(initSeedWrapper);
+        }
+        System.out.println("Initial Wrappers Size: " + srcWrappers.size());
+        System.gc();
+        schedulePureTesting(srcWrappers);
     }
 
     public void pureRandomTesting(String targetPath) {

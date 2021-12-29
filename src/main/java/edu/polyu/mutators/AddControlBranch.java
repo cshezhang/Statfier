@@ -18,17 +18,15 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 public class AddControlBranch extends Mutator {
 
 
-    private static AddControlBranch singleInstance = new AddControlBranch();
+    private static final AddControlBranch singleInstance = new AddControlBranch();
+    private static int varCounter;
 
     public static AddControlBranch getInstance() {
         return singleInstance;
     }
 
-    private AddControlBranch() {}
-
-    @Override
-    public int getIndex() {
-        return 4;
+    private AddControlBranch() {
+        varCounter = 0;
     }
 
     @Override
@@ -36,9 +34,16 @@ public class AddControlBranch extends Mutator {
         IfStatement newIfStatement = ast.newIfStatement();
         Block thenBlock = ast.newBlock();
         Block elseBlock = ast.newBlock();
-        // false branch is directly copied from source statement
-        // true branch considers vd statement because of define range of variable
-        // namely, int a = 10; -> int a; if(true) { a = 10; } else { a = 10; }
+        // False branch is directly cloned from source statement
+        // True branch considers vd statement because of define range of variable
+        // Namely, int a = 10; -> int a; if(true) { a = 10; } else { a = 10; }
+        VariableDeclarationFragment newBoolVdFragment = ast.newVariableDeclarationFragment();
+        String varName = String.format("acb%d", varCounter);
+        newBoolVdFragment.setName(ast.newSimpleName(varName));
+        newBoolVdFragment.setInitializer(ast.newBooleanLiteral(true));
+        VariableDeclarationStatement newBoolVdStatement = ast.newVariableDeclarationStatement(newBoolVdFragment);
+        newBoolVdStatement.setType(ast.newPrimitiveType(PrimitiveType.BOOLEAN));
+        // Final modifier can be added by a specific transformation
         if(sourceStatement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) sourceStatement;
             VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
@@ -57,20 +62,24 @@ public class AddControlBranch extends Mutator {
             elseBlock.statements().add(elseStatement);
             newIfStatement.setThenStatement(thenBlock);
             newIfStatement.setElseStatement(elseBlock);
-            newIfStatement.setExpression(ast.newBooleanLiteral(true));
+            newIfStatement.setExpression(ast.newSimpleName(varName));
             ListRewrite listRewrite = astRewrite.getListRewrite(brotherStatement.getParent(), Block.STATEMENTS_PROPERTY);
             listRewrite.insertAfter(newVdStatement, sourceStatement, null);
-            listRewrite.insertAfter(newIfStatement, newVdStatement, null);
+            listRewrite.insertAfter(newBoolVdStatement, newVdStatement, null);
+            listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
             listRewrite.remove(sourceStatement, null);
         } else {
             Statement thenStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
             Statement elseStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
             thenBlock.statements().add(thenStatement);
             elseBlock.statements().add(elseStatement);
-            newIfStatement.setExpression(ast.newBooleanLiteral(true));
+            newIfStatement.setExpression(ast.newSimpleName(varName));
             newIfStatement.setThenStatement(thenBlock);
             newIfStatement.setElseStatement(elseBlock);
-            astRewrite.replace(sourceStatement, newIfStatement, null);
+            ListRewrite listRewrite = astRewrite.getListRewrite(brotherStatement.getParent(), Block.STATEMENTS_PROPERTY);
+            listRewrite.insertAfter(newBoolVdStatement, sourceStatement, null);
+            listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
+            listRewrite.remove(sourceStatement, null);
         }
         return true;
     }

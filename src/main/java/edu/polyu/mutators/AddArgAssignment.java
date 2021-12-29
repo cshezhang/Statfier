@@ -24,11 +24,6 @@ public class AddArgAssignment extends Mutator {
         return addArgAssignment;
     }
 
-    @Override
-    public int getIndex() {
-        return 1;
-    }
-
     /**
      * int a = constant; -> final int b = constant; int a = b;
      * Var A = NEW B(xxx, yyy); => n = xxx; Var A = NEW B(n, yyy);

@@ -1,15 +1,9 @@
-/*
- * @Description: 
- * @Author: Austin ZHANG
- * @Date: 2021-10-14 09:25:07
- */
 package edu.polyu.mutators;
 
 import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-import static edu.polyu.Util.random;
 
 /**
  * @Description: The mutant to add redundant literal
@@ -24,11 +18,6 @@ public class AddRedundantLiteral extends Mutator {
 
     public static AddRedundantLiteral getInstance() {
         return addRedundantLiteral;
-    }
-
-    @Override
-    public int getIndex() {
-        return 6;
     }
 
     /*

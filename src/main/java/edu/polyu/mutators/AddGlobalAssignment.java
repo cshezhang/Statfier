@@ -32,11 +32,6 @@ public class AddGlobalAssignment extends Mutator {
         return instance;
     }
 
-    @Override
-    public int getIndex() {
-        return 2;
-    }
-
     /*
      * Attention: For FieldDeclaration
      * Source: Var A = B; => Var A; A = B; VD_Statement => VD + Assignment
@@ -44,33 +39,41 @@ public class AddGlobalAssignment extends Mutator {
      * */
     @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
-        TypeDeclaration clazz = Util.getTypeOfStatement(sourceStatement);
-        List<ASTNode> nodes = clazz.bodyDeclarations();
-        List<FieldDeclaration> fieldDeclarations = new ArrayList<>();
-        for(int i = 0; i < nodes.size(); i++) {
-            ASTNode node = nodes.get(i);
+        TypeDeclaration oldClazz = Util.getTypeOfStatement(sourceStatement);
+        List<ASTNode> oldClazzCompoents = oldClazz.bodyDeclarations();
+        List<FieldDeclaration> oldFieldDeclarations = new ArrayList<>();
+        for(int i = 0; i < oldClazzCompoents.size(); i++) {
+            ASTNode node = oldClazzCompoents.get(i);
             if(node instanceof FieldDeclaration) {
                 FieldDeclaration fieldDeclaration = (FieldDeclaration) node;
                 List<ASTNode> modifiers = fieldDeclaration.modifiers();
                 if(modifiers.contains(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
                     VariableDeclarationFragment fragment = (VariableDeclarationFragment) fieldDeclaration.fragments().get(0);
+                    // Search Field Declaration with Initializer
                     if (fragment.getInitializer() != null) {
-                        fieldDeclarations.add(fieldDeclaration);
+                        oldFieldDeclarations.add(fieldDeclaration);
                     }
                 }
             }
+        }
+        if(oldFieldDeclarations.size() == 0) {
+            return false;
         }
         List<FieldDeclaration> targetFields = new ArrayList<>();
         List<ASTNode> children = Util.getChildrenNodes(sourceStatement);
         for(ASTNode node : children) {
             if(node instanceof SimpleName) {
-                for(FieldDeclaration fieldDeclaration : fieldDeclarations) {
-                    VariableDeclarationFragment fragment = (VariableDeclarationFragment) fieldDeclaration.fragments().get(0);
+                for(FieldDeclaration oldFieldDeclaration : oldFieldDeclarations) {
+                    VariableDeclarationFragment fragment = (VariableDeclarationFragment) oldFieldDeclaration.fragments().get(0);
                     if(fragment.getName().getIdentifier().equals(((SimpleName) node).getIdentifier())) {
-                        targetFields.add(fieldDeclaration);
+                        // Search matched filed: SimpleName in Statement -> FieldDeclaration
+                        targetFields.add(oldFieldDeclaration);
                     }
                 }
             }
+        }
+        if(targetFields.size() == 0) {
+            return false;
         }
         Block newStaticBlock = ast.newBlock();
         for(int i = 0; i < targetFields.size(); i++) {
@@ -89,31 +92,14 @@ public class AddGlobalAssignment extends Mutator {
             astRewrite.replace(oldFieldDeclaration, newFieldDeclaration, null);
             newStaticBlock.statements().add(newVdStatement);
         }
-        ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
-        listRewrite.insertAfter(newStaticBlock, fieldDeclarations.get(fieldDeclarations.size() - 1), null);
+        ListRewrite listRewrite = astRewrite.getListRewrite(oldClazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
+        listRewrite.insertAfter(newStaticBlock, oldFieldDeclarations.get(oldFieldDeclarations.size() - 1), null);
         return true;
     }
 
     @Override
     public boolean check(Statement statement) {
-        if(statement instanceof VariableDeclarationStatement) {
-            VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
-            // System.out.println(vdStatement.getType());
-            if(vdStatement.getType() instanceof ArrayType) {
-                if(vdStatement.modifiers().size() > 0) {
-                    Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
-                    if(modifier.getKeyword().toString().equals("final")) {
-                        return false;
-                        // final byte[] values={0}; -> final byte[] values; values = {0} is wrong.
-                    }
-                }
-            }
-            VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
-            if(vdFragment.getInitializer() != null) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 
 }

@@ -43,8 +43,4 @@ public class CFWrapperWithWhileTrue extends Mutator {
         return true;
     }
 
-    @Override
-    public int getIndex() {
-        return 0;
-    }
 }
