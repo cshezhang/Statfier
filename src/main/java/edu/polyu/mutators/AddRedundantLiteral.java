@@ -4,6 +4,12 @@ import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static edu.polyu.Util.getChildrenNodes;
+import static edu.polyu.Util.random;
+
 
 /**
  * @Description: The mutant to add redundant literal
@@ -26,53 +32,66 @@ public class AddRedundantLiteral extends Mutator {
 
     @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
-        Expression oldRightValue = null;
-        if(sourceStatement instanceof ExpressionStatement && ((ExpressionStatement) sourceStatement).getExpression() instanceof Assignment) {
-            oldRightValue = ((Assignment) ((ExpressionStatement) sourceStatement).getExpression()).getRightHandSide();
+        List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
+        List<NumberLiteral> numberLiterals = new ArrayList<>();
+        for(int i = 0; i < subNodes.size(); i++) {
+            ASTNode node = subNodes.get(i);
+            if(node instanceof NumberLiteral) {
+                numberLiterals.add((NumberLiteral) node);
+            }
         }
-        if(sourceStatement instanceof VariableDeclarationStatement) {
-            oldRightValue = ((VariableDeclarationFragment)((VariableDeclarationStatement) sourceStatement).fragments().get(0)).getInitializer();
-        }
-        InfixExpression newRightValue = ast.newInfixExpression();
-        newRightValue.setOperator(InfixExpression.Operator.MINUS);
-        String str = sourceStatement.toString();
+        int randomIndex = random.nextInt(numberLiterals.size());
+        NumberLiteral targetLiteral = numberLiterals.get(randomIndex);
+        InfixExpression newLeft = ast.newInfixExpression();
         String value2add;
-        if(str.contains("float") || str.contains("double")) {
-            value2add = String.format("%f", 100 * Math.random());
+        if(targetLiteral.getToken().contains(".")) {
+            value2add = "1.0";
         } else {
-            value2add = String.format("%d", (int)(100 * Math.random()));
+            value2add = "1";
         }
-        newRightValue.setRightOperand(ast.newNumberLiteral(value2add));
-        InfixExpression newLeftInRight = ast.newInfixExpression();
-        newLeftInRight.setLeftOperand((Expression) ASTNode.copySubtree(ast, oldRightValue));
-        newLeftInRight.setOperator(InfixExpression.Operator.PLUS);
-        newLeftInRight.setRightOperand(ast.newNumberLiteral(value2add.toString()));
-        newRightValue.setLeftOperand(newLeftInRight);
-        astRewrite.replace(oldRightValue, newRightValue, null);
+        newLeft.setLeftOperand(ast.newNumberLiteral(value2add));
+        newLeft.setOperator(InfixExpression.Operator.PLUS);
+        newLeft.setRightOperand((Expression) ASTNode.copySubtree(ast, targetLiteral));
+        InfixExpression newRight = ast.newInfixExpression();
+        newRight.setLeftOperand(newLeft);
+        newRight.setRightOperand(ast.newNumberLiteral(value2add));
+        newRight.setOperator(InfixExpression.Operator.MINUS);
+        ParenthesizedExpression newRightExpression = ast.newParenthesizedExpression();
+        newRightExpression.setExpression(newRight);
+        astRewrite.replace(targetLiteral, newRightExpression, null);
         return true;
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         // Here, I am not sure whether the condition is too strict
         // Here, we should also consider SimpleName by data flow analysis or type binding.
-        Expression rightValue;
-        if(statement instanceof ExpressionStatement && ((ExpressionStatement) statement).getExpression() instanceof Assignment) {
-            Assignment assignment = (Assignment)((ExpressionStatement) statement).getExpression();
-            String op = assignment.getOperator().toString();
-            if(op.contains("+=") || op.contains("-=") || op.contains("*=") || op.contains("/=")) {             
-                rightValue = ((Assignment) ((ExpressionStatement) statement).getExpression()).getRightHandSide();
-                if(rightValue instanceof NumberLiteral) {
-                    return true;
-                }
+        int counter = 0;
+        List<ASTNode> subNodes = getChildrenNodes(statement);
+        for(int i = 0; i < subNodes.size(); i++) {
+            ASTNode node = subNodes.get(i);
+            if(node instanceof NumberLiteral) {
+                counter++;
             }
         }
-        if(statement instanceof VariableDeclarationStatement) {
-            rightValue = ((VariableDeclarationFragment)((VariableDeclarationStatement) statement).fragments().get(0)).getInitializer();
-            if(rightValue != null && rightValue instanceof NumberLiteral) {
-                return true;
-            }
-        }
-        return false;
+        return counter;
+//        Expression rightValue;
+//        if(statement instanceof ExpressionStatement && ((ExpressionStatement) statement).getExpression() instanceof Assignment) {
+//            Assignment assignment = (Assignment)((ExpressionStatement) statement).getExpression();
+//            String op = assignment.getOperator().toString();
+//            if(op.contains("+=") || op.contains("-=") || op.contains("*=") || op.contains("/=")) {
+//                rightValue = ((Assignment) ((ExpressionStatement) statement).getExpression()).getRightHandSide();
+//                if(rightValue instanceof NumberLiteral) {
+//                    return true;
+//                }
+//            }
+//        }
+//        if(statement instanceof VariableDeclarationStatement) {
+//            rightValue = ((VariableDeclarationFragment)((VariableDeclarationStatement) statement).fragments().get(0)).getInitializer();
+//            if(rightValue != null && rightValue instanceof NumberLiteral) {
+//                return true;
+//            }
+//        }
+//        return false;
     }
 }

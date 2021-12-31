@@ -10,6 +10,7 @@ import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 
 import edu.polyu.util.TriTuple;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -31,7 +32,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 /**
  * @Description: Utility Class for SAMutator
@@ -444,7 +447,6 @@ public class Util {
             Document report = saxReader.read(new File(reportPath));
             Element root = report.getRootElement();
             List<Element> bugInstances = root.elements("BugInstance");
-            int nostart_cnt = 0;
             for(Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for(Element sourceLine : sourceLines) {

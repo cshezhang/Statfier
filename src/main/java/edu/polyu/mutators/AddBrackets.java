@@ -41,23 +41,23 @@ public class AddBrackets extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof ExpressionStatement) {
             Expression expression = ((ExpressionStatement)statement).getExpression();
             // https://www.ibm.com/docs/en/rational-soft-arch/9.5?topic=r-api-reference-1
-            // 事实证明只有Assignment能用，别的expression不用考虑
-            return expression instanceof Assignment ? true : false;
+            // Actually, we only need to consider Assignment, others can be dismissed
+            return expression instanceof Assignment ? 1 : 0;
         }
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
             if(vdStatement.getType() instanceof ArrayType) {
-                return false;
+                return 0;
             }
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
             if(vdFragment.getInitializer() != null) {
-                return true;
+                return 1;
             }
         }
-        return false;
+        return 0;
     }
 }

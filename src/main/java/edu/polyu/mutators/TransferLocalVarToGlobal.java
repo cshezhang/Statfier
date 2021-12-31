@@ -63,15 +63,28 @@ public class TransferLocalVarToGlobal extends Mutator {
         return true;
     }
 
+//    @Override
+//    public List<ASTNode> getCandidateNodes(Statement statement) {
+//        List<ASTNode> nodes = getChildrenNodes(statement);
+//        List<ASTNode> results = new ArrayList<>();
+//        for(int i = 0; i < nodes.size(); i++) {
+//            if((checkExpressionLiteral(nodes.get(i)))) {
+//                results.add(nodes.get(i));
+//            }
+//        }
+//        return results;
+//    }
+
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
+        int counter = 0;
         List<ASTNode> nodes = getChildrenNodes(statement);
         for(int i = 0; i < nodes.size(); i++) {
             if(checkExpressionLiteral(nodes.get(i))) {
-                return true;
+                counter++;
             }
         }
-        return false;
+        return counter;
     }
 
 }

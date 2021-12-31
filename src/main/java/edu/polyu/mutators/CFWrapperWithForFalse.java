@@ -57,23 +57,25 @@ public class CFWrapperWithForFalse extends Mutator {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
         newForBody.statements().add(newStatement);
         newForStatement.setBody(newForBody);
-
         Block methodBlock = getDirectBlockOfStatement(sourceStatement);
-        ListRewrite methodRewrite = astRewrite.getListRewrite(methodBlock, Block.STATEMENTS_PROPERTY);
-        try {
+        if(methodBlock.statements().contains(sourceStatement)) {
+            ListRewrite methodRewrite = astRewrite.getListRewrite(methodBlock, Block.STATEMENTS_PROPERTY);
             methodRewrite.insertAfter(newForStatement, sourceStatement, null);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            Block newBlock = ast.newBlock();
+            newBlock.statements().add(ASTNode.copySubtree(ast, sourceStatement));
+            newBlock.statements().add(newForStatement);
+            astRewrite.replace(sourceStatement, newBlock, null);
         }
         return true;
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
-            return false;
+            return 0;
         }
-        return true;
+        return 1;
     }
 
 }

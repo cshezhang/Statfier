@@ -36,11 +36,11 @@ public class CFWrapperWithWhileTrue extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
-            return false;
+            return 0;
         }
-        return true;
+        return 1;
     }
 
 }

@@ -64,14 +64,15 @@ public class TransferLocalVarToStaticGlobal extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
+        int counter = 0;
         List<ASTNode> nodes = getChildrenNodes(statement);
         for(int i = 0; i < nodes.size(); i++) {
             if(Util.checkExpressionLiteral(nodes.get(i))) {
-                return true;
+                counter++;
             }
         }
-        return false;
+        return counter;
     }
 
 }

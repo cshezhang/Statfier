@@ -130,9 +130,6 @@ public class Schedule {
                     String currentIterFolder = userdir + sep + "mutants" + sep + "iter" + current_depth;
                     tester.locateMutationCode(head.depth, currentIterFolder);
                 }
-                if (current_depth >= SEARCH_DEPTH) {
-                    break;
-                }
                 System.gc();
             }
             ArrayList<ASTWrapper> newWrappers = head.mainTransformation();
@@ -220,8 +217,8 @@ public class Schedule {
             if (!file2line.containsKey(seedPath)) {
                 continue;
             }
-            ASTWrapper astWrapper = new ASTWrapper(seedPath, seedFolderName);
-            srcWrappers.add(astWrapper);
+            ASTWrapper wrappers = new ASTWrapper(seedPath, seedFolderName);
+            srcWrappers.add(wrappers);
         }
         System.out.println("Initial Wrappers Size: " + srcWrappers.size());
         System.gc();

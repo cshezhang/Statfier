@@ -117,20 +117,20 @@ public class AddArgAssignment extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
             Expression rightExpression = vdFragment.getInitializer();
             if(rightExpression instanceof MethodInvocation || rightExpression instanceof ClassInstanceCreation) {
-                return true;
+                return 1;
             }
         }
         if(statement instanceof ExpressionStatement) {
             Expression expression = ((ExpressionStatement) statement).getExpression();
             if(expression instanceof MethodInvocation || expression instanceof Assignment) {
-                return true;
+                return 1;
             }
         }
-        return false;
+        return 0;
     }
 }

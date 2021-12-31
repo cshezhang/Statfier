@@ -67,14 +67,15 @@ public class AddMethodCallToLiteral extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
+        int counter = 0;
         List<ASTNode> nodes = getChildrenNodes(statement);
         for(ASTNode astNode : nodes) {
             if(checkExpressionLiteral(astNode)) {
-                return true;
+                counter++;
             }
         }
-        return false;
+        return counter;
     }
 
 }

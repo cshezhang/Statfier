@@ -8,6 +8,9 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static edu.polyu.Util.getDirectMethodOfStatement;
 
 public class NestedClassWrapper extends Mutator {
@@ -36,9 +39,16 @@ public class NestedClassWrapper extends Mutator {
         return true;
     }
 
+//    @Override
+//    public List<ASTNode> getCandidateNodes(Statement statement) {
+//        List<ASTNode> candidateNodes = new ArrayList<>();
+//        candidateNodes.add(statement);
+//        return candidateNodes;
+//    }
+
     @Override
-    public boolean check(Statement statement) {
-        return true;
+    public int check(Statement statement) {
+        return 1;
     }
 
 }

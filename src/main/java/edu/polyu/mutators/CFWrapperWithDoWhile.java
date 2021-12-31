@@ -25,19 +25,19 @@ public class CFWrapperWithDoWhile extends Mutator {
         DoStatement newDoStatement = ast.newDoStatement();
         newDoStatement.setExpression(ast.newBooleanLiteral(false));
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
-        Block newBlock = ast.newBlock();
-        newBlock.statements().add(newStatement);
-        newDoStatement.setBody(newBlock);
+        Block newMethodBlock = ast.newBlock();
+        newMethodBlock.statements().add(newStatement);
+        newDoStatement.setBody(newMethodBlock);
         astRewrite.replace(sourceStatement, newDoStatement, null);
         return true;
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
-            return false;
+            return 0;
         }
-        return true;
+        return 1;
     }
 
 }

@@ -55,9 +55,16 @@ public class EnumClassWrapper extends Mutator {
         return true;
     }
 
+//    @Override
+//    public List<ASTNode> getCandidateNodes(Statement statement) {
+//        List<ASTNode> candidateNodes = new ArrayList<>();
+//        candidateNodes.add(statement);
+//        return candidateNodes;
+//    }
+
     @Override
-    public boolean check(Statement statement) {
-        return true;
+    public int check(Statement statement) {
+        return 1;
     }
 
 }

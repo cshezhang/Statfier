@@ -4,9 +4,6 @@ import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.BodyDeclaration;
-import org.eclipse.jdt.core.dom.BreakStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -14,7 +11,6 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import static edu.polyu.Util.getDirectBlockOfStatement;
-import static edu.polyu.Util.getDirectMethodOfStatement;
 
 public class CFWrapperWithWhileFalse extends Mutator {
 
@@ -35,21 +31,33 @@ public class CFWrapperWithWhileFalse extends Mutator {
         newWhileBlock.statements().add(newStatement);
         newWhileStatement.setBody(newWhileBlock);
         Block block = getDirectBlockOfStatement(sourceStatement);
-        ListRewrite listRewrite = astRewrite.getListRewrite(block, Block.STATEMENTS_PROPERTY);
-        try {
+        if (block.statements().contains(sourceStatement)) {
+            ListRewrite listRewrite = astRewrite.getListRewrite(block, Block.STATEMENTS_PROPERTY);
             listRewrite.insertAfter(newWhileStatement, sourceStatement, null);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            Block newBlock = ast.newBlock();
+            newBlock.statements().add(ASTNode.copySubtree(ast, sourceStatement));
+            newBlock.statements().add(newWhileStatement);
+            astRewrite.replace(sourceStatement, newBlock, null);
         }
         return true;
     }
 
+//    @Override
+//    public List<ASTNode> getCandidateNodes(Statement statement) {
+//        List<ASTNode> candidateNodes = new ArrayList<>();
+//        if(! (statement instanceof VariableDeclarationStatement)) {
+//            candidateNodes.add(statement);
+//        }
+//        return candidateNodes;
+//    }
+
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
-            return false;
+            return 0;
         }
-        return true;
+        return 1;
     }
 
 }

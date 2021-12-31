@@ -98,8 +98,8 @@ public class AddGlobalAssignment extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
-        return true;
+    public int check(Statement statement) {
+        return 1;
     }
 
 }

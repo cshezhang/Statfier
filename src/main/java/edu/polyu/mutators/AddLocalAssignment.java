@@ -55,7 +55,7 @@ public class AddLocalAssignment extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
             // System.out.println(vdStatement.getType());
@@ -63,17 +63,17 @@ public class AddLocalAssignment extends Mutator {
                 if(vdStatement.modifiers().size() > 0) {
                     Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
                     if(modifier.getKeyword().toString().equals("final")) {
-                        return false;
+                        return 0;
                         // final byte[] values={0}; -> final byte[] values; values = {0} is wrong.
                     }
                 }
             }
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
             if(vdFragment.getInitializer() != null) {
-                return true;
+                return 1;
             }
         }
-        return false;
+        return 0;
     }
 
 }

@@ -10,6 +10,9 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Control flow warpper by if(true)
 public class CFWrapperWithIfTrue extends Mutator {
 
@@ -33,12 +36,21 @@ public class CFWrapperWithIfTrue extends Mutator {
         return true;
     }
 
+//    @Override
+//    public List<ASTNode> getCandidateNodes(Statement statement) {
+//        List<ASTNode> candidateNodes = new ArrayList<>();
+//        if(!(statement instanceof VariableDeclarationStatement)) {
+//            candidateNodes.add(statement);
+//        }
+//        return candidateNodes;
+//    }
+
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
-            return false;
+            return 0;
         }
-        return true;
+        return 1;
     }
 
 }

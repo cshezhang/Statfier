@@ -64,9 +64,9 @@ public class AddControlBranch extends Mutator {
             newIfStatement.setElseStatement(elseBlock);
             newIfStatement.setExpression(ast.newSimpleName(varName));
             ListRewrite listRewrite = astRewrite.getListRewrite(brotherStatement.getParent(), Block.STATEMENTS_PROPERTY);
-            listRewrite.insertAfter(newVdStatement, sourceStatement, null);
+            listRewrite.insertAfter(newVdStatement, sourceStatement, null);  // Here needs block, but complex to modify, so add it before brother
             listRewrite.insertAfter(newBoolVdStatement, newVdStatement, null);
-            listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
+            listRewrite.insertAfter(newIfStatement, sourceStatement, null);
             listRewrite.remove(sourceStatement, null);
         } else {
             Statement thenStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
@@ -76,31 +76,31 @@ public class AddControlBranch extends Mutator {
             newIfStatement.setExpression(ast.newSimpleName(varName));
             newIfStatement.setThenStatement(thenBlock);
             newIfStatement.setElseStatement(elseBlock);
-            ListRewrite listRewrite = astRewrite.getListRewrite(brotherStatement.getParent(), Block.STATEMENTS_PROPERTY);
-            listRewrite.insertAfter(newBoolVdStatement, sourceStatement, null);
-            listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
-            listRewrite.remove(sourceStatement, null);
+            Block newBlock = ast.newBlock();
+            newBlock.statements().add(newBoolVdStatement);
+            newBlock.statements().add(newIfStatement);
+            astRewrite.replace(sourceStatement, newBlock, null);
         }
         return true;
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
             if(vdStatement.getType() instanceof ArrayType) {
                 if(vdStatement.modifiers().size() > 0) {
                     Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
                     if(modifier.getKeyword().toString().equals("final")) {
-                        return false;
+                        return 0;
                     }
                 }
             }
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
             if(vdFragment.getInitializer() == null) {
-                return false;
+                return 0;
             }
         }
-        return true;
+        return 1;
     }
 }

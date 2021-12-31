@@ -25,23 +25,30 @@ public class CFWrapperWithIfFlase extends Mutator {
     @Override
     public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
-        Block newBlock = ast.newBlock();
-        newBlock.statements().add(newStatement);
-        IfStatement ifStatement = ast.newIfStatement();
-        ifStatement.setExpression(ast.newBooleanLiteral(false));
-        ifStatement.setThenStatement(newBlock);
+        Block newIfBlock = ast.newBlock();
+        newIfBlock.statements().add(newStatement);
+        IfStatement newIfStatement = ast.newIfStatement();
+        newIfStatement.setExpression(ast.newBooleanLiteral(false));
+        newIfStatement.setThenStatement(newIfBlock);
         Block oldBlock = getDirectBlockOfStatement(sourceStatement);
-        ListRewrite listRewrite = astRewrite.getListRewrite(oldBlock, Block.STATEMENTS_PROPERTY);
-        listRewrite.insertBefore(ifStatement, sourceStatement, null);
+        if(oldBlock.statements().contains(sourceStatement)) {
+            ListRewrite listRewrite = astRewrite.getListRewrite(oldBlock, Block.STATEMENTS_PROPERTY);
+            listRewrite.insertBefore(newIfStatement, sourceStatement, null);
+        } else {
+            Block newBlock = ast.newBlock();
+            newBlock.statements().add(ASTNode.copySubtree(ast, sourceStatement));
+            newBlock.statements().add(newIfStatement);
+            astRewrite.replace(sourceStatement, newBlock, null);
+        }
         return true;
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
         if(statement instanceof VariableDeclarationStatement) {
-            return false;
+            return 0;
         }
-        return true;
+        return 1;
     }
 
 }

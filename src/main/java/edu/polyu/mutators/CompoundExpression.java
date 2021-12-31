@@ -39,12 +39,20 @@ public class CompoundExpression extends Mutator {
         ParenthesizedExpression newParenthesizedExpression = ast.newParenthesizedExpression();
         InfixExpression newInfixExpression = ast.newInfixExpression();
         newInfixExpression.setLeftOperand((BooleanLiteral) ASTNode.copySubtree(ast, targetLiteral));
-        if(Math.random() < 0.5) {
-            newInfixExpression.setOperator(InfixExpression.Operator.OR);
+        if(targetLiteral.booleanValue()) {
             newInfixExpression.setRightOperand(ast.newBooleanLiteral(false));
+            if(Math.random() > 0.5) {
+                newInfixExpression.setOperator(InfixExpression.Operator.CONDITIONAL_OR);
+            } else {
+                newInfixExpression.setOperator(InfixExpression.Operator.OR);
+            }
         } else {
-            newInfixExpression.setOperator(InfixExpression.Operator.AND);
             newInfixExpression.setRightOperand(ast.newBooleanLiteral(true));
+            if(Math.random() > 0.5) {
+                newInfixExpression.setOperator(InfixExpression.Operator.CONDITIONAL_AND);
+            } else {
+                newInfixExpression.setOperator(InfixExpression.Operator.AND);
+            }
         }
         newParenthesizedExpression.setExpression(newInfixExpression);
         astRewrite.replace(targetLiteral, newParenthesizedExpression, null);
@@ -52,13 +60,14 @@ public class CompoundExpression extends Mutator {
     }
 
     @Override
-    public boolean check(Statement statement) {
+    public int check(Statement statement) {
+        int counter = 0;
         List<ASTNode> nodes = getChildrenNodes(statement);
         for(ASTNode node : nodes) {
             if(node instanceof BooleanLiteral) {
-                return true;
+                counter++;
             }
         }
-        return false;
+        return counter;
     }
 }
