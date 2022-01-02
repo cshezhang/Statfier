@@ -31,7 +31,7 @@ public class AddArgAssignment extends Mutator {
      * Notice: New Assignment should be added final modifier
      */
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         Expression targetExpression = null, rightExpression = null;
         if(sourceStatement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) sourceStatement;

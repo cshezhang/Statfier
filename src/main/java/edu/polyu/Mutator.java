@@ -2,13 +2,10 @@ package edu.polyu;
 
 import edu.polyu.mutators.*;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static edu.polyu.Util.PURE_TESTING;
 import static edu.polyu.Util.SINGLE_TESTING;
@@ -23,7 +20,7 @@ public abstract class Mutator {
 
     private static ArrayList<Mutator> mutators;
 
-    public abstract boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement);
+    public abstract boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement);
 //    public abstract List<ASTNode> getCandidateNodes(Statement statement);
     public abstract int check(Statement statement);
 
@@ -52,7 +49,8 @@ public abstract class Mutator {
             mutators.add(CFWrapperWithIfTrue.getInstance());
             mutators.add(CFWrapperWithWhileFalse.getInstance());
             mutators.add(CFWrapperWithWhileTrue.getInstance());
-            mutators.add(CompoundExpression.getInstance());
+            mutators.add(CompoundExpression1.getInstance());
+            mutators.add(CompoundExpression2.getInstance());
             mutators.add(EnumClassWrapper.getInstance());
             mutators.add(NestedClassWrapper.getInstance());
             mutators.add(TransferLocalVarToGlobal.getInstance());
@@ -74,7 +72,8 @@ public abstract class Mutator {
                 mutators.add(CFWrapperWithIfTrue.getInstance());
                 mutators.add(CFWrapperWithWhileFalse.getInstance());
                 mutators.add(CFWrapperWithWhileTrue.getInstance());
-                mutators.add(CompoundExpression.getInstance());
+                mutators.add(CompoundExpression1.getInstance());
+                mutators.add(CompoundExpression2.getInstance());
                 mutators.add(EnumClassWrapper.getInstance());
                 mutators.add(NestedClassWrapper.getInstance());
                 mutators.add(TransferLocalVarToGlobal.getInstance());
@@ -95,7 +94,8 @@ public abstract class Mutator {
                 mutators.add(CFWrapperWithIfTrue.getInstance());
                 mutators.add(CFWrapperWithWhileFalse.getInstance());
                 mutators.add(CFWrapperWithWhileTrue.getInstance());
-                mutators.add(CompoundExpression.getInstance());
+                mutators.add(CompoundExpression1.getInstance());
+                mutators.add(CompoundExpression2.getInstance());
                 mutators.add(EnumClassWrapper.getInstance());
                 mutators.add(NestedClassWrapper.getInstance());
                 mutators.add(TransferLocalVarToGlobal.getInstance());

@@ -25,7 +25,7 @@ public class CFWrapperWithIfTrue extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         IfStatement ifStatement = ast.newIfStatement();
         Block block = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);

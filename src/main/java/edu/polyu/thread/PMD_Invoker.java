@@ -31,8 +31,7 @@ public class PMD_Invoker implements Runnable {
                 + " -d " + seedFolderPath + sep + seedFolderName
                 + " -R " + "category/java/" + this.ruleCategory + ".xml/" + this.ruleType
                 + " -f " + "json"
-                + " -r " +  PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
-                + " --no-cache";
+                + " -r " +  PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json";
         String[] pmdArgs = {"/bin/sh", "-c", pmdConfig};
         invokeCommands(pmdArgs);
     }

@@ -1,8 +1,3 @@
-/*
- * @Description: 
- * @Author: Austin ZHANG
- * @Date: 2021-10-14 09:25:07
- */
 package edu.polyu.mutators;
 
 import edu.polyu.Mutator;
@@ -12,7 +7,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 /**
  * @Description: Add control branch
- * @Author: Huaien Zhang
+ * @Author: Vanguard
  * @Date: 2021-08-20 18:17
  */
 public class AddControlBranch extends Mutator {
@@ -30,7 +25,7 @@ public class AddControlBranch extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         IfStatement newIfStatement = ast.newIfStatement();
         Block thenBlock = ast.newBlock();
         Block elseBlock = ast.newBlock();
@@ -66,7 +61,7 @@ public class AddControlBranch extends Mutator {
             ListRewrite listRewrite = astRewrite.getListRewrite(brotherStatement.getParent(), Block.STATEMENTS_PROPERTY);
             listRewrite.insertAfter(newVdStatement, sourceStatement, null);  // Here needs block, but complex to modify, so add it before brother
             listRewrite.insertAfter(newBoolVdStatement, newVdStatement, null);
-            listRewrite.insertAfter(newIfStatement, sourceStatement, null);
+            listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
             listRewrite.remove(sourceStatement, null);
         } else {
             Statement thenStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);

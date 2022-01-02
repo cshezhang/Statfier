@@ -19,8 +19,6 @@ import java.util.List;
 
 import static edu.polyu.Util.checkLiteralType;
 import static edu.polyu.Util.getChildrenNodes;
-import static edu.polyu.Util.mutantCounter;
-import static edu.polyu.Util.random;
 
 public class TransferLocalVarToStaticGlobal extends Mutator {
 
@@ -36,7 +34,7 @@ public class TransferLocalVarToStaticGlobal extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
         for(int i = 0; i < subNodes.size(); i++) {
@@ -45,10 +43,9 @@ public class TransferLocalVarToStaticGlobal extends Mutator {
                 literalNodes.add(node);
             }
         }
-        int randomIndex = random.nextInt(literalNodes.size());
-        Expression targetLiteral = (Expression) literalNodes.get(randomIndex);
+        Expression targetLiteral = (Expression) literalNodes.get(index);
         TypeDeclaration clazz = Util.getTypeOfStatement(sourceStatement);
-        String newVarName = "t2sg" + mutantCounter++;
+        String newVarName = "t2sg" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         newVdFragment.setName(newVar);

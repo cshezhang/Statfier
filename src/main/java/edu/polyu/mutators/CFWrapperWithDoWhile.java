@@ -21,7 +21,7 @@ public class CFWrapperWithDoWhile extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         DoStatement newDoStatement = ast.newDoStatement();
         newDoStatement.setExpression(ast.newBooleanLiteral(false));
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);

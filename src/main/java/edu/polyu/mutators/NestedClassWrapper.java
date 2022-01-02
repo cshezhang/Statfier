@@ -26,7 +26,7 @@ public class NestedClassWrapper extends Mutator {
     public static int nestedClassCounter = 0;
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
         if(oldMethod == null) {
             return false;

@@ -30,7 +30,7 @@ public class CFWrapperWithForTrue extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         ForStatement newForStatement = ast.newForStatement();
 
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();

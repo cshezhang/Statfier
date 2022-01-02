@@ -29,7 +29,7 @@ public class EnumClassWrapper extends Mutator {
     private EnumClassWrapper() {}
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
         if(oldMethod == null) {
             return false;

@@ -35,7 +35,7 @@ public class AddMethodCallToLiteral extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         List<ASTNode> nodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
         for(ASTNode node : nodes) {
@@ -46,8 +46,7 @@ public class AddMethodCallToLiteral extends Mutator {
         if(literalNodes.size() == 0) {
             return false;
         }
-        int randomIndex = random.nextInt(literalNodes.size());
-        ASTNode targetNode = literalNodes.get(randomIndex);
+        ASTNode targetNode = literalNodes.get(index);
         MethodDeclaration newMethod = ast.newMethodDeclaration();
         String newMethodName = "getLiteral" + literalCounter++;
         newMethod.setName(ast.newSimpleName(newMethodName));

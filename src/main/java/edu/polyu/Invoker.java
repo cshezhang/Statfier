@@ -162,7 +162,6 @@ public class Invoker {
         return reports;
     }
 
-
     @Test
     public void testInvokePMD() {
         String targetPath = "/home/huaien/projects/SAMutator/seeds/PMD_Seeds";

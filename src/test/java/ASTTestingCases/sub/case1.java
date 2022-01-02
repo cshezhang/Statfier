@@ -8,7 +8,7 @@ package ASTTestingCases.sub;
 public class case1 {
 
     public void foo() {
-        boolean a = false || false;
+        boolean a = false;
     }
 
 //    public void foo1() {

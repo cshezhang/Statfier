@@ -38,7 +38,7 @@ public class AddGlobalAssignment extends Mutator {
      * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
      * */
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         TypeDeclaration oldClazz = Util.getTypeOfStatement(sourceStatement);
         List<ASTNode> oldClazzCompoents = oldClazz.bodyDeclarations();
         List<FieldDeclaration> oldFieldDeclarations = new ArrayList<>();

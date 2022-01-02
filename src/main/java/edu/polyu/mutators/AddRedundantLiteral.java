@@ -31,7 +31,7 @@ public class AddRedundantLiteral extends Mutator {
      */
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<NumberLiteral> numberLiterals = new ArrayList<>();
         for(int i = 0; i < subNodes.size(); i++) {
@@ -40,8 +40,7 @@ public class AddRedundantLiteral extends Mutator {
                 numberLiterals.add((NumberLiteral) node);
             }
         }
-        int randomIndex = random.nextInt(numberLiterals.size());
-        NumberLiteral targetLiteral = numberLiterals.get(randomIndex);
+        NumberLiteral targetLiteral = numberLiterals.get(index);
         InfixExpression newLeft = ast.newInfixExpression();
         String value2add;
         if(targetLiteral.getToken().contains(".")) {

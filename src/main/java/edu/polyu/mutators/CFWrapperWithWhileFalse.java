@@ -23,7 +23,7 @@ public class CFWrapperWithWhileFalse extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
         WhileStatement newWhileStatement = ast.newWhileStatement();
         newWhileStatement.setExpression(ast.newBooleanLiteral(false));

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static edu.polyu.ASTWrapper.invalidSeed;
+import static edu.polyu.ASTWrapper.validSeed;
 import static edu.polyu.Util.AST_TESTING;
 import static edu.polyu.Util.AST_TESTING_PATH;
 import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
@@ -19,10 +21,10 @@ import static edu.polyu.Util.initEnv;
 import static edu.polyu.Util.sourceSeedPath;
 import static edu.polyu.Util.startTimeStamp;
 
-/*
- * @Description: This class only contains Automatic Tester related functions, other modules have been moved to Util class.
- * @Author: Vanguard
- * @Date: 2021-12-20 14:20:55
+/**
+ * Description: Mutator Scheduler
+ * Author: Vanguard
+ * Date: 2021-08-08 16:20
  */
 public class AutomaticTester {
 
@@ -48,10 +50,12 @@ public class AutomaticTester {
                 tester.executeMutation(sourceSeedPath);
             }
             int rules = compactIssues.keySet().size();
+            int seqCount = 0;
             int allValidMutantNumber = 0;
             for(Map.Entry<String, HashMap<String, ArrayList<TriTuple>>> entry : compactIssues.entrySet()) {
                 HashMap<String, ArrayList<TriTuple>> seq2mutants = entry.getValue();
                 System.out.println("Rule: " + entry.getKey() + " Seq Number: " + seq2mutants.size());
+                seqCount += seq2mutants.size();
                 for(Map.Entry<String, ArrayList<TriTuple>> subEntry : seq2mutants.entrySet()) {
                     System.out.println("Transoformation Sequence: " + subEntry.getKey());
                     for(TriTuple triTuple : subEntry.getValue()) {
@@ -61,7 +65,10 @@ public class AutomaticTester {
                 }
             }
             System.out.println("Rule Number: " + rules);
+            System.out.println("Unique Sequence: " + seqCount);
             System.out.println("Valid Mutant Number: " + allValidMutantNumber);
+            System.out.println("Invalid Seed Number:" + invalidSeed);
+            System.out.println("Valid Seed Number:" + validSeed);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

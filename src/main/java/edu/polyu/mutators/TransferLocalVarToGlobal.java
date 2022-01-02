@@ -37,7 +37,7 @@ public class TransferLocalVarToGlobal extends Mutator {
     }
 
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
         for(int i = 0; i < subNodes.size(); i++) {
@@ -46,8 +46,7 @@ public class TransferLocalVarToGlobal extends Mutator {
                 literalNodes.add(node);
             }
         }
-        int randomIndex = random.nextInt(literalNodes.size());
-        Expression literalNode = (Expression) literalNodes.get(randomIndex);
+        Expression literalNode = (Expression) literalNodes.get(index);
         TypeDeclaration clazz = Util.getTypeOfStatement(sourceStatement);
         String newVarName = "t2g" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);

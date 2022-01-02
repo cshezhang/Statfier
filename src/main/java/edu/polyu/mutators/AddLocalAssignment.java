@@ -25,7 +25,7 @@ public class AddLocalAssignment extends Mutator {
     * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
     * */
     @Override
-    public boolean transform(AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) sourceStatement;
         VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
         Expression initializer = oldFragment.getInitializer();
