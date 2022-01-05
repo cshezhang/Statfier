@@ -1,10 +1,9 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -21,9 +20,8 @@ import java.util.List;
 import static edu.polyu.Util.checkExpressionLiteral;
 import static edu.polyu.Util.checkLiteralType;
 import static edu.polyu.Util.getChildrenNodes;
-import static edu.polyu.Util.random;
 
-public class TransferLocalVarToGlobal extends Mutator {
+public class TransferLocalVarToGlobal extends StatementMutator {
 
     private static int varCounter;
     private static TransferLocalVarToGlobal instance = new TransferLocalVarToGlobal();
@@ -37,7 +35,7 @@ public class TransferLocalVarToGlobal extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
         for(int i = 0; i < subNodes.size(); i++) {

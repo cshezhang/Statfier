@@ -1,7 +1,7 @@
 package edu.polyu.mutators;
 
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -10,11 +10,8 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // Control flow warpper by if(true)
-public class CFWrapperWithIfTrue extends Mutator {
+public class CFWrapperWithIfTrue extends StatementMutator {
 
     private static final CFWrapperWithIfTrue instance = new CFWrapperWithIfTrue();
 
@@ -25,7 +22,7 @@ public class CFWrapperWithIfTrue extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         IfStatement ifStatement = ast.newIfStatement();
         Block block = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);

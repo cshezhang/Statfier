@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import static edu.polyu.Util.getDirectMethodOfStatement;
 
-public class AnonymousClassWrapper extends Mutator {
+public class AnonymousClassWrapper extends StatementMutator {
 
     public static int varCounter;
 
@@ -28,7 +28,7 @@ public class AnonymousClassWrapper extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
         if(oldMethod == null) {
             return false;

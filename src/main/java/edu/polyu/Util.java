@@ -10,7 +10,6 @@ import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 
 import edu.polyu.util.TriTuple;
-import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -32,9 +31,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Description: Utility Class for SAMutator
@@ -46,7 +44,7 @@ public class Util {
     public static Properties properties;
     static {
         properties = new Properties();
-        File file = new File("./config.properties");
+        File file = new File(".\\config.properties");
         try {
             InputStream in = new FileInputStream(file);
             properties.load(in);
@@ -55,6 +53,7 @@ public class Util {
         }
     }
 
+    public static final ASTMatcher matcher = new ASTMatcher();
     public static int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
 //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
@@ -77,13 +76,13 @@ public class Util {
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
-    public static ExecutorService threadPool = null;
     public static String sourceSeedPath = null;
     public static int subSeedIndex;
     public static long startTimeStamp = System.currentTimeMillis();
-    public static int mutantCounter = 0;
+    public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
-    public final static String sep = File.separator;
+    public static final String sep = File.separator;
+    public static final String separator = "/|\\\\";
     public static final SecureRandom random = new SecureRandom();
     public static int newVarCounter = 0;
 
@@ -108,16 +107,13 @@ public class Util {
 
     // tools
     public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
-    public final static String pmdPath = toolPath + sep + "pmd" + sep + "bin" + sep + "run.sh";
+    public final static String pmdPath = toolPath + sep + "pmd" + sep + "bin" + sep + "pmd.bat";
     public static List<String> jarList = getFilenamesFromFolder(toolPath + sep + "libs", true);
     public static List<String> subSeedFolderNameList;
     public static StringBuilder jarStr = new StringBuilder();
 
     public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>();
     public static HashMap<String, HashMap<String, HashSet<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
-
-    // filename(init + _ + linenumber + _ + mutatorIndex) + line -> true or false
-    public static HashMap<String, Boolean> file2mutation = new HashMap<>();
 
     // (rule -> (transSeq -> Mutant_List))
     public static HashMap<String, HashMap<String, ArrayList<TriTuple>>> compactIssues = new HashMap<>();
@@ -145,6 +141,8 @@ public class Util {
     }
 
     public static void initEnv() {
+//        Properties props=System.getProperties();
+//        String osName = props.getProperty("os.name");
         try {
             FileUtils.deleteDirectory(new File(userdir + sep + "mutants"));
             FileUtils.deleteDirectory(new File(userdir + sep + "results"));
@@ -308,29 +306,11 @@ public class Util {
         return results;
     }
 
-    public static HashMap<MethodDeclaration, List<Statement>> method2substatements = new HashMap<>(); // This is used to save all sub-statements
-
-    public static List<Statement> getSubStatements(MethodDeclaration method) {
-        if(method2substatements.containsKey(method)) {
-            return method2substatements.get(method);
-        }
-        List<Statement> results = new ArrayList<>();
-        if(method.getBody() == null) {
-            method2substatements.put(method, results);
-            return results;
-        }
-        results = getSubStatements(method, method.getBody().statements());
-        return results;
-    }
-
     /*
         This function can get all sub-statements of specific statement(s).
         Sub-statement is defined as statement without containing block
      */
-    public static List<Statement> getSubStatements(MethodDeclaration method, List<Statement> sourceStatements) {
-        if(method != null && method2substatements.containsKey(method)) {
-            return method2substatements.get(method);
-        }
+    public static List<Statement> getSubStatements(List<Statement> sourceStatements) {
         List<Statement> results = new ArrayList<>();
         ArrayDeque<Statement> que = new ArrayDeque<>();
         que.addAll(sourceStatements);
@@ -356,28 +336,10 @@ public class Util {
             }
             results.add(head);
         }
-        if(method != null) {
-            method2substatements.put(method, results);
-        }
         return results;
     }
 
-    public static HashMap<MethodDeclaration, List<Statement>> method2statements = new HashMap<>(); // This is used to save all statements
-
-    public static List<Statement> getAllStatements(MethodDeclaration method) {
-        List<Statement> results = new ArrayList<>();
-        if(method.getBody() == null) {
-            method2statements.put(method, results);
-            return results;
-        }
-        results = getAllStatements(method, method.getBody().statements());
-        return results;
-    }
-
-    public static List<Statement> getAllStatements(MethodDeclaration method, List<Statement> sourceStatements) {
-        if(method != null && method2statements.containsKey(method)) {
-            return method2statements.get(method);
-        }
+    public static List<Statement> getAllStatements(List<Statement> sourceStatements) {
         List<Statement> results = new ArrayList<>();
         ArrayDeque<Statement> que = new ArrayDeque<>();
         que.addAll(sourceStatements);
@@ -402,9 +364,6 @@ public class Util {
                 }
                 continue;
             }
-        }
-        if(method != null) {
-            method2statements.put(method, results);
         }
         return results;
     }
@@ -429,6 +388,7 @@ public class Util {
                 pmd_reports.add(newReport);
             }
         } catch (JsonProcessingException e) {
+            System.err.println("Exceptional Json Path:" + jsonPath);
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -472,7 +432,7 @@ public class Util {
 
     // Get the last token in the path, not include postfix, e.g., .java
     public static String Path2Last(String path) {
-        String[] tokens = path.split(sep);
+        String[] tokens = path.split(separator);
         String target = tokens[tokens.length - 1];
         if(target.contains(".")) {
             return target.substring(0, target.length() - 5);
@@ -494,7 +454,7 @@ public class Util {
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
             for (String srcName : fileList) {
-                String[] tokens = srcName.split(sep);
+                String[] tokens = srcName.split(separator);
                 pureNames.add(tokens[tokens.length - 1]);
             }
             return pureNames;
@@ -521,7 +481,7 @@ public class Util {
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
             for (String srcName : fileList) {
-                String[] tokens = srcName.split(sep);
+                String[] tokens = srcName.split(separator);
                 pureNames.add(tokens[tokens.length - 1]);
             }
             return pureNames;
@@ -562,8 +522,7 @@ public class Util {
         while(!(parent instanceof MethodDeclaration)) {
             parent = parent.getParent();
             if(parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Direct Method!");
-                System.exit(-1);
+                return null;
             }
         }
         return (MethodDeclaration) parent;

@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import static edu.polyu.Util.getDirectBlockOfStatement;
 
-public class CFWrapperWithForFalse extends Mutator {
+public class CFWrapperWithForFalse extends StatementMutator {
 
     private static final CFWrapperWithForFalse instance = new CFWrapperWithForFalse();
 
@@ -32,7 +32,7 @@ public class CFWrapperWithForFalse extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         ForStatement newForStatement = ast.newForStatement();
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         String newControlVar = String.format("cfwwff%d", varCounter++);

@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static edu.polyu.Util.getDirectMethodOfStatement;
 
-public class EnumClassWrapper extends Mutator {
+public class EnumClassWrapper extends StatementMutator {
 
     private static int enumCounter = 0;
 
@@ -29,7 +29,7 @@ public class EnumClassWrapper extends Mutator {
     private EnumClassWrapper() {}
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
         if(oldMethod == null) {
             return false;

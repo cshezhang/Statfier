@@ -1,7 +1,5 @@
 package edu.polyu.thread;
 
-import edu.polyu.Invoker;
-
 import static edu.polyu.Invoker.invokeCommands;
 import static edu.polyu.Util.PMDResultsFolder;
 import static edu.polyu.Util.pmdPath;
@@ -27,12 +25,13 @@ public class PMD_Invoker implements Runnable {
     // seedFolderPath can be java source file or a folder contains source files
     @Override
     public void run() {
-        String pmdConfig = pmdPath + " pmd"
+        String pmdConfig = pmdPath
                 + " -d " + seedFolderPath + sep + seedFolderName
                 + " -R " + "category/java/" + this.ruleCategory + ".xml/" + this.ruleType
                 + " -f " + "json"
                 + " -r " +  PMDResultsFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json";
-        String[] pmdArgs = {"/bin/sh", "-c", pmdConfig};
+        String[] pmdArgs = {"cmd", "/k", pmdConfig};
+//        String pmdArgs = "cmd " + "/k " + pmdConfig;
         invokeCommands(pmdArgs);
     }
 

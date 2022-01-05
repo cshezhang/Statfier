@@ -16,13 +16,16 @@ import static edu.polyu.Util.random;
  * @Author: Vanguard
  * @Date: 2021-10-14 09:25:07
  */
-public abstract class Mutator {
+public abstract class StatementMutator {
 
-    private static ArrayList<Mutator> mutators;
+    private static ArrayList<StatementMutator> mutators;
 
-    public abstract boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement);
+    public abstract boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement);
 //    public abstract List<ASTNode> getCandidateNodes(Statement statement);
     public abstract int check(Statement statement);
+    public String getIndex() {
+        return this.getClass().getSimpleName();
+    }
 
     /*
     Add Final to Argument -> Method Invocation
@@ -104,11 +107,11 @@ public abstract class Mutator {
         }
     }
 
-    public static Mutator getMutatorRandomly() {
+    public static StatementMutator getMutatorRandomly() {
         return mutators.get(random.nextInt(mutators.size()));
     }
 
-    public static ArrayList<Mutator> getMutators() {
+    public static ArrayList<StatementMutator> getMutators() {
         return mutators;
     }
 

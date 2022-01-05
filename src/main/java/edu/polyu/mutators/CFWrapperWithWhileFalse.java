@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import static edu.polyu.Util.getDirectBlockOfStatement;
 
-public class CFWrapperWithWhileFalse extends Mutator {
+public class CFWrapperWithWhileFalse extends StatementMutator {
 
     private static final CFWrapperWithWhileFalse instance = new CFWrapperWithWhileFalse();
 
@@ -23,7 +23,7 @@ public class CFWrapperWithWhileFalse extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
         WhileStatement newWhileStatement = ast.newWhileStatement();
         newWhileStatement.setExpression(ast.newBooleanLiteral(false));

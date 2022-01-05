@@ -6,11 +6,11 @@
 package edu.polyu.mutators;
 
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-public class AddBrackets extends Mutator {
+public class AddBrackets extends StatementMutator {
 
     private static AddBrackets addBrackets = new AddBrackets();
 
@@ -21,7 +21,7 @@ public class AddBrackets extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         Expression expression = null;
         if(sourceStatement instanceof ExpressionStatement) {
             expression = ((ExpressionStatement) sourceStatement).getExpression();

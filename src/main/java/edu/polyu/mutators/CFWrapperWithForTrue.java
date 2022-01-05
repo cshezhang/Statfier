@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -15,7 +15,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 // Control flow wrapper based on for-loop
-public class CFWrapperWithForTrue extends Mutator {
+public class CFWrapperWithForTrue extends StatementMutator {
 
     private static final CFWrapperWithForTrue instance = new CFWrapperWithForTrue();
 
@@ -30,7 +30,7 @@ public class CFWrapperWithForTrue extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         ForStatement newForStatement = ast.newForStatement();
 
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();

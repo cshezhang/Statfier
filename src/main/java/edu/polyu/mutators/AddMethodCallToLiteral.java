@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -23,7 +23,7 @@ import static edu.polyu.Util.*;
  * Author: Vanguard
  * Date: 2021-12-29 16:10
  */
-public class AddMethodCallToLiteral extends Mutator {
+public class AddMethodCallToLiteral extends StatementMutator {
 
     private static int literalCounter = 0;
 
@@ -35,7 +35,7 @@ public class AddMethodCallToLiteral extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         List<ASTNode> nodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
         for(ASTNode node : nodes) {
@@ -56,6 +56,9 @@ public class AddMethodCallToLiteral extends Mutator {
         newMethod.setBody(newBlock);
         returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
+        if(oldMethod == null) {
+            return false;  // It means that this statement is not located in a method, may stay in a initializer of class
+        }
         TypeDeclaration clazz = (TypeDeclaration) oldMethod.getParent();
         ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
         listRewrite.insertFirst(newMethod, null);

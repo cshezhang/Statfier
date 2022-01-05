@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -10,13 +10,13 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
  * @Author: Vanguard
  * @Date: 2021-08-20 21:08
  */
-public class AddLocalAssignment extends Mutator {
+public class AddLocalAssignment extends StatementMutator {
 
     private static final AddLocalAssignment instance = new AddLocalAssignment();
 
     private AddLocalAssignment() {}
 
-    public static Mutator getInstance() {
+    public static StatementMutator getInstance() {
         return instance;
     }
 
@@ -25,7 +25,7 @@ public class AddLocalAssignment extends Mutator {
     * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
     * */
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) sourceStatement;
         VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
         Expression initializer = oldFragment.getInitializer();

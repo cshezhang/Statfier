@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
  * @Author: Vanguard
  * @Date: 2021-08-20 18:17
  */
-public class AddControlBranch extends Mutator {
+public class AddControlBranch extends StatementMutator {
 
 
     private static final AddControlBranch singleInstance = new AddControlBranch();
@@ -25,7 +25,7 @@ public class AddControlBranch extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         IfStatement newIfStatement = ast.newIfStatement();
         Block thenBlock = ast.newBlock();
         Block elseBlock = ast.newBlock();

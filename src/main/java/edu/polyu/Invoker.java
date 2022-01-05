@@ -1,11 +1,9 @@
 package edu.polyu;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +12,7 @@ import edu.polyu.report.SpotBugs_Report;
 import org.junit.Test;
 import edu.polyu.thread.PMD_Invoker;
 import edu.polyu.thread.SpotBugs_Invoker;
+import org.zeroturnaround.exec.ProcessExecutor;
 
 import static edu.polyu.Util.PMDResultsFolder;
 import static edu.polyu.Util.SINGLE_TESTING;
@@ -28,7 +27,6 @@ import static edu.polyu.Util.readSpotBugsResultFile;
 import static edu.polyu.Util.sep;
 import static edu.polyu.Util.THREAD_COUNT;
 import static edu.polyu.Util.subSeedFolderNameList;
-import static edu.polyu.Util.threadPool;
 
 /*
  * @Description: This class is used for different invocation functions.
@@ -37,36 +35,150 @@ import static edu.polyu.Util.threadPool;
  */
 public class Invoker {
 
+//    public static void invokeCommands(String command) {
+//        ProcessBuilder pb;
+//        Process process = null;
+//        BufferedReader br = null;
+//        StringBuilder resMsg = null;
+//        OutputStream os = null;
+//        String cmd1 = "cmd.exe";
+//        int exitValue;
+//        try {
+//            pb = new ProcessBuilder(cmd1);
+//            pb.redirectErrorStream(true);
+//            process = pb.start();
+//            os = process.getOutputStream();
+//            os.write(command.getBytes());
+//            os.flush();
+//            os.close();
+//            boolean isNeedResultMsg = true;
+//            resMsg = new StringBuilder();
+//            // get command result
+//            if (isNeedResultMsg) {
+//                br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//                String s;
+//                while ((s = br.readLine()) != null) {
+//                    resMsg.append(s + "\n");
+//                }
+//                resMsg.deleteCharAt(resMsg.length()-1);
+//                exitValue = process.waitFor();
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (os != null) {
+//                    os.close();
+//                }
+//                if (br != null) {
+//                    br.close();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            if (process != null) {
+//                process.destroy();
+//            }
+//        }
+//        System.out.println(resMsg.toString());
+//    }
+
     public static void invokeCommands(String[] cmdArgs) {
-        StringBuilder args = new StringBuilder();
-        for(int i = 0; i < cmdArgs.length; i++) {
-            args.append(cmdArgs[i] + " ");
-        }
-        InputStream in;
         try {
-            Process process = Runtime.getRuntime().exec(cmdArgs);
-            in = process.getInputStream();
-            BufferedReader read = new BufferedReader(new InputStreamReader(in, "GBK"));
-            String line;
-            StringBuilder builder = new StringBuilder();
-            while((line = read.readLine()) != null) {
-                builder.append(line);
-            }
-            int exitValue = process.waitFor();
+            int exitValue = new ProcessExecutor().command(cmdArgs)
+                    .execute().getExitValue();
             if(exitValue != 4 && exitValue != 0) {
-                System.err.println("Fail to Invoke Commands: " + args);
-                System.err.println("Log: " + builder);
-                System.exit(-1);
+                System.err.println("Execute PMD error!");
+                System.err.println("Commands: " + Arrays.toString(cmdArgs));
             }
-            process.getOutputStream().close();
-        } catch (IOException e) {
-            System.err.println("Fail to Invoke Commands: " + args);
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            System.err.println("Fail to Invoke Commands: " + args);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+//    public static void invokeCommands(String[] cmdArgs) {
+////        System.out.println(cmdArgs);
+//        Process process = null;
+//        try {
+//            process = Runtime.getRuntime().exec(cmdArgs);
+////            bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(process.getInputStream()), Charset.forName("GB2312")));
+//            // 开启线程读取错误输出，避免阻塞
+//            new StreamInfoThread(process.getErrorStream(), "error").start();
+//            new StreamInfoThread(process.getInputStream(), "output").start();
+//            int returnValue = process.waitFor();
+//            if(returnValue != 0 && returnValue != 4) {
+//                System.err.println("Error!");
+//                System.exit(-1);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (process != null) {
+//                    process.getInputStream().close();
+//                    process.getOutputStream().close();
+//                    process.getErrorStream().close();
+//                    process.destroy();
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+//    public static void invokeCommands(String[] cmdArgs) {
+//        StringBuilder args = new StringBuilder();
+//        for(int i = 0; i < cmdArgs.length; i++) {
+//            args.append(cmdArgs[i] + " ");
+//        }
+//        var processBuilder = new ProcessBuilder();
+//        processBuilder.command(cmdArgs);
+//        try {
+//            process = processBuilder.start();
+//            var reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                System.out.println(line);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            process. getOutputStream (). close () ;
+//            process. getInputStream (). close () ;
+//            process. getErrorStream (). close () ;
+//        }
+//        InputStream in;
+//        try {
+//            Process process = Runtime.getRuntime().exec(cmdArgs);
+//            in = process.getInputStream();
+//            BufferedReader read = new BufferedReader(new InputStreamReader(in, "GB2312"));
+//            String line;
+//            StringBuilder builder = new StringBuilder();
+//            while((line = read.readLine()) != null) {
+//                System.out.println(line);
+//                builder.append(line);
+//            }
+//            int exitValue = process.waitFor();
+//            System.out.println(exitValue);
+//            if(exitValue != 4 && exitValue != 0) {
+//                System.err.println("Fail to Invoke Commands: " + cmdArgs);
+//                System.err.println("Log: " + builder);
+//                System.exit(-1);
+//            }
+//            process.getOutputStream().close();
+//        } catch (IOException e) {
+//            System.err.println("Fail to Invoke Commands: " + cmdArgs);
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            System.err.println("Fail to Invoke Commands: " + cmdArgs);
+//            e.printStackTrace();
+//        }
+//    }
 
     // folderPath is purely folder path and doesn't contain java file name.
     public static void compileJavaSourceFile(String folderPath, String fileName, String classFileFolder) {
@@ -82,20 +194,24 @@ public class Invoker {
         cmd_list.add("-cp");
         cmd_list.add(jarStr.toString());  //
         cmd_list.add(folderPath + sep + fileName + ".java");
-        invokeCommands(cmd_list.toArray(new String[cmd_list.size()]));
+//        invokeCommands(cmd_list.toArray(new String[cmd_list.size()]));
     }
 
-    public static void initThreadPool() {
-        threadPool = Executors.newSingleThreadExecutor();
+    private static ExecutorService threadPool;
+
+    private static void initThreadPool() {
         if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
             threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        }
-        if(Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-            threadPool = Executors.newCachedThreadPool();
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            } else {
+                threadPool = Executors.newSingleThreadExecutor();
+            }
         }
     }
 
-    public static void waiitThreadPoolEnding() {
+    private static void waitThreadPoolEnding() {
         threadPool.shutdown();
         try {
             threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
@@ -123,7 +239,7 @@ public class Invoker {
         for(int i = 0; i < lists.size(); i++) {
             threadPool.submit(new SpotBugs_Invoker(seedFolderPath, seedFolderName, lists.get(i)));
         }
-        waiitThreadPoolEnding();
+        waitThreadPoolEnding();
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         long executionTime = System.currentTimeMillis() - startExecutionTime;
@@ -148,7 +264,7 @@ public class Invoker {
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new PMD_Invoker(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
-        waiitThreadPoolEnding();
+        waitThreadPoolEnding();
         long executionTime = System.currentTimeMillis() - startExecutionTime;
         List<PMD_Report> reports = new ArrayList<>();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
@@ -164,16 +280,14 @@ public class Invoker {
 
     @Test
     public void testInvokePMD() {
-        String targetPath = "/home/huaien/projects/SAMutator/seeds/PMD_Seeds";
-        String[] pmdArgs = {"/bin/sh", "-c",
-                pmdPath + " pmd"
-                        + " -d " + targetPath
-                        + " -R " + " ./allRules.xml"
+        String targetPath = ".\\seeds\\SingleTesting";
+        String[] pmdArgs = {"cmd", "/c",
+                pmdPath + " -d " + targetPath
+                        + " -R " + " .\\allRules.xml"
                         + " -f " + "html"
-                        + " -r " + "./PMD_Result.html"
-                        + " --no-cache"
+                        + " -r " + ".\\PMD_Result.html"
         };
-        invokeCommands(pmdArgs);
+//        invokeCommands(pmdArgs);
     }
 
 }

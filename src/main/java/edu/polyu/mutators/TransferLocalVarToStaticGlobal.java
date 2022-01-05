@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -20,7 +20,12 @@ import java.util.List;
 import static edu.polyu.Util.checkLiteralType;
 import static edu.polyu.Util.getChildrenNodes;
 
-public class TransferLocalVarToStaticGlobal extends Mutator {
+/**
+ * @Description: transfer local variable declaration to global scope in class, and this mutator contains static modifier
+ * @Author: Vanguard
+ * @Date: 2021-10-05 12:49
+ */
+public class TransferLocalVarToStaticGlobal extends StatementMutator {
 
     private static int varCounter;
     private static TransferLocalVarToStaticGlobal instance = new TransferLocalVarToStaticGlobal();
@@ -34,7 +39,7 @@ public class TransferLocalVarToStaticGlobal extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<ASTNode> literalNodes = new ArrayList<>();
         for(int i = 0; i < subNodes.size(); i++) {

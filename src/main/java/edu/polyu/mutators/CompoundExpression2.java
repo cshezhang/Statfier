@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static edu.polyu.Util.getChildrenNodes;
 
-public class CompoundExpression2 extends Mutator {
+public class CompoundExpression2 extends StatementMutator {
 
     private static final CompoundExpression2 instance = new CompoundExpression2();
 
@@ -25,7 +25,7 @@ public class CompoundExpression2 extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         List<ASTNode> nodes = getChildrenNodes(sourceStatement);
         List<BooleanLiteral> boolLiterals = new ArrayList<>();
         for(ASTNode node : nodes) {

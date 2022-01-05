@@ -6,7 +6,8 @@ import pandas as pd
 
 from bs4 import BeautifulSoup
 
-save_path = "/home/huaien/projects/SAMutator/seeds" + os.sep + "PMD_Seeds" + os.sep
+userdir = os.path.expanduser('~')
+save_path = userdir + os.sep + "projects" + os.sep + "SAMutator" + os.sep + "seeds" + os.sep + "PMD_Seeds" + os.sep
 
 bug_categories = [
   "bestpractices",
@@ -101,7 +102,7 @@ def getTestCases(cate2rules):
 
 
 def get_filepaths_from_folder():
-    targetDirPath = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds'
+    targetDirPath = userdir + os.sep + 'projects' + os.sep + 'SAMutator' + os.sep + 'seeds'+ os.sep + 'PMD_Seeds'
     filepaths = []
     for (targetDir, dirnamess, filenames) in os.walk(targetDirPath):
         for filename in filenames:
@@ -117,14 +118,14 @@ def main():
   print(filepaths)
   print(file2rule)
   for bug in bugs:
-    bug_dir_path = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds/' + bug
+    bug_dir_path = userdir + os.sep + 'projects' + os.sep + 'SAMutator' + os.sep + 'seeds'+ os.sep + 'PMD_Seeds' + os.sep + bug
     print(bug_dir_path)
     if not os.path.exists(bug_dir_path):
       os.mkdir(bug_dir_path)
   for filepath in filepaths:
       # sub_folder_path = '/home/huaien/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)  
     filename = filepath.split("/")[-1]
-    target_folder = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds/' + file2rule[filename]
+    target_folder = userdir + os.sep + 'projects' + os.sep + 'SAMutator' + os.sep + 'seeds'+ os.sep + 'PMD_Seeds' + os.sep + file2rule[filename]
     shutil.move(filepath, target_folder + os.sep + filename)
 
 main()

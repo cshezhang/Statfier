@@ -1,11 +1,9 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
-
-import java.util.Locale;
 
 import static edu.polyu.Util.*;
 
@@ -14,13 +12,13 @@ import static edu.polyu.Util.*;
  * @Author: Huaien Zhang
  * @Date: 2021-10-05 12:49
  */
-public class AddArgAssignment extends Mutator {
+public class AddArgAssignment extends StatementMutator {
 
     private static AddArgAssignment addArgAssignment = new AddArgAssignment();
 
     private AddArgAssignment() {}
 
-    public static Mutator getInstance() {
+    public static StatementMutator getInstance() {
         return addArgAssignment;
     }
 
@@ -31,7 +29,7 @@ public class AddArgAssignment extends Mutator {
      * Notice: New Assignment should be added final modifier
      */
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         Expression targetExpression = null, rightExpression = null;
         if(sourceStatement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) sourceStatement;
@@ -133,4 +131,5 @@ public class AddArgAssignment extends Mutator {
         }
         return 0;
     }
+
 }

@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.Util.getChildrenNodes;
-import static edu.polyu.Util.random;
 
 
 /**
@@ -16,7 +15,7 @@ import static edu.polyu.Util.random;
  * @Author: Huaien Zhang
  * @Date: 2021-08-20 21:15
  */
-public class AddRedundantLiteral extends Mutator {
+public class AddRedundantLiteral extends StatementMutator {
 
     private static AddRedundantLiteral addRedundantLiteral = new AddRedundantLiteral();
 
@@ -31,7 +30,7 @@ public class AddRedundantLiteral extends Mutator {
      */
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
         List<NumberLiteral> numberLiterals = new ArrayList<>();
         for(int i = 0; i < subNodes.size(); i++) {

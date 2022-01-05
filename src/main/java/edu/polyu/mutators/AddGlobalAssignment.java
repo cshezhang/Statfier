@@ -1,14 +1,10 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ArrayType;
-import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
@@ -23,7 +19,12 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddGlobalAssignment extends Mutator {
+/**
+ * @Description: static int a = b; -> static int a; static {a = b;}
+ * @Author: Vanguard
+ * @Date: 2021-12-15 12:49
+ */
+public class AddGlobalAssignment extends StatementMutator {
 
     private static final AddGlobalAssignment instance = new AddGlobalAssignment();
     private AddGlobalAssignment() {}
@@ -36,9 +37,10 @@ public class AddGlobalAssignment extends Mutator {
      * Attention: For FieldDeclaration
      * Source: Var A = B; => Var A; A = B; VD_Statement => VD + Assignment
      * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
+     * Beside, static variable can inited in static code block.
      * */
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brotherStatement, Statement sourceStatement) {
         TypeDeclaration oldClazz = Util.getTypeOfStatement(sourceStatement);
         List<ASTNode> oldClazzCompoents = oldClazz.bodyDeclarations();
         List<FieldDeclaration> oldFieldDeclarations = new ArrayList<>();

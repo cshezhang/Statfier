@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 // Control flow wrapper by while(true)-break
-public class CFWrapperWithWhileTrue extends Mutator {
+public class CFWrapperWithWhileTrue extends StatementMutator {
 
     private static final CFWrapperWithWhileTrue instance = new CFWrapperWithWhileTrue();
 
@@ -22,7 +22,7 @@ public class CFWrapperWithWhileTrue extends Mutator {
     }
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
         WhileStatement whileStatement = ast.newWhileStatement();
         whileStatement.setExpression(ast.newBooleanLiteral(true));

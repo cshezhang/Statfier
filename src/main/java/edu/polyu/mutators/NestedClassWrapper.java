@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.Mutator;
+import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -8,12 +8,9 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static edu.polyu.Util.getDirectMethodOfStatement;
 
-public class NestedClassWrapper extends Mutator {
+public class NestedClassWrapper extends StatementMutator {
 
     private static NestedClassWrapper nestedClassWrapper = new NestedClassWrapper();
 
@@ -26,7 +23,7 @@ public class NestedClassWrapper extends Mutator {
     public static int nestedClassCounter = 0;
 
     @Override
-    public boolean transform(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
+    public boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement) {
         MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
         if(oldMethod == null) {
             return false;
