@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:30:23.054+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UnnecessaryModifier\\UnnecessaryModifier49.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 22,
+          "endline": 5,
+          "endcolumn": 36,
+          "description": "Unnecessary modifier \u0027final\u0027 on method \u0027magic\u0027: an anonymous class cannot be extended",
+          "rule": "UnnecessaryModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#unnecessarymodifier"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

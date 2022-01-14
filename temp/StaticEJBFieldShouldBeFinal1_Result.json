@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:38:03.278+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_StaticEJBFieldShouldBeFinal\\StaticEJBFieldShouldBeFinal1.java",
+      "violations": [
+        {
+          "beginline": 2,
+          "begincolumn": 8,
+          "endline": 6,
+          "endcolumn": 1,
+          "description": "EJBs shouldnt have non-final static fields",
+          "rule": "StaticEJBFieldShouldBeFinal",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#staticejbfieldshouldbefinal"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

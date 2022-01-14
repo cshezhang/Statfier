@@ -1,0 +1,13 @@
+
+a = true;
+if (foo(a)) {
+  doSomething();
+}
+
+if (b) {
+  doSomething();
+}
+
+if (c) {
+  doSomething();
+}

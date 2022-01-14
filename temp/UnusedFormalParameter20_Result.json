@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:24:53.003+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedFormalParameter\\UnusedFormalParameter20.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 47,
+          "endline": 4,
+          "endcolumn": 52,
+          "description": "Avoid unused method parameters such as \u0027stream\u0027.",
+          "rule": "UnusedFormalParameter",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedformalparameter"
+        },
+        {
+          "beginline": 8,
+          "begincolumn": 33,
+          "endline": 8,
+          "endcolumn": 33,
+          "description": "Avoid unused method parameters such as \u0027a\u0027.",
+          "rule": "UnusedFormalParameter",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedformalparameter"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 62,
+          "endline": 12,
+          "endcolumn": 62,
+          "description": "Avoid unused method parameters such as \u0027o\u0027.",
+          "rule": "UnusedFormalParameter",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedformalparameter"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 47,
+          "endline": 12,
+          "endcolumn": 52,
+          "description": "Avoid unused method parameters such as \u0027stream\u0027.",
+          "rule": "UnusedFormalParameter",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedformalparameter"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

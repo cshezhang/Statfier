@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:25:22.217+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedPrivateMethod\\UnusedPrivateMethod54.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 26,
+          "endline": 7,
+          "endcolumn": 107,
+          "description": "Avoid unused private methods such as \u0027getImageUrlsListForVariant(VariantProductModel,String)\u0027.",
+          "rule": "UnusedPrivateMethod",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedprivatemethod"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,147 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:29:46.694+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UselessParentheses\\UselessParentheses17.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 21,
+          "endline": 4,
+          "endcolumn": 23,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 21,
+          "endline": 5,
+          "endcolumn": 23,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 21,
+          "endline": 6,
+          "endcolumn": 23,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 7,
+          "begincolumn": 21,
+          "endline": 7,
+          "endcolumn": 23,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 8,
+          "begincolumn": 21,
+          "endline": 8,
+          "endcolumn": 22,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 9,
+          "begincolumn": 21,
+          "endline": 9,
+          "endcolumn": 22,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 10,
+          "begincolumn": 21,
+          "endline": 10,
+          "endcolumn": 22,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 11,
+          "begincolumn": 21,
+          "endline": 11,
+          "endcolumn": 22,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 21,
+          "endline": 12,
+          "endcolumn": 25,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 13,
+          "begincolumn": 21,
+          "endline": 13,
+          "endcolumn": 25,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 14,
+          "begincolumn": 21,
+          "endline": 14,
+          "endcolumn": 25,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        },
+        {
+          "beginline": 15,
+          "begincolumn": 21,
+          "endline": 15,
+          "endcolumn": 25,
+          "description": "Useless parentheses.",
+          "rule": "UselessParentheses",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#uselessparentheses"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

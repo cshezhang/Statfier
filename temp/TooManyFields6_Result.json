@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:31:51.467+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_TooManyFields\\TooManyFields6.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 12,
+          "endline": 20,
+          "endcolumn": 5,
+          "description": "Too many fields",
+          "rule": "TooManyFields",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#toomanyfields"
+        },
+        {
+          "beginline": 21,
+          "begincolumn": 12,
+          "endline": 38,
+          "endcolumn": 5,
+          "description": "Too many fields",
+          "rule": "TooManyFields",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#toomanyfields"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

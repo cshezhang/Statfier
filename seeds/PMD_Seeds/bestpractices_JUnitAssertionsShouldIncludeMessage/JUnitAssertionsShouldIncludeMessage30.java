@@ -1,11 +1,17 @@
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
-class SimpleTest {
+public class TestNgTestCase {
     @Test
-    public void simpleMethod() {
-        assertEquals(0, Integer.compare(0, 0), "Not equals 0 != 1");
+    public void testAssert() {
+        assertEquals("a", "b", "message");
+        assertEquals(1, 2, "message");
+        assertFalse(true, "message");
+        assertTrue(false, "message");
+        assertNotEquals(new Object(), new Object(), "message");
+        assertNotNull(null, "message");
+        assertNull(null, "message");
     }
 }
         

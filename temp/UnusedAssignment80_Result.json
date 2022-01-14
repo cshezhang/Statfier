@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:22:49.610+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedAssignment\\UnusedAssignment80.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 30,
+          "endline": 4,
+          "endcolumn": 32,
+          "description": "The initial value of parameter \u0027arr\u0027 is never used (overwritten on line 5)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

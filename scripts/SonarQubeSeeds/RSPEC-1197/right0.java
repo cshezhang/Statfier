@@ -1,0 +1,2 @@
+
+int[][] matrix;   // Compliant

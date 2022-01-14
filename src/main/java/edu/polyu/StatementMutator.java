@@ -43,6 +43,7 @@ public abstract class StatementMutator {
             mutators.add(AddControlBranch.getInstance());
             mutators.add(AddGlobalAssignment.getInstance());
             mutators.add(AddLocalAssignment.getInstance());
+            mutators.add(AddMethodCallToLiteral.getInstance());
             mutators.add(AddRedundantLiteral.getInstance());
             mutators.add(AnonymousClassWrapper.getInstance());
             mutators.add(CFWrapperWithDoWhile.getInstance());
@@ -50,7 +51,6 @@ public abstract class StatementMutator {
             mutators.add(CFWrapperWithForTrue.getInstance());
             mutators.add(CFWrapperWithIfFlase.getInstance());
             mutators.add(CFWrapperWithIfTrue.getInstance());
-            mutators.add(CFWrapperWithWhileFalse.getInstance());
             mutators.add(CFWrapperWithWhileTrue.getInstance());
             mutators.add(CompoundExpression1.getInstance());
             mutators.add(CompoundExpression2.getInstance());
@@ -73,7 +73,6 @@ public abstract class StatementMutator {
                 mutators.add(CFWrapperWithForTrue.getInstance());
                 mutators.add(CFWrapperWithIfFlase.getInstance());
                 mutators.add(CFWrapperWithIfTrue.getInstance());
-                mutators.add(CFWrapperWithWhileFalse.getInstance());
                 mutators.add(CFWrapperWithWhileTrue.getInstance());
                 mutators.add(CompoundExpression1.getInstance());
                 mutators.add(CompoundExpression2.getInstance());
@@ -95,7 +94,6 @@ public abstract class StatementMutator {
                 mutators.add(CFWrapperWithForTrue.getInstance());
                 mutators.add(CFWrapperWithIfFlase.getInstance());
                 mutators.add(CFWrapperWithIfTrue.getInstance());
-                mutators.add(CFWrapperWithWhileFalse.getInstance());
                 mutators.add(CFWrapperWithWhileTrue.getInstance());
                 mutators.add(CompoundExpression1.getInstance());
                 mutators.add(CompoundExpression2.getInstance());

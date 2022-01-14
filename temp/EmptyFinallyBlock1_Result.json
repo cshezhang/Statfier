@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:38:28.188+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_EmptyFinallyBlock\\EmptyFinallyBlock1.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 10,
+          "endline": 5,
+          "endcolumn": 19,
+          "description": "Avoid empty finally blocks",
+          "rule": "EmptyFinallyBlock",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#emptyfinallyblock"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

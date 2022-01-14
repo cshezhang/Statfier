@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:30:15.141+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UnnecessaryModifier\\UnnecessaryModifier35.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 19,
+          "endline": 4,
+          "endcolumn": 5,
+          "description": "Unnecessary modifier \u0027public\u0027 on enum \u0027Inner\u0027: the enum is declared in an annotation type",
+          "rule": "UnnecessaryModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#unnecessarymodifier"
+        },
+        {
+          "beginline": 3,
+          "begincolumn": 19,
+          "endline": 4,
+          "endcolumn": 5,
+          "description": "Unnecessary modifier \u0027static\u0027 on enum \u0027Inner\u0027: nested enums are implicitly static",
+          "rule": "UnnecessaryModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#unnecessarymodifier"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

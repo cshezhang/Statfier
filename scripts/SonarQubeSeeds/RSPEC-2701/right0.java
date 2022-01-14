@@ -1,0 +1,3 @@
+
+assertTrue(something());
+assertNotNull(something());

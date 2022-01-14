@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Author: Vanguard
  * Date: 2021/9/23 7:30 下午
  */
-public class PMD_Violation extends ViolationReport {
+public class PMD_Violation extends Violation {
 
     public int beginLine;
     public int endLine;

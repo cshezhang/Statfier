@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:37:57.879+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AssignmentInOperand\\AssignmentInOperand10.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 13,
+          "endline": 5,
+          "endcolumn": 19,
+          "description": "Avoid assignments in operands",
+          "rule": "AssignmentInOperand",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#assignmentinoperand"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

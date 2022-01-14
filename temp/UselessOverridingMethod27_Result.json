@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:32:21.456+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_UselessOverridingMethod\\UselessOverridingMethod27.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 15,
+          "endline": 11,
+          "endcolumn": 5,
+          "description": "Overriding method merely calls super",
+          "rule": "UselessOverridingMethod",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#uselessoverridingmethod"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

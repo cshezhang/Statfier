@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:41:05.016+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_EmptyStatementNotInLoop\\EmptyStatementNotInLoop3.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 19,
+          "endline": 4,
+          "endcolumn": 19,
+          "description": "An empty statement (semicolon) not part of a loop",
+          "rule": "EmptyStatementNotInLoop",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#emptystatementnotinloop"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

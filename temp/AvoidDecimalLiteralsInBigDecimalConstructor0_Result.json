@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:37:50.145+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AvoidDecimalLiteralsInBigDecimalConstructor\\AvoidDecimalLiteralsInBigDecimalConstructor0.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 25,
+          "endline": 6,
+          "endcolumn": 42,
+          "description": "Avoid creating BigDecimal with a decimal (float/double) literal. Use a String literal",
+          "rule": "AvoidDecimalLiteralsInBigDecimalConstructor",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoiddecimalliteralsinbigdecimalconstructor"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

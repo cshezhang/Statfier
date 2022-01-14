@@ -1,0 +1,48 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:34:41.071+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_AvoidCatchingGenericException\\AvoidCatchingGenericException0.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 18,
+          "endline": 5,
+          "endcolumn": 37,
+          "description": "Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block",
+          "rule": "AvoidCatchingGenericException",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#avoidcatchinggenericexception"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 18,
+          "endline": 6,
+          "endcolumn": 26,
+          "description": "Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block",
+          "rule": "AvoidCatchingGenericException",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#avoidcatchinggenericexception"
+        },
+        {
+          "beginline": 7,
+          "begincolumn": 18,
+          "endline": 7,
+          "endcolumn": 33,
+          "description": "Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block",
+          "rule": "AvoidCatchingGenericException",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#avoidcatchinggenericexception"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

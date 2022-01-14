@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:37:07.044+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_CloseResource\\CloseResource27.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 19,
+          "endline": 7,
+          "endcolumn": 20,
+          "description": "Ensure that resources like this ResultSet object are closed after use",
+          "rule": "CloseResource",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#closeresource"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

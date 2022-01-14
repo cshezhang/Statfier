@@ -6,12 +6,19 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.util.List;
+
 import static edu.polyu.Util.getDirectMethodOfStatement;
+import static edu.polyu.Util.getTypeOfStatement;
 
 public class AnonymousClassWrapper extends StatementMutator {
 
@@ -53,7 +60,39 @@ public class AnonymousClassWrapper extends StatementMutator {
 
     @Override
     public int check(Statement statement) {
-        return 1;
+        TypeDeclaration clazz = getTypeOfStatement(statement);
+        MethodDeclaration method = getDirectMethodOfStatement(statement);
+        if(method == null) {
+            return 1;
+        }
+        boolean isOverride = false;
+        for(ASTNode node : (List<ASTNode>) method.modifiers()) {
+            if(node instanceof MarkerAnnotation) {
+                String name = ((MarkerAnnotation) node).getTypeName().getFullyQualifiedName();
+                if(name.contains("Override")) {
+                    isOverride = true;
+                    break;
+                }
+            }
+        }
+        if(isOverride) {
+            if(clazz.superInterfaceTypes().size() > 0) {
+                return 0;
+            }
+            Type superClazzType = clazz.getSuperclassType();
+            if(superClazzType == null) {
+                return 1;
+            }
+            if (superClazzType instanceof SimpleType) {
+                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
+                if(name.contains("Object")) {
+                    return 1;
+                }
+            }
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
 }

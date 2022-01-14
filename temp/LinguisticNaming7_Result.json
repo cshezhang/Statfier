@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:44.141+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_LinguisticNaming\\LinguisticNaming7.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 5,
+          "endline": 9,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The getter \u0027getName\u0027 should not return void linguistically",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

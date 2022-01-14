@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:25:29.117+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_JUnit4SuitesShouldUseSuiteAnnotation\\JUnit4SuitesShouldUseSuiteAnnotation0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 5,
+          "endline": 7,
+          "endcolumn": 5,
+          "description": "JUnit 4 indicates test suites via annotations, not the suite method.",
+          "rule": "JUnit4SuitesShouldUseSuiteAnnotation",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#junit4suitesshouldusesuiteannotation"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:43:57.812+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_TooFewBranchesForASwitchStatement\\TooFewBranchesForASwitchStatement0.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 9,
+          "endline": 9,
+          "endcolumn": 9,
+          "description": "A switch with less than three branches is inefficient, use a if statement instead.",
+          "rule": "TooFewBranchesForASwitchStatement",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#toofewbranchesforaswitchstatement"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

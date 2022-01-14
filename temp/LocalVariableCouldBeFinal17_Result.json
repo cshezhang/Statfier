@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:31:40.993+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_LocalVariableCouldBeFinal\\LocalVariableCouldBeFinal17.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 17,
+          "endline": 6,
+          "endcolumn": 30,
+          "description": "Local variable \u0027a\u0027 could be declared final",
+          "rule": "LocalVariableCouldBeFinal",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#localvariablecouldbefinal"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 17,
+          "endline": 12,
+          "endcolumn": 25,
+          "description": "Local variable \u0027a\u0027 could be declared final",
+          "rule": "LocalVariableCouldBeFinal",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#localvariablecouldbefinal"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

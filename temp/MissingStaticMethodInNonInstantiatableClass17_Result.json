@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:38:49.035+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_MissingStaticMethodInNonInstantiatableClass\\MissingStaticMethodInNonInstantiatableClass17.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 8,
+          "endline": 17,
+          "endcolumn": 1,
+          "description": "Class cannot be instantiated and does not provide any static methods or fields",
+          "rule": "MissingStaticMethodInNonInstantiatableClass",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#missingstaticmethodinnoninstantiatableclass"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

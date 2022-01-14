@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:37.009+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_CommentDefaultAccessModifier\\CommentDefaultAccessModifier15.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 5,
+          "endline": 3,
+          "endcolumn": 12,
+          "description": "To avoid mistakes add a comment at the beginning of the Foo constructor if you want a default access modifier",
+          "rule": "CommentDefaultAccessModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#commentdefaultaccessmodifier"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

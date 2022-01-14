@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:21:44.987+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_CheckResultSet\\CheckResultSet2.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 9,
+          "endline": 6,
+          "endcolumn": 52,
+          "description": "Always check the return of one of the navigation method (next,previous,first,last) of a ResultSet.",
+          "rule": "CheckResultSet",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#checkresultset"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

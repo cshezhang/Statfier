@@ -1,4 +1,7 @@
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Test {
     public void foo() {
         String [] result = new String[10000];

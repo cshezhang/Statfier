@@ -1,0 +1,11 @@
+
+a = false;
+if (a) { // Noncompliant
+  doSomething(); // never executed
+}
+
+if (!a || b) { // Noncompliant; "!a" is always "true", "b" is never evaluated
+  doSomething();
+} else {
+  doSomethingElse(); // never executed
+}

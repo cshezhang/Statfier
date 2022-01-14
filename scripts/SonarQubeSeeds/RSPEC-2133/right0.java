@@ -1,0 +1,2 @@
+
+Class c = MyObject.class;

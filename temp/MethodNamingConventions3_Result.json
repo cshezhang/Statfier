@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:29:27.976+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_MethodNamingConventions\\MethodNamingConventions3.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 28,
+          "endline": 3,
+          "endcolumn": 58,
+          "description": "The native method name \u0027__surfunc__\u0027 doesn\u0027t match \u0027[a-z][a-zA-Z0-9]*\u0027",
+          "rule": "MethodNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#methodnamingconventions"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

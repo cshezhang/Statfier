@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:26:06.204+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_AvoidReassigningLoopVariables\\AvoidReassigningLoopVariables39.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 13,
+          "endline": 6,
+          "endcolumn": 13,
+          "description": "Avoid reassigning the loop control variable \u0027g\u0027",
+          "rule": "AvoidReassigningLoopVariables",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningloopvariables"
+        },
+        {
+          "beginline": 7,
+          "begincolumn": 13,
+          "endline": 7,
+          "endcolumn": 13,
+          "description": "Avoid reassigning the loop control variable \u0027g\u0027",
+          "rule": "AvoidReassigningLoopVariables",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningloopvariables"
+        },
+        {
+          "beginline": 11,
+          "begincolumn": 13,
+          "endline": 11,
+          "endcolumn": 16,
+          "description": "Avoid reassigning the loop control variable \u0027item\u0027",
+          "rule": "AvoidReassigningLoopVariables",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningloopvariables"
+        },
+        {
+          "beginline": 15,
+          "begincolumn": 13,
+          "endline": 15,
+          "endcolumn": 19,
+          "description": "Avoid reassigning the loop control variable \u0027message\u0027",
+          "rule": "AvoidReassigningLoopVariables",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningloopvariables"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

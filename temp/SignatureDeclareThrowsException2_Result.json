@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:31:54.300+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_SignatureDeclareThrowsException\\SignatureDeclareThrowsException2.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 18,
+          "endline": 3,
+          "endcolumn": 26,
+          "description": "A method/constructor should not explicitly throw java.lang.Exception",
+          "rule": "SignatureDeclareThrowsException",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#signaturedeclarethrowsexception"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

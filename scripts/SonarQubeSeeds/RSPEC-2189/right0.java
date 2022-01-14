@@ -1,0 +1,15 @@
+
+int j;
+while (true) { // reachable end condition added
+  j++;
+  if (j  == Integer.MIN_VALUE) {  // true at Integer.MAX_VALUE +1
+    break;
+  }
+}
+
+int k;
+boolean b = true;
+while (b) {
+  k++;
+  b = k < Integer.MAX_VALUE;
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:23:23.546+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedAssignment\\UnusedAssignment142.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 32,
+          "endline": 3,
+          "endcolumn": 32,
+          "description": "The field initializer for \u0027b\u0027 is never used (overwritten on line 8)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

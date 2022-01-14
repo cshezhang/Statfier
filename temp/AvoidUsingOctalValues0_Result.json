@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:38:04.783+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AvoidUsingOctalValues\\AvoidUsingOctalValues0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 13,
+          "endline": 3,
+          "endcolumn": 15,
+          "description": "Do not start a literal by 0 unless its an octal value",
+          "rule": "AvoidUsingOctalValues",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidusingoctalvalues"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

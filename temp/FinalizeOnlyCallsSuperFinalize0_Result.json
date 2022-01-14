@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:41:17.597+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_FinalizeOnlyCallsSuperFinalize\\FinalizeOnlyCallsSuperFinalize0.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 9,
+          "endline": 4,
+          "endcolumn": 25,
+          "description": "Finalize should do something besides just calling super.finalize()",
+          "rule": "FinalizeOnlyCallsSuperFinalize",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#finalizeonlycallssuperfinalize"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

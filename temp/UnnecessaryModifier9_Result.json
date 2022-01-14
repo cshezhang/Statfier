@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:30:00.745+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UnnecessaryModifier\\UnnecessaryModifier9.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 12,
+          "endline": 3,
+          "endcolumn": 23,
+          "description": "Unnecessary modifier \u0027public\u0027 on class \u0027Bar\u0027: members of interface types are implicitly public",
+          "rule": "UnnecessaryModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#unnecessarymodifier"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

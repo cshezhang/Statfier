@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:19:03.096+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_AvoidReassigningParameters\\AvoidReassigningParameters12.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 9,
+          "endline": 4,
+          "endcolumn": 11,
+          "description": "Avoid reassigning parameters such as \u0027arg\u0027",
+          "rule": "AvoidReassigningParameters",
+          "ruleset": "Best Practices",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningparameters"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 9,
+          "endline": 6,
+          "endcolumn": 12,
+          "description": "Avoid reassigning parameters such as \u0027arg3\u0027",
+          "rule": "AvoidReassigningParameters",
+          "ruleset": "Best Practices",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningparameters"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

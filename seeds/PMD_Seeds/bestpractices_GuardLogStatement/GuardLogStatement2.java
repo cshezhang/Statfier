@@ -5,7 +5,7 @@ public class Foo {
 
     private void foo(Logger logger) {
         if ( logger.isLoggable(Level.FINE) ) {
-            logger.fine("debug message" + "");
+            logger.fine("debug message: " + this);
         }
     }
 }

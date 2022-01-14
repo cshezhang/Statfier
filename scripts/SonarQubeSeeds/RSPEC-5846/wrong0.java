@@ -1,0 +1,14 @@
+
+static final Pattern p = Pattern.compile("^$", Pattern.MULTILINE); // Noncompliant
+
+// Alternatively
+static final Pattern p = Pattern.compile("(?m)^$"); // Noncompliant
+
+
+boolean containsEmptyLines(String str) {
+    return p.matcher(str).find();
+}
+
+// ...
+System.out.println(containsEmptyLines("a\n\nb")); // correctly prints 'true'
+System.out.println(containsEmptyLines("")); // incorrectly prints 'false'

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:32:04.938+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_CognitiveComplexity\\CognitiveComplexity1.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 23,
+          "endline": 50,
+          "endcolumn": 15,
+          "description": "The method \u0027addVersion(Entry, Transaction)\u0027 has a cognitive complexity of 35, current threshold is 15",
+          "rule": "CognitiveComplexity",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#cognitivecomplexity"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

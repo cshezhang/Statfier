@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:39:07.657+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_BeanMembersShouldSerialize\\BeanMembersShouldSerialize23.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 12,
+          "endline": 4,
+          "endcolumn": 12,
+          "description": "Found non-transient, non-static member. Please mark as transient or provide accessors.",
+          "rule": "BeanMembersShouldSerialize",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#beanmembersshouldserialize"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 31,
+          "endline": 6,
+          "endcolumn": 32,
+          "description": "Found non-transient, non-static member. Please mark as transient or provide accessors.",
+          "rule": "BeanMembersShouldSerialize",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#beanmembersshouldserialize"
+        },
+        {
+          "beginline": 8,
+          "begincolumn": 16,
+          "endline": 8,
+          "endcolumn": 17,
+          "description": "Found non-transient, non-static member. Please mark as transient or provide accessors.",
+          "rule": "BeanMembersShouldSerialize",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#beanmembersshouldserialize"
+        },
+        {
+          "beginline": 22,
+          "begincolumn": 29,
+          "endline": 22,
+          "endcolumn": 29,
+          "description": "Found non-transient, non-static member. Please mark as transient or provide accessors.",
+          "rule": "BeanMembersShouldSerialize",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#beanmembersshouldserialize"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

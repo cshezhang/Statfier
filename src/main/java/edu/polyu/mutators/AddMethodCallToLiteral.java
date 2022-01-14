@@ -43,12 +43,10 @@ public class AddMethodCallToLiteral extends StatementMutator {
                 literalNodes.add(node);
             }
         }
-        if(literalNodes.size() == 0) {
-            return false;
-        }
         ASTNode targetNode = literalNodes.get(index);
         MethodDeclaration newMethod = ast.newMethodDeclaration();
         String newMethodName = "getLiteral" + literalCounter++;
+        newMethod.setReturnType2(checkLiteralType(ast, (Expression) targetNode));
         newMethod.setName(ast.newSimpleName(newMethodName));
         ReturnStatement returnStatement = ast.newReturnStatement();
         Block newBlock = ast.newBlock();

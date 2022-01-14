@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:25:40.866+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_PreserveStackTrace\\PreserveStackTrace15.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 13,
+          "endline": 7,
+          "endcolumn": 21,
+          "description": "New exception is thrown in catch block, original stack trace may be lost",
+          "rule": "PreserveStackTrace",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#preservestacktrace"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

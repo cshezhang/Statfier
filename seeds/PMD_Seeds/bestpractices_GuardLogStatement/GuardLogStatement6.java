@@ -7,7 +7,7 @@ public class Test {
     public void test() {
         if (true) {
             // bad:
-            __log.debug("log something" + " and " + "concat strings");
+            __log.debug("log something" + this + " and " + "concat strings");
             // this is useless:
             __log.isDebugEnabled();
         }

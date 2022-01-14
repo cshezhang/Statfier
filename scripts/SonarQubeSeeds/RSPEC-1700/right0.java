@@ -1,0 +1,11 @@
+
+public class Foo {
+  private String name;
+
+  public String getName() { }
+}
+
+//...
+
+Foo foo = new Foo();
+foo.getName()

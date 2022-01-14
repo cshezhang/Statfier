@@ -1,0 +1,4 @@
+
+if(isActiveSession(request.getRequestedSessionId()) ){
+  ...
+}

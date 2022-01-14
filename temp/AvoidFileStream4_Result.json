@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:42:37.733+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_AvoidFileStream\\AvoidFileStream4.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 29,
+          "endline": 5,
+          "endcolumn": 38,
+          "description": "Avoid instantiating FileInputStream, FileOutputStream, FileReader, or FileWriter",
+          "rule": "AvoidFileStream",
+          "ruleset": "Performance",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#avoidfilestream"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:40.724+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_UnnecessaryCaseChange\\UnnecessaryCaseChange4.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 27,
+          "endline": 5,
+          "endcolumn": 98,
+          "description": "Using equalsIgnoreCase() is cleaner than using toUpperCase/toLowerCase().equals().",
+          "rule": "UnnecessaryCaseChange",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#unnecessarycasechange"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

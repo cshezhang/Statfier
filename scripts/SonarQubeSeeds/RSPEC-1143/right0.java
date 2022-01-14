@@ -1,0 +1,24 @@
+
+public static void main(String[] args) {
+  try {
+    doSomethingWhichThrowsException();
+    System.out.println("OK");
+  } catch (RuntimeException e) {
+    System.out.println("ERROR");  // "ERROR" is printed as expected
+  }
+}
+
+public static void doSomethingWhichThrowsException() {
+  try {
+    throw new RuntimeException();
+  } finally {
+    for (int i = 0; i < 10; i ++) {
+      //...
+      if (q == i) {
+        break; // ignored
+      }
+    }
+
+    /* ... */
+  }
+}

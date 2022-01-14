@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:45:04.900+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\security_HardCodedCryptoKey\\HardCodedCryptoKey3.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 54,
+          "endline": 6,
+          "endcolumn": 119,
+          "description": "Do not use hard coded encryption keys",
+          "rule": "HardCodedCryptoKey",
+          "ruleset": "Security",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_security.html#hardcodedcryptokey"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

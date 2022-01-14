@@ -1,0 +1,70 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:43:07.106+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_RedundantFieldInitializer\\RedundantFieldInitializer15.java",
+      "violations": [
+        {
+          "beginline": 13,
+          "begincolumn": 17,
+          "endline": 13,
+          "endcolumn": 29,
+          "description": "Avoid using redundant field initializer for \u0027iszero1\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 14,
+          "begincolumn": 17,
+          "endline": 14,
+          "endcolumn": 29,
+          "description": "Avoid using redundant field initializer for \u0027iszero2\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 15,
+          "begincolumn": 18,
+          "endline": 15,
+          "endcolumn": 31,
+          "description": "Avoid using redundant field initializer for \u0027iszero3\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 16,
+          "begincolumn": 18,
+          "endline": 16,
+          "endcolumn": 31,
+          "description": "Avoid using redundant field initializer for \u0027iszero4\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 17,
+          "begincolumn": 17,
+          "endline": 17,
+          "endcolumn": 37,
+          "description": "Avoid using redundant field initializer for \u0027iszero5\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

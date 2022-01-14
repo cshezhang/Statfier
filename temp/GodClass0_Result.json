@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:33:18.382+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_GodClass\\GodClass0.java",
+      "violations": [
+        {
+          "beginline": 26,
+          "begincolumn": 8,
+          "endline": 120,
+          "endcolumn": 1,
+          "description": "Possible God Class (WMC\u003d123, ATFD\u003d7, TCC\u003d16.667%)",
+          "rule": "GodClass",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#godclass"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

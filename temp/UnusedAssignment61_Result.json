@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:22:39.368+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedAssignment\\UnusedAssignment61.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 29,
+          "endline": 9,
+          "endcolumn": 29,
+          "description": "The initializer for variable \u0027a\u0027 is never used (overwritten on lines 12, 14, 17 and 19)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 33,
+          "endline": 12,
+          "endcolumn": 40,
+          "description": "The value assigned to variable \u0027a\u0027 is never used (overwritten on line 14)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        },
+        {
+          "beginline": 14,
+          "begincolumn": 33,
+          "endline": 14,
+          "endcolumn": 33,
+          "description": "The value assigned to variable \u0027a\u0027 is never used (overwritten on lines 17 and 19)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        },
+        {
+          "beginline": 17,
+          "begincolumn": 29,
+          "endline": 17,
+          "endcolumn": 30,
+          "description": "The value assigned to variable \u0027a\u0027 is never used (overwritten on line 19)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:30:58.415+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UseUnderscoresInNumericLiterals\\UseUnderscoresInNumericLiterals21.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 18,
+          "endline": 3,
+          "endcolumn": 26,
+          "description": "Number 36e-11234 should separate every third digit with an underscore",
+          "rule": "UseUnderscoresInNumericLiterals",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#useunderscoresinnumericliterals"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

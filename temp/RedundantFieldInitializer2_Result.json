@@ -1,0 +1,92 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:43:00.894+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_RedundantFieldInitializer\\RedundantFieldInitializer2.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 15,
+          "endline": 4,
+          "endcolumn": 23,
+          "description": "Avoid using redundant field initializer for \u0027ba\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 9,
+          "begincolumn": 12,
+          "endline": 9,
+          "endcolumn": 21,
+          "description": "Avoid using redundant field initializer for \u0027bya\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 13,
+          "begincolumn": 13,
+          "endline": 13,
+          "endcolumn": 21,
+          "description": "Avoid using redundant field initializer for \u0027sa\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 17,
+          "begincolumn": 12,
+          "endline": 17,
+          "endcolumn": 20,
+          "description": "Avoid using redundant field initializer for \u0027ca\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 21,
+          "begincolumn": 11,
+          "endline": 21,
+          "endcolumn": 19,
+          "description": "Avoid using redundant field initializer for \u0027ia\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 25,
+          "begincolumn": 13,
+          "endline": 25,
+          "endcolumn": 21,
+          "description": "Avoid using redundant field initializer for \u0027fa\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        },
+        {
+          "beginline": 29,
+          "begincolumn": 14,
+          "endline": 29,
+          "endcolumn": 22,
+          "description": "Avoid using redundant field initializer for \u0027da\u0027",
+          "rule": "RedundantFieldInitializer",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#redundantfieldinitializer"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:36:53.902+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_MisplacedNullCheck\\MisplacedNullCheck8.java",
+      "violations": [
+        {
+          "beginline": 8,
+          "begincolumn": 64,
+          "endline": 8,
+          "endcolumn": 73,
+          "description": "The null check here is misplaced; if the variable \u0027attributes\u0027 is null there will be a NullPointerException",
+          "rule": "MisplacedNullCheck",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#misplacednullcheck"
+        },
+        {
+          "beginline": 9,
+          "begincolumn": 64,
+          "endline": 9,
+          "endcolumn": 73,
+          "description": "The null check here is misplaced; if the variable \u0027attributes\u0027 is null there will be a NullPointerException",
+          "rule": "MisplacedNullCheck",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#misplacednullcheck"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

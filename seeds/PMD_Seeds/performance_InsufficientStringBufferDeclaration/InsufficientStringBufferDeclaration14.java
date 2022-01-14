@@ -1,13 +1,12 @@
 
 public class Foo {
-    private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Foo.class);
     public void bar() {
         StringBuffer sb = new StringBuffer();
-        sb.append(12345678901234567890L);
+        sb.append(1234567890123456789L);
     }
     public void bar2() {
         StringBuilder sb = new StringBuilder();
-        sb.append(12345678901234567890L);
+        sb.append(1234567890123456789L);
     }
 }
         

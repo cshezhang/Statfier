@@ -1,0 +1,5 @@
+
+@CheckForNull
+boolean isFoo() {
+ ...
+}

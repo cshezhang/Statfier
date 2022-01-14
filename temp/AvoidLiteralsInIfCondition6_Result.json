@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:35:56.593+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AvoidLiteralsInIfCondition\\AvoidLiteralsInIfCondition6.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 20,
+          "endline": 4,
+          "endcolumn": 22,
+          "description": "Avoid using Literals in Conditional Statements",
+          "rule": "AvoidLiteralsInIfCondition",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidliteralsinifcondition"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

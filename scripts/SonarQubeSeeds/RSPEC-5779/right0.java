@@ -1,0 +1,2 @@
+
+assertThrows(AssertionError.class, () -> throwAssertionError());

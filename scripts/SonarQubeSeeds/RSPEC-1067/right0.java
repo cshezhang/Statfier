@@ -1,0 +1,2 @@
+
+if ( (myFirstCondition() || mySecondCondition()) && myLastCondition()) { ... }

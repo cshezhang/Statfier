@@ -7,14 +7,14 @@ public class Test {
     public void test() {
 
         // bad:
-        __log.debug("log something" + " and " + "concat strings");
+        __log.debug("log something" + this + " and " + "concat strings");
 
         // bad:
-        __log.debug("log something" + " and " + "concat strings", e);
+        __log.debug("log something" + this + " and " + "concat strings", e);
 
         // good:
         if (__log.isDebugEnabled()) {
-        __log.debug("bla" + "",e );
+        __log.debug("bla" + this, e);
         }
     }
 }

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:49.741+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AvoidFieldNameMatchingMethodName\\AvoidFieldNameMatchingMethodName0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 5,
+          "endline": 3,
+          "endcolumn": 12,
+          "description": "Field bar has the same name as a method",
+          "rule": "AvoidFieldNameMatchingMethodName",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidfieldnamematchingmethodname"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

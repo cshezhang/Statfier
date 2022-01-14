@@ -7,7 +7,7 @@ public class Foo {
 
     private void foo() {
         if ( logger.isDebugEnabled() )
-            logger.debug("Debug statement");
+            logger.debug("Debug statement:" + this);
     }
 }
         

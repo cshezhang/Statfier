@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:29:30.230+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_MethodNamingConventions\\MethodNamingConventions8.java",
+      "violations": [
+        {
+          "beginline": 12,
+          "begincolumn": 12,
+          "endline": 13,
+          "endcolumn": 5,
+          "description": "The JUnit 3 test method name \u0027test_getBestTeam\u0027 doesn\u0027t match \u0027test[A-Z0-9][a-zA-Z0-9]*\u0027",
+          "rule": "MethodNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#methodnamingconventions"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

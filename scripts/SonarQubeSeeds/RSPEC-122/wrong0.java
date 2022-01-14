@@ -1,0 +1,2 @@
+
+if(someCondition) doSomething();

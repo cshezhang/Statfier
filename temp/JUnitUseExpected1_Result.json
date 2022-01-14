@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:24:22.279+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_JUnitUseExpected\\JUnitUseExpected1.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 13,
+          "endline": 9,
+          "endcolumn": 16,
+          "description": "In JUnit4, use the @Test(expected) annotation to denote tests that should throw exceptions",
+          "rule": "JUnitUseExpected",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#junituseexpected"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:42.713+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_LinguisticNaming\\LinguisticNaming4.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 5,
+          "endline": 9,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027willFly\u0027 indicates linguistically it returns a boolean, but it returns \u0027int\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

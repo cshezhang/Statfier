@@ -1,4 +1,5 @@
 
+import java.util.List;
 public class Foo {
     public void bar(List l) {
         StringBuffer sb = new StringBuffer(l.size());

@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:22:08.275+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_SimplifiableTestAssertion\\SimplifiableTestAssertion37.java",
+      "violations": [
+        {
+          "beginline": 10,
+          "begincolumn": 21,
+          "endline": 10,
+          "endcolumn": 87,
+          "description": "Assertion may be simplified using assertNotEquals",
+          "rule": "SimplifiableTestAssertion",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#simplifiabletestassertion"
+        },
+        {
+          "beginline": 11,
+          "begincolumn": 21,
+          "endline": 11,
+          "endcolumn": 86,
+          "description": "Assertion may be simplified using assertEquals",
+          "rule": "SimplifiableTestAssertion",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#simplifiabletestassertion"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

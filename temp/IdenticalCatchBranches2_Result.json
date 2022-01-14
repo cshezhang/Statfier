@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:29:24.633+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_IdenticalCatchBranches\\IdenticalCatchBranches2.java",
+      "violations": [
+        {
+          "beginline": 8,
+          "begincolumn": 11,
+          "endline": 10,
+          "endcolumn": 9,
+          "description": "\u0027catch\u0027 branch identical to \u0027IllegalArgumentException\u0027 branch",
+          "rule": "IdenticalCatchBranches",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#identicalcatchbranches"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

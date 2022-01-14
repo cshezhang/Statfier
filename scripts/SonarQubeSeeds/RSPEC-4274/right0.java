@@ -1,0 +1,7 @@
+
+ public void setPrice(int price) {
+  if (price < 0 || price > MAX_PRICE) {
+    throw new IllegalArgumentException("Invalid price: " + price);
+  }
+  // Set the price
+ }

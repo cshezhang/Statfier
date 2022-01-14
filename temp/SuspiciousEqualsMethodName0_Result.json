@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:38:00.374+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_SuspiciousEqualsMethodName\\SuspiciousEqualsMethodName0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 12,
+          "endline": 3,
+          "endcolumn": 49,
+          "description": "The method name and parameter number are suspiciously close to equals(Object)",
+          "rule": "SuspiciousEqualsMethodName",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#suspiciousequalsmethodname"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

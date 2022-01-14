@@ -1,0 +1,2 @@
+
+List<? extends Animal> getAnimals(){...}

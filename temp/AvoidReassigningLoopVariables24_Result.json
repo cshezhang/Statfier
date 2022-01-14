@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:25:58.922+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_AvoidReassigningLoopVariables\\AvoidReassigningLoopVariables24.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 24,
+          "endline": 6,
+          "endcolumn": 24,
+          "description": "Avoid reassigning the loop control variable \u0027i\u0027",
+          "rule": "AvoidReassigningLoopVariables",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#avoidreassigningloopvariables"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

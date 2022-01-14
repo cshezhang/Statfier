@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:42:01.014+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_UseArrayListInsteadOfVector\\UseArrayListInsteadOfVector1.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 24,
+          "endline": 4,
+          "endcolumn": 29,
+          "description": "Use ArrayList instead of Vector",
+          "rule": "UseArrayListInsteadOfVector",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#usearraylistinsteadofvector"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

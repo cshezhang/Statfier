@@ -1,0 +1,213 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:50.920+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_LinguisticNaming\\LinguisticNaming21.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 33,
+          "endline": 5,
+          "endcolumn": 61,
+          "description": "Linguistics Antipattern - The field \u0027isX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 33,
+          "endline": 6,
+          "endcolumn": 62,
+          "description": "Linguistics Antipattern - The field \u0027hasX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 7,
+          "begincolumn": 33,
+          "endline": 7,
+          "endcolumn": 62,
+          "description": "Linguistics Antipattern - The field \u0027canX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 8,
+          "begincolumn": 33,
+          "endline": 8,
+          "endcolumn": 63,
+          "description": "Linguistics Antipattern - The field \u0027haveX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 9,
+          "begincolumn": 33,
+          "endline": 9,
+          "endcolumn": 63,
+          "description": "Linguistics Antipattern - The field \u0027willX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 10,
+          "begincolumn": 33,
+          "endline": 10,
+          "endcolumn": 65,
+          "description": "Linguistics Antipattern - The field \u0027shouldX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 12,
+          "endline": 14,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027isX\u0027 indicates linguistically it returns a boolean, but it returns \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 15,
+          "begincolumn": 12,
+          "endline": 17,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027hasX\u0027 indicates linguistically it returns a boolean, but it returns \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 18,
+          "begincolumn": 12,
+          "endline": 20,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027canX\u0027 indicates linguistically it returns a boolean, but it returns \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 21,
+          "begincolumn": 12,
+          "endline": 23,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027haveX\u0027 indicates linguistically it returns a boolean, but it returns \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 24,
+          "begincolumn": 12,
+          "endline": 26,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027willX\u0027 indicates linguistically it returns a boolean, but it returns \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 27,
+          "begincolumn": 12,
+          "endline": 29,
+          "endcolumn": 5,
+          "description": "Linguistics Antipattern - The method \u0027shouldX\u0027 indicates linguistically it returns a boolean, but it returns \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 31,
+          "begincolumn": 23,
+          "endline": 31,
+          "endcolumn": 51,
+          "description": "Linguistics Antipattern - The variable \u0027isX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 32,
+          "begincolumn": 23,
+          "endline": 32,
+          "endcolumn": 52,
+          "description": "Linguistics Antipattern - The variable \u0027hasX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 33,
+          "begincolumn": 23,
+          "endline": 33,
+          "endcolumn": 52,
+          "description": "Linguistics Antipattern - The variable \u0027canX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 34,
+          "begincolumn": 23,
+          "endline": 34,
+          "endcolumn": 53,
+          "description": "Linguistics Antipattern - The variable \u0027haveX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 35,
+          "begincolumn": 23,
+          "endline": 35,
+          "endcolumn": 53,
+          "description": "Linguistics Antipattern - The variable \u0027willX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        },
+        {
+          "beginline": 36,
+          "begincolumn": 23,
+          "endline": 36,
+          "endcolumn": 55,
+          "description": "Linguistics Antipattern - The variable \u0027shouldX\u0027 indicates linguistically it is a boolean, but it is \u0027AtomicBoolean\u0027",
+          "rule": "LinguisticNaming",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#linguisticnaming"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

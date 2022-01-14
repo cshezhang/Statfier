@@ -1,14 +1,17 @@
 package ASTTestingCases.sub;
 
+import javax.servlet.http.HttpServlet;
+
 /**
  * Description: test cases for AST Testing
  * Author: Austin Zhang
  * Date: 2021/10/12 1:15 下午
  */
-public class case1 {
+public class case1 extends Object {
 
-    public void foo() {
-        boolean a = false;
+    @Override
+    public String toString() {
+        return "123";
     }
 
 //    public void foo1() {

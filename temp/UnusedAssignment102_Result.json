@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:23:01.865+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedAssignment\\UnusedAssignment102.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 25,
+          "endline": 6,
+          "endcolumn": 25,
+          "description": "The initializer for variable \u0027i\u0027 is never used (overwritten on line 8)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

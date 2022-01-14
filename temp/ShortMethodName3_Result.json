@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:31:19.824+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_ShortMethodName\\ShortMethodName3.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 12,
+          "endline": 5,
+          "endcolumn": 5,
+          "description": "Avoid using short method names",
+          "rule": "ShortMethodName",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#shortmethodname"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

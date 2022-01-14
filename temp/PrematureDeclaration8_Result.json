@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:28:16.603+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_PrematureDeclaration\\PrematureDeclaration8.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 13,
+          "endline": 7,
+          "endcolumn": 23,
+          "description": "Avoid declaring a variable if it is unreferenced before a possible exit point.",
+          "rule": "PrematureDeclaration",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#prematuredeclaration"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

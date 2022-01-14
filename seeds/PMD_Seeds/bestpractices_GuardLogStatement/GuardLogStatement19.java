@@ -3,7 +3,9 @@ public class Logger {
     private static final Logger LOGGER = new Logger();
 
     public void bar() {
-        LOGGER.info(() -> "Bla " + " bla"); // The lambda is free to do whatever it likes
+        String msg;
+        msg = "test";
+        LOGGER.info(() -> "Bla " + msg + " bla"); // The lambda is free to do whatever it likes
     }
 
     @Override

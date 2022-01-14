@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:37:48.477+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_UnconditionalIfStatement\\UnconditionalIfStatement1.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 13,
+          "endline": 4,
+          "endcolumn": 17,
+          "description": "Do not use if statements that are always true or always false",
+          "rule": "UnconditionalIfStatement",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#unconditionalifstatement"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

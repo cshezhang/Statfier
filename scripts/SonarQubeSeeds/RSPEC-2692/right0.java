@@ -1,0 +1,17 @@
+
+String color = "blue";
+String name = "ishmael";
+
+List<String> strings = new ArrayList<String> ();
+strings.add(color);
+strings.add(name);
+
+if (strings.indexOf(color) > -1) {
+  // ...
+}
+if (name.indexOf("ish") >= 0) {
+  // ...
+}
+if (name.contains("ae") {
+  // ...
+}

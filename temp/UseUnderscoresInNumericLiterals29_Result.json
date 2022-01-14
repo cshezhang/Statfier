@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:31:03.569+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UseUnderscoresInNumericLiterals\\UseUnderscoresInNumericLiterals29.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 21,
+          "endline": 3,
+          "endcolumn": 30,
+          "description": "Number 0.39361234 should separate every third digit with an underscore",
+          "rule": "UseUnderscoresInNumericLiterals",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#useunderscoresinnumericliterals"
+        },
+        {
+          "beginline": 4,
+          "begincolumn": 21,
+          "endline": 4,
+          "endcolumn": 32,
+          "description": "Number 0.39_361_234 should separate every third digit with an underscore",
+          "rule": "UseUnderscoresInNumericLiterals",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#useunderscoresinnumericliterals"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 22,
+          "endline": 5,
+          "endcolumn": 29,
+          "description": "Number 0.123456 should separate every third digit with an underscore",
+          "rule": "UseUnderscoresInNumericLiterals",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#useunderscoresinnumericliterals"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 22,
+          "endline": 6,
+          "endcolumn": 29,
+          "description": "Number 0.123456 should separate every third digit with an underscore",
+          "rule": "UseUnderscoresInNumericLiterals",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#useunderscoresinnumericliterals"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,6 @@
+
+if (condition1) {
+  // ...
+} if (condition2) {  // Noncompliant
+  //...
+}

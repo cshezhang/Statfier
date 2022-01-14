@@ -1,0 +1,14 @@
+
+class MyClass {
+
+  @Deprecated
+  public void foo1() {    // Noncompliant: Add the missing @deprecated Javadoc tag.
+  }
+
+  /**
+    * @deprecated
+    */
+  public void foo2() {    // Noncompliant: Add the missing @Deprecated annotation.
+  }
+
+}

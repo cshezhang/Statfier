@@ -1,0 +1,6 @@
+
+Map source = new HashMap();
+// ...
+source.put("firstName", "John");
+source.put("lastName", "Smith");
+// ...

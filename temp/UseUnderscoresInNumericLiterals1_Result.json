@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:30:45.331+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UseUnderscoresInNumericLiterals\\UseUnderscoresInNumericLiterals1.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 27,
+          "endline": 3,
+          "endcolumn": 33,
+          "description": "Number 2000000 should separate every third digit with an underscore",
+          "rule": "UseUnderscoresInNumericLiterals",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#useunderscoresinnumericliterals"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

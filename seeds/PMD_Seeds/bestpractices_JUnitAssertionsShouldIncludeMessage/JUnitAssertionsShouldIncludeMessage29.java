@@ -1,11 +1,17 @@
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
+import static org.hamcrest.Matchers.containsString;
 
-class SimpleTest {
+import org.junit.Assert;
+import org.junit.Test;
+
+public class TestClass extends Assert {
+
     @Test
-    public void simpleMethod() {
-        assertEquals(0, 1, "Not equals 0 != 1");
+    public void test() {
+        assertTrue(true);
+        assertEquals("", "");
+        assertNull(null);
+        assertThat("", containsString(""));
     }
 }
         

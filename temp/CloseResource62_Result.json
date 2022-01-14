@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:37:24.955+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_CloseResource\\CloseResource62.java",
+      "violations": [
+        {
+          "beginline": 8,
+          "begincolumn": 11,
+          "endline": 8,
+          "endcolumn": 34,
+          "description": "\u0027c\u0027 is reassigned, but the original instance is not closed",
+          "rule": "CloseResource",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#closeresource"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

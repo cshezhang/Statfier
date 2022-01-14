@@ -4,6 +4,7 @@ import static edu.polyu.Invoker.invokePMD;
 import static edu.polyu.Invoker.invokeSpotBugs;
 import static edu.polyu.Util.*;
 
+import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,9 @@ import edu.polyu.report.PMD_Report;
 import edu.polyu.report.PMD_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
-import edu.polyu.thread.MutationThread;
+import edu.polyu.thread.CheckStyle_TransformThread;
+import edu.polyu.thread.PMD_TransformThread;
+import edu.polyu.thread.SpotBugs_TransformThread;
 
 /**
  * Description: This file is the main class for our framework
@@ -35,7 +38,8 @@ public class Schedule {
     }
 
     public void testAST(String targetFolder) {
-        if(targetFolder.contains(".")) {
+        File folder = new File(targetFolder);
+        if(!folder.isDirectory()) {
             System.err.println("You should provide a folder path!");
             System.exit(-1);
         }
@@ -142,7 +146,7 @@ public class Schedule {
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
         for(int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(separator);
+            String[] tokens = seedPath.split(sep);
             String seedFolderName = tokens[tokens.length - 2];
             if(SINGLE_TESTING) {
                 System.out.println("Seed Path: " + seedPath);
@@ -164,7 +168,7 @@ public class Schedule {
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
         for(int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(separator);
+            String[] tokens = seedPath.split(sep);
             String seedFolderName = tokens[tokens.length - 2];
             if(SINGLE_TESTING) {
                 System.out.println("Seed Path: " + seedPath);
@@ -187,7 +191,7 @@ public class Schedule {
         ArrayList<ASTWrapper> srcWrappers = new ArrayList<>();
         for(int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(separator);
+            String[] tokens = seedPath.split(sep);
             String seedFolderName = tokens[tokens.length - 2];
             ASTWrapper seedWrapper = new ASTWrapper(seedPath, seedFolderName);
             srcWrappers.add(seedWrapper);
@@ -215,7 +219,89 @@ public class Schedule {
 //        scheduleBFS(srcWrappers);
 //    }
 
-    public void executeMutation(String seedFolderPath) {
+    public void executeCheckStyleMutation(String seedFolderPath) {
+        locateMutationCode(0, seedFolderPath);
+        ExecutorService threadPool;
+        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            } else {
+                threadPool = Executors.newSingleThreadExecutor();
+            }
+        }
+        List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
+        System.out.println("All Initial Seed Count: " + seedFilePaths.size());
+        int initValidSeedWrapperSize = 0;
+        List<ASTWrapper> initWrappers = new ArrayList<>();
+        for (int index = 0; index < seedFilePaths.size(); index++) {
+            String seedFilePath = seedFilePaths.get(index);
+            String[] tokens = seedFilePath.split(sep);
+            String seedFolderName = tokens[tokens.length - 2];
+            if (!file2line.containsKey(seedFilePath)) {
+                continue;
+            }
+            initValidSeedWrapperSize++;
+            ASTWrapper seedWrapper = new ASTWrapper(seedFilePath, seedFolderName);
+            initWrappers.add(seedWrapper);
+        }
+        System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
+        List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+        for(int i = 0; i < lists.size(); i++) {
+            CheckStyle_TransformThread thread = new CheckStyle_TransformThread(lists.get(i));
+            threadPool.submit(thread);
+        }
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void executeSpotBugsMutation(String seedFolderPath) {
+        locateMutationCode(0, seedFolderPath);
+        ExecutorService threadPool;
+        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            } else {
+                threadPool = Executors.newSingleThreadExecutor();
+            }
+        }
+        List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
+        System.out.println("All Initial Seed Count: " + seedFilePaths.size());
+        int initValidSeedWrapperSize = 0;
+        List<ASTWrapper> initWrappers = new ArrayList<>();
+        for (int index = 0; index < seedFilePaths.size(); index++) {
+            String seedFilePath = seedFilePaths.get(index);
+            String[] tokens = seedFilePath.split(sep);
+            String seedFolderName = tokens[tokens.length - 2];
+            if (!file2line.containsKey(seedFilePath)) {
+                continue;
+            }
+            initValidSeedWrapperSize++;
+            ASTWrapper seedWrapper = new ASTWrapper(seedFilePath, seedFolderName);
+            initWrappers.add(seedWrapper);
+        }
+        System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
+        List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+        for(int i = 0; i < lists.size(); i++) {
+            SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
+            threadPool.submit(thread);
+        }
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void executePMDMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
         ExecutorService threadPool;
         if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
@@ -230,12 +316,12 @@ public class Schedule {
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         HashMap<String, List<ASTWrapper>> bug2wrapper = new HashMap<>();
-        List<MutationThread> mutationThreads = new ArrayList<>();
+        List<PMD_TransformThread> mutationThreads = new ArrayList<>();
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(separator);
+            String[] tokens = seedPath.split(sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2line.containsKey(seedPath)) {
                 continue;
@@ -267,7 +353,7 @@ public class Schedule {
             for(String bugType : bugTypes) {
                 String seedFolderName = category + "_" + bugType;
                 List<ASTWrapper> wrappers = bug2wrapper.get(seedFolderName);
-                MutationThread mutationThread = new MutationThread(wrappers, seedFolderName);
+                PMD_TransformThread mutationThread = new PMD_TransformThread(wrappers, seedFolderName);
                 mutationThreads.add(mutationThread);
             }
         }

@@ -22,7 +22,13 @@ public class AddStaticModifier extends FieldMutator {
         if(oldFieldDeclaration.modifiers().contains(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
             return false;
         }
-        FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldFieldDeclaration);
+        FieldDeclaration newFieldDeclaration;
+        try {
+            // Failed corner case: float e19=0x0.0p0f; Hence, we add a try-catch here.
+            newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldFieldDeclaration);
+        } catch (Exception e) {
+            return false;
+        }
         newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
         astRewrite.replace(oldFieldDeclaration, newFieldDeclaration, null);
         return true;

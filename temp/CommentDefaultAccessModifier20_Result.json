@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:39.305+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_CommentDefaultAccessModifier\\CommentDefaultAccessModifier20.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 21,
+          "endline": 9,
+          "endcolumn": 37,
+          "description": "To avoid mistakes add a comment at the beginning of the method2 method if you want a default access modifier",
+          "rule": "CommentDefaultAccessModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#commentdefaultaccessmodifier"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:18:53.986+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UseVarargs\\UseVarargs9.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 36,
+          "endline": 3,
+          "endcolumn": 48,
+          "description": "Consider using varargs for methods or constructors which take an array the last parameter.",
+          "rule": "UseVarargs",
+          "ruleset": "Best Practices",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#usevarargs"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

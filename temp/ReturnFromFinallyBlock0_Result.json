@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:52.132+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_ReturnFromFinallyBlock\\ReturnFromFinallyBlock0.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 13,
+          "endline": 9,
+          "endcolumn": 30,
+          "description": "Avoid returning from a finally block",
+          "rule": "ReturnFromFinallyBlock",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#returnfromfinallyblock"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 public class Foo {
     void bar() {
         String foo = "foo";

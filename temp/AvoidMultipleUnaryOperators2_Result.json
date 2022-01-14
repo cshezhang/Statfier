@@ -1,0 +1,103 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:35:51.588+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AvoidMultipleUnaryOperators\\AvoidMultipleUnaryOperators2.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 13,
+          "endline": 3,
+          "endcolumn": 20,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 3,
+          "begincolumn": 15,
+          "endline": 3,
+          "endcolumn": 19,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 4,
+          "begincolumn": 13,
+          "endline": 4,
+          "endcolumn": 20,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 4,
+          "begincolumn": 15,
+          "endline": 4,
+          "endcolumn": 19,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 13,
+          "endline": 5,
+          "endcolumn": 20,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 15,
+          "endline": 5,
+          "endcolumn": 19,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 17,
+          "endline": 6,
+          "endcolumn": 27,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 19,
+          "endline": 6,
+          "endcolumn": 26,
+          "description": "Using multiple unary operators may be a bug, and/or is confusing.",
+          "rule": "AvoidMultipleUnaryOperators",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidmultipleunaryoperators"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

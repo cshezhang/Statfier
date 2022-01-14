@@ -1,0 +1,12 @@
+
+if (booleanMethod() == true) { /* ... */ }
+if (booleanMethod() == false) { /* ... */ }
+if (booleanMethod() || false) { /* ... */ }
+doSomething(!false);
+doSomething(booleanMethod() == true);
+
+booleanVariable = booleanMethod() ? true : false;
+booleanVariable = booleanMethod() ? true : exp;
+booleanVariable = booleanMethod() ? false : exp;
+booleanVariable = booleanMethod() ? exp : true;
+booleanVariable = booleanMethod() ? exp : false;

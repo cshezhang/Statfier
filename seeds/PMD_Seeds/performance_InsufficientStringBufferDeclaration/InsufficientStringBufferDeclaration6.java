@@ -1,6 +1,6 @@
 
 public class Foo {
-    public void bar(List l) {
+    public void bar() {
         StringBuffer sb = new StringBuffer();
         if(true){
             sb.append("1234567890");
@@ -9,7 +9,7 @@ public class Foo {
         }
     }
 
-    public void bar2(List l) {
+    public void bar2() {
         StringBuilder sb = new StringBuilder();
         if(true){
             sb.append("1234567890");

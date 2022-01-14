@@ -10,7 +10,7 @@ import static edu.polyu.Util.sep;
  * @Date: 2021-10-18 11:21:56
  */
 
-public class SpotBugs_Violation extends ViolationReport {
+public class SpotBugs_Violation extends Violation {
     
     private String filename;
     private int beginLine;

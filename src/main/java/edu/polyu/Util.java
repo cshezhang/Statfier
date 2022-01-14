@@ -4,8 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.polyu.analysis.LoopStatement;
+import edu.polyu.report.CheckStyle_Report;
+import edu.polyu.report.CheckStyle_Violation;
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.PMD_Violation;
+import edu.polyu.report.SonarQube_Report;
+import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 
@@ -31,7 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -44,7 +48,7 @@ public class Util {
     public static Properties properties;
     static {
         properties = new Properties();
-        File file = new File(".\\config.properties");
+        File file = new File("./config.properties");
         try {
             InputStream in = new FileInputStream(file);
             properties.load(in);
@@ -58,6 +62,7 @@ public class Util {
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
 //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static String userdir = getProperty("USERDIR");
+    public static String JAVAC_PATH = getProperty("JAVAC_PATH");
 
     public final static boolean AST_TESTING = Boolean.parseBoolean(getProperty("AST_TESTING"));
     public static final boolean PURE_TESTING = Boolean.parseBoolean(getProperty("PURE_TESTING"));
@@ -82,13 +87,12 @@ public class Util {
     public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
     public static final String sep = File.separator;
-    public static final String separator = "/|\\\\";
     public static final SecureRandom random = new SecureRandom();
     public static int newVarCounter = 0;
 
     // seeds, these variables
     public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
-    public final static String AST_TESTING_PATH = "/home/huaien/projects/SAMutator" + sep + "src" + sep + "test" + sep + "java" + sep + "ASTTestingCases";
+    public final static String AST_TESTING_PATH = "." + sep + "src" + sep + "test" + sep + "java" + sep + "ASTTestingCases";
     public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + sep + "SingleTesting";
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + sep + "PMD_Seeds";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + sep + "SpotBugs_Seeds";
@@ -101,22 +105,31 @@ public class Util {
 
     // results
     public final static File resultFolder = new File(userdir + sep + "results");
-    public final static File SpotBugsResultsFolder = new File(userdir + sep + "results" + sep + "SpotBugs_Results");
-    public final static File PMDResultsFolder = new File(userdir + sep + "results" + sep + "PMD_Results");
+    public final static File PMDResultFolder = new File(userdir + sep + "results" + sep + "PMD_Results");
+    public final static File SpotBugsResultFolder = new File(userdir + sep + "results" + sep + "SpotBugs_Results");
     public final static File SpotBugsClassFolder = new File(userdir + sep + "results" + sep + "SpotBugs_Classes");
+    public final static File CheckStyleResultFolder = new File(userdir + sep + "results" + sep + "CheckStyle_Results");
 
     // tools
     public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
-    public final static String pmdPath = toolPath + sep + "pmd" + sep + "bin" + sep + "pmd.bat";
+    public final static String PMD_PATH = toolPath + sep + "pmd" + sep + "bin" + sep + "run.sh pmd";
+    public final static String CHECKSTYLE_PATH = toolPath + sep + "checkstyle.jar";
     public static List<String> jarList = getFilenamesFromFolder(toolPath + sep + "libs", true);
     public static List<String> subSeedFolderNameList;
     public static StringBuilder jarStr = new StringBuilder();
+    static {
+        jarStr.append(".:");
+        for(int i = jarList.size() - 1; i >= 1; i--) {
+            jarStr.append(jarList.get(i) + ":");
+        }
+        jarStr.append(jarList.get(0));
+    }
 
-    public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>();
+    public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>(); // filename -> set: buggy line numbers
     public static HashMap<String, HashMap<String, HashSet<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
     // (rule -> (transSeq -> Mutant_List))
-    public static HashMap<String, HashMap<String, ArrayList<TriTuple>>> compactIssues = new HashMap<>();
+    public static ConcurrentHashMap<String, HashMap<String, ArrayList<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
     public static Map compilerOptions = JavaCore.getOptions();
 
     public static Type checkLiteralType(AST ast, Expression literalExpression) {
@@ -141,8 +154,6 @@ public class Util {
     }
 
     public static void initEnv() {
-//        Properties props=System.getProperties();
-//        String osName = props.getProperty("os.name");
         try {
             FileUtils.deleteDirectory(new File(userdir + sep + "mutants"));
             FileUtils.deleteDirectory(new File(userdir + sep + "results"));
@@ -176,28 +187,29 @@ public class Util {
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();
-            for(int j = 0; j < subSeedIndex; j++) {
-                String subSeedFolderName = subSeedFolderNameList.get(j);
-                File subSeedFolder = new File(iter.getAbsolutePath() + sep + subSeedFolderName);
-                subSeedFolder.mkdir();
+            if(PMD_MUTATION || CHECKSTYLE_MUTATION) {
+                for (int j = 0; j < subSeedIndex; j++) {
+                    String subSeedFolderName = subSeedFolderNameList.get(j);
+                    File subSeedFolder = new File(iter.getAbsolutePath() + sep + subSeedFolderName);
+                    subSeedFolder.mkdir();
+                }
             }
         }
         if(!resultFolder.exists()) {
             resultFolder.mkdir();
         }
-        if(!SpotBugsClassFolder.exists() && SPOTBUGS_MUTATION) {
+        if(PMD_MUTATION && !PMDResultFolder.exists()) {
+            PMDResultFolder.mkdir();
+        }
+        if(SPOTBUGS_MUTATION && !SpotBugsClassFolder.exists()) {
             SpotBugsClassFolder.mkdir();
         }
-        if(!SpotBugsResultsFolder.exists() && SPOTBUGS_MUTATION) {
-            SpotBugsResultsFolder.mkdir();
+        if(SPOTBUGS_MUTATION && !SpotBugsResultFolder.exists()) {
+            SpotBugsResultFolder.mkdir();
         }
-        if(!PMDResultsFolder.exists() && PMD_MUTATION) {
-            PMDResultsFolder.mkdir();
+        if(CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
+            CheckStyleResultFolder.mkdir();
         }
-        for(int i = jarList.size() - 1; i >= 1; i--) {
-            jarStr.append(jarList.get(i) + ":");
-        }
-        jarStr.append(jarList.get(0));
         compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
         compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
         compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
@@ -368,6 +380,27 @@ public class Util {
         return results;
     }
 
+    public static int calculatePMDResultFile(final String jsonPath) {
+        ObjectMapper mapper = new ObjectMapper();
+        File jsonFile = new File(jsonPath);
+        int count = 0;
+        try {
+            JsonNode rootNode = mapper.readTree(jsonFile);
+            JsonNode reportNodes = rootNode.get("files");
+            for(int i = 0; i < reportNodes.size(); i++) {
+                JsonNode reportNode = reportNodes.get(i);
+                JsonNode violationNodes = reportNode.get("violations");
+                count += violationNodes.size();
+            }
+        } catch (JsonProcessingException e) {
+            System.err.println("Exceptional Json Path:" + jsonPath);
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
     public static List<PMD_Report> readPMDResultFile(final String jsonPath) {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -379,7 +412,6 @@ public class Util {
                 JsonNode reportNode = reportNodes.get(i);
                 PMD_Report newReport = new PMD_Report(reportNode.get("filename").asText());
                 JsonNode violationNodes = reportNode.get("violations");
-//                System.out.println("-----------: " + newReport.getFilename() + "      " + violationNodes.size());
                 for(int j = 0; j < violationNodes.size(); j++) {
                     JsonNode violationNode = violationNodes.get(j);
                     PMD_Violation violation = new PMD_Violation(violationNode);
@@ -394,6 +426,77 @@ public class Util {
             e.printStackTrace();
         }
         return pmd_reports;
+    }
+    public static List<SonarQube_Report> readSonarQubeResultFile(String reportPath) {
+        if(SINGLE_TESTING) {
+            System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
+        }
+        HashMap<String, SonarQube_Report> name2report = new HashMap<>();
+        List<SonarQube_Report> results = new ArrayList<>();
+        SAXReader saxReader = new SAXReader();
+        try {
+            Document report = saxReader.read(new File(reportPath));
+            Element root = report.getRootElement();
+            Element fileInstance = root.element("file");
+            String filename = fileInstance.getStringValue();
+            List<Element> errorInstances = root.elements("error");
+            for(Element errorInstance : errorInstances) {
+                List<Element> subElements = errorInstance.elements();
+                for(Element subElement : subElements) {
+                    SonarQube_Violation violation = new SonarQube_Violation("", 0);
+                    if(name2report.containsKey(filename)) {
+                        name2report.get(filename).addViolation(violation);
+                    } else {
+                        SonarQube_Report sonarQube_report = new SonarQube_Report(filename);
+                        sonarQube_report.addViolation(violation);
+                        name2report.put(filename, sonarQube_report);
+                    }
+                }
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+    public static List<CheckStyle_Report> readCheckStyleResultFile(String reportPath) {
+        if(SINGLE_TESTING) {
+            System.out.println("CheckStyle Detection Resutl FileName: " + reportPath);
+        }
+        HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
+        List<CheckStyle_Report> results = new ArrayList<>();
+        SAXReader saxReader = new SAXReader();
+        try {
+            Document report = saxReader.read(new File(reportPath));
+            Element root = report.getRootElement();
+            Element fileInstance = root.element("file");
+            String filename = fileInstance.getStringValue();
+            List<Element> errorInstances = root.elements("error");
+            for(Element errorInstance : errorInstances) {
+                List<Element> subElements = errorInstance.elements();
+                for(Element subElement : subElements) {
+                    CheckStyle_Violation violation = new CheckStyle_Violation(filename);
+                    if(subElement.getName().equals("line")) {
+                        violation.setBeginLine(Integer.parseInt(subElement.getStringValue()));
+                    }
+                    if(subElement.getName().equals("source")) {
+                        String[] tokens = subElement.getStringValue().split(".");
+                        String ruleType = tokens[tokens.length - 1];
+                        violation.setBugType(ruleType.substring(0, ruleType.length() - 5));
+                    }
+                    if(name2report.containsKey(filename)) {
+                        name2report.get(filename).addViolation(violation);
+                    } else {
+                        CheckStyle_Report checkStyle_report = new CheckStyle_Report(filename);
+                        checkStyle_report.addViolation(violation);
+                        name2report.put(filename, checkStyle_report);
+                    }
+                }
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 
     public static List<SpotBugs_Report> readSpotBugsResultFile(String seedPath, String reportPath) {
@@ -432,10 +535,10 @@ public class Util {
 
     // Get the last token in the path, not include postfix, e.g., .java
     public static String Path2Last(String path) {
-        String[] tokens = path.split(separator);
+        String[] tokens = path.split(sep);
         String target = tokens[tokens.length - 1];
         if(target.contains(".")) {
-            return target.substring(0, target.length() - 5);
+            return target.split(".")[0];
         } else {
             return target;
         }
@@ -454,7 +557,7 @@ public class Util {
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
             for (String srcName : fileList) {
-                String[] tokens = srcName.split(separator);
+                String[] tokens = srcName.split(sep);
                 pureNames.add(tokens[tokens.length - 1]);
             }
             return pureNames;
@@ -463,9 +566,6 @@ public class Util {
 
     // The list contains absolute paths.
     public static List<String> getFilenamesFromFolder(String path, boolean getAbsolutePath) {
-        if(SINGLE_TESTING) {
-            System.out.println("Searching Folder: " + path);
-        }
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
@@ -481,7 +581,7 @@ public class Util {
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
             for (String srcName : fileList) {
-                String[] tokens = srcName.split(separator);
+                String[] tokens = srcName.split(sep);
                 pureNames.add(tokens[tokens.length - 1]);
             }
             return pureNames;

@@ -1,17 +1,10 @@
 
-import static org.hamcrest.Matchers.containsString;
-
-import org.junit.Assert;
 import org.junit.Test;
-
-public class TestClass extends Assert {
-
+import static org.junit.Assert.*;
+public class Foo {
     @Test
-    public void test() {
-        assertTrue(true);
-        assertEquals("", "");
-        assertNull(null);
-        assertThat("", containsString(""));
+    public void foo() {
+        assertEquals(1, 1);
     }
 }
         

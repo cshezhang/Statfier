@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:41:32.593+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\multithreading_DontCallThreadRun\\DontCallThreadRun0.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 9,
+          "endline": 5,
+          "endcolumn": 15,
+          "description": "Dont call Thread.run() explicitly, use Thread.start()",
+          "rule": "DontCallThreadRun",
+          "ruleset": "Multithreading",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_multithreading.html#dontcallthreadrun"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

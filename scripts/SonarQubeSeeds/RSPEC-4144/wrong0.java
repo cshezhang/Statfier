@@ -1,0 +1,12 @@
+
+private final static String CODE = "bounteous";
+
+public String calculateCode() {
+  doTheThing();
+  return CODE;
+}
+
+public String getName() {  // Noncompliant
+  doTheThing();
+  return CODE;
+}

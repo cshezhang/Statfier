@@ -1,8 +1,8 @@
 
-public class MyConstants {
-    public static final String FOOO = "FOOO";
+public class MyException {
+    private static final String foo = "FOOO";
 
-    private MyConstants() {
+    public static void main(String[] args) {
         // whitelisted
     }
 }

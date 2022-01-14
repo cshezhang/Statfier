@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:18:34.654+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_AbstractClassWithoutAbstractMethod\\AbstractClassWithoutAbstractMethod2.java",
+      "violations": [
+        {
+          "beginline": 2,
+          "begincolumn": 17,
+          "endline": 4,
+          "endcolumn": 1,
+          "description": "This abstract class does not have any abstract methods",
+          "rule": "AbstractClassWithoutAbstractMethod",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#abstractclasswithoutabstractmethod"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

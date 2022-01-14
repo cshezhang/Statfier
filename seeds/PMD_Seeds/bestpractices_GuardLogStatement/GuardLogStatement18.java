@@ -7,7 +7,7 @@ public class Foo {
 
     public void foo() {
         if (LOGGER.isLoggable(Level.INFO)) { // should have been level FINE
-            LOGGER.log(Level.FINE, "This is a severe message" + " and concat");
+            LOGGER.log(Level.FINE, "This is a severe message" + this + " and concat");
         }
     }
 }

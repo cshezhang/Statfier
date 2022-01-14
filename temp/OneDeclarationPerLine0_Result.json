@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:20:52.257+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_OneDeclarationPerLine\\OneDeclarationPerLine0.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 9,
+          "endline": 6,
+          "endcolumn": 37,
+          "description": "Use one line for each declaration, it enhances code readability.",
+          "rule": "OneDeclarationPerLine",
+          "ruleset": "Best Practices",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#onedeclarationperline"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

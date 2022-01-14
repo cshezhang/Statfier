@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:43:49.297+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_InsufficientStringBufferDeclaration\\InsufficientStringBufferDeclaration41.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 28,
+          "endline": 4,
+          "endcolumn": 39,
+          "description": "StringBuffer has been initialized with size 16, but has at least 41 characters appended.",
+          "rule": "InsufficientStringBufferDeclaration",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#insufficientstringbufferdeclaration"
+        },
+        {
+          "beginline": 8,
+          "begincolumn": 9,
+          "endline": 8,
+          "endcolumn": 20,
+          "description": "StringBuffer has been initialized with size 16, but has at least 52 characters appended.",
+          "rule": "InsufficientStringBufferDeclaration",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#insufficientstringbufferdeclaration"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

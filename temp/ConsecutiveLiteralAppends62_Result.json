@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:44:54.459+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_ConsecutiveLiteralAppends\\ConsecutiveLiteralAppends62.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 30,
+          "endline": 5,
+          "endcolumn": 38,
+          "description": "StringBuffer (or StringBuilder).append is called 3 consecutive times with literals. Use a single append with a single combined String.",
+          "rule": "ConsecutiveLiteralAppends",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#consecutiveliteralappends"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

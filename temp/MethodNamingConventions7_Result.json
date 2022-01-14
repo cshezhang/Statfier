@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:29:29.795+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_MethodNamingConventions\\MethodNamingConventions7.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 12,
+          "endline": 7,
+          "endcolumn": 5,
+          "description": "The native method name \u0027nt_whatever\u0027 doesn\u0027t match \u0027[a-z][a-zA-Z0-9]*\u0027",
+          "rule": "MethodNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#methodnamingconventions"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

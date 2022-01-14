@@ -1,8 +1,7 @@
 
-import junit.framework.TestCase;
-public class Foo extends TestCase {
+public class Foo extends junit.framework.TestCase {
     public void test1() {
-        assertEquals(1, 2, 3);
+        assertEquals(1, 1);
     }
 }
         

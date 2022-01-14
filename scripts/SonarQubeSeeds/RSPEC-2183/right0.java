@@ -1,0 +1,5 @@
+
+public int shift(int a) {
+  int x = a >> 31;
+  return a << 16;
+}

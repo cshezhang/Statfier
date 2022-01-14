@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:41:30.491+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\multithreading_AvoidSynchronizedAtMethodLevel\\AvoidSynchronizedAtMethodLevel0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 18,
+          "endline": 3,
+          "endcolumn": 31,
+          "description": "Use block level rather than method level synchronization",
+          "rule": "AvoidSynchronizedAtMethodLevel",
+          "ruleset": "Multithreading",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_multithreading.html#avoidsynchronizedatmethodlevel"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

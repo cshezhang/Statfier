@@ -1,0 +1,9 @@
+
+public void doSomething(){
+  ...
+  synchronized(anObject) {
+    ...
+    anObject.notify();
+    ...
+  }
+}

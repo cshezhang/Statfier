@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:29.736+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_InstantiationToGetClass\\InstantiationToGetClass0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 31,
+          "endline": 3,
+          "endcolumn": 39,
+          "description": "Avoid instantiating an object just to call getClass() on it; use the .class public member instead",
+          "rule": "InstantiationToGetClass",
+          "ruleset": "Error Prone",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#instantiationtogetclass"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:32.769+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_GenericsNaming\\GenericsNaming2.java",
+      "violations": [
+        {
+          "beginline": 2,
+          "begincolumn": 23,
+          "endline": 2,
+          "endcolumn": 35,
+          "description": "Generics names should be a one letter long and upper case.",
+          "rule": "GenericsNaming",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#genericsnaming"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -7,7 +7,7 @@ public class Test {
     public void test() {
         // good:
         if (__log.isDebugEnabled()) {
-        __log.debug("bla" + "",e );
+        __log.debug("bla" + this, e);
         }
     }
 }

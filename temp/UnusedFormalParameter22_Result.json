@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:24:53.979+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedFormalParameter\\UnusedFormalParameter22.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 22,
+          "endline": 3,
+          "endcolumn": 25,
+          "description": "Avoid unused method parameters such as \u0027arg1\u0027.",
+          "rule": "UnusedFormalParameter",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedformalparameter"
+        },
+        {
+          "beginline": 4,
+          "begincolumn": 24,
+          "endline": 4,
+          "endcolumn": 27,
+          "description": "Avoid unused method parameters such as \u0027arg2\u0027.",
+          "rule": "UnusedFormalParameter",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedformalparameter"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

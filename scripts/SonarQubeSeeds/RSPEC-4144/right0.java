@@ -1,0 +1,11 @@
+
+private final static String CODE = "bounteous";
+
+public String getCode() {
+  doTheThing();
+  return CODE;
+}
+
+public String getName() {
+  return getCode();
+}

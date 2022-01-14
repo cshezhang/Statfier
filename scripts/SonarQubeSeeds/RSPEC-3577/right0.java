@@ -1,0 +1,13 @@
+
+class FooTest {
+  @Test
+  void check() {  }
+}
+
+class BarIT {
+  @Nested
+  class PositiveCase {
+    @Test
+    void check() {  }
+  }
+}

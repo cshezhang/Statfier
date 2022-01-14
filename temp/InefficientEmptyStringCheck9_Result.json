@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:42:20.869+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_InefficientEmptyStringCheck\\InefficientEmptyStringCheck9.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 21,
+          "endline": 5,
+          "endcolumn": 40,
+          "description": "String.trim().length() \u003d\u003d 0 / String.trim().isEmpty() is an inefficient way to validate a blank String.",
+          "rule": "InefficientEmptyStringCheck",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#inefficientemptystringcheck"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,12 +1,8 @@
 
 public class Foo {
 
-    private Foo() {
-    }
-
-    public Foo() {
-        // This constructor shouldn't exist,
-        // but we consider the class a utility class anyway
+    {
+        // ugly side effects
     }
 
     static final int ZERO = 0;

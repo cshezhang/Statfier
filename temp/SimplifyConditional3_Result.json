@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:34:50.057+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_SimplifyConditional\\SimplifyConditional3.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 13,
+          "endline": 4,
+          "endcolumn": 47,
+          "description": "No need to check for null before an instanceof",
+          "rule": "SimplifyConditional",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#simplifyconditional"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

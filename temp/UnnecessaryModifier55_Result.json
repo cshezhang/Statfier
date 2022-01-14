@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:30:26.664+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UnnecessaryModifier\\UnnecessaryModifier55.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 12,
+          "endline": 5,
+          "endcolumn": 23,
+          "description": "Unnecessary modifier \u0027static\u0027 on class \u0027Foo\u0027: types nested within an interface type are implicitly static",
+          "rule": "UnnecessaryModifier",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#unnecessarymodifier"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

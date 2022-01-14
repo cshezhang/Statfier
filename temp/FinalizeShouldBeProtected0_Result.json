@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:41:21.088+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_FinalizeShouldBeProtected\\FinalizeShouldBeProtected0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 12,
+          "endline": 3,
+          "endcolumn": 29,
+          "description": "If you override finalize(), make it protected",
+          "rule": "FinalizeShouldBeProtected",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#finalizeshouldbeprotected"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

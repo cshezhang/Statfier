@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:41:26.682+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\multithreading_DoNotUseThreads\\DoNotUseThreads1.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 34,
+          "endline": 3,
+          "endcolumn": 39,
+          "description": "To be compliant to J2EE, a webapp should not use any thread.",
+          "rule": "DoNotUseThreads",
+          "ruleset": "Multithreading",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_multithreading.html#donotusethreads"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

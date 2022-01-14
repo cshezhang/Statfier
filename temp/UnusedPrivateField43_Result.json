@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:20:16.385+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedPrivateField\\UnusedPrivateField43.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 20,
+          "endline": 7,
+          "endcolumn": 22,
+          "description": "Avoid unused private fields such as \u0027bar\u0027.",
+          "rule": "UnusedPrivateField",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedprivatefield"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:23:41.979+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_LooseCoupling\\LooseCoupling7.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 14,
+          "endline": 4,
+          "endcolumn": 20,
+          "description": "Avoid using implementation types like \u0027HashMap\u0027; use the interface instead",
+          "rule": "LooseCoupling",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#loosecoupling"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

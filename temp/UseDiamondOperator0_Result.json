@@ -1,0 +1,48 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:26:56.260+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UseDiamondOperator\\UseDiamondOperator0.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 31,
+          "endline": 7,
+          "endcolumn": 53,
+          "description": "Explicit type arguments can be replaced by Diamond Operator",
+          "rule": "UseDiamondOperator",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#usediamondoperator"
+        },
+        {
+          "beginline": 10,
+          "begincolumn": 38,
+          "endline": 10,
+          "endcolumn": 72,
+          "description": "Explicit type arguments can be replaced by Diamond Operator",
+          "rule": "UseDiamondOperator",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#usediamondoperator"
+        },
+        {
+          "beginline": 11,
+          "begincolumn": 21,
+          "endline": 11,
+          "endcolumn": 43,
+          "description": "Explicit type arguments can be replaced by Diamond Operator",
+          "rule": "UseDiamondOperator",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#usediamondoperator"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:06.659+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_SuspiciousOctalEscape\\SuspiciousOctalEscape1.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 28,
+          "endline": 4,
+          "endcolumn": 40,
+          "description": "Suspicious decimal characters following octal escape in string literal",
+          "rule": "SuspiciousOctalEscape",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#suspiciousoctalescape"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

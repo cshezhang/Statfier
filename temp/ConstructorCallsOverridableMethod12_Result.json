@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:39:14.715+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_ConstructorCallsOverridableMethod\\ConstructorCallsOverridableMethod12.java",
+      "violations": [
+        {
+          "beginline": 6,
+          "begincolumn": 13,
+          "endline": 6,
+          "endcolumn": 22,
+          "description": "Overridable method \u0027toString\u0027 called during object construction",
+          "rule": "ConstructorCallsOverridableMethod",
+          "ruleset": "Error Prone",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#constructorcallsoverridablemethod"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

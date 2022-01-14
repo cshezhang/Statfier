@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:36:36.872+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_DoNotCallGarbageCollectionExplicitly\\DoNotCallGarbageCollectionExplicitly1.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 9,
+          "endline": 5,
+          "endcolumn": 17,
+          "description": "Do not explicitly trigger a garbage collection.",
+          "rule": "DoNotCallGarbageCollectionExplicitly",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#donotcallgarbagecollectionexplicitly"
+        },
+        {
+          "beginline": 10,
+          "begincolumn": 9,
+          "endline": 10,
+          "endcolumn": 26,
+          "description": "Do not explicitly trigger a garbage collection.",
+          "rule": "DoNotCallGarbageCollectionExplicitly",
+          "ruleset": "Error Prone",
+          "priority": 2,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#donotcallgarbagecollectionexplicitly"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

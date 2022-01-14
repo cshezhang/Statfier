@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:43:53.580+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\performance_InsufficientStringBufferDeclaration\\InsufficientStringBufferDeclaration50.java",
+      "violations": [
+        {
+          "beginline": 11,
+          "begincolumn": 23,
+          "endline": 11,
+          "endcolumn": 24,
+          "description": "StringBuilder has been initialized with size 4, but has at least 5 characters appended.",
+          "rule": "InsufficientStringBufferDeclaration",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#insufficientstringbufferdeclaration"
+        },
+        {
+          "beginline": 35,
+          "begincolumn": 23,
+          "endline": 35,
+          "endcolumn": 24,
+          "description": "StringBuilder has been initialized with size 5, but has at least 6 characters appended.",
+          "rule": "InsufficientStringBufferDeclaration",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#insufficientstringbufferdeclaration"
+        },
+        {
+          "beginline": 45,
+          "begincolumn": 9,
+          "endline": 45,
+          "endcolumn": 20,
+          "description": "StringBuilder has been initialized with size 8, but has at least 10 characters appended.",
+          "rule": "InsufficientStringBufferDeclaration",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#insufficientstringbufferdeclaration"
+        },
+        {
+          "beginline": 62,
+          "begincolumn": 9,
+          "endline": 62,
+          "endcolumn": 25,
+          "description": "StringBuilder has been initialized with size 8, but has at least 9 characters appended.",
+          "rule": "InsufficientStringBufferDeclaration",
+          "ruleset": "Performance",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_performance.html#insufficientstringbufferdeclaration"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

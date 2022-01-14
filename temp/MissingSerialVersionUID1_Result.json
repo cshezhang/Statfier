@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:36:38.550+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_MissingSerialVersionUID\\MissingSerialVersionUID1.java",
+      "violations": [
+        {
+          "beginline": 2,
+          "begincolumn": 8,
+          "endline": 3,
+          "endcolumn": 1,
+          "description": "Classes implementing Serializable should set a serialVersionUID",
+          "rule": "MissingSerialVersionUID",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#missingserialversionuid"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

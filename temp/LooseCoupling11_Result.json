@@ -1,0 +1,48 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:23:43.912+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_LooseCoupling\\LooseCoupling11.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 13,
+          "endline": 7,
+          "endcolumn": 19,
+          "description": "Avoid using implementation types like \u0027HashSet\u0027; use the interface instead",
+          "rule": "LooseCoupling",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#loosecoupling"
+        },
+        {
+          "beginline": 12,
+          "begincolumn": 13,
+          "endline": 12,
+          "endcolumn": 19,
+          "description": "Avoid using implementation types like \u0027HashSet\u0027; use the interface instead",
+          "rule": "LooseCoupling",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#loosecoupling"
+        },
+        {
+          "beginline": 16,
+          "begincolumn": 9,
+          "endline": 16,
+          "endcolumn": 15,
+          "description": "Avoid using implementation types like \u0027HashSet\u0027; use the interface instead",
+          "rule": "LooseCoupling",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#loosecoupling"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

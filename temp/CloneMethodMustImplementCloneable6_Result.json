@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:11.417+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_CloneMethodMustImplementCloneable\\CloneMethodMustImplementCloneable6.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 5,
+          "endline": 4,
+          "endcolumn": 19,
+          "description": "clone() method should be implemented only if implementing Cloneable interface",
+          "rule": "CloneMethodMustImplementCloneable",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#clonemethodmustimplementcloneable"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

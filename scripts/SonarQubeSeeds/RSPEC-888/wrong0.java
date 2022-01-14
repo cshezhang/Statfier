@@ -1,0 +1,5 @@
+
+for (int i = 1; i != 10; i += 2)  // Noncompliant. Infinite; i goes from 9 straight to 11.
+{
+  //...
+}

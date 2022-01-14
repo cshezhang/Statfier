@@ -1,0 +1,59 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:28:18.089+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_LocalVariableNamingConventions\\LocalVariableNamingConventions2.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 13,
+          "endline": 4,
+          "endcolumn": 15,
+          "description": "The local variable name \u0027Foo\u0027 doesn\u0027t match \u0027[a-z][a-zA-Z0-9]*\u0027",
+          "rule": "LocalVariableNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#localvariablenamingconventions"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 19,
+          "endline": 5,
+          "endcolumn": 21,
+          "description": "The final local variable name \u0027FOO\u0027 doesn\u0027t match \u0027[a-z][a-zA-Z0-9]*\u0027",
+          "rule": "LocalVariableNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#localvariablenamingconventions"
+        },
+        {
+          "beginline": 6,
+          "begincolumn": 19,
+          "endline": 6,
+          "endcolumn": 21,
+          "description": "The final local variable name \u0027Hoo\u0027 doesn\u0027t match \u0027[a-z][a-zA-Z0-9]*\u0027",
+          "rule": "LocalVariableNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#localvariablenamingconventions"
+        },
+        {
+          "beginline": 10,
+          "begincolumn": 28,
+          "endline": 10,
+          "endcolumn": 28,
+          "description": "The exception block parameter name \u0027E\u0027 doesn\u0027t match \u0027[a-z][a-zA-Z0-9]*\u0027",
+          "rule": "LocalVariableNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#localvariablenamingconventions"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

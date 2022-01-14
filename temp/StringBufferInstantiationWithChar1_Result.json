@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:36:48.810+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_StringBufferInstantiationWithChar\\StringBufferInstantiationWithChar1.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 40,
+          "endline": 3,
+          "endcolumn": 42,
+          "description": "Do not instantiate a StringBuffer or StringBuilder with a char",
+          "rule": "StringBufferInstantiationWithChar",
+          "ruleset": "Error Prone",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#stringbufferinstantiationwithchar"
+        },
+        {
+          "beginline": 7,
+          "begincolumn": 42,
+          "endline": 7,
+          "endcolumn": 44,
+          "description": "Do not instantiate a StringBuffer or StringBuilder with a char",
+          "rule": "StringBufferInstantiationWithChar",
+          "ruleset": "Error Prone",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#stringbufferinstantiationwithchar"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

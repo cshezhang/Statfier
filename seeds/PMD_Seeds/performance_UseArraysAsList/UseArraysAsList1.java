@@ -1,4 +1,7 @@
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bar {
     void foo() {
         Integer[] ints = new Integer(10);

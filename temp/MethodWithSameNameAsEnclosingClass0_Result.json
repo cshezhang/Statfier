@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:39:50.163+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_MethodWithSameNameAsEnclosingClass\\MethodWithSameNameAsEnclosingClass0.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 9,
+          "endline": 3,
+          "endcolumn": 21,
+          "description": "Classes should not have non-constructor methods with the same name as the class",
+          "rule": "MethodWithSameNameAsEnclosingClass",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#methodwithsamenameasenclosingclass"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

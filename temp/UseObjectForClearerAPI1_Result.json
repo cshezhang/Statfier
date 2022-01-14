@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:34:37.515+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_UseObjectForClearerAPI\\UseObjectForClearerAPI1.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 24,
+          "endline": 6,
+          "endcolumn": 30,
+          "description": "Rather than using a lot of String arguments, consider using a container object for those values.",
+          "rule": "UseObjectForClearerAPI",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#useobjectforclearerapi"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

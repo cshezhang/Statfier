@@ -43,7 +43,7 @@ public class ASTWrapper {
     private CompilationUnit cu;
     private String filePath; // This variable saves the absolute path.
     private String folderPath;
-    private String folderName;
+    private String folderName; // For PMD and CheckStyle, folderName equals to rule name
     private String parentPath;
     private String mutantFolder;
     private List<String> transSeq;
@@ -70,7 +70,11 @@ public class ASTWrapper {
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
         this.parentPath = null;
         this.parViolations = 0;
-        this.mutantFolder = userdir + sep + "mutants" + sep + "iter" + (this.depth + 1) + sep + folderName;
+        if(PMD_MUTATION) {
+            this.mutantFolder = userdir + sep + "mutants" + sep + "iter" + (this.depth + 1) + sep + folderName;
+        } else {
+            this.mutantFolder = userdir + sep + "mutants" + sep + "iter" + (this.depth + 1);
+        }
         this.transSeq = new ArrayList<>();
         this.parser = ASTParser.newParser(AST.JLS3);
         this.parser.setCompilerOptions(compilerOptions);
@@ -125,9 +129,13 @@ public class ASTWrapper {
         this.depth = parentWrapper.depth + 1;
         this.filePath = filePath;
         this.initSeed = parentWrapper.initSeed;
-        this.folderName = parentWrapper.folderName;
+        this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
-        this.mutantFolder = userdir + sep + "mutants" + sep + "iter" + (this.depth + 1) + sep + folderName;
+        if(PMD_MUTATION) {
+            this.mutantFolder = userdir + sep + "mutants" + sep + "iter" + (this.depth + 1) + sep + folderName;
+        } else {
+            this.mutantFolder =  userdir + sep + "mutants" + sep + "iter" + (this.depth + 1);
+        }
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
         this.transSeq = new ArrayList<>();
@@ -401,6 +409,7 @@ public class ASTWrapper {
     }
 
     public boolean isBuggy() {
+        boolean buggy = false;
         if (this.depth != 0 && this.violations < this.parViolations) { // Checking depth is to mutate initial seeds
             HashMap<String, HashSet<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
             HashMap<String, HashSet<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
@@ -439,6 +448,7 @@ public class ASTWrapper {
                 }
             }
             for (int i = 0; i < potentialFPs.size(); i++) {
+                buggy =true;
                 String bugType = potentialFPs.get(i).getKey();
                 if (!compactIssues.containsKey(bugType)) {
                     HashMap<String, ArrayList<TriTuple>> seq2paths = new HashMap<>();
@@ -454,6 +464,7 @@ public class ASTWrapper {
                 paths.add(new TriTuple(this.initSeed, this.filePath, "FP"));
             }
             for (int i = 0; i < potentialFNs.size(); i++) {
+                buggy = true;
                 String bugType = potentialFNs.get(i).getKey();
                 if (!compactIssues.containsKey(bugType)) {
                     HashMap<String, ArrayList<TriTuple>> seq2paths = new HashMap<>();
@@ -468,10 +479,8 @@ public class ASTWrapper {
                 ArrayList<TriTuple> paths = seq2paths.get(seqKey);
                 paths.add(new TriTuple(this.initSeed, this.filePath, "FN"));
             }
-            return true;
-        } else {
-            return false;
         }
+        return buggy;
     }
 
     public boolean isDuplicatedMutant(String newContent) {
@@ -613,6 +622,7 @@ public class ASTWrapper {
         return newWrappers;
     }
 
+//    public static AtomicInteger sumMutation = new AtomicInteger(0);
     public ArrayList<ASTWrapper> guidedRandomTransformation() {
         ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
         int guidedRandomCount = 0;
@@ -620,63 +630,68 @@ public class ASTWrapper {
             if (this.candidateStatements == null) {
                 this.candidateStatements = this.getCandidateStatements();
             }
-            if(this.depth >= SEARCH_DEPTH) {
-                return newWrappers;
-            }
-            int statementSize = this.candidateStatements.size();
-            if (statementSize <= 0) {
+            int candidateStatementSize = this.candidateStatements.size();
+            if (candidateStatementSize <= 0) {
                 invalidSeed.addAndGet(1);
                 return newWrappers;
             } else {
                 validSeed.addAndGet(1);
             }
             while (true) {
-                if (++guidedRandomCount > statementSize * getMutatorSize()) {
+                if (guidedRandomCount > candidateStatementSize * getMutatorSize()) {
                     break;
                 }
-                Statement oldStatement = this.candidateStatements.get(random.nextInt(statementSize));
-                StatementMutator mutator = StatementMutator.getMutatorRandomly();
-                int counter = mutator.check(oldStatement);
-                for(int i = 0; i < counter; i++) {
-                    String filename = "mutant_" + mutantCounter.getAndAdd(1);
-                    String mutantPath = mutantFolder + sep + filename + ".java";
-                    String content = this.document.get();
-                    ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
-                    int oldLineNumber = this.cu.getLineNumber(oldStatement.getStartPosition());
-                    Statement newStatement = newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);
-                    if (newStatement == null) {
-                        System.out.println(oldStatement);
-                        String s0 = this.document.get();
-                        System.out.println(this.document.get().hashCode());
-                        String s1 = newWrapper.document.get();
-                        System.out.println(newWrapper.document.get().hashCode());
-                        newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);
-                        System.out.println(oldStatement);
-                        System.err.println("Old and new ASTWrapper are not matched!");
-                        System.exit(-1);
-                    }
-                    boolean hasMutated = mutator.run(
-                            i,
-                            newWrapper.ast,
-                            newWrapper.astRewrite,
-                            getFirstBrotherOfStatement(newStatement),
-                            newStatement);
-                    if (hasMutated) {
-                        newWrapper.transSeq.add(mutator.getIndex());
-                        if (COMPILE) {
-                            newWrapper.rewriteJavaCode();
-                            newWrapper.resetClassName();
-                            newWrapper.removePackageDefinition();
+//                Statement oldStatement = this.candidateStatements.get(random.nextInt(candidateStatementSize));
+                for(Statement oldStatement : this.candidateStatements) {
+                    StatementMutator mutator = StatementMutator.getMutatorRandomly();
+                    guidedRandomCount++;
+                    int counter = mutator.check(oldStatement);
+//                    if(counter > 0) {
+//                        sumMutation.addAndGet(1);
+//                    }
+                    for (int i = 0; i < counter; i++) {
+                        String filename = "mutant_" + mutantCounter.getAndAdd(1);
+                        String mutantPath = mutantFolder + sep + filename + ".java";
+                        String content = this.document.get();
+                        ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
+                        int oldLineNumber = this.cu.getLineNumber(oldStatement.getStartPosition());
+                        Statement newStatement = newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);
+                        if (newStatement == null) {
+                            System.out.println(oldStatement);
+                            String s0 = this.document.get();
+                            System.out.println(this.document.get().hashCode());
+                            String s1 = newWrapper.document.get();
+                            System.out.println(newWrapper.document.get().hashCode());
+                            newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);
+                            System.out.println(oldStatement);
+                            System.err.println("Old and new ASTWrapper are not matched!");
+                            System.exit(-1);
                         }
-                        newWrapper.rewriteJavaCode();
-                        String newContent = newWrapper.document.get();
-                        if (!this.isDuplicatedMutant(newContent)) {
+                        boolean hasMutated = mutator.run(
+                                i,
+                                newWrapper.ast,
+                                newWrapper.astRewrite,
+                                getFirstBrotherOfStatement(newStatement),
+                                newStatement);
+                        if (hasMutated) {
+                            succMutation.addAndGet(1);
+                            newWrapper.transSeq.add(mutator.getIndex());
+                            if (COMPILE) {
+                                newWrapper.rewriteJavaCode();
+                                newWrapper.resetClassName();
+                                newWrapper.removePackageDefinition();
+                            }
+                            newWrapper.rewriteJavaCode();
+                            String newContent = newWrapper.document.get();
+//                        if (!this.isDuplicatedMutant(newContent)) {
                             newWrappers.add(newWrapper);
                             mutantContents.add(newWrapper.document.get());
                             newWrapper.writeToJavaFile();
+//                        }
+                        } else {
+                            failMutation.addAndGet(1);
+                            Files.deleteIfExists(Paths.get(mutantPath));
                         }
-                    } else {
-                        Files.deleteIfExists(Paths.get(mutantPath));
                     }
                 }
             }
@@ -686,6 +701,8 @@ public class ASTWrapper {
         return newWrappers;
     }
 
+    public static AtomicInteger succMutation = new AtomicInteger(0);
+    public static AtomicInteger failMutation = new AtomicInteger(0);
     public static AtomicInteger invalidSeed = new AtomicInteger(0);
     public static AtomicInteger validSeed = new AtomicInteger(0);
     public ArrayList<ASTWrapper> mainTransform() {
@@ -701,58 +718,57 @@ public class ASTWrapper {
                     validSeed.addAndGet(1);
                 }
             }
-            if(this.depth >= SEARCH_DEPTH) {
-                return newWrappers;
-            }
-            for(FieldDeclaration oldFieldDeclaration : this.candidateFieldDeclarations) {
-                for(FieldMutator transform : FieldMutator.getTransforms()) {
-                    String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
-                    String mutantPath = mutantFolder + sep + mutantFilename + ".java";
-                    String content = this.document.get();
-//                        if (SINGLE_TESTING) {
-//                            System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
-//                            System.out.println(filename + " is generated from: " + mutator.getClass());
+//            for(FieldDeclaration oldFieldDeclaration : this.candidateFieldDeclarations) {
+//                for(FieldMutator transform : FieldMutator.getTransforms()) {
+//                    String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
+//                    String mutantPath = mutantFolder + sep + mutantFilename + ".java";
+//                    String content = this.document.get();
+////                        if (SINGLE_TESTING) {
+////                            System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
+////                            System.out.println(filename + " is generated from: " + mutator.getClass());
+////                        }
+//                    // Here, codes from newWrapper and oldWrapper should be identical
+//                    ASTWrapper newWrapper = new ASTWrapper(mutantFilename, mutantPath, content, this);
+//                    int oldLineNumber = this.cu.getLineNumber(oldFieldDeclaration.getStartPosition());
+//                    FieldDeclaration newFieldDeclaration = newWrapper.searchFieldDeclarationByLinenumber(oldFieldDeclaration, oldLineNumber);
+//                    if (newFieldDeclaration == null) {
+//                        System.out.println(oldFieldDeclaration);
+//                        String s0 = this.document.get();
+//                        System.out.println(this.document.get().hashCode());
+//                        String s1 = newWrapper.document.get();
+//                        System.out.println(newWrapper.document.get().hashCode());
+//                        newWrapper.searchFieldDeclarationByLinenumber(oldFieldDeclaration, oldLineNumber);
+//                        System.out.println(oldFieldDeclaration);
+//                        System.err.println("Old and new ASTWrapper are not matched!");
+//                        System.exit(-1);
+//                    }
+//                    boolean hasMutated =
+//                            transform.run(
+//                                    newWrapper.ast,
+//                                    newWrapper.astRewrite,
+//                                    newFieldDeclaration);
+//                    if (hasMutated) {
+//                        succMutation.addAndGet(1);
+//                        newWrapper.transSeq.add(transform.getIndex());
+//                        if (COMPILE) {
+//                            // 1: rewrite for transformation, 2: rewrite for class name and pkg definition
+//                            newWrapper.rewriteJavaCode();
+//                            newWrapper.resetClassName();
+//                            newWrapper.removePackageDefinition();
 //                        }
-                    // Here, codes from newWrapper and oldWrapper should be identical
-                    ASTWrapper newWrapper = new ASTWrapper(mutantFilename, mutantPath, content, this);
-                    int oldLineNumber = this.cu.getLineNumber(oldFieldDeclaration.getStartPosition());
-                    FieldDeclaration newFieldDeclaration = newWrapper.searchFieldDeclarationByLinenumber(oldFieldDeclaration, oldLineNumber);
-                    if (newFieldDeclaration == null) {
-                        System.out.println(oldFieldDeclaration);
-                        String s0 = this.document.get();
-                        System.out.println(this.document.get().hashCode());
-                        String s1 = newWrapper.document.get();
-                        System.out.println(newWrapper.document.get().hashCode());
-                        newWrapper.searchFieldDeclarationByLinenumber(oldFieldDeclaration, oldLineNumber);
-                        System.out.println(oldFieldDeclaration);
-                        System.err.println("Old and new ASTWrapper are not matched!");
-                        System.exit(-1);
-                    }
-                    boolean hasMutated =
-                            transform.run(
-                                    newWrapper.ast,
-                                    newWrapper.astRewrite,
-                                    newFieldDeclaration);
-                    if (hasMutated) {
-                        newWrapper.transSeq.add(transform.getIndex());
-                        if (COMPILE) {
-                            // 1: rewrite for transformation, 2: rewrite for class name and pkg definition
-                            newWrapper.rewriteJavaCode();
-                            newWrapper.resetClassName();
-                            newWrapper.removePackageDefinition();
-                        }
-                        newWrapper.rewriteJavaCode();
-                        String newContent = newWrapper.document.get();
-//                        if(!this.isDuplicatedMutant(newContent)) {
-                            newWrappers.add(newWrapper);
-                            mutantContents.add(newWrapper.document.get());
-                            newWrapper.writeToJavaFile();
-//                        }
-                    } else {
-                        Files.deleteIfExists(Paths.get(mutantPath));
-                    }
-                }
-            }
+//                        newWrapper.rewriteJavaCode();
+//                        String newContent = newWrapper.document.get();
+////                        if(!this.isDuplicatedMutant(newContent)) {
+//                            newWrappers.add(newWrapper);
+//                            mutantContents.add(newWrapper.document.get());
+//                            newWrapper.writeToJavaFile();
+////                        }
+//                    } else {
+//                        failMutation.addAndGet(1);
+//                        Files.deleteIfExists(Paths.get(mutantPath));
+//                    }
+//                }
+//            }
             for (Statement oldStatement : this.candidateStatements) {
                 for (StatementMutator mutator : StatementMutator.getMutators()) {
                     int counter = mutator.check(oldStatement);
@@ -788,6 +804,7 @@ public class ASTWrapper {
                                         getFirstBrotherOfStatement(newStatement),
                                         newStatement);
                         if (hasMutated) {
+                            succMutation.addAndGet(1);
                             newWrapper.transSeq.add(mutator.getIndex());
                             if (COMPILE) {
                                 // 1: rewrite for transformation, 2: rewrite for class name and pkg definition
@@ -797,12 +814,13 @@ public class ASTWrapper {
                             }
                             newWrapper.rewriteJavaCode();
                             String newContent = newWrapper.document.get();
-                            if(!this.isDuplicatedMutant(newContent)) {
+//                            if(!this.isDuplicatedMutant(newContent)) {
                                 newWrappers.add(newWrapper);
                                 mutantContents.add(newWrapper.document.get());
                                 newWrapper.writeToJavaFile();
-                            }
+//                            }
                         } else {
+                            failMutation.addAndGet(1);
                             Files.deleteIfExists(Paths.get(mutantPath));
                         }
                     }
@@ -952,6 +970,14 @@ public class ASTWrapper {
 
     public String getFolderPath() {
         return this.folderPath;
+    }
+
+    public String getFolderName() {
+        return this.folderName;
+    }
+
+    public String getFileName() {
+        return this.filename;
     }
 
     public String getFilePath() {

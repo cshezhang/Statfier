@@ -1,9 +1,10 @@
 
-import org.junit.Test;
 public class Foo {
-    @Test
-    public void foo() {
+    public void test1() {
         assertEquals(1, 1);
+    }
+    private void assertEquals(int x, int y) {
+        if (x != y) throw new AssertionError();
     }
 }
         

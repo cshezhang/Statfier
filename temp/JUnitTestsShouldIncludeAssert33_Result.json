@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:20:34.827+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_JUnitTestsShouldIncludeAssert\\JUnitTestsShouldIncludeAssert33.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 9,
+          "endline": 11,
+          "endcolumn": 9,
+          "description": "JUnit tests should include assert() or fail()",
+          "rule": "JUnitTestsShouldIncludeAssert",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#junittestsshouldincludeassert"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

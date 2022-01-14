@@ -1,4 +1,8 @@
 
-public class Md5Checksum {
+public class Foo {
+
+    private Foo() {
+    }
+
 }
         

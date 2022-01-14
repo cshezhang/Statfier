@@ -1,5 +1,7 @@
 
 public interface Foo {
-    public static final int FOO = 2;
+    List foo();
+    ArrayList foo();
+    Vector foo();
 }
         

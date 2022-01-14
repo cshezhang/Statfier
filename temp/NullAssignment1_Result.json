@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:40:57.053+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_NullAssignment\\NullAssignment1.java",
+      "violations": [
+        {
+          "beginline": 7,
+          "begincolumn": 13,
+          "endline": 7,
+          "endcolumn": 16,
+          "description": "Assigning an Object to null is a code smell.  Consider refactoring.",
+          "rule": "NullAssignment",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#nullassignment"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

@@ -1,0 +1,12 @@
+
+if (condition) {
+  firstActionInBlock();
+  secondAction();
+}
+thirdAction();
+
+String str = null;
+for (int i = 0; i < array.length; i++) {
+  str = array[i];
+  doTheThing(str);
+}

@@ -1,0 +1,9 @@
+
+public static void main(String args[]) {
+ try {
+    doSomething();
+  } catch (Throwable t) {
+    log.error(t);
+    System.exit(1);  // Default exit code, 0, indicates success. Non-zero value means failure.
+  }
+}

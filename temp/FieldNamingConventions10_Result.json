@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:31:17.374+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_FieldNamingConventions\\FieldNamingConventions10.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 31,
+          "endline": 4,
+          "endcolumn": 39,
+          "description": "The constant name \u0027m$mangled\u0027 doesn\u0027t match \u0027[A-Z][A-Z_0-9]*\u0027",
+          "rule": "FieldNamingConventions",
+          "ruleset": "Code Style",
+          "priority": 1,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#fieldnamingconventions"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

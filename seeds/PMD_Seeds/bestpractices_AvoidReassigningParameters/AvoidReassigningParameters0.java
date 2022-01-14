@@ -1,7 +1,12 @@
 
-public class Foo {
-    void foo(int bar) {
-        bar = 2;
-    }
+public class Hello {
+  private void greet(String name) {
+    name = name.trim();
+    System.out.println("Hello " + name);
+
+    // preferred
+    String trimmedName = name.trim();
+    System.out.println("Hello " + trimmedName);
+  }
 }
         

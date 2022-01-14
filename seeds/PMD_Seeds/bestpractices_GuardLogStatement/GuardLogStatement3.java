@@ -6,7 +6,7 @@ public class Foo {
     private static final Logger logger = LogManager.getLogger(Foo.class);
 
     private void foo() {
-        logger.debug("Debug statement" + "");
+        logger.debug("Debug statement: " + this);
     }
 }
         

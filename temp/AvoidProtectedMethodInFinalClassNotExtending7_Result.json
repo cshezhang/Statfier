@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:29:22.475+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_AvoidProtectedMethodInFinalClassNotExtending\\AvoidProtectedMethodInFinalClassNotExtending7.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 41,
+          "endline": 3,
+          "endcolumn": 51,
+          "description": "Avoid protected methods in a final class that doesnt extend anything other than Object.  Change to private or package access.",
+          "rule": "AvoidProtectedMethodInFinalClassNotExtending",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#avoidprotectedmethodinfinalclassnotextending"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

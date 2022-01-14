@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:32:47.608+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\design_SingularField\\SingularField16.java",
+      "violations": [
+        {
+          "beginline": 3,
+          "begincolumn": 13,
+          "endline": 3,
+          "endcolumn": 18,
+          "description": "Perhaps \u0027x\u0027 could be replaced by a local variable.",
+          "rule": "SingularField",
+          "ruleset": "Design",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_design.html#singularfield"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

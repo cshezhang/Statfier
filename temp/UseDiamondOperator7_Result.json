@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:27:00.176+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UseDiamondOperator\\UseDiamondOperator7.java",
+      "violations": [
+        {
+          "beginline": 9,
+          "begincolumn": 25,
+          "endline": 9,
+          "endcolumn": 65,
+          "description": "Explicit type arguments can be replaced by Diamond Operator",
+          "rule": "UseDiamondOperator",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#usediamondoperator"
+        },
+        {
+          "beginline": 16,
+          "begincolumn": 25,
+          "endline": 16,
+          "endcolumn": 57,
+          "description": "Explicit type arguments can be replaced by Diamond Operator",
+          "rule": "UseDiamondOperator",
+          "ruleset": "Code Style",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#usediamondoperator"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

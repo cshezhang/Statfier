@@ -1,0 +1,48 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:24:14.026+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedLocalVariable\\UnusedLocalVariable13.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 13,
+          "endline": 4,
+          "endcolumn": 13,
+          "description": "Avoid unused local variables such as \u0027x\u0027.",
+          "rule": "UnusedLocalVariable",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedlocalvariable"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 33,
+          "endline": 5,
+          "endcolumn": 33,
+          "description": "Avoid unused local variables such as \u0027j\u0027.",
+          "rule": "UnusedLocalVariable",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedlocalvariable"
+        },
+        {
+          "beginline": 5,
+          "begincolumn": 24,
+          "endline": 5,
+          "endcolumn": 24,
+          "description": "Avoid unused local variables such as \u0027y\u0027.",
+          "rule": "UnusedLocalVariable",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedlocalvariable"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

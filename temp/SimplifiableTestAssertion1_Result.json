@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:21:50.368+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_SimplifiableTestAssertion\\SimplifiableTestAssertion1.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 9,
+          "endline": 5,
+          "endcolumn": 30,
+          "description": "Assertion may be simplified using assertNull",
+          "rule": "SimplifiableTestAssertion",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#simplifiabletestassertion"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

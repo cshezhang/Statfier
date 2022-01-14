@@ -1,0 +1,114 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:39:52.109+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\errorprone_AvoidAccessibilityAlteration\\AvoidAccessibilityAlteration1.java",
+      "violations": [
+        {
+          "beginline": 10,
+          "begincolumn": 13,
+          "endline": 10,
+          "endcolumn": 37,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 13,
+          "begincolumn": 9,
+          "endline": 13,
+          "endcolumn": 38,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 14,
+          "begincolumn": 9,
+          "endline": 14,
+          "endcolumn": 33,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 17,
+          "begincolumn": 13,
+          "endline": 17,
+          "endcolumn": 32,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 20,
+          "begincolumn": 9,
+          "endline": 20,
+          "endcolumn": 38,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 21,
+          "begincolumn": 9,
+          "endline": 21,
+          "endcolumn": 28,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 24,
+          "begincolumn": 13,
+          "endline": 24,
+          "endcolumn": 31,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 27,
+          "begincolumn": 9,
+          "endline": 27,
+          "endcolumn": 38,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        },
+        {
+          "beginline": 28,
+          "begincolumn": 9,
+          "endline": 28,
+          "endcolumn": 27,
+          "description": "You should not modify visibility of constructors, methods or fields using setAccessible()",
+          "rule": "AvoidAccessibilityAlteration",
+          "ruleset": "Error Prone",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_errorprone.html#avoidaccessibilityalteration"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

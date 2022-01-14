@@ -6,11 +6,11 @@ public class Foo {
     private static final Logger logger = LogManager.getLogger(Foo.class);
 
     private void foo() {
-        logger.debug("Debug statement" + "");
+        logger.debug("Debug statement: " + this);
     }
 
     private void bar() {
-        logger.info("No guard, but'is OK with properties configuration" + "");
+        logger.info("No guard, but'is OK with properties configuration: " + this);
     }
 }
         

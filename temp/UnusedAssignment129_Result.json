@@ -1,0 +1,37 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:23:17.211+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\bestpractices_UnusedAssignment\\UnusedAssignment129.java",
+      "violations": [
+        {
+          "beginline": 5,
+          "begincolumn": 42,
+          "endline": 5,
+          "endcolumn": 45,
+          "description": "The field initializer for \u0027ignore\u0027 is never used (overwritten on line 8)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        },
+        {
+          "beginline": 14,
+          "begincolumn": 34,
+          "endline": 14,
+          "endcolumn": 37,
+          "description": "The value assigned to field \u0027ignore\u0027 is never used (overwritten on line 16)",
+          "rule": "UnusedAssignment",
+          "ruleset": "Best Practices",
+          "priority": 3,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_bestpractices.html#unusedassignment"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

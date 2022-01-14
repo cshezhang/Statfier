@@ -1,0 +1,26 @@
+{
+  "formatVersion": 0,
+  "pmdVersion": "6.41.0",
+  "timestamp": "2022-01-08T14:28:57.974+08:00",
+  "files": [
+    {
+      "filename": "C:\\Users\\wanna\\projects\\SAMutator\\seeds\\PMD_Seeds\\codestyle_UnnecessaryFullyQualifiedName\\UnnecessaryFullyQualifiedName8.java",
+      "violations": [
+        {
+          "beginline": 4,
+          "begincolumn": 13,
+          "endline": 4,
+          "endcolumn": 26,
+          "description": "Unnecessary use of fully qualified name \u0027java.util.List\u0027 due to existing import \u0027java.util.List\u0027",
+          "rule": "UnnecessaryFullyQualifiedName",
+          "ruleset": "Code Style",
+          "priority": 4,
+          "externalInfoUrl": "https://pmd.github.io/pmd-6.41.0/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname"
+        }
+      ]
+    }
+  ],
+  "suppressedViolations": [],
+  "processingErrors": [],
+  "configurationErrors": []
+}

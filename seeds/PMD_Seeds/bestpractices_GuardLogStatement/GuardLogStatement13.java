@@ -6,7 +6,7 @@ public class Foo {
     Logger LOGGER;
 
     public void foo() {
-        LOGGER.severe("This is a severe message" + " and concat");
+        LOGGER.severe("This is a severe message" + this + " and concat");
     }
 }
         

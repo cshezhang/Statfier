@@ -1,0 +1,2 @@
+
+int count = stream.count();

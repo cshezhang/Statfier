@@ -1,0 +1,2 @@
+
+logger.log("My Message");
