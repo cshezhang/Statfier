@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AbbreviationAsWordInName0.java">
+<error line="4" column="7" severity="error" message="Abbreviation in name &apos;CURRENT_COUNTER&apos; must contain no more than &apos;4&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="13" column="8" severity="error" message="Abbreviation in name &apos;incrementCOUNTER&apos; must contain no more than &apos;4&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="17" column="15" severity="error" message="Abbreviation in name &apos;incrementGLOBAL&apos; must contain no more than &apos;4&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+</file>
+</checkstyle>

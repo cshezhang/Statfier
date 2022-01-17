@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/WriteTag2.java">
+<error line="6" severity="error" message="Type Javadoc comment is missing @since tag." source="com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck"/>
+<error line="8" severity="error" message="Type Javadoc comment is missing @since tag." source="com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck"/>
+</file>
+</checkstyle>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/WriteTag3.java">
+<error line="9" severity="error" message="Type Javadoc tag @since must match pattern &apos;[1-9\.]&apos;." source="com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck"/>
+</file>
+</checkstyle>

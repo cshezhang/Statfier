@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/InterfaceTypeParameterName0.java">
+<error line="4" column="27" severity="error" message="Name &apos;t&apos; must match pattern &apos;^[A-Z]$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.InterfaceTypeParameterNameCheck"/>
+</file>
+</checkstyle>

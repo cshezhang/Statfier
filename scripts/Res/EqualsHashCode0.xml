@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/EqualsHashCode0.java">
+<error line="4" column="5" severity="error" message="Definition of &apos;hashCode()&apos; without corresponding definition of &apos;equals()&apos;." source="com.puppycrawl.tools.checkstyle.checks.coding.EqualsHashCodeCheck"/>
+<error line="12" column="5" severity="error" message="Definition of &apos;equals()&apos; without corresponding definition of &apos;hashCode()&apos;." source="com.puppycrawl.tools.checkstyle.checks.coding.EqualsHashCodeCheck"/>
+<error line="42" column="5" severity="error" message="Definition of &apos;equals()&apos; without corresponding definition of &apos;hashCode()&apos;." source="com.puppycrawl.tools.checkstyle.checks.coding.EqualsHashCodeCheck"/>
+<error line="47" column="5" severity="error" message="Definition of &apos;hashCode()&apos; without corresponding definition of &apos;equals()&apos;." source="com.puppycrawl.tools.checkstyle.checks.coding.EqualsHashCodeCheck"/>
+</file>
+</checkstyle>

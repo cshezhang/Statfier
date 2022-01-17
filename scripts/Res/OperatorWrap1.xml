@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/OperatorWrap1.java">
+<error line="6" column="21" severity="error" message="&apos;=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="10" column="21" severity="error" message="&apos;+=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="14" column="21" severity="error" message="&apos;*=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="18" column="21" severity="error" message="&apos;-=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="22" column="21" severity="error" message="&apos;/=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="24" column="21" severity="error" message="&apos;%=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="26" column="21" severity="error" message="&apos;&gt;&gt;=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="28" column="17" severity="error" message="&apos;&gt;&gt;&gt;=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="32" column="21" severity="error" message="&apos;^=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="34" column="21" severity="error" message="&apos;|=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="36" column="21" severity="error" message="&apos;&amp;=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+<error line="38" column="21" severity="error" message="&apos;&lt;&lt;=&apos; should be on the previous line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck"/>
+</file>
+</checkstyle>

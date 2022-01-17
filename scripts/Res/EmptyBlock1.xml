@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/EmptyBlock1.java">
+<error line="10" column="9" severity="error" message="Empty try block." source="com.puppycrawl.tools.checkstyle.checks.blocks.EmptyBlockCheck"/>
+</file>
+</checkstyle>

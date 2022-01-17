@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AbbreviationAsWordInName2.java">
+<error line="5" column="7" severity="error" message="Abbreviation in name &apos;secondNUM&apos; must contain no more than &apos;1&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="7" column="14" severity="error" message="Abbreviation in name &apos;fourthNUm&apos; must contain no more than &apos;1&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+</file>
+</checkstyle>

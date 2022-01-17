@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/InnerTypeLast0.java">
+<error line="6" column="5" severity="error" message="Init blocks, constructors, fields and methods should be before inner types." source="com.puppycrawl.tools.checkstyle.checks.design.InnerTypeLastCheck"/>
+<error line="12" column="5" severity="error" message="Init blocks, constructors, fields and methods should be before inner types." source="com.puppycrawl.tools.checkstyle.checks.design.InnerTypeLastCheck"/>
+</file>
+</checkstyle>

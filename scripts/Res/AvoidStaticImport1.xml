@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AvoidStaticImport1.java">
+<error line="5" column="32" severity="error" message="Using a static member import should be avoided - java.lang.Integer.parseInt." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck"/>
+</file>
+</checkstyle>

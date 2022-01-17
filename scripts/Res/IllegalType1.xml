@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalType1.java">
+<error line="4" column="21" severity="error" message="Usage of type &apos;java.util.HashSet&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="12" column="21" severity="error" message="Usage of type &apos;java.util.HashSet&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+</file>
+</checkstyle>

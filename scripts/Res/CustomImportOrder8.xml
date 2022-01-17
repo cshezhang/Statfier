@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CustomImportOrder8.java">
+<error line="11" column="1" severity="error" message="Import statement for &apos;com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck&apos; is in the wrong order. Should be in the &apos;THIRD_PARTY_PACKAGE&apos; group, expecting group &apos;SPECIAL_IMPORTS&apos; on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="12" column="1" severity="error" message="Import statement for &apos;com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck&apos; is in the wrong order. Should be in the &apos;THIRD_PARTY_PACKAGE&apos; group, expecting group &apos;SPECIAL_IMPORTS&apos; on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+</checkstyle>

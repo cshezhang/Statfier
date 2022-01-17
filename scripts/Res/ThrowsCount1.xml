@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ThrowsCount1.java">
+<error line="4" column="30" severity="error" message="Throws count is 3 (max allowed is 2)." source="com.puppycrawl.tools.checkstyle.checks.design.ThrowsCountCheck"/>
+</file>
+</checkstyle>

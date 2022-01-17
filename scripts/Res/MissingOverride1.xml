@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/MissingOverride1.java">
+<error line="6" column="5" severity="error" message="Must include @java.lang.Override annotation when &apos;@inheritDoc&apos; Javadoc tag exists." source="com.puppycrawl.tools.checkstyle.checks.annotation.MissingOverrideCheck"/>
+<error line="14" column="5" severity="error" message="Must include @java.lang.Override annotation when &apos;@inheritDoc&apos; Javadoc tag exists." source="com.puppycrawl.tools.checkstyle.checks.annotation.MissingOverrideCheck"/>
+</file>
+</checkstyle>

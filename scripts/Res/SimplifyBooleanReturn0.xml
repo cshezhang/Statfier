@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/SimplifyBooleanReturn0.java">
+<error line="10" column="3" severity="error" message="Conditional logic can be removed." source="com.puppycrawl.tools.checkstyle.checks.coding.SimplifyBooleanReturnCheck"/>
+<error line="25" column="3" severity="error" message="Conditional logic can be removed." source="com.puppycrawl.tools.checkstyle.checks.coding.SimplifyBooleanReturnCheck"/>
+</file>
+</checkstyle>

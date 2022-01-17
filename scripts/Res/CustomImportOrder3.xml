@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CustomImportOrder3.java">
+<error line="11" column="1" severity="error" message="Imports without groups should be placed at the end of the import list: &apos;org.apache.commons.io.FileUtils&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="12" column="1" severity="error" message="&apos;com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck&apos; should be separated from previous import group by one line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+</checkstyle>

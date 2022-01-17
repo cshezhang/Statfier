@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AbstractClassName0.java">
+<error line="4" column="1" severity="error" message="Name &apos;SecondClass&apos; must match pattern &apos;^Abstract.+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.AbstractClassNameCheck"/>
+<error line="5" column="1" severity="error" message="Class &apos;AbstractThirdClass&apos; must be declared as &apos;abstract&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.AbstractClassNameCheck"/>
+</file>
+</checkstyle>

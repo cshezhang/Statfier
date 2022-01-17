@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/NPathComplexity1.java">
+<error line="4" column="1" severity="error" message="NPath Complexity is 128 (max allowed is 100)." source="com.puppycrawl.tools.checkstyle.checks.metrics.NPathComplexityCheck"/>
+</file>
+</checkstyle>

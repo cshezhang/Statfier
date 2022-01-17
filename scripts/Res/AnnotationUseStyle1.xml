@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AnnotationUseStyle1.java">
+<error line="3" column="1" severity="error" message="Annotation must have closing parenthesis." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+<error line="5" column="1" severity="error" message="Annotation style must be &apos;EXPANDED&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+<error line="12" column="1" severity="error" message="Annotation style must be &apos;EXPANDED&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+</file>
+</checkstyle>

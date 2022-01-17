@@ -7,6 +7,8 @@ bug_categories = ["annotation", "blocks", "design", "coding", "header", "imports
 userdir = os.getcwd()
 sep = os.sep
 seed_folder_path = userdir + sep + "CheckStyleSeed"
+code_counter = 0
+not_covered_rule = 0
 
 def get_html_content(url):
     http = urllib3.PoolManager()
@@ -16,6 +18,8 @@ def get_html_content(url):
     return content
 
 def parse_html_file(bug_category, content):
+    global code_counter, not_covered_rule
+    print("Processing Category: " + bug_category)
     rule_tags = []
     example_tags = []
     soup = BeautifulSoup(content, "html.parser")
@@ -54,36 +58,38 @@ def parse_html_file(bug_category, content):
             code_tag = code_tag.next_element
             if code_tag == None or code_tag.name == "h3":
                 break
-        if len(code_tags) % 2 == 1:
-            print("Config and Code Mismatch: " + rule_tag.get_text())
-            continue
+        rule2config = dict()
+        rule2code = dict()
         config_codes = []
         java_codes = []
+        # config2code = dict()
+        # current_index = None
         for code_tag in code_tags:
             if "module name" in code_tag.get_text().lower():
+                # current_index = code_tag
+                # config2code[code_tag] = []
                 config_codes.append(code_tag.get_text())
             else:
                 java_codes.append(code_tag.get_text())
+        rule_name = rule_tag.get_text().strip()
+        rule2config[rule_name] = config_codes
+        rule2code[rule_name] = java_codes
+        code_counter  = code_counter + len(java_codes)
         if len(config_codes) != len(java_codes):
-            print("Config and Code Mismatch: " + rule_tag.get_text())
+            if(len(java_codes) == 0):
+                not_covered_rule = not_covered_rule + 1
+                print("Config and Code Mismatch: " + rule_tag.get_text())
+                print("Config Length: " + str(len(config_codes)) + " Java Code Length: " + str(len(java_codes)))
             continue
-        # while tmp_tag != None and tmp_tag.name != "h3":
-        #     if tmp_tag.name == "p":
-        #         content = tmp_tag.get_text().lower()
-        #         if "configure" in tmp_tag.get_text() or "configuration" in tmp_tag.get_text():
-        #             config_tag = tmp_tag.next_sibling.next_sibling
-        #             if config_tag.name != "div":
-        #                  print("Error: Missing Config!")
-        #             # print(str(config_tag.get_text()))
-        #             config_codes.append(config_tag.get_text().strip())
-        #             tmp1_tag = config_tag.next_sibling.next_sibling
-        #             code_tag = tmp1_tag.next_sibling.next_sibling
-        #             if code_tag.name != "div":
-        #                 print("Error: Missing Code!")
-        #             if "example" in tmp1_tag.get_text().lower():
-        #                 # print(code_tag.get_text())
-        #                 java_codes.append(code_tag.get_text())
-        #     tmp_tag = tmp_tag.next_sibling
+        for i in range(0, len(config_codes)):
+            config_code = config_codes[i]
+            java_code = java_codes[i]
+            config_file = open("./CheckStyleDocSeeds" + sep + rule_name + str(i) + ".xml", "w")
+            java_file = open("./CheckStyleDocSeeds" + sep + rule_name + str(i) + ".java", "w")
+            config_file.write(config_code)
+            java_file.write(java_code)
+            config_file.close()
+            java_file.close()
                 
 def main():
     if not os.path.exists(seed_folder_path):
@@ -101,8 +107,7 @@ def main():
             seed_file = open(seed_file_path, "w")
             seed_file.write(content)
             seed_file.close()
-        print("Category: " + bug_category)
         parse_html_file(bug_category, content)
-        break
-
+    print("Code=" + str(code_counter))
+    print("Not Covered Rule:" + str(not_covered_rule))
 main()

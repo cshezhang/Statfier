@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CustomImportOrder4.java">
+<error line="13" column="1" severity="error" message="Import statement for &apos;org.apache.commons.io.FileUtils&apos; is in the wrong order. Should be in the &apos;SPECIAL_IMPORTS&apos; group, expecting not assigned imports on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+</checkstyle>

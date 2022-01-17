@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ClassTypeParameterName1.java">
+<error line="3" column="16" severity="error" message="Name &apos;T&apos; must match pattern &apos;^[A-Z]{2,}$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+<error line="4" column="16" severity="error" message="Name &apos;t&apos; must match pattern &apos;^[A-Z]{2,}$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+<error line="5" column="16" severity="error" message="Name &apos;abc&apos; must match pattern &apos;^[A-Z]{2,}$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+<error line="7" column="16" severity="error" message="Name &apos;RequestT&apos; must match pattern &apos;^[A-Z]{2,}$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+</file>
+</checkstyle>

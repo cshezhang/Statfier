@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ClassMemberImpliedModifier0.java">
+<error line="7" column="3" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.ClassMemberImpliedModifierCheck"/>
+<error line="14" column="3" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.ClassMemberImpliedModifierCheck"/>
+<error line="19" column="3" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.ClassMemberImpliedModifierCheck"/>
+<error line="23" column="5" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.ClassMemberImpliedModifierCheck"/>
+</file>
+</checkstyle>

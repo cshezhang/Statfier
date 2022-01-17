@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/RecordComponentName0.java">
+<error line="4" column="28" severity="error" message="Name &apos;Values&apos; must match pattern &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.RecordComponentNameCheck"/>
+<error line="6" column="25" severity="error" message="Name &apos;my_number&apos; must match pattern &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.RecordComponentNameCheck"/>
+</file>
+</checkstyle>

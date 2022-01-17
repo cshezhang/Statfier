@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/JavadocTagContinuationIndentation0.java">
+<error line="5" severity="error" message="Line continuation have incorrect indentation level, expected level should be 4." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+<error line="6" severity="error" message="Line continuation have incorrect indentation level, expected level should be 4." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck"/>
+</file>
+</checkstyle>

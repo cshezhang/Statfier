@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/SeparatorWrap2.java">
+<error line="7" column="8" severity="error" message="&apos;,&apos; should be on a new line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.SeparatorWrapCheck"/>
+<error line="10" column="24" severity="error" message="&apos;,&apos; should be on a new line." source="com.puppycrawl.tools.checkstyle.checks.whitespace.SeparatorWrapCheck"/>
+</file>
+</checkstyle>

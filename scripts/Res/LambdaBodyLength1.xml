@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/LambdaBodyLength1.java">
+<error line="4" column="19" severity="error" message="Lambda body length is 6 lines (max allowed is 5)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LambdaBodyLengthCheck"/>
+<error line="11" column="20" severity="error" message="Lambda body length is 6 lines (max allowed is 5)." source="com.puppycrawl.tools.checkstyle.checks.sizes.LambdaBodyLengthCheck"/>
+</file>
+</checkstyle>

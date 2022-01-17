@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AbbreviationAsWordInName3.java">
+<error line="6" column="7" severity="error" message="Abbreviation in name &apos;secondMYNum&apos; must contain no more than &apos;2&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="8" column="7" severity="error" message="Abbreviation in name &apos;thirdNUM&apos; must contain no more than &apos;2&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+<error line="13" column="10" severity="error" message="Abbreviation in name &apos;firstXML&apos; must contain no more than &apos;2&apos; consecutive capital letters." source="com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck"/>
+</file>
+</checkstyle>

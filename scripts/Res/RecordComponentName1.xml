@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/RecordComponentName1.java">
+<error line="5" column="25" severity="error" message="Name &apos;myNumber&apos; must match pattern &apos;^[a-z]+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.RecordComponentNameCheck"/>
+</file>
+</checkstyle>

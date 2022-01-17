@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AnnotationUseStyle0.java">
+<error line="4" column="1" severity="error" message="Annotation style must be &apos;COMPACT_NO_ARRAY&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+<error line="5" column="1" severity="error" message="Annotation style must be &apos;COMPACT_NO_ARRAY&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+<error line="11" column="1" severity="error" message="Annotation style must be &apos;COMPACT_NO_ARRAY&apos;." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+<error line="13" column="1" severity="error" message="Annotation cannot have closing parenthesis." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationUseStyleCheck"/>
+</file>
+</checkstyle>

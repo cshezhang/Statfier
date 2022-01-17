@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CustomImportOrder2.java">
+<error line="9" column="1" severity="error" message="&apos;javax.net.*&apos; should be separated from previous import group by one line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="11" column="1" severity="error" message="Extra separation in import group before &apos;org.apache.commons.io.FileUtils&apos;" source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+</checkstyle>

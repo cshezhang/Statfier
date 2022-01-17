@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/InterfaceMemberImpliedModifier0.java">
+<error line="7" column="3" severity="error" message="Implied modifier &apos;final&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="7" column="3" severity="error" message="Implied modifier &apos;public&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="7" column="3" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="13" column="3" severity="error" message="Implied modifier &apos;abstract&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="13" column="3" severity="error" message="Implied modifier &apos;public&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="15" column="3" severity="error" message="Implied modifier &apos;public&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="15" column="3" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="17" column="5" severity="error" message="Implied modifier &apos;abstract&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="17" column="5" severity="error" message="Implied modifier &apos;public&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+</file>
+</checkstyle>

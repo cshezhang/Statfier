@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CustomImportOrder1.java">
+<error line="9" column="1" severity="error" message="Import statement for &apos;java.io.*&apos; is in the wrong order. Should be in the &apos;STATIC&apos; group, expecting group &apos;THIRD_PARTY_PACKAGE&apos; on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+</checkstyle>

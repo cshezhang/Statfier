@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/NoEnumTrailingComma0.java">
+<error line="13" column="6" severity="error" message="Enum should not contain trailing comma." source="com.puppycrawl.tools.checkstyle.checks.coding.NoEnumTrailingCommaCheck"/>
+<error line="17" column="6" severity="error" message="Enum should not contain trailing comma." source="com.puppycrawl.tools.checkstyle.checks.coding.NoEnumTrailingCommaCheck"/>
+<error line="22" column="6" severity="error" message="Enum should not contain trailing comma." source="com.puppycrawl.tools.checkstyle.checks.coding.NoEnumTrailingCommaCheck"/>
+<error line="24" column="21" severity="error" message="Enum should not contain trailing comma." source="com.puppycrawl.tools.checkstyle.checks.coding.NoEnumTrailingCommaCheck"/>
+<error line="25" column="21" severity="error" message="Enum should not contain trailing comma." source="com.puppycrawl.tools.checkstyle.checks.coding.NoEnumTrailingCommaCheck"/>
+</file>
+</checkstyle>

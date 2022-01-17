@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalInstantiation2.java">
+<error line="11" column="17" severity="error" message="Instantiation of java.lang.Boolean should be avoided." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalInstantiationCheck"/>
+<error line="13" column="27" severity="error" message="Instantiation of java.lang.Boolean should be avoided." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalInstantiationCheck"/>
+<error line="16" column="17" severity="error" message="Instantiation of java.lang.Integer should be avoided." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalInstantiationCheck"/>
+</file>
+</checkstyle>

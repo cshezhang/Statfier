@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalType4.java">
+<error line="4" column="10" severity="error" message="Usage of type &apos;HashMap&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="12" column="13" severity="error" message="Usage of type &apos;HashMap&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="16" column="17" severity="error" message="Usage of type &apos;TreeMap&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+</file>
+</checkstyle>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AvoidStaticImport0.java">
+<error line="3" column="29" severity="error" message="Using a static member import should be avoided - java.lang.Math.pow." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck"/>
+<error line="4" column="31" severity="error" message="Using a static member import should be avoided - java.lang.System.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStaticImportCheck"/>
+</file>
+</checkstyle>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ExplicitInitialization0.java">
+<error line="4" column="15" severity="error" message="Variable &apos;intField1&apos; explicitly initialized to &apos;0&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+<error line="8" column="16" severity="error" message="Variable &apos;charField1&apos; explicitly initialized to &apos;\0&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+<error line="12" column="19" severity="error" message="Variable &apos;boolField1&apos; explicitly initialized to &apos;false&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+<error line="16" column="15" severity="error" message="Variable &apos;objField1&apos; explicitly initialized to &apos;null&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+<error line="20" column="15" severity="error" message="Variable &apos;arrField1&apos; explicitly initialized to &apos;null&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+</file>
+</checkstyle>

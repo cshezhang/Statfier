@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/MethodName4.java">
+<error line="6" column="16" severity="error" message="Name &apos;ThirdMethod&apos; must match pattern &apos;^[a-z](_?[a-zA-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
+<error line="8" column="8" severity="error" message="Name &apos;FourthMethod&apos; must match pattern &apos;^[a-z](_?[a-zA-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
+</file>
+</checkstyle>

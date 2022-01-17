@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/BooleanExpressionComplexity2.java">
+<error line="13" column="15" severity="error" message="Boolean expression complexity is 4 (max allowed is 3)." source="com.puppycrawl.tools.checkstyle.checks.metrics.BooleanExpressionComplexityCheck"/>
+</file>
+</checkstyle>

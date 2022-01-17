@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ExplicitInitialization1.java">
+<error line="16" column="15" severity="error" message="Variable &apos;objField1&apos; explicitly initialized to &apos;null&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+<error line="20" column="15" severity="error" message="Variable &apos;arrField1&apos; explicitly initialized to &apos;null&apos; (default value for its type)." source="com.puppycrawl.tools.checkstyle.checks.coding.ExplicitInitializationCheck"/>
+</file>
+</checkstyle>

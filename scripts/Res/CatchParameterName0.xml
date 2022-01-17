@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CatchParameterName0.java">
+<error line="13" column="40" severity="error" message="Name &apos;e123&apos; must match pattern &apos;^(e|t|ex|[a-z][a-z][a-zA-Z]+)$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.CatchParameterNameCheck"/>
+<error line="16" column="35" severity="error" message="Name &apos;ab&apos; must match pattern &apos;^(e|t|ex|[a-z][a-z][a-zA-Z]+)$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.CatchParameterNameCheck"/>
+<error line="21" column="35" severity="error" message="Name &apos;aBC&apos; must match pattern &apos;^(e|t|ex|[a-z][a-z][a-zA-Z]+)$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.CatchParameterNameCheck"/>
+</file>
+</checkstyle>

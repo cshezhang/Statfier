@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/NoClone0.java">
+<error line="5" column="2" severity="error" message="Avoid using clone method." source="com.puppycrawl.tools.checkstyle.checks.coding.NoCloneCheck"/>
+<error line="7" column="2" severity="error" message="Avoid using clone method." source="com.puppycrawl.tools.checkstyle.checks.coding.NoCloneCheck"/>
+</file>
+</checkstyle>

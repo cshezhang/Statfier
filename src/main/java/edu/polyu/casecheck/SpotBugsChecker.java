@@ -1,15 +1,21 @@
 package edu.polyu.casecheck;
 
 import edu.polyu.Util;
+import edu.polyu.thread.SpotBugs_InvokeThread;
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static edu.polyu.Invoker.compileJavaSourceFile;
 import static edu.polyu.Util.*;
@@ -57,48 +63,93 @@ public class SpotBugsChecker {
         return warningLabels;
     }
 
+    private static ExecutorService threadPool;
+
+    private static void initThreadPool() {
+        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            } else {
+                threadPool = Executors.newSingleThreadExecutor();
+            }
+        }
+    }
+
+    private static void waitThreadPoolEnding() {
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-//        List<String> seedList = Util.getFilenamesFromFolder("/home/vanguard/projects/spotbugs", true);
-        List<String> seedList = Util.getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
-//        compileFirstIterJavaFiles(seedList);
+        List<String> allSeedList = Util.getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
+        HashMap<String, List<String>> rule2seedlist = new HashMap<>();
+//        compileFirstIterJavaFiles(allSeedList);
         HashSet<String> ruleCounter = new HashSet<>();
         HashMap<String, Integer> rule2cnt = new HashMap<>();
         int seedCounter = 0;
-        for(int i = 0; i < seedList.size(); i++) {
-            String seedPath = seedList.get(i);
+        for(int i = 0; i < allSeedList.size(); i++) {
+            String seedPath = allSeedList.get(i);
             if(!seedPath.endsWith(".java")) {
                 continue;
             }
             List<String> warningLines = getWarningLabels(seedPath);
             if(warningLines.size() > 0) {
                 seedCounter++;
-//                System.out.println(seedPath);
                 for (String warningLine : warningLines) {
-//                    System.out.println(warningLine);
                     int startIndex = warningLine.indexOf("\"") + 1;
                     int endIndex = warningLine.lastIndexOf("\"");
                     String ruleType = null;
                     try {
+                        // Get bug type by @tag
                         ruleType = warningLine.substring(startIndex, endIndex);
                     } catch (Exception e) {
-                        System.out.println(warningLine);
+                        System.err.println(warningLine);
                         e.printStackTrace();
                     }
-//                    System.out.println(ruleType);
                     ruleCounter.add(ruleType);
-                    if(rule2cnt.containsKey(ruleType)) {
-                        rule2cnt.put(ruleType, rule2cnt.get(ruleType) + 1);
-                    } else {
-                        rule2cnt.put(ruleType, 1);
+                    if(!rule2cnt.containsKey(ruleType)) {
+                        rule2cnt.put(ruleType, 0);
+                        rule2seedlist.put(ruleType, new ArrayList<>());
                     }
+                    // rule2seedlist saves the absolute paths.
+                    rule2cnt.put(ruleType, rule2cnt.get(ruleType) + 1);
+                    rule2seedlist.get(ruleType).add(seedPath);
                 }
             }
         }
-        System.out.println(ruleCounter.size());
+        System.out.println("Covered Rules: " + ruleCounter.size());
+        System.out.println("Seed Count: " + seedCounter);
         for(String key : rule2cnt.keySet()) {
             System.out.println(key + "  " + rule2cnt.get(key));
+//            System.out.println(rule2seedlist.get(key));
         }
-        System.out.println(seedCounter);
+        // Following is used to move seed to new folder with rule type name
+//        for(String rule : ruleCounter) {
+//            File ruleDir = new File(SPOTBUGS_SEED_PATH + sep + rule);
+//            ruleDir.mkdir();
+//            List<String> seedList = rule2seedlist.get(rule);
+//            for(String seedPath : seedList) {
+//                File srcFile = new File(seedPath);
+//                String filename = srcFile.getName();
+//                File dstFile = new File(ruleDir.getAbsolutePath() + sep + filename);
+//                try {
+//                    FileUtils.copyFile(srcFile, dstFile);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+        initThreadPool();
+        for(String ruleType : ruleCounter) {
+            threadPool.submit(new SpotBugs_InvokeThread(SPOTBUGS_SEED_PATH, ruleType, getFilenamesFromFolder(SPOTBUGS_SEED_PATH + sep + ruleType, false)));
+        }
+        waitThreadPoolEnding();
     }
 
 }

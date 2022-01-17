@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AnnotationOnSameLine0.java">
+<error line="5" column="3" severity="error" message="Annotation &apos;SuppressWarnings&apos; should be on the same line with its target." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationOnSameLineCheck"/>
+<error line="19" column="3" severity="error" message="Annotation &apos;Override&apos; should be on the same line with its target." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationOnSameLineCheck"/>
+<error line="26" column="3" severity="error" message="Annotation &apos;SuppressWarnings&apos; should be on the same line with its target." source="com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationOnSameLineCheck"/>
+</file>
+</checkstyle>

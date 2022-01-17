@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AtclauseOrder0.java">
+<error line="28" severity="error" message="Block tags have to appear in the order &apos;[@author, @version, @param, @return, @throws, @exception, @see, @since, @serial, @serialField, @serialData, @deprecated]&apos;." source="com.puppycrawl.tools.checkstyle.checks.javadoc.AtclauseOrderCheck"/>
+<error line="30" severity="error" message="Block tags have to appear in the order &apos;[@author, @version, @param, @return, @throws, @exception, @see, @since, @serial, @serialField, @serialData, @deprecated]&apos;." source="com.puppycrawl.tools.checkstyle.checks.javadoc.AtclauseOrderCheck"/>
+<error line="31" severity="error" message="Block tags have to appear in the order &apos;[@author, @version, @param, @return, @throws, @exception, @see, @since, @serial, @serialField, @serialData, @deprecated]&apos;." source="com.puppycrawl.tools.checkstyle.checks.javadoc.AtclauseOrderCheck"/>
+</file>
+</checkstyle>

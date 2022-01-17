@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CyclomaticComplexity2.java">
+<error line="6" column="3" severity="error" message="Cyclomatic Complexity is 11 (max allowed is 10)." source="com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck"/>
+</file>
+</checkstyle>

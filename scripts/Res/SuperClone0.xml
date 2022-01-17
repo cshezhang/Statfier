@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/SuperClone0.java">
+<error line="13" column="11" severity="error" message="Method &apos;clone&apos; should call &apos;super.clone&apos;." source="com.puppycrawl.tools.checkstyle.checks.coding.SuperCloneCheck"/>
+</file>
+</checkstyle>

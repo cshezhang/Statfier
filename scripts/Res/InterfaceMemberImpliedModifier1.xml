@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/InterfaceMemberImpliedModifier1.java">
+<error line="5" column="3" severity="error" message="Implied modifier &apos;final&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="5" column="3" severity="error" message="Implied modifier &apos;public&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+<error line="5" column="3" severity="error" message="Implied modifier &apos;static&apos; should be explicit." source="com.puppycrawl.tools.checkstyle.checks.modifier.InterfaceMemberImpliedModifierCheck"/>
+</file>
+</checkstyle>

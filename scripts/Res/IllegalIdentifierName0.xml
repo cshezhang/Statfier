@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalIdentifierName0.java">
+<error line="5" column="13" severity="error" message="Name &apos;var&apos; must match pattern &apos;(?i)^(?!(record|yield|var|permits|sealed|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+<error line="6" column="13" severity="error" message="Name &apos;record&apos; must match pattern &apos;(?i)^(?!(record|yield|var|permits|sealed|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+<error line="7" column="16" severity="error" message="Name &apos;yield&apos; must match pattern &apos;(?i)^(?!(record|yield|var|permits|sealed|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+<error line="9" column="16" severity="error" message="Name &apos;Record&apos; must match pattern &apos;(?i)^(?!(record|yield|var|permits|sealed|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+<error line="10" column="17" severity="error" message="Name &apos;record&apos; must match pattern &apos;(?i)^(?!(record|yield|var|permits|sealed|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+<error line="16" column="16" severity="error" message="Name &apos;_&apos; must match pattern &apos;(?i)^(?!(record|yield|var|permits|sealed|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+</file>
+</checkstyle>

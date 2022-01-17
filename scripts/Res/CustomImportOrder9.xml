@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/CustomImportOrder9.java">
+<error line="8" column="1" severity="error" message="Import statement for &apos;java.time.*&apos; is in the wrong order. Should be in the &apos;STANDARD_JAVA_PACKAGE&apos; group, expecting not assigned imports on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="11" column="1" severity="error" message="Import statement for &apos;javax.net.*&apos; is in the wrong order. Should be in the &apos;SPECIAL_IMPORTS&apos; group, expecting not assigned imports on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="13" column="1" severity="error" message="Import statement for &apos;org.apache.commons.io.FileUtils&apos; is in the wrong order. Should be in the &apos;THIRD_PARTY_PACKAGE&apos; group, expecting not assigned imports on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="15" column="1" severity="error" message="Import statement for &apos;com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck&apos; is in the wrong order. Should be in the &apos;THIRD_PARTY_PACKAGE&apos; group, expecting not assigned imports on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="16" column="1" severity="error" message="Import statement for &apos;com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck&apos; is in the wrong order. Should be in the &apos;THIRD_PARTY_PACKAGE&apos; group, expecting not assigned imports on this line." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+</file>
+</checkstyle>

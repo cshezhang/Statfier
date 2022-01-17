@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ConstantName1.java">
+<error line="6" column="20" severity="error" message="Name &apos;logMYSELF&apos; must match pattern &apos;^log(ger)?$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ConstantNameCheck"/>
+<error line="8" column="20" severity="error" message="Name &apos;loggerMYSELF&apos; must match pattern &apos;^log(ger)?$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ConstantNameCheck"/>
+<error line="11" column="20" severity="error" message="Name &apos;myselfConstant&apos; must match pattern &apos;^log(ger)?$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ConstantNameCheck"/>
+</file>
+</checkstyle>

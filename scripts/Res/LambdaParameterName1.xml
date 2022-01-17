@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/LambdaParameterName1.java">
+<error line="5" column="40" severity="error" message="Name &apos;_s&apos; must match pattern &apos;^[a-z]([a-zA-Z]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LambdaParameterNameCheck"/>
+<error line="11" column="23" severity="error" message="Name &apos;Word&apos; must match pattern &apos;^[a-z]([a-zA-Z]+)*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.LambdaParameterNameCheck"/>
+</file>
+</checkstyle>

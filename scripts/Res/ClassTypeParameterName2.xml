@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ClassTypeParameterName2.java">
+<error line="4" column="16" severity="error" message="Name &apos;t&apos; must match pattern &apos;(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+<error line="5" column="16" severity="error" message="Name &apos;abc&apos; must match pattern &apos;(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+<error line="6" column="16" severity="error" message="Name &apos;LISTENER&apos; must match pattern &apos;(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.ClassTypeParameterNameCheck"/>
+</file>
+</checkstyle>

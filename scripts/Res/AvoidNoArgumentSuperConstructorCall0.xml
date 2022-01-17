@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/AvoidNoArgumentSuperConstructorCall0.java">
+<error line="5" column="9" severity="error" message="Unnecessary call to superclass constructor with no arguments." source="com.puppycrawl.tools.checkstyle.checks.coding.AvoidNoArgumentSuperConstructorCallCheck"/>
+</file>
+</checkstyle>

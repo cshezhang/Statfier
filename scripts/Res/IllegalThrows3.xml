@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalThrows3.java">
+<error line="4" column="30" severity="error" message="Throwing &apos;RuntimeException&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalThrowsCheck"/>
+<error line="6" column="30" severity="error" message="Throwing &apos;Error&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalThrowsCheck"/>
+<error line="7" column="30" severity="error" message="Throwing &apos;Throwable&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalThrowsCheck"/>
+<error line="10" column="33" severity="error" message="Throwing &apos;Error&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalThrowsCheck"/>
+</file>
+</checkstyle>

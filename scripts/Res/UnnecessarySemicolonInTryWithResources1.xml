@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/UnnecessarySemicolonInTryWithResources1.java">
+<error line="5" column="42" severity="error" message="Unnecessary semicolon." source="com.puppycrawl.tools.checkstyle.checks.coding.UnnecessarySemicolonInTryWithResourcesCheck"/>
+<error line="7" column="42" severity="error" message="Unnecessary semicolon." source="com.puppycrawl.tools.checkstyle.checks.coding.UnnecessarySemicolonInTryWithResourcesCheck"/>
+</file>
+</checkstyle>

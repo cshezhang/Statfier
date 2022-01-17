@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/ParameterName4.java">
+<error line="5" column="25" severity="error" message="Parameter name &apos;V2&apos; must match pattern &apos;^[a-z]([a-z0-9][a-zA-Z0-9]*)?$&apos;" source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+<error line="8" column="22" severity="error" message="Parameter name &apos;b&apos; must match pattern &apos;^[a-z][a-z0-9][a-zA-Z0-9]*$&apos;" source="com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck"/>
+</file>
+</checkstyle>

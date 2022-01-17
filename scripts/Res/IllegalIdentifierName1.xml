@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalIdentifierName1.java">
+<error line="6" column="9" severity="error" message="Name &apos;open&apos; must match pattern &apos;(?i)^(?!(record|yield|var                     |permits|sealed|open|transitive|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+<error line="7" column="12" severity="error" message="Name &apos;transitive&apos; must match pattern &apos;(?i)^(?!(record|yield|var                     |permits|sealed|open|transitive|_)$).+$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.IllegalIdentifierNameCheck"/>
+</file>
+</checkstyle>

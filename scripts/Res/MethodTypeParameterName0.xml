@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/MethodTypeParameterName0.java">
+<error line="5" column="11" severity="error" message="Name &apos;a&apos; must match pattern &apos;^[A-Z]$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodTypeParameterNameCheck"/>
+<error line="7" column="11" severity="error" message="Name &apos;k&apos; must match pattern &apos;^[A-Z]$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodTypeParameterNameCheck"/>
+</file>
+</checkstyle>

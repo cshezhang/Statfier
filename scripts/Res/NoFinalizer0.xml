@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/NoFinalizer0.java">
+<error line="5" column="5" severity="error" message="Avoid using finalizer method." source="com.puppycrawl.tools.checkstyle.checks.coding.NoFinalizerCheck"/>
+</file>
+</checkstyle>

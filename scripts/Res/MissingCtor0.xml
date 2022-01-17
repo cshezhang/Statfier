@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/MissingCtor0.java">
+<error line="15" column="1" severity="error" message="Class should define a constructor." source="com.puppycrawl.tools.checkstyle.checks.coding.MissingCtorCheck"/>
+</file>
+</checkstyle>

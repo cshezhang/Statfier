@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.2.1">
+<file name="/home/vanguard/projects/SAMutator/scripts/CheckStyleDocSeeds/IllegalType5.java">
+<error line="5" column="14" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="6" column="29" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="6" column="38" severity="error" message="Usage of type &apos;Foo&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="8" column="28" severity="error" message="Usage of type &apos;Foo&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="8" column="39" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="9" column="15" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="10" column="20" severity="error" message="Usage of type &apos;Foo&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="10" column="40" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="13" column="21" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="15" column="52" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="17" column="23" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="17" column="54" severity="error" message="Usage of type &apos;Boolean&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+<error line="19" column="24" severity="error" message="Usage of type &apos;Foo&apos; is not allowed." source="com.puppycrawl.tools.checkstyle.checks.coding.IllegalTypeCheck"/>
+</file>
+</checkstyle>
