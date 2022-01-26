@@ -1,0 +1,103 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:130: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.conditional2_bad(...)` writes to field `this.ff` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  128.         ff = 88;
+  129.       } else {
+  130. >       ff = 99; // this might or might now run on the main thread; warn
+  131.       }
+  132.     }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:219: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.conditionalMainThreadWriteBad()` indirectly writes to field `this.mOnlyWrittenOnMain` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  217.   
+  218.     public void conditionalMainThreadWriteBad() {
+  219. >     conditionalMainThreadWrite2(false);
+  220.     }
+  221.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:152: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.conditional_isMainThread_ElseBranch_Bad()` writes to field `this.ff` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  150.         }
+  151.       } else {
+  152. >       ff = 99;
+  153.       }
+  154.     }
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:168: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.conditional_isMainThread_Negation_Bad()` writes to field `this.ff` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  166.     void conditional_isMainThread_Negation_Bad() {
+  167.       if (!OurThreadUtils.isMainThread()) {
+  168. >       ff = 88;
+  169.       }
+  170.     }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:162: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.conditional_isUiThread_ElseBranch_Bad()` writes to field `this.ff` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  160.         }
+  161.       } else {
+  162. >       ff = 99;
+  163.       }
+  164.     }
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:191: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.confusedAssertBad(...)` writes to field `this.mFld` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  189.       }
+  190.       // not sure if we're on UI or background, should report
+  191. >     mFld = null;
+  192.     }
+  193.   
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:98: warning: Thread Safety Violation
+  Read/Write race. Non-private method `RaceWithMainThread.readProtectedUnthreadedBad()` reads with synchronization from `this.f`. Potentially races with unsynchronized write in method `RaceWithMainThread.main_thread_indirect_OK()`.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+   96.       Integer x;
+   97.       synchronized (this) {
+   98. >       x = f;
+   99.       }
+  100.     }
+
+#7
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:64: warning: Thread Safety Violation
+  Read/Write race. Non-private method `RaceWithMainThread.read_unprotected_unthreaded1_Bad()` reads without synchronization from `this.f1`. Potentially races with write in method `RaceWithMainThread.main_thread1_OK()`.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  62.     void read_unprotected_unthreaded1_Bad() {
+  63.       Integer x;
+  64. >     x = f1;
+  65.     }
+  66.   
+
+#8
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:59: warning: Thread Safety Violation
+  Read/Write race. Non-private method `RaceWithMainThread.read_unprotected_unthreaded_Bad()` reads without synchronization from `this.f`. Potentially races with write in method `RaceWithMainThread.main_thread_indirect_OK()`.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  57.     void read_unprotected_unthreaded_Bad() {
+  58.       Integer x;
+  59. >     x = f;
+  60.     }
+  61.   
+
+#9
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/RaceWithMainThread.java:228: warning: Thread Safety Violation
+  Unprotected write. Non-private method `RaceWithMainThread.writeAfterConditionalMainThreadInCalleeBad()` writes to field `this.mSharedField` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  226.       // one branch of the callee runs on the main thread, but that doesn't mean we can assume that
+  227.       // the caller does too
+  228. >     mSharedField = 7;
+  229.     }
+  230.   }
+
+Found 10 issues
+                        Issue Type(ISSUED_TYPE_ID): #
+  Thread Safety Violation(THREAD_SAFETY_VIOLATION): 10

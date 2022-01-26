@@ -1,0 +1,21 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/InstanceOfExample.java:48: error: Null Dereference
+  object `new_p` last assigned on line 47 could be null and is dereferenced at line 48.
+  46.       Person p = new Professor();
+  47.       Person new_p = updatePerson(p);
+  48. >     new_p.toString();
+  49.     }
+  50.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/InstanceOfExample.java:81: error: Null Dereference
+  object `o` last assigned on line 80 could be null and is dereferenced at line 81.
+  79.       if (!(p instanceof Professor)) {
+  80.         Object o = null;
+  81. >       o.toString();
+  82.       }
+  83.     }
+
+Found 2 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 2

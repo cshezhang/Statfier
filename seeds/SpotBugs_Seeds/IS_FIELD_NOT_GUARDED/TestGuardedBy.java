@@ -1,4 +1,3 @@
-package jcipAnnotations;
 
 import edu.umd.cs.findbugs.annotations.ExpectWarning;
 import net.jcip.annotations.GuardedBy;

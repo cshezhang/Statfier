@@ -1,0 +1,30 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/ParameterNotNullable.java:40: error: Null Dereference
+  object `s` last assigned on line 39 could be null and is dereferenced by call to `test(...)` at line 40.
+  38.     void callNull() {
+  39.       String s = null;
+  40. >     test(s);
+  41.     }
+  42.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/ParameterNotNullable.java:46: error: Null Dereference
+  object `s` last assigned on line 45 could be null and is dereferenced by call to `test(...)` at line 46.
+  44.     void callNullSuppressed() {
+  45.       String s = null;
+  46. >     test(s);
+  47.     }
+  48.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/ParameterNotNullable.java:71: error: Null Dereference
+  object `null` is dereferenced by call to `getProperty(...)` at line 71.
+  69.   
+  70.     public @Nullable String testSystemGetPropertyArgument() {
+  71. >     String s = System.getProperty(null);
+  72.       return s;
+  73.     }
+
+Found 3 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 3

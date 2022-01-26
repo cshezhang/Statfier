@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

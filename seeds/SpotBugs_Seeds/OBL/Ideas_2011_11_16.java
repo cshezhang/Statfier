@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/doccase/LOCKLESS_VIOLATION.java:16: error: Lockless Violation
+  Method `void LOCKLESS_VIOLATION.no_lock()` is annotated `Lockless` but locks `this` in `class codetoanalyze.java.doccase.LOCKLESS_VIOLATION`.
+  14.   
+  15.       public void no_lock() { // this method should not acquire any locks
+  16. >         do_lock();
+  17.       }
+  18.   }
+
+Found 1 issue
+              Issue Type(ISSUED_TYPE_ID): #
+  Lockless Violation(LOCKLESS_VIOLATION): 1

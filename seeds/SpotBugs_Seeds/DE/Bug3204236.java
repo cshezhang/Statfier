@@ -1,4 +1,3 @@
-package sfBugs;
 
 import javax.imageio.IIOException;
 

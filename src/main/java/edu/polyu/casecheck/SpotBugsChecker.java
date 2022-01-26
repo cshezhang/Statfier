@@ -1,6 +1,7 @@
 package edu.polyu.casecheck;
 
 import edu.polyu.Util;
+import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.apache.commons.io.FileUtils;
 
@@ -145,11 +146,23 @@ public class SpotBugsChecker {
 //                }
 //            }
 //        }
-        initThreadPool();
-        for(String ruleType : ruleCounter) {
-            threadPool.submit(new SpotBugs_InvokeThread(SPOTBUGS_SEED_PATH, ruleType, getFilenamesFromFolder(SPOTBUGS_SEED_PATH + sep + ruleType, false)));
+//        initThreadPool();
+//        for(String ruleType : ruleCounter) {
+//            threadPool.submit(new SpotBugs_InvokeThread(SPOTBUGS_SEED_PATH + sep + ruleType, ruleType, getFilenamesFromFolder(SPOTBUGS_SEED_PATH + sep + ruleType, false)));
+//        }
+//        waitThreadPoolEnding();
+        List<String> reportPaths = getFilenamesFromFolder(userdir + sep + "results", true);
+        for(String reportPath : reportPaths) {
+            try {
+                String[] tokens = reportPath.split(sep);
+                String reportName = tokens[tokens.length - 1].substring(0, tokens[tokens.length - 1].length() - 11);
+                String seedPath = "/home/vanguard/projects/SAMutator/seeds/" + reportName + ".java";
+                List<SpotBugs_Report> reports = readSpotBugsResultFile(seedPath, reportPath);
+                System.out.println(reports.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        waitThreadPoolEnding();
     }
 
 }

@@ -6,10 +6,10 @@
 <module name="Checker">
   <property name="severity" value="error"/>
   <property name="fileExtensions" value="java, properties, xml"/>
-  <module name="TreeWalker">
-    <module name="ClassTypeParameterName">
-      <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
-    </module>
-  </module>
+  <module name="CustomImportOrder">
+  <property name="customImportOrderRules"
+    value="SAME_PACKAGE(3)###THIRD_PARTY_PACKAGE###STATIC###SPECIAL_IMPORTS"/>
+  <property name="specialImportsRegExp" value="^android\."/>
+</module>
 </module>
         

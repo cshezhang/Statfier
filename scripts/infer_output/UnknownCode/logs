@@ -1,0 +1,224 @@
+[67329][      debug] Loading models took 64.02ms
+[67330][      debug] Sqlite write daemon: starting up
+[67330][      debug] Sqlite write daemon: set up complete, waiting for connections
+[67329][environment] CWD = /home/vanguard/projects/SAMutator/scripts
+[67329][environment] No .inferconfig file found
+[67329][environment] Project root = /home/vanguard/projects/SAMutator/scripts
+[67329][environment] INFER_ARGS =   @/tmp/args.tmp.921f30
+[67329][environment] command line arguments:   /home/vanguard/bin/infer/bin/infer run -o
+[67329][environment]                           /home/vanguard/projects/SAMutator/scripts/infer_output/UnknownCode
+[67329][environment]                           -- javac -cp
+[67329][environment]                           .:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar
+[67329][environment]                           /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java
+[67329][environment] Available memory at startup: 25092 MB
+[67329][environment] Active checkers: self-in-block (C/C++/ObjC), starvation (C/C++/ObjC, Java), uninit (C/C++/ObjC), siof (C/C++/ObjC), dotnet-resource-leak (C#/.Net), racerd (C/C++/ObjC, Java), liveness (C/C++/ObjC), inefficient-keyset-iterator (Java), fragment-retains-view (Java), biabduction (C/C++/ObjC, Java, C#/.Net)
+[67329][environment] Scheduler: file
+[67329][environment] Cores used: 10
+[67329][environment] Infer version v1.1.0
+[67329][environment] Copyright 2009 - present Facebook. All Rights Reserved.
+[67329][environment] 
+[67329][   progress] Capturing in javac mode...
+[67329][      debug] Current working directory: '/home/vanguard/projects/SAMutator/scripts'
+[67329][      debug] Trying to execute: javac '-J-Duser.language=en' '@/home/vanguard/projects/SAMutator/scripts/infer_output/UnknownCode/tmp/javac_args.tmp.923efb' 2>'/home/vanguard/projects/SAMutator/scripts/infer_output/UnknownCode/tmp/javac.tmp.399b8d.out'
+[67329][      debug] *** Failed: exited with code 1!
+[67329][      debug] 
+[67329][      debug] Trying to execute: javac '@/home/vanguard/projects/SAMutator/scripts/infer_output/UnknownCode/tmp/javac_args.tmp.923efb' 2>'/home/vanguard/projects/SAMutator/scripts/infer_output/UnknownCode/tmp/javac.tmp.399b8d.out'
+[67329][   user err] 
+*** Failed to execute compilation command: exited with code 1
+*** Command: javac '@/home/vanguard/projects/SAMutator/scripts/infer_output/UnknownCode/tmp/javac_args.tmp.923efb'
+*** Output:
+[parsing started SimpleFileObject[/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java]]
+[parsing completed 11ms]
+[loading /modules/jdk.unsupported/module-info.class]
+[loading /modules/jdk.jlink/module-info.class]
+[loading /modules/jdk.localedata/module-info.class]
+[loading /modules/jdk.jdi/module-info.class]
+[loading /modules/jdk.crypto.cryptoki/module-info.class]
+[loading /modules/jdk.hotspot.agent/module-info.class]
+[loading /modules/jdk.management.jfr/module-info.class]
+[loading /modules/jdk.management/module-info.class]
+[loading /modules/jdk.security.jgss/module-info.class]
+[loading /modules/jdk.naming.dns/module-info.class]
+[loading /modules/jdk.net/module-info.class]
+[loading /modules/jdk.security.auth/module-info.class]
+[loading /modules/jdk.internal.ed/module-info.class]
+[loading /modules/java.sql/module-info.class]
+[loading /modules/java.datatransfer/module-info.class]
+[loading /modules/java.se/module-info.class]
+[loading /modules/java.instrument/module-info.class]
+[loading /modules/jdk.editpad/module-info.class]
+[loading /modules/jdk.dynalink/module-info.class]
+[loading /modules/jdk.naming.rmi/module-info.class]
+[loading /modules/java.scripting/module-info.class]
+[loading /modules/jdk.sctp/module-info.class]
+[loading /modules/jdk.rmic/module-info.class]
+[loading /modules/java.sql.rowset/module-info.class]
+[loading /modules/jdk.jdwp.agent/module-info.class]
+[loading /modules/jdk.internal.jvmstat/module-info.class]
+[loading /modules/jdk.attach/module-info.class]
+[loading /modules/jdk.xml.dom/module-info.class]
+[loading /modules/java.prefs/module-info.class]
+[loading /modules/jdk.jsobject/module-info.class]
+[loading /modules/jdk.naming.ldap/module-info.class]
+[loading /modules/java.desktop/module-info.class]
+[loading /modules/jdk.accessibility/module-info.class]
+[loading /modules/jdk.internal.vm.ci/module-info.class]
+[loading /modules/java.management.rmi/module-info.class]
+[loading /modules/java.smartcardio/module-info.class]
+[loading /modules/java.naming/module-info.class]
+[loading /modules/jdk.pack/module-info.class]
+[loading /modules/jdk.charsets/module-info.class]
+[loading /modules/java.net.http/module-info.class]
+[loading /modules/java.security.jgss/module-info.class]
+[loading /modules/jdk.internal.vm.compiler.management/module-info.class]
+[loading /modules/jdk.jstatd/module-info.class]
+[loading /modules/java.base/module-info.class]
+[loading /modules/java.transaction.xa/module-info.class]
+[loading /modules/jdk.internal.le/module-info.class]
+[loading /modules/java.xml.crypto/module-info.class]
+[loading /modules/jdk.jfr/module-info.class]
+[loading /modules/java.rmi/module-info.class]
+[loading /modules/jdk.jdeps/module-info.class]
+[loading /modules/jdk.compiler/module-info.class]
+[loading /modules/jdk.jartool/module-info.class]
+[loading /modules/java.xml/module-info.class]
+[loading /modules/jdk.management.agent/module-info.class]
+[loading /modules/java.compiler/module-info.class]
+[loading /modules/jdk.crypto.ec/module-info.class]
+[loading /modules/jdk.httpserver/module-info.class]
+[loading /modules/jdk.jcmd/module-info.class]
+[loading /modules/jdk.jshell/module-info.class]
+[loading /modules/jdk.internal.vm.compiler/module-info.class]
+[loading /modules/jdk.internal.opt/module-info.class]
+[loading /modules/jdk.scripting.nashorn.shell/module-info.class]
+[loading /modules/jdk.unsupported.desktop/module-info.class]
+[loading /modules/java.security.sasl/module-info.class]
+[loading /modules/java.logging/module-info.class]
+[loading /modules/jdk.aot/module-info.class]
+[loading /modules/jdk.scripting.nashorn/module-info.class]
+[loading /modules/jdk.jconsole/module-info.class]
+[loading /modules/jdk.zipfs/module-info.class]
+[loading /modules/java.management/module-info.class]
+[loading /modules/jdk.javadoc/module-info.class]
+[search path for source files: .,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar]
+[search path for class files: /home/vanguard/bin/jdk/jdk-11.0.12/lib/modules,.,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar]
+[loading /home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar(/android/content/Intent.class)]
+[loading /home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar(/android/os/Parcel.class)]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:12: error: cannot find symbol
+import codetoanalyze.java.InferTaint;
+                         ^
+  symbol:   class InferTaint
+  location: package codetoanalyze.java
+[loading /modules/java.base/java/lang/Object.class]
+[loading /modules/java.base/java/lang/String.class]
+[loading /modules/java.base/java/lang/Deprecated.class]
+[loading /modules/java.base/java/lang/annotation/Retention.class]
+[loading /modules/java.base/java/lang/annotation/RetentionPolicy.class]
+[loading /modules/java.base/java/lang/annotation/Target.class]
+[loading /modules/java.base/java/lang/annotation/ElementType.class]
+[checking codetoanalyze.java.quandary.UnknownCode]
+[loading /modules/java.base/java/io/Serializable.class]
+[loading /modules/java.base/java/lang/AutoCloseable.class]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:26: error: cannot find symbol
+    String source = (String) InferTaint.inferSecretSource();
+                             ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+[loading /modules/java.base/java/lang/StringBuilder.class]
+[loading /modules/java.base/java/lang/StringBuffer.class]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:29: error: cannot find symbol
+    InferTaint.inferSensitiveSink(unknownConstructor);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:34: error: cannot find symbol
+    InferTaint.inferSensitiveSink(unknownConstructor);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:42: error: cannot find symbol
+    InferTaint.inferSensitiveSink(launderedSource3);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:46: error: cannot find symbol
+    Object source = InferTaint.inferSecretSource();
+                    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+[loading /home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar(/android/os/Parcelable.class)]
+[loading /modules/java.base/java/lang/Cloneable.class]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:49: error: cannot find symbol
+    InferTaint.inferSensitiveSink(i);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:53: error: cannot find symbol
+    String source = (String) InferTaint.inferSecretSource();
+                             ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+[loading /modules/java.base/java/lang/Comparable.class]
+[loading /modules/java.base/java/lang/CharSequence.class]
+[loading /modules/java.base/java/lang/AbstractStringBuilder.class]
+[loading /modules/java.base/java/lang/Appendable.class]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:58: error: cannot find symbol
+    InferTaint.inferSensitiveSink(buffer); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:59: error: cannot find symbol
+    InferTaint.inferSensitiveSink(alias); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:65: error: cannot find symbol
+    InferTaint.inferSensitiveSink(buffer);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:69: error: cannot find symbol
+    propagateFootprint((String) InferTaint.inferSecretSource());
+                                ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:73: error: cannot find symbol
+    Object source = InferTaint.inferSecretSource();
+                    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:75: error: cannot find symbol
+    InferTaint.inferSensitiveSink(launderedSource);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:79: error: cannot find symbol
+    Object source = InferTaint.inferSecretSource();
+                    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:81: error: cannot find symbol
+    InferTaint.inferSensitiveSink(launderedSource);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:85: error: cannot find symbol
+    Object source = InferTaint.inferSecretSource();
+                    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/UnknownCode.java:87: error: cannot find symbol
+    InferTaint.inferSensitiveSink(launderedSource);
+    ^
+  symbol:   variable InferTaint
+  location: class UnknownCode
+[total 188ms]
+18 errors
+
+*** Infer needs a working compilation command to run.
+
+[67329][   user err] Raised at Stdlib__buffer.add_channel in file "buffer.ml", line 273, characters 18-35
+Called from Stdio__In_channel.input_all.loop in file "src/in_channel.ml", line 44, characters 4-47
+Called from Stdio__In_channel.input_all in file "src/in_channel.ml", line 47, characters 6-13
+
+[67330][      debug] Sqlite write daemon: terminating

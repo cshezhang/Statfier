@@ -1,4 +1,3 @@
-package equals;
 
 import java.io.Serializable;
 

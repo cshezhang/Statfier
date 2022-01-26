@@ -1,4 +1,3 @@
-package concurrency;
 
 import edu.umd.cs.findbugs.annotations.ExpectWarning;
 

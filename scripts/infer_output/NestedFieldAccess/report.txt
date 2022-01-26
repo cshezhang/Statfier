@@ -1,0 +1,57 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/NestedFieldAccess.java:45: error: Null Dereference
+  object `NestedFieldAccess$TestNullableChains.s` last accessed on line 45 could be null and is dereferenced at line 45.
+  43.   
+  44.       void field_AccessWithoutNullCheckIsBad() {
+  45. >       int n = s.length();
+  46.       }
+  47.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/NestedFieldAccess.java:55: error: Null Dereference
+  object `NestedFieldAccess$TestNullableChains.myc.s` last accessed on line 55 could be null and is dereferenced at line 55.
+  53.   
+  54.       void nestedField_AccessWithoutNullCheckIsBad() {
+  55. >       int n = myc.s.length();
+  56.       }
+  57.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/NestedFieldAccess.java:65: error: Null Dereference
+  object `c.s` last accessed on line 65 could be null and is dereferenced at line 65.
+  63.   
+  64.       void param_AccessWithoutNullCheckIsBad(C c) {
+  65. >       int n = c.s.length();
+  66.       }
+  67.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/NestedFieldAccess.java:88: error: Null Dereference
+  object `cc.c.s` last accessed on line 88 could be null and is dereferenced at line 88.
+  86.       void deep_AccessWithoutNullCheckIsBad(CC cc) {
+  87.         if (cc.c != null /* && cc.c.s != null */) {
+  88. >         int n = cc.c.s.length();
+  89.         }
+  90.       }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/NestedFieldAccess.java:100: error: Null Dereference
+  object `ccc.cc.c.s` last accessed on line 100 could be null and is dereferenced at line 100.
+   98.       void veryDeep_AccessWithoutNullCheckIsBad(CCC ccc) {
+   99.         if (ccc.cc != null && ccc.cc.c != null /* && ccc.cc.c.s != null */) {
+  100. >         int n = ccc.cc.c.s.length();
+  101.         }
+  102.       }
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/NestedFieldAccess.java:114: error: Null Dereference
+  object `ccc.cc.c.s` last accessed on line 114 could be null and is dereferenced at line 114.
+  112.         if (ccc == null || ccc.cc == null || ccc.cc.c == null /*|| ccc.cc.c.s == null*/) {
+  113.         } else {
+  114. >         int n = ccc.cc.c.s.length();
+  115.         }
+  116.       }
+
+Found 6 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 6

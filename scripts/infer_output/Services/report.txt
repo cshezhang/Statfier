@@ -1,0 +1,57 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/Services.java:42: error: Resource Leak
+  resource of type `java.lang.Process` acquired by call to `exec(...)` at line 42 is not released after line 42.
+  40.     @Override
+  41.     public void serviceMethodBad(String s) throws IOException {
+  42. >     Runtime.getRuntime().exec(s); // RCE if s is tainted, we should warn
+  43.     }
+  44.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/Services.java:75: error: Resource Leak
+  resource of type `java.lang.Process` acquired by call to `exec(...)` at line 75 is not released after line 75.
+  73.     @Override
+  74.     public void packageProtectedServiceMethodBad(String s) throws IOException {
+  75. >     Runtime.getRuntime().exec(s);
+  76.     }
+  77.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/Services.java:80: error: Resource Leak
+  resource of type `java.lang.Process` acquired by call to `exec(...)` at line 80 is not released after line 80.
+  78.     // doesn't override a method from the service interface; not an endpoint
+  79.     public void publicMethodNotEndpointOk(String s) throws IOException {
+  80. >     Runtime.getRuntime().exec(s);
+  81.     }
+  82.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/Services.java:85: error: Resource Leak
+  resource of type `java.lang.Process` acquired by call to `exec(...)` at line 85 is not released after line 85.
+  83.     // same
+  84.     protected void protectedMethodNotEndpointOk(String s) throws IOException {
+  85. >     Runtime.getRuntime().exec(s);
+  86.     }
+  87.   
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/Services.java:89: error: Resource Leak
+  resource of type `java.lang.Process` acquired by call to `exec(...)` at line 89 is not released after line 89.
+  87.   
+  88.     void packageProtectedMethodNotEndpointOk(String s) throws IOException {
+  89. >     Runtime.getRuntime().exec(s);
+  90.     }
+  91.   
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/Services.java:94: error: Resource Leak
+  resource of type `java.lang.Process` acquired by call to `exec(...)` at line 94 is not released after line 94.
+  92.     // same
+  93.     private void privateMethodNotEndpointOk(String s) throws IOException {
+  94. >     Runtime.getRuntime().exec(s);
+  95.     }
+  96.   }
+
+Found 6 issues
+    Issue Type(ISSUED_TYPE_ID): #
+  Resource Leak(RESOURCE_LEAK): 6

@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/MasterLock.java:14: error: Deadlock
+  Potential deadlock. `void MasterLock.oneWayBad()` (Trace 1) and `void MasterLock.theOtherWayBad()` (Trace 2) acquire locks `this.b` in `class codetoanalyze.java.starvation.MasterLock` and `this.a` in `class codetoanalyze.java.starvation.MasterLock` in reverse orders.
+  12.     // 1st method has a and wants b
+  13.     void oneWayBad() {
+  14. >     synchronized (a) {
+  15.         synchronized (b) {
+  16.         }
+
+Found 1 issue
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 1

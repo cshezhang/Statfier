@@ -9,7 +9,6 @@
  * Test case based on example code from bug report
  * **************************************** */
 
-package sfBugs;
 
 import edu.umd.cs.findbugs.annotations.NoWarning;
 

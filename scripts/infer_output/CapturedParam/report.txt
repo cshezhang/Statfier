@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/CapturedParam.java:16: error: Null Dereference
+  object `parameter` could be null and is dereferenced at line 16.
+  14.   
+  15.     void dereferencingNullableIsBAD(@Nullable Object parameter) {
+  16. >     parameter.toString();
+  17.     }
+  18.   
+
+Found 1 issue
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 1

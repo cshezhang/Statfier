@@ -1,4 +1,3 @@
-package sfBugs;
 
 import java.util.Map;
 import java.util.Set;

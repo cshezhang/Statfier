@@ -1,0 +1,214 @@
+[parsing started SimpleFileObject[/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java]]
+[parsing completed 12ms]
+[loading /modules/java.net.http/module-info.class]
+[loading /modules/jdk.internal.opt/module-info.class]
+[loading /modules/jdk.charsets/module-info.class]
+[loading /modules/jdk.zipfs/module-info.class]
+[loading /modules/jdk.xml.dom/module-info.class]
+[loading /modules/java.logging/module-info.class]
+[loading /modules/jdk.jstatd/module-info.class]
+[loading /modules/jdk.internal.vm.compiler/module-info.class]
+[loading /modules/jdk.internal.le/module-info.class]
+[loading /modules/jdk.scripting.nashorn/module-info.class]
+[loading /modules/jdk.management.jfr/module-info.class]
+[loading /modules/jdk.internal.vm.compiler.management/module-info.class]
+[loading /modules/jdk.httpserver/module-info.class]
+[loading /modules/java.management/module-info.class]
+[loading /modules/jdk.accessibility/module-info.class]
+[loading /modules/java.instrument/module-info.class]
+[loading /modules/jdk.security.jgss/module-info.class]
+[loading /modules/jdk.jfr/module-info.class]
+[loading /modules/java.security.jgss/module-info.class]
+[loading /modules/jdk.jlink/module-info.class]
+[loading /modules/jdk.naming.rmi/module-info.class]
+[loading /modules/java.desktop/module-info.class]
+[loading /modules/jdk.net/module-info.class]
+[loading /modules/java.xml.crypto/module-info.class]
+[loading /modules/java.scripting/module-info.class]
+[loading /modules/java.sql/module-info.class]
+[loading /modules/jdk.attach/module-info.class]
+[loading /modules/java.datatransfer/module-info.class]
+[loading /modules/jdk.internal.ed/module-info.class]
+[loading /modules/jdk.editpad/module-info.class]
+[loading /modules/java.compiler/module-info.class]
+[loading /modules/jdk.naming.dns/module-info.class]
+[loading /modules/jdk.compiler/module-info.class]
+[loading /modules/jdk.dynalink/module-info.class]
+[loading /modules/jdk.internal.jvmstat/module-info.class]
+[loading /modules/jdk.jdwp.agent/module-info.class]
+[loading /modules/java.smartcardio/module-info.class]
+[loading /modules/jdk.aot/module-info.class]
+[loading /modules/java.naming/module-info.class]
+[loading /modules/jdk.pack/module-info.class]
+[loading /modules/java.base/module-info.class]
+[loading /modules/jdk.unsupported/module-info.class]
+[loading /modules/jdk.sctp/module-info.class]
+[loading /modules/java.xml/module-info.class]
+[loading /modules/jdk.scripting.nashorn.shell/module-info.class]
+[loading /modules/jdk.naming.ldap/module-info.class]
+[loading /modules/jdk.jshell/module-info.class]
+[loading /modules/java.rmi/module-info.class]
+[loading /modules/jdk.jdeps/module-info.class]
+[loading /modules/jdk.security.auth/module-info.class]
+[loading /modules/jdk.unsupported.desktop/module-info.class]
+[loading /modules/jdk.jartool/module-info.class]
+[loading /modules/jdk.jsobject/module-info.class]
+[loading /modules/java.prefs/module-info.class]
+[loading /modules/java.management.rmi/module-info.class]
+[loading /modules/jdk.localedata/module-info.class]
+[loading /modules/java.security.sasl/module-info.class]
+[loading /modules/java.sql.rowset/module-info.class]
+[loading /modules/jdk.jdi/module-info.class]
+[loading /modules/jdk.internal.vm.ci/module-info.class]
+[loading /modules/jdk.crypto.cryptoki/module-info.class]
+[loading /modules/jdk.management/module-info.class]
+[loading /modules/jdk.jcmd/module-info.class]
+[loading /modules/jdk.hotspot.agent/module-info.class]
+[loading /modules/jdk.javadoc/module-info.class]
+[loading /modules/java.se/module-info.class]
+[loading /modules/java.transaction.xa/module-info.class]
+[loading /modules/jdk.rmic/module-info.class]
+[loading /modules/jdk.crypto.ec/module-info.class]
+[loading /modules/jdk.jconsole/module-info.class]
+[loading /modules/jdk.management.agent/module-info.class]
+[search path for source files: .,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar]
+[search path for class files: /home/vanguard/bin/jdk/jdk-11.0.12/lib/modules,.,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar,/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar]
+[loading /home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar(/android/content/ContentValues.class)]
+[loading /home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar(/android/content/SharedPreferences.class)]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:12: error: cannot find symbol
+import codetoanalyze.java.InferTaint;
+                         ^
+  symbol:   class InferTaint
+  location: package codetoanalyze.java
+[loading ./codetoanalyze/java/annotation/IntegritySink.class]
+[loading ./codetoanalyze/java/annotation/IntegritySource.class]
+[loading ./codetoanalyze/java/annotation/PrivacySink.class]
+[loading ./codetoanalyze/java/annotation/PrivacySource.class]
+[loading /modules/java.base/java/io/IOException.class]
+[loading /modules/java.base/java/io/InputStream.class]
+[loading /modules/java.base/java/net/Socket.class]
+[loading /modules/java.base/javax/net/ssl/HostnameVerifier.class]
+[loading /modules/java.base/javax/net/ssl/SSLException.class]
+[loading /modules/java.base/javax/net/ssl/SSLSession.class]
+[loading /modules/java.base/javax/net/ssl/SSLSocket.class]
+[loading /modules/java.base/javax/net/ssl/SSLSocketFactory.class]
+[loading /modules/java.base/java/lang/Object.class]
+[loading /modules/java.base/java/lang/String.class]
+[loading /modules/java.base/java/lang/Deprecated.class]
+[loading /modules/java.base/java/lang/annotation/Retention.class]
+[loading /modules/java.base/java/lang/annotation/RetentionPolicy.class]
+[loading /modules/java.base/java/lang/annotation/Target.class]
+[loading /modules/java.base/java/lang/annotation/ElementType.class]
+[loading /modules/java.base/java/lang/annotation/Annotation.class]
+[checking codetoanalyze.java.quandary.TaintExample]
+[loading /modules/java.base/java/io/Serializable.class]
+[loading /modules/java.base/java/lang/AutoCloseable.class]
+[loading /modules/java.base/java/lang/Exception.class]
+[loading /modules/java.base/java/lang/Throwable.class]
+[loading /modules/java.base/javax/net/SocketFactory.class]
+[loading /modules/java.base/java/io/Closeable.class]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:104: error: cannot find symbol
+    Object o = InferTaint.inferSecretSource();
+               ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:105: error: cannot find symbol
+    InferTaint.inferSensitiveSink(o);
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:109: error: cannot find symbol
+    return InferTaint.inferSecretSource();
+           ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:113: error: cannot find symbol
+    InferTaint.inferSensitiveSink(o);
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:117: error: cannot find symbol
+    InferTaint.inferSensitiveSink(returnTaintedSourceModelMethods());
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:121: error: cannot find symbol
+    callSinkMethodModelMethods(InferTaint.inferSecretSource());
+                               ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:129: error: cannot find symbol
+    Object o = InferTaint.inferSecretSourceUndefined();
+               ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:130: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(o);
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:134: error: cannot find symbol
+    return InferTaint.inferSecretSourceUndefined();
+           ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:138: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(o);
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:142: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(returnTaintedSourceModelMethodsUndefined());
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:146: error: cannot find symbol
+    callSinkMethodModelMethodsUndefined(InferTaint.inferSecretSourceUndefined());
+                                        ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+[loading /home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar(/android/os/Parcelable.class)]
+[loading /modules/java.base/java/lang/Boolean.class]
+[loading /modules/java.base/java/lang/Double.class]
+[loading /modules/java.base/java/lang/Float.class]
+[loading /modules/java.base/java/lang/Long.class]
+[loading /modules/java.base/java/lang/Integer.class]
+[loading /modules/java.base/java/lang/Short.class]
+[loading /modules/java.base/java/lang/Byte.class]
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:168: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(privacySource()); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:201: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(source); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:206: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(source); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:213: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(aFieldWithoutAnnotations); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:226: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(integritySource()); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:231: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(source); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/quandary/TaintExample.java:236: error: cannot find symbol
+    InferTaint.inferSensitiveSinkUndefined(source); // should report
+    ^
+  symbol:   variable InferTaint
+  location: class TaintExample
+[total 215ms]
+20 errors

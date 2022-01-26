@@ -1,0 +1,123 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:54: warning: Thread Safety Violation
+  Read/Write race. Non-private method `ThreadSafeMethods.readSameFieldAsThreadSafeMethod1Bad()` reads without synchronization from `this.field1`. Potentially races with write in method `ThreadSafeMethods.safelyWriteSameFieldAsThreadSafeMethod1Ok()`.
+ Reporting because another access to the same memory occurs on a background thread, although this access may not.
+  52.     // reads a field that is written in a method marked thread-safe
+  53.     public Object readSameFieldAsThreadSafeMethod1Bad() {
+  54. >     return this.field1;
+  55.     }
+  56.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:78: warning: Thread Safety Violation
+  Read/Write race. Non-private method `ThreadSafeMethods.readSameFieldAsThreadSafeMethod2Bad()` reads without synchronization from `this.field4`. Potentially races with write in method `ThreadSafeMethods.synchronizedWriteOk()`.
+ Reporting because another access to the same memory occurs on a background thread, although this access may not.
+  76.     // unprotected read of a field that is written safely in a method marked thread-safe
+  77.     public Object readSameFieldAsThreadSafeMethod2Bad() {
+  78. >     return this.field4;
+  79.     }
+  80.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:63: warning: Thread Safety Violation
+  Read/Write race. Non-private method `ThreadSafeMethods.readSameFieldAsThreadSafeMethodWhileSynchronized1Bad()` reads with synchronization from `this.field1`. Potentially races with unsynchronized write in method `ThreadSafeMethods.threadSafeMethodWriteBad()`.
+ Reporting because this access may occur on a background thread.
+  61.   
+  62.     public synchronized Object readSameFieldAsThreadSafeMethodWhileSynchronized1Bad() {
+  63. >     return this.field1;
+  64.     }
+  65.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:123: warning: Thread Safety Violation
+  Read/Write race. Non-private method `ThreadSafeMethodsSubclass.readThreadSafeFieldOfOverrideBad()` reads without synchronization from `this.subclassField`. Potentially races with write in method `ThreadSafeMethodsSubclass.safeMethodOverride()`.
+ Reporting because another access to the same memory occurs on a background thread, although this access may not.
+  121.   
+  122.     public Object readThreadSafeFieldOfOverrideBad() {
+  123. >     return this.subclassField;
+  124.     }
+  125.   }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:107: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethodsSubclass.safeMethodOverride()` writes to field `this.subclassField` outside of synchronization.
+ Reporting because current method is annotated `@ThreadSafe` or overrides an annotated method., so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  105.     // overrides method annotated with @ThreadSafe, should warn
+  106.     public void safeMethodOverride() {
+  107. >     this.subclassField = new Object();
+  108.     }
+  109.   
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:28: warning: Thread Safety Violation
+  Read/Write race. Non-private method `ThreadSafeMethods.threadSafeMethodReadBad()` reads without synchronization from `this.field2`. Potentially races with write in method `ThreadSafeMethods.threadSafePrivateMethodBad()`.
+ Reporting because current method is annotated `@ThreadSafe` or overrides an annotated method., so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  26.     @ThreadSafe
+  27.     public Object threadSafeMethodReadBad() {
+  28. >     return this.field2;
+  29.     }
+  30.   
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:23: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethods.threadSafeMethodWriteBad()` writes to field `this.field1` outside of synchronization.
+ Reporting because current method is annotated `@ThreadSafe` or overrides an annotated method., so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  21.     @ThreadSafe
+  22.     public void threadSafeMethodWriteBad() {
+  23. >     this.field1 = new Object(); // should warn
+  24.     }
+  25.   
+
+#7
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:33: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethods.threadSafePrivateMethodBad()` writes to field `this.field2` outside of synchronization.
+ Reporting because current method is annotated `@ThreadSafe` or overrides an annotated method., so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  31.     @ThreadSafe
+  32.     private void threadSafePrivateMethodBad() {
+  33. >     this.field2 = new Object(); // should warn
+  34.     }
+  35.   
+
+#8
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:39: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethods.threadSafeVisibleForTestingMethodBad()` writes to field `this.field3` outside of synchronization.
+ Reporting because current method is annotated `@ThreadSafe` or overrides an annotated method., so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  37.     @VisibleForTesting
+  38.     public void threadSafeVisibleForTestingMethodBad() {
+  39. >     this.field3 = new Object(); // should warn
+  40.     }
+  41.   
+
+#9
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:49: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethods.writeSameFieldAsThreadSafeMethod1Bad()` writes to field `this.field1` outside of synchronization.
+ Reporting because another access to the same memory occurs on a background thread, although this access may not.
+  47.     public void writeSameFieldAsThreadSafeMethod1Bad() {
+  48.       // warn here because field1 is also written in @ThreadSafe method threadSafeMethodWriteBad
+  49. >     this.field1 = new Object();
+  50.     }
+  51.   
+
+#10
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:73: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethods.writeSameFieldAsThreadSafeMethod2Bad()` writes to field `this.field4` outside of synchronization.
+ Reporting because another access to the same memory occurs on a background thread, although this access may not.
+  71.     // unprotected write to a field that is written safely in a method marked thread-safe
+  72.     public void writeSameFieldAsThreadSafeMethod2Bad() {
+  73. >     this.field4 = new Object();
+  74.     }
+  75.   
+
+#11
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/ThreadSafeMethods.java:119: warning: Thread Safety Violation
+  Unprotected write. Non-private method `ThreadSafeMethodsSubclass.writeThreadSafeFieldOfOverrideBad()` writes to field `this.subclassField` outside of synchronization.
+ Reporting because another access to the same memory occurs on a background thread, although this access may not.
+  117.   
+  118.     public void writeThreadSafeFieldOfOverrideBad() {
+  119. >     this.subclassField = new Object();
+  120.     }
+  121.   
+
+Found 12 issues
+                        Issue Type(ISSUED_TYPE_ID): #
+  Thread Safety Violation(THREAD_SAFETY_VIOLATION): 12

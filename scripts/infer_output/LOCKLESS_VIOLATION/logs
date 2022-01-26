@@ -1,0 +1,119 @@
+[69701][      debug] Loading models took 48.286ms
+[69702][      debug] Sqlite write daemon: starting up
+[69702][      debug] Sqlite write daemon: set up complete, waiting for connections
+[69701][environment] CWD = /home/vanguard/projects/SAMutator/scripts
+[69701][environment] No .inferconfig file found
+[69701][environment] Project root = /home/vanguard/projects/SAMutator/scripts
+[69701][environment] INFER_ARGS =   @/tmp/args.tmp.fee778
+[69701][environment] command line arguments:   /home/vanguard/bin/infer/bin/infer run -o
+[69701][environment]                           /home/vanguard/projects/SAMutator/scripts/infer_output/LOCKLESS_VIOLATION
+[69701][environment]                           -- javac -cp
+[69701][environment]                           .:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar
+[69701][environment]                           /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/doccase/LOCKLESS_VIOLATION.java
+[69701][environment] Available memory at startup: 25080 MB
+[69701][environment] Active checkers: self-in-block (C/C++/ObjC), starvation (C/C++/ObjC, Java), uninit (C/C++/ObjC), siof (C/C++/ObjC), dotnet-resource-leak (C#/.Net), racerd (C/C++/ObjC, Java), liveness (C/C++/ObjC), inefficient-keyset-iterator (Java), fragment-retains-view (Java), biabduction (C/C++/ObjC, Java, C#/.Net)
+[69701][environment] Scheduler: file
+[69701][environment] Cores used: 10
+[69701][environment] Infer version v1.1.0
+[69701][environment] Copyright 2009 - present Facebook. All Rights Reserved.
+[69701][environment] 
+[69701][   progress] Capturing in javac mode...
+[69701][      debug] Current working directory: '/home/vanguard/projects/SAMutator/scripts'
+[69701][      debug] Trying to execute: javac '-J-Duser.language=en' '@/home/vanguard/projects/SAMutator/scripts/infer_output/LOCKLESS_VIOLATION/tmp/javac_args.tmp.b873b6' 2>'/home/vanguard/projects/SAMutator/scripts/infer_output/LOCKLESS_VIOLATION/tmp/javac.tmp.064f53.out'
+[69701][      debug] *** Success. Logs:
+[69701][      debug] Translating 1 source files (2 classes)
+[69701][      debug] done capturing all files
+[69701][      debug] GC stats for capture:
+[69701][      debug]   minor_words: 4.05983e+06
+[69701][      debug]   promoted_words: 1.13814e+06
+[69701][      debug]   major_words: 1.19107e+06
+[69701][      debug]   minor_collections: 4
+[69701][      debug]   major_collections: 0
+[69701][      debug]   compactions: 0
+[69701][      debug]   top_heap_words: 2026496
+[69701][      debug]   
+[69701][environment] Parallel jobs: 10
+[69701][   progress] Found 1 source file to analyze in /home/vanguard/projects/SAMutator/scripts/infer_output/LOCKLESS_VIOLATION
+[69735][   progress] /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/doccase/LOCKLESS_VIOLATION.java starting
+[69735][   progress] /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/doccase/LOCKLESS_VIOLATION.java DONE
+[69701][      debug] Backend stats:
+[69701][      debug]   summary_file_try_load= 18
+[69701][      debug]   summary_read_from_disk= 0
+[69701][      debug]   summary_cache_hits= 52 (74%)
+[69701][      debug]   summary_cache_misses= 18
+[69701][      debug]   ondemand_procs_analyzed= 3
+[69701][      debug]   ondemand_local_cache_hits= 15 (75%)
+[69701][      debug]   ondemand_local_cache_misses= 5
+[69701][      debug]   proc_locker_lock_time_user= 0.00000000
+[69701][      debug]   proc_locker_lock_time_sys= 0.00000000
+[69701][      debug]   proc_locker_lock_time_wall= 0.00000000
+[69701][      debug]   proc_locker_unlock_time_user= 0.00000000
+[69701][      debug]   proc_locker_unlock_time_sys= 0.00000000
+[69701][      debug]   proc_locker_unlock_time_wall= 0.00000000
+[69701][      debug]   restart_scheduler_useful_time_user= 0.00000000
+[69701][      debug]   restart_scheduler_useful_time_sys= 0.00000000
+[69701][      debug]   restart_scheduler_useful_time_wall= 0.00000000
+[69701][      debug]   restart_scheduler_total_time_user= 0.00000000
+[69701][      debug]   restart_scheduler_total_time_sys= 0.00000000
+[69701][      debug]   restart_scheduler_total_time_wall= 0.00000000
+[69701][      debug]   
+[69701][      debug] GC stats for backend_stats.gc_stats_add.:
+[69701][      debug]   minor_words: 653082
+[69701][      debug]   promoted_words: 79439
+[69701][      debug]   major_words: 80621
+[69701][      debug]   minor_collections: 1
+[69701][      debug]   major_collections: 0
+[69701][      debug]   compactions: 0
+[69701][      debug]   top_heap_words: 20264960
+[69701][      debug]   
+[69701][      debug] GC stats for backend_stats.gc_stats_max.:
+[69701][      debug]   minor_words: 652596
+[69701][      debug]   promoted_words: 79439
+[69701][      debug]   major_words: 80621
+[69701][      debug]   minor_collections: 1
+[69701][      debug]   major_collections: 0
+[69701][      debug]   compactions: 0
+[69701][      debug]   top_heap_words: 2026496
+[69701][      debug]   
+[69701][      debug] Average over 10 processes
+[69701][      debug] GC stats for backend_stats.gc_stats_average.:
+[69701][      debug]   minor_words: 65308.2
+[69701][      debug]   promoted_words: 7943.9
+[69701][      debug]   major_words: 8062.1
+[69701][      debug]   minor_collections: 0
+[69701][      debug]   major_collections: 0
+[69701][      debug]   compactions: 0
+[69701][      debug]   top_heap_words: 2026496
+[69701][      debug]   
+[69701][      debug] Analysis phase finished in 26.123ms
+[69701][      debug] backend_stats.scheduler_process_analysis_time_user= 0.00524400
+[69701][      debug] backend_stats.scheduler_process_analysis_time_sys= 0.01261300
+[69701][      debug] backend_stats.scheduler_process_analysis_time_wall= 0.02612345
+[69701][      debug] GC stats for analysis_scheduler:
+[69701][      debug]   minor_words: 13989
+[69701][      debug]   promoted_words: 76078
+[69701][      debug]   major_words: 84784
+[69701][      debug]   minor_collections: 1
+[69701][      debug]   major_collections: 2
+[69701][      debug]   compactions: 1
+[69701][      debug]   top_heap_words: 2026496
+[69701][      debug]   
+[69701][      debug] GC stats for report:
+[69701][      debug]   minor_words: 20834
+[69701][      debug]   promoted_words: 0
+[69701][      debug]   major_words: 528
+[69701][      debug]   minor_collections: 0
+[69701][      debug]   major_collections: 0
+[69701][      debug]   compactions: 0
+[69701][      debug]   top_heap_words: 2026496
+[69701][      debug]   
+[69701][      debug] GC stats for main_process_full:
+[69701][      debug]   minor_words: 5.75745e+06
+[69701][      debug]   promoted_words: 1.37957e+06
+[69701][      debug]   major_words: 1.96777e+06
+[69701][      debug]   minor_collections: 9
+[69701][      debug]   major_collections: 4
+[69701][      debug]   compactions: 2
+[69701][      debug]   top_heap_words: 2026496
+[69701][      debug]   
+[69702][      debug] Sqlite write daemon: terminating

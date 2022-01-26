@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/topl/slowIter/SlowIterTests.java:13: error: Inefficient Keyset Iterator
+  Accessing a value using a key that was retrieved from a `keySet` iterator. It is more efficient to use an iterator on the `entrySet` of the map, avoiding the extra `HashMap.get(key)` lookup.
+  11.     static <K, V> void aBad(Map<K, V> m) {
+  12.       for (K k : m.keySet()) {
+  13. >       System.out.printf("%s -> %s\n", k, m.get(k));
+  14.       }
+  15.     }
+
+Found 1 issue
+                                Issue Type(ISSUED_TYPE_ID): #
+  Inefficient Keyset Iterator(INEFFICIENT_KEYSET_ITERATOR): 1

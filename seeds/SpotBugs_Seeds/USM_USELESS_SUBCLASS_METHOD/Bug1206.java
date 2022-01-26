@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 // Description.java
 import java.lang.annotation.ElementType;

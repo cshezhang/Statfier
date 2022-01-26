@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/doccase/DEADLOCK_1.java:9: error: Deadlock
+  Potential deadlock. `void DEADLOCK_1.lockAThenB()` (Trace 1) and `void DEADLOCK_1.lockBThenA()` (Trace 2) acquire locks `this.lockB` in `class codetoanalyze.java.doccase.DEADLOCK_1` and `this.lockA` in `class codetoanalyze.java.doccase.DEADLOCK_1` in reverse orders.
+   7.   
+   8.     public void lockAThenB() {
+   9. >     synchronized(lockA) {
+  10.         synchronized(lockB) {
+  11.          // do something with both resources
+
+Found 1 issue
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 1

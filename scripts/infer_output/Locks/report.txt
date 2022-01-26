@@ -1,0 +1,143 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:45: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.afterReentrantLockUnlockBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  43.       mReentrantLock.lock();
+  44.       mReentrantLock.unlock();
+  45. >     f = 42;
+  46.     }
+  47.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:39: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.afterUnlockBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  37.       mLock.lock();
+  38.       mLock.unlock();
+  39. >     f = 42;
+  40.     }
+  41.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:51: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.afterWriteLockUnlockBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  49.       mReentrantReadWriteLock.writeLock().lock();
+  50.       mReentrantReadWriteLock.writeLock().unlock();
+  51. >     f = 42;
+  52.     }
+  53.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:247: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.lockInLoopLexicalBad(...)` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  245.         }
+  246.       }
+  247. >     f = 32;
+  248.     }
+  249.   
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:112: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.negatedReentrantLockTryLockBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  110.     public void negatedReentrantLockTryLockBad() {
+  111.       if (!mReentrantLock.tryLock()) {
+  112. >       f = 42;
+  113.       }
+  114.     }
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:195: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.nested1Bad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  193.         }
+  194.       }
+  195. >     f = 32;
+  196.     }
+  197.   
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:201: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.nested2Bad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  199.       synchronized (this) {
+  200.       }
+  201. >     f = 32;
+  202.       synchronized (this) {
+  203.       }
+
+#7
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:211: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.nested3Bad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  209.       synchronized (this) {
+  210.       }
+  211. >     f = 32;
+  212.     }
+  213.   
+
+#8
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:307: warning: Thread Safety Violation
+  Read/Write race. Non-private method `Locks.readOutsideLock1Bad()` reads without synchronization from `this.mField`. Potentially races with write in method `Locks.writeUnderLockOk()`.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  305.       synchronized (this) {
+  306.       }
+  307. >     return mField;
+  308.     }
+  309.   
+
+#9
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:311: warning: Thread Safety Violation
+  Read/Write race. Non-private method `Locks.readOutsideLock2Bad()` reads without synchronization from `this.mField`. Potentially races with write in method `Locks.writeUnderLockOk()`.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  309.   
+  310.     boolean readOutsideLock2Bad() {
+  311. >     boolean tmp = mField;
+  312.       synchronized (this) {
+  313.       }
+
+#10
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:92: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.tryLockNoCheckBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  90.     public void tryLockNoCheckBad() {
+  91.       mReentrantLock.tryLock(); // might return false
+  92. >     f = 42;
+  93.     }
+  94.   
+
+#11
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:98: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.tryLockWrongBranchBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+   96.       if (mReentrantLock.tryLock()) {
+   97.       } else {
+   98. >       f = 42;
+   99.       }
+  100.     }
+
+#12
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:362: warning: Thread Safety Violation
+  Read/Write race. Non-private method `Locks.unownedReadBad()` reads without synchronization from `this.mField3`. Potentially races with write in method `Locks.unownedLockedWriteOk()`.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  360.   
+  361.     public Object unownedReadBad() {
+  362. >     return this.mField3;
+  363.     }
+  364.   }
+
+#13
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/Locks.java:221: warning: Thread Safety Violation
+  Unprotected write. Non-private method `Locks.useLockInCalleeBad()` writes to field `this.f` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  219.     void useLockInCalleeBad() {
+  220.       useLock();
+  221. >     f = 32;
+  222.     }
+  223.   
+
+Found 14 issues
+                        Issue Type(ISSUED_TYPE_ID): #
+  Thread Safety Violation(THREAD_SAFETY_VIOLATION): 14

@@ -10,7 +10,6 @@
  * Test case based on example code from bug report
  * **************************************** */
 
-package sfBugs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

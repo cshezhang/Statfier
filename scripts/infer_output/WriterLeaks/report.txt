@@ -1,0 +1,72 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:30: error: Resource Leak
+  resource of type `java.io.PrintWriter` acquired by call to `new()` at line 27 is not released after line 30.
+**Note**: potential exception at line 28
+  28.         writer.write(10);
+  29.         writer.close();
+  30. >     } catch (IOException e) {
+  31.       }
+  32.     }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:51: error: Resource Leak
+  resource of type `java.io.PrintWriter` acquired by call to `new()` at line 50 is not released after line 51.
+  49.       try {
+  50.         writer = new PrintWriter("file.txt");
+  51. >       writer = writer.append('0');
+  52.         writer.close();
+  53.       } catch (IOException e) {
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:77: error: Resource Leak
+  resource of type `java.io.BufferedWriter` acquired to `writer` by call to `new()` at line 74 is not released after line 77.
+**Note**: potential exception at line 75
+  75.         writer.write("word");
+  76.         writer.close();
+  77. >     } catch (IOException e) {
+  78.       }
+  79.     }
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:101: error: Resource Leak
+  resource of type `java.io.OutputStreamWriter` acquired to `writer` by call to `new()` at line 98 is not released after line 101.
+**Note**: potential exception at line 99
+   99.         writer.write("word");
+  100.         writer.close();
+  101. >     } catch (IOException e) {
+  102.       }
+  103.     }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:124: error: Resource Leak
+  resource of type `java.io.FileWriter` acquired to `writer` by call to `new()` at line 121 is not released after line 124.
+**Note**: potential exception at line 122
+  122.         writer.write("word");
+  123.         writer.close();
+  124. >     } catch (IOException e) {
+  125.       }
+  126.     }
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:149: error: Resource Leak
+  resource of type `java.io.PipedWriter` acquired to `writer` by call to `PipedWriter(...)` at line 146 is not released after line 149.
+**Note**: potential exception at line 147
+  147.         writer.write(42);
+  148.         writer.close();
+  149. >     } catch (IOException e) {
+  150.       }
+  151.     }
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/WriterLeaks.java:160: error: Resource Leak
+  resource of type `java.io.PipedWriter` acquired to `writer` by call to `connect(...)` at line 157 is not released after line 160.
+**Note**: potential exception at line 158
+  158.         writer.write(42);
+  159.         writer.close();
+  160. >     } catch (IOException e) {
+  161.       }
+  162.     }
+
+Found 7 issues
+    Issue Type(ISSUED_TYPE_ID): #
+  Resource Leak(RESOURCE_LEAK): 7

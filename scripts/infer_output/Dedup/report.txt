@@ -1,0 +1,40 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation-dedup/Dedup.java:27: error: UI Thread Starvation
+  Method `void Dedup.callMethodWithMultipleBlocksBad()` runs on UI thread and may block; calls `void CountDownLatch.await()`.
+  25.     void callMethodWithMultipleBlocksBad() throws InterruptedException, ExecutionException {
+  26.       future.get();
+  27. >     latch.await();
+  28.       future.get();
+  29.     }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation-dedup/Dedup.java:26: error: UI Thread Starvation
+  Method `void Dedup.callMethodWithMultipleBlocksBad()` runs on UI thread and may block; calls `Object Future.get()`.
+  24.     @UiThread
+  25.     void callMethodWithMultipleBlocksBad() throws InterruptedException, ExecutionException {
+  26. >     future.get();
+  27.       latch.await();
+  28.       future.get();
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation-dedup/Dedup.java:20: error: UI Thread Starvation
+  Method `void Dedup.onUiThreadBad()` runs on UI thread and may block; calls `void CountDownLatch.await()`. Additional report(s) on the same line were suppressed.
+  18.     @UiThread
+  19.     void onUiThreadBad() throws InterruptedException, ExecutionException {
+  20. >     callMethodWithMultipleBlocksBad();
+  21.     }
+  22.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation-dedup/Dedup.java:35: error: Deadlock
+  Potential deadlock. `void Dedup.oneWayBad()` (Trace 1) and `void Dedup.anotherWayBad()` (Trace 2) acquire locks `this.lockB` in `class Dedup` and `this.lockA` in `class Dedup` in reverse orders. Additional report(s) on the same line were suppressed.
+  33.     // deadlock should be reported between oneWayBad and anotherWayBad only
+  34.     void oneWayBad() {
+  35. >     synchronized (lockA) {
+  36.         synchronized (lockB) {
+  37.         }
+
+Found 4 issues
+        Issue Type(ISSUED_TYPE_ID): #
+  UI Thread Starvation(STARVATION): 3
+                Deadlock(DEADLOCK): 1

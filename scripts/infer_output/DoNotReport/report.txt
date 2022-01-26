@@ -1,0 +1,13 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/racerd/DoNotReport.java:20: warning: Thread Safety Violation
+  Unprotected write. Non-private method `DoNotReport.obviousRaceBad(...)` writes to field `this.mFld` outside of synchronization.
+ Reporting because the current class is annotated `@ThreadSafe`, so we assume that this method can run in parallel with other non-private methods in the class (including itself).
+  18.     // .inferconfig
+  19.     void obviousRaceBad(int i) {
+  20. >     mFld = i;
+  21.     }
+  22.   }
+
+Found 1 issue
+                        Issue Type(ISSUED_TYPE_ID): #
+  Thread Safety Violation(THREAD_SAFETY_VIOLATION): 1

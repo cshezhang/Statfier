@@ -16,7 +16,6 @@
  *         false positive first appears in version 1.3.7
  * **************************************** */
 
-package sfBugs;
 
 import java.util.HashMap;
 import java.util.Map;

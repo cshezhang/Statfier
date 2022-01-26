@@ -1,0 +1,394 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:58: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 58 is not released after line 58.
+  56.   
+  57.     public void fileOutputStreamNotClosed() throws IOException {
+  58. >     FileOutputStream fis = new FileOutputStream("file.txt");
+  59.     }
+  60.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:68: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired to `fis` by call to `FileOutputStream(...)` at line 65 is not released after line 68.
+**Note**: potential exception at line 66
+  66.         fis.write(arr);
+  67.         fis.close();
+  68. >     } catch (IOException e) {
+  69.       }
+  70.     }
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:79: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 78 is not released after line 79.
+  77.     public void fileOutputStreamOneLeak() throws IOException {
+  78.       FileOutputStream fis = new FileOutputStream("file.txt");
+  79. >     if (fis != null) {
+  80.       } else {
+  81.       }
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:87: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 85 is not released after line 87.
+  85.       FileOutputStream fis = new FileOutputStream("file.txt");
+  86.       if (ok) {
+  87. >       fis.write(1);
+  88.         return 1;
+  89.       } else {
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:90: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 85 is not released after line 90.
+  88.         return 1;
+  89.       } else {
+  90. >       fis.write(2);
+  91.         return 2;
+  92.       }
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:100: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 100 is not released after line 100.
+   98.       } else {
+   99.       }
+  100. >     fis = new FileOutputStream("x");
+  101.     }
+  102.   
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:97: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 96 is not released after line 97.
+  95.     public void fileOutputStreamTwoLeaks2() throws IOException {
+  96.       FileOutputStream fis = new FileOutputStream("file.txt");
+  97. >     if (fis != null) {
+  98.       } else {
+  99.       }
+
+#7
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:116: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired to `fos` by call to `FileOutputStream(...)` at line 110 is not released after line 116.
+**Note**: potential exception at line 113
+  114.         if (fos != null) fos.close();
+  115.       }
+  116. >   }
+  117.   
+  118.     public static void twoResourcesHeliosFix() throws IOException {
+
+#8
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:175: error: Resource Leak
+  resource of type `java.io.RandomAccessFile` acquired to `b` by call to `RandomAccessFile(...)` at line 170 is not released after line 175.
+**Note**: potential exception at line 172
+  173.         if (b != null) b.close();
+  174.       }
+  175. >   }
+  176.   
+  177.     public static void twoResourcesRandomAccessFileCommonFix() throws IOException {
+
+#9
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:207: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 207 is not released after line 207.
+  205.     // in which case the new FileInputStream will be dangling
+  206.     public void nestedBad1() throws IOException {
+  207. >     GZIPInputStream g = new GZIPInputStream(new FileInputStream("file.txt"));
+  208.       g.close();
+  209.     }
+
+#10
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:212: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 212 is not released after line 212.
+  210.   
+  211.     public void nestedBad2() throws IOException {
+  212. >     GZIPOutputStream g = new GZIPOutputStream(new FileOutputStream("file.txt"));
+  213.       g.close();
+  214.     }
+
+#11
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:220: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 220 is not released after line 220.
+  218.       ObjectInputStream oin = null;
+  219.       try {
+  220. >       oin = new ObjectInputStream(new FileInputStream("file.txt"));
+  221.         int a = oin.available();
+  222.       } catch (IOException e) {
+
+#12
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:232: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 232 is not released after line 232.
+  230.       ObjectOutputStream oin = null;
+  231.       try {
+  232. >       oin = new ObjectOutputStream(new FileOutputStream("file.txt"));
+  233.         oin.write(3);
+  234.       } catch (IOException e) {
+
+#13
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:247: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 247 is not released after line 247.
+**Note**: potential exception at line 245
+  245.         j = new ZipFile("");
+  246.       } catch (IOException e) {
+  247. >       FileOutputStream fis = new FileOutputStream("file.txt");
+  248.         // The purpose of this is to cause a leak, from when ZipFile constructor throws
+  249.       } finally {
+
+#14
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:284: error: Resource Leak
+  resource of type `java.util.jar.JarFile` acquired by call to `JarFile(...)` at line 284 is not released after line 284.
+  282.       JarFile jarFile = null;
+  283.       try {
+  284. >       jarFile = new JarFile("");
+  285.       } catch (IOException e) {
+  286.       }
+
+#15
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:298: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired to `fis` by call to `FileInputStream(...)` at line 295 is not released after line 298.
+**Note**: potential exception at line 296
+  296.         fis.read();
+  297.         fis.close();
+  298. >     } catch (IOException e) {
+  299.       }
+  300.     }
+
+#16
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:321: error: Resource Leak
+  resource of type `java.io.PipedInputStream` acquired to `pin` by call to `PipedInputStream(...)` at line 318 is not released after line 321.
+**Note**: potential exception at line 319
+  319.         int data = pin.read();
+  320.         pin.close();
+  321. >     } catch (IOException e) {
+  322.       }
+  323.     }
+
+#17
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:345: error: Resource Leak
+  resource of type `java.io.PipedOutputStream` acquired to `pout` by call to `PipedOutputStream()` at line 342 is not released after line 345.
+**Note**: potential exception at line 343
+  343.         pout.write(arr);
+  344.         pout.close();
+  345. >     } catch (IOException e) {
+  346.       }
+  347.     }
+
+#18
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:366: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 366 is not released after line 366.
+  364.       ObjectOutputStream oout;
+  365.       try {
+  366. >       oout = new ObjectOutputStream(new FileOutputStream("file.txt"));
+  367.         oout.write(arr);
+  368.         oout.close();
+
+#19
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:369: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 366 is not released after line 369.
+**Note**: potential exception at line 367
+  367.         oout.write(arr);
+  368.         oout.close();
+  369. >     } catch (IOException e) {
+  370.       }
+  371.     }
+
+#20
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:390: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 390 is not released after line 390.
+  388.       ObjectInputStream oin;
+  389.       try {
+  390. >       oin = new ObjectInputStream(new FileInputStream("file.txt"));
+  391.         oin.read();
+  392.         oin.close();
+
+#21
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:393: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 390 is not released after line 393.
+**Note**: potential exception at line 391
+  391.         oin.read();
+  392.         oin.close();
+  393. >     } catch (IOException e) {
+  394.       }
+  395.     }
+
+#22
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:440: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 438 is not released after line 440.
+  438.       FileInputStream fos = new FileInputStream("");
+  439.       try {
+  440. >       JarInputStream g = new JarInputStream(fos); //  Testing exceptional condition in constructor
+  441.         g.close();
+  442.       } catch (IOException e) {
+
+#23
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:448: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 448 is not released after line 448.
+  446.   
+  447.     public static void nestedBadJarInputStream(File file) throws IOException {
+  448. >     JarInputStream g = new JarInputStream(new FileInputStream(file));
+  449.       g.close();
+  450.     }
+
+#24
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:467: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 465 is not released after line 467.
+  465.       FileOutputStream fos = new FileOutputStream("");
+  466.       try {
+  467. >       JarOutputStream g = new JarOutputStream(fos); //  Testing exceptional condition in constructor
+  468.         g.close();
+  469.       } catch (IOException e) {
+
+#25
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:475: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 475 is not released after line 475.
+  473.   
+  474.     public static void nestedBadJarOutputStream() throws IOException {
+  475. >     JarOutputStream g = new JarOutputStream(new FileOutputStream("file.txt"));
+  476.       g.close();
+  477.     }
+
+#26
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:482: error: Resource Leak
+  resource of type `java.net.Socket` acquired by call to `Socket()` at line 482 is not released after line 482.
+  480.   
+  481.     public void socketNotClosed() {
+  482. >     Socket socket = new Socket();
+  483.     }
+  484.   
+
+#27
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:537: error: Resource Leak
+  resource of type `java.net.ServerSocket` acquired to `listener` by call to `new()` at line 527 is not released after line 537.
+**Note**: potential exception at line 529
+  535.         }
+  536.         listener.close();
+  537. >     }
+  538.     }
+  539.   
+
+#28
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:587: error: Resource Leak
+  resource of type `java.net.HttpURLConnection` acquired by call to `openConnection()` at line 585 is not released after line 587.
+  585.       connection = (HttpURLConnection) address.openConnection();
+  586.   
+  587. >     outputStream = new DataOutputStream(connection.getOutputStream());
+  588.       outputStream.writeBytes(content);
+  589.     }
+
+#29
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:594: error: Resource Leak
+  resource of type `javax.net.ssl.HttpsURLConnection` acquired by call to `openConnection()` at line 594 is not released after line 594.
+  592.       HttpsURLConnection connection = null;
+  593.       URL address = new URL("https://www.facebook.com");
+  594. >     connection = (HttpsURLConnection) address.openConnection();
+  595.     }
+  596.   
+
+#30
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:668: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `createParser(...)` at line 667 is not released after line 668.
+  666.       try {
+  667.         parser = (UTF8StreamJsonParser) factory.createParser(new File("[]"));
+  668. >       Object o = parser.readValueAs(Object.class);
+  669.         ignore(o);
+  670.       } catch (Exception e) {
+
+#31
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:695: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 694 is not released after line 695.
+  693.       try {
+  694.         in = new FileInputStream("");
+  695. >       parser = factory.createParser(in);
+  696.         Object o = parser.readValueAs(Object.class);
+  697.         ignore(o);
+
+#32
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:727: error: Resource Leak
+  resource of type `java.io.RandomAccessFile` acquired to `f` by call to `RandomAccessFile(...)` at line 723 is not released after line 727.
+**Note**: potential exception at line 725
+  725.       f.readFully(bytes);
+  726.       f.close();
+  727. >     return new String(bytes);
+  728.     }
+  729.   
+
+#33
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:750: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `getInputStream()` at line 749 is not released after line 750.
+  748.         URLConnection connection = url.openConnection();
+  749.         InputStream stream = connection.getInputStream();
+  750. >       return stream.read();
+  751.       } catch (Exception e) {
+  752.       }
+
+#34
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:775: error: Resource Leak
+  resource of type `android.content.res.TypedArray` acquired by call to `obtainStyledAttributes(...)` at line 774 is not released after line 775.
+  773.     public void themeObtainTypedArrayAndLeak(Resources.Theme theme) {
+  774.       TypedArray array = theme.obtainStyledAttributes(new int[] {});
+  775. >     ignore(array);
+  776.     }
+  777.   
+
+#35
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:786: error: Resource Leak
+  resource of type `android.content.res.TypedArray` acquired by call to `obtainStyledAttributes(...)` at line 785 is not released after line 786.
+  784.     public void activityObtainTypedArrayAndLeak(Activity activity) {
+  785.       TypedArray array = activity.obtainStyledAttributes(new int[] {});
+  786. >     ignore(array);
+  787.     }
+  788.   
+
+#36
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:797: error: Resource Leak
+  resource of type `android.content.res.TypedArray` acquired by call to `obtainStyledAttributes(...)` at line 796 is not released after line 797.
+  795.     public void contextObtainTypedArrayAndLeak(Context context) {
+  796.       TypedArray array = context.obtainStyledAttributes(new int[] {});
+  797. >     ignore(array);
+  798.     }
+  799.   
+
+#37
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:811: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 803 is not released after line 811.
+**Note**: potential exception at line 804
+  809.         if (outChannel != null) outChannel.close();
+  810.       }
+  811. >   }
+  812.   
+  813.     void copyFileClose(File src, File dst) throws IOException {
+
+#38
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:811: error: Resource Leak
+  resource of type `java.io.FileOutputStream` acquired by call to `FileOutputStream(...)` at line 804 is not released after line 811.
+**Note**: potential exception at line 808
+  809.         if (outChannel != null) outChannel.close();
+  810.       }
+  811. >   }
+  812.   
+  813.     void copyFileClose(File src, File dst) throws IOException {
+
+#39
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:836: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 836 is not released after line 836.
+  834.   
+  835.     void scannerNotClosed() throws IOException {
+  836. >     Scanner scanner = new Scanner(new FileInputStream("file.txt"));
+  837.     }
+  838.   
+
+#40
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:928: error: Resource Leak
+  resource of type `java.util.zip.Deflater` acquired by call to `Deflater()` at line 928 is not released after line 928.
+  926.   
+  927.     public void deflaterLeak() {
+  928. >     Deflater comp = new Deflater();
+  929.     }
+  930.   
+
+#41
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/ResourceLeaks.java:937: error: Resource Leak
+  resource of type `java.util.zip.Inflater` acquired by call to `Inflater()` at line 937 is not released after line 937.
+  935.   
+  936.     public void inflaterLeak() {
+  937. >     Inflater decomp = new Inflater();
+  938.     }
+  939.   
+
+Found 42 issues
+    Issue Type(ISSUED_TYPE_ID): #
+  Resource Leak(RESOURCE_LEAK): 42

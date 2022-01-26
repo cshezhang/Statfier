@@ -1,0 +1,119 @@
+[74911][      debug] Loading models took 65.289ms
+[74912][      debug] Sqlite write daemon: starting up
+[74912][      debug] Sqlite write daemon: set up complete, waiting for connections
+[74911][environment] CWD = /home/vanguard/projects/SAMutator/scripts
+[74911][environment] No .inferconfig file found
+[74911][environment] Project root = /home/vanguard/projects/SAMutator/scripts
+[74911][environment] INFER_ARGS =   @/tmp/args.tmp.a1c995
+[74911][environment] command line arguments:   /home/vanguard/bin/infer/bin/infer run -o
+[74911][environment]                           /home/vanguard/projects/SAMutator/scripts/infer_output/SyntheticErrorSuppressions
+[74911][environment]                           -- javac -cp
+[74911][environment]                           .:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar
+[74911][environment]                           /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/SyntheticErrorSuppressions.java
+[74911][environment] Available memory at startup: 23158 MB
+[74911][environment] Active checkers: self-in-block (C/C++/ObjC), starvation (C/C++/ObjC, Java), uninit (C/C++/ObjC), siof (C/C++/ObjC), dotnet-resource-leak (C#/.Net), racerd (C/C++/ObjC, Java), liveness (C/C++/ObjC), inefficient-keyset-iterator (Java), fragment-retains-view (Java), biabduction (C/C++/ObjC, Java, C#/.Net)
+[74911][environment] Scheduler: file
+[74911][environment] Cores used: 10
+[74911][environment] Infer version v1.1.0
+[74911][environment] Copyright 2009 - present Facebook. All Rights Reserved.
+[74911][environment] 
+[74911][   progress] Capturing in javac mode...
+[74911][      debug] Current working directory: '/home/vanguard/projects/SAMutator/scripts'
+[74911][      debug] Trying to execute: javac '-J-Duser.language=en' '@/home/vanguard/projects/SAMutator/scripts/infer_output/SyntheticErrorSuppressions/tmp/javac_args.tmp.082829' 2>'/home/vanguard/projects/SAMutator/scripts/infer_output/SyntheticErrorSuppressions/tmp/javac.tmp.9f574d.out'
+[74911][      debug] *** Success. Logs:
+[74911][      debug] Translating 1 source files (3 classes)
+[74911][      debug] done capturing all files
+[74911][      debug] GC stats for capture:
+[74911][      debug]   minor_words: 4.3902e+06
+[74911][      debug]   promoted_words: 1.19788e+06
+[74911][      debug]   major_words: 1.25136e+06
+[74911][      debug]   minor_collections: 6
+[74911][      debug]   major_collections: 1
+[74911][      debug]   compactions: 0
+[74911][      debug]   top_heap_words: 2026496
+[74911][      debug]   
+[74911][environment] Parallel jobs: 10
+[74911][   progress] Found 1 source file to analyze in /home/vanguard/projects/SAMutator/scripts/infer_output/SyntheticErrorSuppressions
+[74945][   progress] /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/SyntheticErrorSuppressions.java starting
+[74945][   progress] /home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/SyntheticErrorSuppressions.java DONE
+[74911][      debug] Backend stats:
+[74911][      debug]   summary_file_try_load= 41
+[74911][      debug]   summary_read_from_disk= 0
+[74911][      debug]   summary_cache_hits= 237 (85%)
+[74911][      debug]   summary_cache_misses= 41
+[74911][      debug]   ondemand_procs_analyzed= 13
+[74911][      debug]   ondemand_local_cache_hits= 81 (81%)
+[74911][      debug]   ondemand_local_cache_misses= 19
+[74911][      debug]   proc_locker_lock_time_user= 0.00000000
+[74911][      debug]   proc_locker_lock_time_sys= 0.00000000
+[74911][      debug]   proc_locker_lock_time_wall= 0.00000000
+[74911][      debug]   proc_locker_unlock_time_user= 0.00000000
+[74911][      debug]   proc_locker_unlock_time_sys= 0.00000000
+[74911][      debug]   proc_locker_unlock_time_wall= 0.00000000
+[74911][      debug]   restart_scheduler_useful_time_user= 0.00000000
+[74911][      debug]   restart_scheduler_useful_time_sys= 0.00000000
+[74911][      debug]   restart_scheduler_useful_time_wall= 0.00000000
+[74911][      debug]   restart_scheduler_total_time_user= 0.00000000
+[74911][      debug]   restart_scheduler_total_time_sys= 0.00000000
+[74911][      debug]   restart_scheduler_total_time_wall= 0.00000000
+[74911][      debug]   
+[74911][      debug] GC stats for backend_stats.gc_stats_add.:
+[74911][      debug]   minor_words: 3.97762e+06
+[74911][      debug]   promoted_words: 41865
+[74911][      debug]   major_words: 54687
+[74911][      debug]   minor_collections: 4
+[74911][      debug]   major_collections: 2
+[74911][      debug]   compactions: 0
+[74911][      debug]   top_heap_words: 20264960
+[74911][      debug]   
+[74911][      debug] GC stats for backend_stats.gc_stats_max.:
+[74911][      debug]   minor_words: 3.97713e+06
+[74911][      debug]   promoted_words: 41865
+[74911][      debug]   major_words: 54687
+[74911][      debug]   minor_collections: 4
+[74911][      debug]   major_collections: 2
+[74911][      debug]   compactions: 0
+[74911][      debug]   top_heap_words: 2026496
+[74911][      debug]   
+[74911][      debug] Average over 10 processes
+[74911][      debug] GC stats for backend_stats.gc_stats_average.:
+[74911][      debug]   minor_words: 397762
+[74911][      debug]   promoted_words: 4186.5
+[74911][      debug]   major_words: 5468.7
+[74911][      debug]   minor_collections: 0
+[74911][      debug]   major_collections: 0
+[74911][      debug]   compactions: 0
+[74911][      debug]   top_heap_words: 2026496
+[74911][      debug]   
+[74911][      debug] Analysis phase finished in 94.848ms
+[74911][      debug] backend_stats.scheduler_process_analysis_time_user= 0.01798100
+[74911][      debug] backend_stats.scheduler_process_analysis_time_sys= 0.02911400
+[74911][      debug] backend_stats.scheduler_process_analysis_time_wall= 0.09484769
+[74911][      debug] GC stats for analysis_scheduler:
+[74911][      debug]   minor_words: 14093
+[74911][      debug]   promoted_words: 27862
+[74911][      debug]   major_words: 36568
+[74911][      debug]   minor_collections: 1
+[74911][      debug]   major_collections: 2
+[74911][      debug]   compactions: 1
+[74911][      debug]   top_heap_words: 2026496
+[74911][      debug]   
+[74911][      debug] GC stats for report:
+[74911][      debug]   minor_words: 38032
+[74911][      debug]   promoted_words: 0
+[74911][      debug]   major_words: 1086
+[74911][      debug]   minor_collections: 0
+[74911][      debug]   major_collections: 0
+[74911][      debug]   compactions: 0
+[74911][      debug]   top_heap_words: 2026496
+[74911][      debug]   
+[74911][      debug] GC stats for main_process_full:
+[74911][      debug]   minor_words: 6.10516e+06
+[74911][      debug]   promoted_words: 1.3911e+06
+[74911][      debug]   major_words: 1.98041e+06
+[74911][      debug]   minor_collections: 11
+[74911][      debug]   major_collections: 5
+[74911][      debug]   compactions: 2
+[74911][      debug]   top_heap_words: 2026496
+[74911][      debug]   
+[74912][      debug] Sqlite write daemon: terminating

@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation-dedup/Interproc.java:9: error: Deadlock
+  Potential deadlock. `void Interproc.interproc1Bad(InterprocA)` (Trace 1) and `void InterprocA.interproc1Bad(Interproc)` (Trace 2) acquire locks `a` in `class InterprocA` and `c` in `class Interproc` in reverse orders.
+   7.   
+   8.   class Interproc {
+   9. >   synchronized void interproc1Bad(InterprocA a) {
+  10.       interproc2(a);
+  11.     }
+
+Found 1 issue
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 1

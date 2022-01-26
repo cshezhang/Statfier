@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ConcurrentHashMap;

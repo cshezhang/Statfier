@@ -1,0 +1,21 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/TrueFalseOnNull.java:245: error: Null Dereference
+  object `src` could be null and is dereferenced at line 245.
+  243.           }
+  244.           // at this point src should be a non-nullable: super.equals() would return false otherwise.
+  245. >         src.toString(); // should be OK to dereference now
+  246.           if (!(src instanceof SomeObject)) {
+  247.             return false;
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/TrueFalseOnNull.java:260: error: Null Dereference
+  object `y` could be null and is dereferenced at line 260.
+  258.   
+  259.         // OK to dereference
+  260. >       y.toString();
+  261.       }
+  262.   
+
+Found 2 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 2

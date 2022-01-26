@@ -1,4 +1,3 @@
-package sfBugs;
 
 import java.util.Currency;
 import java.util.Locale;

@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/NotUnderLock.java:17: error: Arbitrary Code Execution Under lock
+  Method `void NotUnderLock.firstAcquisitionBad()` calls `boolean SettableFuture.set(Object)` under a lock; executed code may acquire arbitrary locks leading to potential deadlock.
+  15.     }
+  16.   
+  17. >   private synchronized void firstAcquisitionBad() {
+  18.       callFutureSetOk();
+  19.     }
+
+Found 1 issue
+                                                Issue Type(ISSUED_TYPE_ID): #
+  Arbitrary Code Execution Under lock(ARBITRARY_CODE_EXECUTION_UNDER_LOCK): 1

@@ -1,0 +1,30 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ThreadDeadlock.java:35: error: Deadlock
+  Potential deadlock. `void ThreadDeadlock.annotatedUiThreadBad()` (Trace 1) and `void ThreadDeadlock.annotatedWorkerThreadBad()` (Trace 2) acquire locks `this.lockB` in `class codetoanalyze.java.starvation.ThreadDeadlock` and `this` in `class codetoanalyze.java.starvation.ThreadDeadlock` in reverse orders.
+  33.   
+  34.     @UiThread
+  35. >   public synchronized void annotatedUiThreadBad() {
+  36.       synchronized (lockB) {
+  37.       }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ThreadDeadlock.java:52: error: Deadlock
+  Potential deadlock. `void ThreadDeadlock.assertOnUIThreadBad()` (Trace 1) and `void ThreadDeadlock.assertOnBackgroundThreadBad()` (Trace 2) acquire locks `this.lockC` in `class codetoanalyze.java.starvation.ThreadDeadlock` and `this` in `class codetoanalyze.java.starvation.ThreadDeadlock` in reverse orders.
+  50.     // deadlock as above, but here assertions are used to determine thread status
+  51.   
+  52. >   public synchronized void assertOnUIThreadBad() {
+  53.       OurThreadUtils.assertOnUiThread();
+  54.       synchronized (lockC) {
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ThreadDeadlock.java:71: error: Deadlock
+  Potential deadlock. `void ThreadDeadlock.notAnnotatedBadA()` (Trace 1) and `void ThreadDeadlock.notAnnotatedBBad()` (Trace 2) acquire locks `this.lockD` in `class codetoanalyze.java.starvation.ThreadDeadlock` and `this` in `class codetoanalyze.java.starvation.ThreadDeadlock` in reverse orders.
+  69.     // methods take locks
+  70.   
+  71. >   public synchronized void notAnnotatedBadA() {
+  72.       synchronized (lockD) {
+  73.       }
+
+Found 3 issues
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 3

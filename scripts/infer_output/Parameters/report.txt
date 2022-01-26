@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/Parameters.java:34: error: Deadlock
+  Potential deadlock. `void Parameters.oneWayEmulateSyncBad()` (Trace 1) and `void Parameters.anotherWayEmulateSyncBad()` (Trace 2) acquire locks `this.someObject` in `class codetoanalyze.java.starvation.Parameters` and `this` in `class codetoanalyze.java.starvation.Parameters` in reverse orders.
+  32.   
+  33.     // Next two methods will deadlock
+  34. >   public synchronized void oneWayEmulateSyncBad() {
+  35.       emulateSynchronized(someObject);
+  36.     }
+
+Found 1 issue
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 1

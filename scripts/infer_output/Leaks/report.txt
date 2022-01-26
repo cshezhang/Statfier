@@ -1,0 +1,67 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:17: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 17 is not released after line 17.
+  15.   
+  16.     void basicLeakBad() throws FileNotFoundException {
+  17. >     new FileInputStream("file.txt");
+  18.     }
+  19.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:21: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 21 is not released after line 21.
+  19.   
+  20.     void doubleLeakBad() throws FileNotFoundException {
+  21. >     new FileInputStream("file1.txt");
+  22.       new FileInputStream("file2.txt");
+  23.     }
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:22: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 22 is not released after line 22.
+  20.     void doubleLeakBad() throws FileNotFoundException {
+  21.       new FileInputStream("file1.txt");
+  22. >     new FileInputStream("file2.txt");
+  23.     }
+  24.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:32: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 32 is not released after line 32.
+  30.     void acquireTwoForgetOneBad() throws IOException, FileNotFoundException {
+  31.       FileInputStream stream1 = new FileInputStream("file.txt");
+  32. >     FileInputStream stream2 = new FileInputStream("file.txt");
+  33.       stream1.close();
+  34.     }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:34: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired to `stream1` by call to `FileInputStream(...)` at line 31 is not released after line 34.
+**Note**: potential exception at line 32
+  32.       FileInputStream stream2 = new FileInputStream("file.txt");
+  33.       stream1.close();
+  34. >   }
+  35.   
+  36.     void acquireTwoThenReleaseOk() throws IOException, FileNotFoundException {
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:41: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired to `stream1` by call to `FileInputStream(...)` at line 37 is not released after line 41.
+**Note**: potential exception at line 38
+  39.       stream1.close();
+  40.       stream2.close();
+  41. >   }
+  42.   }
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/Leaks.java:41: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired to `stream2` by call to `FileInputStream(...)` at line 38 is not released after line 41.
+**Note**: potential exception at line 39
+  39.       stream1.close();
+  40.       stream2.close();
+  41. >   }
+  42.   }
+
+Found 7 issues
+    Issue Type(ISSUED_TYPE_ID): #
+  Resource Leak(RESOURCE_LEAK): 7

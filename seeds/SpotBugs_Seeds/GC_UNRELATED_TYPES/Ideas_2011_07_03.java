@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import java.util.ArrayList;
 import java.util.HashSet;

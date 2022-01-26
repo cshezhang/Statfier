@@ -1,4 +1,3 @@
-package sfBugs;
 
 import org.testng.annotations.Test;
 

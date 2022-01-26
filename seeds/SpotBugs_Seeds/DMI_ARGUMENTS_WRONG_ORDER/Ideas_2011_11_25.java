@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import com.google.common.base.Preconditions;
 

@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Callable;

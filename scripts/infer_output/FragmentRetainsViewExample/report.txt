@@ -1,0 +1,30 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/FragmentRetainsViewExample.java:40: warning: Fragment Retains View
+  Fragment `codetoanalyze.java.checkers.FragmentRetainsViewExample` does not nullify View field `mCustomView` (type `codetoanalyze.java.checkers.FragmentRetainsViewExample$CustomView`) in `onDestroyView`. If this Fragment is placed on the back stack, a reference to this (probably dead) View will be retained. In general, it is a good idea to initialize View's in `onCreateView`, then nullify them in `onDestroyView`.
+  38.   
+  39.     @Override
+  40. >   public void onDestroyView() {
+  41.       // not nulling out anything
+  42.     }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/FragmentRetainsViewExample.java:40: warning: Fragment Retains View
+  Fragment `codetoanalyze.java.checkers.FragmentRetainsViewExample` does not nullify View field `mViewSubclass` (type `android.view.ViewGroup`) in `onDestroyView`. If this Fragment is placed on the back stack, a reference to this (probably dead) View will be retained. In general, it is a good idea to initialize View's in `onCreateView`, then nullify them in `onDestroyView`.
+  38.   
+  39.     @Override
+  40. >   public void onDestroyView() {
+  41.       // not nulling out anything
+  42.     }
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/FragmentRetainsViewExample.java:40: warning: Fragment Retains View
+  Fragment `codetoanalyze.java.checkers.FragmentRetainsViewExample` does not nullify View field `mView` (type `android.view.View`) in `onDestroyView`. If this Fragment is placed on the back stack, a reference to this (probably dead) View will be retained. In general, it is a good idea to initialize View's in `onCreateView`, then nullify them in `onDestroyView`.
+  38.   
+  39.     @Override
+  40. >   public void onDestroyView() {
+  41.       // not nulling out anything
+  42.     }
+
+Found 3 issues
+                             Issue Type(ISSUED_TYPE_ID): #
+  Fragment Retains View(CHECKERS_FRAGMENT_RETAINS_VIEW): 3

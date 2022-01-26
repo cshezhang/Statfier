@@ -1,4 +1,3 @@
-package sfBugsNew.Bug1207b;
 
 import edu.umd.cs.findbugs.annotations.NoWarning;
 import sfBugsNew.Bug1207a.Parent;

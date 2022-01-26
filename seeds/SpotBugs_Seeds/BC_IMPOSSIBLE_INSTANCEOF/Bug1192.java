@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 import java.io.IOException;
 

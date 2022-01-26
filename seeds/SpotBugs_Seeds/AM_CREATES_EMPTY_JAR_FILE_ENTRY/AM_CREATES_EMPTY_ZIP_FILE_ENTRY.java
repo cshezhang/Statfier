@@ -1,4 +1,3 @@
-package bugPatterns;
 
 import java.io.IOException;
 import java.util.jar.JarOutputStream;

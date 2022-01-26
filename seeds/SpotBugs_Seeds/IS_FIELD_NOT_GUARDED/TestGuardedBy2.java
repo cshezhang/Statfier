@@ -1,4 +1,3 @@
-package jcipAnnotations;
 
 import javax.annotation.concurrent.GuardedBy;
 

@@ -1,4 +1,3 @@
-package awt;
 
 import java.awt.Menu;
 import java.awt.MenuBar;

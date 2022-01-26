@@ -1,4 +1,3 @@
-package tigerTraps;
 
 import java.lang.reflect.Method;
 

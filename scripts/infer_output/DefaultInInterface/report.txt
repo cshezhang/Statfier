@@ -1,0 +1,39 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/DefaultInInterface.java:22: error: Null Dereference
+  object returned by `defaultMethod1()` could be null and is dereferenced at line 22.
+  20.     public static class A implements I {
+  21.       public void defaultCallNPE() {
+  22. >       System.out.println(this.defaultMethod1().toString());
+  23.       }
+  24.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/DefaultInInterface.java:44: error: Null Dereference
+  object returned by `defaultMethod2()` could be null and is dereferenced at line 44.
+  42.   
+  43.       public void overridenCallNPE() {
+  44. >       System.out.println(this.defaultMethod2().toString());
+  45.       }
+  46.     }
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/DefaultInInterface.java:53: error: Null Dereference
+  object returned by `aAorB.defaultMethod1()` could be null and is dereferenced at line 53.
+  51.         aAorB = new B();
+  52.       }
+  53. >     System.out.println(aAorB.defaultMethod1().toString());
+  54.     }
+  55.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/DefaultInInterface.java:61: error: Null Dereference
+  object returned by `aAorB.defaultMethod2()` could be null and is dereferenced at line 61.
+  59.         aAorB = new B();
+  60.       }
+  61. >     System.out.println(aAorB.defaultMethod2().toString());
+  62.     }
+  63.   }
+
+Found 4 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 4

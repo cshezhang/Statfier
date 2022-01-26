@@ -1,4 +1,3 @@
-package gcUnrelatedTypes;
 
 import java.util.ArrayList;
 

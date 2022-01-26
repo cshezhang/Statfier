@@ -1,0 +1,21 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/MainThreadTest.java:23: warning: Ipc On Ui Thread
+  Method `void MainThreadTest.callTransactBad()` runs on UI thread and may perform blocking IPC; calls `boolean Binder.transact(int,Parcel,Parcel,int)`.
+  21.     @MainThread
+  22.     void callTransactBad() {
+  23. >     doTransact();
+  24.     }
+  25.   }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/MainThreadTest.java:30: warning: Ipc On Ui Thread
+  Method `void AnnotatedClass.callTransactBad(MainThreadTest)` runs on UI thread and may perform blocking IPC; calls `boolean Binder.transact(int,Parcel,Parcel,int)`.
+  28.   class AnnotatedClass {
+  29.     void callTransactBad(MainThreadTest m) {
+  30. >     m.doTransact();
+  31.     }
+  32.   }
+
+Found 2 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Ipc On Ui Thread(IPC_ON_UI_THREAD): 2

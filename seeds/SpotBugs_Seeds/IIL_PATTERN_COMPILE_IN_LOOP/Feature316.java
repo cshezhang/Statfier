@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

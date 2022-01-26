@@ -1,4 +1,3 @@
-package gcUnrelatedTypes;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;

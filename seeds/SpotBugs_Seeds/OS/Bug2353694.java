@@ -13,7 +13,6 @@
  * for fp_warning_OS (on in2) despite the second unclosed stream (in3).
  * **************************************** */
 
-package sfBugs;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,0 +1,31 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/SuppressLintExample.java:20: error: Null Dereference
+  object `object` last assigned on line 19 could be null and is dereferenced at line 20.
+  18.     void shouldNotReportNPE() {
+  19.       Object object = null;
+  20. >     object.toString();
+  21.     }
+  22.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/SuppressLintExample.java:25: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 25 is not released after line 25.
+  23.     void shouldNotReportResourceLeak() {
+  24.       try {
+  25. >       FileInputStream fis = new FileInputStream(new File("whatever.txt"));
+  26.       } catch (IOException e) {
+  27.       }
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/SuppressLintExample.java:41: error: Null Dereference
+  object `object` last assigned on line 40 could be null and is dereferenced at line 41.
+  39.     void shouldReportNPE() {
+  40.       Object object = null;
+  41. >     object.toString();
+  42.     }
+  43.   
+
+Found 3 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 2
+        Resource Leak(RESOURCE_LEAK): 1

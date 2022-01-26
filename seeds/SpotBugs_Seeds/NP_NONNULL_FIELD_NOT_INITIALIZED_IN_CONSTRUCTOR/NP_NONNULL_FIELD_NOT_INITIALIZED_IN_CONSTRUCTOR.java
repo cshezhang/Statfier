@@ -1,4 +1,3 @@
-package bugPatterns;
 
 import javax.annotation.Nonnull;
 

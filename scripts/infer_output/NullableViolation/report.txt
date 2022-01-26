@@ -1,0 +1,48 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/NullableViolation.java:24: error: Null Dereference
+  object `t` last assigned on line 23 could be null and is dereferenced at line 24.
+  22.     void dereferenceNullableReturnValueBad() {
+  23.       T t = returnsNullable();
+  24. >     t.x = 42; // reports here
+  25.     }
+  26.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/NullableViolation.java:35: error: Null Dereference
+  object returned by `returnsNullable()` could be null and is dereferenced at line 35.
+  33.   
+  34.     void dereferenceNullableMethodBad() {
+  35. >     returnsNullable().doSomething(); // reports here
+  36.     }
+  37.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/NullableViolation.java:53: error: Null Dereference
+  object returned by `returnsNullable()` could be null and is dereferenced at line 53.
+  51.     void dereferenceNullableMethodIncorrectlyCheckedForNullBad() {
+  52.       if (returnsNullable() == null) {
+  53. >       returnsNullable().doSomething(); // reports here
+  54.       }
+  55.     }
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/NullableViolation.java:60: error: Null Dereference
+  object returned by `returnsNullable()` could be null and is dereferenced at line 60.
+  58.       if (returnsNullable() != null) {
+  59.       } else {
+  60. >       returnsNullable().doSomething(); // reports here
+  61.       }
+  62.     }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/checkers/NullableViolation.java:74: error: Null Dereference
+  object returned by `returnsNullable()` could be null and is dereferenced at line 74.
+  72.     void dereferenceNullableMethodNotAlwaysCheckedForNullBad() {
+  73.       if (star() || returnsNullable() != null) {
+  74. >       returnsNullable().doSomething(); // reports here
+  75.       }
+  76.     }
+
+Found 5 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 5

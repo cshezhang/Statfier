@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 import java.awt.Point;
 import java.util.List;

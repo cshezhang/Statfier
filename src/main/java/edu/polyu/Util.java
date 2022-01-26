@@ -76,6 +76,7 @@ public class Util {
     public final static boolean SPOTBUGS_MUTATION = Boolean.parseBoolean(getProperty("SPOTBUGS_MUTATION"));
     public final static boolean CHECKSTYLE_MUTATION = false;
     public final static boolean ERRORPRONE_MUTATION = false;
+    public final static boolean INFER_MUTATION = false;
     public final static boolean SONARQUBE_MUTATION = false;
     public final static boolean COMPILE = SPOTBUGS_MUTATION ? true : false;
 
@@ -98,6 +99,7 @@ public class Util {
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + sep + "SpotBugs_Seeds";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + sep + "SonarQube_Seeds";
     public final static String ERRORPRONE_SEED_PATH = BASE_SEED_PATH + sep + "Errorprone_Seeds";
+    public final static String INFER_SEED_PATH = "/home/vanguard/projects/SAMutator/infer/infer/tests/codetoanalyze/java";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + sep + "Checkstyle_Seeds";
 
     // mutants

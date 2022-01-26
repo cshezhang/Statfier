@@ -1,0 +1,39 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ObjWait.java:46: error: UI Thread Starvation
+  Method `void ObjWait.indirectWaitOnMainWithoutTimeoutBad()` runs on UI thread and locks `this.lock` in `class codetoanalyze.java.starvation.ObjWait`, which may be held by another thread which calls `wait` on `this.x` in `class codetoanalyze.java.starvation.ObjWait`.
+  44.     @UiThread
+  45.     void indirectWaitOnMainWithoutTimeoutBad() throws InterruptedException {
+  46. >     synchronized (lock) {
+  47.       }
+  48.     }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ObjWait.java:31: error: UI Thread Starvation
+  Method `void ObjWait.waitOnMainWithExcessiveTimeout1Bad()` runs on UI thread and may block; calls `wait` on `this.o` in `class codetoanalyze.java.starvation.ObjWait`.
+  29.     void waitOnMainWithExcessiveTimeout1Bad() throws InterruptedException {
+  30.       synchronized (o) {
+  31. >       o.wait(5001);
+  32.       }
+  33.     }
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ObjWait.java:38: error: UI Thread Starvation
+  Method `void ObjWait.waitOnMainWithExcessiveTimeout2Bad()` runs on UI thread and may block; calls `wait` on `this.o` in `class codetoanalyze.java.starvation.ObjWait`.
+  36.     void waitOnMainWithExcessiveTimeout2Bad() throws InterruptedException {
+  37.       synchronized (o) {
+  38. >       o.wait(4000, 2000000000);
+  39.       }
+  40.     }
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/ObjWait.java:24: error: UI Thread Starvation
+  Method `void ObjWait.waitOnMainWithoutTimeoutBad()` runs on UI thread and may block; calls `wait` on `this.o` in `class codetoanalyze.java.starvation.ObjWait`.
+  22.     void waitOnMainWithoutTimeoutBad() throws InterruptedException {
+  23.       synchronized (o) {
+  24. >       o.wait();
+  25.       }
+  26.     }
+
+Found 4 issues
+        Issue Type(ISSUED_TYPE_ID): #
+  UI Thread Starvation(STARVATION): 4

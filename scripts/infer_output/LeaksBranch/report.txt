@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/lab/LeaksBranch.java:19: error: Resource Leak
+  resource of type `java.io.FileInputStream` acquired by call to `FileInputStream(...)` at line 19 is not released after line 19.
+  17.       FileInputStream stream;
+  18.       if (b) {
+  19. >       stream = new FileInputStream("file.txt");
+  20.       }
+  21.     }
+
+Found 1 issue
+    Issue Type(ISSUED_TYPE_ID): #
+  Resource Leak(RESOURCE_LEAK): 1

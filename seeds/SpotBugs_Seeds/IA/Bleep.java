@@ -1,4 +1,3 @@
-package tigerTraps;
 
 import edu.umd.cs.findbugs.annotations.ExpectWarning;
 

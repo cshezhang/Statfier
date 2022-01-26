@@ -1,4 +1,3 @@
-package infiniteLoop;
 
 import java.util.List;
 

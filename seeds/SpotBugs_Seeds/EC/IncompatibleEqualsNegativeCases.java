@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-package com.google.errorprone.bugpatterns;
 
 import java.util.Collection;
 import java.util.HashSet;

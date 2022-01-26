@@ -1,4 +1,3 @@
-package ghIssues;
 
 import java.util.concurrent.ForkJoinPool;
 

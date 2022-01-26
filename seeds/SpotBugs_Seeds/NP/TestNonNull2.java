@@ -1,4 +1,3 @@
-package nullnessAnnotations.packageDefault;
 
 import javax.annotation.CheckForNull;
 

@@ -1,4 +1,3 @@
-package nullnessAnnotations.returnValue;
 
 import java.util.Collection;
 

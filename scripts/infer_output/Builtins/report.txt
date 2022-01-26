@@ -1,0 +1,30 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/Builtins.java:10: error: Null Dereference
+  object `x` last assigned on line 8 could be null and is dereferenced at line 10.
+   8.       Object x = null;
+   9.       InferBuiltins.assume(x != null);
+  10. >     x.toString();
+  11.     }
+  12.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/Builtins.java:16: error: Null Dereference
+  object `y` last assigned on line 14 could be null and is dereferenced at line 16.
+  14.       Object y = null;
+  15.       InferBuiltins.assume(x != null);
+  16. >     y.toString();
+  17.     }
+  18.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/Builtins.java:23: error: Null Dereference
+  object `y` last assigned on line 20 could be null and is dereferenced at line 23.
+  21.       int i = 0;
+  22.       InferBuiltins.assume(i != 0);
+  23. >     y.toString();
+  24.     }
+  25.   
+
+Found 3 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 3

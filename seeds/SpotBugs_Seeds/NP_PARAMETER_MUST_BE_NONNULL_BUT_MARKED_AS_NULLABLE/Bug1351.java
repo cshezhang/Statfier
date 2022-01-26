@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;

@@ -1,4 +1,3 @@
-package nullnessAnnotations;
 
 import edu.umd.cs.findbugs.annotations.NoWarning;
 import edu.umd.cs.findbugs.annotations.NonNull;

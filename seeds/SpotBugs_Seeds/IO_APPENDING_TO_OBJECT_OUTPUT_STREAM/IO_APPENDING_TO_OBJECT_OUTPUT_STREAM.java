@@ -1,4 +1,3 @@
-package bugPatterns;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

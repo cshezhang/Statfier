@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation-dedup/Intraproc.java:10: error: Deadlock
+  Potential deadlock. `void Intraproc.intraBad(IntraprocA)` (Trace 1) and `void IntraprocA.intraBad(Intraproc)` (Trace 2) acquire locks `o` in `class IntraprocA` and `o` in `class Intraproc` in reverse orders.
+   8.   class Intraproc {
+   9.     void intraBad(IntraprocA o) {
+  10. >     synchronized (this) {
+  11.         synchronized (o) {
+  12.         }
+
+Found 1 issue
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 1

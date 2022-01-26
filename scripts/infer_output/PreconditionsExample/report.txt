@@ -1,0 +1,30 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/PreconditionsExample.java:62: error: Null Dereference
+  object `y` last assigned on line 60 could be null and is dereferenced at line 62.
+  60.       Object y = null;
+  61.       Preconditions.checkNotNull(x);
+  62. >     y.toString();
+  63.     }
+  64.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/PreconditionsExample.java:70: error: Null Dereference
+  object `y` last assigned on line 67 could be null and is dereferenced at line 70.
+  68.       x.i1 = 1000;
+  69.       Preconditions.checkState(x.i1.equals(1000));
+  70. >     y.toString();
+  71.     }
+  72.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/pulse/PreconditionsExample.java:96: error: Null Dereference
+  object `x` last assigned on line 94 could be null and is dereferenced at line 96.
+  94.       Object x = null;
+  95.       checkAgeOver18(age);
+  96. >     x.getClass();
+  97.     }
+  98.   }
+
+Found 3 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 3

@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/doccase/DEADLOCK_2.java:11: error: Deadlock
+  Potential deadlock. `void DEADLOCK_2.lockAThenAddToVector()` (Trace 1) and `void DEADLOCK_2.lockVectorThenA()` (Trace 2) acquire locks `this.vector` in `class codetoanalyze.java.doccase.DEADLOCK_2` and `this.lockA` in `class codetoanalyze.java.doccase.DEADLOCK_2` in reverse orders.
+   9.   
+  10.       public void lockAThenAddToVector() {
+  11. >         synchronized (lockA) {
+  12.               vector.add(new Object());
+  13.           }
+
+Found 1 issue
+  Issue Type(ISSUED_TYPE_ID): #
+          Deadlock(DEADLOCK): 1

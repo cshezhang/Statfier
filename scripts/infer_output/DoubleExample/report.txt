@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/DoubleExample.java:22: error: Null Dereference
+  object `DoubleExample.x` last accessed on line 22 could be null and is dereferenced at line 22.
+  20.   
+  21.     private Double testdReadNullableBad() {
+  22. >     return x + 1.0;
+  23.     }
+  24.   }
+
+Found 1 issue
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 1

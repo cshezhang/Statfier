@@ -1,0 +1,21 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/Countdwn.java:21: error: UI Thread Starvation
+  Method `void Countdwn.awaitOnMainByAnnotBad()` runs on UI thread and may block; calls `void CountDownLatch.await()`.
+  19.     @UiThread
+  20.     void awaitOnMainByAnnotBad() throws InterruptedException {
+  21. >     latch.await();
+  22.     }
+  23.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/starvation/Countdwn.java:16: error: UI Thread Starvation
+  Method `void Countdwn.awaitOnMainByCallBad()` runs on UI thread and may block; calls `void CountDownLatch.await()`.
+  14.     void awaitOnMainByCallBad() throws InterruptedException {
+  15.       OurThreadUtils.assertMainThread();
+  16. >     latch.await();
+  17.     }
+  18.   
+
+Found 2 issues
+        Issue Type(ISSUED_TYPE_ID): #
+  UI Thread Starvation(STARVATION): 2

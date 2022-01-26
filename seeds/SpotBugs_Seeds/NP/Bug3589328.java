@@ -1,4 +1,3 @@
-package sfBugs;
 
 import java.net.URI;
 

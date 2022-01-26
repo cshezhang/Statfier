@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 import com.google.common.base.Objects;
 

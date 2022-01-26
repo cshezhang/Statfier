@@ -1,4 +1,3 @@
-package sfBugs;
 
 import edu.umd.cs.findbugs.annotations.NoWarning;
 

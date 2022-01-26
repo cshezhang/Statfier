@@ -1,0 +1,12 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/AlternativeRecommendations.java:22: error: Null Dereference
+  object returned by `view.findViewById(2)` could be null and is dereferenced at line 22.
+  20.   
+  21.     static void dereference_ShouldSuggestAlternative(View view) {
+  22. >     view.findViewById(2).setId(3);
+  23.     }
+  24.   
+
+Found 1 issue
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 1

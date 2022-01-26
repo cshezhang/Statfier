@@ -1,4 +1,3 @@
-package sfBugsNew;
 
 import edu.umd.cs.findbugs.annotations.DesireNoWarning;
 import edu.umd.cs.findbugs.annotations.ExpectWarning;

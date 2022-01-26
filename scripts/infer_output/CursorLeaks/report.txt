@@ -1,0 +1,66 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:61: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 51 is not released after line 61.
+  59.         value = cursor.getString(0);
+  60.       } finally {
+  61. >       if (cursor != null && !cursor.isClosed()) {
+  62.           cursor.close();
+  63.         }
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:70: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 69 is not released after line 70.
+  68.     public int cursorNotClosedBad(SQLiteDatabase sqLiteDatabase) {
+  69.       Cursor cursor = sqLiteDatabase.query("events", null, null, null, null, null, null);
+  70. >     return cursor.getCount();
+  71.     }
+  72.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:85: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 82 is not released after line 85.
+  83.   
+  84.       if (cursor != null) {
+  85. >       int count = cursor.getInt(0);
+  86.         // cursor.close();
+  87.         return count;
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:119: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 111 is not released after line 119.
+  117.           count++;
+  118.         }
+  119. >       return count;
+  120.       }
+  121.     }
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:144: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 143 is not released after line 144.
+  142.       builder.setTables("");
+  143.       Cursor cursor = builder.query(null, null, "", null, null, null, null);
+  144. >     if (cursor != null) cursor.moveToFirst();
+  145.     }
+  146.   
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:177: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 173 is not released after line 177.
+  175.           return 0;
+  176.         } else {
+  177. >         return cursor.getColumnIndex(DownloadManager.COLUMN_STATUS);
+  178.         }
+  179.       } finally {
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/biabduction/CursorLeaks.java:211: error: Resource Leak
+  resource of type `android.database.sqlite.SQLiteCursor` acquired by call to `query(...)` at line 207 is not released after line 211.
+  209.         }
+  210.       } finally {
+  211. >       if (cursor != null) {
+  212.           // cursor.close();
+  213.         }
+
+Found 7 issues
+    Issue Type(ISSUED_TYPE_ID): #
+  Resource Leak(RESOURCE_LEAK): 7

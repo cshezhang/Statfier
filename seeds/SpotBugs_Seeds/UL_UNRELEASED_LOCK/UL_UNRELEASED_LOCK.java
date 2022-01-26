@@ -1,4 +1,3 @@
-package bugPatterns;
 
 import java.util.concurrent.locks.Lock;
 

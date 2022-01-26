@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import java.sql.Time;
 

@@ -1,4 +1,3 @@
-package bugIdeas;
 
 import edu.umd.cs.findbugs.annotations.DesireWarning;
 import edu.umd.cs.findbugs.annotations.ExpectWarning;

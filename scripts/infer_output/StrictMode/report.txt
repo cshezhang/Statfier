@@ -1,0 +1,66 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:41: error: Null Dereference
+  object returned by `getNullable()` could be null and is dereferenced at line 41.
+  39.   
+  40.     private void sameClass_dereferenceNullableMethodIsBad() {
+  41. >     getNullable().toString();
+  42.     }
+  43.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:49: error: Null Dereference
+  object returned by `staticNullable()` could be null and is dereferenced at line 49.
+  47.   
+  48.     private void sameClass_dereferenceNullableStaticMethodIsBad() {
+  49. >     staticNullable().toString();
+  50.     }
+  51.   
+
+#2
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:57: error: Null Dereference
+  object `Strict.nullable` last accessed on line 57 could be null and is dereferenced at line 57.
+  55.   
+  56.     private void sameClass_dereferenceNullableFieldIsBad() {
+  57. >     nullable.toString();
+  58.     }
+  59.   
+
+#3
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:75: error: Null Dereference
+  object returned by `getNullable(__new(codetoanalyze.java.nullsafe.OtherStrict))` could be null and is dereferenced at line 75.
+  73.   
+  74.     private void strictClass_dereferenceNullableMethodIsBad() {
+  75. >     (new OtherStrict()).getNullable().toString();
+  76.     }
+  77.   
+
+#4
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:83: error: Null Dereference
+  object returned by `staticNullable()` could be null and is dereferenced at line 83.
+  81.   
+  82.     private void strictClass_dereferenceNullableStaticMethodIsBad() {
+  83. >     OtherStrict.staticNullable().toString();
+  84.     }
+  85.   
+
+#5
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:110: error: Null Dereference
+  object returned by `getNullable(__new(codetoanalyze.java.nullsafe.NonStrict))` could be null and is dereferenced at line 110.
+  108.   
+  109.     private void nonStrictClass_dereferenceNullableMethodIsBad() {
+  110. >     (new NonStrict()).getNullable().toString();
+  111.     }
+  112.   
+
+#6
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/StrictMode.java:119: error: Null Dereference
+  object returned by `staticNullable()` could be null and is dereferenced at line 119.
+  117.   
+  118.     private void nonStrictClass_dereferenceNullableStaticMethodIsBad() {
+  119. >     NonStrict.staticNullable().toString();
+  120.     }
+  121.   
+
+Found 7 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 7

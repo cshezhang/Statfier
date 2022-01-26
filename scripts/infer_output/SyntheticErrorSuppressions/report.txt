@@ -1,0 +1,21 @@
+#0
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/SyntheticErrorSuppressions.java:64: error: Null Dereference
+  object `SyntheticErrorSuppressions$ClassWithSyntheticCode.$ul_fieldNullable` last accessed on line 64 could be null and is dereferenced at line 64.
+  62.   
+  63.       public String dereferencingSyntheticNullableField_OK_FP() {
+  64. >       return $ul_fieldNullable.toString();
+  65.       }
+  66.   
+
+#1
+/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/SyntheticErrorSuppressions.java:68: error: Null Dereference
+  object returned by `$ul_iAmNullableAutogen()` could be null and is dereferenced at line 68.
+  66.   
+  67.       public String dereferencingNullableSyntheticMethodCall_OK_FP() {
+  68. >       return $ul_iAmNullableAutogen().toString();
+  69.       }
+  70.     }
+
+Found 2 issues
+          Issue Type(ISSUED_TYPE_ID): #
+  Null Dereference(NULL_DEREFERENCE): 2
