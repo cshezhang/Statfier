@@ -134,6 +134,15 @@ public class Util {
     public static ConcurrentHashMap<String, HashMap<String, ArrayList<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
     public static Map compilerOptions = JavaCore.getOptions();
 
+    public static List<ASTWrapper> randomMutantSampling(List<ASTWrapper> wrappers) {
+        List<ASTWrapper> filteredWrappers = new ArrayList<>();
+        int targetSize = (int)(wrappers.size() * 0.1);
+        while(filteredWrappers.size() < targetSize) {
+            
+        }
+        return filteredWrappers;
+    }
+
     public static Type checkLiteralType(AST ast, Expression literalExpression) {
         if(literalExpression instanceof NumberLiteral) {
             String token = ((NumberLiteral) literalExpression).getToken();

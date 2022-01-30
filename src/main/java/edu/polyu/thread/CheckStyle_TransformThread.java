@@ -4,8 +4,6 @@ import edu.polyu.ASTWrapper;
 import edu.polyu.Invoker;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
-import edu.polyu.report.SpotBugs_Report;
-import edu.polyu.report.SpotBugs_Violation;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -25,6 +23,7 @@ import static edu.polyu.Util.SpotBugsClassFolder;
 import static edu.polyu.Util.SpotBugsResultFolder;
 import static edu.polyu.Util.file2bugs;
 import static edu.polyu.Util.file2line;
+import static edu.polyu.Util.randomMutantSampling;
 import static edu.polyu.Util.readCheckStyleResultFile;
 import static edu.polyu.Util.sep;
 
@@ -64,7 +63,8 @@ public class CheckStyle_TransformThread implements Runnable {
                                 mutants = wrapper.pureRandomTransformation();
                             }
                         }
-                        wrapperQue.addAll(mutants);
+                        List<ASTWrapper> filteredMutants = randomMutantSampling(mutants);
+                        wrapperQue.addAll(filteredMutants);
                     }
                 } else {
                     wrapperQue.addFirst(wrapper);
