@@ -6,11 +6,10 @@
 package edu.polyu.mutators;
 
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-public class AddBrackets extends StatementMutator {
+public class AddBrackets extends Mutator {
 
     private static AddBrackets addBrackets = new AddBrackets();
 

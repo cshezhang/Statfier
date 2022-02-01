@@ -1,5 +1,6 @@
 package edu.polyu;
 
+import edu.polyu.mutators.Mutator;
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.*;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static edu.polyu.StatementMutator.getMutatorSize;
+import static edu.polyu.mutators.Mutator.getMutatorSize;
 import static edu.polyu.Util.*;
 import static edu.polyu.util.EditDistance.calculateStringSimilarity;
 
@@ -507,9 +508,9 @@ public class ASTWrapper {
             if (statementSize <= 0) {
                 return newWrappers;
             }
-            ArrayList<StatementMutator> mutators = StatementMutator.getMutators();
+            ArrayList<Mutator> mutators = Mutator.getMutators();
             for(Statement oldStatement : candidateStatements) {
-                for (StatementMutator mutator : mutators) {
+                for (Mutator mutator : mutators) {
                     int counter = mutator.check(oldStatement);
                     for (int i = 0; i < counter; i++) {
                         String filename = "mutant_" + mutantCounter.getAndAdd(1);
@@ -574,7 +575,7 @@ public class ASTWrapper {
                     break;
                 }
                 Statement oldStatement = candidateStatements.get(random.nextInt(statementSize));
-                StatementMutator mutator = StatementMutator.getMutatorRandomly();
+                Mutator mutator = Mutator.getMutatorRandomly();
                 int counter = mutator.check(oldStatement);
                 for(int i = 0; i < counter; i++) {
                     if (counter <= 0) {
@@ -643,7 +644,7 @@ public class ASTWrapper {
                 }
 //                Statement oldStatement = this.candidateStatements.get(random.nextInt(candidateStatementSize));
                 for(Statement oldStatement : this.candidateStatements) {
-                    StatementMutator mutator = StatementMutator.getMutatorRandomly();
+                    Mutator mutator = Mutator.getMutatorRandomly();
                     guidedRandomCount++;
                     int counter = mutator.check(oldStatement);
 //                    if(counter > 0) {
@@ -770,7 +771,7 @@ public class ASTWrapper {
 //                }
 //            }
             for (Statement oldStatement : this.candidateStatements) {
-                for (StatementMutator mutator : StatementMutator.getMutators()) {
+                for (Mutator mutator : Mutator.getMutators()) {
                     int counter = mutator.check(oldStatement);
                     for(int i = 0; i < counter; i++) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);

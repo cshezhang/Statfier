@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -10,13 +9,13 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
  * @Author: Vanguard
  * @Date: 2021-08-20 21:08
  */
-public class AddLocalAssignment extends StatementMutator {
+public class AddLocalAssignment extends Mutator {
 
     private static final AddLocalAssignment instance = new AddLocalAssignment();
 
     private AddLocalAssignment() {}
 
-    public static StatementMutator getInstance() {
+    public static Mutator getInstance() {
         return instance;
     }
 

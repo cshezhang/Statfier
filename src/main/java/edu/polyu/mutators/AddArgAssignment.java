@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -12,13 +11,13 @@ import static edu.polyu.Util.*;
  * @Author: Huaien Zhang
  * @Date: 2021-10-05 12:49
  */
-public class AddArgAssignment extends StatementMutator {
+public class AddArgAssignment extends Mutator {
 
     private static AddArgAssignment addArgAssignment = new AddArgAssignment();
 
     private AddArgAssignment() {}
 
-    public static StatementMutator getInstance() {
+    public static Mutator getInstance() {
         return addArgAssignment;
     }
 

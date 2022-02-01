@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -10,7 +9,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
  * @Author: Vanguard
  * @Date: 2021-08-20 18:17
  */
-public class AddControlBranch extends StatementMutator {
+public class AddControlBranch extends Mutator {
 
 
     private static final AddControlBranch singleInstance = new AddControlBranch();

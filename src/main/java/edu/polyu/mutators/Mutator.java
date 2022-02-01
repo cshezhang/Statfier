@@ -1,6 +1,5 @@
-package edu.polyu;
+package edu.polyu.mutators;
 
-import edu.polyu.mutators.*;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -16,9 +15,9 @@ import static edu.polyu.Util.random;
  * @Author: Vanguard
  * @Date: 2021-10-14 09:25:07
  */
-public abstract class StatementMutator {
+public abstract class Mutator {
 
-    private static ArrayList<StatementMutator> mutators;
+    private static ArrayList<Mutator> mutators;
 
     public abstract boolean run(int index, AST ast, ASTRewrite astRewrite, Statement brother, Statement sourceStatement);
 //    public abstract List<ASTNode> getCandidateNodes(Statement statement);
@@ -105,11 +104,11 @@ public abstract class StatementMutator {
         }
     }
 
-    public static StatementMutator getMutatorRandomly() {
+    public static Mutator getMutatorRandomly() {
         return mutators.get(random.nextInt(mutators.size()));
     }
 
-    public static ArrayList<StatementMutator> getMutators() {
+    public static ArrayList<Mutator> getMutators() {
         return mutators;
     }
 

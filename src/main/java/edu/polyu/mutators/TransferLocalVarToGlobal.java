@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -21,7 +20,7 @@ import static edu.polyu.Util.checkExpressionLiteral;
 import static edu.polyu.Util.checkLiteralType;
 import static edu.polyu.Util.getChildrenNodes;
 
-public class TransferLocalVarToGlobal extends StatementMutator {
+public class TransferLocalVarToGlobal extends Mutator {
 
     private static int varCounter;
     private static TransferLocalVarToGlobal instance = new TransferLocalVarToGlobal();

@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -14,7 +13,7 @@ import java.util.List;
 
 import static edu.polyu.Util.getChildrenNodes;
 
-public class CompoundExpression2 extends StatementMutator {
+public class CompoundExpression2 extends Mutator {
 
     private static final CompoundExpression2 instance = new CompoundExpression2();
 

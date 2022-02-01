@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -23,7 +22,7 @@ import static edu.polyu.Util.*;
  * Author: Vanguard
  * Date: 2021-12-29 16:10
  */
-public class AddMethodCallToLiteral extends StatementMutator {
+public class AddMethodCallToLiteral extends Mutator {
 
     private static int literalCounter = 0;
 

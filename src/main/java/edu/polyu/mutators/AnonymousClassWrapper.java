@@ -1,6 +1,5 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -20,7 +19,7 @@ import java.util.List;
 import static edu.polyu.Util.getDirectMethodOfStatement;
 import static edu.polyu.Util.getTypeOfStatement;
 
-public class AnonymousClassWrapper extends StatementMutator {
+public class AnonymousClassWrapper extends Mutator {
 
     public static int varCounter;
 

@@ -1,7 +1,6 @@
 package edu.polyu.mutators;
 
 
-import edu.polyu.StatementMutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -11,7 +10,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 // Control flow warpper by if(true)
-public class CFWrapperWithIfTrue extends StatementMutator {
+public class CFWrapperWithIfTrue extends Mutator {
 
     private static final CFWrapperWithIfTrue instance = new CFWrapperWithIfTrue();
 
