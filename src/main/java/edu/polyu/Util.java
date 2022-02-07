@@ -128,10 +128,23 @@ public class Util {
     public static Map compilerOptions = JavaCore.getOptions();
 
     public static List<ASTWrapper> randomMutantSampling(List<ASTWrapper> wrappers) {
+        HashSet<Integer> selectedIndex = new HashSet<>();
         List<ASTWrapper> filteredWrappers = new ArrayList<>();
-        int targetSize = (int)(wrappers.size() * 0.1);
-        while(filteredWrappers.size() < targetSize) {
-            
+        int targetSize = (int)(wrappers.size() * 0.1 + 0.5);
+        while(selectedIndex.size() < targetSize) {
+            for(int i = 0; i < wrappers.size(); i++) {
+                if(Math.random() < 0.5) {
+                    continue;
+                }
+                if(selectedIndex.contains(i)) {
+                    continue;
+                } else {
+                    selectedIndex.add(i);
+                }
+            }
+        }
+        for(Integer index : selectedIndex) {
+            filteredWrappers.add(wrappers.get(index));
         }
         return filteredWrappers;
     }

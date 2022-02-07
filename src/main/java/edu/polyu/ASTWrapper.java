@@ -1,5 +1,6 @@
 package edu.polyu;
 
+import edu.polyu.mutators.Mutator;
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.dom.*;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static edu.polyu.Mutator.getMutatorSize;
 import static edu.polyu.Util.*;
 import static edu.polyu.util.EditDistance.calculateStringSimilarity;
 
@@ -570,7 +570,7 @@ public class ASTWrapper {
                 return newWrappers;
             }
             while (true) {
-                if (++randomCount > statementSize * getMutatorSize()) {
+                if (++randomCount > statementSize * Mutator.getMutatorSize()) {
                     break;
                 }
                 Statement oldStatement = candidateStatements.get(random.nextInt(statementSize));
@@ -638,7 +638,7 @@ public class ASTWrapper {
                 validSeed.addAndGet(1);
             }
             while (true) {
-                if (guidedRandomCount > candidateStatementSize * getMutatorSize()) {
+                if (guidedRandomCount > candidateStatementSize * Mutator.getMutatorSize()) {
                     break;
                 }
 //                Statement oldStatement = this.candidateStatements.get(random.nextInt(candidateStatementSize));
