@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
+import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import static edu.polyu.Util.getDirectBlockOfStatement;
 
-public class CFWrapperWithIfFlase extends StatementMutator {
+public class CFWrapperWithIfFlase extends Mutator {
 
     private static final CFWrapperWithIfFlase instance = new CFWrapperWithIfFlase();
 

@@ -1,6 +1,6 @@
 ###
  # @Description: This shell script is used to remove useless project files.
- # @Author: Austin ZHANG
+ # @Author: Vanguard
  # @Date: 2021-12-02 19:19:20
 ###
 cp  ./out/artifacts/SAMutator/SAMutator.jar ~/evaluation/SpotBugs_15/

@@ -1,6 +1,6 @@
 /**
  * @Description: This is the testing case for compound syntactic structure.
- * @Author: Huaien Zhang
+ * @Author: Vanguard
  * @Date: 2021-08-10 15:56
  */
 public class AddBracketsTesting {

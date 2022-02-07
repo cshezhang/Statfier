@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
+import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
@@ -16,7 +16,7 @@ import java.util.List;
 import static edu.polyu.Util.getDirectMethodOfStatement;
 import static edu.polyu.Util.getTypeOfStatement;
 
-public class NestedClassWrapper extends StatementMutator {
+public class NestedClassWrapper extends Mutator {
 
     private static NestedClassWrapper nestedClassWrapper = new NestedClassWrapper();
 

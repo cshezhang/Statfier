@@ -4,14 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.polyu.analysis.LoopStatement;
-import edu.polyu.report.CheckStyle_Report;
-import edu.polyu.report.CheckStyle_Violation;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.PMD_Violation;
-import edu.polyu.report.SonarQube_Report;
-import edu.polyu.report.SonarQube_Violation;
-import edu.polyu.report.SpotBugs_Report;
-import edu.polyu.report.SpotBugs_Violation;
+import edu.polyu.report.*;
 
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
@@ -74,11 +67,10 @@ public class Util {
     // The following Bool variables are used to select static analysis tools.
     public final static boolean PMD_MUTATION = Boolean.parseBoolean(getProperty("PMD_MUTATION"));
     public final static boolean SPOTBUGS_MUTATION = Boolean.parseBoolean(getProperty("SPOTBUGS_MUTATION"));
-    public final static boolean CHECKSTYLE_MUTATION = false;
-    public final static boolean ERRORPRONE_MUTATION = false;
-    public final static boolean INFER_MUTATION = false;
-    public final static boolean SONARQUBE_MUTATION = false;
-    public final static boolean COMPILE = SPOTBUGS_MUTATION ? true : false;
+    public final static boolean INFER_MUTATION = Boolean.parseBoolean(getProperty("INFER_MUTATION"));
+    public final static boolean CHECKSTYLE_MUTATION = Boolean.parseBoolean(getProperty("CHECKSTYLE_MUTATION"));
+    public final static boolean SONARQUBE_MUTATION = Boolean.parseBoolean(getProperty("SONARQUBE_MUTATION"));
+    public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION) ? true : false;
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
@@ -98,8 +90,7 @@ public class Util {
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + sep + "PMD_Seeds";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + sep + "SpotBugs_Seeds";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + sep + "SonarQube_Seeds";
-    public final static String ERRORPRONE_SEED_PATH = BASE_SEED_PATH + sep + "Errorprone_Seeds";
-    public final static String INFER_SEED_PATH = "/home/vanguard/projects/SAMutator/infer/infer/tests/codetoanalyze/java";
+    public final static String INFER_SEED_PATH = BASE_SEED_PATH + sep + "Infer_Seeds";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + sep + "Checkstyle_Seeds";
 
     // mutants
@@ -108,17 +99,19 @@ public class Util {
     // results
     public final static File resultFolder = new File(userdir + sep + "results");
     public final static File PMDResultFolder = new File(userdir + sep + "results" + sep + "PMD_Results");
+    public final static File InferResultFolder = new File(userdir + sep + "results" + sep + "Infer_Results");
+    public final static File InferClassFolder = new File(userdir + sep + "results" + sep + "Infer_Classes");
     public final static File SpotBugsResultFolder = new File(userdir + sep + "results" + sep + "SpotBugs_Results");
     public final static File SpotBugsClassFolder = new File(userdir + sep + "results" + sep + "SpotBugs_Classes");
     public final static File CheckStyleResultFolder = new File(userdir + sep + "results" + sep + "CheckStyle_Results");
 
     // tools
     public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
-    public final static String PMD_PATH = toolPath + sep + "pmd" + sep + "bin" + sep + "run.sh pmd";
+    public final static String InferPath = toolPath + sep + "Infer" + sep + "bin" + sep + "infer";
     public final static String CHECKSTYLE_PATH = toolPath + sep + "checkstyle.jar";
     public static List<String> jarList = getFilenamesFromFolder(toolPath + sep + "libs", true);
     public static List<String> subSeedFolderNameList;
-    public static StringBuilder jarStr = new StringBuilder();
+    public static StringBuilder jarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     static {
         jarStr.append(".:");
         for(int i = jarList.size() - 1; i >= 1; i--) {
@@ -185,9 +178,6 @@ public class Util {
             }
             if (SONARQUBE_MUTATION) {
                 sourceSeedPath = SONARQUBE_SEED_PATH;
-            }
-            if (ERRORPRONE_MUTATION) {
-                sourceSeedPath = ERRORPRONE_SEED_PATH;
             }
             if (CHECKSTYLE_MUTATION) {
                 sourceSeedPath = CHECKSTYLE_SEED_PATH;
@@ -506,6 +496,34 @@ public class Util {
             }
         } catch (DocumentException e) {
             e.printStackTrace();
+        }
+        return results;
+    }
+
+    public static List<Infer_Report> readInferResultFile(String seedPath, String reportPath) {
+        List<Infer_Report> results = new ArrayList<>();
+        HashMap<String, Infer_Report> name2report = new HashMap<>();
+        SAXReader saxReader = new SAXReader();
+        try {
+            Document report = saxReader.read(new File(reportPath));
+            Element root = report.getRootElement();
+            List<Element> violations = root.elements("violation");
+            for(Element violation : violations) {
+                Infer_Violation infer_violation = new Infer_Violation(seedPath, violation);
+                String filename = infer_violation.getFilename();
+                if(name2report.containsKey(filename)) {
+                    name2report.get(filename).addViolation(infer_violation);
+                } else {
+                    Infer_Report infer_report = new Infer_Report(filename);
+                    infer_report.addViolation(infer_violation);
+                    name2report.put(filename, infer_report);
+                }
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        for(Infer_Report report : name2report.values()) {
+            results.add(report);
         }
         return results;
     }

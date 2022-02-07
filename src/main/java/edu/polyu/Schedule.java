@@ -20,6 +20,7 @@ import edu.polyu.report.PMD_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 import edu.polyu.thread.CheckStyle_TransformThread;
+import edu.polyu.thread.Infer_TransformThread;
 import edu.polyu.thread.PMD_TransformThread;
 import edu.polyu.thread.SpotBugs_TransformThread;
 
@@ -368,6 +369,73 @@ public class Schedule {
         }
     }
 
+    public void executeInferMutation(String seedFolderPath) {
+        locateMutationCode(0, seedFolderPath);
+        ExecutorService threadPool;
+        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            } else {
+                threadPool = Executors.newSingleThreadExecutor();
+            }
+        }
+        List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
+        System.out.println("All Initial Seed Count: " + seedPaths.size());
+        HashMap<String, List<ASTWrapper>> bug2wrapper = new HashMap<>();
+        List<Infer_TransformThread> mutationThreads = new ArrayList<>();
+        HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
+        int initSeedWrapperSize = 0;
+        for (int index = 0; index < seedPaths.size(); index++) {
+            String seedPath = seedPaths.get(index);
+            String[] tokens = seedPath.split(sep);
+            String seedFolderName = tokens[tokens.length - 2];
+            if (!file2line.containsKey(seedPath)) {
+                continue;
+            }
+            String key = tokens[tokens.length - 2];
+            String category = key.split("_")[0];
+            String bugType = key.split("_")[1];
+            if(category2bugTypes.containsKey(category)) {
+                category2bugTypes.get(category).add(bugType);
+            } else {
+                HashSet<String> types = new HashSet<>();
+                types.add(bugType);
+                category2bugTypes.put(category, types);
+            }
+            initSeedWrapperSize++;
+            ASTWrapper seedWrapper = new ASTWrapper(seedPath, seedFolderName);
+            if(bug2wrapper.containsKey(key)) {
+                bug2wrapper.get(key).add(seedWrapper);
+            } else {
+                List<ASTWrapper> wrappers = new ArrayList<>();
+                wrappers.add(seedWrapper);
+                bug2wrapper.put(key, wrappers);
+            }
+        }
+        System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
+        for(Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
+            String category = entry.getKey();
+            HashSet<String> bugTypes = entry.getValue();
+            for(String bugType : bugTypes) {
+                String seedFolderName = category + "_" + bugType;
+                List<ASTWrapper> wrappers = bug2wrapper.get(seedFolderName);
+                Infer_TransformThread mutationThread = new Infer_TransformThread(wrappers);
+                mutationThreads.add(mutationThread);
+            }
+        }
+        for(int i = 0; i < mutationThreads.size(); i++) {
+            threadPool.submit(mutationThreads.get(i));
+        }
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     // This function only can invoke static analysis tool and cannot include other parts.
     public void locateMutationCode(int iterDepth, String seedFolderPath) {
         String seedFolderName = Path2Last(seedFolderPath);
@@ -395,7 +463,6 @@ public class Schedule {
         }
         if(SPOTBUGS_MUTATION) {
             List<SpotBugs_Report> reports = invokeSpotBugs(seedFolderPath, seedFolderName);
-//            all_SpotBugs_Reports.add(reports);
             for(SpotBugs_Report report : reports) {
                 if(!file2line.containsKey(report.getFilename())) {
                     file2line.put(report.getFilename(), new HashSet<>());

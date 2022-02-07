@@ -14,22 +14,7 @@ import static edu.polyu.ASTWrapper.failMutation;
 import static edu.polyu.ASTWrapper.invalidSeed;
 import static edu.polyu.ASTWrapper.succMutation;
 import static edu.polyu.ASTWrapper.validSeed;
-import static edu.polyu.Util.AST_TESTING;
-import static edu.polyu.Util.AST_TESTING_PATH;
-import static edu.polyu.Util.CHECKSTYLE_MUTATION;
-import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.Util.MAIN_EXECUTION;
-import static edu.polyu.Util.PMD_MUTATION;
-import static edu.polyu.Util.PURE_RANDOM_TESTING;
-import static edu.polyu.Util.PURE_TESTING;
-import static edu.polyu.Util.SINGLE_TESTING_PATH;
-import static edu.polyu.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.Util.compactIssues;
-import static edu.polyu.Util.initEnv;
-import static edu.polyu.Util.sep;
-import static edu.polyu.Util.sourceSeedPath;
-import static edu.polyu.Util.startTimeStamp;
-import static edu.polyu.Util.userdir;
+import static edu.polyu.Util.*;
 
 /**
  * Description: Mutator Scheduler
@@ -71,6 +56,9 @@ public class AutomaticTester {
                 }
                 if(CHECKSTYLE_MUTATION) {
                     tester.executeCheckStyleMutation(sourceSeedPath);
+                }
+                if(INFER_MUTATION) {
+                    tester.executeInferMutation(sourceSeedPath);
                 }
             }
             StringBuilder res = new StringBuilder();

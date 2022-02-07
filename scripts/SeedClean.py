@@ -1,6 +1,6 @@
 '''
 Description: This script is used to clean seeds.
-Author: Austin ZHANG
+Author: Vanguard
 Date: 2021-11-01 10:52:59
 '''
 

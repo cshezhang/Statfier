@@ -2,7 +2,7 @@ package PMDCases;
 
 /**
  * Description:
- * Author: Austin Zhang
+ * Author: Vanguard
  * Date: 2021/10/7 4:32 下午
  */
 public enum PMDCase2 {

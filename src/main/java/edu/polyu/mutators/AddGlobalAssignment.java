@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
+import edu.polyu.Mutator;
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -24,7 +24,7 @@ import java.util.List;
  * @Author: Vanguard
  * @Date: 2021-12-15 12:49
  */
-public class AddGlobalAssignment extends StatementMutator {
+public class AddGlobalAssignment extends Mutator {
 
     private static final AddGlobalAssignment instance = new AddGlobalAssignment();
     private AddGlobalAssignment() {}

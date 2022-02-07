@@ -227,7 +227,7 @@ public class Invoker {
         List<String> seedFileNamesWithSuffix = getFilenamesFromFolder(seedFolderPath, false); // Filenames with suffix
         initThreadPool();
         List<List<String>> lists = listAveragePartition(seedFileNamesWithSuffix, THREAD_COUNT);
-        long startExecutionTime = System.currentTimeMillis();
+        long startExecutionTime = System.currentTimeMillis();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                urrentTimeMillis();
         for(int i = 0; i < lists.size(); i++) {
             threadPool.submit(new SpotBugs_InvokeThread(seedFolderPath, seedFolderName, lists.get(i)));
         }

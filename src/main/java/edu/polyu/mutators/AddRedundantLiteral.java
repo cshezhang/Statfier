@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
+import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
@@ -12,10 +12,10 @@ import static edu.polyu.Util.getChildrenNodes;
 
 /**
  * @Description: The mutant to add redundant literal
- * @Author: Huaien Zhang
+ * @Author: Vanguard
  * @Date: 2021-08-20 21:15
  */
-public class AddRedundantLiteral extends StatementMutator {
+public class AddRedundantLiteral extends Mutator {
 
     private static AddRedundantLiteral addRedundantLiteral = new AddRedundantLiteral();
 

@@ -6,7 +6,7 @@ import static edu.polyu.Util.sep;
 
 /*
  * @Intro: Save a bug instance in report.
- * @Author: Austin ZHANG
+ * @Author: Vanguard
  * @Date: 2021-10-18 11:21:56
  */
 

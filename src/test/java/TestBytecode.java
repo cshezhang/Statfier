@@ -1,10 +1,8 @@
-package edu.polyu;
-
 import org.junit.Test;
 
 /**
  * Description:
- * Author: Austin Zhang
+ * Author: Vanguard
  * Date: 2021/12/19 7:35 下午
  */
 public class TestBytecode {

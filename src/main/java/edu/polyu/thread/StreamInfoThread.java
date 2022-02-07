@@ -1,6 +1,7 @@
 package edu.polyu.thread;
 
 import java.io.*;
+
 public class StreamInfoThread extends Thread {
 
     private InputStream is;

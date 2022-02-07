@@ -1,6 +1,6 @@
 <!--
  * @Description: 
- * @Author: Austin ZHANG
+ * @Author: Vanguard
  * @Date: 2021-10-14 09:25:07
 -->
 # SAMutator
@@ -8,9 +8,9 @@ Testing Tool for Static Analysis Tool.
 
 ## Main Strategy
 
-### Metamorphic Testing
+### Differential Testing
 
-### Mutation Testing
+### Program Transformation
 
 ## Environment Setting
 

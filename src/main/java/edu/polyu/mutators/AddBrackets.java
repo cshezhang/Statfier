@@ -1,16 +1,16 @@
 /*
  * @Description: 
- * @Author: Austin ZHANG
+ * @Author: Vanguard
  * @Date: 2021-10-14 09:25:07
  */
 package edu.polyu.mutators;
 
 
-import edu.polyu.StatementMutator;
+import edu.polyu.Mutator;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-public class AddBrackets extends StatementMutator {
+public class AddBrackets extends Mutator {
 
     private static AddBrackets addBrackets = new AddBrackets();
 

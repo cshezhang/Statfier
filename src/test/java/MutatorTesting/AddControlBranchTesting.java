@@ -1,6 +1,6 @@
 /**
  * @Description: This is the testing case for bogus control flow.
- * @Author: Huaien Zhang
+ * @Author: Vanguard
  * @Date: 2021-08-13 13:57
  */
 public class AddControlBranchTesting {

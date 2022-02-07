@@ -1,6 +1,6 @@
 package edu.polyu.mutators;
 
-import edu.polyu.StatementMutator;
+import edu.polyu.Mutator;
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -25,7 +25,7 @@ import static edu.polyu.Util.getChildrenNodes;
  * @Author: Vanguard
  * @Date: 2021-10-05 12:49
  */
-public class TransferLocalVarToStaticGlobal extends StatementMutator {
+public class TransferLocalVarToStaticGlobal extends Mutator {
 
     private static int varCounter;
     private static TransferLocalVarToStaticGlobal instance = new TransferLocalVarToStaticGlobal();
