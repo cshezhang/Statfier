@@ -4,20 +4,25 @@ import sys
 
 from Util import get_files_from_folder, run_infer, merge_dicts, get_direct_files_from_folder
 
+SOURCE_INFER_SEED_PATH = "C:\\Users\\Rainy\\IdeaProjects\\SourceInferSeeds"
 INFER_TESTCASE_SEED_PATH = "/home/vanguard/projects/SAMutator/seeds/InferSeeds"
 INFER_DOC_SEED_PATH = "/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java"
 issue_path_list = []
 seed_path_list = []
 
+# 1. Filename to Rule type; (Use infer doc)
+# 2. Check compilation;
+# 3. Infe testing
+
 def get_seed_coveaged_rules():
     seed_path_list = []
     infer_bug_set = set()
-    infer_bug_set_file = open("/home/vanguard/projects/SAMutator/scripts/InferBug.list", "r")
+    infer_bug_set_file = open(os.getcwd() + os.sep  + "InferBug.list", "r")
     lines = infer_bug_set_file.readlines()
     for line in lines:
         infer_bug_set.add(line.strip())
     infer_bug_set_file.close()
-    file_path_list = get_files_from_folder(INFER_TESTCASE_SEED_PATH)
+    file_path_list = get_files_from_folder(SOURCE_INFER_SEED_PATH)
     for file_path in file_path_list:
         if file_path.endswith(".java"):
             seed_path_list.append(file_path)
@@ -26,6 +31,7 @@ def get_seed_coveaged_rules():
     rules = set()
     filename2bug = dict()
     for issue_file_path in issue_path_list:
+        print("Issue Path: " + issue_file_path)
         issue_file = open(issue_file_path, "r")
         lines = issue_file.readlines()
         issue_file.close()
@@ -62,21 +68,22 @@ def get_doc_coveraged_rules():
 
 def main():
     (seed_coveraged_rules, seed_path_list, filename2bug1) = get_seed_coveaged_rules()
-    (doc_coveraged_rules, doc_path_list, filename2bug2) = get_doc_coveraged_rules()
-    filename2bug = merge_dicts(filename2bug1, filename2bug2)
-    sum_coveraged_rules = seed_coveraged_rules.union(doc_coveraged_rules)
-    for rule in sum_coveraged_rules:
-        print(rule)
-    print(len(seed_coveraged_rules))
-    print(len(sum_coveraged_rules))
-    for seedcase_path in seed_path_list:
-        seedname = seedcase_path.split(os.sep)[-1].split(".")[0]
-        output_path = os.getcwd() + os.sep + "infer_output" + os.sep + seedname
-        run_infer(seedcase_path, output_path)
-    for doccase_path in doc_path_list:
-        seedname = doccase_path.split(os.sep)[-1].split(".")[0]
-        output_path = os.getcwd() + os.sep + "infer_output" + os.sep + seedname
-        run_infer(doccase_path, output_path)
+    print(filename2bug1)
+    # (doc_coveraged_rules, doc_path_list, filename2bug2) = get_doc_coveraged_rules()
+    # filename2bug = merge_dicts(filename2bug1, filename2bug2)
+    # sum_coveraged_rules = seed_coveraged_rules.union(doc_coveraged_rules)
+    # for rule in sum_coveraged_rules:
+    #     print(rule)
+    # print(len(seed_coveraged_rules))
+    # print(len(sum_coveraged_rules))
+    # for seedcase_path in seed_path_list:
+    #     seedname = seedcase_path.split(os.sep)[-1].split(".")[0]
+    #     output_path = os.getcwd() + os.sep + "infer_output" + os.sep + seedname
+    #     run_infer(seedcase_path, output_path)
+    # for doccase_path in doc_path_list:
+    #     seedname = doccase_path.split(os.sep)[-1].split(".")[0]
+    #     output_path = os.getcwd() + os.sep + "infer_output" + os.sep + seedname
+    #     run_infer(doccase_path, output_path)
 
 
 main()

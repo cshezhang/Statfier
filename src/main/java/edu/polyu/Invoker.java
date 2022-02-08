@@ -184,7 +184,12 @@ public class Invoker {
         cmd_list.add("-d");
         cmd_list.add(classFileFolder);  // Generated class files are saved in this folder.
         cmd_list.add("-cp");
-        cmd_list.add(jarStr.toString());
+        if (SPOTBUGS_MUTATION) {
+            cmd_list.add(spotBugsJarStr.toString());
+        }
+        if(INFER_MUTATION) {
+            cmd_list.add(inferJarStr.toString());
+        }
         cmd_list.add(folderPath + sep + fileName + ".java");
         invokeCommands(cmd_list.toArray(new String[cmd_list.size()]));
     }

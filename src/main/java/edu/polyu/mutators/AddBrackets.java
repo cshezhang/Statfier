@@ -1,18 +1,13 @@
-/*
- * @Description: 
- * @Author: Vanguard
- * @Date: 2021-10-14 09:25:07
- */
 package edu.polyu.mutators;
 
-
-<<<<<<< HEAD
-import edu.polyu.Mutator;
-=======
->>>>>>> d2a3d5d792e1b70378656198bac2f3a1c133ad84
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+/*
+ * @Description:
+ * @Author: Vanguard
+ * @Date: 2021-10-14 09:25:07
+ */
 public class AddBrackets extends Mutator {
 
     private static AddBrackets addBrackets = new AddBrackets();

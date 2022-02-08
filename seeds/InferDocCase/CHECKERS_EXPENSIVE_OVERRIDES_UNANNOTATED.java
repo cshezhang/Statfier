@@ -1,7 +1,3 @@
-
-
-import codetoanalyze.java.annotation.Expensive;
-
 // CHECKERS_EXPENSIVE_OVERRIDES_UNANNOTATED
 interface I {
   void foo();

@@ -1,5 +1,3 @@
-
-
 class ERADICATE_FIELD_NOT_INITIALIZED {
   String f;
 

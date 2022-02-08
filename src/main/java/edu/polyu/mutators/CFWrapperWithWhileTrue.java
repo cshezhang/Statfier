@@ -1,9 +1,5 @@
 package edu.polyu.mutators;
 
-<<<<<<< HEAD
-import edu.polyu.Mutator;
-=======
->>>>>>> d2a3d5d792e1b70378656198bac2f3a1c133ad84
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -13,7 +9,11 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
-// Control flow wrapper by while(true)-break
+/**
+ * @Description: Control flow wrapper by while(true)-break
+ * @Author: Vanguard
+ * @Date: 2021-10-20 18:17
+ */
 public class CFWrapperWithWhileTrue extends Mutator {
 
     private static final CFWrapperWithWhileTrue instance = new CFWrapperWithWhileTrue();

@@ -1,5 +1,3 @@
-
-
 import com.google.common.util.concurrent.SettableFuture;
 
 public class ARBITRARY_CODE_EXECUTION_UNDER_LOCK {

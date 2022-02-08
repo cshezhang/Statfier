@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.GuardedBy;
 
 class GUARDEDBY_VIOLATION_NULLSAFE {

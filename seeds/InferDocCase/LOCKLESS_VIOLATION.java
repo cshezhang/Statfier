@@ -1,7 +1,3 @@
-
-
-import codetoanalyze.java.annotation.Lockless;
-
 interface I_lockless{
     @Lockless
     public void no_lock();

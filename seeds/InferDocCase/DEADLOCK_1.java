@@ -1,5 +1,3 @@
-
-
 public class DEADLOCK_1 {
 
   Object lockA = new Object();

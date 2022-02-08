@@ -87,7 +87,7 @@ public class Util {
     public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
     public final static String AST_TESTING_PATH = "." + sep + "src" + sep + "test" + sep + "java" + sep + "ASTTestingCases";
     public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + sep + "SingleTesting";
-    public final static String PMD_SEED_PATH = BASE_SEED_PATH + sep + "PMD_Seeds";
+    public final static String PMD_SEED_PATH = BASE_SEED_PATH + sep + "Small_PMD_Seeds";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + sep + "SpotBugs_Seeds";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + sep + "SonarQube_Seeds";
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + sep + "Infer_Seeds";
@@ -109,15 +109,22 @@ public class Util {
     public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
     public final static String InferPath = toolPath + sep + "Infer" + sep + "bin" + sep + "infer";
     public final static String CHECKSTYLE_PATH = toolPath + sep + "checkstyle.jar";
-    public static List<String> jarList = getFilenamesFromFolder(toolPath + sep + "libs", true);
+    public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + sep + "SpotBugs_Dependency", true);
+    public static List<String> inferJarList = getFilenamesFromFolder(toolPath + sep + "Infer_Dependency", true);
     public static List<String> subSeedFolderNameList;
-    public static StringBuilder jarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
+    public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
+    public static StringBuilder inferJarStr = new StringBuilder();
     static {
-        jarStr.append(".:");
-        for(int i = jarList.size() - 1; i >= 1; i--) {
-            jarStr.append(jarList.get(i) + ":");
+        spotBugsJarStr.append(".:");
+        for(int i = spotBugsJarList.size() - 1; i >= 1; i--) {
+            spotBugsJarStr.append(spotBugsJarList.get(i) + ":");
         }
-        jarStr.append(jarList.get(0));
+        spotBugsJarStr.append(spotBugsJarList.get(0));
+        inferJarStr.append(".:");
+        for(int i = inferJarList.size() - 1; i >= 1; i--) {
+            inferJarStr.append(inferJarList.get(i) + ":");
+        }
+        inferJarStr.append(inferJarList.get(0));
     }
 
     public static HashMap<String, HashSet<Integer>> file2line = new HashMap<>(); // filename -> set: buggy line numbers
@@ -591,6 +598,9 @@ public class Util {
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
+        if(files == null) {
+            System.err.println("GetDirectFile Cannot find: " + path);
+        }
         for(File file : files) {
             fileList.add(file.getAbsolutePath());
         }
@@ -611,6 +621,9 @@ public class Util {
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
+        if(files == null) {
+            System.err.println("GetFileName cannot find: " + path);
+        }
         for (File file : files) {
             if (file.isDirectory()) {
                 fileList.addAll(getFilenamesFromFolder(file.getAbsolutePath(), getAbsolutePath));

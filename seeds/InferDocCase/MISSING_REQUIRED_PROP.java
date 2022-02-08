@@ -1,7 +1,3 @@
-
-
-import codetoanalyze.java.lithorequiredprops.MyComponent;
-import codetoanalyze.java.lithorequiredprops.Prop;
 import org.osgi.service.component.ComponentContext;
 
 class MyComponentSpec {

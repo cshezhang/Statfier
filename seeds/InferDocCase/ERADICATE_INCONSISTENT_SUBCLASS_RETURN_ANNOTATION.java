@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.Nullable;
 
 class A {

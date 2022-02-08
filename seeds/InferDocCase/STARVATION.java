@@ -1,8 +1,3 @@
-
-
-import codetoanalyze.java.annotation.NonBlocking;
-import codetoanalyze.java.annotation.SuppressLint;
-
 public class STARVATION {
 
     @SuppressLint("STARVATION")  // avoid report

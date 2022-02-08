@@ -1,5 +1,3 @@
-
-
 class ERADICATE_CONDITION_REDUNDANT {
   void m() {
     String s = new String("abc");

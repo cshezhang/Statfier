@@ -1,5 +1,3 @@
-
-
 public class EXPENSIVE_LOOP_INVARIANT_CALL {
     int incr(int x) {
         return x + 1;

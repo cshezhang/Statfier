@@ -5,12 +5,27 @@ import edu.polyu.report.PMD_Report;
 import edu.polyu.report.PMD_Violation;
 import net.sourceforge.pmd.PMD;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-import static edu.polyu.Invoker.invokeCommands;
-import static edu.polyu.Util.*;
+import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
+import static edu.polyu.Util.MAIN_EXECUTION;
+import static edu.polyu.Util.PMDResultFolder;
+import static edu.polyu.Util.SEARCH_DEPTH;
+import static edu.polyu.Util.file2bugs;
+import static edu.polyu.Util.file2line;
+import static edu.polyu.Util.mutantFolder;
+import static edu.polyu.Util.readPMDResultFile;
 import static edu.polyu.Util.sep;
 
+/**
+ * Description: This file is the main class for testing PMD with multi threads
+ * Author: Vanguard
+ * Date: 2021/11/30 10:03 上午
+ */
 public class PMD_TransformThread implements Runnable {
 
     private int currentDepth;

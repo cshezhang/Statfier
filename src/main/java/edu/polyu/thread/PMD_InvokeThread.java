@@ -4,6 +4,12 @@ import static edu.polyu.Invoker.invokeCommands;
 import static edu.polyu.Util.PMDResultFolder;
 import static edu.polyu.Util.sep;
 
+/**
+ * Description: Previous main process for testing PMD with multi thread
+ * Author: Vanguard
+ * Date: 2021/11/30 10:03 上午
+ */
+
 public class PMD_InvokeThread implements Runnable {
 
     private int iterDepth;

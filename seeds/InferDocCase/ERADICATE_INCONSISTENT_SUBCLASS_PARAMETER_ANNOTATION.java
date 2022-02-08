@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.Nullable;
 
 public class ERADICATE_INCONSISTENT_SUBCLASS_PARAMETER_ANNOTATION {

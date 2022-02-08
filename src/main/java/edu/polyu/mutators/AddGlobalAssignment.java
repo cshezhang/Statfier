@@ -1,9 +1,5 @@
 package edu.polyu.mutators;
 
-<<<<<<< HEAD
-import edu.polyu.Mutator;
-=======
->>>>>>> d2a3d5d792e1b70378656198bac2f3a1c133ad84
 import edu.polyu.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;

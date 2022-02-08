@@ -14,10 +14,26 @@ import static edu.polyu.ASTWrapper.failMutation;
 import static edu.polyu.ASTWrapper.invalidSeed;
 import static edu.polyu.ASTWrapper.succMutation;
 import static edu.polyu.ASTWrapper.validSeed;
-import static edu.polyu.Util.*;
+import static edu.polyu.Util.AST_TESTING;
+import static edu.polyu.Util.AST_TESTING_PATH;
+import static edu.polyu.Util.CHECKSTYLE_MUTATION;
+import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
+import static edu.polyu.Util.INFER_MUTATION;
+import static edu.polyu.Util.MAIN_EXECUTION;
+import static edu.polyu.Util.PMD_MUTATION;
+import static edu.polyu.Util.PURE_RANDOM_TESTING;
+import static edu.polyu.Util.PURE_TESTING;
+import static edu.polyu.Util.SINGLE_TESTING_PATH;
+import static edu.polyu.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.Util.compactIssues;
+import static edu.polyu.Util.initEnv;
+import static edu.polyu.Util.sep;
+import static edu.polyu.Util.sourceSeedPath;
+import static edu.polyu.Util.startTimeStamp;
+import static edu.polyu.Util.userdir;
 
 /**
- * Description: Mutator Scheduler
+ * Description: Main Process for automatic testing
  * Author: Vanguard
  * Date: 2021-08-08 16:20
  */
@@ -25,40 +41,40 @@ public class AutomaticTester {
 
     public static void main(String[] args) {
         initEnv();
-        Schedule tester = Schedule.getInstance();
+        Schedule schedule = Schedule.getInstance();
         if(AST_TESTING) {
-            tester.testAST(AST_TESTING_PATH);
+            schedule.testAST(AST_TESTING_PATH);
             System.exit(0);
         }
         if(PURE_TESTING) {
-            tester.pureTesting(SINGLE_TESTING_PATH);
+            schedule.pureTesting(SINGLE_TESTING_PATH);
             System.exit(0);
         }
         try {
             if (PURE_RANDOM_TESTING) {
-                tester.pureRandomTesting(sourceSeedPath);
+                schedule.pureRandomTesting(sourceSeedPath);
             }
             if (GUIDED_RANDOM_TESTING) {
 //                tester.guidedRandomTesting(sourceSeedPath);
                 if(PMD_MUTATION) {
-                    tester.executePMDMutation(sourceSeedPath);
+                    schedule.executePMDMutation(sourceSeedPath);
                 }
                 if(SPOTBUGS_MUTATION) {
-                    tester.executeSpotBugsMutation(sourceSeedPath);
+                    schedule.executeSpotBugsMutation(sourceSeedPath);
                 }
             }
             if (MAIN_EXECUTION) {
                 if(PMD_MUTATION) {
-                    tester.executePMDMutation(sourceSeedPath);
+                    schedule.executePMDMutation(sourceSeedPath);
                 }
                 if(SPOTBUGS_MUTATION) {
-                    tester.executeSpotBugsMutation(sourceSeedPath);
+                    schedule.executeSpotBugsMutation(sourceSeedPath);
                 }
                 if(CHECKSTYLE_MUTATION) {
-                    tester.executeCheckStyleMutation(sourceSeedPath);
+                    schedule.executeCheckStyleMutation(sourceSeedPath);
                 }
                 if(INFER_MUTATION) {
-                    tester.executeInferMutation(sourceSeedPath);
+                    schedule.executeInferMutation(sourceSeedPath);
                 }
             }
             StringBuilder res = new StringBuilder();

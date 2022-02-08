@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.Nullable;
 
 class ERADICATE_FIELD_NOT_NULLABLE {
