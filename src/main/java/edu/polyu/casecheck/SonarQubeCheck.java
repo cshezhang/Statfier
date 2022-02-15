@@ -1,6 +1,6 @@
 package edu.polyu.casecheck;
 
-import edu.polyu.Util;
+import edu.polyu.util.Util;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

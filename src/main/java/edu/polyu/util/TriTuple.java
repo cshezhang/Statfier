@@ -5,6 +5,7 @@ public class TriTuple {
     public String second;
     public String third;
 
+    // third String means FP or FN
     public TriTuple(String first, String second, String third) {
         this.first = first;
         this.second = second;
@@ -13,9 +14,9 @@ public class TriTuple {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof TriTuple) {
+        if (o instanceof TriTuple) {
             TriTuple rhs = (TriTuple) o;
-            if(rhs.first.equals(this.first) && rhs.second.equals(this.second) && rhs.third.equals(this.third)) {
+            if (rhs.first.equals(this.first) && rhs.second.equals(this.second) && rhs.third.equals(this.third)) {
                 return true;
             }
         }
@@ -29,7 +30,7 @@ public class TriTuple {
 
     @Override
     public String toString() {
-        return "Seed: " + first + "\n Mutant: " + second + "\n " + third;
+        return "Seed: " + first + "\nMutant: " + second + "\nBug Type: " + third;
     }
 
 }

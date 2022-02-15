@@ -3,8 +3,7 @@ import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcher;
 import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcherBuilder;
 import org.junit.Test;
 
-import static edu.polyu.Invoker.compileJavaSourceFile;
-import static edu.umd.cs.findbugs.test.CountMatcher.containsExactly;
+import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TestSpotBugs extends AbstractIntegrationTest {

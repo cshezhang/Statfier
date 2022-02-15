@@ -1,36 +1,36 @@
 package edu.polyu;
 
+import edu.polyu.util.Schedule;
 import edu.polyu.util.TriTuple;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static edu.polyu.ASTWrapper.failMutation;
-import static edu.polyu.ASTWrapper.invalidSeed;
-import static edu.polyu.ASTWrapper.succMutation;
-import static edu.polyu.ASTWrapper.validSeed;
-import static edu.polyu.Util.AST_TESTING;
-import static edu.polyu.Util.AST_TESTING_PATH;
-import static edu.polyu.Util.CHECKSTYLE_MUTATION;
-import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.Util.INFER_MUTATION;
-import static edu.polyu.Util.MAIN_EXECUTION;
-import static edu.polyu.Util.PMD_MUTATION;
-import static edu.polyu.Util.PURE_RANDOM_TESTING;
-import static edu.polyu.Util.PURE_TESTING;
-import static edu.polyu.Util.SINGLE_TESTING_PATH;
-import static edu.polyu.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.Util.compactIssues;
-import static edu.polyu.Util.initEnv;
-import static edu.polyu.Util.sep;
-import static edu.polyu.Util.sourceSeedPath;
-import static edu.polyu.Util.startTimeStamp;
-import static edu.polyu.Util.userdir;
+import static edu.polyu.analysis.ASTWrapper.failMutation;
+import static edu.polyu.analysis.ASTWrapper.invalidSeed;
+import static edu.polyu.analysis.ASTWrapper.succMutation;
+import static edu.polyu.analysis.ASTWrapper.validSeed;
+import static edu.polyu.util.Util.AST_TESTING;
+import static edu.polyu.util.Util.AST_TESTING_PATH;
+import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
+import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
+import static edu.polyu.util.Util.INFER_MUTATION;
+import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.util.Util.PMD_MUTATION;
+import static edu.polyu.util.Util.PURE_RANDOM_TESTING;
+import static edu.polyu.util.Util.PURE_TESTING;
+import static edu.polyu.util.Util.SINGLE_TESTING_PATH;
+import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Util.compactIssues;
+import static edu.polyu.util.Util.initEnv;
+import static edu.polyu.util.Util.sourceSeedPath;
+import static edu.polyu.util.Util.startTimeStamp;
+import static edu.polyu.util.Util.userdir;
 
 /**
  * Description: Main Process for automatic testing
@@ -42,11 +42,11 @@ public class AutomaticTester {
     public static void main(String[] args) {
         initEnv();
         Schedule schedule = Schedule.getInstance();
-        if(AST_TESTING) {
+        if (AST_TESTING) {
             schedule.testAST(AST_TESTING_PATH);
             System.exit(0);
         }
-        if(PURE_TESTING) {
+        if (PURE_TESTING) {
             schedule.pureTesting(SINGLE_TESTING_PATH);
             System.exit(0);
         }
@@ -56,24 +56,24 @@ public class AutomaticTester {
             }
             if (GUIDED_RANDOM_TESTING) {
 //                tester.guidedRandomTesting(sourceSeedPath);
-                if(PMD_MUTATION) {
+                if (PMD_MUTATION) {
                     schedule.executePMDMutation(sourceSeedPath);
                 }
-                if(SPOTBUGS_MUTATION) {
+                if (SPOTBUGS_MUTATION) {
                     schedule.executeSpotBugsMutation(sourceSeedPath);
                 }
             }
-            if (MAIN_EXECUTION) {
-                if(PMD_MUTATION) {
+            if (MAIN_EXECUTION) { // Main Automatic Entry
+                if (PMD_MUTATION) {
                     schedule.executePMDMutation(sourceSeedPath);
                 }
-                if(SPOTBUGS_MUTATION) {
+                if (SPOTBUGS_MUTATION) {
                     schedule.executeSpotBugsMutation(sourceSeedPath);
                 }
-                if(CHECKSTYLE_MUTATION) {
+                if (CHECKSTYLE_MUTATION) {
                     schedule.executeCheckStyleMutation(sourceSeedPath);
                 }
-                if(INFER_MUTATION) {
+                if (INFER_MUTATION) {
                     schedule.executeInferMutation(sourceSeedPath);
                 }
             }
@@ -81,33 +81,38 @@ public class AutomaticTester {
             int rules = compactIssues.keySet().size();
             int seqCount = 0;
             int allValidMutantNumber = 0;
-            for(Map.Entry<String, HashMap<String, ArrayList<TriTuple>>> entry : compactIssues.entrySet()) {
-                HashMap<String, ArrayList<TriTuple>> seq2mutants = entry.getValue();
-                res.append("Rule: " + entry.getKey() + " Seq Size: " + seq2mutants.size() + "\n");
+            for (Map.Entry<String, HashMap<String, List<TriTuple>>> entry : compactIssues.entrySet()) {
+                HashMap<String, List<TriTuple>> seq2mutants = entry.getValue();
+                res.append("Rule: " + entry.getKey() + "  Seq Size: " + seq2mutants.size() + "\n");
                 seqCount += seq2mutants.size();
-                for(Map.Entry<String, ArrayList<TriTuple>> subEntry : seq2mutants.entrySet()) {
-                    res.append("Transoformation Sequence: " + subEntry.getKey() + "\n");
-                    for(TriTuple triTuple : subEntry.getValue()) {
+                res.append("****************************************\n");
+                for (Map.Entry<String, List<TriTuple>> subEntry : seq2mutants.entrySet()) {
+                    res.append("-------------------begin-----------------------\n");
+                    res.append("Transform Sequence: " + subEntry.getKey() + "\n");
+                    for (TriTuple triTuple : subEntry.getValue()) {
                         res.append(triTuple + "\n");
                     }
                     allValidMutantNumber += subEntry.getValue().size();
+                    res.append("--------------------end----------------------\n");
                 }
+                res.append("****************************************\n");
             }
             res.append("Rule Size: " + rules + "\n");
+            res.append("Detected Rules: " + compactIssues.keySet() + "\n");
             res.append("Unique Sequence: " + seqCount + "\n");
-            res.append("Valid Mutant Size: " + allValidMutantNumber + "\n");
+            res.append("Valid Mutant Size(Potential Bug): " + allValidMutantNumber + "\n");
             res.append("Invalid Seed Size: " + invalidSeed + "\n");
             res.append("Valid Seed Size: " + validSeed + "\n");
-//            System.out.println("Passed-check Transform: " + sumMutation);
             res.append("Succ Transform: " + succMutation + "\n");
             res.append("Fail Transform: " + failMutation + "\n");
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             res.append(String.format(
                     "Overall Execution Time is: " + String.format("%d min, %d sec",
-                            TimeUnit.MILLISECONDS.toMinutes(executionTime),
-                            TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n"));
-            File resFile = new File(userdir + sep + "Multithread_Main_PMDSeeds1_Iter2_res.log");
-            if(!resFile.exists()) {
+                    TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                    TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
+            );
+            File resFile = new File(userdir + File.separator + "Output.log");
+            if (!resFile.exists()) {
                 resFile.createNewFile();
             }
             FileWriter fileWriter = new FileWriter(resFile);

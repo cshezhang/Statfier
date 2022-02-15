@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 userdir = os.path.expanduser('~')
 currentdir = os.getcwd()
 sep = os.sep
-save_path = userdir + sep + "projects" + sep + "SAMutator" + sep + "seeds" + sep + "PMD_Seeds" + sep
+save_path = userdir  + File.separator + "projects"  + File.separator + "SAMutator"  + File.separator + "seeds"  + File.separator + "PMD_Seeds" + sep
 
 bug_categories = [
   "bestpractices",
@@ -77,8 +77,8 @@ def getTestCases(cate2rules):
       #   fails.append((cate + "  " + rule, xml_link))
       # # case link: https://raw.githubusercontent.com/pmd/pmd/81739da5caff948dbcd2136c17532b65c726c781/pmd-java/src/test/resources/net/sourceforge/pmd/lang/java/rule/codestyle/xml/AbstractNaming.xml
       # xml_doc = xml_response.read()
-      xml_folder_path = currentdir + sep + "xml_folder"
-      xml_file_path = xml_folder_path + sep + cate + sep + "xml" + sep + rule + ".xml"
+      xml_folder_path = currentdir  + File.separator + "xml_folder"
+      xml_file_path = xml_folder_path  + File.separator + cate  + File.separator + "xml"  + File.separator + rule + ".xml"
       if not os.path.exists(xml_file_path):
         continue
       xml_doc = open(xml_file_path)
@@ -119,11 +119,11 @@ def getTestCases(cate2rules):
 
 
 def get_filepaths_from_folder():
-    targetDirPath = userdir + sep + 'projects' + sep + 'SAMutator' + sep + 'seeds'+ sep + 'PMD_Seeds'
+    targetDirPath = userdir  + File.separator + 'projects'  + File.separator + 'SAMutator'  + File.separator + 'seeds'+ sep + 'PMD_Seeds'
     filepaths = []
     for (targetDir, dirnamess, filenames) in os.walk(targetDirPath):
         for filename in filenames:
-            filepaths.append(targetDir + sep + filename)
+            filepaths.append(targetDir  + File.separator + filename)
     random.shuffle(filepaths)
     return filepaths
 
@@ -135,19 +135,19 @@ def main():
   # print(filepaths)
   # print(file2rule)
   for bug in bugs:
-    bug_dir_path = userdir + sep + 'projects' + sep + 'SAMutator' + sep + 'seeds'+ sep + 'PMD_Seeds' + sep + bug
+    bug_dir_path = userdir  + File.separator + 'projects'  + File.separator + 'SAMutator'  + File.separator + 'seeds'+ sep + 'PMD_Seeds'  + File.separator + bug
     # print(bug_dir_path)
     if not os.path.exists(bug_dir_path):
       os.mkdir(bug_dir_path)
   # for k in file2rule.keys(): # entry example: HardCodedCryptoKey5.java   security_HardCodedCryptoKey
   #   print("entry:" + str(k) + "   " + str(file2rule[k]))
   for filepath in filepaths:
-      # sub_folder_path = '/home/huaien/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)  
+      # sub_folder_path = '/home/+ File.separator/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)
     filename = filepath.split(sep)[-1]
     # print("filename: " + str(filename))
     # if filename not in file2rule.keys():
     #   print("Not in")
-    target_folder = userdir + sep + 'projects' + sep + 'SAMutator' + sep + 'seeds'+ sep + 'PMD_Seeds' + sep + file2rule[filename]
-    shutil.move(filepath, target_folder + sep + filename)
+    target_folder = userdir  + File.separator + 'projects'  + File.separator + 'SAMutator'  + File.separator + 'seeds'+ sep + 'PMD_Seeds'  + File.separator + file2rule[filename]
+    shutil.move(filepath, target_folder  + File.separator + filename)
 
 main()

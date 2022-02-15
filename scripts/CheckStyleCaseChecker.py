@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 bug_categories = ["annotation", "blocks", "design", "coding", "header", "imports", "javadoc", "metrics", "misc", "modifier", "naming", "regexp", "sizes", "whitespace"]
 userdir = os.getcwd()
 sep = os.sep
-seed_folder_path = userdir + sep + "CheckStyleSeed"
+seed_folder_path = userdir  + File.separator + "CheckStyleSeed"
 
 class CommandException(Exception):
     pass

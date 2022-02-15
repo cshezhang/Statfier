@@ -7,12 +7,11 @@ import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcherBuilder;
 import java.io.File;
 import java.util.List;
 
-import static edu.polyu.Invoker.compileJavaSourceFile;
-import static edu.polyu.Util.BASE_SEED_PATH;
-import static edu.polyu.Util.SpotBugsClassFolder;
-import static edu.polyu.Util.SpotBugsPath;
-import static edu.polyu.Util.SpotBugsResultFolder;
-import static edu.polyu.Util.sep;
+import static edu.polyu.util.Invoker.compileJavaSourceFile;
+import static edu.polyu.util.Util.BASE_SEED_PATH;
+import static edu.polyu.util.Util.SpotBugsClassFolder;
+import static edu.polyu.util.Util.SpotBugsPath;
+import static edu.polyu.util.Util.SpotBugsResultFolder;
 import static edu.umd.cs.findbugs.test.CountMatcher.containsExactly;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -34,16 +33,16 @@ public class SpotBugs_InvokeThread extends AbstractIntegrationTest implements Ru
             String seedFileNameWithSuffix = this.seedFileNamesWithSuffix.get(i);
             String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
             // Why needs a name here? -> To specify class folder name
-            File classFolder = new File(SpotBugsClassFolder.getAbsolutePath() + sep + seedFileName);
+            File classFolder = new File(SpotBugsClassFolder.getAbsolutePath()  + File.separator + seedFileName);
             if(!classFolder.exists()) {
                 classFolder.mkdirs();
             }
             compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-            String configPath = BASE_SEED_PATH + sep + "SpotBugs_Rule_Config" + sep + this.seedFolderName + ".xml";
-            String reportPath = SpotBugsResultFolder.getAbsolutePath() + sep + seedFileName + "_Result.xml";
+            String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
+            String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
             String[] invokeCmds = {"/bin/bash", "-c",
                     SpotBugsPath + " -textui" + " -include " + configPath + " -xml:withMessages" + " -output " + reportPath + " "
-                            + classFolder.getAbsolutePath() + sep + seedFileName + ".class"};
+                            + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class"};
 //            invokeCommands(invokeCmds);
             StringBuilder builder = new StringBuilder();
             for(String arg : invokeCmds) {

@@ -1,14 +1,11 @@
 package edu.polyu.casecheck;
 
-import edu.polyu.Util;
+import edu.polyu.util.Util;
 import edu.polyu.report.SpotBugs_Report;
-import edu.polyu.thread.SpotBugs_InvokeThread;
-import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +15,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static edu.polyu.Invoker.compileJavaSourceFile;
-import static edu.polyu.Util.*;
+import static edu.polyu.util.Invoker.compileJavaSourceFile;
+import static edu.polyu.util.Util.*;
 
 public class SpotBugsChecker {
 
-    private static final String spotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
+    private static final String spotBugsPath = toolPath  + File.separator + "SpotBugs"  + File.separator + "bin"  + File.separator + "spotbugs";
 
     public static void compileFirstIterJavaFiles(List<String> filePaths) {
         File classFolder = new File("/home/vanguard/evaluation/InitClasses");
@@ -132,13 +129,13 @@ public class SpotBugsChecker {
         }
         // Following is used to move seed to new folder with rule type name
 //        for(String rule : ruleCounter) {
-//            File ruleDir = new File(SPOTBUGS_SEED_PATH + sep + rule);
+//            File ruleDir = new File(SPOTBUGS_SEED_PATH  + File.separator + rule);
 //            ruleDir.mkdir();
 //            List<String> seedList = rule2seedlist.get(rule);
 //            for(String seedPath : seedList) {
 //                File srcFile = new File(seedPath);
 //                String filename = srcFile.getName();
-//                File dstFile = new File(ruleDir.getAbsolutePath() + sep + filename);
+//                File dstFile = new File(ruleDir.getAbsolutePath()  + File.separator + filename);
 //                try {
 //                    FileUtils.copyFile(srcFile, dstFile);
 //                } catch (IOException e) {
@@ -148,10 +145,10 @@ public class SpotBugsChecker {
 //        }
 //        initThreadPool();
 //        for(String ruleType : ruleCounter) {
-//            threadPool.submit(new SpotBugs_InvokeThread(SPOTBUGS_SEED_PATH + sep + ruleType, ruleType, getFilenamesFromFolder(SPOTBUGS_SEED_PATH + sep + ruleType, false)));
+//            threadPool.submit(new SpotBugs_InvokeThread(SPOTBUGS_SEED_PATH  + File.separator + ruleType, ruleType, getFilenamesFromFolder(SPOTBUGS_SEED_PATH  + File.separator + ruleType, false)));
 //        }
 //        waitThreadPoolEnding();
-        List<String> reportPaths = getFilenamesFromFolder(userdir + sep + "results", true);
+        List<String> reportPaths = getFilenamesFromFolder(userdir  + File.separator + "results", true);
         for(String reportPath : reportPaths) {
             try {
                 String[] tokens = reportPath.split(sep);

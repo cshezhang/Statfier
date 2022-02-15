@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
@@ -12,15 +13,14 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.Util.BASE_SEED_PATH;
-import static edu.polyu.Util.calculatePMDResultFile;
-import static edu.polyu.Util.sep;
-import static edu.polyu.Util.userdir;
+import static edu.polyu.util.Util.BASE_SEED_PATH;
+import static edu.polyu.util.Util.calculatePMDResultFile;
+import static edu.polyu.util.Util.userdir;
 
 public class PMDCaseChecker {
 
-    private static final String PMD_SEED_PATH = BASE_SEED_PATH + sep + "PMD_Seeds";
-    private static final String pmdCSVPath = "." + sep + "scripts" + sep + "PMDSeedData.csv";
+    private static final String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Seeds";
+    private static final String pmdCSVPath = "."  + File.separator + "scripts"  + File.separator + "PMDSeedData.csv";
 
     static class DiffRecord {
 
@@ -65,18 +65,18 @@ public class PMDCaseChecker {
                 int expect = Integer.parseInt(record.get("problem_cnt"));
                 boolean isFP = Boolean.parseBoolean(record.get("FP"));
                 String xml_path = record.get("XML_Path");
-                int detectedBugs = Integer.parseInt(invokePMD(PMD_SEED_PATH + sep + category + "_" + bugType, category + "_" + bugType, filename));
+                int detectedBugs = Integer.parseInt(invokePMD(PMD_SEED_PATH  + File.separator + category + "_" + bugType, category + "_" + bugType, filename));
                 if(isFP && detectedBugs > 0) {
                     continue;
                 }
                 if (detectedBugs > expect && expect != 0) {
-                    DiffRecord newRecord = new DiffRecord(PMD_SEED_PATH + sep + category + "_" + bugType + sep + filename, category, bugType, description, detectedBugs, expect, (String)xml_path);
+                    DiffRecord newRecord = new DiffRecord(PMD_SEED_PATH  + File.separator + category + "_" + bugType  + File.separator + filename, category, bugType, description, detectedBugs, expect, (String)xml_path);
                     diffRecords.add(newRecord);
                 }
             }
             final String[] FILE_HEADER = {"Filepath", "Category", "Rule", "Description", "Detect", "Expect", "XML_PATH"};
             CSVFormat format = CSVFormat.DEFAULT.withHeader(FILE_HEADER);
-            String resultPath = userdir + sep + "CaseCheck_allRules.log";
+            String resultPath = userdir  + File.separator + "CaseCheck_allRules.log";
             System.out.println("Result Path: " + resultPath);
             // Write to CSV file
             CSVPrinter printer = null;
@@ -109,9 +109,9 @@ public class PMDCaseChecker {
         String ruleCategory = tokens[0];
         String ruleType = tokens[1];
         String resultFileName = fileNameWithSuffix.substring(0, fileNameWithSuffix.length() - 5) + "_Result.json";
-        String resultFilePath =  userdir + sep + "PMD_Case_Check" + sep + resultFileName;
+        String resultFilePath =  userdir  + File.separator + "PMD_Case_Check"  + File.separator + resultFileName;
         String[] pmdArgs = {
-            "-d", seedFolderPath + sep + fileNameWithSuffix,
+            "-d", seedFolderPath  + File.separator + fileNameWithSuffix,
             "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
             "-f", "json",
             "-r", resultFilePath,

@@ -1,13 +1,28 @@
 package edu.polyu.thread;
 
-import edu.polyu.ASTWrapper;
-import edu.polyu.report.*;
+import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.report.Infer_Report;
+import edu.polyu.report.Infer_Violation;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-import static edu.polyu.Invoker.invokeCommands;
-import static edu.polyu.Util.*;
+import static edu.polyu.util.Invoker.invokeCommands;
+import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
+import static edu.polyu.util.Util.InferClassFolder;
+import static edu.polyu.util.Util.InferPath;
+import static edu.polyu.util.Util.InferResultFolder;
+import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.util.Util.SEARCH_DEPTH;
+import static edu.polyu.util.Util.file2bugs;
+import static edu.polyu.util.Util.file2line;
+import static edu.polyu.util.Util.readInferResultFile;
+import static edu.polyu.util.Util.sep;
+
 
 /**
  * Description: Infer Transformation Thread
@@ -32,7 +47,7 @@ public class Infer_TransformThread implements Runnable {
     @Override
     public void run() {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
-        for(ASTWrapper initWrapper : this.initWrappers) {
+        for (ASTWrapper initWrapper : this.initWrappers) {
             ArrayDeque<ASTWrapper> tmpWrappers = new ArrayDeque<>(64);
             tmpWrappers.add(initWrapper);
             for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
@@ -66,16 +81,16 @@ public class Infer_TransformThread implements Runnable {
                     String seedFileNameWithSuffix = tokens[tokens.length - 1];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
-                    File classFolder = new File(InferClassFolder.getAbsolutePath() + sep + seedFileName);
+                    File classFolder = new File(InferClassFolder.getAbsolutePath() + File.separator + seedFileName);
                     if (!classFolder.exists()) {
                         classFolder.mkdirs();
                     }
-                    String java_path = seedFolderPath + sep + seedFileNameWithSuffix;
-                    String reportPath = InferResultFolder.getAbsolutePath() + sep + seedFileName + "_Result.xml";
+                    String java_path = seedFolderPath + File.separator + seedFileNameWithSuffix;
+                    String reportPath = InferResultFolder.getAbsolutePath() + File.separator + seedFileName + "_Result.xml";
                     // infer --pmd-xml xml_path run -- javac java_path
                     String[] invokeCmds = {"/bin/bash", "-c", InferPath + " --pmd-xml " + reportPath + " run -- javac " + java_path};
                     invokeCommands(invokeCmds);
-                    String report_path = InferResultFolder.getAbsolutePath() + sep + seedFileName + "_Result.xml";
+                    String report_path = InferResultFolder.getAbsolutePath() + File.separator + seedFileName + "_Result.xml";
                     reports.addAll(readInferResultFile(tmpWrapper.getFolderPath(), report_path));
                 }
                 for (Infer_Report report : reports) {

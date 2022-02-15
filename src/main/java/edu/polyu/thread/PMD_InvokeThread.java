@@ -1,8 +1,10 @@
 package edu.polyu.thread;
 
-import static edu.polyu.Invoker.invokeCommands;
-import static edu.polyu.Util.PMDResultFolder;
-import static edu.polyu.Util.sep;
+import net.sourceforge.pmd.PMD;
+
+import java.io.File;
+
+import static edu.polyu.util.Util.PMDResultFolder;
 
 /**
  * Description: Previous main process for testing PMD with multi thread
@@ -31,12 +33,13 @@ public class PMD_InvokeThread implements Runnable {
     @Override
     public void run() {
         String[] pmdConfig = {
-            "-d", seedFolderPath + sep + seedFolderName,
+            "-d", seedFolderPath  + File.separator + seedFolderName,
             "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
             "-f", "json",
-            "-r", PMDResultFolder.getAbsolutePath() + sep + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
+            "-r", PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
+//            "--no-cache"
         };
-        invokeCommands(pmdConfig);
+        PMD.runPmd(pmdConfig);
     }
 
 }

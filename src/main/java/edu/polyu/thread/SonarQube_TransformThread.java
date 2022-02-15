@@ -1,7 +1,7 @@
 package edu.polyu.thread;
 
-import edu.polyu.ASTWrapper;
-import edu.polyu.Invoker;
+import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.util.Invoker;
 import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 
@@ -12,19 +12,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static edu.polyu.Invoker.compileJavaSourceFile;
-import static edu.polyu.Invoker.invokeCommands;
-import static edu.polyu.Util.CHECKSTYLE_PATH;
-import static edu.polyu.Util.CheckStyleResultFolder;
-import static edu.polyu.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.Util.MAIN_EXECUTION;
-import static edu.polyu.Util.SEARCH_DEPTH;
-import static edu.polyu.Util.SpotBugsClassFolder;
-import static edu.polyu.Util.SpotBugsResultFolder;
-import static edu.polyu.Util.file2bugs;
-import static edu.polyu.Util.file2line;
-import static edu.polyu.Util.readSonarQubeResultFile;
-import static edu.polyu.Util.sep;
+import static edu.polyu.util.Invoker.compileJavaSourceFile;
+import static edu.polyu.util.Invoker.invokeCommands;
+import static edu.polyu.util.Util.CHECKSTYLE_PATH;
+import static edu.polyu.util.Util.CheckStyleResultFolder;
+import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
+import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.util.Util.SEARCH_DEPTH;
+import static edu.polyu.util.Util.SpotBugsClassFolder;
+import static edu.polyu.util.Util.SpotBugsResultFolder;
+import static edu.polyu.util.Util.file2bugs;
+import static edu.polyu.util.Util.file2line;
+import static edu.polyu.util.Util.readSonarQubeResultFile;
+import static edu.polyu.util.Util.sep;
 
 public class SonarQube_TransformThread implements Runnable {
 
@@ -77,15 +77,15 @@ public class SonarQube_TransformThread implements Runnable {
                     String seedFileNameWithSuffix = tokens[tokens.length - 1];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
-                    File classFolder = new File(SpotBugsClassFolder.getAbsolutePath() + sep + seedFileName);
+                    File classFolder = new File(SpotBugsClassFolder.getAbsolutePath()  + File.separator + seedFileName);
                     if (!classFolder.exists()) {
                         classFolder.mkdirs();
                     }
                     compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                    String reportPath = CheckStyleResultFolder.getAbsolutePath() + sep + seedFileName + "_Result.xml";
+                    String reportPath = CheckStyleResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
                     String[] args = {"javac", "-jar", CHECKSTYLE_PATH, "-c", configFilePath, "-o", reportPath, seedFilePath};
                     invokeCommands(args);
-                    String report_path = SpotBugsResultFolder.getAbsolutePath() + sep + seedFileName + "_Result.xml";
+                    String report_path = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
                     reports.addAll(readSonarQubeResultFile(report_path));
                 }
                 for (SonarQube_Report report : reports) {

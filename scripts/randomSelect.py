@@ -17,7 +17,7 @@ def split_list(num, srcList):
     return groups
 
 def get_filepaths_from_folder():
-    targetDirPath = '/home/huaien/projects/SAMutator/seeds/PMD_Seeds'
+    targetDirPath = '/home/vanguard/projects/SAMutator/seeds/PMD_Seeds'
     filepaths = []
     for (targetDir, dirnamess, filenames) in os.walk(targetDirPath):
         for filename in filenames:
@@ -29,7 +29,7 @@ def main():
     filepaths = get_filepaths_from_folder()
     groups = split_list(int(len(filepaths) / 20), filepaths)
     for i in range(0, len(groups)):
-        sub_folder_path = '/home/huaien/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)
+        sub_folder_path = '/home/vanguard/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)
         if not os.path.exists(sub_folder_path):
             os.mkdir(sub_folder_path)
         for src_filepath in groups[i]:

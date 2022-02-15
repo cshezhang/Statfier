@@ -22,7 +22,7 @@ def get_rule_names():
 
 def crawl_code(rule_names):
     codes = []
-    seed_path = userdir + sep + "SonarQubeSeeds"
+    seed_path = userdir  + File.separator + "SonarQubeSeeds"
     if not os.path.exists(seed_path):
         os.mkdir(seed_path)
     for rule_name in rule_names:
@@ -30,7 +30,7 @@ def crawl_code(rule_names):
         # content = get_html_content(url)
         filename = rule_name[6:] + ".html"
         # filename = "RSPEC-5826" + ".html"
-        seed_file = open(seed_path + sep + filename, "r")
+        seed_file = open(seed_path  + File.separator + filename, "r")
         # seed_file.write(content)
         # seed_file.close()
         # print("Processing URL: " + url)
@@ -59,17 +59,17 @@ def crawl_code(rule_names):
                     if code_tag.next_sibling.next_sibling.name == "pre":
                         code2.append(code_tag.next_sibling.next_sibling.get_text())
         codes.append((rule, code1, code2))
-        rule_folder = seed_path + sep + rule
+        rule_folder = seed_path  + File.separator + rule
         if not os.path.exists(rule_folder):
             os.mkdir(rule_folder)
         for i in range(0, len(code1)):
             right_code = code1[i]
-            file1 = open(rule_folder + sep + "right" + str(i) + ".java", "w")
+            file1 = open(rule_folder  + File.separator + "right" + str(i) + ".java", "w")
             file1.write(right_code)
             file1.close()
         for i in range(0, len(code2)):
             wrong_code = code2[i]
-            file2 = open(rule_folder + sep + "wrong" + str(i) + ".java", "w")
+            file2 = open(rule_folder  + File.separator + "wrong" + str(i) + ".java", "w")
             file2.write(wrong_code)
             file2.close()
         if notFound1 and notFound2:

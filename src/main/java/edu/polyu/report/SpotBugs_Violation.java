@@ -2,7 +2,7 @@ package edu.polyu.report;
 
 import org.dom4j.Element;
 
-import static edu.polyu.Util.sep;
+import java.io.File;
 
 /*
  * @Intro: Save a bug instance in report.
@@ -18,7 +18,7 @@ public class SpotBugs_Violation extends Violation {
     private String bugType;
 
     public SpotBugs_Violation(String seedFolderPath, Element sourceLine, String bugType) {
-        this.filename = seedFolderPath + sep + sourceLine.attribute("sourcefile").getText();
+        this.filename = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
         if(sourceLine.attribute("start") != null) {
             this.beginLine = Integer.parseInt(sourceLine.attribute("start").getText());
         } else {
