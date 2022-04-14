@@ -11,16 +11,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommands;
-import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.util.Util.GUIDED_LOCATION;
+import static edu.polyu.util.Util.NO_SELECTION;
+import static edu.polyu.util.Util.RANDOM_LOCATION;
+import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
 import static edu.polyu.util.Util.SpotBugsClassFolder;
 import static edu.polyu.util.Util.SpotBugsPath;
 import static edu.polyu.util.Util.SpotBugsResultFolder;
+import static edu.polyu.util.Util.TS_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2line;
+import static edu.polyu.util.Util.file2row;
 
 import static edu.polyu.util.Util.readSpotBugsResultFile;
 import static edu.polyu.util.Util.sep;
@@ -44,33 +49,37 @@ public class SpotBugs_TransformThread implements Runnable {
     public void run() {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
         for(ASTWrapper initWrapper : this.initWrappers) {
-            ArrayDeque<ASTWrapper> tmpWrappers = new ArrayDeque<>(64);
-            tmpWrappers.add(initWrapper);
+            ArrayDeque<ASTWrapper> wrappers = new ArrayDeque<>(64);
+            wrappers.add(initWrapper);
             for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
-                while (!tmpWrappers.isEmpty()) {
-                    ASTWrapper wrapper = tmpWrappers.pollFirst();
+                while (!wrappers.isEmpty()) {
+                    ASTWrapper wrapper = wrappers.pollFirst();
                     if (wrapper.depth == currentDepth) {
                         if (!wrapper.isBuggy()) {
-                            List<ASTWrapper> mutants;
-                            if (GUIDED_RANDOM_TESTING) {
-                                mutants = wrapper.guidedRandomTransformation();
-                            } else {
-                                if (MAIN_EXECUTION) {
-                                    mutants = wrapper.mainTransform();
-                                } else {
-                                    mutants = wrapper.pureRandomTransformation();
-                                }
+                            List<ASTWrapper> mutants = new ArrayList<>();
+                            if (GUIDED_LOCATION) {
+                                mutants = wrapper.TransformByGuidedLocation();
+                            } else if (RANDOM_LOCATION) {
+                                mutants = wrapper.TransformByRandomLocation();
                             }
-                            tmpWrappers.addAll(mutants);
+                            if(NO_SELECTION) {
+                                wrappers.addAll(mutants);
+                            }
+                            if(RANDOM_SELECTION) {
+                                wrappers.addAll(Random_Selection(mutants));
+                            }
+                            if(TS_SELECTION) {
+                                wrappers.addAll(TS_Selection(mutants));
+                            }
                         }
                     } else {
-                        tmpWrappers.addFirst(wrapper);
+                        wrappers.addFirst(wrapper);
                         currentDepth += 1;
                         break;
                     }
                 }
                 List<SpotBugs_Report> reports = new ArrayList<>();
-                for (ASTWrapper tmpWrapper : tmpWrappers) {
+                for (ASTWrapper tmpWrapper : wrappers) {
                     String seedFilePath = tmpWrapper.getFilePath();
                     String seedFolderPath = tmpWrapper.getFolderPath();
                     String[] tokens = seedFilePath.split(sep);
@@ -91,13 +100,13 @@ public class SpotBugs_TransformThread implements Runnable {
                     reports.addAll(readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path));
                 }
                 for (SpotBugs_Report report : reports) {
-                    if (!file2line.containsKey(report.getFilename())) {
-                        file2line.put(report.getFilename(), new HashSet<>());
-                        file2bugs.put(report.getFilename(), new HashMap<>());
+                    if (!file2row.containsKey(report.getFilepath())) {
+                        file2row.put(report.getFilepath(), new HashSet<>());
+                        file2bugs.put(report.getFilepath(), new HashMap<>());
                     }
                     for (SpotBugs_Violation violation : report.getViolations()) {
-                        file2line.get(report.getFilename()).add(violation.getBeginLine());
-                        HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilename());
+                        file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                        HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
                         if (!bug2cnt.containsKey(violation.getBugType())) {
                             bug2cnt.put(violation.getBugType(), new HashSet<>());
                         }
@@ -105,13 +114,13 @@ public class SpotBugs_TransformThread implements Runnable {
                     }
                 }
                 List<ASTWrapper> validWrappers = new ArrayList<>();
-                while (!tmpWrappers.isEmpty()) {
-                    ASTWrapper head = tmpWrappers.pollFirst();
+                while (!wrappers.isEmpty()) {
+                    ASTWrapper head = wrappers.pollFirst();
                     if (!head.isBuggy()) {
                         validWrappers.add(head);
                     }
                 }
-                tmpWrappers.addAll(validWrappers);
+                wrappers.addAll(validWrappers);
             }
         }
     }

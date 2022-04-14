@@ -1,8 +1,0 @@
-
-if (file != null && isFileOrDirectory(file)) {
-  /* ... */
-}
-
-private static boolean isFileOrDirectory(File file) {
-  return file.isFile() || file.isDirectory();
-}

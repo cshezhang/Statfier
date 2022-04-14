@@ -1,0 +1,6 @@
+
+
+<module name="ExplicitInitialization">
+  <property name="onlyObjectReferences" value="true"/>
+</module>
+        

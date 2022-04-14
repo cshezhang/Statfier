@@ -1,0 +1,6 @@
+
+
+<module name="ClassTypeParameterName">
+  <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+</module>
+        

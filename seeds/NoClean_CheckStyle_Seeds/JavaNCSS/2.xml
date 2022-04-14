@@ -1,0 +1,6 @@
+
+
+<module name="JavaNCSS">
+  <property name="classMaximum" value="100"/>
+</module>
+        

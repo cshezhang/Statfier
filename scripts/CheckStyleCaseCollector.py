@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 bug_categories = ["annotation", "blocks", "design", "coding", "header", "imports", "javadoc", "metrics", "misc", "modifier", "naming", "regexp", "sizes", "whitespace"]
 userdir = os.getcwd()
 sep = os.sep
-seed_folder_path = userdir  + File.separator + "CheckStyleSeed"
+seed_folder_path = userdir  + sep + "CheckStyleSeed"
 code_counter = 0
 not_covered_rule = 0
 
@@ -84,8 +84,11 @@ def parse_html_file(bug_category, content):
         for i in range(0, len(config_codes)):
             config_code = config_codes[i]
             java_code = java_codes[i]
-            config_file = open("./CheckStyleDocSeeds"  + File.separator + rule_name + str(i) + ".xml", "w")
-            java_file = open("./CheckStyleDocSeeds"  + File.separator + rule_name + str(i) + ".java", "w")
+            folder_path = userdir + sep + "CheckStyleDocSeeds" + sep + rule_name
+            if not os.path.exists(folder_path):
+                os.mkdir(folder_path)
+            config_file = open("." + sep + "CheckStyleDocSeeds"  + sep + rule_name+ sep + str(i) + ".xml", "w", encoding="utf-8")
+            java_file = open("." + sep + "CheckStyleDocSeeds"  + sep + rule_name + sep + str(i) + ".java", "w", encoding="utf-8")
             config_file.write(config_code)
             java_file.write(java_code)
             config_file.close()
@@ -95,7 +98,7 @@ def main():
     if not os.path.exists(seed_folder_path):
         os.mkdir(seed_folder_path)
     for bug_category in bug_categories:
-        seed_file_path = seed_folder_path  + File.separator + bug_category + ".html"
+        seed_file_path = seed_folder_path  + sep + bug_category + ".html"
         content = ""
         if os.path.exists(seed_file_path):
             seed_file = open(seed_file_path, "r")

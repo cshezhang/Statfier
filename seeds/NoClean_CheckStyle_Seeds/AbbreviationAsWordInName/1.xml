@@ -1,0 +1,7 @@
+
+
+<module name="AbbreviationAsWordInName">
+  <property name="ignoreStatic" value="false"/>
+  <property name="ignoreOverriddenMethods" value="false"/>
+</module>
+        

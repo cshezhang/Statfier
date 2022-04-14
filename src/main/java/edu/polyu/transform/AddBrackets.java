@@ -1,7 +1,19 @@
 package edu.polyu.transform;
 
-import org.eclipse.jdt.core.dom.*;
+import edu.polyu.analysis.ASTWrapper;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * @Description:
@@ -19,7 +31,9 @@ public class AddBrackets extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression expression = null;
         if(sourceStatement instanceof ExpressionStatement) {
             expression = ((ExpressionStatement) sourceStatement).getExpression();
@@ -39,23 +53,27 @@ public class AddBrackets extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(statement instanceof ExpressionStatement) {
             Expression expression = ((ExpressionStatement)statement).getExpression();
             // https://www.ibm.com/docs/en/rational-soft-arch/9.5?topic=r-api-reference-1
             // Actually, we only need to consider Assignment, others can be dismissed
-            return expression instanceof Assignment ? 1 : 0;
-        }
-        if(statement instanceof VariableDeclarationStatement) {
-            VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
-            if(vdStatement.getType() instanceof ArrayType) {
-                return 0;
+            if(expression instanceof Assignment) {
+                nodes.add(statement);
             }
-            VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
-            if(vdFragment.getInitializer() != null) {
-                return 1;
+        } else {
+            if (statement instanceof VariableDeclarationStatement) {
+                VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
+                if (vdStatement.getType() instanceof ArrayType) {
+                    return nodes;
+                }
+                VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
+                if (vdFragment.getInitializer() != null) {
+                    nodes.add(statement);
+                }
             }
         }
-        return 0;
+        return nodes;
     }
 }

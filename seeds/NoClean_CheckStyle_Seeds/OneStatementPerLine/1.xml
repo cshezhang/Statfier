@@ -1,0 +1,6 @@
+
+
+<module name="OneStatementPerLine">
+  <property name="treatTryResourcesAsStatement" value="true"/>
+</module>
+        

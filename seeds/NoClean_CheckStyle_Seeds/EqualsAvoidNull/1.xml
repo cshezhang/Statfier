@@ -1,0 +1,6 @@
+
+
+<module name="EqualsAvoidNull">
+  <property name="ignoreEqualsIgnoreCase" value="true"/>
+</module>
+        

@@ -1,0 +1,6 @@
+
+
+<module name="LambdaParameterName">
+  <property name="format" value="^[a-z]([a-zA-Z]+)*$"/>
+</module>
+        

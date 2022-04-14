@@ -1,6 +1,0 @@
-
-Assert.assertEquals(a, b);
-Assert.assertSame(a, b);
-Assert.assertNull(a);
-Assert.assertNotNull(a);
-Assert.assertNotEquals(a, b);

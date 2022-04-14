@@ -1,0 +1,6 @@
+
+
+<module name="AvoidNestedBlocks">
+  <property name="allowInSwitchCase" value="true"/>
+</module>
+        

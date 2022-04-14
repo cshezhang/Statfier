@@ -1,0 +1,6 @@
+
+
+<module name="HiddenField">
+  <property name="ignoreConstructorParameter" value="true"/>
+</module>
+        

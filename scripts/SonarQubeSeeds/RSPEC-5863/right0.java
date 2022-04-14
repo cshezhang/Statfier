@@ -1,2 +1,0 @@
-
-assertThat(actual).isEqualTo(expected);

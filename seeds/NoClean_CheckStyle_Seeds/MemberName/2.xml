@@ -1,0 +1,7 @@
+
+
+<module name="MemberName">
+  <property name="applyToPublic" value="false"/>
+  <property name="applyToPrivate" value="false"/>
+</module>
+        

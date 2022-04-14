@@ -1,0 +1,6 @@
+
+
+<module name="JavadocContentLocationCheck">
+  <property name="location" value="first_line"/>
+</module>
+        

@@ -1,8 +1,12 @@
 package edu.polyu.transform;
 
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description: Add assignment mutatant
@@ -24,7 +28,9 @@ public class AddLocalAssignment extends Transform {
     * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
     * */
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) sourceStatement;
         VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
         Expression initializer = oldFragment.getInitializer();
@@ -54,7 +60,8 @@ public class AddLocalAssignment extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
             // System.out.println(vdStatement.getType());
@@ -62,17 +69,17 @@ public class AddLocalAssignment extends Transform {
                 if(vdStatement.modifiers().size() > 0) {
                     Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
                     if(modifier.getKeyword().toString().equals("final")) {
-                        return 0;
+                        return nodes;
                         // final byte[] values={0}; -> final byte[] values; values = {0} is wrong.
                     }
                 }
             }
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
             if(vdFragment.getInitializer() != null) {
-                return 1;
+                nodes.add(statement);
             }
         }
-        return 0;
+        return nodes;
     }
 
 }

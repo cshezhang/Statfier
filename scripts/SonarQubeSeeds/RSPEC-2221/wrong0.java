@@ -1,6 +1,0 @@
-
-try {
-  // do something that might throw an UnsupportedDataTypeException or UnsupportedEncodingException
-} catch (Exception e) { // Noncompliant
-  // log exception ...
-}

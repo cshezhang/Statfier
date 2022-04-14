@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -11,6 +12,9 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static edu.polyu.util.Util.getDirectBlockOfStatement;
 
@@ -25,7 +29,9 @@ public class CFWrapperWithIfFlase extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brother, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, oldStatement);
         Block newIfBlock = ast.newBlock();
         newIfBlock.statements().add(newStatement);
@@ -46,11 +52,13 @@ public class CFWrapperWithIfFlase extends Transform {
     }
 
     @Override
-    public int check(ASTNode node) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration || node instanceof MethodDeclaration) {
-            return 0;
+            return nodes;
         }
-        return 1;
+        nodes.add(node);
+        return nodes;
     }
 
 }

@@ -1,2 +1,0 @@
-
-Integer.toString(myInteger);        // Compliant

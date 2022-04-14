@@ -1,0 +1,6 @@
+
+
+<module name="IllegalThrows">
+  <property name="illegalClassNames" value="NullPointerException"/>
+</module>
+        

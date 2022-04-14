@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 
+import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -34,16 +35,10 @@ public class TransferLocalVarToGlobal extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
-        List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
-        List<ASTNode> literalNodes = new ArrayList<>();
-        for(int i = 0; i < subNodes.size(); i++) {
-            ASTNode node = subNodes.get(i);
-            if(checkExpressionLiteral(node)) {
-                literalNodes.add(node);
-            }
-        }
-        Expression literalNode = (Expression) literalNodes.get(index);
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
+        Expression literalNode = (Expression) targetNode;
         TypeDeclaration clazz = Util.getClassOfStatement(sourceStatement);
         String newVarName = "t2g" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
@@ -59,28 +54,17 @@ public class TransferLocalVarToGlobal extends Transform {
         return true;
     }
 
-//    @Override
-//    public List<ASTNode> getCandidateNodes(Statement statement) {
-//        List<ASTNode> nodes = getChildrenNodes(statement);
-//        List<ASTNode> results = new ArrayList<>();
-//        for(int i = 0; i < nodes.size(); i++) {
-//            if((checkExpressionLiteral(nodes.get(i)))) {
-//                results.add(nodes.get(i));
-//            }
-//        }
-//        return results;
-//    }
-
     @Override
-    public int check(ASTNode statement) {
-        int counter = 0;
-        List<ASTNode> nodes = getChildrenNodes(statement);
-        for(int i = 0; i < nodes.size(); i++) {
-            if(checkExpressionLiteral(nodes.get(i))) {
-                counter++;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(statement);
+        for(int i = 0; i < subNodes.size(); i++) {
+            ASTNode subNode = subNodes.get(i);
+            if(checkExpressionLiteral(subNode)) {
+                nodes.add(subNode);
             }
         }
-        return counter;
+        return nodes;
     }
 
 }

@@ -1,0 +1,7 @@
+
+
+<module name="IllegalType">
+  <property name="memberModifiers" value="LITERAL_PUBLIC,
+    LITERAL_PROTECTED, LITERAL_STATIC"/>
+</module>
+        

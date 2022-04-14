@@ -1,2 +1,0 @@
-
-ArrayList cats = new ArrayList();

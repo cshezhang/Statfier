@@ -1,5 +1,6 @@
 package edu.polyu.transform;
 
+import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -38,7 +39,9 @@ public class AddGlobalAssignment extends Transform {
      * Beside, static variable can inited in static code block.
      * */
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         TypeDeclaration oldClazz = Util.getClassOfStatement(sourceStatement);
         List<ASTNode> oldClazzCompoents = oldClazz.bodyDeclarations();
         List<FieldDeclaration> oldFieldDeclarations = new ArrayList<>();
@@ -98,8 +101,10 @@ public class AddGlobalAssignment extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
-        return 1;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
+        nodes.add(statement);
+        return nodes;
     }
 
 }

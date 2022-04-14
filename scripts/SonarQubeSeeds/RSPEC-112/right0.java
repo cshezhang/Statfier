@@ -1,4 +1,0 @@
-
-public void foo(String bar) {
-  throw new MyOwnRuntimeException("My Message");
-}

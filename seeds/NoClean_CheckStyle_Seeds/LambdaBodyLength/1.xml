@@ -1,0 +1,6 @@
+
+
+<module name="LambdaBodyLength">
+  <property name="max" value="5"/>
+</module>
+        

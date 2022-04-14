@@ -1,8 +1,0 @@
-
-try {
-  /* some work which end up throwing an exception */
-  throw new IllegalArgumentException();
-} finally {
-  /* clean up */
-  throw new RuntimeException();       // Noncompliant; masks the IllegalArgumentException
-}

@@ -1,0 +1,6 @@
+
+
+<module name="MethodName">
+   <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
+</module>
+        

@@ -1,0 +1,8 @@
+
+
+<module name="StaticVariableName">
+  <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
+  <property name="applyToPrivate" value="false"/>
+  <property name="applyToPackage" value="false"/>
+</module>
+        

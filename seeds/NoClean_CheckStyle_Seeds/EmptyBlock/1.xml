@@ -1,0 +1,7 @@
+
+
+<module name="EmptyBlock">
+  <property name="option" value="text"/>
+  <property name="tokens" value="LITERAL_TRY"/>
+</module>
+        

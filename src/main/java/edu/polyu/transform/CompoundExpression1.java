@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -24,15 +25,10 @@ public class CompoundExpression1 extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brother, ASTNode oldStatement) {
-        List<ASTNode> nodes = getChildrenNodes(oldStatement);
-        List<BooleanLiteral> boolLiterals = new ArrayList<>();
-        for(ASTNode node : nodes) {
-            if(node instanceof BooleanLiteral) {
-                boolLiterals.add((BooleanLiteral) node);
-            }
-        }
-        BooleanLiteral targetLiteral = boolLiterals.get(index);
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
+        BooleanLiteral targetLiteral = (BooleanLiteral) targetNode;
         ParenthesizedExpression newParenthesizedExpression = ast.newParenthesizedExpression();
         InfixExpression newInfixExpression = ast.newInfixExpression();
         newInfixExpression.setLeftOperand((BooleanLiteral) ASTNode.copySubtree(ast, targetLiteral));
@@ -49,14 +45,14 @@ public class CompoundExpression1 extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
-        int counter = 0;
-        List<ASTNode> nodes = getChildrenNodes(statement);
-        for(ASTNode node : nodes) {
-            if(node instanceof BooleanLiteral) {
-                counter++;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(statement);
+        for(ASTNode subNode : subNodes) {
+            if(subNode instanceof BooleanLiteral) {
+                nodes.add(subNode);
             }
         }
-        return counter;
+        return nodes;
     }
 }

@@ -1,5 +1,0 @@
-
-@Test
-public void testFoo() {
-  // ...
-}

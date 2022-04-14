@@ -1,0 +1,6 @@
+
+
+<module name="AbstractClassName">
+  <property name="ignoreModifier" value="true"/>
+</module>
+        

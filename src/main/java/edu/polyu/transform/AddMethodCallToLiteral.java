@@ -1,8 +1,14 @@
 package edu.polyu.transform;
 
+import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.report.PMD_Report;
+import edu.polyu.report.PMD_Violation;
+import edu.polyu.report.Report;
+import edu.polyu.report.Violation;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -15,7 +21,13 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Util.checkExpressionLiteral;
+import static edu.polyu.util.Util.checkLiteralType;
+import static edu.polyu.util.Util.file2report;
+import static edu.polyu.util.Util.getChildrenNodes;
+import static edu.polyu.util.Util.getDirectMethodOfStatement;
+import static edu.polyu.util.Util.random;
+
 
 /**
  * Description:
@@ -34,15 +46,9 @@ public class AddMethodCallToLiteral extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brother, ASTNode sourceStatement) {
-        List<ASTNode> nodes = getChildrenNodes(sourceStatement);
-        List<ASTNode> literalNodes = new ArrayList<>();
-        for(ASTNode node : nodes) {
-            if(checkExpressionLiteral(node)) {
-                literalNodes.add(node);
-            }
-        }
-        ASTNode targetNode = literalNodes.get(index);
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode broStatement, ASTNode srcStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration newMethod = ast.newMethodDeclaration();
         String newMethodName = "getLiteral" + literalCounter++;
         newMethod.setReturnType2(checkLiteralType(ast, (Expression) targetNode));
@@ -52,7 +58,7 @@ public class AddMethodCallToLiteral extends Transform {
         newBlock.statements().add(returnStatement);
         newMethod.setBody(newBlock);
         returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(sourceStatement);
+        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcStatement);
         if(oldMethod == null) {
             return false;  // It means that this statement is not located in a method, may stay in a initializer of class
         }
@@ -66,18 +72,52 @@ public class AddMethodCallToLiteral extends Transform {
     }
 
     @Override
-    public int check(ASTNode node) {
-        int counter = 0;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(node instanceof FieldDeclaration || node instanceof MethodDeclaration) {
-            return counter;
+            return nodes;
         }
-        List<ASTNode> nodes = getChildrenNodes(node);
-        for(ASTNode astNode : nodes) {
-            if(checkExpressionLiteral(astNode)) {
-                counter++;
+        List<ASTNode> subNodes = getChildrenNodes(node);
+        for(ASTNode subNode : subNodes) {
+            if(checkExpressionLiteral(subNode)) {
+                nodes.add(subNode);
             }
         }
-        return counter;
+        if(nodes.size() == 0) {
+            return nodes;
+        }
+        CompilationUnit cu = wrapper.getCompilationUnit();
+        List<ASTNode> resNodes = new ArrayList<>();
+        List<ASTNode> candidateNodes = new ArrayList<>();
+        for(ASTNode targetNode : nodes) {
+            int col = cu.getColumnNumber(targetNode.getStartPosition()), row = cu.getLineNumber(targetNode.getStartPosition());
+            Report report = file2report.get(wrapper.getFilePath());
+            if (report instanceof PMD_Report) {
+                PMD_Report pmd_report = (PMD_Report) report;
+                List<PMD_Violation> violations = pmd_report.getViolations();
+                for (PMD_Violation violation : violations) {
+                    if (violation.getBeginLine() == row) {
+                        candidateNodes.add(targetNode);
+                        if(col >= violation.getBeginCol() - 1 && col <= violation.getEndCol() + 1) {
+                            resNodes.add(targetNode);
+                        }
+                    }
+                }
+            }
+        }
+        if(resNodes.size() == 0) {
+            if(candidateNodes.size() == 0) {
+                resNodes.add(nodes.get(random.nextInt(nodes.size())));
+            } else {
+                if(candidateNodes.size() > 2) {
+                    resNodes.add(candidateNodes.get(0));
+                    resNodes.add(candidateNodes.get(1));
+                } else {
+                    resNodes.add(candidateNodes.get(0));
+                }
+            }
+        }
+        return resNodes;
     }
 
 }

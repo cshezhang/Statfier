@@ -1,6 +1,0 @@
-
-public void doSomething(String [] strings) {
-  for (int i = 0; i < strings.length; i++) {
-    String string = strings[i];
-    //...
-  }

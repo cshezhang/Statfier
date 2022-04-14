@@ -3,6 +3,9 @@ package edu.polyu.thread;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.Infer_Report;
 import edu.polyu.report.Infer_Violation;
+import edu.polyu.report.PMD_Report;
+import edu.polyu.report.PMD_Violation;
+import net.sourceforge.pmd.PMD;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -11,111 +14,121 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static edu.polyu.util.Invoker.invokeCommands;
-import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.util.Util.InferClassFolder;
+import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
+import static edu.polyu.util.Invoker.invokeCommandsByZT;
+import static edu.polyu.util.Util.GUIDED_LOCATION;
 import static edu.polyu.util.Util.InferPath;
 import static edu.polyu.util.Util.InferResultFolder;
-import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.util.Util.NO_SELECTION;
+import static edu.polyu.util.Util.PMDResultFolder;
+import static edu.polyu.util.Util.Path2Last;
+import static edu.polyu.util.Util.RANDOM_LOCATION;
+import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
+import static edu.polyu.util.Util.TS_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2line;
+import static edu.polyu.util.Util.file2report;
+import static edu.polyu.util.Util.file2row;
+import static edu.polyu.util.Util.getFilenamesFromFolder;
+import static edu.polyu.util.Util.mutantFolder;
 import static edu.polyu.util.Util.readInferResultFile;
-import static edu.polyu.util.Util.sep;
+import static edu.polyu.util.Util.readPMDResultFile;
 
 
 /**
  * Description: Infer Transformation Thread
  * Author: Vanguard
- * Date: 2022/2/4 1:23 下午
+ * Date: 2022/2/4 1:23 PM
  */
 public class Infer_TransformThread implements Runnable {
 
     private int currentDepth;
-    private ArrayDeque<ASTWrapper> initWrappers;
+    private String seedFolderName;
+    private ArrayDeque<ASTWrapper> wrappers;
 
-    // initWrappers contains different seedFolderPaths and seedFolderNames, so we can get them from wrappers
-    public Infer_TransformThread(List<ASTWrapper> initWrappers) {
+    public Infer_TransformThread(List<ASTWrapper> initWrappers, String seedFolderName) {
         this.currentDepth = 0;
-        this.initWrappers = new ArrayDeque<>() {
+        this.seedFolderName = seedFolderName;
+        this.wrappers = new ArrayDeque<>() {
             {
                 addAll(initWrappers);
             }
         };
     }
 
+    // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
     @Override
     public void run() {
-        // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
-        for (ASTWrapper initWrapper : this.initWrappers) {
-            ArrayDeque<ASTWrapper> tmpWrappers = new ArrayDeque<>(64);
-            tmpWrappers.add(initWrapper);
-            for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
-                while (!tmpWrappers.isEmpty()) {
-                    ASTWrapper wrapper = tmpWrappers.pollFirst();
-                    if (wrapper.depth == currentDepth) {
-                        if (!wrapper.isBuggy()) {
-                            List<ASTWrapper> mutants;
-                            if (GUIDED_RANDOM_TESTING) {
-                                mutants = wrapper.guidedRandomTransformation();
-                            } else {
-                                if (MAIN_EXECUTION) {
-                                    mutants = wrapper.mainTransform();
-                                } else {
-                                    mutants = wrapper.pureRandomTransformation();
-                                }
-                            }
-                            tmpWrappers.addAll(mutants);
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            while (!wrappers.isEmpty()) {
+                ASTWrapper wrapper = wrappers.pollFirst();
+                if (wrapper.depth == currentDepth) {
+                    if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
+                        List<ASTWrapper> mutants = new ArrayList<>();
+                        if (GUIDED_LOCATION) {
+                            mutants = wrapper.TransformByGuidedLocation();
+                        } else if (RANDOM_LOCATION) {
+                            mutants = wrapper.TransformByRandomLocation();
                         }
-                    } else {
-                        tmpWrappers.addFirst(wrapper);
-                        currentDepth += 1;
-                        break;
-                    }
-                }
-                List<Infer_Report> reports = new ArrayList<>();
-                for (ASTWrapper tmpWrapper : tmpWrappers) {
-                    String seedFilePath = tmpWrapper.getFilePath();
-                    String seedFolderPath = tmpWrapper.getFolderPath();
-                    String[] tokens = seedFilePath.split(sep);
-                    String seedFileNameWithSuffix = tokens[tokens.length - 1];
-                    String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
-                    // Filename is used to specify class folder name
-                    File classFolder = new File(InferClassFolder.getAbsolutePath() + File.separator + seedFileName);
-                    if (!classFolder.exists()) {
-                        classFolder.mkdirs();
-                    }
-                    String java_path = seedFolderPath + File.separator + seedFileNameWithSuffix;
-                    String reportPath = InferResultFolder.getAbsolutePath() + File.separator + seedFileName + "_Result.xml";
-                    // infer --pmd-xml xml_path run -- javac java_path
-                    String[] invokeCmds = {"/bin/bash", "-c", InferPath + " --pmd-xml " + reportPath + " run -- javac " + java_path};
-                    invokeCommands(invokeCmds);
-                    String report_path = InferResultFolder.getAbsolutePath() + File.separator + seedFileName + "_Result.xml";
-                    reports.addAll(readInferResultFile(tmpWrapper.getFolderPath(), report_path));
-                }
-                for (Infer_Report report : reports) {
-                    if (!file2line.containsKey(report.getFilename())) {
-                        file2line.put(report.getFilename(), new HashSet<>());
-                        file2bugs.put(report.getFilename(), new HashMap<>());
-                    }
-                    for (Infer_Violation violation : report.getViolations()) {
-                        file2line.get(report.getFilename()).add(violation.getBeginLine());
-                        HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilename());
-                        if (!bug2cnt.containsKey(violation.getBugType())) {
-                            bug2cnt.put(violation.getBugType(), new HashSet<>());
+                        if(NO_SELECTION) {
+                            wrappers.addAll(mutants);
                         }
-                        bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+                        if(RANDOM_SELECTION) {
+                            wrappers.addAll(Random_Selection(mutants));
+                        }
+                        if(TS_SELECTION) {
+                            wrappers.addAll(TS_Selection(mutants));
+                        }
                     }
+                } else {
+                    wrappers.addFirst(wrapper); // The last wrapper in current depth
+                    currentDepth += 1;
+                    break;
                 }
-                List<ASTWrapper> validWrappers = new ArrayList<>();
-                while (!tmpWrappers.isEmpty()) {
-                    ASTWrapper head = tmpWrappers.pollFirst();
-                    if (!head.isBuggy()) {
-                        validWrappers.add(head);
-                    }
-                }
-                tmpWrappers.addAll(validWrappers);
             }
+            // detect mutants of iter i
+            String resultFolderPath = InferResultFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName;
+            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+            List<String> filepaths = getFilenamesFromFolder(mutantFolderPath, true);
+            for(int i = 0; i < filepaths.size(); i++) {
+                String srcJavaPath = filepaths.get(i);
+                String filename = Path2Last(srcJavaPath).split(".")[0];
+                String reportFolderPath = InferResultFolder + File.separator + "iter" + depth + "_" + filename;
+//            String[] invokeCmds = {"/bin/bash", "-c",  // Linux
+                String[] invokeCmds = {"cmd.exe", "/c",  // Windows
+                        InferPath + " run -o " + "" + reportFolderPath + " -- javac " + srcJavaPath};
+                invokeCommandsByZT(invokeCmds);
+            }
+            String resultFilePath = resultFolderPath + File.separator + "result.json";
+            List<Infer_Report> reports = readInferResultFile(depth, resultFilePath);
+            for (Infer_Report report : reports) {
+                file2report.put(report.getFilepath(), report);
+                if (!file2row.containsKey(report.getFilepath())) {
+                    file2row.put(report.getFilepath(), new HashSet<>());
+                    file2bugs.put(report.getFilepath(), new HashMap<>());
+                }
+                for (Infer_Violation violation : report.getViolations()) {
+                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                    if (!bug2cnt.containsKey(violation.getBugType())) {
+                        bug2cnt.put(violation.getBugType(), new HashSet<>());
+                    }
+                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+                }
+            }
+            List<ASTWrapper> validWrappers = new ArrayList<>();
+            while (!wrappers.isEmpty()) {
+                ASTWrapper head = wrappers.pollFirst();
+                // Used for debugging
+//                String file = head.filename;
+//                String content = head.getCode();
+//                int cnt = head.getViolations();
+                if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
+                    validWrappers.add(head);
+                }
+            }
+            wrappers.addAll(validWrappers);
         }
     }
 

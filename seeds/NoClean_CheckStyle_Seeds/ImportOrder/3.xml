@@ -1,0 +1,14 @@
+
+
+<module name="ImportOrder">
+  <property name="groups" value="*,javax,java"/>
+  <property name="ordered" value="true"/>
+  <property name="separated" value="false"/>
+  <property name="option" value="bottom"/>
+  <property name="sortStaticImportsAlphabetically" value="true"/>
+</module>
+<module name="SuppressionXpathSingleFilter">
+  <property name="checks" value="ImportOrder"/>
+  <property name="message" value="^'java\..*'.*"/>
+</module>
+        

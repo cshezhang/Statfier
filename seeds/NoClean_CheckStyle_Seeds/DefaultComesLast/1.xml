@@ -1,0 +1,6 @@
+
+
+<module name="DefaultComesLast">
+  <property name="skipIfLastAndSharedWithCase" value="true"/>
+</module>
+        

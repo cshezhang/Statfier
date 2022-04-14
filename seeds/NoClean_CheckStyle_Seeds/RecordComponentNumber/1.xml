@@ -1,0 +1,6 @@
+
+
+<module name="RecordComponentNumber">
+  <property name="max" value="5"/>
+</module>
+        

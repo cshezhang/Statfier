@@ -1,2 +1,0 @@
-
-myString.toLowerCase(Locale.TR)

@@ -1,0 +1,6 @@
+
+
+<module name="CyclomaticComplexity">
+  <property name="switchBlockAsSingleDecisionPoint" value="true"/>
+</module>
+        

@@ -1,0 +1,6 @@
+
+
+<module name="NoWhitespaceBefore">
+  <property name="allowLineBreaks" value="true"/>
+</module>
+        

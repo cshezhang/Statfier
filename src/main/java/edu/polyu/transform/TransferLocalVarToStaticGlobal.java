@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 
+import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -38,16 +39,10 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
-        List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
-        List<ASTNode> literalNodes = new ArrayList<>();
-        for(int i = 0; i < subNodes.size(); i++) {
-            ASTNode node = subNodes.get(i);
-            if(Util.checkExpressionLiteral(node)) {
-                literalNodes.add(node);
-            }
-        }
-        Expression targetLiteral = (Expression) literalNodes.get(index);
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
+        Expression targetLiteral = (Expression) targetNode;
         TypeDeclaration clazz = Util.getClassOfStatement(sourceStatement);
         String newVarName = "t2sg" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
@@ -65,15 +60,16 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
-        int counter = 0;
-        List<ASTNode> nodes = getChildrenNodes(statement);
-        for(int i = 0; i < nodes.size(); i++) {
-            if(Util.checkExpressionLiteral(nodes.get(i))) {
-                counter++;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(statement);
+        for(int i = 0; i < subNodes.size(); i++) {
+            ASTNode subNode = subNodes.get(i);
+            if(Util.checkExpressionLiteral(subNode)) {
+                nodes.add(subNode);
             }
         }
-        return counter;
+        return nodes;
     }
 
 }

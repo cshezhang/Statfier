@@ -1,0 +1,6 @@
+
+
+<module name="MethodTypeParameterName">
+   <property name="format" value="^[a-zA-Z]$"/>
+</module>
+        

@@ -1,0 +1,6 @@
+
+
+<module name="MissingJavadocMethod">
+  <property name="allowMissingPropertyJavadoc" value="true"/>
+</module>
+        

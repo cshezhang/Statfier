@@ -1,8 +1,29 @@
 package edu.polyu.transform;
 
-import org.eclipse.jdt.core.dom.*;
+import edu.polyu.analysis.ASTWrapper;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.CharacterLiteral;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.NullLiteral;
+import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static edu.polyu.util.Util.*;
 
@@ -28,7 +49,9 @@ public class AddArgAssignment extends Transform {
      * Notice: New Assignment should be added final modifier
      */
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetExpression = null, rightExpression = null;
         if(sourceStatement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) sourceStatement;
@@ -114,21 +137,22 @@ public class AddArgAssignment extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
-        if(statement instanceof VariableDeclarationStatement) {
-            VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
+        if(node instanceof VariableDeclarationStatement) {
+            VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
             Expression rightExpression = vdFragment.getInitializer();
             if(rightExpression instanceof MethodInvocation || rightExpression instanceof ClassInstanceCreation) {
-                return 1;
+                nodes.add(node);
             }
         }
-        if(statement instanceof ExpressionStatement) {
-            Expression expression = ((ExpressionStatement) statement).getExpression();
+        if(node instanceof ExpressionStatement) {
+            Expression expression = ((ExpressionStatement) node).getExpression();
             if(expression instanceof MethodInvocation || expression instanceof Assignment) {
-                return 1;
+                nodes.add(node);
             }
         }
-        return 0;
+        return nodes;
     }
 
 }

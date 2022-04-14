@@ -1,0 +1,6 @@
+
+
+<module name="MissingJavadocType">
+  <property name="scope" value="private"/>
+</module>
+        

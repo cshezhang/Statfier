@@ -1,7 +1,11 @@
 package edu.polyu.transform;
 
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description: static int a = XX; -> static int a; static { a = 10; }
@@ -19,7 +23,9 @@ public class AddStaticAssignment extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode oldStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         FieldDeclaration oldFieldDeclaration = (FieldDeclaration) oldStatement;
         if(!oldFieldDeclaration.modifiers().contains(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
             return false;
@@ -49,12 +55,12 @@ public class AddStaticAssignment extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(statement instanceof FieldDeclaration) {
-            return 1;
-        } else {
-            return 0;
+            nodes.add(statement);
         }
+        return nodes;
     }
 
 }

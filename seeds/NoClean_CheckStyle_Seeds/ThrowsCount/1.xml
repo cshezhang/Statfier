@@ -1,0 +1,6 @@
+
+
+<module name="ThrowsCount">
+  <property name="max" value="2"/>
+</module>
+        

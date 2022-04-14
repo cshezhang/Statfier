@@ -1,19 +1,20 @@
 package edu.polyu.report;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Description: PMD report class to save different info in a PMD report
  * Author: Vanguard
- * Date: 2021/9/23 7:30 下午
+ * Date: 2021/9/23 7:30
  */
 public class PMD_Report extends Report {
 
-    private String filename;
-    private ArrayList<PMD_Violation> violations;
+    private String filepath;
+    private List<PMD_Violation> violations;
 
-    public PMD_Report(String filename) {
-        this.filename = filename;
+    public PMD_Report(String filepath) {
+        this.filepath = filepath;
         this.violations = new ArrayList<>();
     }
 
@@ -21,18 +22,18 @@ public class PMD_Report extends Report {
         this.violations.add(pmd_violation);
     }
 
-    public String getFilename() {
-        return this.filename;
+    public String getFilepath() {
+        return this.filepath;
     }
 
-    public ArrayList<PMD_Violation> getViolations() {
+    public List<PMD_Violation> getViolations() {
         return this.violations;
     }
 
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
-        out.append("PMD_Report Filename: " + this.filename + "\n");
+        out.append("PMD_Report Filename: " + this.filepath + "\n");
         for(PMD_Violation pmd_violation : this.violations) {
             out.append(pmd_violation.toString() + "\n");
         }

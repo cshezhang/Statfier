@@ -1,0 +1,6 @@
+
+
+<module name="MissingJavadocMethod">
+  <property name="allowedAnnotations" value="Override,Deprecated"/>
+</module>
+        

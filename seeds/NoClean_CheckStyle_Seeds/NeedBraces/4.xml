@@ -1,0 +1,7 @@
+
+
+<module name="NeedBraces">
+  <property name="allowEmptyLoopBody" value="true"/>
+  <property name="tokens" value="LITERAL_WHILE, LITERAL_FOR"/>
+</module>
+        

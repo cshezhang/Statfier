@@ -1,0 +1,7 @@
+
+
+<module name="RightCurly">
+  <property name="option" value="alone_or_singleline"/>
+  <property name="tokens" value="LITERAL_IF, METHOD_DEF"/>
+</module>
+        

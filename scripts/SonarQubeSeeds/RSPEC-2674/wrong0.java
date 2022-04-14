@@ -1,9 +1,0 @@
-
-public void doSomething(String fileName) {
-  try {
-    InputStream is = new InputStream(file);
-    byte [] buffer = new byte[1000];
-    is.read(buffer);  // Noncompliant
-    // ...
-  } catch (IOException e) { ... }
-}

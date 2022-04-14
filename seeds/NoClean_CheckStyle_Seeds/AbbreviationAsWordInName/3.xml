@@ -1,0 +1,9 @@
+
+
+<module name="AbbreviationAsWordInName">
+  <property name="tokens" value="VARIABLE_DEF"/>
+  <property name="ignoreStatic" value="true"/>
+  <property name="allowedAbbreviationLength" value="1"/>
+  <property name="allowedAbbreviations" value="CSV"/>
+</module>
+        

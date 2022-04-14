@@ -1,0 +1,6 @@
+
+
+<module name="FinalParameters">
+  <property name="ignorePrimitiveTypes" value="true"/>
+</module>
+        

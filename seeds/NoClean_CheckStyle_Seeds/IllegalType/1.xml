@@ -1,0 +1,6 @@
+
+
+<module name="IllegalType">
+  <property name="tokens" value="METHOD_DEF"/>
+</module>
+        

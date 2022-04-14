@@ -1,0 +1,6 @@
+
+
+<module name="NPathComplexity">
+  <property name="max" value="100"/>
+</module>
+        

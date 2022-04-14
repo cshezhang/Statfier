@@ -3,7 +3,31 @@ package edu.polyu.analysis;
 import edu.polyu.transform.Transform;
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.TextEdit;
@@ -18,44 +42,59 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static edu.polyu.util.Util.*;
-import static edu.polyu.util.EditDistance.calculateStringSimilarity;
+import static edu.polyu.util.Util.COMPILE;
+import static edu.polyu.util.Util.matcher;
+import static edu.polyu.util.Util.PMD_MUTATION;
+import static edu.polyu.util.Util.Path2Last;
+import static edu.polyu.util.Util.compactIssues;
+import static edu.polyu.util.Util.compilerOptions;
+import static edu.polyu.util.Util.createMethodSignature;
+import static edu.polyu.util.Util.file2bugs;
+import static edu.polyu.util.Util.file2row;
+import static edu.polyu.util.Util.getAllNodes;
+import static edu.polyu.util.Util.getAllStatements;
+import static edu.polyu.util.Util.getChildrenNodes;
+import static edu.polyu.util.Util.getDirectMethodOfStatement;
+import static edu.polyu.util.Util.getFirstBrotherOfStatement;
+import static edu.polyu.util.Util.getSubStatements;
+import static edu.polyu.util.Util.mutantCounter;
+import static edu.polyu.util.Util.random;
+import static edu.polyu.util.Util.userdir;
 
 /**
- * Description: Mutator Scheduler
+ * Description: ASTWrapper is 1-to-1 a mutant or seed, it also contains some methods to perform different transformation schedule.
  * Author: Vanguard
  * Date: 2021-08-10 16:10
  */
 public class ASTWrapper {
 
     public int depth;
-    public AST ast;
-    public ASTRewrite astRewrite;
+    private AST ast;
+    private ASTRewrite astRewrite;
+    private CompilationUnit cu;
 
-    public String filename;
+    private String filename;
     private String initSeed;
     private int violations;
     private int parViolations;
     private Document document;
     private ASTParser parser;
-    private CompilationUnit cu;
     private String filePath; // This variable saves the absolute path.
     private String folderPath;
     private String folderName; // For PMD and CheckStyle, folderName equals to rule name
     private String parentPath;
+    private ASTWrapper parentWrapper;
     private String mutantFolder;
+    private List<ASTNode> nodeIndex;
     private List<String> transSeq;
+    private List<ASTNode> transNodes;
     private List<TypeDeclaration> types;
-//    private List<FieldDeclaration> allFieldDeclarations;
-//    private List<Statement> allNodes;
     private List<ASTNode> allNodes;
     private HashMap<String, List<ASTNode>> method2statements;
-//    private List<Statement> candidateStatements;
     private List<ASTNode> candidateNodes;
-//    private List<FieldDeclaration> candidateFieldDeclarations;
-    private List<String> mutantContents;
 
     public ASTWrapper(String filePath, String folderName) {
         this.depth = 0;
@@ -71,13 +110,16 @@ public class ASTWrapper {
         this.folderName = folderName;
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
         this.parentPath = null;
+        this.parentWrapper = null;
         this.parViolations = 0;
         if (PMD_MUTATION) {
             this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         } else {
             this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1);
         }
+        this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
+        this.transNodes = new ArrayList<>();
         this.parser = ASTParser.newParser(AST.JLS3);
         this.parser.setCompilerOptions(compilerOptions);
         this.parser.setSource(document.get().toCharArray());
@@ -91,7 +133,6 @@ public class ASTWrapper {
                 this.types.add((TypeDeclaration) node);
             }
         }
-//        this.allStatements = new ArrayList<>();
         this.allNodes = new ArrayList<>();
         this.method2statements = new HashMap<>();
         for (TypeDeclaration clazz : this.types) {
@@ -104,27 +145,27 @@ public class ASTWrapper {
                 if (component instanceof Initializer) {
                     Block block = ((Initializer) component).getBody();
                     if (block != null) {
-                        allNodes.addAll(getAllStatements((block.statements())));
+                        allNodes.addAll(getAllNodes((block.statements())));
+                    } else {
+                        allNodes = new ArrayList<>();
                     }
                 }
                 if (component instanceof MethodDeclaration) {
                     MethodDeclaration method = (MethodDeclaration) component;
                     List<ASTNode> statements;
                     Block block = method.getBody();
-                    if (block == null) {
+                    if (block == null || block.statements().size() == 0) {
                         statements = new ArrayList<>();
+                        this.allNodes.add(method);
                     } else {
-                        statements = getAllStatements(block.statements());
+                        statements = getAllNodes(getAllNodes(block.statements()));
                         this.allNodes.addAll(statements);
-//                        this.allStatements.addAll(statements);
                     }
                     this.method2statements.put(clazz.getName().toString() + ":" + createMethodSignature(method), statements);
                 }
             }
         }
         this.candidateNodes = null;
-//        this.candidateFieldDeclarations = new ArrayList<>();
-        this.mutantContents = new ArrayList<>();
     }
 
     // Other cases need invoke this constructor, filename is defined in mutate function
@@ -134,6 +175,7 @@ public class ASTWrapper {
         this.initSeed = parentWrapper.initSeed;
         this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
+        this.document = new Document(content);
         if (PMD_MUTATION) {
             this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         } else {
@@ -141,8 +183,10 @@ public class ASTWrapper {
         }
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
+        this.parentWrapper = parentWrapper;
+        this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
-        this.document = new Document(content);
+        this.transNodes = new ArrayList<>();
         File targetFile = new File(filePath);
         this.folderPath = targetFile.getParentFile().getAbsolutePath();
         this.parser = ASTParser.newParser(AST.JLS3);
@@ -153,8 +197,6 @@ public class ASTWrapper {
         this.astRewrite = ASTRewrite.create(ast);
         this.cu.recordModifications();
         this.types = this.cu.types();
-//        this.allFieldDeclarations = new ArrayList<>();
-//        this.allStatements = new ArrayList<>();
         this.allNodes = new ArrayList<>();
         this.method2statements = new HashMap<>();
         for (TypeDeclaration clazz : this.types) {
@@ -162,9 +204,6 @@ public class ASTWrapper {
             for (int i = 0; i < components.size(); i++) {
                 ASTNode component = components.get(i);
                 allNodes.add(component);
-//                if (component instanceof FieldDeclaration) {
-//                    allNodes.add(component);
-//                }
                 if (component instanceof Initializer) {
                     Block block = ((Initializer) component).getBody();
                     if (block != null) {
@@ -175,11 +214,11 @@ public class ASTWrapper {
                     MethodDeclaration method = (MethodDeclaration) component;
                     List<ASTNode> nodes;
                     Block block = method.getBody();
-                    if (block == null) {
+                    if (block == null || block.statements().size() == 0) {
                         nodes = new ArrayList<>();
+                        this.allNodes.add(method);
                     } else {
                         nodes = getAllStatements(block.statements());
-//                        this.allStatements.addAll(statements);
                         this.allNodes.addAll(nodes);
                     }
                     this.method2statements.put(clazz.getName().toString() + ":" + createMethodSignature(method), nodes);
@@ -187,8 +226,6 @@ public class ASTWrapper {
             }
         }
         this.candidateNodes = null;
-//        this.candidateFieldDeclarations = new ArrayList<>();
-        this.mutantContents = new ArrayList<>();
     }
 
     public void updateAST(String source) {
@@ -202,7 +239,6 @@ public class ASTWrapper {
         this.cu.recordModifications();
         this.types = cu.types();
         this.allNodes = new ArrayList<>();
-//        this.allStatements = new ArrayList<>();
         this.method2statements = new HashMap<>();
         for (TypeDeclaration clazz : this.types) {
             List<ASTNode> components = clazz.bodyDeclarations();
@@ -210,12 +246,10 @@ public class ASTWrapper {
                 ASTNode component = components.get(i);
                 if (component instanceof FieldDeclaration) {
                     allNodes.add(component);
-//                    allFieldDeclarations.add((FieldDeclaration) component);
                 }
                 if (component instanceof Initializer) {
                     Block block = ((Initializer) component).getBody();
                     if (block != null) {
-//                        allStatements.addAll(getAllStatements((block.statements())));
                         allNodes.addAll(getAllStatements((block.statements())));
                     }
                 }
@@ -223,20 +257,18 @@ public class ASTWrapper {
                     MethodDeclaration method = (MethodDeclaration) component;
                     List<ASTNode> statements;
                     Block block = method.getBody();
-                    if (block == null) {
+                    if (block == null || block.statements().size() == 0) {
                         statements = new ArrayList<>();
+                        this.allNodes.add(method);
                     } else {
                         statements = getAllStatements(block.statements());
-//                        this.allStatements.addAll(statements);
                         this.allNodes.addAll(statements);
                     }
                     this.method2statements.put(clazz.getName().toString() + ":" + createMethodSignature(method), statements);
                 }
             }
         }
-//        this.candidateStatements = null;
         this.candidateNodes = null;
-//        this.candidateFieldDeclarations = new ArrayList<>();
     }
 
     public void rewriteJavaCode() {
@@ -252,19 +284,28 @@ public class ASTWrapper {
     }
 
     // This method can be invoked only if the source code file has generated.
-    public void writeToJavaFile() {
+    public boolean writeToJavaFile() {
+        String code = this.getCode();
+//        String formattedCode;
         try {
             File file = new File(this.filePath);
             if (!file.exists()) {
                 file.createNewFile();
             }
+//            if (code.contains("enum ")) {
+//                formattedCode = new Formatter().formatSource(code);
+//            } else {
+//                formattedCode = code;
+//            }
             FileWriter fileWriter = new FileWriter(this.filePath);
-            fileWriter.write(this.document.get());
+            fileWriter.write(code);
             fileWriter.close();
+            return true;
         } catch (IOException e) {
             System.err.println("Fail to Write to Java File!");
             e.printStackTrace();
         }
+        return false;
     }
 
     public void printBasicInfo() {
@@ -286,7 +327,7 @@ public class ASTWrapper {
             for (MethodDeclaration method : methods) {
                 System.out.println("----------Method Name: " + method.getName() + "----------");
                 Block block = method.getBody();
-                if (block == null) {
+                if (block == null || block.statements().size() == 0) {
                     continue;
                 }
                 List<Statement> statements = block.statements();
@@ -307,46 +348,17 @@ public class ASTWrapper {
       This function can get all related statemnts of its ASTWrapper by taint analysis.
     */
     public List<ASTNode> getCandidateNodes() {
-        HashSet<Integer> validLines = file2line.get(this.filePath);
+        HashSet<Integer> validLines = file2row.get(this.filePath);
         List<ASTNode> resNodes = new ArrayList<>();
-        if (validLines == null) {
+        if (validLines == null) { // no warning in this file
             return resNodes;
         }
         validLines.remove(-1);
         if (validLines != null && validLines.size() > 0) {
-            for (TypeDeclaration clazz : this.types) {
-                List<ASTNode> nodes = clazz.bodyDeclarations();
-                for (ASTNode node : nodes) {
-                    int currentLine = this.cu.getLineNumber(node.getStartPosition());
-                    if(validLines.contains(currentLine)) {
-                        resNodes.add(node);
-                    }
-//                    if (node instanceof FieldDeclaration) {
-//                        int currentLine = this.cu.getLineNumber(node.getStartPosition());
-//                        if (validLines.contains(currentLine)) {
-//                            this.candidateFieldDeclarations.add((FieldDeclaration) node);
-//                        }
-//                    }
-//                    List<Statement> statements = new ArrayList<>();
-//                    if (node instanceof Initializer) {
-//                        Initializer initializer = (Initializer) node;
-//                        if (initializer.getBody() != null) {
-//                            statements.addAll(getAllStatements(initializer.getBody().statements()));
-//                        }
-//                    }
-//                    if (node instanceof MethodDeclaration) {
-//                        MethodDeclaration method = (MethodDeclaration) node;
-//                        statements.add(node);
-//                    }
-//                    for (int i = 0; i < statements.size(); i++) {
-//                        Statement statement = statements.get(i);
-//                        ArrayList<Statement> st = new ArrayList<>();
-//                        st.add(statement);
-//                        int currentLine = this.cu.getLineNumber(statement.getStartPosition());
-//                        if (validLines.contains(currentLine)) {
-//                            candidateStatements.add(statement);
-//                        }
-//                    }
+            for (ASTNode node : this.allNodes) {
+                int row = this.cu.getLineNumber(node.getStartPosition());
+                if (validLines.contains(row)) {
+                    resNodes.add(node);
                 }
             }
             this.violations = validLines.size();
@@ -424,8 +436,9 @@ public class ASTWrapper {
     public boolean isBuggy() {
         boolean buggy = false;
         if (this.depth != 0 && this.violations < this.parViolations) { // Checking depth is to mutate initial seeds
-            HashMap<String, HashSet<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
-            HashMap<String, HashSet<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
+            // bug type -> line numbers
+            Map<String, HashSet<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
+            Map<String, HashSet<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
             if (mutant_bug2lines == null && source_bug2lines == null) {
                 System.err.println("What the fuck? Both reports don't have bugs?");
@@ -437,21 +450,27 @@ public class ASTWrapper {
             if (source_bug2lines == null) {
                 source_bug2lines = new HashMap<>();
             }
-            ArrayList<Map.Entry<String, HashSet<Integer>>> potentialFPs = new ArrayList<>();
-            ArrayList<Map.Entry<String, HashSet<Integer>>> potentialFNs = new ArrayList<>();
+            List<Map.Entry<String, HashSet<Integer>>> potentialFPs = new ArrayList<>();
+            List<Map.Entry<String, HashSet<Integer>>> potentialFNs = new ArrayList<>();
             for (Map.Entry<String, HashSet<Integer>> entry : mutant_bug2lines.entrySet()) {
                 if (!source_bug2lines.containsKey(entry.getKey())) {
                     potentialFPs.add(entry); // Because mutant has, but source does not have.
                 } else {
-                    HashSet<Integer> source_bugs = source_bug2lines.get(entry.getKey());
-                    HashSet<Integer> mutant_bugs = mutant_bug2lines.get(entry.getKey());
+                    Set<Integer> source_bugs = source_bug2lines.get(entry.getKey());
+                    Set<Integer> mutant_bugs = mutant_bug2lines.get(entry.getKey());
                     if (source_bugs.size() == mutant_bugs.size()) {
                         continue;
                     }
                     if (source_bugs.size() > mutant_bugs.size()) {
                         potentialFNs.add(entry);
                     } else {
-                        potentialFPs.add(entry);
+                        if(this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
+                            if(source_bugs.size() + 1 < mutant_bugs.size()) {
+                                potentialFPs.add(entry);
+                            }
+                        } else {
+                            potentialFPs.add(entry);
+                        }
                     }
                 }
             }
@@ -496,231 +515,81 @@ public class ASTWrapper {
         return buggy;
     }
 
-    public boolean isDuplicatedMutant(String newContent) {
-        for (int i = 0; i < this.mutantContents.size(); i++) {
-            String oldContent = mutantContents.get(i);
-            float simi = calculateStringSimilarity(oldContent, newContent);
-            if (simi >= 1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public ArrayList<ASTWrapper> pureTransformation() {
-        ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
-        try {
-            if (this.candidateNodes == null) {
-                this.candidateNodes = this.allNodes;
-            }
-            if (this.depth >= SEARCH_DEPTH) {
-                return newWrappers;
-            }
-            int statementSize = this.candidateNodes.size();
-            if (statementSize <= 0) {
-                return newWrappers;
-            }
-            List<Transform> transforms = Transform.getTransforms();
-            for (ASTNode oldNode : candidateNodes) {
-                for (Transform transform : transforms) {
-                    int counter = transform.check(oldNode);
-                    for (int i = 0; i < counter; i++) {
-                        String filename = "mutant_" + mutantCounter.getAndAdd(1);
-                        String mutantPath = mutantFolder + File.separator + filename + ".java";
-                        String content = this.document.get();
-                        ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
-                        ASTNode newNode = newWrapper.searchNode(oldNode);
-                        if (newNode == null) {
-                            continue;
-                            // Here, we directly return the newWrappers and regards this situation as failed mutation
-                            // Not exception, because we select statements randomly
-                        }
-                        boolean hasMutated = transform.run(
-                                i,
-                                newWrapper.ast,
-                                newWrapper.astRewrite,
-                                getFirstBrotherOfStatement(newNode),
-                                newNode
-                        );
-                        if (hasMutated) {
-                            newWrapper.transSeq.add(transform.getIndex());
-                            if (COMPILE) {
-                                newWrapper.rewriteJavaCode();
-                                newWrapper.resetClassName();
-                                newWrapper.removePackageDefinition();
-                            }
-                            newWrapper.rewriteJavaCode();
-                            String newContent = newWrapper.document.get();
-//                            if (!this.isDuplicatedMutant(newContent)) {
-                            newWrappers.add(newWrapper);
-                            mutantContents.add(newWrapper.document.get());
-                            newWrapper.writeToJavaFile();
-//                            }
-                        } else {
-                            Files.deleteIfExists(Paths.get(mutantPath));
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return newWrappers;
-    }
-
-    public ArrayList<ASTWrapper> pureRandomTransformation() {
-        ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
-        int randomCount = 0;
-        try {
-            if (this.candidateNodes == null) {
-                this.candidateNodes = this.allNodes;
-            }
-            if (this.depth >= SEARCH_DEPTH) {
-                return newWrappers;
-            }
-            int statementSize = this.candidateNodes.size();
-            if (statementSize <= 0) {
-                return newWrappers;
-            }
-            while (true) {
-                if (++randomCount > statementSize * Transform.getTransforms().size()) {
-                    break;
-                }
-                ASTNode oldNode = candidateNodes.get(random.nextInt(statementSize));
-                Transform mutator = Transform.getTransformRandomly();
-                int counter = mutator.check(oldNode);
-                for (int i = 0; i < counter; i++) {
-                    if (counter <= 0) {
-                        continue;
-                    }
-                    String filename = "mutant_" + mutantCounter.getAndAdd(1);
-                    String mutantPath = mutantFolder + File.separator + filename + ".java";
-                    String content = this.document.get();
-                    ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
-                    ASTNode newNode = newWrapper.searchNode(oldNode);
-                    if (newNode == null) {
-                        continue;
-                        // Here, we directly return the newWrappers and regards this situation as failed mutation
-                        // Not exception, because we select statements randomly
-                    }
-                    boolean hasMutated = mutator.run(
-                            i,
-                            newWrapper.ast,
-                            newWrapper.astRewrite,
-                            getFirstBrotherOfStatement(newNode),
-                            newNode
-                    );
-                    if (hasMutated) {
-                        newWrapper.transSeq.add(mutator.getIndex());
-                        if (COMPILE) {
-                            newWrapper.rewriteJavaCode();
-                            newWrapper.resetClassName();
-                            newWrapper.removePackageDefinition();
-                        }
-                        newWrapper.rewriteJavaCode();
-                        String newContent = newWrapper.document.get();
-                        if (!this.isDuplicatedMutant(newContent)) {
-                            newWrappers.add(newWrapper);
-                            mutantContents.add(newWrapper.document.get());
-                            newWrapper.writeToJavaFile();
-                        }
-                    } else {
-                        Files.deleteIfExists(Paths.get(mutantPath));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return newWrappers;
-    }
-
-    //    public static AtomicInteger sumMutation = new AtomicInteger(0);
-    public ArrayList<ASTWrapper> guidedRandomTransformation() {
-        ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
-        int guidedRandomCount = 0;
-        try {
-            if (this.candidateNodes == null) {
-                this.candidateNodes = this.getCandidateNodes();
-            }
-            int candidateNodesize = this.candidateNodes.size();
-            if (candidateNodesize <= 0) {
-                invalidSeed.addAndGet(1);
-                return newWrappers;
-            } else {
-                validSeed.addAndGet(1);
-            }
-            while (true) {
-                if (guidedRandomCount > candidateNodesize * Transform.getTransforms().size()) {
-                    break;
-                }
-//                Statement oldStatement = this.candidateNodes.get(random.nextInt(candidateNodesize));
-                for (ASTNode candidateNode : this.candidateNodes) {
-                    Transform mutator = Transform.getTransformRandomly();
-                    guidedRandomCount++;
-                    int counter = mutator.check(candidateNode);
-//                    if(counter > 0) {
-//                        sumMutation.addAndGet(1);
-//                    }
-                    for (int i = 0; i < counter; i++) {
-                        String filename = "mutant_" + mutantCounter.getAndAdd(1);
-                        String mutantPath = mutantFolder + File.separator + filename + ".java";
-                        String content = this.document.get();
-                        ASTWrapper newWrapper = new ASTWrapper(filename, mutantPath, content, this);
-                        int oldLineNumber = this.cu.getLineNumber(candidateNode.getStartPosition());
-                        ASTNode newNode = newWrapper.searchNodeByLinenumber(candidateNode, oldLineNumber);
-                        if (newNode == null) {
-                            System.out.println(candidateNode);
-                            String s0 = this.document.get();
-                            System.out.println(this.document.get().hashCode());
-                            String s1 = newWrapper.document.get();
-                            System.out.println(newWrapper.document.get().hashCode());
-                            newWrapper.searchNodeByLinenumber(candidateNode, oldLineNumber);
-                            System.out.println(candidateNode);
-                            System.err.println("Old and new ASTWrapper are not matched!");
-                            System.exit(-1);
-                        }
-                        boolean hasMutated = mutator.run(
-                                i,
-                                newWrapper.ast,
-                                newWrapper.astRewrite,
-                                getFirstBrotherOfStatement(newNode),
-                                newNode);
-                        if (hasMutated) {
-                            succMutation.addAndGet(1);
-                            newWrapper.transSeq.add(mutator.getIndex());
-                            if (COMPILE) {
-                                newWrapper.rewriteJavaCode();
-                                newWrapper.resetClassName();
-                                newWrapper.removePackageDefinition();
-                            }
-                            newWrapper.rewriteJavaCode();
-                            String newContent = newWrapper.document.get();
-//                        if (!this.isDuplicatedMutant(newContent)) {
-                            newWrappers.add(newWrapper);
-                            mutantContents.add(newWrapper.document.get());
-                            newWrapper.writeToJavaFile();
-//                        }
-                        } else {
-                            failMutation.addAndGet(1);
-                            Files.deleteIfExists(Paths.get(mutantPath));
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return newWrappers;
-    }
-
     public static AtomicInteger succMutation = new AtomicInteger(0);
     public static AtomicInteger failMutation = new AtomicInteger(0);
     public static AtomicInteger invalidSeed = new AtomicInteger(0);
     public static AtomicInteger validSeed = new AtomicInteger(0);
 
-    public ArrayList<ASTWrapper> mainTransform() {
-        ArrayList<ASTWrapper> newWrappers = new ArrayList<>();
+    public List<ASTWrapper> TransformByRandomLocation() {
+        List<ASTWrapper> newWrappers = new ArrayList<>();
+        int randomCount = 0;
+        if (this.candidateNodes == null) {
+            this.candidateNodes = this.allNodes;
+        }
+        if (this.depth == 0) {
+            if (this.candidateNodes.size() == 0) {
+                invalidSeed.addAndGet(1);
+            } else {
+                validSeed.addAndGet(1);
+            }
+        }
+        while(true) {
+            if(++randomCount > 1) {
+                break;
+            }
+            ASTNode candidateNode = this.candidateNodes.get(random.nextInt(this.candidateNodes.size()));
+            Transform transform = Transform.getTransformRandomly();
+            List<ASTNode> targetNodes = transform.check(this, candidateNode);
+            for (ASTNode targetNode : targetNodes) {
+                String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
+                String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
+                String content = this.document.get();
+                ASTWrapper newMutant = new ASTWrapper(mutantFilename, mutantPath, content, this);
+                int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
+                int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
+                ASTNode newTargetNode = newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
+                if (newTargetNode == null) {
+                    newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
+                    System.err.println("Old and new ASTWrapper are not matched!");
+                    System.exit(-1);
+                }
+                int oldRowNumber2 = this.cu.getLineNumber(candidateNode.getStartPosition());
+                int oldColNumber2 = this.cu.getColumnNumber(candidateNode.getStartPosition());
+                ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldRowNumber2, oldColNumber2);
+                if (newSrcNode == null) {
+                    System.err.println("Old and new ASTWrapper are not matched!");
+                    System.exit(-1);
+                }
+                boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
+                if (hasMutated) {
+                    succMutation.addAndGet(1);
+                    newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
+                    newMutant.transSeq.add(transform.getIndex());
+                    newMutant.transNodes.add(newSrcNode);
+                    if (COMPILE) {
+                        newMutant.rewriteJavaCode(); // 1: Rewrite transformation
+                        newMutant.resetClassName();  // 2: Rewrite class name and pkg definition
+                        newMutant.removePackageDefinition();
+                    }
+                    newMutant.rewriteJavaCode();
+                    if (newMutant.writeToJavaFile()) {
+                        newWrappers.add(newMutant);
+                    }
+                } else {
+                    failMutation.addAndGet(1);
+                    try {
+                        Files.deleteIfExists(Paths.get(mutantPath));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return newWrappers;
+    }
+
+    public List<ASTWrapper> TransformByGuidedLocation() {
+        List<ASTWrapper> newWrappers = new ArrayList<>();
         try {
             if (this.candidateNodes == null) {
                 this.candidateNodes = this.getCandidateNodes();
@@ -732,48 +601,44 @@ public class ASTWrapper {
                     validSeed.addAndGet(1);
                 }
             }
-            for(ASTNode candidateNode : candidateNodes) {
-                for(Transform transform : Transform.getTransforms()) {
-                    int counter = transform.check(candidateNode);
-                    for(int index = 0; index < counter; index++) {
+            for (ASTNode candidateNode : candidateNodes) {
+                for (Transform transform : Transform.getTransforms()) {
+                    List<ASTNode> targetNodes = transform.check(this, candidateNode);
+                    for(ASTNode targetNode : targetNodes) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                         String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
                         String content = this.document.get();
-//                        if (SINGLE_TESTING) {
-//                            System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
-//                            System.out.println(filename + " is generated from: " + mutator.getClass());
-//                        }
-                        // Here, codes from newWrapper and oldWrapper should be identical
-                        ASTWrapper newWrapper = new ASTWrapper(mutantFilename, mutantPath, content, this);
-                        int oldLineNumber = this.cu.getLineNumber(candidateNode.getStartPosition());
-                        ASTNode newCandidate = newWrapper.searchNodeByLinenumber(candidateNode, oldLineNumber);
-                        if (newCandidate == null) {
-                            System.out.println(candidateNode);
-                            String s0 = this.document.get();
-                            System.out.println(this.document.get().hashCode());
-                            String s1 = newWrapper.document.get();
-                            System.out.println(newWrapper.document.get().hashCode());
-                            newWrapper.searchNodeByLinenumber(candidateNode, oldLineNumber);
+                        ASTWrapper newMutant = new ASTWrapper(mutantFilename, mutantPath, content, this);
+                        int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
+                        int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
+                        ASTNode newTargetNode = newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
+                        if (newTargetNode == null) {
+                            newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
                             System.err.println("Old and new ASTWrapper are not matched!");
                             System.exit(-1);
                         }
-                        boolean hasMutated = transform.run(index, newWrapper.ast, newWrapper.astRewrite, getFirstBrotherOfStatement(newCandidate), newCandidate);
+                        int oldRowNumber2 = this.cu.getLineNumber(candidateNode.getStartPosition());
+                        int oldColNumber2 = this.cu.getColumnNumber(candidateNode.getStartPosition());
+                        ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldRowNumber2, oldColNumber2);
+                        if (newSrcNode == null) {
+                            System.err.println("Old and new ASTWrapper are not matched!");
+                            System.exit(-1);
+                        }
+                        boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                         if (hasMutated) {
                             succMutation.addAndGet(1);
-                            newWrapper.transSeq.add(transform.getIndex());
+                            newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
+                            newMutant.transSeq.add(transform.getIndex());
+                            newMutant.transNodes.add(newSrcNode);
                             if (COMPILE) {
-                                // 1: rewrite for transformation, 2: rewrite for class name and pkg definition
-                                newWrapper.rewriteJavaCode();
-                                newWrapper.resetClassName();
-                                newWrapper.removePackageDefinition();
+                                newMutant.rewriteJavaCode(); // 1: Rewrite transformation
+                                newMutant.resetClassName();  // 2: Rewrite class name and pkg definition
+                                newMutant.removePackageDefinition();
                             }
-                            newWrapper.rewriteJavaCode();
-                            String newContent = newWrapper.document.get();
-//                        if(!this.isDuplicatedMutant(newContent)) {
-                            newWrappers.add(newWrapper);
-                            mutantContents.add(newWrapper.document.get());
-                            newWrapper.writeToJavaFile();
-//                        }
+                            newMutant.rewriteJavaCode();
+                            if(newMutant.writeToJavaFile()) {
+                                newWrappers.add(newMutant);
+                            }
                         } else {
                             failMutation.addAndGet(1);
                             Files.deleteIfExists(Paths.get(mutantPath));
@@ -781,65 +646,6 @@ public class ASTWrapper {
                     }
                 }
             }
-
-            // Below code is original version, only consider statement
-//            for (Statement oldStatement : this.candidateNodes) { // Actually, in this line, old statement is candidate statement
-//                for (Mutator mutator : Mutator.getMutators()) {
-//                    int counter = mutator.check(oldStatement);
-//                    for (int i = 0; i < counter; i++) {
-//                        String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
-//                        String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
-//                        String content = this.document.get();
-////                        if (SINGLE_TESTING) {
-////                            System.out.println("This: " + this.filePath + "\nParent: " + this.parentPath);
-////                            System.out.println(filename + " is generated from: " + mutator.getClass());
-////                        }
-//                        // Here, codes from newWrapper and oldWrapper should be identical because newWrapper is copied from oldWrapper
-//                        ASTWrapper newWrapper = new ASTWrapper(mutantFilename, mutantPath, content, this);
-//                        int oldLineNumber = this.cu.getLineNumber(oldStatement.getStartPosition());
-//                        Statement newStatement = newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);
-//                        if (newStatement == null) {
-//                            System.out.println(oldStatement);
-//                            String s0 = this.document.get();
-//                            System.out.println(this.document.get().hashCode());
-//                            String s1 = newWrapper.document.get();
-//                            System.out.println(newWrapper.document.get().hashCode());
-//                            newWrapper.searchStatementByLinenumber(oldStatement, oldLineNumber);
-//                            newWrapper.searchStatement(oldStatement);
-//                            System.out.println(oldStatement);
-//                            System.err.println("Old and new ASTWrapper are not matched!");
-//                            System.exit(-1);
-//                        }
-//                        boolean hasMutated =
-//                                mutator.run(
-//                                        i,
-//                                        newWrapper.ast,
-//                                        newWrapper.astRewrite,
-//                                        getFirstBrotherOfStatement(newStatement),
-//                                        newStatement);
-//                        if (hasMutated) {
-//                            succMutation.addAndGet(1);
-//                            newWrapper.transSeq.add(mutator.getIndex());
-//                            if (COMPILE) {
-//                                // 1: rewrite for transformation, 2: rewrite for class name and pkg definition
-//                                newWrapper.rewriteJavaCode();
-//                                newWrapper.resetClassName();
-//                                newWrapper.removePackageDefinition();
-//                            }
-//                            newWrapper.rewriteJavaCode();
-////                            String newContent = newWrapper.document.get();
-////                            if(!this.isDuplicatedMutant(newContent)) {
-//                            newWrappers.add(newWrapper);
-//                            mutantContents.add(newWrapper.document.get());
-//                            newWrapper.writeToJavaFile();
-////                            }
-//                        } else {
-//                            failMutation.addAndGet(1);
-//                            Files.deleteIfExists(Paths.get(mutantPath));
-//                        }
-//                    }
-//                }
-//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -891,17 +697,31 @@ public class ASTWrapper {
     }
 
     // This function is invoked by newWrapper
-    public ASTNode searchNodeByLinenumber(ASTNode oldNode, int oldLineNumber) {
+    public ASTNode searchNodeByPosition(ASTNode oldNode, int oldRowNumber, int oldColNumber) {
         if (oldNode == null) {
             System.err.println("AST Node to be searched is NULL!");
             System.exit(-1);
         }
-        for (int i = 0; i < this.allNodes.size(); i++) {
-            ASTNode newNode = this.allNodes.get(i);
-            if (compareNode(newNode, oldNode)) {
-                int newLineNumber = this.cu.getLineNumber(newNode.getStartPosition());
-                if (newLineNumber == oldLineNumber) {
-                    return newNode;
+        for (int i = 0; i < this.allNodes.size(); i++) { // 1: Statement-level search
+            ASTNode newStatement = this.allNodes.get(i);
+            int newLineNumber = this.cu.getLineNumber(newStatement.getStartPosition());
+            int newColNumber = this.cu.getColumnNumber(newStatement.getStartPosition());
+            if(newLineNumber == oldRowNumber && newColNumber == oldColNumber) {
+                if (compareNode(newStatement, oldNode)) {
+                    return newStatement;
+                }
+            }
+        }
+        for(int i = 0; i < this.allNodes.size(); i++) {  // 2: Fine-grained ASTNode-level search
+            ASTNode newStatement = this.allNodes.get(i);
+            List<ASTNode> newNodes = getChildrenNodes(newStatement);
+            for(ASTNode newNode : newNodes) {
+                if(compareNode(newNode, oldNode)) {
+                    int newRowNumber = this.cu.getLineNumber(newNode.getStartPosition());
+                    int newColNumber = this.cu.getColumnNumber(newNode.getStartPosition());
+                    if(newRowNumber == oldRowNumber && newColNumber == oldColNumber) {
+                        return newNode;
+                    }
                 }
             }
         }
@@ -973,6 +793,10 @@ public class ASTWrapper {
         return this.folderName;
     }
 
+    public int getViolations() {
+        return this.violations;
+    }
+
     public String getFileName() {
         return this.filename;
     }
@@ -988,4 +812,41 @@ public class ASTWrapper {
     public Document getDocument() {
         return this.document;
     }
+
+    public List<String> getTransSeq() {
+        return this.transSeq;
+    }
+
+    public List<ASTNode> getTransNodes() {
+        return this.transNodes;
+    }
+
+    public ASTWrapper getParentWrapper() {
+        return this.parentWrapper;
+    }
+
+    public List<ASTNode> getNodeIndex() {
+        return this.nodeIndex;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public AST getAst() {
+        return ast;
+    }
+
+    public ASTRewrite getAstRewrite() {
+        return astRewrite;
+    }
+
+    public CompilationUnit getCompilationUnit() {
+        return cu;
+    }
+
+    public String getInitSeed() {
+        return this.initSeed;
+    }
+
 }

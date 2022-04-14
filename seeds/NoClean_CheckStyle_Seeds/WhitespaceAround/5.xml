@@ -1,0 +1,6 @@
+
+
+<module name="WhitespaceAround">
+  <property name="allowEmptyTypes" value="true"/>
+</module>
+        

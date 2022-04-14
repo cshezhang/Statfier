@@ -1,0 +1,6 @@
+
+
+<module name="EmptyBlock">
+  <property name="tokens" value="LITERAL_DEFAULT"/>
+</module>
+        

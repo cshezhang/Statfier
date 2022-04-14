@@ -1,0 +1,6 @@
+
+
+<module name="WhitespaceAround">
+  <property name="tokens" value="LCURLY,RCURLY"/>
+</module>
+        

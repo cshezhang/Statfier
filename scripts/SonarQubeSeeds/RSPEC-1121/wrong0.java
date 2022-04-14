@@ -1,3 +1,0 @@
-
-if ((str = cont.substring(pos1, pos2)).isEmpty()) {  // Noncompliant
-  //...

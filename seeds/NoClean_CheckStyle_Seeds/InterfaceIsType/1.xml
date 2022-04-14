@@ -1,0 +1,6 @@
+
+
+<module name="InterfaceIsType">
+  <property name="allowMarkerInterfaces" value="false"/>
+</module>
+        

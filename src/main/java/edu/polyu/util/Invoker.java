@@ -11,14 +11,37 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import edu.polyu.report.CheckStyle_Report;
+import edu.polyu.report.Infer_Report;
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.SpotBugs_Report;
+import edu.polyu.thread.CheckStyle_InvokeThread;
+import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
-import edu.polyu.thread.StreamInfoThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Util.CheckStyleResultFolder;
+import static edu.polyu.util.Util.INFER_MUTATION;
+import static edu.polyu.util.Util.JAVAC_PATH;
+import static edu.polyu.util.Util.PMDResultFolder;
+import static edu.polyu.util.Util.PMD_MUTATION;
+import static edu.polyu.util.Util.SINGLE_TESTING;
+import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Util.SpotBugsResultFolder;
+import static edu.polyu.util.Util.THREAD_COUNT;
+import static edu.polyu.util.Util.getFilenamesFromFolder;
+import static edu.polyu.util.Util.getProperty;
+import static edu.polyu.util.Util.inferJarStr;
+import static edu.polyu.util.Util.listAveragePartition;
+import static edu.polyu.util.Util.readCheckStyleResultFile;
+import static edu.polyu.util.Util.readInferResultFile;
+import static edu.polyu.util.Util.readPMDResultFile;
+import static edu.polyu.util.Util.readSpotBugsResultFile;
+import static edu.polyu.util.Util.sep;
+import static edu.polyu.util.Util.spotBugsJarStr;
+import static edu.polyu.util.Util.subSeedFolderNameList;
+
 
 /*
  * @Description: This class is used for different invocation functions.
@@ -27,117 +50,25 @@ import static edu.polyu.util.Util.*;
  */
 public class Invoker {
 
-    public static String getConfigXMLFile(String rule) {
-        String xmlFilePath = "";
-        return xmlFilePath;
-    }
-
-//    public static void invokeCommands(String command) {
-//        ProcessBuilder pb;
-//        Process process = null;
-//        BufferedReader br = null;
-//        StringBuilder resMsg = null;
-//        OutputStream os = null;
-//        String cmd1 = "cmd.exe";
-//        int exitValue;
-//        try {
-//            pb = new ProcessBuilder(cmd1);
-//            pb.redirectErrorStream(true);
-//            process = pb.start();
-//            os = process.getOutputStream();
-//            os.write(command.getBytes());
-//            os.flush();
-//            os.close();
-//            boolean isNeedResultMsg = true;
-//            resMsg = new StringBuilder();
-//            // get command result
-//            if (isNeedResultMsg) {
-//                br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//                String s;
-//                while ((s = br.readLine()) != null) {
-//                    resMsg.append(s + "\n");
-//                }
-//                resMsg.deleteCharAt(resMsg.length()-1);
-//                exitValue = process.waitFor();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (os != null) {
-//                    os.close();
-//                }
-//                if (br != null) {
-//                    br.close();
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            if (process != null) {
-//                process.destroy();
-//            }
-//        }
-//        System.out.println(resMsg.toString());
-//    }
-
     public static void invokeCommandsByZT(String[] cmdArgs) {
+        StringBuilder argStr = new StringBuilder();
+        for(String arg : cmdArgs) {
+            argStr.append(arg + " ");
+        }
         try {
-            int exitValue = new ProcessExecutor().command(cmdArgs)
-                    .execute().getExitValue();
-            StringBuilder builder = new StringBuilder();
-            for(String arg : cmdArgs) {
-                builder.append(arg + " ");
-            }
+            int exitValue = new ProcessExecutor().command(cmdArgs).execute().getExitValue();
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");
-                System.err.println(builder);
+                System.err.println(argStr);
             }
             if(SPOTBUGS_MUTATION && exitValue != 0) {
                 System.err.println("Execute SpotBugs Error!");
-                System.err.println(builder);
-            }
-        } catch (Exception e) {
-            StringBuilder args = new StringBuilder();
-            for(String str : cmdArgs) {
-                args.append(str + " ");
-            }
-            System.err.println(args);
-            e.printStackTrace();
-        }
-    }
-
-    public static void invokeCommandsWithLog(String[] cmdArgs) {
-//        System.out.println(cmdArgs);
-        Process process = null;
-        try {
-            process = Runtime.getRuntime().exec(cmdArgs);
-//            bufferedReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(process.getInputStream()), Charset.forName("GB2312")));
-            // 开启线程读取错误输出，避免阻塞
-            new StreamInfoThread(process.getErrorStream(), "error").start();
-            new StreamInfoThread(process.getInputStream(), "output").start();
-            int returnValue = process.waitFor();
-            if(returnValue != 0 && returnValue != 4) {
-                System.err.println("Error!");
+                System.err.println(argStr);
                 System.exit(-1);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.err.println(argStr);
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (process != null) {
-                    process.getInputStream().close();
-                    process.getOutputStream().close();
-                    process.getErrorStream().close();
-                    process.destroy();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -240,7 +171,6 @@ public class Invoker {
         waitThreadPoolEnding();
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
-        long executionTime = System.currentTimeMillis() - startExecutionTime;
         List<SpotBugs_Report> reports = new ArrayList<>();
         for(int i = 0; i < seedFileNamesWithSuffix.size(); i++) {
             String seedFilenameWithSuffix = seedFileNamesWithSuffix.get(i);
@@ -248,31 +178,46 @@ public class Invoker {
             String report_path = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFilename + "_Result.xml";
             reports.addAll(readSpotBugsResultFile(seedFolderPath, report_path));
         }
-        System.out.println(String.format(
-                "SpotBugs Invocation Time is: " + String.format("%d min, %d sec",
-                TimeUnit.MILLISECONDS.toMinutes(executionTime),
-                TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))
-                )));
+        return reports;
+    }
+    public static List<Infer_Report> invokeInfer(int iterDepth, String seedFolderPath) {
+        initThreadPool();
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+            threadPool.submit(new Infer_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
+        }
+        waitThreadPoolEnding();
+        List<Infer_Report> reports = new ArrayList<>();
+        List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
+        for(int i = 0; i < reportPaths.size(); i++) {
+            reports.addAll(readInferResultFile(iterDepth, reportPaths.get(i)));
+        }
+        return reports;
+    }
+
+    public static List<CheckStyle_Report> invokeCheckStyle(int iterDepth, String seedFolderPath) {
+        initThreadPool();
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+            threadPool.submit(new CheckStyle_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
+        }
+        waitThreadPoolEnding();
+        List<CheckStyle_Report> reports = new ArrayList<>();
+        List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
+        for(int i = 0; i < reportPaths.size(); i++) {
+            reports.addAll(readCheckStyleResultFile(reportPaths.get(i)));
+        }
         return reports;
     }
 
     public static List<PMD_Report> invokePMD(int iterDepth, String seedFolderPath) {
-        long startExecutionTime = System.currentTimeMillis();
         initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new PMD_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding();
-        long executionTime = System.currentTimeMillis() - startExecutionTime;
         List<PMD_Report> reports = new ArrayList<>();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             reports.addAll(readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json"));
         }
-        System.out.println(String.format(
-                "PMD Invocation Time is: " + String.format("%d min, %d sec",
-                        TimeUnit.MILLISECONDS.toMinutes(executionTime),
-                        TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))
-                )));
         return reports;
     }
 

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public class SpotBugs_Report extends Report {
 
-    private String filename;
+    private String filepath;
     private List<SpotBugs_Violation> violations;
     
-    public SpotBugs_Report(String filename) {
-        this.filename = filename;
+    public SpotBugs_Report(String filepath) {
+        this.filepath = filepath;
         this.violations = new ArrayList<>();
     }
 
@@ -23,8 +23,8 @@ public class SpotBugs_Report extends Report {
         this.violations.add(newViolation);
     }
 
-    public String getFilename() {
-        return this.filename;
+    public String getFilepath() {
+        return this.filepath;
     }
 
     public List<SpotBugs_Violation> getViolations() {
@@ -34,7 +34,7 @@ public class SpotBugs_Report extends Report {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append("SpotBugs Report: " + this.filename + "\n");
+        str.append("SpotBugs Report: " + this.filepath + "\n");
         for(int i = 0; i < violations.size(); i++) {
             str.append(violations.get(i) + "\n");
         }

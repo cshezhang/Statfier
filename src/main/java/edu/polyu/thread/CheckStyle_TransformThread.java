@@ -1,7 +1,6 @@
 package edu.polyu.thread;
 
 import edu.polyu.analysis.ASTWrapper;
-import edu.polyu.util.Invoker;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
 
@@ -12,107 +11,112 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static edu.polyu.util.Invoker.compileJavaSourceFile;
+import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
 import static edu.polyu.util.Invoker.invokeCommands;
-import static edu.polyu.util.Util.CHECKSTYLE_PATH;
+import static edu.polyu.util.Invoker.invokeCommandsByZT;
+import static edu.polyu.util.Util.CheckStyleConfigPath;
+import static edu.polyu.util.Util.CheckStylePath;
 import static edu.polyu.util.Util.CheckStyleResultFolder;
-import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.util.Util.GUIDED_LOCATION;
+import static edu.polyu.util.Util.NO_SELECTION;
+import static edu.polyu.util.Util.RANDOM_LOCATION;
+import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.SpotBugsClassFolder;
-import static edu.polyu.util.Util.SpotBugsResultFolder;
+import static edu.polyu.util.Util.TS_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2line;
-import static edu.polyu.util.Util.randomMutantSampling;
+import static edu.polyu.util.Util.file2report;
+import static edu.polyu.util.Util.file2row;
+import static edu.polyu.util.Util.getFilenamesFromFolder;
+import static edu.polyu.util.Util.mutantFolder;
 import static edu.polyu.util.Util.readCheckStyleResultFile;
-import static edu.polyu.util.Util.sep;
 
 public class CheckStyle_TransformThread implements Runnable {
 
     private int currentDepth;
-    private List<ASTWrapper> initWrappers;
+    private String seedFolderName; // equal to rule type
+    private ArrayDeque<ASTWrapper> wrappers;
+    private int configIndex;
 
-    public CheckStyle_TransformThread(List<ASTWrapper> initWrappers) {
+    public CheckStyle_TransformThread(ASTWrapper initWrapper, String seedFolderName, int configIndex) {
         this.currentDepth = 0;
-        this.initWrappers = new ArrayList<>() {
+        this.seedFolderName = seedFolderName;
+        this.wrappers = new ArrayDeque<>() {
             {
-                addAll(initWrappers);
+                add(initWrapper);
             }
         };
+        this.configIndex = configIndex;
     }
 
+    // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
     @Override
     public void run() {
-        for(int i = 0; i < initWrappers.size(); i++) {
-            ASTWrapper seedWrapper = initWrappers.get(i);
-            ArrayDeque<ASTWrapper> wrapperQue = new ArrayDeque<>();
-            wrapperQue.add(seedWrapper);
-            String configFilePath = Invoker.getConfigXMLFile(seedWrapper.getFolderName());
-            // java -jar checkstyle-9.2.1-all.jar -c /sun_checks.xml MyClass.java
-            for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-                ASTWrapper wrapper = wrapperQue.pollFirst();
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            while (!wrappers.isEmpty()) {
+                ASTWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
-                    if (!wrapper.isBuggy()) {
-                        List<ASTWrapper> mutants;
-                        if (GUIDED_RANDOM_TESTING) {
-                            mutants = wrapper.guidedRandomTransformation();
-                        } else {
-                            if (MAIN_EXECUTION) {
-                                mutants = wrapper.mainTransform();
-                            } else {
-                                mutants = wrapper.pureRandomTransformation();
-                            }
+                    if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
+                        List<ASTWrapper> mutants = new ArrayList<>();
+                        if (GUIDED_LOCATION) {
+                            mutants = wrapper.TransformByGuidedLocation();
+                        } else if (RANDOM_LOCATION) {
+                            mutants = wrapper.TransformByRandomLocation();
                         }
-                        List<ASTWrapper> filteredMutants = randomMutantSampling(mutants);
-                        wrapperQue.addAll(filteredMutants);
+                        if(NO_SELECTION) {
+                            wrappers.addAll(mutants);
+                        }
+                        if(RANDOM_SELECTION) {
+                            wrappers.addAll(Random_Selection(mutants));
+                        }
+                        if(TS_SELECTION) {
+                            wrappers.addAll(TS_Selection(mutants));
+                        }
                     }
                 } else {
-                    wrapperQue.addFirst(wrapper);
+                    wrappers.addFirst(wrapper); // The last wrapper in current depth
                     currentDepth += 1;
                     break;
                 }
-                List<CheckStyle_Report> reports = new ArrayList<>();
-                for (ASTWrapper tmpWrapper : wrapperQue) {
-                    String seedFilePath = tmpWrapper.getFilePath();
-                    String seedFolderPath = tmpWrapper.getFolderPath();
-                    String[] tokens = seedFilePath.split(sep);
-                    String seedFileNameWithSuffix = tokens[tokens.length - 1];
-                    String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
-                    // Filename is used to specify class folder name
-                    File classFolder = new File(SpotBugsClassFolder.getAbsolutePath()  + File.separator + seedFileName);
-                    if (!classFolder.exists()) {
-                        classFolder.mkdirs();
-                    }
-                    compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                    String reportPath = CheckStyleResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
-                    String[] args = {"javac", "-jar", CHECKSTYLE_PATH, "-c", configFilePath, "-o", reportPath, seedFilePath};
-                    invokeCommands(args);
-                    String report_path = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
-                    reports.addAll(readCheckStyleResultFile(report_path));
-                }
-                for (CheckStyle_Report report : reports) {
-                    if (!file2line.containsKey(report.getFileName())) {
-                        file2line.put(report.getFileName(), new HashSet<>());
-                        file2bugs.put(report.getFileName(), new HashMap<>());
-                    }
-                    for (CheckStyle_Violation violation : report.getViolations()) {
-                        file2line.get(report.getFileName()).add(violation.getBeginLine());
-                        HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFileName());
-                        if (!bug2cnt.containsKey(violation.getBugType())) {
-                            bug2cnt.put(violation.getBugType(), new HashSet<>());
-                        }
-                        bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                    }
-                }
-                List<ASTWrapper> validWrappers = new ArrayList<>();
-                while (!wrapperQue.isEmpty()) {
-                    ASTWrapper head = wrapperQue.pollFirst();
-                    if (!head.isBuggy()) {
-                        validWrappers.add(head);
-                    }
-                }
-                wrapperQue.addAll(validWrappers);
             }
+            // detect mutants of iter i
+            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+            List<String> mutantFilePaths = getFilenamesFromFolder(mutantFolderPath, true);
+            String configPath = CheckStyleConfigPath + File.separator + seedFolderName + configIndex + ".xml";
+            List<CheckStyle_Report> reports = new ArrayList<>();
+            // 这里还可以做一个configIndex是否match seedFolderName里边的index
+            for(String mutantFilePath : mutantFilePaths) {
+                String reportFilePath = CheckStyleResultFolder + File.separator + "iter" + depth + "_" + seedFolderName + configIndex + ".xml";
+//            String[] invokeCmds = {"/bin/bash", "-c",
+                String[] invokeCmds = {"cmd.exe", "/c",  // Windows
+                        "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
+                                + configPath + " " + mutantFilePath};
+                invokeCommandsByZT(invokeCmds);
+                reports.addAll(readCheckStyleResultFile(reportFilePath));
+            }
+            for (CheckStyle_Report report : reports) {
+                file2report.put(report.getFilepath(), report);
+                if (!file2row.containsKey(report.getFilepath())) {
+                    file2row.put(report.getFilepath(), new HashSet<>());
+                    file2bugs.put(report.getFilepath(), new HashMap<>());
+                }
+                for (CheckStyle_Violation violation : report.getViolations()) {
+                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                    if (!bug2cnt.containsKey(violation.getBugType())) {
+                        bug2cnt.put(violation.getBugType(), new HashSet<>());
+                    }
+                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+                }
+            }
+            List<ASTWrapper> validWrappers = new ArrayList<>();
+            while (!wrappers.isEmpty()) {
+                ASTWrapper head = wrappers.pollFirst();
+                if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
+                    validWrappers.add(head);
+                }
+            }
+            wrappers.addAll(validWrappers);
         }
     }
 

@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -11,6 +12,7 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.util.Util.getClassOfStatement;
@@ -29,7 +31,9 @@ public class NestedClassWrapper extends Transform {
     public static int nestedClassCounter = 0;
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brother, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
         if(oldMethod != null) {
             TypeDeclaration nestedClass = ast.newTypeDeclaration();
@@ -53,14 +57,17 @@ public class NestedClassWrapper extends Transform {
     }
 
     @Override
-    public int check(ASTNode node) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(node instanceof MethodDeclaration) {
-            return 1;
+            nodes.add(node);
+            return nodes;
         }
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
         if(method == null) {
-            return 1;
+            nodes.add(node);
+            return nodes;
         }
         boolean isOverride = false;
         for(ASTNode modifier : (List<ASTNode>) method.modifiers()) {
@@ -74,21 +81,24 @@ public class NestedClassWrapper extends Transform {
         }
         if(isOverride) {
             if(clazz.superInterfaceTypes().size() > 0) {
-                return 0;
+                return nodes;
             }
             Type superClazzType = clazz.getSuperclassType();
             if(superClazzType == null) {
-                return 1;
+                nodes.add(node);
+                return nodes;
             }
             if (superClazzType instanceof SimpleType) {
                 String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
                 if(name.contains("Object")) {
-                    return 1;
+                    nodes.add(node);
+                    return nodes;
                 }
             }
-            return 0;
+            return nodes;
         } else {
-            return 1;
+            nodes.add(node);
+            return nodes;
         }
     }
 

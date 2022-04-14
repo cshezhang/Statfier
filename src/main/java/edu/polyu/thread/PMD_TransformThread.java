@@ -12,19 +12,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
-import static edu.polyu.util.Util.MAIN_EXECUTION;
+import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
+import static edu.polyu.util.Util.GUIDED_LOCATION;
+import static edu.polyu.util.Util.NO_SELECTION;
 import static edu.polyu.util.Util.PMDResultFolder;
+import static edu.polyu.util.Util.RANDOM_LOCATION;
+import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
+import static edu.polyu.util.Util.TS_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2line;
+import static edu.polyu.util.Util.file2report;
+import static edu.polyu.util.Util.file2row;
 import static edu.polyu.util.Util.mutantFolder;
 import static edu.polyu.util.Util.readPMDResultFile;
 
 /**
- * Description: This file is the main class for testing PMD with multi threads
+ * Description: This file is the MAIN class for testing PMD with multi threads
  * Author: Vanguard
- * Date: 2021/11/30 10:03 上午
+ * Date: 2021/11/30 10:03
  */
 public class PMD_TransformThread implements Runnable {
 
@@ -45,6 +51,7 @@ public class PMD_TransformThread implements Runnable {
                 addAll(initWrappers);
             }
         };
+        System.out.println("Rule: " + this.ruleType);
     }
 
     // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
@@ -55,44 +62,48 @@ public class PMD_TransformThread implements Runnable {
                 ASTWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
                     if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<ASTWrapper> mutants;
-                        if (GUIDED_RANDOM_TESTING) {
-                            mutants = wrapper.guidedRandomTransformation();
-                        } else {
-                            if (MAIN_EXECUTION) {
-                                mutants = wrapper.mainTransform();
-                            } else {
-                                mutants = wrapper.pureRandomTransformation();
-                            }
+                        List<ASTWrapper> mutants = new ArrayList<>();
+                        if (GUIDED_LOCATION) {
+                            mutants = wrapper.TransformByGuidedLocation();
+                        } else if (RANDOM_LOCATION) {
+                            mutants = wrapper.TransformByRandomLocation();
                         }
-                        wrappers.addAll(mutants);
+                        if(NO_SELECTION) {
+                            wrappers.addAll(mutants);
+                        }
+                        if(RANDOM_SELECTION) {
+                            wrappers.addAll(Random_Selection(mutants));
+                        }
+                        if(TS_SELECTION) {
+                            wrappers.addAll(TS_Selection(mutants));
+                        }
                     }
                 } else {
-                    wrappers.addFirst(wrapper);
+                    wrappers.addFirst(wrapper); // The last wrapper in current depth
                     currentDepth += 1;
                     break;
                 }
             }
-            // detect mutants of iter i
             String resultFilePath = PMDResultFolder.getAbsolutePath() + File.separator + "iter" + i + "_" + seedFolderName + "_Result.json";
             String mutantFolderPath = mutantFolder + File.separator + "iter" + i + File.separator + seedFolderName;
             String[] pmdConfig = {
                     "-d", mutantFolderPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
                     "-f", "json",
-                    "-r", resultFilePath
-//                    "--no-cache"
+                    "-r", resultFilePath,
+                    "--no-cache"
             };
-            PMD.runPmd(pmdConfig);
+            PMD.runPmd(pmdConfig); // detect mutants of iter i
             List<PMD_Report> reports = readPMDResultFile(resultFilePath);
             for (PMD_Report report : reports) {
-                if (!file2line.containsKey(report.getFilename())) {
-                    file2line.put(report.getFilename(), new HashSet<>());
-                    file2bugs.put(report.getFilename(), new HashMap<>());
+                file2report.put(report.getFilepath(), report);
+                if (!file2row.containsKey(report.getFilepath())) {
+                    file2row.put(report.getFilepath(), new HashSet<>());
+                    file2bugs.put(report.getFilepath(), new HashMap<>());
                 }
                 for (PMD_Violation violation : report.getViolations()) {
-                    file2line.get(report.getFilename()).add(violation.beginLine);
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilename());
+                    file2row.get(report.getFilepath()).add(violation.beginLine);
+                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
                     if (!bug2cnt.containsKey(violation.getBugType())) {
                         bug2cnt.put(violation.getBugType(), new HashSet<>());
                     }
@@ -102,7 +113,7 @@ public class PMD_TransformThread implements Runnable {
             List<ASTWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
                 ASTWrapper head = wrappers.pollFirst();
-                if (!head.isBuggy()) {
+                if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
                     validWrappers.add(head);
                 }
             }

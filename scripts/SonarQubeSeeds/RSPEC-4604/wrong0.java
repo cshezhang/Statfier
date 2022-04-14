@@ -1,5 +1,0 @@
-
-@SpringBootApplication
-public class MyApplication {
-...
-}

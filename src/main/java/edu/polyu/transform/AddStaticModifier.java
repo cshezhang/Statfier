@@ -1,10 +1,14 @@
 package edu.polyu.transform;
 
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddStaticModifier extends Transform {
 
@@ -17,10 +21,20 @@ public class AddStaticModifier extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode oldStatement) {
-        FieldDeclaration oldFieldDeclaration = (FieldDeclaration) oldStatement;
-        if(oldFieldDeclaration.modifiers().contains(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
-            return false;
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherNode, ASTNode oldNode) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
+        FieldDeclaration oldFieldDeclaration = (FieldDeclaration) oldNode;
+        try {
+            for (Modifier modifier : (List<Modifier>) oldFieldDeclaration.modifiers()) {
+                if (modifier.getKeyword().toString().equals("static")) {
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(wrapper.getFilePath());
+            System.err.println(wrapper.getInitSeed());
+            e.printStackTrace();
         }
         FieldDeclaration newFieldDeclaration;
         try {
@@ -35,12 +49,12 @@ public class AddStaticModifier extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
-        if(statement instanceof FieldDeclaration) {
-            return 1;
-        } else {
-            return 0;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
+        if(node instanceof FieldDeclaration) {
+            nodes.add(node);
         }
+        return nodes;
     }
 
 }

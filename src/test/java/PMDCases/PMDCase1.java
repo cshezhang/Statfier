@@ -5,7 +5,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * Description: Manual testing for PMD
  * Author: Vanguard
- * Date: 2021/10/7 3:28 下午
+ * Date: 2021/10/7 3:28 PM
  */
 public class PMDCase1 extends Object {
 

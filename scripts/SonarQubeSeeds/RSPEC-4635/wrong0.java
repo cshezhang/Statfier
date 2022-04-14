@@ -1,2 +1,0 @@
-
-str.substring(beginIndex).indexOf(char1); // Noncompliant; a new String is going to be created by "substring"

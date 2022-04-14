@@ -1,0 +1,6 @@
+
+
+<module name="IllegalType">
+  <property name="illegalClassNames" value="Boolean, Foo"/>
+</module>
+        

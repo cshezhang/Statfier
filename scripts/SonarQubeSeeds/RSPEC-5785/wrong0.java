@@ -1,6 +1,0 @@
-
-Assert.assertTrue(a.equals(b));
-Assert.assertTrue(a == b);
-Assert.assertTrue(a == null);
-Assert.assertTrue(a != null);
-Assert.assertFalse(a.equals(b));

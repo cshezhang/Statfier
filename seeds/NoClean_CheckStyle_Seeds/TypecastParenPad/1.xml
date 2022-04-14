@@ -1,0 +1,6 @@
+
+
+<module name="TypecastParenPad">
+  <property name="option" value="space"/>
+</module>
+        

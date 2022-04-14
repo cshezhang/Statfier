@@ -1,11 +1,18 @@
 package edu.polyu;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import edu.polyu.util.Schedule;
 import edu.polyu.util.TriTuple;
+import org.junit.Test;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +22,9 @@ import static edu.polyu.analysis.ASTWrapper.failMutation;
 import static edu.polyu.analysis.ASTWrapper.invalidSeed;
 import static edu.polyu.analysis.ASTWrapper.succMutation;
 import static edu.polyu.analysis.ASTWrapper.validSeed;
-import static edu.polyu.util.Util.AST_TESTING;
-import static edu.polyu.util.Util.AST_TESTING_PATH;
 import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
-import static edu.polyu.util.Util.GUIDED_RANDOM_TESTING;
 import static edu.polyu.util.Util.INFER_MUTATION;
-import static edu.polyu.util.Util.MAIN_EXECUTION;
 import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.PURE_RANDOM_TESTING;
-import static edu.polyu.util.Util.PURE_TESTING;
-import static edu.polyu.util.Util.SINGLE_TESTING_PATH;
 import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
 import static edu.polyu.util.Util.compactIssues;
 import static edu.polyu.util.Util.initEnv;
@@ -39,64 +39,72 @@ import static edu.polyu.util.Util.userdir;
  */
 public class AutomaticTester {
 
+    @Test
+    public void moduleTest() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String reportPath = "C:\\Users\\Rainy\\Desktop\\test.json";
+        File reportFile = new File(reportPath);
+        JsonNode rootNode = mapper.readTree(reportFile);
+        System.out.println(rootNode.size());
+        System.out.println(rootNode.toPrettyString());
+    }
+
     public static void main(String[] args) {
         initEnv();
         Schedule schedule = Schedule.getInstance();
-        if (AST_TESTING) {
-            schedule.testAST(AST_TESTING_PATH);
-            System.exit(0);
-        }
-        if (PURE_TESTING) {
-            schedule.pureTesting(SINGLE_TESTING_PATH);
-            System.exit(0);
-        }
         try {
-            if (PURE_RANDOM_TESTING) {
-                schedule.pureRandomTesting(sourceSeedPath);
+            // Main Automatic Entry
+            if (PMD_MUTATION) {
+                schedule.executePMDMutation(sourceSeedPath);
             }
-            if (GUIDED_RANDOM_TESTING) {
-//                tester.guidedRandomTesting(sourceSeedPath);
-                if (PMD_MUTATION) {
-                    schedule.executePMDMutation(sourceSeedPath);
-                }
-                if (SPOTBUGS_MUTATION) {
-                    schedule.executeSpotBugsMutation(sourceSeedPath);
-                }
+            if (SPOTBUGS_MUTATION) {
+                schedule.executeSpotBugsMutation(sourceSeedPath);
             }
-            if (MAIN_EXECUTION) { // Main Automatic Entry
-                if (PMD_MUTATION) {
-                    schedule.executePMDMutation(sourceSeedPath);
-                }
-                if (SPOTBUGS_MUTATION) {
-                    schedule.executeSpotBugsMutation(sourceSeedPath);
-                }
-                if (CHECKSTYLE_MUTATION) {
-                    schedule.executeCheckStyleMutation(sourceSeedPath);
-                }
-                if (INFER_MUTATION) {
-                    schedule.executeInferMutation(sourceSeedPath);
-                }
+            if (CHECKSTYLE_MUTATION) {
+                schedule.executeCheckStyleMutation(sourceSeedPath);
             }
-            StringBuilder res = new StringBuilder();
+            if (INFER_MUTATION) {
+                schedule.executeInferMutation(sourceSeedPath);
+            }
             int rules = compactIssues.keySet().size();
             int seqCount = 0;
             int allValidMutantNumber = 0;
             for (Map.Entry<String, HashMap<String, List<TriTuple>>> entry : compactIssues.entrySet()) {
+                String rule = entry.getKey();
                 HashMap<String, List<TriTuple>> seq2mutants = entry.getValue();
-                res.append("Rule: " + entry.getKey() + "  Seq Size: " + seq2mutants.size() + "\n");
                 seqCount += seq2mutants.size();
-                res.append("****************************************\n");
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectNode root = mapper.createObjectNode();
+                root.put("Rule", rule);
+                root.put("SeqSize", seq2mutants.size());
+                ArrayNode bugs = mapper.createArrayNode();
                 for (Map.Entry<String, List<TriTuple>> subEntry : seq2mutants.entrySet()) {
-                    res.append("-------------------begin-----------------------\n");
-                    res.append("Transform Sequence: " + subEntry.getKey() + "\n");
+                    ObjectNode bug = mapper.createObjectNode();
+                    bug.put("Transform_Sequence", subEntry.getKey());
+                    ArrayNode tuples = mapper.createArrayNode();
                     for (TriTuple triTuple : subEntry.getValue()) {
-                        res.append(triTuple + "\n");
+                        ObjectNode tuple = mapper.createObjectNode();
+                        tuple.put("Seed", triTuple.first);
+                        tuple.put("Mutant", triTuple.second);
+                        tuple.put("BugType", triTuple.third);
+                        tuples.add(tuple);
                     }
+                    bug.put("Bugs", tuples);
+                    bugs.add(bug);
                     allValidMutantNumber += subEntry.getValue().size();
-                    res.append("--------------------end----------------------\n");
                 }
-                res.append("****************************************\n");
+                root.put("Results", bugs);
+                File jsonFile = new File(userdir + File.separator + "results" + File.separator + rule + ".json");
+                if(!jsonFile.exists()) {
+                    jsonFile.createNewFile();
+                }
+                FileWriter jsonWriter = new FileWriter(jsonFile);
+                BufferedWriter jsonBufferedWriter = new BufferedWriter(jsonWriter);
+                jsonBufferedWriter.write(root.toString());
+                jsonBufferedWriter.close();
+                jsonWriter.close();
             }
+            StringBuilder res = new StringBuilder();
             res.append("Rule Size: " + rules + "\n");
             res.append("Detected Rules: " + compactIssues.keySet() + "\n");
             res.append("Unique Sequence: " + seqCount + "\n");
@@ -108,20 +116,21 @@ public class AutomaticTester {
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             res.append(String.format(
                     "Overall Execution Time is: " + String.format("%d min, %d sec",
-                    TimeUnit.MILLISECONDS.toMinutes(executionTime),
-                    TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
+                            TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                            TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
             );
             File resFile = new File(userdir + File.separator + "Output.log");
             if (!resFile.exists()) {
                 resFile.createNewFile();
             }
-            FileWriter fileWriter = new FileWriter(resFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            FileWriter writer = new FileWriter(resFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
             bufferedWriter.write(res.toString());
             bufferedWriter.close();
+            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }
+

@@ -1,4 +1,0 @@
-
-int divide(int numerator, int denominator) {
-  return numerator / denominator;              // FIXME denominator value might be  0
-}

@@ -1,0 +1,6 @@
+
+
+<module name="AvoidStaticImport">
+  <property name="excludes" value="java.lang.System.out,java.lang.Math.*"/>
+</module>
+        

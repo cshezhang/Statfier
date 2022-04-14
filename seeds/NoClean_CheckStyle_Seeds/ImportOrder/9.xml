@@ -1,0 +1,8 @@
+
+
+<module name="ImportOrder">
+  <property name="staticGroups" value="*,java,javax,org"/>
+  <property name="option" value="top"/>
+  <property name="separatedStaticGroups" value="true"/>
+</module>
+        

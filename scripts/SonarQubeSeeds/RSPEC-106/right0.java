@@ -1,2 +1,0 @@
-
-logger.log("My Message");

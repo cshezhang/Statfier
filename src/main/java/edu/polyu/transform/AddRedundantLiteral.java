@@ -1,7 +1,12 @@
 package edu.polyu.transform;
 
-
-import org.eclipse.jdt.core.dom.*;
+import edu.polyu.analysis.ASTWrapper;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
@@ -30,16 +35,13 @@ public class AddRedundantLiteral extends Transform {
      */
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
-        List<ASTNode> subNodes = getChildrenNodes(sourceStatement);
-        List<NumberLiteral> numberLiterals = new ArrayList<>();
-        for(int i = 0; i < subNodes.size(); i++) {
-            ASTNode node = subNodes.get(i);
-            if(node instanceof NumberLiteral) {
-                numberLiterals.add((NumberLiteral) node);
-            }
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
+        NumberLiteral targetLiteral = (NumberLiteral) targetNode;
+        if(targetLiteral.getToken().toLowerCase().contains("0x") && targetLiteral.getToken().contains(".")) {
+            return false;
         }
-        NumberLiteral targetLiteral = numberLiterals.get(index);
         InfixExpression newLeft = ast.newInfixExpression();
         String value2add;
         if(targetLiteral.getToken().contains(".")) {
@@ -61,15 +63,15 @@ public class AddRedundantLiteral extends Transform {
     }
 
     @Override
-    public int check(ASTNode statement) {
-        int counter = 0;
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+        List<ASTNode> nodes = new ArrayList<>();
         List<ASTNode> subNodes = getChildrenNodes(statement);
         for(int i = 0; i < subNodes.size(); i++) {
             ASTNode node = subNodes.get(i);
             if(node instanceof NumberLiteral) {
-                counter++;
+                nodes.add(node);
             }
         }
-        return counter;
+        return nodes;
     }
 }

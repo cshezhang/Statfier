@@ -1,3 +1,0 @@
-
-assertTrue(something());
-assertNotNull(something());

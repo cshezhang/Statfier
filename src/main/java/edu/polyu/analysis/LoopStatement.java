@@ -6,7 +6,7 @@ import org.eclipse.jdt.core.dom.*;
 /**
  * Description: This class is used to process and unify loop-related statements
  * Author: Vanguard
- * Date: 2021/10/11 2:02 下午
+ * Date: 2021/10/11 2:02 PM
  */
 public class LoopStatement {
 
@@ -14,27 +14,27 @@ public class LoopStatement {
     private Statement loopStatement;
     private Statement body;
 
-    public LoopStatement(Statement loopStatement) {
+    public LoopStatement(ASTNode node) {
         this.tag = -1;
-        if(loopStatement instanceof ForStatement) {
+        if(node instanceof ForStatement) {
             this.tag = 0;
-            this.loopStatement = loopStatement;
-            this.body = ((ForStatement) loopStatement).getBody();
+            this.loopStatement = (ForStatement) node;
+            this.body = ((ForStatement) this.loopStatement).getBody();
         }
-        if(loopStatement instanceof WhileStatement) {
+        if(node instanceof WhileStatement) {
             this.tag = 1;
-            this.loopStatement = loopStatement;
-            this.body = ((WhileStatement) loopStatement).getBody();
+            this.loopStatement = (WhileStatement) node;
+            this.body = ((WhileStatement) this.loopStatement).getBody();
         }
-        if(loopStatement instanceof DoStatement) {
+        if(node instanceof DoStatement) {
             this.tag = 2;
-            this.loopStatement = loopStatement;
-            this.body = ((DoStatement) loopStatement).getBody();
+            this.loopStatement = (DoStatement) node;
+            this.body = ((DoStatement) this.loopStatement).getBody();
         }
-        if(loopStatement instanceof EnhancedForStatement) {
+        if(node instanceof EnhancedForStatement) {
             this.tag = 3;
-            this.loopStatement = loopStatement;
-            this.body = ((EnhancedForStatement) loopStatement).getBody();
+            this.loopStatement = (EnhancedForStatement) node;
+            this.body = ((EnhancedForStatement) this.loopStatement).getBody();
         }
         if(tag == -1) {
             System.err.println("This is not a Loop Statement!");
@@ -49,8 +49,9 @@ public class LoopStatement {
         return this.body;
     }
 
-    public static boolean isLoopStatement(Statement statement) {
-        if (statement instanceof EnhancedForStatement || statement instanceof ForStatement || statement instanceof WhileStatement || statement instanceof DoStatement) {
+    public static boolean isLoopStatement(ASTNode node) {
+        if (node instanceof EnhancedForStatement || node instanceof ForStatement
+                || node instanceof WhileStatement || node instanceof DoStatement) {
             return true;
         }
         return false;

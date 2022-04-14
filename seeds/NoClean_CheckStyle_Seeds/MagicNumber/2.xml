@@ -1,0 +1,6 @@
+
+
+<module name="MagicNumber">
+    <property name="ignoreFieldDeclaration" value="false"/>
+</module>
+        

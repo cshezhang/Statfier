@@ -1,7 +1,0 @@
-'-verbose'
-'-g'
-'-d'
-'/home/vanguard/projects/SAMutator/scripts'
-'-cp'
-'.:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/javax.inject.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/guava-23.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-support-v4.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305-src.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/kotlin-annotations-jvm-1.3.72.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/collection-1.1.0.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jsr305.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/jackson-2.2.3.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/android-23.jar:/home/vanguard/projects/SAMutator/tools/Infer_Dependency/tools.jar'
-'/home/vanguard/projects/SAMutator/src/test/java/codetoanalyze/java/nullsafe/LibraryCalls.java'

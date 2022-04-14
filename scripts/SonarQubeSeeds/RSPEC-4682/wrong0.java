@@ -1,5 +1,0 @@
-
-@CheckForNull
-boolean isFoo() {
- ...
-}

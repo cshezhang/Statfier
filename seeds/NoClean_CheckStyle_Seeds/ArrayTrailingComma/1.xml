@@ -1,0 +1,6 @@
+
+
+<module name="ArrayTrailingComma">
+    <property name="alwaysDemandTrailingComma" value="true"/>
+</module>
+        

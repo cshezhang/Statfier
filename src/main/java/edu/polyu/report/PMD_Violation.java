@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 /**
  * Description:
  * Author: Vanguard
- * Date: 2021/9/23 7:30 下午
+ * Date: 2021/9/23 7:30 PM
  */
 public class PMD_Violation extends Violation {
 
@@ -26,9 +26,9 @@ public class PMD_Violation extends Violation {
 
     public PMD_Violation(JsonNode reportNode) {
         this.beginLine = reportNode.get("beginline").asInt();
-        this.beginCol = reportNode.get("begincolumn").asInt();
         this.endLine = reportNode.get("endline").asInt();
-        this.endCol = reportNode.get("endcolumn").asInt();
+        this.beginCol = reportNode.get("begincolumn").asInt() - 1;
+        this.endCol = reportNode.get("endcolumn").asInt() + 1;
         this.bugType = reportNode.get("rule").asText();
         this.description = reportNode.get("ruleset") + ":[" + reportNode.get("rule") + ", " + reportNode.get("description").toString() + "]";
     }
@@ -41,6 +41,14 @@ public class PMD_Violation extends Violation {
     @Override
     public int getBeginLine() {
         return this.beginLine;
+    }
+
+    public int getBeginCol() {
+        return beginCol;
+    }
+
+    public int getEndCol() {
+        return endCol;
     }
 
     @Override

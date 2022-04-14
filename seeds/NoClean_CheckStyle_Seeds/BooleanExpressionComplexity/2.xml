@@ -1,0 +1,6 @@
+
+
+<module name="BooleanExpressionComplexity">
+  <property name="tokens" value="BXOR,LAND,LOR"/>
+</module>
+        

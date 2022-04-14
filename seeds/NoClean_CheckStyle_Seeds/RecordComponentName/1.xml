@@ -1,0 +1,6 @@
+
+
+<module name="RecordComponentName">
+    <property name="format" value="^[a-z]+$"/>
+</module>
+        

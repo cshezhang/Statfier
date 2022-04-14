@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,33 +34,38 @@ public class EnumClassWrapper extends Transform {
     private EnumClassWrapper() {}
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherNode, ASTNode oldNode) {
-        TypeDeclaration clazz = getClassOfStatement(oldNode);
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(oldNode);
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherNode, ASTNode srcNode) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
+        TypeDeclaration clazz = getClassOfStatement(srcNode);
+        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
         EnumConstantDeclaration enumConstant = ast.newEnumConstantDeclaration();
         enumConstant.setName(ast.newSimpleName("RED"));
-        EnumDeclaration enumDeclaration = ast.newEnumDeclaration();
-        enumDeclaration.setName(ast.newSimpleName("enumClass" + enumCounter));
-        enumDeclaration.enumConstants().add(enumConstant);
+        EnumDeclaration enumClass = ast.newEnumDeclaration();
+        enumClass.setName(ast.newSimpleName("enumClass" + enumCounter));
+        enumClass.enumConstants().add(enumConstant);
+        ListRewrite listRewrite = astRewrite.getListRewrite(enumClass, enumClass.getBodyDeclarationsProperty());
         if(oldMethod != null) {
+            // Here, we think oldNote is located in a method
             List<VariableDeclarationStatement> validVDStatemnets = new ArrayList<>();
             for (ASTNode node : (List<ASTNode>) clazz.bodyDeclarations()) {
                 if (node instanceof VariableDeclarationStatement) {
-                    validVDStatemnets.add((VariableDeclarationStatement) node);
+                    validVDStatemnets.add((VariableDeclarationStatement) node);  // copy all vd statements to enum class
                 }
             }
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
             for (VariableDeclarationStatement vdStatement : validVDStatemnets) {
-                enumDeclaration.bodyDeclarations().add(vdStatement);
+                listRewrite.insertLast(vdStatement, null);
             }
-            enumDeclaration.bodyDeclarations().add(newMethod);
-            astRewrite.replace(oldMethod, enumDeclaration, null);
+            listRewrite.insertLast(newMethod, null);
+            astRewrite.replace(oldMethod, enumClass, null);
             return true;
         } else {
-            if(oldNode instanceof FieldDeclaration) {
-                FieldDeclaration newStatement = (FieldDeclaration) ASTNode.copySubtree(ast, oldNode);
-                enumDeclaration.bodyDeclarations().add(newStatement);
-                astRewrite.replace(oldNode, enumDeclaration, null);
+            // Here, we think oldNode is a FieldDeclaration or Initializer
+            if(srcNode instanceof FieldDeclaration) {
+                FieldDeclaration newStatement = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
+                listRewrite.insertLast(newStatement, null);
+                astRewrite.replace(srcNode, enumClass, null);
                 return true;
             } else {
                 return false;
@@ -68,14 +74,17 @@ public class EnumClassWrapper extends Transform {
     }
 
     @Override
-    public int check(ASTNode node) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(node instanceof MethodDeclaration) {
-            return 1;
+            nodes.add(node);
+            return nodes;
         }
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
         if(method == null) {  // means FieldDeclaration
-            return 1;
+            nodes.add(node);
+            return nodes;
         }
         boolean isOverride = false;
         for(ASTNode modifier : (List<ASTNode>) method.modifiers()) {
@@ -89,21 +98,24 @@ public class EnumClassWrapper extends Transform {
         }
         if(isOverride) {
             if(clazz.superInterfaceTypes().size() > 0) {
-                return 0;
+                return nodes;
             }
             Type superClazzType = clazz.getSuperclassType();
             if(superClazzType == null) {
-                return 1;
+                nodes.add(node);
+                return nodes;
             }
             if (superClazzType instanceof SimpleType) {
                 String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
                 if(name.contains("Object")) {
-                    return 1;
+                    nodes.add(node);
+                    return nodes;
                 }
             }
-            return 0;
+            return nodes;
         } else {
-            return 1;
+            nodes.add(node);
+            return nodes;
         }
     }
 

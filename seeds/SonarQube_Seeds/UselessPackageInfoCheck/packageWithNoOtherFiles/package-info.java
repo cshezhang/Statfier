@@ -1,1 +1,0 @@
-package checks.UselessPackageInfoCheck.packageWithNoOtherFiles;

@@ -5,11 +5,11 @@ import java.util.List;
 
 public class SonarQube_Report extends Report {
 
-    private String fileName;
+    private String filepath;
     private List<SonarQube_Violation> violations;
 
-    public SonarQube_Report(String fileName) {
-        this.fileName = fileName;
+    public SonarQube_Report(String filepath) {
+        this.filepath = filepath;
         this.violations = new ArrayList<>();
     }
 
@@ -17,12 +17,13 @@ public class SonarQube_Report extends Report {
         this.violations.add(violation);
     }
 
-    public String getFileName() {
-        return this.fileName;
-    }
-
     public List<SonarQube_Violation> getViolations() {
         return this.violations;
+    }
+
+    @Override
+    public String getFilepath() {
+        return this.filepath;
     }
 
 }

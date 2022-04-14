@@ -9,7 +9,7 @@ import static edu.polyu.util.Util.PMDResultFolder;
 /**
  * Description: Previous main process for testing PMD with multi thread
  * Author: Vanguard
- * Date: 2021/11/30 10:03 上午
+ * Date: 2021/11/30 10:03
  */
 
 public class PMD_InvokeThread implements Runnable {
@@ -36,8 +36,8 @@ public class PMD_InvokeThread implements Runnable {
             "-d", seedFolderPath  + File.separator + seedFolderName,
             "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
             "-f", "json",
-            "-r", PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
-//            "--no-cache"
+            "-r", PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json",
+            "--no-cache"
         };
         PMD.runPmd(pmdConfig);
     }

@@ -1,0 +1,6 @@
+
+
+<module name="AvoidStarImport">
+  <property name="allowClassImports" value="true"/>
+</module>
+        

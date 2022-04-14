@@ -1,2 +1,0 @@
-
-int myNumber = 8;

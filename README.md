@@ -1,8 +1,4 @@
-<!--
- * @Description: 
- * @Author: Vanguard
- * @Date: 2021-10-14 09:25:07
--->
+
 # SAMutator
 Testing Tool for Static Analysis Tool. 
 

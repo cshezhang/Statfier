@@ -1,9 +1,27 @@
 package edu.polyu.transform;
 
-import com.sun.jdi.Method;
-import org.eclipse.jdt.core.dom.*;
+import edu.polyu.analysis.ASTWrapper;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description: Add control branch
@@ -11,7 +29,6 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
  * @Date: 2021-08-20 18:17
  */
 public class AddControlBranch extends Transform {
-
 
     private static final AddControlBranch singleInstance = new AddControlBranch();
     private static int varCounter;
@@ -25,7 +42,9 @@ public class AddControlBranch extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherNode, ASTNode srcNode) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         IfStatement newIfStatement = ast.newIfStatement();
         Block thenBlock = ast.newBlock();
         Block elseBlock = ast.newBlock();
@@ -39,8 +58,8 @@ public class AddControlBranch extends Transform {
         VariableDeclarationStatement newBoolVdStatement = ast.newVariableDeclarationStatement(newBoolVdFragment);
         newBoolVdStatement.setType(ast.newPrimitiveType(PrimitiveType.BOOLEAN));
         // Final modifier can be added by a specific transformation
-        if(sourceStatement instanceof VariableDeclarationStatement) {
-            VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) sourceStatement;
+        if(srcNode instanceof VariableDeclarationStatement) {
+            VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) srcNode;
             VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
             VariableDeclarationFragment newFragment = ast.newVariableDeclarationFragment();
             newFragment.setName(ast.newSimpleName(oldFragment.getName().toString()));
@@ -58,14 +77,14 @@ public class AddControlBranch extends Transform {
             newIfStatement.setThenStatement(thenBlock);
             newIfStatement.setElseStatement(elseBlock);
             newIfStatement.setExpression(ast.newSimpleName(varName));
-            ListRewrite listRewrite = astRewrite.getListRewrite(brotherStatement.getParent(), Block.STATEMENTS_PROPERTY);
-            listRewrite.insertAfter(newVdStatement, sourceStatement, null);  // Here needs block, but complex to modify, so add it before brother
+            ListRewrite listRewrite = astRewrite.getListRewrite(brotherNode.getParent(), Block.STATEMENTS_PROPERTY);
+            listRewrite.insertAfter(newVdStatement, srcNode, null);  // Here needs block, but complex to modify, so add it before brother
             listRewrite.insertAfter(newBoolVdStatement, newVdStatement, null);
             listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
-            listRewrite.remove(sourceStatement, null);
+            listRewrite.remove(srcNode, null);
         } else {
-            Statement thenStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
-            Statement elseStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
+            Statement thenStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
+            Statement elseStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
             thenBlock.statements().add(thenStatement);
             elseBlock.statements().add(elseStatement);
             newIfStatement.setExpression(ast.newSimpleName(varName));
@@ -74,15 +93,16 @@ public class AddControlBranch extends Transform {
             Block newBlock = ast.newBlock();
             newBlock.statements().add(newBoolVdStatement);
             newBlock.statements().add(newIfStatement);
-            astRewrite.replace(sourceStatement, newBlock, null);
+            astRewrite.replace(srcNode, newBlock, null);
         }
         return true;
     }
 
     @Override
-    public int check(ASTNode node) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(node instanceof FieldDeclaration || node instanceof MethodDeclaration) {
-            return 0;
+            return nodes;
         }
         if(node instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;
@@ -90,15 +110,16 @@ public class AddControlBranch extends Transform {
                 if(vdStatement.modifiers().size() > 0) {
                     Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
                     if(modifier.getKeyword().toString().equals("final")) {
-                        return 0;
+                        return nodes;
                     }
                 }
             }
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
             if(vdFragment.getInitializer() == null) {
-                return 0;
+                return nodes;
             }
         }
-        return 1;
+        nodes.add(node);
+        return nodes;
     }
 }

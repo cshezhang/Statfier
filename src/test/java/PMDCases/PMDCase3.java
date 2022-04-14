@@ -3,7 +3,7 @@ package PMDCases;
 /**
  * Description:
  * Author: Vanguard
- * Date: 2021/10/7 8:02 下午
+ * Date: 2021/10/7 8:02 PM
  */
 public class PMDCase3 {
 

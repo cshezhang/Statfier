@@ -1,0 +1,7 @@
+
+
+<module name="IllegalInstantiation">
+  <property name="classes" value="java.lang.Boolean[],
+     Boolean[], java.lang.Integer[], Integer[]"/>
+</module>
+        

@@ -1,7 +1,6 @@
 package edu.polyu.transform;
 
-
-
+import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -11,6 +10,9 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // Control flow warpper by if(true)
 public class CFWrapperWithIfTrue extends Transform {
@@ -24,7 +26,9 @@ public class CFWrapperWithIfTrue extends Transform {
     }
 
     @Override
-    public boolean run(int index, AST ast, ASTRewrite astRewrite, ASTNode brother, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode sourceStatement) {
+        AST ast = wrapper.getAst();
+        ASTRewrite astRewrite = wrapper.getAstRewrite();
         IfStatement ifStatement = ast.newIfStatement();
         Block block = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
@@ -36,11 +40,13 @@ public class CFWrapperWithIfTrue extends Transform {
     }
 
     @Override
-    public int check(ASTNode node) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration || node instanceof MethodDeclaration) {
-            return 0;
+            return nodes;
         }
-        return 1;
+        nodes.add(node);
+        return nodes;
     }
 
 }

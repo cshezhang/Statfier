@@ -1,0 +1,6 @@
+
+
+<module name="NeedBraces">
+  <property name="tokens" value="LITERAL_IF, LITERAL_ELSE"/>
+</module>
+        

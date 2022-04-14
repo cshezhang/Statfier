@@ -1,0 +1,6 @@
+
+
+<module name="MagicNumber">
+    <property name="ignoreHashCodeMethod" value="true"/>
+</module>
+        

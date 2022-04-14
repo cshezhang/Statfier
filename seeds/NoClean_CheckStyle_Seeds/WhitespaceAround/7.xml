@@ -1,0 +1,6 @@
+
+
+<module name="WhitespaceAround">
+  <property name="allowEmptyLambdas" value="true"/>
+</module>
+        

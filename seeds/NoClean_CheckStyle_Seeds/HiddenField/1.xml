@@ -1,0 +1,6 @@
+
+
+<module name="HiddenField">
+  <property name="tokens" value="VARIABLE_DEF"/>
+</module>
+        

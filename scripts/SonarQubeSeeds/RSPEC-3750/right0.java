@@ -1,3 +1,0 @@
-
-@Controller
-public class HelloWorld {

@@ -1,0 +1,7 @@
+
+
+<module name="CyclomaticComplexity">
+  <property name="max" value="4"/>
+  <property name="tokens" value="LITERAL_WHILE, LITERAL_DO"/>
+</module>
+        

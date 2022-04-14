@@ -1,0 +1,7 @@
+
+
+<module name="RegexpSinglelineJava">
+  <property name="format" value="debug"/>
+  <property name="ignoreCase" value="true"/>
+</module>
+        

@@ -1,9 +1,0 @@
-
-public class Foo {
-  private String foo;
-
-  public String getFoo() { }
-}
-
-Foo foo = new Foo();
-foo.getFoo() // what does this return?

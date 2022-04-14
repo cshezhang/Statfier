@@ -1,9 +1,9 @@
 #!/bin/bash
 echo "Building process start..."
  
-JAR_PATH=/home/lschen/projects/SAMutator/target/dependency
+JAR_PATH=/home/huaien/projects/SAMutator/target/dependency
 BIN_PATH=bin
-SRC_PATH=/home/lschen/projects/SAMutator/src
+SRC_PATH=/home/huaien/projects/SAMutator/src
  
 # java文件列表目录，使用@文件名来管理java源文件，可以简化命令
 SRC_FILE_LIST_PATH=src/sources.list

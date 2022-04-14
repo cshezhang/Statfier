@@ -1,0 +1,12 @@
+
+
+<module name="IllegalType">
+  <property name="illegalClassNames" value="java.util.Optional"/>
+  <property name="tokens" value="VARIABLE_DEF"/>
+  <property name="id" value="IllegalTypeOptionalAsField"/>
+</module>
+<module name="SuppressionXpathSingleFilter">
+  <property name="query" value="//METHOD_DEF//*"/>
+  <property name="id" value="IllegalTypeOptionalAsField"/>
+</module>
+        

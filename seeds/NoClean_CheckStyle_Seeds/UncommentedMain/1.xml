@@ -1,0 +1,6 @@
+
+
+<module name="UncommentedMain">
+  <property name="excludedClasses" value="\.Main$"/>
+</module>
+        

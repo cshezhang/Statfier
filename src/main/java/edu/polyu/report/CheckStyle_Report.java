@@ -5,11 +5,11 @@ import java.util.List;
 
 public class CheckStyle_Report extends Report {
 
-    private String fileName;
+    private String filepath;
     private List<CheckStyle_Violation> violations;
 
-    public CheckStyle_Report(String fileName) {
-        this.fileName = fileName;
+    public CheckStyle_Report(String filepath) {
+        this.filepath = filepath;
         this.violations = new ArrayList<>();
     }
 
@@ -17,8 +17,8 @@ public class CheckStyle_Report extends Report {
         this.violations.add(violation);
     }
 
-    public String getFileName() {
-        return this.fileName;
+    public String getFilepath() {
+        return this.filepath;
     }
 
     public List<CheckStyle_Violation> getViolations() {

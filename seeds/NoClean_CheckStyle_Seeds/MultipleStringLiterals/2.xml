@@ -1,0 +1,7 @@
+
+
+<module name="MultipleStringLiterals">
+  <property name="ignoreStringsRegexp"
+    value='^(("")|(", "))$'/>
+</module>
+        
