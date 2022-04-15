@@ -540,6 +540,7 @@ public class ASTWrapper {
             ASTNode candidateNode = this.candidateNodes.get(random.nextInt(this.candidateNodes.size()));
             Transform transform = Transform.getTransformRandomly();
             List<ASTNode> targetNodes = transform.check(this, candidateNode);
+            System.out.println("Target Nodes have been found!");
             for (ASTNode targetNode : targetNodes) {
                 String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                 String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
@@ -549,16 +550,13 @@ public class ASTWrapper {
                 int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
                 ASTNode newTargetNode = newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
                 if (newTargetNode == null) {
-                    newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
-                    System.err.println("Old and new ASTWrapper are not matched!");
-                    System.exit(-1);
+                    continue;
                 }
-                int oldRowNumber2 = this.cu.getLineNumber(candidateNode.getStartPosition());
+                int oldLineNumber2 = this.cu.getLineNumber(candidateNode.getStartPosition());
                 int oldColNumber2 = this.cu.getColumnNumber(candidateNode.getStartPosition());
-                ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldRowNumber2, oldColNumber2);
+                ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldLineNumber2, oldColNumber2);
                 if (newSrcNode == null) {
-                    System.err.println("Old and new ASTWrapper are not matched!");
-                    System.exit(-1);
+                    continue;
                 }
                 boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                 if (hasMutated) {

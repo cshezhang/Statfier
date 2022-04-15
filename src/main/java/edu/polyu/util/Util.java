@@ -174,7 +174,7 @@ public class Util {
     public static Map compilerOptions = JavaCore.getOptions();
 
     public static void initEnv() {
-        random.setSeed(RANDOM_SEED4);
+        random.setSeed(RANDOM_SEED1);
         if(SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {
