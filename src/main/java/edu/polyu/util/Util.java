@@ -226,7 +226,6 @@ public class Util {
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         subSeedIndex = subSeedFolderNameList.size();
         // Generate mutant folder from iter1 -> iter8
-
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath()  + File.separator + "iter" + i);
             iter.mkdir();
@@ -241,22 +240,33 @@ public class Util {
         if(PMD_MUTATION && !PMDResultFolder.exists()) {
             PMDResultFolder.mkdir();
         }
-        if(SPOTBUGS_MUTATION && !SpotBugsClassFolder.exists()) {
-            SpotBugsClassFolder.mkdir();
-        }
-        if(SPOTBUGS_MUTATION && !SpotBugsResultFolder.exists()) {
-            SpotBugsResultFolder.mkdir();
-            for(int i = 0; i < subSeedIndex; i++) {
-                File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath()  + File.separator + subSeedFolderNameList.get(i));
-                if(reportFolder.exists()) {
-                    System.err.println("Init Error!");
-                    System.exit(-1);
+
+        if(SPOTBUGS_MUTATION) {
+            if(!SpotBugsClassFolder.exists()) {
+                SpotBugsClassFolder.mkdir();
+            }
+            if(!SpotBugsResultFolder.exists()) {
+                SpotBugsResultFolder.mkdir();
+                for (int i = 0; i < subSeedIndex; i++) {
+                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderNameList.get(i));
+                    if (reportFolder.exists()) {
+                        System.err.println("Init Error!");
+                        System.exit(-1);
+                    }
+                    reportFolder.mkdir();
                 }
-                reportFolder.mkdir();
             }
         }
         if(CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
             CheckStyleResultFolder.mkdir();
+        }
+        if(INFER_MUTATION) {
+            if(!InferClassFolder.exists()) {
+                InferClassFolder.mkdir();
+            }
+            if(!InferResultFolder.exists()) {
+                InferResultFolder.mkdir();
+            }
         }
         compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
         compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);

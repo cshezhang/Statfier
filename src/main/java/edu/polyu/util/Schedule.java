@@ -63,62 +63,6 @@ public class Schedule {
         return tester;
     }
 
-    public void testAST(String targetFolder) {
-        File folder = new File(targetFolder);
-        if (!folder.isDirectory()) {
-            System.err.println("You should provide a folder path!");
-            System.exit(-1);
-        }
-        List<String> filePaths = getFilenamesFromFolder(targetFolder, true);
-        for (String filePath : filePaths) {
-            System.out.println("Testing Java File: " + filePath);
-            ASTWrapper mutator = new ASTWrapper(filePath, "sub");
-            mutator.printBasicInfo();
-        }
-    }
-
-    public void randomLocationTesting(List<ASTWrapper> srcWrappers) {
-        int current_depth = -1;
-        ArrayDeque<ASTWrapper> que = new ArrayDeque<>();
-        que.addAll(srcWrappers);
-        while (!que.isEmpty()) {
-            ASTWrapper head = que.pollFirst();
-            if (current_depth != head.depth) {
-                current_depth = head.depth;
-                if (current_depth != 0) {
-                    System.out.println(head.getFolderPath());
-                    // No need to invocate locateMutationCode, just randomly select mutants
-                }
-                if (current_depth >= SEARCH_DEPTH) {
-                    break;
-                }
-            }
-            List<ASTWrapper> newWrappers = head.TransformByRandomLocation();
-            que.addAll(newWrappers);
-        }
-    }
-
-    public void guidedLocationTesting(List<ASTWrapper> srcWrappers) {
-        int current_depth = -1;
-        ArrayDeque<ASTWrapper> que = new ArrayDeque<>();
-        que.addAll(srcWrappers);
-        while (!que.isEmpty()) {
-            ASTWrapper head = que.pollFirst();
-            if (current_depth != head.depth) {
-                current_depth = head.depth;
-                if (current_depth != 0) {
-                    if (SINGLE_TESTING) {
-                        System.out.println("Current Depth: " + head.depth);
-                    }
-                    String currentIterFolder = userdir + File.separator + "mutants" + File.separator + "iter" + current_depth;
-                    tester.locateMutationCode(head.depth, currentIterFolder);
-                }
-            }
-            List<ASTWrapper> newWrappers = head.TransformByGuidedLocation();
-            que.addAll(newWrappers);
-        }
-    }
-
     public void executeCheckStyleMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
         ExecutorService threadPool = Executors.newSingleThreadExecutor();
