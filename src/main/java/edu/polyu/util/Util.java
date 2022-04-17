@@ -146,25 +146,14 @@ public class Util {
 
     // tools
     public final static String SpotBugsPath = toolPath  + File.separator + "SpotBugs"  + File.separator + "bin"  + File.separator + "spotbugs";
-    public final static String InferPath = toolPath  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
+//    public final static String InferPath = toolPath  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
+    public final static String InferPath = "infer";
     public final static String CheckStylePath = toolPath  + File.separator + "checkstyle.jar";
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath  + File.separator + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath  + File.separator + "Infer_Dependency", true);
     public static List<String> subSeedFolderNameList;
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
-    static {
-        spotBugsJarStr.append("\".;");
-        for(int i = spotBugsJarList.size() - 1; i >= 1; i--) {
-            spotBugsJarStr.append(spotBugsJarList.get(i) + ";");
-        }
-        spotBugsJarStr.append(spotBugsJarList.get(0) + "\"");
-        inferJarStr.append("\".;");
-        for(int i = inferJarList.size() - 1; i >= 1; i--) {
-            inferJarStr.append(inferJarList.get(i) + ";");
-        }
-        inferJarStr.append(inferJarList.get(0) + "\"");
-    }
 
     public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy line numbers
     public static HashMap<String, HashSet<Integer>> file2col = new HashMap<>(); // filename -> set: buggy line numbers
@@ -176,6 +165,22 @@ public class Util {
     public static Map compilerOptions = JavaCore.getOptions();
 
     public static void initEnv() {
+        String sp;
+        if(OSUtil.isWindows()) {
+            sp = ";";
+        } else { // Linux, Mac OS
+            sp = ":";
+        }
+        spotBugsJarStr.append("\"." + sp);
+        for (int i = spotBugsJarList.size() - 1; i >= 1; i--) {
+            spotBugsJarStr.append(spotBugsJarList.get(i) + sp);
+        }
+        spotBugsJarStr.append(spotBugsJarList.get(0) + "\"");
+        inferJarStr.append("\"." + sp);
+        for (int i = inferJarList.size() - 1; i >= 1; i--) {
+            inferJarStr.append(inferJarList.get(i) + sp);
+        }
+        inferJarStr.append(inferJarList.get(0) + "\"");
         random.setSeed(RANDOM_SEED5);
         if(SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
