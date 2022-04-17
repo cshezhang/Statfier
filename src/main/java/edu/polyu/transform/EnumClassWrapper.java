@@ -8,9 +8,13 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -18,6 +22,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
 
@@ -38,7 +43,30 @@ public class EnumClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         TypeDeclaration clazz = getClassOfStatement(srcNode);
+        List<String> staticFieldNames = new ArrayList<>();
+        for(FieldDeclaration fd : clazz.getFields()) {
+            for(Object modifier : fd.modifiers()) {
+                if(modifier instanceof Modifier) {
+                    if(((Modifier) modifier).isStatic()) {
+                        staticFieldNames.add(((VariableDeclarationFragment)fd.fragments().get(0)).getName().getFullyQualifiedName());
+                    }
+                }
+            }
+        }
         MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
+        if(oldMethod.isConstructor()) {
+            return false;
+        }
+        for(Statement statement : (List<Statement>)oldMethod.getBody().statements()) {
+            List<ASTNode> nodes = getChildrenNodes(statement);
+            for(ASTNode node : nodes) {
+                if(node instanceof SimpleName) {
+                    if(!staticFieldNames.contains(((SimpleName) node).getFullyQualifiedName())) {
+                        return false;
+                    }
+                }
+            }
+        }
         EnumConstantDeclaration enumConstant = ast.newEnumConstantDeclaration();
         enumConstant.setName(ast.newSimpleName("RED"));
         EnumDeclaration enumClass = ast.newEnumDeclaration();

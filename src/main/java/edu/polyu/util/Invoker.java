@@ -28,6 +28,7 @@ import static edu.polyu.util.Util.PMDResultFolder;
 import static edu.polyu.util.Util.PMD_MUTATION;
 import static edu.polyu.util.Util.SINGLE_TESTING;
 import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Util.SpotBugsPath;
 import static edu.polyu.util.Util.SpotBugsResultFolder;
 import static edu.polyu.util.Util.THREAD_COUNT;
 import static edu.polyu.util.Util.getFilenamesFromFolder;
@@ -105,7 +106,7 @@ public class Invoker {
     }
 
     // folderPath is purely folder path and doesn't contain java file name.
-    public static void compileJavaSourceFile(String folderPath, String fileName, String classFileFolder) {
+    public static void compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
         if(!fileName.endsWith(".java")) {
             System.err.println("File: " + fileName + " is not ended by .java");
             System.exit(0);
@@ -122,8 +123,8 @@ public class Invoker {
         if(INFER_MUTATION) {
             cmd_list.add(inferJarStr.toString());
         }
-        cmd_list.add(folderPath  + File.separator + fileName + ".java");
-        invokeCommands(cmd_list.toArray(new String[cmd_list.size()]));
+        cmd_list.add(srcFolderPath  + File.separator + fileName + ".java");
+        invokeCommandsByZT(cmd_list.toArray(new String[cmd_list.size()]));
     }
 
     private static ExecutorService threadPool;
@@ -149,37 +150,35 @@ public class Invoker {
         }
     }
 
-    // seedFolderPath is the java source code folder (seed path), like: SpotBugs_Seeds, iter1, iter2...
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in SpotBugsClassFolder
-    public static List<SpotBugs_Report> invokeSpotBugs(String seedFolderPath, String seedFolderName) {
+    public static List<SpotBugs_Report> invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
         if(seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
         if(SINGLE_TESTING) {
-            System.out.println("Invoke SpotBugs Path: " + seedFolderPath + "  seedFolderName: " + seedFolderName);
-            System.out.println("Invoke Target Path: " + seedFolderPath);
-            System.out.println("Output Name: " + seedFolderName);
+            System.out.println("Invoke SpotBugs Path: " + seedFolderPath);
         }
-        List<String> seedFileNamesWithSuffix = getFilenamesFromFolder(seedFolderPath, false); // Filenames with suffix
         initThreadPool();
-        List<List<String>> lists = listAveragePartition(seedFileNamesWithSuffix, THREAD_COUNT);
-        long startExecutionTime = System.currentTimeMillis();
-        for(int i = 0; i < lists.size(); i++) {
-            threadPool.submit(new SpotBugs_InvokeThread(seedFolderPath, seedFolderName, lists.get(i)));
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+            String seedFolderName = subSeedFolderNameList.get(i);
+            String subSeedFolderPath = seedFolderPath + File.separator + seedFolderName;
+            List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
+            threadPool.submit(new SpotBugs_InvokeThread(subSeedFolderPath, seedFolderName, seedFileNames));
         }
         waitThreadPoolEnding();
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         List<SpotBugs_Report> reports = new ArrayList<>();
-        for(int i = 0; i < seedFileNamesWithSuffix.size(); i++) {
-            String seedFilenameWithSuffix = seedFileNamesWithSuffix.get(i);
-            String seedFilename = seedFilenameWithSuffix.substring(0, seedFilenameWithSuffix.length() - 5);
-            String report_path = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFilename + "_Result.xml";
-            reports.addAll(readSpotBugsResultFile(seedFolderPath, report_path));
+        for(String subSeedFolderName : subSeedFolderNameList) {
+            List<String> reportPaths = getFilenamesFromFolder(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName, true);
+            for(String reportPath : reportPaths) {
+                reports.addAll(readSpotBugsResultFile(seedFolderPath, reportPath));
+            }
         }
         return reports;
     }
+
     public static List<Infer_Report> invokeInfer(int iterDepth, String seedFolderPath) {
         initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {

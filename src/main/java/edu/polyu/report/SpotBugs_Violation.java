@@ -12,13 +12,13 @@ import java.io.File;
 
 public class SpotBugs_Violation extends Violation {
     
-    private String filename;
+    private String filepath;
     private int beginLine;
     private int endLine;
     private String bugType;
 
     public SpotBugs_Violation(String seedFolderPath, Element sourceLine, String bugType) {
-        this.filename = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
+        this.filepath = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
         if(sourceLine.attribute("start") != null) {
             this.beginLine = Integer.parseInt(sourceLine.attribute("start").getText());
         } else {
@@ -29,12 +29,11 @@ public class SpotBugs_Violation extends Violation {
         } else {
             this.endLine = -1;
         }
-        this.bugType = bugType;
-        // Consider the category attribute of BugInstance element
+        this.bugType = bugType; // Consider the category attribute of BugInstance element
     }
 
-    public String getFilename() {
-        return this.filename;
+    public String getFilepath() {
+        return this.filepath;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class SpotBugs_Violation extends Violation {
 
     @Override
     public String toString() {
-        return this.filename + ": [" + this.bugType + "] between [" + this.beginLine + ", " + this.endLine + "]";  
+        return this.filepath + ": [" + this.bugType + "] between [" + this.beginLine + ", " + this.endLine + "]";
     }
 
 }

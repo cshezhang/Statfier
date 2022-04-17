@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.util.Schedule;
 import edu.polyu.util.TriTuple;
 import org.junit.Test;
@@ -38,6 +39,14 @@ import static edu.polyu.util.Util.userdir;
  * Date: 2021-08-08 16:20
  */
 public class AutomaticTester {
+
+    @Test
+    public void testAST() {
+        String filepath = "C:\\Users\\Rainy\\IdeaProjects\\newSAMutator\\src\\test\\java\\TestBytecode.java";
+        String foldername = "java";
+        ASTWrapper wrapper = new ASTWrapper(filepath, foldername);
+        System.out.println(wrapper);
+    }
 
     @Test
     public void moduleTest() throws IOException {

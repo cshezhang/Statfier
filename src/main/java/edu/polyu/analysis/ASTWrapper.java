@@ -45,7 +45,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
 import static edu.polyu.util.Util.COMPILE;
+import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
 import static edu.polyu.util.Util.matcher;
 import static edu.polyu.util.Util.PMD_MUTATION;
 import static edu.polyu.util.Util.Path2Last;
@@ -112,7 +114,7 @@ public class ASTWrapper {
         this.parentPath = null;
         this.parentWrapper = null;
         this.parViolations = 0;
-        if (PMD_MUTATION) {
+        if (PMD_MUTATION || SPOTBUGS_MUTATION || CHECKSTYLE_MUTATION) {
             this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         } else {
             this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1);

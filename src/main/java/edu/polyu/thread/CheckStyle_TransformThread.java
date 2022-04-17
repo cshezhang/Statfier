@@ -3,6 +3,7 @@ package edu.polyu.thread;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
+import edu.polyu.util.Util;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -53,6 +54,9 @@ public class CheckStyle_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            if(Util.DEBUG) {
+                System.out.println("Depth: " + depth + " Folder: " + this.seedFolderName);
+            }
             while (!wrappers.isEmpty()) {
                 ASTWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {

@@ -2,6 +2,7 @@
 mutants/
 results/
 target/
+config.properties
 PMD_Cache.bin
 PMD_Result.html
 .vscode/

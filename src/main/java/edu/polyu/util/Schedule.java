@@ -385,7 +385,7 @@ public class Schedule {
             return;
         }
         if (SPOTBUGS_MUTATION) {
-            List<SpotBugs_Report> reports = invokeSpotBugs(seedFolderPath, seedFolderName);
+            List<SpotBugs_Report> reports = invokeSpotBugs(seedFolderPath);
             for (SpotBugs_Report report : reports) {
                 if (!file2row.containsKey(report.getFilepath())) {
                     file2row.put(report.getFilepath(), new HashSet<>());
@@ -399,6 +399,9 @@ public class Schedule {
                     }
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
+            }
+            if (SINGLE_TESTING) {
+                System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
             }
         }
     }

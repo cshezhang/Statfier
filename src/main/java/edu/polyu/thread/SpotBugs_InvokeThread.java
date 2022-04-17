@@ -3,11 +3,14 @@ package edu.polyu.thread;
 import edu.polyu.util.AbstractIntegrationTest;
 import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcher;
 import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcherBuilder;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
 
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
+import static edu.polyu.util.Invoker.invokeCommands;
+import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.BASE_SEED_PATH;
 import static edu.polyu.util.Util.SpotBugsClassFolder;
 import static edu.polyu.util.Util.SpotBugsPath;
@@ -39,19 +42,19 @@ public class SpotBugs_InvokeThread extends AbstractIntegrationTest implements Ru
             }
             compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
             String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
-            String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
-            String[] invokeCmds = {"/bin/bash", "-c",
-                    SpotBugsPath + " -textui" + " -include " + configPath + " -xml:withMessages" + " -output " + reportPath + " "
+            String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
+//            String[] invokeCmds = {"/bin/bash", "-c",
+            String[] invokeCmds = {"cmd.exe", "/c",
+                    SpotBugsPath + " -textui"
+//                            + " -include " + configPath
+                            + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class"};
 //            invokeCommands(invokeCmds);
-            StringBuilder builder = new StringBuilder();
-            for(String arg : invokeCmds) {
-                builder.append(arg);
-            }
-            System.out.println(builder);
+            invokeCommandsByZT(invokeCmds);
         }
     }
 
+    @Test
     public void runMaven() {
         performAnalysis("ghIssues/Issue1759.class");
         BugInstanceMatcher matcher = new BugInstanceMatcherBuilder()

@@ -92,8 +92,11 @@ public class SpotBugs_TransformThread implements Runnable {
                     }
                     compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
                     String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
-                    String[] invokeCmds = {"/bin/bash", "-c",
-                            SpotBugsPath + " -textui" + " -xml:withMessages" + " -output " + reportPath + " "
+//                    String[] invokeCmds = {"/bin/bash", "-c",
+                    String[] invokeCmds = {"cmd.exe", "/c",
+                            SpotBugsPath + " -textui"
+//                            + " -include " + configPath
+                            + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath()};
                     invokeCommands(invokeCmds);
                     String report_path = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";

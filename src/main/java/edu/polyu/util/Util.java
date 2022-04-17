@@ -78,6 +78,8 @@ public class Util {
         }
     }
 
+    public static final boolean DEBUG = Boolean.parseBoolean(getProperty("DEBUG"));
+
     public static final ASTMatcher matcher = new ASTMatcher();
     public static final boolean NO_SELECTION = Boolean.parseBoolean(getProperty("NO_SELECTION"));
     public static final boolean RANDOM_SELECTION = Boolean.parseBoolean(getProperty("RANDOM_SELECTION"));
@@ -152,16 +154,16 @@ public class Util {
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
     static {
-        spotBugsJarStr.append(".:");
+        spotBugsJarStr.append("\".;");
         for(int i = spotBugsJarList.size() - 1; i >= 1; i--) {
-            spotBugsJarStr.append(spotBugsJarList.get(i) + ":");
+            spotBugsJarStr.append(spotBugsJarList.get(i) + ";");
         }
-        spotBugsJarStr.append(spotBugsJarList.get(0));
-        inferJarStr.append(".:");
+        spotBugsJarStr.append(spotBugsJarList.get(0) + "\"");
+        inferJarStr.append("\".;");
         for(int i = inferJarList.size() - 1; i >= 1; i--) {
-            inferJarStr.append(inferJarList.get(i) + ":");
+            inferJarStr.append(inferJarList.get(i) + ";");
         }
-        inferJarStr.append(inferJarList.get(0));
+        inferJarStr.append(inferJarList.get(0) + "\"");
     }
 
     public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy line numbers
@@ -174,7 +176,7 @@ public class Util {
     public static Map compilerOptions = JavaCore.getOptions();
 
     public static void initEnv() {
-        random.setSeed(RANDOM_SEED1);
+        random.setSeed(RANDOM_SEED5);
         if(SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {
@@ -197,14 +199,12 @@ public class Util {
         try {
             File ud = new File(userdir);
             if(ud.exists()) {
-                FileUtils.deleteDirectory(new File(userdir + File.separator + "mutants"));
-                FileUtils.deleteDirectory(new File(userdir + File.separator + "results"));
-            } else {
-                ud.mkdir();
-                if(!ud.exists()) {
-                    System.err.println("Fail to create userdir!\n");
-                    System.exit(-1);
-                }
+                FileUtils.deleteDirectory(new File(userdir));
+            }
+            ud.mkdir();
+            if(!ud.exists()) {
+                System.err.println("Fail to create userdir!\n");
+                System.exit(-1);
             }
             if(!resultFolder.mkdir()) {
                 System.err.println("Fail to create result folder!\n");
@@ -221,10 +221,11 @@ public class Util {
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         subSeedIndex = subSeedFolderNameList.size();
         // Generate mutant folder from iter1 -> iter8
+
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath()  + File.separator + "iter" + i);
             iter.mkdir();
-            if(PMD_MUTATION || CHECKSTYLE_MUTATION) {
+            if(PMD_MUTATION || CHECKSTYLE_MUTATION || SPOTBUGS_MUTATION) {
                 for (int j = 0; j < subSeedIndex; j++) {
                     String subSeedFolderName = subSeedFolderNameList.get(j);
                     File subSeedFolder = new File(iter.getAbsolutePath()  + File.separator + subSeedFolderName);
@@ -240,6 +241,14 @@ public class Util {
         }
         if(SPOTBUGS_MUTATION && !SpotBugsResultFolder.exists()) {
             SpotBugsResultFolder.mkdir();
+            for(int i = 0; i < subSeedIndex; i++) {
+                File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath()  + File.separator + subSeedFolderNameList.get(i));
+                if(reportFolder.exists()) {
+                    System.err.println("Init Error!");
+                    System.exit(-1);
+                }
+                reportFolder.mkdir();
+            }
         }
         if(CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
             CheckStyleResultFolder.mkdir();
@@ -626,10 +635,12 @@ public class Util {
         return results;
     }
 
-    public static List<SpotBugs_Report> readSpotBugsResultFile(String seedPath, String reportPath) {
+    public static List<SpotBugs_Report> readSpotBugsResultFile(String seedFolderPath, String reportPath) {
         if(SINGLE_TESTING) {
             System.out.println("SpotBugs Detection Resutl FileName: " + reportPath);
         }
+        String[] tokens = reportPath.split(sep);
+        String seedFolderName = tokens[tokens.length - 2];
         HashMap<String, SpotBugs_Report> name2report = new HashMap<>();
         List<SpotBugs_Report> results = new ArrayList<>();
         SAXReader saxReader = new SAXReader();
@@ -640,14 +651,14 @@ public class Util {
             for(Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for(Element sourceLine : sourceLines) {
-                    SpotBugs_Violation violation = new SpotBugs_Violation(seedPath, sourceLine, bugInstance.attribute("type").getText());
-                    String filename = violation.getFilename();
-                    if(name2report.containsKey(filename)) {
-                        name2report.get(filename).addViolation(violation);
+                    SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath + File.separator + seedFolderName, sourceLine, bugInstance.attribute("type").getText());
+                    String filepath = violation.getFilepath();
+                    if(name2report.containsKey(filepath)) {
+                        name2report.get(filepath).addViolation(violation);
                     } else {
-                        SpotBugs_Report spotBugs_report = new SpotBugs_Report(filename);
+                        SpotBugs_Report spotBugs_report = new SpotBugs_Report(filepath);
                         spotBugs_report.addViolation(violation);
-                        name2report.put(filename, spotBugs_report);
+                        name2report.put(filepath, spotBugs_report);
                     }
                 }
             }
@@ -665,7 +676,7 @@ public class Util {
         String[] tokens = path.split(sep);
         String target = tokens[tokens.length - 1];
         if(target.contains(".")) {
-            return target.split(".")[0];
+            return target.substring(0, target.indexOf('.'));
         } else {
             return target;
         }

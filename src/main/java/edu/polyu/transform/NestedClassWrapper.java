@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -35,7 +36,17 @@ public class NestedClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
+        if(oldMethod.isConstructor()) {
+            return false;
+        }
         if(oldMethod != null) {
+            for(Object modifier : oldMethod.modifiers()) {
+                if(modifier instanceof Modifier) {
+                    if(((Modifier) modifier).getKeyword().toString().equals("static")) {
+                        return false;
+                    }
+                }
+            }
             TypeDeclaration nestedClass = ast.newTypeDeclaration();
             nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);

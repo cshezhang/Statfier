@@ -8,7 +8,9 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -39,6 +41,16 @@ public class AnonymousClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
+        if(oldMethod.isConstructor()) {
+            return false;
+        }
+        for(Object modifier : oldMethod.modifiers()) {
+            if(modifier instanceof Modifier) {
+                if(((Modifier) modifier).getKeyword().toString().equals("static")) {
+                    return false;
+                }
+            }
+        }
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
         instanceCreation.setType(ast.newSimpleType(ast.newSimpleName("Object")));

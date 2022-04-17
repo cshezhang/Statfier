@@ -25,16 +25,10 @@ public class AddStaticModifier extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         FieldDeclaration oldFieldDeclaration = (FieldDeclaration) oldNode;
-        try {
-            for (Modifier modifier : (List<Modifier>) oldFieldDeclaration.modifiers()) {
-                if (modifier.getKeyword().toString().equals("static")) {
-                    return false;
-                }
+        for(ASTNode modifier : (List<ASTNode>) oldFieldDeclaration.modifiers()) {
+            if(modifier instanceof Modifier && ((Modifier) modifier).getKeyword().toString().equals("static")) {
+                return false;
             }
-        } catch (Exception e) {
-            System.err.println(wrapper.getFilePath());
-            System.err.println(wrapper.getInitSeed());
-            e.printStackTrace();
         }
         FieldDeclaration newFieldDeclaration;
         try {
