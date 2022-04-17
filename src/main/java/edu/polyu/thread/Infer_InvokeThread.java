@@ -41,7 +41,7 @@ public class Infer_InvokeThread implements Runnable {
         List<String> filepaths = getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
         for(int i = 0; i < filepaths.size(); i++) {
             String srcJavaPath = filepaths.get(i);
-            String filename = Path2Last(srcJavaPath).split(".")[0];
+            String filename = Path2Last(srcJavaPath);
             String reportFolderPath = InferResultFolder + File.separator + "iter" + iterDepth + "_" + filename;
             String[] invokeCmds = {"/bin/bash", "-c", InferPath + " run -o " + "" + reportFolderPath + " -- javac " + srcJavaPath};
             invokeCommandsByZT(invokeCmds);

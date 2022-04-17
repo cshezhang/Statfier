@@ -3,9 +3,6 @@ package edu.polyu.thread;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.Infer_Report;
 import edu.polyu.report.Infer_Violation;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.PMD_Violation;
-import net.sourceforge.pmd.PMD;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -21,7 +18,6 @@ import static edu.polyu.util.Util.GUIDED_LOCATION;
 import static edu.polyu.util.Util.InferPath;
 import static edu.polyu.util.Util.InferResultFolder;
 import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.PMDResultFolder;
 import static edu.polyu.util.Util.Path2Last;
 import static edu.polyu.util.Util.RANDOM_LOCATION;
 import static edu.polyu.util.Util.RANDOM_SELECTION;
@@ -33,7 +29,6 @@ import static edu.polyu.util.Util.file2row;
 import static edu.polyu.util.Util.getFilenamesFromFolder;
 import static edu.polyu.util.Util.mutantFolder;
 import static edu.polyu.util.Util.readInferResultFile;
-import static edu.polyu.util.Util.readPMDResultFile;
 
 
 /**
@@ -93,7 +88,7 @@ public class Infer_TransformThread implements Runnable {
             List<String> filepaths = getFilenamesFromFolder(mutantFolderPath, true);
             for(int i = 0; i < filepaths.size(); i++) {
                 String srcJavaPath = filepaths.get(i);
-                String filename = Path2Last(srcJavaPath).split(".")[0];
+                String filename = Path2Last(srcJavaPath);
                 String reportFolderPath = InferResultFolder + File.separator + "iter" + depth + "_" + filename;
                 String[] invokeCmds = {"/bin/bash", "-c", InferPath + " run -o " + "" + reportFolderPath + " -- javac " + srcJavaPath};
                 invokeCommandsByZT(invokeCmds);
