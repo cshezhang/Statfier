@@ -62,12 +62,18 @@ public class Invoker {
         }
         try {
             int exitValue = new ProcessExecutor().command(cmdArgs).execute().getExitValue();
+            // CheckStyle Return value is the number of bugs.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");
                 System.err.println(argStr);
             }
             if(SPOTBUGS_MUTATION && exitValue != 0) {
                 System.err.println("Execute SpotBugs Error!");
+                System.err.println(argStr);
+                System.exit(-1);
+            }
+            if(INFER_MUTATION && exitValue != 0) {
+                System.err.println("Execute Infer Error!");
                 System.err.println(argStr);
                 System.exit(-1);
             }
