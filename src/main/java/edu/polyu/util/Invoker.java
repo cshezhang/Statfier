@@ -57,6 +57,9 @@ public class Invoker {
         for(String arg : cmdArgs) {
             argStr.append(arg + " ");
         }
+        if(SINGLE_TESTING) {
+            System.out.println("Invoke Command: " + argStr);
+        }
         try {
             int exitValue = new ProcessExecutor().command(cmdArgs).execute().getExitValue();
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {

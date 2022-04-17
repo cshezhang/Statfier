@@ -7,6 +7,7 @@ import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.InferPath;
 import static edu.polyu.util.Util.InferResultFolder;
 import static edu.polyu.util.Util.Path2Last;
+import static edu.polyu.util.Util.SINGLE_TESTING;
 import static edu.polyu.util.Util.getFilenamesFromFolder;
 
 /**
@@ -25,6 +26,13 @@ public class Infer_InvokeThread implements Runnable {
         this.iterDepth = iterDepth;
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;
+        if(SINGLE_TESTING) {
+            System.out.println("---Infer InvokeThread---");
+            System.out.println("Iter Depth: " + iterDepth);
+            System.out.println("Seed FolderPath: " + seedFolderPath);
+            System.out.println("Seed FolderName: " + seedFolderName);
+            System.out.println("------");
+        }
     }
 
     // seedFolderPath can be java source file or a folder contains source files
