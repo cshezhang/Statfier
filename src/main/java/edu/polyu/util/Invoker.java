@@ -23,6 +23,7 @@ import org.zeroturnaround.exec.ProcessExecutor;
 
 import static edu.polyu.util.Util.CheckStyleResultFolder;
 import static edu.polyu.util.Util.INFER_MUTATION;
+import static edu.polyu.util.Util.InferResultFolder;
 import static edu.polyu.util.Util.JAVAC_PATH;
 import static edu.polyu.util.Util.PMDResultFolder;
 import static edu.polyu.util.Util.PMD_MUTATION;
@@ -186,7 +187,13 @@ public class Invoker {
         }
         waitThreadPoolEnding();
         List<Infer_Report> reports = new ArrayList<>();
-        List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
+        System.out.println("Infer Result Folder: " + InferResultFolder.getAbsolutePath());
+        List<String> reportPaths = getFilenamesFromFolder(InferResultFolder.getAbsolutePath(), true);
+        if(SINGLE_TESTING) {
+            for(String reportPath : reportPaths) {
+                System.out.println("Infer Report Path: " + reportPath);
+            }
+        }
         for(int i = 0; i < reportPaths.size(); i++) {
             reports.addAll(readInferResultFile(iterDepth, reportPaths.get(i)));
         }
