@@ -40,24 +40,6 @@ import static edu.polyu.util.Util.userdir;
  */
 public class AutomaticTester {
 
-    @Test
-    public void testAST() {
-        String filepath = "C:\\Users\\Rainy\\IdeaProjects\\newSAMutator\\src\\test\\java\\TestBytecode.java";
-        String foldername = "java";
-        ASTWrapper wrapper = new ASTWrapper(filepath, foldername);
-        System.out.println(wrapper);
-    }
-
-    @Test
-    public void moduleTest() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String reportPath = "C:\\Users\\Rainy\\Desktop\\test.json";
-        File reportFile = new File(reportPath);
-        JsonNode rootNode = mapper.readTree(reportFile);
-        System.out.println(rootNode.size());
-        System.out.println(rootNode.toPrettyString());
-    }
-
     public static void main(String[] args) {
         initEnv();
         Schedule schedule = Schedule.getInstance();

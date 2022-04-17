@@ -95,9 +95,7 @@ public class Infer_TransformThread implements Runnable {
                 String srcJavaPath = filepaths.get(i);
                 String filename = Path2Last(srcJavaPath).split(".")[0];
                 String reportFolderPath = InferResultFolder + File.separator + "iter" + depth + "_" + filename;
-//            String[] invokeCmds = {"/bin/bash", "-c",  // Linux
-                String[] invokeCmds = {"cmd.exe", "/c",  // Windows
-                        InferPath + " run -o " + "" + reportFolderPath + " -- javac " + srcJavaPath};
+                String[] invokeCmds = {"/bin/bash", "-c", InferPath + " run -o " + "" + reportFolderPath + " -- javac " + srcJavaPath};
                 invokeCommandsByZT(invokeCmds);
             }
             String resultFilePath = resultFolderPath + File.separator + "result.json";
