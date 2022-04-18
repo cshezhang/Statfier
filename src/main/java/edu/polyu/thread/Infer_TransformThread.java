@@ -16,7 +16,6 @@ import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.*;
 
-
 /**
  * Description: Infer Transformation Thread
  * Author: Vanguard
@@ -42,6 +41,7 @@ public class Infer_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth);
             while (!wrappers.isEmpty()) {
                 ASTWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
@@ -69,7 +69,6 @@ public class Infer_TransformThread implements Runnable {
                 }
             }
             // detect mutants of iter i
-            String resultFolderPath = InferResultFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName;
             String mutantFolderPath = mutantFolder + File.separator + "iter" + depth;
             List<String> filepaths = getFilenamesFromFolder(mutantFolderPath, true);
             List<Infer_Report> reports = new ArrayList<>();
@@ -85,6 +84,7 @@ public class Infer_TransformThread implements Runnable {
                 String resultFilePath = reportFolderPath + File.separator + "report.json";
                 reports.addAll(readInferResultFile(srcJavaPath, resultFilePath));
             }
+            System.out.println("Report Size: " + reports.size());
             for (Infer_Report report : reports) {
                 file2report.put(report.getFilepath(), report);
                 if (!file2row.containsKey(report.getFilepath())) {
@@ -103,10 +103,6 @@ public class Infer_TransformThread implements Runnable {
             List<ASTWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
                 ASTWrapper head = wrappers.pollFirst();
-                // Used for debugging
-//                String file = head.filename;
-//                String content = head.getCode();
-//                int cnt = head.getViolations();
                 if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
                     validWrappers.add(head);
                 }

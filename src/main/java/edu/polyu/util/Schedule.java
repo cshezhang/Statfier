@@ -251,6 +251,7 @@ public class Schedule {
             threadPool.submit(mutationThreads.get(i));
         }
         threadPool.shutdown();
+        System.out.println("Init Transform Thread Finished!");
         try {
             threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
@@ -263,6 +264,7 @@ public class Schedule {
         String seedFolderName = Path2Last(seedFolderPath);
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=" + iterDepth);
         if (INFER_MUTATION) {
+            System.out.println("Begin to Inokve Infer for Init...");
             List<Infer_Report> reports = invokeInfer(iterDepth, seedFolderPath);
             for (Infer_Report report : reports) {
                 file2report.put(report.getFilepath(), report);
@@ -279,9 +281,7 @@ public class Schedule {
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
             }
-            if (SINGLE_TESTING) {
-                System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            }
+            System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
             return;
         }
         if (CHECKSTYLE_MUTATION) {

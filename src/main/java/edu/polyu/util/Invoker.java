@@ -16,7 +16,6 @@ import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
-import org.zeroturnaround.exec.stream.slf4j.Slf4jStream;
 
 import static edu.polyu.util.Util.*;
 
@@ -32,9 +31,6 @@ public class Invoker {
         StringBuilder argStr = new StringBuilder();
         for(String arg : cmdArgs) {
             argStr.append(arg + " ");
-        }
-        if(SINGLE_TESTING) {
-            System.out.println("Invoke Command: " + argStr);
         }
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
