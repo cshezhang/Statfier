@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 
 // test is for recognizing Activity lifecycle methods
-class MyActivity extends Activity {
+class starvationMyActivity extends Activity {
   Binder b;
 
   private void bad() {
