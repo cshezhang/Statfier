@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import edu.polyu.report.Infer_Report;
 import edu.polyu.util.Schedule;
 import edu.polyu.util.TriTuple;
 
@@ -19,15 +20,7 @@ import static edu.polyu.analysis.ASTWrapper.failMutation;
 import static edu.polyu.analysis.ASTWrapper.invalidSeed;
 import static edu.polyu.analysis.ASTWrapper.succMutation;
 import static edu.polyu.analysis.ASTWrapper.validSeed;
-import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
-import static edu.polyu.util.Util.INFER_MUTATION;
-import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.util.Util.compactIssues;
-import static edu.polyu.util.Util.initEnv;
-import static edu.polyu.util.Util.sourceSeedPath;
-import static edu.polyu.util.Util.startTimeStamp;
-import static edu.polyu.util.Util.userdir;
+import static edu.polyu.util.Util.*;
 
 /**
  * Description: Main Process for automatic testing
@@ -113,6 +106,12 @@ public class AutomaticTester {
             FileWriter writer = new FileWriter(resFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             bufferedWriter.write(res.toString());
+            if(INFER_MUTATION) {
+                bufferedWriter.write("Failed Reports:\n");
+                for(String report : failedReport) {
+                    bufferedWriter.write(report + "\n");
+                }
+            }
             bufferedWriter.close();
             writer.close();
         } catch (Exception e) {

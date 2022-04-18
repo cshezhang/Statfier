@@ -171,16 +171,16 @@ public class Util {
         } else { // Linux, Mac OS
             sp = ":";
         }
-        spotBugsJarStr.append("\"." + sp);
+        spotBugsJarStr.append("." + sp);
         for (int i = spotBugsJarList.size() - 1; i >= 1; i--) {
             spotBugsJarStr.append(spotBugsJarList.get(i) + sp);
         }
-        spotBugsJarStr.append(spotBugsJarList.get(0) + "\"");
-        inferJarStr.append("\"." + sp);
+        spotBugsJarStr.append(spotBugsJarList.get(0));
+        inferJarStr.append("." + sp);
         for (int i = inferJarList.size() - 1; i >= 1; i--) {
             inferJarStr.append(inferJarList.get(i) + sp);
         }
-        inferJarStr.append(inferJarList.get(0) + "\"");
+        inferJarStr.append(inferJarList.get(0));
         random.setSeed(RANDOM_SEED5);
         if(SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
@@ -229,12 +229,10 @@ public class Util {
         for(int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath()  + File.separator + "iter" + i);
             iter.mkdir();
-            if(PMD_MUTATION || CHECKSTYLE_MUTATION || SPOTBUGS_MUTATION) {
-                for (int j = 0; j < subSeedIndex; j++) {
-                    String subSeedFolderName = subSeedFolderNameList.get(j);
-                    File subSeedFolder = new File(iter.getAbsolutePath()  + File.separator + subSeedFolderName);
-                    subSeedFolder.mkdir();
-                }
+            for (int j = 0; j < subSeedIndex; j++) {
+                String subSeedFolderName = subSeedFolderNameList.get(j);
+                File subSeedFolder = new File(iter.getAbsolutePath()  + File.separator + subSeedFolderName);
+                subSeedFolder.mkdir();
             }
         }
         if(PMD_MUTATION && !PMDResultFolder.exists()) {
@@ -247,14 +245,14 @@ public class Util {
             }
             if(!SpotBugsResultFolder.exists()) {
                 SpotBugsResultFolder.mkdir();
-                for (int i = 0; i < subSeedIndex; i++) {
-                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderNameList.get(i));
-                    if (reportFolder.exists()) {
-                        System.err.println("Init Error!");
-                        System.exit(-1);
-                    }
-                    reportFolder.mkdir();
-                }
+//                for (int i = 0; i < subSeedIndex; i++) {
+//                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderNameList.get(i));
+//                    if (reportFolder.exists()) {
+//                        System.err.println("Init Error!");
+//                        System.exit(-1);
+//                    }
+//                    reportFolder.mkdir();
+//                }
             }
         }
         if(CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
@@ -620,23 +618,29 @@ public class Util {
         return results;
     }
 
-    public static List<Infer_Report> readInferResultFile(int iterDepth, String reportPath) {
+    public static List<String> failedReport = new ArrayList<>();
+
+    // seedFolderPath has iter depth information
+    public static List<Infer_Report> readInferResultFile(String seedFilepath, String reportPath) {
         List<Infer_Report> results = new ArrayList<>();
         HashMap<String, Infer_Report> name2report = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         File reportFile = new File(reportPath);
+        if(!reportFile.exists()) {
+            failedReport.add(reportPath);
+            return results;
+        }
         try {
             JsonNode rootNode = mapper.readTree(reportFile);
             for(int i = 0; i < rootNode.size(); i++) {
                 JsonNode violationNode = rootNode.get(i);
-                String filepath = mutantFolder.getAbsolutePath() + File.separator + "iter" + iterDepth + File.separator + violationNode.get("file").asText();
                 Infer_Violation infer_violation = new Infer_Violation(violationNode);
-                if(name2report.containsKey(filepath)) {
-                    name2report.get(filepath).addViolation(infer_violation);
+                if(name2report.containsKey(seedFilepath)) {
+                    name2report.get(seedFilepath).addViolation(infer_violation);
                 } else {
-                    Infer_Report infer_report = new Infer_Report(filepath);
+                    Infer_Report infer_report = new Infer_Report(seedFilepath);
                     infer_report.addViolation(infer_violation);
-                    name2report.put(filepath, infer_report);
+                    name2report.put(seedFilepath, infer_report);
                 }
             }
         } catch (JsonProcessingException e) {

@@ -3,15 +3,9 @@ package edu.polyu.thread;
 import java.io.File;
 import java.util.List;
 
+import static edu.polyu.util.Invoker.invokeCommands;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.InferClassFolder;
-import static edu.polyu.util.Util.InferPath;
-import static edu.polyu.util.Util.InferResultFolder;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.inferJarList;
-import static edu.polyu.util.Util.inferJarStr;
+import static edu.polyu.util.Util.*;
 
 /**
  * @Description:
@@ -46,11 +40,14 @@ public class Infer_InvokeThread implements Runnable {
             String srcJavaPath = filepaths.get(i);
             String filename = Path2Last(srcJavaPath);
             String reportFolderPath = InferResultFolder + File.separator + "iter" + iterDepth + "_" + filename;
-            String[] invokeCmds = {"/bin/bash", "-c",
-                    InferPath + " run -o " + "" + reportFolderPath +
-                    " -- javac -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
-                    " -cp " + inferJarStr +
-                    " " + srcJavaPath};
+            String cmd = InferPath + " run -o " + reportFolderPath + " -- " + JAVAC_PATH +
+                    " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
+                    " -cp " + inferJarStr + " " + srcJavaPath;
+            String[] invokeCmds = {"/bin/bash", "-c", "python3 cmd.py " + cmd};
+//            String[] invokeCmds = {"/bin/bash", "-c",
+//                    "\"" + InferPath + " run -o " + reportFolderPath +
+//                    " -- javac -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
+//                    " -cp " + inferJarStr + " " + srcJavaPath + "\""};
             invokeCommandsByZT(invokeCmds);
         }
     }

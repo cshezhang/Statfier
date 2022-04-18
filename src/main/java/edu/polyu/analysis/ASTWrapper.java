@@ -3,31 +3,7 @@ package edu.polyu.analysis;
 import edu.polyu.transform.Transform;
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import org.eclipse.jdt.core.dom.WhileStatement;
+import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.TextEdit;
@@ -109,16 +85,12 @@ public class ASTWrapper {
             e.printStackTrace();
         }
         this.folderPath = targetFile.getParentFile().getAbsolutePath();
-        this.folderName = folderName;
+        this.folderName = folderName; // folderName -> subSeedFolderName
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
         this.parentPath = null;
         this.parentWrapper = null;
         this.parViolations = 0;
-        if (PMD_MUTATION || SPOTBUGS_MUTATION || CHECKSTYLE_MUTATION) {
-            this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
-        } else {
-            this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1);
-        }
+        this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
         this.transNodes = new ArrayList<>();
@@ -130,7 +102,7 @@ public class ASTWrapper {
         this.astRewrite = ASTRewrite.create(ast);
         this.cu.recordModifications();
         this.types = new ArrayList<>();
-        for (ASTNode node : (List<ASTNode>) this.cu.types()) { // Attention: AbstractTypeDeclaration
+        for (ASTNode node : (List<ASTNode>) this.cu.types()) { // Attention: EnumDeclaration and AnnotationTD
             if (node instanceof TypeDeclaration) {
                 this.types.add((TypeDeclaration) node);
             }
@@ -178,11 +150,7 @@ public class ASTWrapper {
         this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
         this.document = new Document(content);
-        if (PMD_MUTATION) {
-            this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
-        } else {
-            this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1);
-        }
+        this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
         this.parentWrapper = parentWrapper;
@@ -198,7 +166,12 @@ public class ASTWrapper {
         this.ast = this.cu.getAST();
         this.astRewrite = ASTRewrite.create(ast);
         this.cu.recordModifications();
-        this.types = this.cu.types();
+        this.types = new ArrayList<>();
+        for(ASTNode node : (List<ASTNode>) this.cu.types()) {
+            if(node instanceof TypeDeclaration) {
+                this.types.add((TypeDeclaration) node);
+            }
+        }
         this.allNodes = new ArrayList<>();
         this.method2statements = new HashMap<>();
         for (TypeDeclaration clazz : this.types) {
@@ -239,7 +212,12 @@ public class ASTWrapper {
         this.ast = cu.getAST();
         this.astRewrite = ASTRewrite.create(this.ast);
         this.cu.recordModifications();
-        this.types = cu.types();
+        this.types = new ArrayList<>();
+        for(ASTNode node : (List<ASTNode>) this.cu.types()) {
+            if(node instanceof TypeDeclaration) {
+                this.types.add((TypeDeclaration) node);
+            }
+        }
         this.allNodes = new ArrayList<>();
         this.method2statements = new HashMap<>();
         for (TypeDeclaration clazz : this.types) {
@@ -674,6 +652,7 @@ public class ASTWrapper {
         }
         if (clazz == null) {
             System.err.println("Severe Error! No Parent Main Class is found in: " + this.filePath);
+            System.out.println("Src Path: " + this.initSeed);
             System.exit(-1);
         }
         // This is used to change names of constructor.

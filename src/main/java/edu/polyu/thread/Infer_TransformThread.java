@@ -14,21 +14,7 @@ import java.util.List;
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.GUIDED_LOCATION;
-import static edu.polyu.util.Util.InferPath;
-import static edu.polyu.util.Util.InferResultFolder;
-import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.RANDOM_LOCATION;
-import static edu.polyu.util.Util.RANDOM_SELECTION;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.TS_SELECTION;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2report;
-import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.mutantFolder;
-import static edu.polyu.util.Util.readInferResultFile;
+import static edu.polyu.util.Util.*;
 
 
 /**
@@ -84,17 +70,21 @@ public class Infer_TransformThread implements Runnable {
             }
             // detect mutants of iter i
             String resultFolderPath = InferResultFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName;
-            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth;
             List<String> filepaths = getFilenamesFromFolder(mutantFolderPath, true);
+            List<Infer_Report> reports = new ArrayList<>();
             for(int i = 0; i < filepaths.size(); i++) {
                 String srcJavaPath = filepaths.get(i);
                 String filename = Path2Last(srcJavaPath);
                 String reportFolderPath = InferResultFolder + File.separator + "iter" + depth + "_" + filename;
-                String[] invokeCmds = {"/bin/bash", "-c", InferPath + " run -o " + "" + reportFolderPath + " -- javac " + srcJavaPath};
+                String cmd = InferPath + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
+                        " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
+                        " -cp " + inferJarStr + " " + srcJavaPath;
+                String[] invokeCmds = {"/bin/bash", "-c", "python3 cmd.py " + cmd};
                 invokeCommandsByZT(invokeCmds);
+                String resultFilePath = reportFolderPath + File.separator + "report.json";
+                reports.addAll(readInferResultFile(srcJavaPath, resultFilePath));
             }
-            String resultFilePath = resultFolderPath + File.separator + "result.json";
-            List<Infer_Report> reports = readInferResultFile(depth, resultFilePath);
             for (Infer_Report report : reports) {
                 file2report.put(report.getFilepath(), report);
                 if (!file2row.containsKey(report.getFilepath())) {

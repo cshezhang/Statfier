@@ -1,10 +1,6 @@
 package edu.polyu.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -20,29 +16,9 @@ import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
+import org.zeroturnaround.exec.stream.slf4j.Slf4jStream;
 
-import static edu.polyu.util.Util.CheckStyleResultFolder;
-import static edu.polyu.util.Util.INFER_MUTATION;
-import static edu.polyu.util.Util.InferResultFolder;
-import static edu.polyu.util.Util.JAVAC_PATH;
-import static edu.polyu.util.Util.PMDResultFolder;
-import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.util.Util.SpotBugsPath;
-import static edu.polyu.util.Util.SpotBugsResultFolder;
-import static edu.polyu.util.Util.THREAD_COUNT;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.getProperty;
-import static edu.polyu.util.Util.inferJarStr;
-import static edu.polyu.util.Util.listAveragePartition;
-import static edu.polyu.util.Util.readCheckStyleResultFile;
-import static edu.polyu.util.Util.readInferResultFile;
-import static edu.polyu.util.Util.readPMDResultFile;
-import static edu.polyu.util.Util.readSpotBugsResultFile;
-import static edu.polyu.util.Util.sep;
-import static edu.polyu.util.Util.spotBugsJarStr;
-import static edu.polyu.util.Util.subSeedFolderNameList;
+import static edu.polyu.util.Util.*;
 
 
 /*
@@ -61,7 +37,8 @@ public class Invoker {
             System.out.println("Invoke Command: " + argStr);
         }
         try {
-            int exitValue = new ProcessExecutor().command(cmdArgs).execute().getExitValue();
+            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
+            int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
             // CheckStyle Return value is the number of bugs.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");
@@ -73,8 +50,10 @@ public class Invoker {
                 System.exit(-1);
             }
             if(INFER_MUTATION && exitValue != 0) {
+                System.err.println("Exit Value: " + exitValue);
                 System.err.println("Execute Infer Error!");
                 System.err.println(argStr);
+                System.err.println("Error: " + new String(errorStream.toByteArray()));
                 System.exit(-1);
             }
         } catch (Exception e) {
@@ -101,16 +80,17 @@ public class Invoker {
             }
             int exitValue = process.waitFor();
             if(exitValue != 4 && exitValue != 0) {
-                System.err.println("Fail to Invoke Commands: " + args);
+                System.err.println("Fail to Invoke Commands1: " + args);
                 System.err.println("Log: " + builder);
+                System.err.println("ExitValue: " + exitValue);
                 System.exit(-1);
             }
             process.getOutputStream().close();
         } catch (IOException e) {
-            System.err.println("Fail to Invoke Commands: " + args);
+            System.err.println("Fail to Invoke Commands2: " + args);
             e.printStackTrace();
         } catch (InterruptedException e) {
-            System.err.println("Fail to Invoke Commands: " + args);
+            System.err.println("Fail to Invoke Commands:3 " + args);
             e.printStackTrace();
         }
     }
@@ -197,14 +177,10 @@ public class Invoker {
         waitThreadPoolEnding();
         List<Infer_Report> reports = new ArrayList<>();
         System.out.println("Infer Result Folder: " + InferResultFolder.getAbsolutePath());
-        List<String> reportPaths = getFilenamesFromFolder(InferResultFolder.getAbsolutePath(), true);
-        if(SINGLE_TESTING) {
-            for(String reportPath : reportPaths) {
-                System.out.println("Infer Report Path: " + reportPath);
-            }
-        }
-        for(int i = 0; i < reportPaths.size(); i++) {
-            reports.addAll(readInferResultFile(iterDepth, reportPaths.get(i)));
+        List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
+        for(String seedPath : seedPaths) {
+            String reportPath = InferResultFolder.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
+            reports.addAll(readInferResultFile(seedPath, reportPath));
         }
         return reports;
     }
