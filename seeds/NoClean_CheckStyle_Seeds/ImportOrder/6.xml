@@ -1,8 +1,0 @@
-
-
-<module name="ImportOrder">
-  <property name="staticGroups" value="org,java"/>
-  <property name="sortStaticImportsAlphabetically" value="true"/>
-  <property name="option" value="top"/>
-</module>
-        

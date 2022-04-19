@@ -1,6 +1,0 @@
-
-
-<module name="MultipleStringLiterals">
-  <property name="ignoreOccurrenceContext" value=""/>
-</module>
-        

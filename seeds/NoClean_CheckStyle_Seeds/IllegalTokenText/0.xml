@@ -1,7 +1,0 @@
-
-
-<module name="IllegalTokenText">
-  <property name="tokens" value="STRING_LITERAL"/>
-  <property name="format" value="a href"/>
-</module>
-        

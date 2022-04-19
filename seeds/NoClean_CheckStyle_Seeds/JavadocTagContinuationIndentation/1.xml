@@ -1,6 +1,0 @@
-
-
-<module name="JavadocTagContinuationIndentation">
-  <property name="offset" value="2"/>
-</module>
-        

@@ -1,7 +1,0 @@
-
-
-<module name="NeedBraces">
-  <property name="tokens" value="LAMBDA"/>
-  <property name="allowSingleLineStatement" value="true"/>
-</module>
-        

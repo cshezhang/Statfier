@@ -1,8 +1,0 @@
-
-
-<module name="IllegalTokenText">
-  <property name="tokens" value="NUM_INT,NUM_LONG"/>
-  <property name="format" value="^0[^lx]"/>
-  <property name="ignoreCase" value="true"/>
-</module>
-        

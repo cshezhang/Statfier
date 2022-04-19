@@ -1,7 +1,0 @@
-
-
-<module name="LeftCurly">
-  <property name="option" value="nl"/>
-  <property name="tokens" value="CLASS_DEF,INTERFACE_DEF"/>
-</module>
-        

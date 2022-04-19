@@ -1,6 +1,0 @@
-
-
-<module name="SingleLineJavadoc">
-  <property name="ignoredTags" value="@inheritDoc, @see"/>
-</module>
-        

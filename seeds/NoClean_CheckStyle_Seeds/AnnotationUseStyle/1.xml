@@ -1,8 +1,0 @@
-
-
-<module name="AnnotationUseStyle">
-  <property name="elementStyle" value="expanded"/>
-  <property name="trailingArrayComma" value="never"/>
-  <property name="closingParens" value="always"/>
-</module>
-        

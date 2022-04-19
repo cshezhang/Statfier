@@ -146,8 +146,9 @@ public class Util {
 
     // tools
     public final static String SpotBugsPath = toolPath  + File.separator + "SpotBugs"  + File.separator + "bin"  + File.separator + "spotbugs";
-//    public final static String InferPath = toolPath  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
-    public final static String InferPath = "infer";
+    public final static String InferPath = "/home/vanguard/bin/Infer/bin/infer";
+//    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
+//    public final static String InferPath = "infer";
     public final static String CheckStylePath = toolPath  + File.separator + "checkstyle.jar";
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath  + File.separator + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath  + File.separator + "Infer_Dependency", true);

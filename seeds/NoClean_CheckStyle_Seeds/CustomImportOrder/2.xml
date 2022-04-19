@@ -1,8 +1,0 @@
-
-
-<module name="CustomImportOrder">
-  <property name="customImportOrderRules"
-    value="STATIC###STANDARD_JAVA_PACKAGE###THIRD_PARTY_PACKAGE"/>
-  <property name="standardPackageRegExp" value="^java\."/>
-</module>
-        

@@ -1,6 +1,0 @@
-
-
-<module name="DeclarationOrder">
-  <property name="ignoreConstructors" value="true"/>
-</module>
-        

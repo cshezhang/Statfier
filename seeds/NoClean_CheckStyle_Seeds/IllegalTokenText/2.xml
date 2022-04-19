@@ -1,7 +1,0 @@
-
-
-<module name="IllegalTokenText">
-    <property name="tokens" value="TEXT_BLOCK_CONTENT"/>
-    <property name="format" value='"'/>
-</module>
-        

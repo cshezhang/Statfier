@@ -1,7 +1,0 @@
-
-
-<module name="ConstantName">
-  <property name="applyToPublic" value="false"/>
-  <property name="applyToProtected" value="false"/>
-</module>
-        

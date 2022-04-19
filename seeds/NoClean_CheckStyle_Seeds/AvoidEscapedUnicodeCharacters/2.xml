@@ -1,6 +1,0 @@
-
-
-<module name="AvoidEscapedUnicodeCharacters">
-  <property name="allowByTailComment" value="true"/>
-</module>
-        

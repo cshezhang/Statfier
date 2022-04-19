@@ -1,8 +1,0 @@
-
-
-A =65
-a =97
-key =107 than nothing
-key.sub =k is 107 and dot is 46
-key.png =value - violation
-        

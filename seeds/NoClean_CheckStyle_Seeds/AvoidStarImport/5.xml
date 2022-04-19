@@ -1,7 +1,0 @@
-
-
-<module name="AvoidStarImport">
-  <property name="allowStaticMemberImports" value="true"/>
-  <property name="excludes" value="java.io,java.net"/>
-</module>
-        

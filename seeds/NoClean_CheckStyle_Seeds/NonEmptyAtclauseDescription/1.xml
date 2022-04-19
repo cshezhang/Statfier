@@ -1,6 +1,0 @@
-
-
-<module name="NonEmptyAtclauseDescription">
-  <property name="javadocTokens" value="PARAM_LITERAL,RETURN_LITERAL"/>
-</module>
-        

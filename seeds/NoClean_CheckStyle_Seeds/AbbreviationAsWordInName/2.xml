@@ -1,9 +1,0 @@
-
-
-<module name="AbbreviationAsWordInName">
-  <property name="tokens" value="VARIABLE_DEF,CLASS_DEF"/>
-  <property name="ignoreStatic" value="false"/>
-  <property name="allowedAbbreviationLength" value="0"/>
-  <property name="allowedAbbreviations" value="XML,URL"/>
-</module>
-        

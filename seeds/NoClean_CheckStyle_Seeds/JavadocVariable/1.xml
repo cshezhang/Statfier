@@ -1,6 +1,0 @@
-
-
-<module name="JavadocVariable">
-  <property name="scope" value="public"/>
-</module>
-        

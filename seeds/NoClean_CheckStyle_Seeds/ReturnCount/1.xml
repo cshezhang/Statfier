@@ -1,6 +1,0 @@
-
-
-<module name="ReturnCount">
-  <property name="maxForVoid" value="0"/>
-</module>
-        

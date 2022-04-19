@@ -1,6 +1,0 @@
-
-
-<module name="HiddenField">
-  <property name="ignoreSetter" value="true"/>
-</module>
-        

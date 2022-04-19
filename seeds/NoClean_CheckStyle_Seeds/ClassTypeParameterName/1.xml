@@ -1,6 +1,0 @@
-
-
-<module name="ClassTypeParameterName">
-  <property name="format" value="^[A-Z]{2,}$"/>
-</module>
-        

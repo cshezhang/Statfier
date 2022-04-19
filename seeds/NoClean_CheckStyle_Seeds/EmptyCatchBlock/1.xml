@@ -1,6 +1,0 @@
-
-
-<module name="EmptyCatchBlock">
-  <property name="exceptionVariableName" value="expected|ignore"/>
-</module>
-        

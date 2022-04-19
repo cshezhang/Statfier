@@ -1,6 +1,0 @@
-
-
-<module name="AvoidStarImport">
-  <property name="allowStaticMemberImports" value="true"/>
-</module>
-        

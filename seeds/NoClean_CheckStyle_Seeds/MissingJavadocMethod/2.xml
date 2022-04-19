@@ -1,7 +1,0 @@
-
-
-<module name="MissingJavadocMethod">
-  <property name="scope" value="private"/>
-  <property name="excludeScope" value="protected"/>
-</module>
-        

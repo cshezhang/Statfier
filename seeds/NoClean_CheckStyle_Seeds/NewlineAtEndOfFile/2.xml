@@ -1,6 +1,0 @@
-
-
-<module name="NewlineAtEndOfFile">
-  <property name="fileExtensions" value="java, xml, py"/>
-</module>
-        

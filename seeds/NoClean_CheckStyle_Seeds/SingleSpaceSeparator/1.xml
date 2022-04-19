@@ -1,6 +1,0 @@
-
-
-<module name="SingleSpaceSeparator">
-  <property name="validateComments" value="true"/>
-</module>
-        

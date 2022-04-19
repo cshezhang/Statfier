@@ -1,7 +1,0 @@
-
-
-<module name="MethodName">
-   <property name="format" value="^[a-zA-Z](_?[a-zA-Z0-9]+)*$"/>
-   <property name="allowClassName" value="true"/>
-</module>
-        

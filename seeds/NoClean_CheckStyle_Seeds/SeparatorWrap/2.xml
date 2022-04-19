@@ -1,7 +1,0 @@
-
-
-<module name="SeparatorWrap">
-  <property name="tokens" value="COMMA"/>
-  <property name="option" value="nl"/>
-</module>
-        

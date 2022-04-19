@@ -1,6 +1,0 @@
-
-
-<module name="FinalParameters">
-  <property name="tokens" value="CTOR_DEF"/>
-</module>
-        

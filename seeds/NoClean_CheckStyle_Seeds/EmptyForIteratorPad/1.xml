@@ -1,6 +1,0 @@
-
-
-<module name="EmptyForIteratorPad">
-  <property name="option" value="space"/>
-</module>
-        

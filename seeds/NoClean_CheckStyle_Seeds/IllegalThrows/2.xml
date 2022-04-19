@@ -1,6 +1,0 @@
-
-
-<module name="IllegalThrows">
-  <property name="ignoredMethodNames" value="func1"/>
-</module>
-        

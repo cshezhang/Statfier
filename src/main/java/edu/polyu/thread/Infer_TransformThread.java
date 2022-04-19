@@ -21,7 +21,7 @@ import static edu.polyu.util.Util.*;
  * Author: Vanguard
  * Date: 2022/2/4 1:23 PM
  */
-public class Infer_TransformThread implements Runnable {
+public class Infer_TransformThread extends Thread {
 
     private int currentDepth;
     private String seedFolderName;
@@ -41,7 +41,7 @@ public class Infer_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth);
+            System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             while (!wrappers.isEmpty()) {
                 ASTWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
@@ -72,6 +72,8 @@ public class Infer_TransformThread implements Runnable {
             String mutantFolderPath = mutantFolder + File.separator + "iter" + depth;
             List<String> filepaths = getFilenamesFromFolder(mutantFolderPath, true);
             List<Infer_Report> reports = new ArrayList<>();
+            System.out.println(this.getName() + "-" + "Begin to Read Reports and File Size: " + filepaths.size());
+            System.out.println("Mutant Folder: " + mutantFolderPath);
             for(int i = 0; i < filepaths.size(); i++) {
                 String srcJavaPath = filepaths.get(i);
                 String filename = Path2Last(srcJavaPath);
@@ -79,6 +81,8 @@ public class Infer_TransformThread implements Runnable {
                 String cmd = InferPath + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
                         " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
                         " -cp " + inferJarStr + " " + srcJavaPath;
+//                String[] invokeCmds = {"/bin/bash", "-c", "./exec_cmd /bin/bash -c " + cmd};
+                System.out.println(this.getName() + "-" + cmd);
                 String[] invokeCmds = {"/bin/bash", "-c", "python3 cmd.py " + cmd};
                 invokeCommandsByZT(invokeCmds);
                 String resultFilePath = reportFolderPath + File.separator + "report.json";
@@ -108,6 +112,7 @@ public class Infer_TransformThread implements Runnable {
                 }
             }
             wrappers.addAll(validWrappers);
+            System.out.println("End Iteration!");
         }
     }
 

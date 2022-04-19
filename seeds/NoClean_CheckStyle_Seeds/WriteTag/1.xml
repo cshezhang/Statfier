@@ -1,6 +1,0 @@
-
-
-<module name="WriteTag">
-  <property name="tag" value="@since"/>
-</module>
-        

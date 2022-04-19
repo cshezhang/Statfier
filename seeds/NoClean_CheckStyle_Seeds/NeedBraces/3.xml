@@ -1,7 +1,0 @@
-
-
-<module name="NeedBraces">
-  <property name="tokens" value="LITERAL_CASE, LITERAL_DEFAULT"/>
-  <property name="allowSingleLineStatement" value="true"/>
-</module>
-        

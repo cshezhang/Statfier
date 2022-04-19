@@ -1,6 +1,0 @@
-
-
-<module name="UnnecessarySemicolonAfterOuterTypeDeclaration">
-  <property name="tokens" value="CLASS_DEF"/>
-</module>
-        

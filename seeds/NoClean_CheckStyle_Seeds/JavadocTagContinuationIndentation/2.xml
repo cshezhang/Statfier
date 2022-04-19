@@ -1,6 +1,0 @@
-
-
-<module name="JavadocTagContinuationIndentation">
-  <property name="violateExecutionOnNonTightHtml" value="true"/>
-</module>
-        

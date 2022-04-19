@@ -1,6 +1,0 @@
-
-
-<module name="ThrowsCount">
-  <property name="ignorePrivateMethods" value="false"/>
-</module>
-        

@@ -1,6 +1,0 @@
-
-
-<module name="JavaNCSS">
-  <property name="methodMaximum" value="40"/>
-</module>
-        

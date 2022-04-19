@@ -1,9 +1,0 @@
-
-
-<module name="IllegalInstantiation">
-  <property name="classes" value="java.lang.Boolean,
-    java.lang.Integer"/>
-  <property name="tokens" value="LITERAL_NEW, PACKAGE_DEF,
-    IMPORT"/>
-</module>
-        

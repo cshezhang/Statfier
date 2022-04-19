@@ -1,6 +1,0 @@
-
-
-<module name="MultipleStringLiterals">
-  <property name="allowedDuplicates" value="2"/>
-</module>
-        

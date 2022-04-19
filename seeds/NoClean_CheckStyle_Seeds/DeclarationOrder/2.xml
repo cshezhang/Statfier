@@ -1,6 +1,0 @@
-
-
-<module name="DeclarationOrder">
-  <property name="ignoreModifiers" value="true"/>
-</module>
-        

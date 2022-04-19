@@ -1,9 +1,0 @@
-
-
-<module name="RegexpSinglelineJava">
-  <property name="format" value="public"/>
-  <property name="minimum" value="2"/>
-  <property name="message" value="public member found"/>
-  <property name="ignoreComments" value="true"/>
-</module>
-        

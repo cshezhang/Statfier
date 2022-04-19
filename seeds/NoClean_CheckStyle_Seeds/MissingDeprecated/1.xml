@@ -1,6 +1,0 @@
-
-
-<module name="MissingDeprecated">
-  <property name="violateExecutionOnNonTightHtml" value="true"/>
-</module>
-        

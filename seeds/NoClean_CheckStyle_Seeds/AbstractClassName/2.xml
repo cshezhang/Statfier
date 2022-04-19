@@ -1,6 +1,0 @@
-
-
-<module name="AbstractClassName">
-  <property name="ignoreName" value="true"/>
-</module>
-        

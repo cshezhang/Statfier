@@ -1,7 +1,0 @@
-
-
-<module name="IllegalIdentifierName">
-    <property name="format" value="(?i)^(?!(record|yield|var
-                    |permits|sealed|open|transitive|_)$).+$"/>
-</module>
-        

@@ -1,8 +1,0 @@
-
-
-<module name="TypeName">
-  <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
-  <property name="applyToProtected" value="false"/>
-  <property name="applyToPrivate" value="false"/>
-</module>
-        

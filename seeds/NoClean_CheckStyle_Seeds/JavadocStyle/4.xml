@@ -1,6 +1,0 @@
-
-
-<module name="JavadocStyle">
-<property name="checkHtml" value="false"/>
-</module>
-        

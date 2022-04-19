@@ -1,6 +1,0 @@
-
-
-<module name="InterfaceTypeParameterName">
-   <property name="format" value="^[a-zA-Z]$"/>
-</module>
-        

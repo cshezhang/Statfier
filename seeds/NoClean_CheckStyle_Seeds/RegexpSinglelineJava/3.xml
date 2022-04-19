@@ -1,7 +1,0 @@
-
-
-<module name="RegexpSinglelineJava">
-  <property name="format" value="\.read(.*)|\.write(.*)"/>
-  <property name="message" value="IO found"/>
-</module>
-        

@@ -1,6 +1,0 @@
-
-
-<module name="HiddenField">
-  <property name="ignoreAbstractMethods" value="true"/>
-</module>
-        

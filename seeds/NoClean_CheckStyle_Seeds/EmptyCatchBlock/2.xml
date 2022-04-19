@@ -1,6 +1,0 @@
-
-
-<module name="EmptyCatchBlock">
-  <property name="commentFormat" value="This is expected"/>
-</module>
-        

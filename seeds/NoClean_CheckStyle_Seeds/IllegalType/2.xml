@@ -1,6 +1,0 @@
-
-
-<module name="IllegalType">
-  <property name="ignoredMethodNames" value="function"/>
-</module>
-        

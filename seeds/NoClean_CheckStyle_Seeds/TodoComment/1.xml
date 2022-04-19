@@ -1,6 +1,0 @@
-
-
-<module name="TodoComment">
-  <property name="format" value="(TODO)|(FIXME)"/>
-</module>
-        

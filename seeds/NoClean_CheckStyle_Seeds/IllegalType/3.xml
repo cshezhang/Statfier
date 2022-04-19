@@ -1,7 +1,0 @@
-
-
-<module name="IllegalType">
-  <property name="validateAbstractClassNames" value="true"/>
-  <property name="illegalAbstractClassNameFormat" value="Gitt"/>
-</module>
-        

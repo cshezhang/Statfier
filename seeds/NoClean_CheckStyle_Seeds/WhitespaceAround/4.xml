@@ -1,6 +1,0 @@
-
-
-<module name="WhitespaceAround">
-  <property name="allowEmptyConstructors" value="true"/>
-</module>
-        

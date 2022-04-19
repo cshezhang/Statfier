@@ -257,6 +257,7 @@ public class Schedule {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("Exec Transform Thread Finished!");
     }
 
     // This function only can invoke static analysis tool and cannot include other parts.

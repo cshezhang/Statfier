@@ -1,7 +1,0 @@
-
-
-<module name="IllegalCatch">
-  <property name="illegalClassNames" value="ArithmeticException,
-              OutOfMemoryError"/>
-</module>
-        

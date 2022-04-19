@@ -1,7 +1,0 @@
-
-
-<module name="JavadocVariable">
-  <property name="scope" value="private"/>
-  <property name="excludeScope" value="protected"/>
-</module>
-        

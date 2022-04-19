@@ -1,8 +1,0 @@
-
-
-<module name="NeedBraces">
-  <property name="allowSingleLineStatement" value="true"/>
-  <property name="tokens"
-         value="LITERAL_IF, LITERAL_WHILE, LITERAL_DO, LITERAL_FOR"/>
-</module>
-        

@@ -1,6 +1,0 @@
-
-
-<module name="SingleLineJavadoc">
-  <property name="violateExecutionOnNonTightHtml" value="true"/>
-</module>
-        

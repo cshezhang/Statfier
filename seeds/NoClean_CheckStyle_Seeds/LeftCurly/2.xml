@@ -1,6 +1,0 @@
-
-
-<module name="LeftCurly">
-  <property name="ignoreEnums" value="false"/>
-</module>
-        

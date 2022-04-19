@@ -1,6 +1,0 @@
-
-
-<module name="MissingJavadocType">
-  <property name="skipAnnotations" value="SpringBootApplication,Configuration"/>
-</module>
-        

@@ -12,7 +12,6 @@ import edu.umd.cs.findbugs.BugCollectionBugReporter;
 import edu.umd.cs.findbugs.SystemProperties;
 import edu.umd.cs.findbugs.internalAnnotations.SlashedClassName;
 import edu.umd.cs.findbugs.test.AnalysisRunner;
-import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcherBuilder;
 
 public abstract class AbstractIntegrationTest {
 

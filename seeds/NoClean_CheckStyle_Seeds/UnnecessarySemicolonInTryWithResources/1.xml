@@ -1,6 +1,0 @@
-
-
-<module name="UnnecessarySemicolonInTryWithResources">
-  <property name="allowWhenNoBraceAfterSemicolon" value="false"/>
-</module>
-        
