@@ -36,7 +36,8 @@ public class Infer_InvokeThread implements Runnable {
                     " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
                     " -cp " + inferJarStr + " " + srcJavaPath + "\"";
 //            System.out.println(cmd);
-            String[] invokeCmds = {"/bin/bash", "-c", "./exec_cmd /bin/bash -c " + cmd};
+//            String[] invokeCmds = {"/bin/bash", "-c", "./exec_cmd /bin/bash -c " + cmd};
+            String[] invokeCmds = {"/bin/bash", "-c", "python3 cmd.py " + cmd};
             File file = new File(reportFolderPath);
             file.mkdir();
 //            String[] invokeCmds = {"/bin/bash", "-c",
