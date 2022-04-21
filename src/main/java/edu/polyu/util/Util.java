@@ -66,6 +66,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Util {
 
     public static Properties properties;
+
     static {
         properties = new Properties();
         File file = new File("./config.properties");
@@ -85,7 +86,7 @@ public class Util {
     public static final boolean TS_SELECTION = Boolean.parseBoolean(getProperty("TS_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-//    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
+    //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static String userdir = getProperty("USERDIR");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
 
@@ -109,7 +110,7 @@ public class Util {
     public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
     public static final String sep = "/|\\\\";
-    
+
     public static final SecureRandom random = new SecureRandom();
     public static final long RANDOM_SEED1 = 1649250511;
     public static final long RANDOM_SEED2 = 815954400;
@@ -120,37 +121,37 @@ public class Util {
 
     // seeds, these variables
     public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
-    public final static String AST_TESTING_PATH = "."  + File.separator + "src"  + File.separator + "test"  + File.separator + "java"  + File.separator + "ASTTestingCases";
-    public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH  + File.separator + "SingleTesting";
-//    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
-    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Seeds";
-    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH  + File.separator + "SpotBugs_Seeds";
-    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH  + File.separator + "SonarQube_Seeds";
-    public final static String INFER_SEED_PATH = BASE_SEED_PATH  + File.separator + "Infer_Seeds";
-    public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH  + File.separator + "CheckStyle_Seeds";
+    public final static String AST_TESTING_PATH = "." + File.separator + "src" + File.separator + "test" + File.separator + "java" + File.separator + "ASTTestingCases";
+    public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
+    //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
+    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Seeds";
+    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Seeds";
+    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Seeds";
+    public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
+    public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
 
     // mutants
-    public final static File mutantFolder = new File(userdir  + File.separator + "mutants");
-    public final static File resultFolder = new File(userdir  + File.separator + "results");
+    public final static File mutantFolder = new File(userdir + File.separator + "mutants");
+    public final static File resultFolder = new File(userdir + File.separator + "results");
 
     // results
 //    public final static File resultFolder = new File(userdir  + File.separator + "results");
-    public final static File PMDResultFolder = new File(userdir  + File.separator + "PMD_Results");
-    public final static File InferResultFolder = new File(userdir  + File.separator + "Infer_Results");
-    public final static File InferClassFolder = new File(userdir  + File.separator + "Infer_Classes");
-    public final static File SpotBugsResultFolder = new File(userdir  + File.separator + "SpotBugs_Results");
-    public final static File SpotBugsClassFolder = new File(userdir  + File.separator + "SpotBugs_Classes");
-    public final static File CheckStyleResultFolder = new File(userdir  + File.separator + "CheckStyle_results");
+    public final static File PMDResultFolder = new File(userdir + File.separator + "PMD_Results");
+    public final static File InferResultFolder = new File(userdir + File.separator + "Infer_Results");
+    public final static File InferClassFolder = new File(userdir + File.separator + "Infer_Classes");
+    public final static File SpotBugsResultFolder = new File(userdir + File.separator + "SpotBugs_Results");
+    public final static File SpotBugsClassFolder = new File(userdir + File.separator + "SpotBugs_Classes");
+    public final static File CheckStyleResultFolder = new File(userdir + File.separator + "CheckStyle_results");
 
     // tools
-    public final static String SpotBugsPath = toolPath  + File.separator + "SpotBugs"  + File.separator + "bin"  + File.separator + "spotbugs";
+    public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
     public final static String InferPath = "/home/vanguard/bin/Infer/bin/infer";
-//    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
+    //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
 //    public final static String InferPath = "infer";
-    public final static String CheckStylePath = toolPath  + File.separator + "checkstyle.jar";
-    public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath  + File.separator + "SpotBugs_Dependency", true);
-    public static List<String> inferJarList = getFilenamesFromFolder(toolPath  + File.separator + "Infer_Dependency", true);
+    public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";
+    public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + File.separator + "SpotBugs_Dependency", true);
+    public static List<String> inferJarList = getFilenamesFromFolder(toolPath + File.separator + "Infer_Dependency", true);
     public static List<String> subSeedFolderNameList;
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
@@ -166,7 +167,7 @@ public class Util {
 
     public static void initEnv() {
         String sp;
-        if(OSUtil.isWindows()) {
+        if (OSUtil.isWindows()) {
             sp = ";";
         } else { // Linux, Mac OS
             sp = ":";
@@ -182,7 +183,7 @@ public class Util {
         }
         inferJarStr.append(inferJarList.get(0));
         random.setSeed(RANDOM_SEED4);
-        if(SINGLE_TESTING) {
+        if (SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {
             if (PMD_MUTATION) {
@@ -197,25 +198,25 @@ public class Util {
             if (CHECKSTYLE_MUTATION) {
                 sourceSeedPath = CHECKSTYLE_SEED_PATH;
             }
-            if(INFER_MUTATION) {
+            if (INFER_MUTATION) {
                 sourceSeedPath = INFER_SEED_PATH;
             }
         }
         try {
             File ud = new File(userdir);
-            if(ud.exists()) {
+            if (ud.exists()) {
                 FileUtils.deleteDirectory(new File(userdir));
             }
             ud.mkdir();
-            if(!ud.exists()) {
+            if (!ud.exists()) {
                 System.err.println("Fail to create userdir!\n");
                 System.exit(-1);
             }
-            if(!resultFolder.mkdir()) {
+            if (!resultFolder.mkdir()) {
                 System.err.println("Fail to create result folder!\n");
                 System.exit(-1);
             }
-            if(!mutantFolder.mkdir()) {
+            if (!mutantFolder.mkdir()) {
                 System.err.println("Fail to create mutant folder!\n");
                 System.exit(-1);
             }
@@ -226,24 +227,24 @@ public class Util {
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         subSeedIndex = subSeedFolderNameList.size();
         // Generate mutant folder from iter1 -> iter8
-        for(int i = 1; i <= 8; i++) {
-            File iter = new File(mutantFolder.getAbsolutePath()  + File.separator + "iter" + i);
+        for (int i = 1; i <= 8; i++) {
+            File iter = new File(mutantFolder.getAbsolutePath() + File.separator + "iter" + i);
             iter.mkdir();
             for (int j = 0; j < subSeedIndex; j++) {
                 String subSeedFolderName = subSeedFolderNameList.get(j);
-                File subSeedFolder = new File(iter.getAbsolutePath()  + File.separator + subSeedFolderName);
+                File subSeedFolder = new File(iter.getAbsolutePath() + File.separator + subSeedFolderName);
                 subSeedFolder.mkdir();
             }
         }
-        if(PMD_MUTATION && !PMDResultFolder.exists()) {
+        if (PMD_MUTATION && !PMDResultFolder.exists()) {
             PMDResultFolder.mkdir();
         }
 
-        if(SPOTBUGS_MUTATION) {
-            if(!SpotBugsClassFolder.exists()) {
+        if (SPOTBUGS_MUTATION) {
+            if (!SpotBugsClassFolder.exists()) {
                 SpotBugsClassFolder.mkdir();
             }
-            if(!SpotBugsResultFolder.exists()) {
+            if (!SpotBugsResultFolder.exists()) {
                 SpotBugsResultFolder.mkdir();
 //                for (int i = 0; i < subSeedIndex; i++) {
 //                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderNameList.get(i));
@@ -255,14 +256,14 @@ public class Util {
 //                }
             }
         }
-        if(CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
+        if (CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
             CheckStyleResultFolder.mkdir();
         }
-        if(INFER_MUTATION) {
-            if(!InferClassFolder.exists()) {
+        if (INFER_MUTATION) {
+            if (!InferClassFolder.exists()) {
                 InferClassFolder.mkdir();
             }
-            if(!InferResultFolder.exists()) {
+            if (!InferResultFolder.exists()) {
                 InferResultFolder.mkdir();
             }
         }
@@ -294,8 +295,8 @@ public class Util {
         StringBuilder signature = new StringBuilder();
         List<ASTNode> parameters = method.parameters();
         signature.append(method.getName().toString());
-        for(ASTNode parameter : parameters) {
-            if(parameter instanceof SingleVariableDeclaration) {
+        for (ASTNode parameter : parameters) {
+            if (parameter instanceof SingleVariableDeclaration) {
                 SingleVariableDeclaration svd = (SingleVariableDeclaration) parameter;
                 signature.append(":" + svd.getType().toString());
             } else {
@@ -320,22 +321,22 @@ public class Util {
         ArrayList<ASTNode> nodes = new ArrayList<>();
         ArrayDeque<ASTNode> que = new ArrayDeque<>();
         que.add(root);
-        while(!que.isEmpty()) {
+        while (!que.isEmpty()) {
             ASTNode head = que.pollFirst();
             List<StructuralPropertyDescriptor> children = (List<StructuralPropertyDescriptor>) head.structuralPropertiesForType();
-            for(StructuralPropertyDescriptor descriptor : children) {
+            for (StructuralPropertyDescriptor descriptor : children) {
                 Object child = head.getStructuralProperty(descriptor);
-                if(child == null) {
+                if (child == null) {
                     continue;
                 }
-                if(child instanceof ASTNode) {
-                    nodes.add((ASTNode)child);
-                    que.addLast((ASTNode)child);
+                if (child instanceof ASTNode) {
+                    nodes.add((ASTNode) child);
+                    que.addLast((ASTNode) child);
                 }
-                if(child instanceof List) {
-                    List<ASTNode> newChildren = (List<ASTNode>)child;
+                if (child instanceof List) {
+                    List<ASTNode> newChildren = (List<ASTNode>) child;
                     nodes.addAll(newChildren);
-                    for(ASTNode node : newChildren) {
+                    for (ASTNode node : newChildren) {
                         que.addLast(node);
                     }
                 }
@@ -345,9 +346,9 @@ public class Util {
     }
 
     public static boolean checkExpressionLiteral(ASTNode astNode) {
-        if(astNode instanceof StringLiteral || astNode instanceof NumberLiteral
-        || astNode instanceof BooleanLiteral || astNode instanceof CharacterLiteral
-        /*|| expression instanceof NullLiteral || expression instanceof TypeLiteral*/) {
+        if (astNode instanceof StringLiteral || astNode instanceof NumberLiteral
+                || astNode instanceof BooleanLiteral || astNode instanceof CharacterLiteral
+            /*|| expression instanceof NullLiteral || expression instanceof TypeLiteral*/) {
             return true;
         }
         return false;
@@ -357,16 +358,16 @@ public class Util {
         ArrayList<Statement> results = new ArrayList<>();
         Statement thenStatement = target.getThenStatement();
         Statement elseStatement = target.getElseStatement();
-        if(thenStatement != null) {
-            if(thenStatement instanceof Block) {
+        if (thenStatement != null) {
+            if (thenStatement instanceof Block) {
                 results.addAll(((Block) thenStatement).statements());
             } else {
                 results.add(thenStatement);
             }
         }
-        if(elseStatement != null) {
-            if(elseStatement instanceof Block) {
-                results.addAll((List<Statement>) ((Block)elseStatement).statements());
+        if (elseStatement != null) {
+            if (elseStatement instanceof Block) {
+                results.addAll((List<Statement>) ((Block) elseStatement).statements());
             } else {
                 results.add(elseStatement);
             }
@@ -382,21 +383,21 @@ public class Util {
         List<Statement> results = new ArrayList<>();
         ArrayDeque<Statement> que = new ArrayDeque<>();
         que.addAll(sourceStatements);
-        while(!que.isEmpty()) {
+        while (!que.isEmpty()) {
             Statement head = que.pollFirst();
-            if(head instanceof IfStatement) {
+            if (head instanceof IfStatement) {
                 que.addAll(getIfSubStatements((IfStatement) head));
                 continue;
             }
-            if(head instanceof TryStatement) {
+            if (head instanceof TryStatement) {
                 que.addAll(((TryStatement) head).getBody().statements());
                 continue;
             }
-            if(LoopStatement.isLoopStatement(head)) {
+            if (LoopStatement.isLoopStatement(head)) {
                 LoopStatement loopStatement = new LoopStatement(head);
                 Statement body = loopStatement.getBody();
-                if(body instanceof Block) {
-                    que.addAll((List<Statement>)((Block) body).statements());
+                if (body instanceof Block) {
+                    que.addAll((List<Statement>) ((Block) body).statements());
                 } else {
                     que.add(body);
                 }
@@ -411,22 +412,22 @@ public class Util {
         List<ASTNode> resNodes = new ArrayList<>();
         ArrayDeque<ASTNode> que = new ArrayDeque<>();
         que.addAll(srcNodes);
-        while(!que.isEmpty()) {
+        while (!que.isEmpty()) {
             ASTNode head = que.pollFirst();
             resNodes.add(head);
-            if(head instanceof IfStatement) {
+            if (head instanceof IfStatement) {
                 que.addAll(getIfSubStatements((IfStatement) head));
                 continue;
             }
-            if(head instanceof TryStatement) {
+            if (head instanceof TryStatement) {
                 que.addAll(((TryStatement) head).getBody().statements());
                 continue;
             }
-            if(LoopStatement.isLoopStatement(head)) {
+            if (LoopStatement.isLoopStatement(head)) {
                 LoopStatement loopStatement = new LoopStatement(head);
                 Statement body = loopStatement.getBody();
-                if(body instanceof Block) {
-                    que.addAll((List<Statement>)((Block) body).statements());
+                if (body instanceof Block) {
+                    que.addAll((List<Statement>) ((Block) body).statements());
                 } else {
                     que.add(body);
                 }
@@ -440,22 +441,22 @@ public class Util {
         List<Statement> results = new ArrayList<>();
         ArrayDeque<Statement> que = new ArrayDeque<>();
         que.addAll(sourceStatements);
-        while(!que.isEmpty()) {
+        while (!que.isEmpty()) {
             Statement head = que.pollFirst();
             results.add(head);
-            if(head instanceof IfStatement) {
+            if (head instanceof IfStatement) {
                 que.addAll(getIfSubStatements((IfStatement) head));
                 continue;
             }
-            if(head instanceof TryStatement) {
+            if (head instanceof TryStatement) {
                 que.addAll(((TryStatement) head).getBody().statements());
                 continue;
             }
-            if(LoopStatement.isLoopStatement(head)) {
+            if (LoopStatement.isLoopStatement(head)) {
                 LoopStatement loopStatement = new LoopStatement(head);
                 Statement body = loopStatement.getBody();
-                if(body instanceof Block) {
-                    que.addAll((List<Statement>)((Block) body).statements());
+                if (body instanceof Block) {
+                    que.addAll((List<Statement>) ((Block) body).statements());
                 } else {
                     que.add(body);
                 }
@@ -472,7 +473,7 @@ public class Util {
         try {
             JsonNode rootNode = mapper.readTree(jsonFile);
             JsonNode reportNodes = rootNode.get("files");
-            for(int i = 0; i < reportNodes.size(); i++) {
+            for (int i = 0; i < reportNodes.size(); i++) {
                 JsonNode reportNode = reportNodes.get(i);
                 JsonNode violationNodes = reportNode.get("violations");
                 count += violationNodes.size();
@@ -493,11 +494,11 @@ public class Util {
         try {
             JsonNode rootNode = mapper.readTree(jsonFile);
             JsonNode reportNodes = rootNode.get("files");
-            for(int i = 0; i < reportNodes.size(); i++) {
+            for (int i = 0; i < reportNodes.size(); i++) {
                 JsonNode reportNode = reportNodes.get(i);
                 PMD_Report newReport = new PMD_Report(reportNode.get("filename").asText());
                 JsonNode violationNodes = reportNode.get("violations");
-                for(int j = 0; j < violationNodes.size(); j++) {
+                for (int j = 0; j < violationNodes.size(); j++) {
                     JsonNode violationNode = violationNodes.get(j);
                     PMD_Violation violation = new PMD_Violation(violationNode);
                     newReport.addViolation(violation);
@@ -513,14 +514,47 @@ public class Util {
         return pmd_reports;
     }
 
+    public static List<String> readFileByLine(String filepath) {
+        List<String> lines = new ArrayList<>();
+        try {
+            FileInputStream fis = new FileInputStream(filepath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            String str;
+            while ((str = br.readLine()) != null) {
+                lines.add(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
+
+    public static boolean writeFileByLine(String outputPath, List<String> lines) {
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(outputPath));
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+            BufferedWriter bw = new BufferedWriter(osw);
+            for (String line : lines) {
+                bw.write(line + "\n");
+            }
+            bw.close();
+            osw.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public static List<SonarQube_Report> readSonarQubeResultFile(String reportPath) {
-        if(SINGLE_TESTING) {
+        if (SINGLE_TESTING) {
             System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
         }
         HashMap<String, SonarQube_Report> name2report = new HashMap<>();
         List<SonarQube_Report> results = new ArrayList<>();
-        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
-                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
+//        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
+//                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
         try {
             Reader reader = new FileReader(reportPath);
             CSVParser format = CSVFormat.EXCEL.withFirstRecordAsHeader()
@@ -537,29 +571,29 @@ public class Util {
             String lineNumber, bugType, component, flows;
             for (CSVRecord record : records) {
                 lineNumber = record.get("line");
-                if(lineNumber.trim().equals("-")) {
+                if (lineNumber.trim().equals("-")) {
                     continue;
                 }
                 bugType = record.get("rule");
                 component = record.get("component");
                 flows = record.get("flows");
                 String file;
-                if(component.contains(".java")) {
+                if (component.contains(".java")) {
                     file = component;
                 } else {
-                    if(flows.contains(".java")) {
+                    if (flows.contains(".java")) {
                         file = flows;
                     } else {
                         continue;
                     }
                 }
                 String filepath = SONARQUBE_SEED_PATH + File.separator + file.substring(file.indexOf(":") + 1);
-                if(!name2report.containsKey(filepath)) {
+                if (!name2report.containsKey(filepath)) {
                     SonarQube_Report report = new SonarQube_Report(filepath);
                     name2report.put(filepath, report);
                 }
                 SonarQube_Report report = name2report.get(filepath);
-                if(lineNumber.contains(".0")) {
+                if (lineNumber.contains(".0")) {
                     lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
                 }
                 try {
@@ -586,34 +620,34 @@ public class Util {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<String> errorInstances = new ArrayList<>();
             String line;
-            while((line = bufferedReader.readLine()) != null) {
-                if(line.contains("[ERROR]")) {
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.contains("[ERROR]")) {
                     errorInstances.add(line);
                 }
             }
             inputStream.close();
             bufferedReader.close();
             String filepath;
-            for(String errorInstance : errorInstances) {
+            for (String errorInstance : errorInstances) {
                 int startIndex = errorInstance.indexOf(' ') + 1, endIndex = -1;
-                for(int i = startIndex + 1; i < errorInstance.length(); i++) {
-                    if(errorInstance.charAt(i) == ' ') {
+                for (int i = startIndex + 1; i < errorInstance.length(); i++) {
+                    if (errorInstance.charAt(i) == ' ') {
                         endIndex = i;
                         break;
                     }
                 }
-                if(endIndex == -1) {
+                if (endIndex == -1) {
                     System.err.println("End Index Error!");
                     System.exit(-1);
                 }
                 String content = errorInstance.substring(startIndex, endIndex);
                 int index1 = content.indexOf(".java") + ".java".length(), index2 = -1;
-                if(content.charAt(index1) != ':') {
+                if (content.charAt(index1) != ':') {
                     System.err.println("Index1 Error!");
                     System.exit(-1);
                 }
-                for(int i = index1 + 1; i < content.length(); i++) {
-                    if(content.charAt(i) == ':') {
+                for (int i = index1 + 1; i < content.length(); i++) {
+                    if (content.charAt(i) == ':') {
                         index2 = i;
                         break;
                     }
@@ -623,7 +657,7 @@ public class Util {
                 int row = 0, col = -1;
                 try {
                     row = Integer.parseInt(content.substring(index1 + 1, index2));
-                    if(index2 < content.length() - 1) {
+                    if (index2 < content.length() - 1) {
                         col = Integer.parseInt(content.substring(index2 + 1, content.length() - 1));
                     }
                 } catch (Exception e) {
@@ -635,7 +669,7 @@ public class Util {
                 index1 = errorInstance.lastIndexOf('[');
                 String bugType = errorInstance.substring(index1 + 1, errorInstance.length() - 1);
                 violation.setBugType(bugType);
-                if(name2report.containsKey(filepath)) {
+                if (name2report.containsKey(filepath)) {
                     name2report.get(filepath).addViolation(violation);
                 } else {
                     CheckStyle_Report newReport = new CheckStyle_Report(filepath);
@@ -658,16 +692,16 @@ public class Util {
         HashMap<String, Infer_Report> name2report = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         File reportFile = new File(reportPath);
-        if(!reportFile.exists()) {
+        if (!reportFile.exists()) {
             failedReport.add(reportPath);
             return results;
         }
         try {
             JsonNode rootNode = mapper.readTree(reportFile);
-            for(int i = 0; i < rootNode.size(); i++) {
+            for (int i = 0; i < rootNode.size(); i++) {
                 JsonNode violationNode = rootNode.get(i);
                 Infer_Violation infer_violation = new Infer_Violation(violationNode);
-                if(name2report.containsKey(seedFilepath)) {
+                if (name2report.containsKey(seedFilepath)) {
                     name2report.get(seedFilepath).addViolation(infer_violation);
                 } else {
                     Infer_Report infer_report = new Infer_Report(seedFilepath);
@@ -685,7 +719,7 @@ public class Util {
     }
 
     public static List<SpotBugs_Report> readSpotBugsResultFile(String seedFolderPath, String reportPath) {
-        if(SINGLE_TESTING) {
+        if (SINGLE_TESTING) {
             System.out.println("SpotBugs Detection Resutl FileName: " + reportPath);
         }
         String[] tokens = reportPath.split(sep);
@@ -697,12 +731,12 @@ public class Util {
             Document report = saxReader.read(new File(reportPath));
             Element root = report.getRootElement();
             List<Element> bugInstances = root.elements("BugInstance");
-            for(Element bugInstance : bugInstances) {
+            for (Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
-                for(Element sourceLine : sourceLines) {
+                for (Element sourceLine : sourceLines) {
                     SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath + File.separator + seedFolderName, sourceLine, bugInstance.attribute("type").getText());
                     String filepath = violation.getFilepath();
-                    if(name2report.containsKey(filepath)) {
+                    if (name2report.containsKey(filepath)) {
                         name2report.get(filepath).addViolation(violation);
                     } else {
                         SpotBugs_Report spotBugs_report = new SpotBugs_Report(filepath);
@@ -722,7 +756,7 @@ public class Util {
     public static String Path2Last(String path) {
         String[] tokens = path.split(sep);
         String target = tokens[tokens.length - 1];
-        if(target.contains(".")) {
+        if (target.contains(".")) {
             return target.substring(0, target.indexOf('.'));
         } else {
             return target;
@@ -734,13 +768,13 @@ public class Util {
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
-        if(files == null) {
+        if (files == null) {
             System.err.println("GetDirectFile Cannot find: " + path);
         }
-        for(File file : files) {
+        for (File file : files) {
             fileList.add(file.getAbsolutePath());
         }
-        if(getAbsolutePath) {
+        if (getAbsolutePath) {
             return fileList;
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
@@ -757,7 +791,7 @@ public class Util {
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);
         File[] files = dir.listFiles();
-        if(files == null) {
+        if (files == null) {
             System.err.println("GetFileName cannot find: " + path);
         }
         for (File file : files) {
@@ -767,7 +801,7 @@ public class Util {
                 fileList.add(file.getAbsolutePath());
             }
         }
-        if(getAbsolutePath) {
+        if (getAbsolutePath) {
             return fileList;
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
@@ -780,27 +814,27 @@ public class Util {
     }
 
     public static ASTNode getFirstBrotherOfStatement(ASTNode statement) {
-        if(!(statement instanceof Statement)) {
+        if (!(statement instanceof Statement)) {
             return null;
         }
         ASTNode parent = statement.getParent();
         ASTNode currentStatement = statement;
-        while(!(parent instanceof Block)) {
+        while (!(parent instanceof Block)) {
             parent = parent.getParent();
             currentStatement = currentStatement.getParent();
-            if(parent == null || parent.equals(parent.getParent())) {
+            if (parent == null || parent.equals(parent.getParent())) {
                 System.err.println("Error in Finding Brother Statement!");
                 System.exit(-1);
             }
         }
-        if(!(currentStatement instanceof Statement)) {
+        if (!(currentStatement instanceof Statement)) {
             System.err.println("Error: Current Statement cannot be casted to Statement!");
         }
         return (Statement) currentStatement;
     }
 
     public static Block getDirectBlockOfStatement(ASTNode statement) {
-        if(statement instanceof Statement) {
+        if (statement instanceof Statement) {
             ASTNode parent = statement.getParent();
             while (!(parent instanceof Block)) {
                 parent = parent.getParent();
@@ -816,7 +850,7 @@ public class Util {
     }
 
     public static MethodDeclaration getDirectMethodOfStatement(ASTNode node) {
-        if(node instanceof Statement) {
+        if (node instanceof Statement) {
             ASTNode parent = node.getParent();
             while (!(parent instanceof MethodDeclaration)) {
                 parent = parent.getParent();
@@ -826,7 +860,7 @@ public class Util {
             }
             return (MethodDeclaration) parent;
         } else {
-            if(node instanceof MethodDeclaration) {
+            if (node instanceof MethodDeclaration) {
                 return (MethodDeclaration) node;
             } else {
                 return null;
@@ -836,9 +870,9 @@ public class Util {
 
     public static TypeDeclaration getClassOfStatement(ASTNode statement) {
         ASTNode parent = statement.getParent();
-        while(parent != null && !(parent instanceof TypeDeclaration)) {
+        while (parent != null && !(parent instanceof TypeDeclaration)) {
             parent = parent.getParent();
-            if(parent == null || parent.equals(parent.getParent())) {
+            if (parent == null || parent.equals(parent.getParent())) {
                 System.err.println("Error in Finding Type!");
                 System.exit(-1);
             }
@@ -847,7 +881,7 @@ public class Util {
     }
 
     public static String getProperty(String name) {
-        if(properties.containsKey(name)) {
+        if (properties.containsKey(name)) {
             return properties.getProperty(name);
         } else {
             System.err.println(name + " is not existed!");
@@ -859,41 +893,41 @@ public class Util {
     public static List<ASTWrapper> randomMutantSampling(List<ASTWrapper> wrappers) {
         HashSet<Integer> selectedIndex = new HashSet<>();
         List<ASTWrapper> filteredWrappers = new ArrayList<>();
-        int targetSize = (int)(wrappers.size() * 0.1 + 0.5);
-        while(selectedIndex.size() < targetSize) {
-            for(int i = 0; i < wrappers.size(); i++) {
-                if(Math.random() < 0.5) {
+        int targetSize = (int) (wrappers.size() * 0.1 + 0.5);
+        while (selectedIndex.size() < targetSize) {
+            for (int i = 0; i < wrappers.size(); i++) {
+                if (Math.random() < 0.5) {
                     continue;
                 }
-                if(selectedIndex.contains(i)) {
+                if (selectedIndex.contains(i)) {
                     continue;
                 } else {
                     selectedIndex.add(i);
                 }
             }
         }
-        for(Integer index : selectedIndex) {
+        for (Integer index : selectedIndex) {
             filteredWrappers.add(wrappers.get(index));
         }
         return filteredWrappers;
     }
 
     public static Type checkLiteralType(AST ast, Expression literalExpression) {
-        if(literalExpression instanceof NumberLiteral) {
+        if (literalExpression instanceof NumberLiteral) {
             String token = ((NumberLiteral) literalExpression).getToken();
-            if(token.contains(".")) {
+            if (token.contains(".")) {
                 return ast.newPrimitiveType(PrimitiveType.DOUBLE);
             } else {
                 return ast.newPrimitiveType(PrimitiveType.INT);
             }
         }
-        if(literalExpression instanceof StringLiteral) {
+        if (literalExpression instanceof StringLiteral) {
             return ast.newSimpleType(ast.newSimpleName("String"));
         }
-        if(literalExpression instanceof CharacterLiteral) {
+        if (literalExpression instanceof CharacterLiteral) {
             return ast.newPrimitiveType(PrimitiveType.CHAR);
         }
-        if(literalExpression instanceof BooleanLiteral) {
+        if (literalExpression instanceof BooleanLiteral) {
             return ast.newPrimitiveType(PrimitiveType.BOOLEAN);
         }
         return ast.newSimpleType(ast.newSimpleName("Object"));
