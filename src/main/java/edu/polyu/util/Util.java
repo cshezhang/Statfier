@@ -17,6 +17,9 @@ import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -41,12 +44,8 @@ import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -182,7 +181,7 @@ public class Util {
             inferJarStr.append(inferJarList.get(i) + sp);
         }
         inferJarStr.append(inferJarList.get(0));
-        random.setSeed(RANDOM_SEED5);
+        random.setSeed(RANDOM_SEED4);
         if(SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {
@@ -514,36 +513,68 @@ public class Util {
         return pmd_reports;
     }
 
-    // To do
     public static List<SonarQube_Report> readSonarQubeResultFile(String reportPath) {
         if(SINGLE_TESTING) {
             System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
         }
         HashMap<String, SonarQube_Report> name2report = new HashMap<>();
         List<SonarQube_Report> results = new ArrayList<>();
-        SAXReader saxReader = new SAXReader();
+        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
+                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
         try {
-            Document report = saxReader.read(new File(reportPath));
-            Element root = report.getRootElement();
-            Element fileInstance = root.element("file");
-            String filename = fileInstance.getText();
-            List<Element> errorInstances = root.elements("error");
-            for(Element errorInstance : errorInstances) {
-                List<Element> subElements = errorInstance.elements();
-                for(Element subElement : subElements) {
-                    SonarQube_Violation violation = new SonarQube_Violation("", 0);
-                    if(name2report.containsKey(filename)) {
-                        name2report.get(filename).addViolation(violation);
+            Reader reader = new FileReader(reportPath);
+            CSVParser format = CSVFormat.EXCEL.withFirstRecordAsHeader()
+                    .withIgnoreHeaderCase()
+                    .withTrim()
+                    .parse(reader);
+            List<CSVRecord> records = format.getRecords();
+//            CSVFormat format = CSVFormat.EXCEL.withHeader(FILE_HEADER).withSkipHeaderRecord(true)
+//                    .withIgnoreEmptyLines(true)
+//                    .withTrim()
+//                    .withDelimiter('\t');
+//            Reader in = new FileReader(reportPath);
+//            Iterable<CSVRecord> records = format.parse(in);
+            String lineNumber, bugType, component, flows;
+            for (CSVRecord record : records) {
+                lineNumber = record.get("line");
+                if(lineNumber.trim().equals("-")) {
+                    continue;
+                }
+                bugType = record.get("rule");
+                component = record.get("component");
+                flows = record.get("flows");
+                String file;
+                if(component.contains(".java")) {
+                    file = component;
+                } else {
+                    if(flows.contains(".java")) {
+                        file = flows;
                     } else {
-                        SonarQube_Report sonarQube_report = new SonarQube_Report(filename);
-                        sonarQube_report.addViolation(violation);
-                        name2report.put(filename, sonarQube_report);
+                        continue;
                     }
                 }
+                String filepath = SONARQUBE_SEED_PATH + File.separator + file.substring(file.indexOf(":") + 1);
+                if(!name2report.containsKey(filepath)) {
+                    SonarQube_Report report = new SonarQube_Report(filepath);
+                    name2report.put(filepath, report);
+                }
+                SonarQube_Report report = name2report.get(filepath);
+                if(lineNumber.contains(".0")) {
+                    lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
+                }
+                try {
+                    SonarQube_Violation violation = new SonarQube_Violation(bugType, Integer.parseInt(lineNumber));
+                    report.addViolation(violation);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (DocumentException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        results.addAll(name2report.values());
         return results;
     }
 
@@ -649,9 +680,7 @@ public class Util {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for(Infer_Report report : name2report.values()) {
-            results.add(report);
-        }
+        results.addAll(name2report.values());
         return results;
     }
 
@@ -685,9 +714,7 @@ public class Util {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        for(SpotBugs_Report report : name2report.values()) {
-            results.add(report);
-        }
+        results.addAll(name2report.values());
         return results;
     }
 

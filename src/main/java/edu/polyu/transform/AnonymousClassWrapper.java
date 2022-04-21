@@ -41,20 +41,20 @@ public class AnonymousClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
-        if(oldMethod.isConstructor()) {
-            return false;
-        }
-        for(Object modifier : oldMethod.modifiers()) {
-            if(modifier instanceof Modifier) {
-                if(((Modifier) modifier).getKeyword().toString().equals("static")) {
-                    return false;
-                }
-            }
-        }
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
         instanceCreation.setType(ast.newSimpleType(ast.newSimpleName("Object")));
         if(oldMethod != null) {
+            if(oldMethod.isConstructor()) {
+                return false;
+            }
+            for(Object modifier : oldMethod.modifiers()) {
+                if(modifier instanceof Modifier) {
+                    if(((Modifier) modifier).getKeyword().toString().equals("static")) {
+                        return false;
+                    }
+                }
+            }
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
             anonymousClassDeclaration.bodyDeclarations().add(newMethod);
             instanceCreation.setAnonymousClassDeclaration(anonymousClassDeclaration);

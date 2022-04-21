@@ -23,7 +23,8 @@ public class NestedClassWrapper extends Transform {
 
     private static NestedClassWrapper nestedClassWrapper = new NestedClassWrapper();
 
-    private NestedClassWrapper() {}
+    private NestedClassWrapper() {
+    }
 
     public static NestedClassWrapper getInstance() {
         return nestedClassWrapper;
@@ -36,13 +37,13 @@ public class NestedClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
-        if(oldMethod.isConstructor()) {
-            return false;
-        }
-        if(oldMethod != null) {
-            for(Object modifier : oldMethod.modifiers()) {
-                if(modifier instanceof Modifier) {
-                    if(((Modifier) modifier).getKeyword().toString().equals("static")) {
+        if (oldMethod != null) {
+            if (oldMethod.isConstructor()) {
+                return false;
+            }
+            for (Object modifier : oldMethod.modifiers()) {
+                if (modifier instanceof Modifier) {
+                    if (((Modifier) modifier).getKeyword().toString().equals("static")) {
                         return false;
                     }
                 }
@@ -54,7 +55,7 @@ public class NestedClassWrapper extends Transform {
             astRewrite.replace(oldMethod, nestedClass, null);
             return true;
         } else {
-            if(oldStatement instanceof FieldDeclaration) {
+            if (oldStatement instanceof FieldDeclaration) {
                 TypeDeclaration nestedClass = ast.newTypeDeclaration();
                 nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
                 FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldStatement);
@@ -70,38 +71,38 @@ public class NestedClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(node instanceof MethodDeclaration) {
+        if (node instanceof MethodDeclaration) {
             nodes.add(node);
             return nodes;
         }
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
-        if(method == null) {
+        if (method == null) {
             nodes.add(node);
             return nodes;
         }
         boolean isOverride = false;
-        for(ASTNode modifier : (List<ASTNode>) method.modifiers()) {
-            if(modifier instanceof MarkerAnnotation) {
+        for (ASTNode modifier : (List<ASTNode>) method.modifiers()) {
+            if (modifier instanceof MarkerAnnotation) {
                 String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
-                if(name.contains("Override")) {
+                if (name.contains("Override")) {
                     isOverride = true;
                     break;
                 }
             }
         }
-        if(isOverride) {
-            if(clazz.superInterfaceTypes().size() > 0) {
+        if (isOverride) {
+            if (clazz.superInterfaceTypes().size() > 0) {
                 return nodes;
             }
             Type superClazzType = clazz.getSuperclassType();
-            if(superClazzType == null) {
+            if (superClazzType == null) {
                 nodes.add(node);
                 return nodes;
             }
             if (superClazzType instanceof SimpleType) {
                 String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-                if(name.contains("Object")) {
+                if (name.contains("Object")) {
                     nodes.add(node);
                     return nodes;
                 }

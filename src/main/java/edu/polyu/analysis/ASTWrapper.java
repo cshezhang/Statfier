@@ -74,6 +74,8 @@ public class ASTWrapper {
     private HashMap<String, List<ASTNode>> method2statements;
     private List<ASTNode> candidateNodes;
 
+    public static HashMap<String, String> seed2mutant = new HashMap<>();
+
     public ASTWrapper(String filePath, String folderName) {
         this.depth = 0;
         this.filePath = filePath;
@@ -143,10 +145,11 @@ public class ASTWrapper {
     }
 
     // Other cases need invoke this constructor, filename is defined in mutate function
-    public ASTWrapper(String filename, String filePath, String content, ASTWrapper parentWrapper) {
+    public ASTWrapper(String filename, String filepath, String content, ASTWrapper parentWrapper) {
         this.depth = parentWrapper.depth + 1;
-        this.filePath = filePath;
+        this.filePath = filepath;
         this.initSeed = parentWrapper.initSeed;
+        seed2mutant.put(initSeed, filepath);
         this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
         this.document = new Document(content);
@@ -167,8 +170,8 @@ public class ASTWrapper {
         this.astRewrite = ASTRewrite.create(ast);
         this.cu.recordModifications();
         this.types = new ArrayList<>();
-        for(ASTNode node : (List<ASTNode>) this.cu.types()) {
-            if(node instanceof TypeDeclaration) {
+        for (ASTNode node : (List<ASTNode>) this.cu.types()) {
+            if (node instanceof TypeDeclaration) {
                 this.types.add((TypeDeclaration) node);
             }
         }
@@ -213,8 +216,8 @@ public class ASTWrapper {
         this.astRewrite = ASTRewrite.create(this.ast);
         this.cu.recordModifications();
         this.types = new ArrayList<>();
-        for(ASTNode node : (List<ASTNode>) this.cu.types()) {
-            if(node instanceof TypeDeclaration) {
+        for (ASTNode node : (List<ASTNode>) this.cu.types()) {
+            if (node instanceof TypeDeclaration) {
                 this.types.add((TypeDeclaration) node);
             }
         }
@@ -444,8 +447,8 @@ public class ASTWrapper {
                     if (source_bugs.size() > mutant_bugs.size()) {
                         potentialFNs.add(entry);
                     } else {
-                        if(this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
-                            if(source_bugs.size() + 1 < mutant_bugs.size()) {
+                        if (this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
+                            if (source_bugs.size() + 1 < mutant_bugs.size()) {
                                 potentialFPs.add(entry);
                             }
                         } else {
@@ -513,8 +516,8 @@ public class ASTWrapper {
                 validSeed.addAndGet(1);
             }
         }
-        while(true) {
-            if(++randomCount > 1) {
+        while (true) {
+            if (++randomCount > 1) {
                 break;
             }
             ASTNode candidateNode = this.candidateNodes.get(random.nextInt(this.candidateNodes.size()));
@@ -582,7 +585,7 @@ public class ASTWrapper {
             for (ASTNode candidateNode : candidateNodes) {
                 for (Transform transform : Transform.getTransforms()) {
                     List<ASTNode> targetNodes = transform.check(this, candidateNode);
-                    for(ASTNode targetNode : targetNodes) {
+                    for (ASTNode targetNode : targetNodes) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                         String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
                         String content = this.document.get();
@@ -599,6 +602,7 @@ public class ASTWrapper {
                         int oldColNumber2 = this.cu.getColumnNumber(candidateNode.getStartPosition());
                         ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldRowNumber2, oldColNumber2);
                         if (newSrcNode == null) {
+                            newMutant.searchNodeByPosition(candidateNode, oldRowNumber2, oldColNumber2);
                             System.err.println("Old and new ASTWrapper are not matched!");
                             System.exit(-1);
                         }
@@ -614,7 +618,7 @@ public class ASTWrapper {
                                 newMutant.removePackageDefinition();
                             }
                             newMutant.rewriteJavaCode();
-                            if(newMutant.writeToJavaFile()) {
+                            if (newMutant.writeToJavaFile()) {
                                 newWrappers.add(newMutant);
                             }
                         } else {
@@ -685,54 +689,22 @@ public class ASTWrapper {
             ASTNode newStatement = this.allNodes.get(i);
             int newLineNumber = this.cu.getLineNumber(newStatement.getStartPosition());
             int newColNumber = this.cu.getColumnNumber(newStatement.getStartPosition());
-            if(newLineNumber == oldRowNumber && newColNumber == oldColNumber) {
+            if (newLineNumber == oldRowNumber && newColNumber == oldColNumber) {
                 if (compareNode(newStatement, oldNode)) {
                     return newStatement;
                 }
             }
         }
-        for(int i = 0; i < this.allNodes.size(); i++) {  // 2: Fine-grained ASTNode-level search
+        for (int i = 0; i < this.allNodes.size(); i++) {  // 2: Fine-grained ASTNode-level search
             ASTNode newStatement = this.allNodes.get(i);
             List<ASTNode> newNodes = getChildrenNodes(newStatement);
-            for(ASTNode newNode : newNodes) {
-                if(compareNode(newNode, oldNode)) {
+            for (ASTNode newNode : newNodes) {
+                if (compareNode(newNode, oldNode)) {
                     int newRowNumber = this.cu.getLineNumber(newNode.getStartPosition());
                     int newColNumber = this.cu.getColumnNumber(newNode.getStartPosition());
-                    if(newRowNumber == oldRowNumber && newColNumber == oldColNumber) {
+                    if (newRowNumber == oldRowNumber && newColNumber == oldColNumber) {
                         return newNode;
                     }
-                }
-            }
-        }
-        return null;
-    }
-
-    /*
-    Search oldStatement (Source) in new ASTWrapper
-     */
-    public ASTNode searchNode(ASTNode oldNode) {
-        if (oldNode == null) {
-            System.err.println("Statement to be searched is NULL!");
-            System.exit(-1);
-        }
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(oldNode);
-        if (oldMethod != null) {
-            TypeDeclaration oldClazz = (TypeDeclaration) oldMethod.getParent();
-            String key = oldClazz.getName().toString() + ":" + createMethodSignature(oldMethod);
-            if (this.method2statements.containsKey(key)) {
-                List<ASTNode> newNodes = this.method2statements.get(key);
-                for (int i = 0; i < newNodes.size(); i++) {
-                    ASTNode newNode = newNodes.get(i);
-                    if (compareNode(newNode, oldNode)) {
-                        return newNode;
-                    }
-                }
-            }
-        } else {
-            for (int i = 0; i < this.allNodes.size(); i++) {
-                ASTNode newNode = allNodes.get(i);
-                if (compareNode(oldNode, newNode)) {
-                    return newNode;
                 }
             }
         }
@@ -760,6 +732,27 @@ public class ASTWrapper {
         }
         if (node1 instanceof TryStatement) {
             return matcher.match((TryStatement) node1, node2);
+        }
+        if (node1 instanceof EnhancedForStatement) {
+            return matcher.match((EnhancedForStatement) node1, node2);
+        }
+        if (node1 instanceof TypeDeclarationStatement) {
+            return matcher.match((TypeDeclarationStatement) node1, node2);
+        }
+        if (node1 instanceof BreakStatement) {
+            return matcher.match((BreakStatement) node1, node2);
+        }
+        if (node1 instanceof EmptyStatement) {
+            return matcher.match((EmptyStatement) node1, node2);
+        }
+        if (node1 instanceof ThrowStatement) {
+            return matcher.match((ThrowStatement) node1, node2);
+        }
+        if (node1 instanceof SwitchStatement) {
+            return matcher.match((SwitchStatement) node1, node2);
+        }
+        if (node1 instanceof Block) {
+            return matcher.match((Block) node1, node2);
         }
         return false;
     }

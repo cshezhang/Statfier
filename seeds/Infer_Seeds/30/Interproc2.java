@@ -1,6 +1,6 @@
 
 
-class Interproc {
+class Interproc2 {
   synchronized void interproc1Bad(InterprocA a) {
     interproc2(a);
   }

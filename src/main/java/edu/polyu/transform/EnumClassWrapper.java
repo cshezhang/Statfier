@@ -54,19 +54,6 @@ public class EnumClassWrapper extends Transform {
             }
         }
         MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
-        if(oldMethod.isConstructor()) {
-            return false;
-        }
-        for(Statement statement : (List<Statement>)oldMethod.getBody().statements()) {
-            List<ASTNode> nodes = getChildrenNodes(statement);
-            for(ASTNode node : nodes) {
-                if(node instanceof SimpleName) {
-                    if(!staticFieldNames.contains(((SimpleName) node).getFullyQualifiedName())) {
-                        return false;
-                    }
-                }
-            }
-        }
         EnumConstantDeclaration enumConstant = ast.newEnumConstantDeclaration();
         enumConstant.setName(ast.newSimpleName("RED"));
         EnumDeclaration enumClass = ast.newEnumDeclaration();
@@ -74,6 +61,21 @@ public class EnumClassWrapper extends Transform {
         enumClass.enumConstants().add(enumConstant);
         ListRewrite listRewrite = astRewrite.getListRewrite(enumClass, enumClass.getBodyDeclarationsProperty());
         if(oldMethod != null) {
+            if(oldMethod.isConstructor()) {
+                return false;
+            }
+            if(oldMethod.getBody() != null) {
+                for (Statement statement : (List<Statement>) oldMethod.getBody().statements()) {
+                    List<ASTNode> nodes = getChildrenNodes(statement);
+                    for (ASTNode node : nodes) {
+                        if (node instanceof SimpleName) {
+                            if (!staticFieldNames.contains(((SimpleName) node).getFullyQualifiedName())) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
             // Here, we think oldNote is located in a method
             List<VariableDeclarationStatement> validVDStatemnets = new ArrayList<>();
             for (ASTNode node : (List<ASTNode>) clazz.bodyDeclarations()) {

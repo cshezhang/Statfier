@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static edu.polyu.analysis.ASTWrapper.failMutation;
-import static edu.polyu.analysis.ASTWrapper.invalidSeed;
-import static edu.polyu.analysis.ASTWrapper.succMutation;
-import static edu.polyu.analysis.ASTWrapper.validSeed;
+import static edu.polyu.analysis.ASTWrapper.*;
 import static edu.polyu.util.Util.*;
 
 /**
@@ -44,6 +41,9 @@ public class AutomaticTester {
             }
             if (INFER_MUTATION) {
                 schedule.executeInferMutation(sourceSeedPath);
+            }
+            if (SONARQUBE_MUTATION) {
+                schedule.executeSonarQubeMutation(sourceSeedPath);
             }
             int rules = compactIssues.keySet().size();
             int seqCount = 0;
@@ -92,6 +92,10 @@ public class AutomaticTester {
             res.append("Valid Seed Size: " + validSeed + "\n");
             res.append("Succ Transform: " + succMutation + "\n");
             res.append("Fail Transform: " + failMutation + "\n");
+            res.append("Seed2Mutant:\n");
+            for(Map.Entry<String, String> entry : seed2mutant.entrySet()) {
+                res.append(entry.getKey() + "->" + entry.getValue() + "\n");
+            }
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             res.append(String.format(
                     "Overall Execution Time is: " + String.format("%d min, %d sec",

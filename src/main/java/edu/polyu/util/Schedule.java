@@ -4,22 +4,7 @@ import static edu.polyu.util.Invoker.invokeCheckStyle;
 import static edu.polyu.util.Invoker.invokeInfer;
 import static edu.polyu.util.Invoker.invokePMD;
 import static edu.polyu.util.Invoker.invokeSpotBugs;
-import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
-import static edu.polyu.util.Util.INFER_MUTATION;
-import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.util.Util.THREAD_COUNT;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2report;
-import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.getProperty;
-import static edu.polyu.util.Util.listAveragePartition;
-import static edu.polyu.util.Util.sep;
-import static edu.polyu.util.Util.userdir;
+import static edu.polyu.util.Util.*;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -33,18 +18,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import edu.polyu.analysis.ASTWrapper;
-import edu.polyu.report.CheckStyle_Report;
-import edu.polyu.report.CheckStyle_Violation;
-import edu.polyu.report.Infer_Report;
-import edu.polyu.report.Infer_Violation;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.PMD_Violation;
-import edu.polyu.report.SpotBugs_Report;
-import edu.polyu.report.SpotBugs_Violation;
-import edu.polyu.thread.CheckStyle_TransformThread;
-import edu.polyu.thread.Infer_TransformThread;
-import edu.polyu.thread.PMD_TransformThread;
-import edu.polyu.thread.SpotBugs_TransformThread;
+import edu.polyu.report.*;
+import edu.polyu.thread.*;
 
 /**
  * Description: This file is the main class for our framework
@@ -208,6 +183,39 @@ public class Schedule {
         }
     }
 
+    public void executeSonarQubeMutation(String seedFolderPath) {
+        locateMutationCode(0, seedFolderPath);
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            }
+        }
+        List<ASTWrapper> initWrappers = new ArrayList<>();
+        for(String filepath : file2report.keySet()) {
+            String[] tokens = filepath.split(sep);
+            String foldername = tokens[tokens.length - 2];
+            ASTWrapper wrapper = new ASTWrapper(filepath, foldername);
+            initWrappers.add(wrapper);
+        }
+        System.out.println("All Initial Wrapper Size: " + initWrappers.size());
+        List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+        for(int i = 0; i < lists.size(); i++) {
+            SonarQube_TransformThread thread = new SonarQube_TransformThread(lists.get(i));
+            threadPool.submit(thread);
+        }
+        threadPool.shutdown();
+        System.out.println("Init Transform Thread Finished!");
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Exec Transform Thread Finished!");
+    }
+
     public void executeInferMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
         ExecutorService threadPool = Executors.newSingleThreadExecutor();
@@ -264,6 +272,29 @@ public class Schedule {
     public void locateMutationCode(int iterDepth, String seedFolderPath) {
         String seedFolderName = Path2Last(seedFolderPath);
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=" + iterDepth);
+        if (SONARQUBE_MUTATION) {
+            System.out.println("Begin to Analyze first round SonarQube Result File...");
+            String initReportPath = "/home/vanguard/evaluation/MyTest.csv";
+            List<SonarQube_Report> reports = readSonarQubeResultFile(initReportPath);
+            System.out.println("Report Size: " + reports.size());
+            for(SonarQube_Report report : reports) {
+                file2report.put(report.getFilepath(), report);
+                if (!file2row.containsKey(report.getFilepath())) {
+                    file2row.put(report.getFilepath(), new HashSet<>());
+                    file2bugs.put(report.getFilepath(), new HashMap<>());
+                }
+                for (SonarQube_Violation violation : report.getViolations()) {
+                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                    if (!bug2cnt.containsKey(violation.getBugType())) {
+                        bug2cnt.put(violation.getBugType(), new HashSet<>());
+                    }
+                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+                }
+            }
+            System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
+            return;
+        }
         if (INFER_MUTATION) {
             System.out.println("Begin to Inokve Infer for Init...");
             List<Infer_Report> reports = invokeInfer(iterDepth, seedFolderPath);
@@ -302,9 +333,7 @@ public class Schedule {
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
             }
-            if (SINGLE_TESTING) {
-                System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            }
+            System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
             return;
         }
         if (PMD_MUTATION) {

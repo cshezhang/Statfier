@@ -1,12 +1,9 @@
 package edu.polyu.thread;
 
 import edu.polyu.analysis.ASTWrapper;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.PMD_Violation;
 import edu.polyu.util.Invoker;
 import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
-import net.sourceforge.pmd.PMD;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -76,45 +73,6 @@ public class SonarQube_TransformThread implements Runnable {
                     break;
                 }
             }
-            // detect mutants of iter i
-            String resultFilePath = PMDResultFolder.getAbsolutePath() + File.separator + "iter" + i + "_" + seedFolderName + "_Result.json";
-            String mutantFolderPath = mutantFolder + File.separator + "iter" + i + File.separator + seedFolderName;
-            String[] pmdConfig = {
-                    "-d", mutantFolderPath,
-                    "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
-                    "-f", "json",
-                    "-r", resultFilePath,
-                    "--no-cache"
-            };
-            PMD.runPmd(pmdConfig);
-            List<PMD_Report> reports = readPMDResultFile(resultFilePath);
-            for (PMD_Report report : reports) {
-                file2report.put(report.getFilepath(), report);
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (PMD_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.beginLine);
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
-            List<ASTWrapper> validWrappers = new ArrayList<>();
-            while (!wrappers.isEmpty()) {
-                ASTWrapper head = wrappers.pollFirst();
-                // Used for debugging
-//                String file = head.filename;
-//                String content = head.getCode();
-//                int cnt = head.getViolations();
-                if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
-                    validWrappers.add(head);
-                }
-            }
-            wrappers.addAll(validWrappers);
         }
     }
 
