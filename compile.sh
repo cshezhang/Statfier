@@ -21,7 +21,7 @@ for file in  ${JAR_PATH}/*.jar;
 do
 jarfile=${jarfile}:${file}
 done
-echo "jarfile = "$jarfile
+# echo "jarfile = "$jarfile
 
 # copy配置文件
 # cp src/*.properties bin/

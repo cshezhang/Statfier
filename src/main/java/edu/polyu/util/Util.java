@@ -126,7 +126,7 @@ public class Util {
     //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Seeds";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Seeds";
-    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Seeds";
+    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Seeds1";
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
@@ -560,6 +560,7 @@ public class Util {
             CSVParser format = CSVFormat.EXCEL.withFirstRecordAsHeader()
                     .withIgnoreHeaderCase()
                     .withTrim()
+                    .withDelimiter('\t')
                     .parse(reader);
             List<CSVRecord> records = format.getRecords();
 //            CSVFormat format = CSVFormat.EXCEL.withHeader(FILE_HEADER).withSkipHeaderRecord(true)

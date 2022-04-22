@@ -62,6 +62,7 @@
 /home/vanguard/project/SAMutator/src/main/java/edu/polyu/transform/CFWrapperWithForTrue.java
 /home/vanguard/project/SAMutator/src/main/java/edu/polyu/transform/TransferLocalVarToStaticGlobal.java
 /home/vanguard/project/SAMutator/src/main/java/edu/polyu/transform/AddRedundantLiteral.java
+/home/vanguard/project/SAMutator/src/main/java/edu/polyu/DiffSQAnalysis.java
 /home/vanguard/project/SAMutator/src/test/java/PMDCases/PMDCase3.java
 /home/vanguard/project/SAMutator/src/test/java/PMDCases/PMDCase1.java
 /home/vanguard/project/SAMutator/src/test/java/PMDCases/PMDCase2.java

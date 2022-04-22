@@ -274,7 +274,7 @@ public class Schedule {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=" + iterDepth);
         if (SONARQUBE_MUTATION) {
             System.out.println("Begin to Analyze first round SonarQube Result File...");
-            String initReportPath = "/home/vanguard/evaluation/MyTest.csv";
+            String initReportPath = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
             List<SonarQube_Report> reports = readSonarQubeResultFile(initReportPath);
             System.out.println("Report Size: " + reports.size());
             for(SonarQube_Report report : reports) {

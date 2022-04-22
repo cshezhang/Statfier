@@ -48,9 +48,9 @@ public abstract class Transform {
             transforms.add(AddRedundantLiteral.getInstance());
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
-//                transforms.add(CFWrapperWithForFalse.getInstance());
+            transforms.add(CFWrapperWithForFalse.getInstance());
             transforms.add(CFWrapperWithForTrue.getInstance());
-//                transforms.add(CFWrapperWithIfFlase.getInstance());
+            transforms.add(CFWrapperWithIfFlase.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
             transforms.add(CompoundExpression1.getInstance());
