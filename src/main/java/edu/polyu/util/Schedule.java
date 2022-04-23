@@ -275,7 +275,7 @@ public class Schedule {
         if (SONARQUBE_MUTATION) {
             System.out.println("Begin to Analyze first round SonarQube Result File...");
             String initReportPath = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
-            List<SonarQube_Report> reports = readSonarQubeResultFile(initReportPath);
+            List<SonarQube_Report> reports = readSonarQubeResultFile(initReportPath, SONARQUBE_SEED_PATH);
             System.out.println("Report Size: " + reports.size());
             for(SonarQube_Report report : reports) {
                 file2report.put(report.getFilepath(), report);

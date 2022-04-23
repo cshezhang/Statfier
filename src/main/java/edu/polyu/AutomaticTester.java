@@ -94,7 +94,7 @@ public class AutomaticTester {
             res.append("Fail Transform: " + failMutation + "\n");
             res.append("Seed2Mutant:\n");
             for(Map.Entry<String, String> entry : seed2mutant.entrySet()) {
-                res.append(entry.getKey() + "->" + entry.getValue() + "\n");
+                res.append(entry.getKey() + "->" + entry.getValue() + "#" + mutant2seq.get(entry.getValue()) + "\n");
             }
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             res.append(String.format(

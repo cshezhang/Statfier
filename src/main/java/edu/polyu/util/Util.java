@@ -547,7 +547,7 @@ public class Util {
         return true;
     }
 
-    public static List<SonarQube_Report> readSonarQubeResultFile(String reportPath) {
+    public static List<SonarQube_Report> readSonarQubeResultFile(String reportPath, String seedFolderPath) {
         if (SINGLE_TESTING) {
             System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
         }
@@ -588,7 +588,7 @@ public class Util {
                         continue;
                     }
                 }
-                String filepath = SONARQUBE_SEED_PATH + File.separator + file.substring(file.indexOf(":") + 1);
+                String filepath = seedFolderPath + File.separator + file.substring(file.indexOf(":") + 1);
                 if (!name2report.containsKey(filepath)) {
                     SonarQube_Report report = new SonarQube_Report(filepath);
                     name2report.put(filepath, report);

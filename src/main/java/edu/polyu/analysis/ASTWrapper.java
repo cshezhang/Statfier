@@ -21,11 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
 import static edu.polyu.util.Util.COMPILE;
-import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
 import static edu.polyu.util.Util.matcher;
-import static edu.polyu.util.Util.PMD_MUTATION;
 import static edu.polyu.util.Util.Path2Last;
 import static edu.polyu.util.Util.compactIssues;
 import static edu.polyu.util.Util.compilerOptions;
@@ -55,7 +52,7 @@ public class ASTWrapper {
     private CompilationUnit cu;
 
     private String filename;
-    private String initSeed;
+    private String initSeedPath;
     private int violations;
     private int parViolations;
     private Document document;
@@ -75,11 +72,12 @@ public class ASTWrapper {
     private List<ASTNode> candidateNodes;
 
     public static HashMap<String, String> seed2mutant = new HashMap<>();
+    public static HashMap<String, String> mutant2seq = new HashMap<>();
 
     public ASTWrapper(String filePath, String folderName) {
         this.depth = 0;
         this.filePath = filePath;
-        this.initSeed = filePath;
+        this.initSeedPath = filePath;
         File targetFile = new File(filePath);
         try {
             this.document = new Document(FileUtils.readFileToString(targetFile, "UTF-8"));
@@ -148,8 +146,7 @@ public class ASTWrapper {
     public ASTWrapper(String filename, String filepath, String content, ASTWrapper parentWrapper) {
         this.depth = parentWrapper.depth + 1;
         this.filePath = filepath;
-        this.initSeed = parentWrapper.initSeed;
-        seed2mutant.put(initSeed, filepath);
+        this.initSeedPath = parentWrapper.initSeedPath;
         this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
         this.document = new Document(content);
@@ -418,7 +415,7 @@ public class ASTWrapper {
 
     public boolean isBuggy() {
         boolean buggy = false;
-        if (this.depth != 0 && this.violations < this.parViolations) { // Checking depth is to mutate initial seeds
+        if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
             Map<String, HashSet<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
             Map<String, HashSet<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
@@ -476,7 +473,7 @@ public class ASTWrapper {
                     seq2paths.put(seqKey, paths);
                 }
                 List<TriTuple> paths = seq2paths.get(seqKey);
-                paths.add(new TriTuple(this.initSeed, this.filePath, "FP"));
+                paths.add(new TriTuple(this.initSeedPath, this.filePath, "FP"));
             }
             for (int i = 0; i < potentialFNs.size(); i++) {
                 buggy = true;
@@ -492,7 +489,7 @@ public class ASTWrapper {
                     seq2paths.put(seqKey, paths);
                 }
                 List<TriTuple> paths = seq2paths.get(seqKey);
-                paths.add(new TriTuple(this.initSeed, this.filePath, "FN"));
+                paths.add(new TriTuple(this.initSeedPath, this.filePath, "FN"));
             }
         }
         return buggy;
@@ -546,6 +543,8 @@ public class ASTWrapper {
                     succMutation.addAndGet(1);
                     newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
                     newMutant.transSeq.add(transform.getIndex());
+                    seed2mutant.put(newMutant.initSeedPath, newMutant.filePath);
+                    mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
                     newMutant.transNodes.add(newSrcNode);
                     if (COMPILE) {
                         newMutant.rewriteJavaCode(); // 1: Rewrite transformation
@@ -611,6 +610,8 @@ public class ASTWrapper {
                             succMutation.addAndGet(1);
                             newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
+                            mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
+                            seed2mutant.put(newMutant.initSeedPath, newMutant.filePath);
                             newMutant.transNodes.add(newSrcNode);
                             if (COMPILE) {
                                 newMutant.rewriteJavaCode(); // 1: Rewrite transformation
@@ -656,7 +657,7 @@ public class ASTWrapper {
         }
         if (clazz == null) {
             System.err.println("Severe Error! No Parent Main Class is found in: " + this.filePath);
-            System.out.println("Src Path: " + this.initSeed);
+            System.out.println("Src Path: " + this.initSeedPath);
             System.exit(-1);
         }
         // This is used to change names of constructor.
@@ -817,8 +818,8 @@ public class ASTWrapper {
         return cu;
     }
 
-    public String getInitSeed() {
-        return this.initSeed;
+    public String getInitSeedPath() {
+        return this.initSeedPath;
     }
 
 }
