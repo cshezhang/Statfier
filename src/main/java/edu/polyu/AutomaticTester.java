@@ -15,8 +15,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static edu.polyu.analysis.ASTWrapper.*;
-import static edu.polyu.util.Util.*;
+import static edu.polyu.analysis.ASTWrapper.failMutation;
+import static edu.polyu.analysis.ASTWrapper.invalidSeed;
+import static edu.polyu.analysis.ASTWrapper.mutant2seq;
+import static edu.polyu.analysis.ASTWrapper.seed2mutant;
+import static edu.polyu.analysis.ASTWrapper.succMutation;
+import static edu.polyu.analysis.ASTWrapper.validSeed;
+import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
+import static edu.polyu.util.Util.INFER_MUTATION;
+import static edu.polyu.util.Util.PMD_MUTATION;
+import static edu.polyu.util.Util.SONARQUBE_MUTATION;
+import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Util.compactIssues;
+import static edu.polyu.util.Util.failedReport;
+import static edu.polyu.util.Util.initEnv;
+import static edu.polyu.util.Util.sourceSeedPath;
+import static edu.polyu.util.Util.startTimeStamp;
+import static edu.polyu.util.Util.userdir;
 
 /**
  * Description: Main Process for automatic testing

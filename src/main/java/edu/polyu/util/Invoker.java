@@ -17,7 +17,27 @@ import edu.polyu.thread.PMD_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Util.CheckStyleResultFolder;
+import static edu.polyu.util.Util.INFER_MUTATION;
+import static edu.polyu.util.Util.InferResultFolder;
+import static edu.polyu.util.Util.JAVAC_PATH;
+import static edu.polyu.util.Util.PMDResultFolder;
+import static edu.polyu.util.Util.PMD_MUTATION;
+import static edu.polyu.util.Util.Path2Last;
+import static edu.polyu.util.Util.SINGLE_TESTING;
+import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Util.SpotBugsResultFolder;
+import static edu.polyu.util.Util.THREAD_COUNT;
+import static edu.polyu.util.Util.getFilenamesFromFolder;
+import static edu.polyu.util.Util.getProperty;
+import static edu.polyu.util.Util.inferJarStr;
+import static edu.polyu.util.Util.readCheckStyleResultFile;
+import static edu.polyu.util.Util.readInferResultFile;
+import static edu.polyu.util.Util.readPMDResultFile;
+import static edu.polyu.util.Util.readSpotBugsResultFile;
+import static edu.polyu.util.Util.sep;
+import static edu.polyu.util.Util.spotBugsJarStr;
+import static edu.polyu.util.Util.subSeedFolderNameList;
 
 
 /*
@@ -35,6 +55,10 @@ public class Invoker {
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
             int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
+            String errorOutput = errorStream.toString();
+//            if(!errorOutput.contains("Checkstyle ends with") && !errorOutput.equals("\n")) {
+//                System.out.println(errorStream);
+//            }
             // CheckStyle Return value is the number of bugs.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");

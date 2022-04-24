@@ -78,8 +78,6 @@ public class Util {
         }
     }
 
-    public static final boolean DEBUG = Boolean.parseBoolean(getProperty("DEBUG"));
-
     public static final ASTMatcher matcher = new ASTMatcher();
     public static final boolean NO_SELECTION = Boolean.parseBoolean(getProperty("NO_SELECTION"));
     public static final boolean RANDOM_SELECTION = Boolean.parseBoolean(getProperty("RANDOM_SELECTION"));
@@ -182,7 +180,7 @@ public class Util {
             inferJarStr.append(inferJarList.get(i) + sp);
         }
         inferJarStr.append(inferJarList.get(0));
-        random.setSeed(RANDOM_SEED4);
+        random.setSeed(RANDOM_SEED5);
         if (SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {

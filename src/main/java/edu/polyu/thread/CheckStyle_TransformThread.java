@@ -3,7 +3,7 @@ package edu.polyu.thread;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
-import edu.polyu.util.Util;
+import edu.polyu.util.OSUtil;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -14,16 +14,17 @@ import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
-import static edu.polyu.util.Invoker.invokeCommands;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.CheckStyleConfigPath;
 import static edu.polyu.util.Util.CheckStylePath;
 import static edu.polyu.util.Util.CheckStyleResultFolder;
 import static edu.polyu.util.Util.GUIDED_LOCATION;
 import static edu.polyu.util.Util.NO_SELECTION;
+import static edu.polyu.util.Util.Path2Last;
 import static edu.polyu.util.Util.RANDOM_LOCATION;
 import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
+import static edu.polyu.util.Util.SINGLE_TESTING;
 import static edu.polyu.util.Util.TS_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2report;
@@ -54,8 +55,8 @@ public class CheckStyle_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            if(Util.DEBUG) {
-                System.out.println("Depth: " + depth + " Folder: " + this.seedFolderName);
+            if(SINGLE_TESTING) {
+                System.out.println("TransformThread Depth: " + depth + " Folder: " + this.seedFolderName);
             }
             while (!wrappers.isEmpty()) {
                 ASTWrapper wrapper = wrappers.pollFirst();
@@ -90,11 +91,22 @@ public class CheckStyle_TransformThread implements Runnable {
             List<CheckStyle_Report> reports = new ArrayList<>();
             // 这里还可以做一个configIndex是否match seedFolderName里边的index
             for(String mutantFilePath : mutantFilePaths) {
-                String reportFilePath = CheckStyleResultFolder + File.separator + "iter" + depth + "_" + seedFolderName + configIndex + ".xml";
-//            String[] invokeCmds = {"/bin/bash", "-c",
-                String[] invokeCmds = {"cmd.exe", "/c",  // Windows
-                        "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
-                                + configPath + " " + mutantFilePath};
+                String mutantFileName = Path2Last(mutantFilePath);
+                String reportFilePath = CheckStyleResultFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".xml";
+                String[] invokeCmds = new String[3];
+                if(OSUtil.isLinux() || OSUtil.isMacOSX()) {
+                    invokeCmds[0] = "/bin/bash";
+                    invokeCmds[1] = "-c";
+                }
+                if(OSUtil.isWindows()) {
+                    invokeCmds[0] = "cmd.exe";
+                    invokeCmds[1] = "/c";
+                }
+                invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
+                                + configPath + " " + mutantFilePath;
+                if(SINGLE_TESTING) {
+                    System.out.println(invokeCmds[2]);
+                }
                 invokeCommandsByZT(invokeCmds);
                 reports.addAll(readCheckStyleResultFile(reportFilePath));
             }

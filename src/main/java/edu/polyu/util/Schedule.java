@@ -52,12 +52,12 @@ public class Schedule {
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
         List<ASTWrapper> initWrappers = new ArrayList<>();
-        HashMap<String, Integer> file2index = new HashMap<>();
+        Map<String, Integer> file2index = new HashMap<>();  // source file -> config index
         for (int i = 0; i < seedFilePaths.size(); i++) {
             String seedFilePath = seedFilePaths.get(i);  // Absolute Path
             String[] tokens = seedFilePath.split(sep);
             String seedFolderName = tokens[tokens.length - 2];
-            if (!file2row.containsKey(seedFilePath)) {  // Whether this seed has warning?
+            if (!file2row.containsKey(seedFilePath)) {  // Check whether this seed has warning
                 continue;
             }
             initValidSeedWrapperSize++;
