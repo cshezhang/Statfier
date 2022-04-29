@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -46,7 +47,7 @@ public class AddMethodCallToLiteral extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode broStatement, ASTNode srcStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode broStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration newMethod = ast.newMethodDeclaration();
@@ -58,9 +59,20 @@ public class AddMethodCallToLiteral extends Transform {
         newBlock.statements().add(returnStatement);
         newMethod.setBody(newBlock);
         returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcStatement);
+        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
         if(oldMethod == null) {
             return false;  // It means that this statement is not located in a method, may stay in a initializer of class
+        }
+        boolean hasStatic = false;
+        for(ASTNode modifier : (List<ASTNode>) oldMethod.modifiers()) {
+            if(modifier instanceof Modifier) {
+                if(((Modifier) modifier).getKeyword().toString().equals("static")) {
+                    hasStatic = true;
+                }
+            }
+        }
+        if(hasStatic) {
+            newMethod.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
         }
         TypeDeclaration clazz = (TypeDeclaration) oldMethod.getParent();
         ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);

@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -18,6 +19,7 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
 
@@ -89,6 +91,17 @@ public class AnonymousClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(node);
+        boolean hasThis = false;
+        for(ASTNode subNode : subNodes) {
+            if(subNode instanceof ThisExpression) {
+                hasThis = true;
+                break;
+            }
+        }
+        if(hasThis) {
+            return nodes;
+        }
         if(node instanceof MethodDeclaration) {
             nodes.add(node);
             return nodes;

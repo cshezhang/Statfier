@@ -1,12 +1,13 @@
 package edu.polyu.transform;
 
-
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -14,12 +15,14 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.util.Util.checkExpressionLiteral;
 import static edu.polyu.util.Util.checkLiteralType;
 import static edu.polyu.util.Util.getChildrenNodes;
+import static edu.polyu.util.Util.getDirectMethodOfStatement;
 
 public class TransferLocalVarToGlobal extends Transform {
 
@@ -35,11 +38,11 @@ public class TransferLocalVarToGlobal extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression literalNode = (Expression) targetNode;
-        TypeDeclaration clazz = Util.getClassOfStatement(sourceStatement);
+        TypeDeclaration clazz = Util.getClassOfStatement(srcNode);
         String newVarName = "t2g" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
@@ -55,12 +58,30 @@ public class TransferLocalVarToGlobal extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
-        List<ASTNode> subNodes = getChildrenNodes(statement);
-        for(int i = 0; i < subNodes.size(); i++) {
+        MethodDeclaration method = getDirectMethodOfStatement(srcNode);
+        if (method != null) {
+            for (ASTNode modifier : (List<ASTNode>) method.modifiers()) {
+                if(modifier instanceof Modifier) {
+                    if(((Modifier) modifier).getKeyword().toString().contains("static")) {
+                        return nodes;
+                    }
+                }
+            }
+        } else {
+            ASTNode parNode = srcNode.getParent();
+            while(parNode != null) {
+                if(parNode instanceof Initializer) {
+                    return nodes;
+                }
+                parNode = parNode.getParent();
+            }
+        }
+        List<ASTNode> subNodes = getChildrenNodes(srcNode);
+        for (int i = 0; i < subNodes.size(); i++) {
             ASTNode subNode = subNodes.get(i);
-            if(checkExpressionLiteral(subNode)) {
+            if (checkExpressionLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }

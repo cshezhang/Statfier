@@ -34,13 +34,12 @@ public class CheckStyle_InvokeThread implements Runnable {
             String configPath = CheckStyleConfigPath + File.separator + seedFolderName + i + ".xml";
             String reportPath = CheckStyleResultFolder + File.separator + "iter" + iterDepth + "_" + seedFolderName + i + "_Result.xml";
             String[] invokeCmds = new String[3];
-            if(OSUtil.isLinux() || OSUtil.isMacOSX()) {
-                invokeCmds[0] = "/bin/bash";
-                invokeCmds[1] = "-c";
-            }
             if(OSUtil.isWindows()) {
                 invokeCmds[0] = "cmd.exe";
                 invokeCmds[1] = "/c";
+            } else {
+                invokeCmds[0] = "/bin/bash";
+                invokeCmds[1] = "-c";
             }
             invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filepath;
             if(SINGLE_TESTING) {

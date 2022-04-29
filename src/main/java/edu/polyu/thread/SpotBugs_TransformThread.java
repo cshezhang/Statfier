@@ -3,6 +3,7 @@ package edu.polyu.thread;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
+import edu.polyu.util.OSUtil;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -84,6 +85,7 @@ public class SpotBugs_TransformThread implements Runnable {
                     String seedFolderPath = tmpWrapper.getFolderPath();
                     String[] tokens = seedFilePath.split(sep);
                     String seedFileNameWithSuffix = tokens[tokens.length - 1];
+                    String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
                     File classFolder = new File(SpotBugsClassFolder.getAbsolutePath()  + File.separator + seedFileName);
@@ -91,15 +93,21 @@ public class SpotBugs_TransformThread implements Runnable {
                         classFolder.mkdirs();
                     }
                     compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                    String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
-//                    String[] invokeCmds = {"/bin/bash", "-c",
-                    String[] invokeCmds = {"cmd.exe", "/c",
-                            SpotBugsPath + " -textui"
+                    String reportPath = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                    String[] invokeCmds = new String[3];
+                    if(OSUtil.isWindows()) {
+                        invokeCmds[0] = "cmd.exe";
+                        invokeCmds[1] = "/c";
+                    } else {
+                        invokeCmds[0] = "/bin/bash";
+                        invokeCmds[1] = "-c";
+                    }
+                    invokeCmds[2] = SpotBugsPath + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
-                            + classFolder.getAbsolutePath()};
+                            + classFolder.getAbsolutePath();
                     invokeCommands(invokeCmds);
-                    String report_path = SpotBugsResultFolder.getAbsolutePath()  + File.separator + seedFileName + "_Result.xml";
+                    String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     reports.addAll(readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path));
                 }
                 for (SpotBugs_Report report : reports) {

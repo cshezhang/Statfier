@@ -55,10 +55,7 @@ public class Invoker {
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
             int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
-            String errorOutput = errorStream.toString();
-//            if(!errorOutput.contains("Checkstyle ends with") && !errorOutput.equals("\n")) {
-//                System.out.println(errorStream);
-//            }
+
             // CheckStyle Return value is the number of bugs.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");
@@ -117,6 +114,9 @@ public class Invoker {
 
     // folderPath is purely folder path and doesn't contain java file name.
     public static void compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
+        if(SINGLE_TESTING) {
+            System.out.println("Compiling: " + fileName);
+        }
         if(!fileName.endsWith(".java")) {
             System.err.println("File: " + fileName + " is not ended by .java");
             System.exit(0);
@@ -171,10 +171,10 @@ public class Invoker {
         }
         initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            String seedFolderName = subSeedFolderNameList.get(i);
-            String subSeedFolderPath = seedFolderPath + File.separator + seedFolderName;
+            String subSeedFolderName = subSeedFolderNameList.get(i);
+            String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
-            threadPool.submit(new SpotBugs_InvokeThread(subSeedFolderPath, seedFolderName, seedFileNames));
+            threadPool.submit(new SpotBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
         waitThreadPoolEnding();
         // Here we want to invoke SpotBugs one time and get all analysis results
@@ -183,7 +183,7 @@ public class Invoker {
         for(String subSeedFolderName : subSeedFolderNameList) {
             List<String> reportPaths = getFilenamesFromFolder(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName, true);
             for(String reportPath : reportPaths) {
-                reports.addAll(readSpotBugsResultFile(seedFolderPath, reportPath));
+                reports.addAll(readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath));
             }
         }
         return reports;

@@ -3,6 +3,7 @@ package edu.polyu.thread;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.Infer_Report;
 import edu.polyu.report.Infer_Violation;
+import edu.polyu.util.OSUtil;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -81,9 +82,16 @@ public class Infer_TransformThread extends Thread {
                 String cmd = InferPath + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
                         " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
                         " -cp " + inferJarStr + " " + srcJavaPath;
-//                String[] invokeCmds = {"/bin/bash", "-c", "./exec_cmd /bin/bash -c " + cmd};
                 System.out.println(this.getName() + "-" + cmd);
-                String[] invokeCmds = {"/bin/bash", "-c", "python3 cmd.py " + cmd};
+                String[] invokeCmds = new String[3];
+                if(OSUtil.isWindows()) {
+                    invokeCmds[0] = "cmd.exe";
+                    invokeCmds[1] = "/c";
+                } else {
+                    invokeCmds[0] = "/bin/bash";
+                    invokeCmds[1] = "-c";
+                }
+                invokeCmds[2] = "python3 cmd.py " + cmd;
                 invokeCommandsByZT(invokeCmds);
                 String resultFilePath = reportFolderPath + File.separator + "report.json";
                 reports.addAll(readInferResultFile(srcJavaPath, resultFilePath));

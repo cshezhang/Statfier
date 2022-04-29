@@ -1,6 +1,7 @@
 package edu.polyu.thread;
 
 import edu.polyu.util.AbstractIntegrationTest;
+import edu.polyu.util.OSUtil;
 import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcher;
 import edu.umd.cs.findbugs.test.matcher.BugInstanceMatcherBuilder;
 import org.junit.Test;
@@ -43,13 +44,19 @@ public class SpotBugs_InvokeThread extends AbstractIntegrationTest implements Ru
             compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
             String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
             String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
-//            String[] invokeCmds = {"/bin/bash", "-c",
-            String[] invokeCmds = {"cmd.exe", "/c",
-                    SpotBugsPath + " -textui"
+            System.out.println("Report: " + reportPath);
+            String[] invokeCmds = new String[3];
+            if(OSUtil.isWindows()) {
+                invokeCmds[0] = "cmd.exe";
+                invokeCmds[1] = "/c";
+            } else {
+                invokeCmds[0] = "/bin/bash";
+                invokeCmds[1] = "-c";
+            }
+            invokeCmds[2] = SpotBugsPath + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
-                            + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class"};
-//            invokeCommands(invokeCmds);
+                            + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class";
             invokeCommandsByZT(invokeCmds);
         }
     }

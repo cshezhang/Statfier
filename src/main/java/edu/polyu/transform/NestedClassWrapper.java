@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
 
@@ -33,10 +35,10 @@ public class NestedClassWrapper extends Transform {
     public static int nestedClassCounter = 0;
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
+        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
         if (oldMethod != null) {
             if (oldMethod.isConstructor()) {
                 return false;
@@ -55,12 +57,12 @@ public class NestedClassWrapper extends Transform {
             astRewrite.replace(oldMethod, nestedClass, null);
             return true;
         } else {
-            if (oldStatement instanceof FieldDeclaration) {
+            if (srcNode instanceof FieldDeclaration) {
                 TypeDeclaration nestedClass = ast.newTypeDeclaration();
                 nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
-                FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldStatement);
+                FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
                 nestedClass.bodyDeclarations().add(newFieldDeclaration);
-                astRewrite.replace(oldStatement, nestedClass, null);
+                astRewrite.replace(srcNode, nestedClass, null);
                 return true;
             } else {
                 return false;
@@ -71,6 +73,17 @@ public class NestedClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(node);
+        boolean hasThis = false;
+        for(ASTNode subNode : subNodes) {
+            if(subNode instanceof ThisExpression) {
+                hasThis = true;
+                break;
+            }
+        }
+        if(hasThis) {
+            return nodes;
+        }
         if (node instanceof MethodDeclaration) {
             nodes.add(node);
             return nodes;
@@ -78,7 +91,7 @@ public class NestedClassWrapper extends Transform {
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
         if (method == null) {
-            nodes.add(node);
+            nodes.add(node);  // FieldDeclaration
             return nodes;
         }
         boolean isOverride = false;

@@ -4,18 +4,8 @@ import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.util.TriTuple;
 import edu.polyu.util.Util;
-import org.junit.Test;
-import org.sonar.wsclient.Host;
-import org.sonar.wsclient.Sonar;
-import org.sonar.wsclient.SonarClient;
-import org.sonar.wsclient.connectors.HttpClient4Connector;
-import org.sonar.wsclient.issue.Issue;
-import org.sonar.wsclient.issue.IssueClient;
-import org.sonar.wsclient.issue.IssueQuery;
-import org.sonar.wsclient.issue.Issues;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import static edu.polyu.util.Util.*;
@@ -93,6 +83,7 @@ public class DiffSQAnalysis {
             Map<String, Set<Integer>> bug2cnt1 = file2bug.get(seedPath); // seed
             Map<String, Set<Integer>> bug2cnt2 = file2bug.get(mutantPath); // mutant
             if(bug2cnt2 != null) {
+                System.out.println(mutantPath);
                 for (Map.Entry<String, Set<Integer>> b2c : bug2cnt1.entrySet()) {
                     String rule = b2c.getKey();
                     if ((!bug2cnt2.containsKey(rule)) ||
@@ -109,7 +100,7 @@ public class DiffSQAnalysis {
                     }
                 }
             } else {
-                System.out.println(mutantPath);
+//                System.out.println(mutantPath);
                 continue;
             }
             for (Map.Entry<String, Set<Integer>> b2c : bug2cnt2.entrySet()) {
@@ -142,35 +133,27 @@ public class DiffSQAnalysis {
             }
         }
         System.out.println("Sum All Bugs: " + compactIssues.size());
-        System.out.print("Bug Rules:[");
+//        System.out.print("Bug Rules:[");
+//        for(String key : compactIssues.keySet()) {
+//            System.out.print(key + ", ");
+//        }
+//        System.out.println("]");
         for(String key : compactIssues.keySet()) {
-            System.out.print(key + ", ");
-        }
-        System.out.println("]");
-    }
-
-    @Test
-    public void getSonarQubeIssues() {
-        SonarClient client = SonarClient.create("http://localhost:9000");
-        client.builder().login("admin");
-        client.builder().password("z123456");
-        IssueQuery query = IssueQuery.create();
-        query.components("GuidedDiv_Seed1");
-//        query.severities("CRITICAL", "MAJOR", "MINOR");
-        query.severities("MINOR");
-        IssueClient issueClient = client.issueClient();
-        Issues issues = issueClient.find(query);
-        List<Issue> issueList = issues.list();
-        for (Issue issue : issueList) {
-            System.out.println(issue);
+            HashMap<String, ArrayList<TriTuple>> trans2bugs = compactIssues.get(key);
+            for(String transform : trans2bugs.keySet()) {
+                System.out.println("Rule: " + key + " " + transform);
+                ArrayList<TriTuple> bugs = trans2bugs.get(transform);
+                for(TriTuple tuple : bugs) {
+                    System.out.println(tuple);
+                }
+            }
         }
     }
-
 
     public static void main(String[] args) {
-        String seed_report = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
-        String report2 = "/home/vanguard/evaluation/SonarQube_Testing.csv";
-        String mappingPath = "/home/vanguard/evaluation/SonarQube_Testing/Output.log";
+        String seed_report = "/home/vanguard/evaluation/2022-04-25-SonarQube_Seeds1-issues-report.csv";
+        String report2 = "/home/vanguard/evaluation/2022-04-25-SonarQube_Testing-issues-report.csv";
+        String mappingPath = "/home/vanguard/evaluation/SonarQube_Test2/Output.log";
         analysis(mappingPath, seed_report, report2);
         // String SONARQUBE_EVALUATION_PATH = "/home/vanguard/evaluation/SonarQube_Evaluation";
         // List<String> folderPaths = getDirectFilenamesFromFolder(SONARQUBE_EVALUATION_PATH, true);

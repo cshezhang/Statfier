@@ -23,10 +23,10 @@ public class AddStaticAssignment extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        FieldDeclaration oldFieldDeclaration = (FieldDeclaration) oldStatement;
+        FieldDeclaration oldFieldDeclaration = (FieldDeclaration) srcNode;
         if(!oldFieldDeclaration.modifiers().contains(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
             return false;
         }

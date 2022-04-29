@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
@@ -106,6 +107,17 @@ public class EnumClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(node);
+        boolean hasThis = false;
+        for(ASTNode subNode : subNodes) {
+            if(subNode instanceof ThisExpression) {
+                hasThis = true;
+                break;
+            }
+        }
+        if(hasThis) {
+            return nodes;
+        }
         if(node instanceof MethodDeclaration) {
             nodes.add(node);
             return nodes;

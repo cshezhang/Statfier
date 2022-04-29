@@ -69,6 +69,7 @@ public class ASTWrapper {
     private List<TypeDeclaration> types;
     private List<ASTNode> allNodes;
     private HashMap<String, List<ASTNode>> method2statements;
+    private HashMap<String, String> method2identifiers;
     private List<ASTNode> candidateNodes;
 
     public static HashMap<String, String> seed2mutant = new HashMap<>();
@@ -109,8 +110,8 @@ public class ASTWrapper {
         }
         this.allNodes = new ArrayList<>();
         this.method2statements = new HashMap<>();
-        for (TypeDeclaration clazz : this.types) {
-            List<ASTNode> components = clazz.bodyDeclarations();
+        for (TypeDeclaration type : this.types) {
+            List<ASTNode> components = type.bodyDeclarations();
             for (int i = 0; i < components.size(); i++) {
                 ASTNode component = components.get(i);
                 if (component instanceof FieldDeclaration) {
@@ -125,6 +126,7 @@ public class ASTWrapper {
                     }
                 }
                 if (component instanceof MethodDeclaration) {
+                    getIdentifiers(component);
                     MethodDeclaration method = (MethodDeclaration) component;
                     List<ASTNode> statements;
                     Block block = method.getBody();
@@ -135,7 +137,7 @@ public class ASTWrapper {
                         statements = getAllNodes(getAllNodes(block.statements()));
                         this.allNodes.addAll(statements);
                     }
-                    this.method2statements.put(clazz.getName().toString() + ":" + createMethodSignature(method), statements);
+                    this.method2statements.put(type.getName().toString() + ":" + createMethodSignature(method), statements);
                 }
             }
         }
@@ -252,6 +254,7 @@ public class ASTWrapper {
     }
 
     public void rewriteJavaCode() {
+        String oldCode = this.document.get();
         TextEdit edits = this.astRewrite.rewriteAST(this.document, null);
         try {
             edits.apply(this.document);
@@ -266,12 +269,13 @@ public class ASTWrapper {
     // This method can be invoked only if the source code file has generated.
     public boolean writeToJavaFile() {
         String code = this.getCode();
-//        String formattedCode;
+        String formattedCode;
         try {
             File file = new File(this.filePath);
             if (!file.exists()) {
                 file.createNewFile();
             }
+//            formattedCode = new Formatter().formatSource(code);
 //            if (code.contains("enum ")) {
 //                formattedCode = new Formatter().formatSource(code);
 //            } else {
@@ -299,9 +303,17 @@ public class ASTWrapper {
             for (ASTNode node : super_nodes) {
                 System.out.println(node);
             }
-            TypeDeclaration[] types = clazz.getTypes();
-            for (TypeDeclaration type : types) {
-                System.out.println(type);
+            TypeDeclaration[] subTypes = clazz.getTypes();
+            for (TypeDeclaration subType : subTypes) {
+                System.out.println(subType);
+            }
+            List<ASTNode> components = clazz.bodyDeclarations();
+            for(ASTNode node : components) {
+                System.out.println(node);
+            }
+            FieldDeclaration[] fields = clazz.getFields();
+            for(FieldDeclaration field : fields) {
+                System.out.println(field);
             }
             MethodDeclaration[] methods = clazz.getMethods();
             for (MethodDeclaration method : methods) {

@@ -94,13 +94,12 @@ public class CheckStyle_TransformThread implements Runnable {
                 String mutantFileName = Path2Last(mutantFilePath);
                 String reportFilePath = CheckStyleResultFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".xml";
                 String[] invokeCmds = new String[3];
-                if(OSUtil.isLinux() || OSUtil.isMacOSX()) {
-                    invokeCmds[0] = "/bin/bash";
-                    invokeCmds[1] = "-c";
-                }
                 if(OSUtil.isWindows()) {
                     invokeCmds[0] = "cmd.exe";
                     invokeCmds[1] = "/c";
+                } else {
+                    invokeCmds[0] = "/bin/bash";
+                    invokeCmds[1] = "-c";
                 }
                 invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
                                 + configPath + " " + mutantFilePath;

@@ -21,24 +21,21 @@ public class AddStaticModifier extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherNode, ASTNode oldNode) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherNode, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        FieldDeclaration oldFieldDeclaration = (FieldDeclaration) oldNode;
+        FieldDeclaration oldFieldDeclaration = (FieldDeclaration) srcNode;
         for(ASTNode modifier : (List<ASTNode>) oldFieldDeclaration.modifiers()) {
             if(modifier instanceof Modifier && ((Modifier) modifier).getKeyword().toString().equals("static")) {
                 return false;
             }
         }
-        FieldDeclaration newFieldDeclaration;
-        try {
-            // Failed corner case: float e19=0x0.0p0f; Hence, we add a try-catch here.
-            newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldFieldDeclaration);
-        } catch (Exception e) {
-            return false;
-        }
-        newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
-        astRewrite.replace(oldFieldDeclaration, newFieldDeclaration, null);
+        List<ASTNode> nodes = new ArrayList<>();
+        nodes.add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
+
+//        FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldFieldDeclaration);
+//        newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
+//        astRewrite.replace(oldFieldDeclaration, newFieldDeclaration, null);
         return true;
     }
 

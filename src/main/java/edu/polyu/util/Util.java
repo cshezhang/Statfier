@@ -30,10 +30,12 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PrimitiveType;
@@ -103,7 +105,6 @@ public class Util {
     public final static String toolPath = getProperty("TOOL_PATH");
 
     public static String sourceSeedPath = null;
-    public static int subSeedIndex;
     public static long startTimeStamp = System.currentTimeMillis();
     public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
@@ -223,13 +224,11 @@ public class Util {
         }
         // subSeedFolder, like security_hardcodedCryptoKey
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
-        subSeedIndex = subSeedFolderNameList.size();
         // Generate mutant folder from iter1 -> iter8
         for (int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + File.separator + "iter" + i);
             iter.mkdir();
-            for (int j = 0; j < subSeedIndex; j++) {
-                String subSeedFolderName = subSeedFolderNameList.get(j);
+            for (String subSeedFolderName : subSeedFolderNameList) {
                 File subSeedFolder = new File(iter.getAbsolutePath() + File.separator + subSeedFolderName);
                 subSeedFolder.mkdir();
             }
@@ -244,14 +243,14 @@ public class Util {
             }
             if (!SpotBugsResultFolder.exists()) {
                 SpotBugsResultFolder.mkdir();
-//                for (int i = 0; i < subSeedIndex; i++) {
-//                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderNameList.get(i));
-//                    if (reportFolder.exists()) {
-//                        System.err.println("Init Error!");
-//                        System.exit(-1);
-//                    }
-//                    reportFolder.mkdir();
-//                }
+                for (String subSeedFolderName : subSeedFolderNameList) {
+                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName);
+                    if (reportFolder.exists()) {
+                        System.err.println("Init Error!");
+                        System.exit(-1);
+                    }
+                    reportFolder.mkdir();
+                }
             }
         }
         if (CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
@@ -317,6 +316,9 @@ public class Util {
 
     public static List<ASTNode> getChildrenNodes(ASTNode root) {
         ArrayList<ASTNode> nodes = new ArrayList<>();
+        if(root == null) {
+            return nodes;
+        }
         ArrayDeque<ASTNode> que = new ArrayDeque<>();
         que.add(root);
         while (!que.isEmpty()) {
@@ -717,12 +719,11 @@ public class Util {
         return results;
     }
 
+    // Variable seedFolderPath contains sub seed folder name
     public static List<SpotBugs_Report> readSpotBugsResultFile(String seedFolderPath, String reportPath) {
         if (SINGLE_TESTING) {
             System.out.println("SpotBugs Detection Resutl FileName: " + reportPath);
         }
-        String[] tokens = reportPath.split(sep);
-        String seedFolderName = tokens[tokens.length - 2];
         HashMap<String, SpotBugs_Report> name2report = new HashMap<>();
         List<SpotBugs_Report> results = new ArrayList<>();
         SAXReader saxReader = new SAXReader();
@@ -733,7 +734,7 @@ public class Util {
             for (Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for (Element sourceLine : sourceLines) {
-                    SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath + File.separator + seedFolderName, sourceLine, bugInstance.attribute("type").getText());
+                    SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath, sourceLine, bugInstance.attribute("type").getText());
                     String filepath = violation.getFilepath();
                     if (name2report.containsKey(filepath)) {
                         name2report.get(filepath).addViolation(violation);
@@ -759,6 +760,12 @@ public class Util {
             return target.substring(0, target.indexOf('.'));
         } else {
             return target;
+        }
+    }
+
+    public static List<String> getIdentifiers(Block block) {
+        for(Statement statement : block.statements()) {
+
         }
     }
 
