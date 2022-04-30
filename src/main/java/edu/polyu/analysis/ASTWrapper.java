@@ -591,11 +591,10 @@ public class ASTWrapper {
                             seed2mutant.put(newMutant.initSeedPath, newMutant.filePath);
                             newMutant.transNodes.add(newSrcNode);
                             if (COMPILE) {
-                                newMutant.rewriteJavaCode(); // 1: Rewrite transformation
-                                newMutant.resetClassName();  // 2: Rewrite class name and pkg definition
+                                newMutant.resetClassName();  // Rewrite class name and pkg definition
                                 newMutant.removePackageDefinition();
                             }
-                            newMutant.rewriteJavaCode();
+                            newMutant.rewriteJavaCode(); // Rewrite transformation
                             if (newMutant.writeToJavaFile()) {
                                 newWrappers.add(newMutant);
                             }

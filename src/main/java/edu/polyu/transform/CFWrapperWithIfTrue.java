@@ -19,16 +19,22 @@ public class CFWrapperWithIfTrue extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
+        ASTNode parNode = srcNode.getParent();
+        if(parNode instanceof Block) {
+            if(((Block) parNode).statements().size() == 1) {
+                return false;
+            }
+        }
         IfStatement ifStatement = ast.newIfStatement();
         Block block = ast.newBlock();
-        Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
+        Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         block.statements().add(newStatement);
         ifStatement.setExpression(ast.newBooleanLiteral(true));
         ifStatement.setThenStatement(block);
-        astRewrite.replace(sourceStatement, ifStatement, null);
+        astRewrite.replace(srcNode, ifStatement, null);
         return true;
     }
 

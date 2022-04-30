@@ -15,6 +15,9 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.SwitchCase;
+import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -86,22 +89,36 @@ public class AddMethodCallToLiteral extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(node instanceof FieldDeclaration || node instanceof MethodDeclaration) {
+        if (node instanceof FieldDeclaration || node instanceof MethodDeclaration) {
             return nodes;
         }
         List<ASTNode> subNodes = getChildrenNodes(node);
-        for(ASTNode subNode : subNodes) {
-            if(checkExpressionLiteral(subNode)) {
+        for (ASTNode subNode : subNodes) {
+            if (checkExpressionLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }
-        if(nodes.size() == 0) {
+        if (node instanceof SwitchStatement) {
+            for (Statement statement : (List<Statement>) ((SwitchStatement) node).statements()) {
+                if(statement instanceof SwitchCase) {
+                    Expression e = ((SwitchCase) statement).getExpression();
+                    for(int i = nodes.size() - 1; i >= 0; i--) {
+                        ASTNode subNode = nodes.get(i);
+                        if(subNode == e) {
+                            nodes.remove(subNode);
+                        }
+                    }
+                }
+            }
+        }
+        if (nodes.size() == 0) {
             return nodes;
         }
         CompilationUnit cu = wrapper.getCompilationUnit();
         List<ASTNode> resNodes = new ArrayList<>();
         List<ASTNode> candidateNodes = new ArrayList<>();
-        for(ASTNode targetNode : nodes) {
+        // Locate by column
+        for (ASTNode targetNode : nodes) {
             int col = cu.getColumnNumber(targetNode.getStartPosition()), row = cu.getLineNumber(targetNode.getStartPosition());
             Report report = file2report.get(wrapper.getFilePath());
             if (report instanceof PMD_Report) {
@@ -117,11 +134,11 @@ public class AddMethodCallToLiteral extends Transform {
                 }
             }
         }
-        if(resNodes.size() == 0) {
-            if(candidateNodes.size() == 0) {
+        if (resNodes.size() == 0) { // Cannot locate by column, randomly select one node
+            if (candidateNodes.size() == 0) {
                 resNodes.add(nodes.get(random.nextInt(nodes.size())));
             } else {
-                if(candidateNodes.size() > 2) {
+                if (candidateNodes.size() > 2) {
                     resNodes.add(candidateNodes.get(0));
                     resNodes.add(candidateNodes.get(1));
                 } else {

@@ -23,10 +23,16 @@ public class CFWrapperWithWhileTrue extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
+        ASTNode parNode = srcNode.getParent();
+        if(parNode instanceof Block) {
+            if(((Block) parNode).statements().size() == 1) {
+                return false;
+            }
+        }
+        Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         WhileStatement whileStatement = ast.newWhileStatement();
         whileStatement.setExpression(ast.newBooleanLiteral(true));
         BreakStatement breakStatement = ast.newBreakStatement();
@@ -34,7 +40,7 @@ public class CFWrapperWithWhileTrue extends Transform {
         block.statements().add(newStatement);
         block.statements().add(breakStatement);
         whileStatement.setBody(block);
-        astRewrite.replace(sourceStatement, whileStatement, null);
+        astRewrite.replace(srcNode, whileStatement, null);
         return true;
     }
 

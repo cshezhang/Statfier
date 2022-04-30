@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static edu.polyu.util.Util.createMethodSignature;
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
@@ -45,6 +46,13 @@ public class NestedClassWrapper extends Transform {
         if (oldMethod != null) {
             if (oldMethod.isConstructor()) {
                 return false;
+            }
+            TypeDeclaration type = getClassOfStatement(srcNode);
+            String methodKey = type.getName().toString() + ":" + createMethodSignature(oldMethod);
+            for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
+                if(!entry.getKey().equals(methodKey) && entry.getValue().contains(oldMethod.getName().getIdentifier())) {
+                    return false;
+                }
             }
             for (Object modifier : oldMethod.modifiers()) {
                 if (modifier instanceof Modifier) {

@@ -2,11 +2,15 @@ package edu.polyu.transform;
 
 
 import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.polyu.util.Util.getDirectMethodOfStatement;
 
 // Control flow wrapper based on for-loop
 public class CFWrapperWithForTrue extends Transform {
@@ -24,11 +28,16 @@ public class CFWrapperWithForTrue extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
+        ASTNode parNode = srcNode.getParent();
+        if(parNode instanceof Block) {
+            if(((Block) parNode).statements().size() == 1) {
+                return false;
+            }
+        }
         ForStatement newForStatement = ast.newForStatement();
-
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         String controlVar = String.format("cfwwft%d", varCounter++);
         newVdFragment.setName(ast.newSimpleName(controlVar));
@@ -50,10 +59,10 @@ public class CFWrapperWithForTrue extends Transform {
         newForStatement.updaters().add(postfixExpression);
 
         Block newForBodyBlock = ast.newBlock();
-        Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
+        Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         newForBodyBlock.statements().add(newStatement);
         newForStatement.setBody(newForBodyBlock);
-        astRewrite.replace(sourceStatement, newForStatement, null);
+        astRewrite.replace(srcNode, newForStatement, null);
         return true;
     }
 
