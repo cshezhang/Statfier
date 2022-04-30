@@ -12,10 +12,13 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
@@ -58,6 +61,12 @@ public class NestedClassWrapper extends Transform {
             return true;
         } else {
             if (srcNode instanceof FieldDeclaration) {
+                String varName = ((VariableDeclarationFragment) (((FieldDeclaration) srcNode).fragments().get(0))).getName().getIdentifier();
+                for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
+                    if(entry.getValue().contains(varName)) {
+                        return false;
+                    }
+                }
                 TypeDeclaration nestedClass = ast.newTypeDeclaration();
                 nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
                 FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);

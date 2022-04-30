@@ -17,7 +17,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
@@ -38,10 +40,10 @@ public class AnonymousClassWrapper extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(oldStatement);
+        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
         instanceCreation.setType(ast.newSimpleType(ast.newSimpleName("Object")));
@@ -69,8 +71,14 @@ public class AnonymousClassWrapper extends Transform {
             astRewrite.replace(oldMethod, fieldDeclaration, null);
             return true;
         } else {
-            if(oldStatement instanceof FieldDeclaration) {
-                FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldStatement);
+            if(srcNode instanceof FieldDeclaration) {
+                String varName = ((VariableDeclarationFragment) (((FieldDeclaration) srcNode).fragments().get(0))).getName().getIdentifier();
+                for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
+                    if(entry.getValue().contains(varName)) {
+                        return false;
+                    }
+                }
+                FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
                 anonymousClassDeclaration.bodyDeclarations().add(newFieldDeclaration);
                 instanceCreation.setAnonymousClassDeclaration(anonymousClassDeclaration);
                 // Init value of new FieldDeclaration
@@ -78,9 +86,9 @@ public class AnonymousClassWrapper extends Transform {
                 fragment.setInitializer(instanceCreation);
                 fragment.setName(ast.newSimpleName("acw" + varCounter++));
                 // insert new FieldStatement containing Anonymous class
-                FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
-                fieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-                astRewrite.replace(oldStatement, fieldDeclaration, null);
+                FieldDeclaration newNode = ast.newFieldDeclaration(fragment);
+                newNode.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+                astRewrite.replace(srcNode, newNode, null);
                 return true;
             } else {
                 return false;

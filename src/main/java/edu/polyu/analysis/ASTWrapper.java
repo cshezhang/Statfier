@@ -3,6 +3,7 @@ package edu.polyu.analysis;
 import edu.polyu.transform.Transform;
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jface.text.Document;
@@ -22,14 +23,13 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static edu.polyu.util.Util.COMPILE;
+import static edu.polyu.util.Util.getIdentifiers;
 import static edu.polyu.util.Util.matcher;
 import static edu.polyu.util.Util.Path2Last;
 import static edu.polyu.util.Util.compactIssues;
-import static edu.polyu.util.Util.compilerOptions;
 import static edu.polyu.util.Util.createMethodSignature;
 import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.getAllNodes;
 import static edu.polyu.util.Util.getAllStatements;
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
@@ -69,11 +69,18 @@ public class ASTWrapper {
     private List<TypeDeclaration> types;
     private List<ASTNode> allNodes;
     private HashMap<String, List<ASTNode>> method2statements;
-    private HashMap<String, String> method2identifiers;
+    private HashMap<String, HashSet<String>> method2identifiers;
     private List<ASTNode> candidateNodes;
 
     public static HashMap<String, String> seed2mutant = new HashMap<>();
     public static HashMap<String, String> mutant2seq = new HashMap<>();
+
+    public static Map compilerOptions = JavaCore.getOptions();
+    static {
+        compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
+        compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
+        compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
+    }
 
     public ASTWrapper(String filePath, String folderName) {
         this.depth = 0;
@@ -108,40 +115,54 @@ public class ASTWrapper {
                 this.types.add((TypeDeclaration) node);
             }
         }
+        this.parse2nodes();
+        this.candidateNodes = null;
+    }
+
+    private void parse2nodes() {
         this.allNodes = new ArrayList<>();
         this.method2statements = new HashMap<>();
+        this.method2identifiers = new HashMap<>();
+        int initializerCount = 0;
         for (TypeDeclaration type : this.types) {
             List<ASTNode> components = type.bodyDeclarations();
             for (int i = 0; i < components.size(); i++) {
                 ASTNode component = components.get(i);
-                if (component instanceof FieldDeclaration) {
-                    allNodes.add(component);
-                }
+                allNodes.add(component);
+                // The following parts are used to get sub nodes by analyze Initializer and MethodDeclaration
                 if (component instanceof Initializer) {
                     Block block = ((Initializer) component).getBody();
-                    if (block != null) {
-                        allNodes.addAll(getAllNodes((block.statements())));
+                    HashSet<String> ids;
+                    List<ASTNode> statements;
+                    if (block != null || block.statements().size() > 0) {
+                        ids = getIdentifiers(block);
+                        statements = getAllStatements(block.statements());
+                        allNodes.addAll(statements);
                     } else {
-                        allNodes = new ArrayList<>();
+                        ids = new HashSet<>();
+                        statements = new ArrayList<>();
                     }
+                    this.method2identifiers.put(type.getName().toString() + ":Initializer" + initializerCount, ids);
+                    this.method2statements.put(type.getName().toString() + ":Initializer" + initializerCount++, statements);
                 }
                 if (component instanceof MethodDeclaration) {
-                    getIdentifiers(component);
+                    HashSet<String> ids;
                     MethodDeclaration method = (MethodDeclaration) component;
                     List<ASTNode> statements;
                     Block block = method.getBody();
-                    if (block == null || block.statements().size() == 0) {
-                        statements = new ArrayList<>();
-                        this.allNodes.add(method);
-                    } else {
-                        statements = getAllNodes(getAllNodes(block.statements()));
+                    if (block != null && block.statements().size() > 0) {
+                        statements = getAllStatements(block.statements());
                         this.allNodes.addAll(statements);
+                         ids = getIdentifiers(((MethodDeclaration) component).getBody());
+                    } else {
+                        statements = new ArrayList<>();
+                        ids = new HashSet<>();
                     }
+                    this.method2identifiers.put(type.getName().toString() + ":" + createMethodSignature(method), ids);
                     this.method2statements.put(type.getName().toString() + ":" + createMethodSignature(method), statements);
                 }
             }
         }
-        this.candidateNodes = null;
     }
 
     // Other cases need invoke this constructor, filename is defined in mutate function
@@ -174,34 +195,7 @@ public class ASTWrapper {
                 this.types.add((TypeDeclaration) node);
             }
         }
-        this.allNodes = new ArrayList<>();
-        this.method2statements = new HashMap<>();
-        for (TypeDeclaration clazz : this.types) {
-            List<ASTNode> components = clazz.bodyDeclarations();
-            for (int i = 0; i < components.size(); i++) {
-                ASTNode component = components.get(i);
-                allNodes.add(component);
-                if (component instanceof Initializer) {
-                    Block block = ((Initializer) component).getBody();
-                    if (block != null) {
-                        allNodes.addAll(getAllStatements((block.statements())));
-                    }
-                }
-                if (component instanceof MethodDeclaration) {
-                    MethodDeclaration method = (MethodDeclaration) component;
-                    List<ASTNode> nodes;
-                    Block block = method.getBody();
-                    if (block == null || block.statements().size() == 0) {
-                        nodes = new ArrayList<>();
-                        this.allNodes.add(method);
-                    } else {
-                        nodes = getAllStatements(block.statements());
-                        this.allNodes.addAll(nodes);
-                    }
-                    this.method2statements.put(clazz.getName().toString() + ":" + createMethodSignature(method), nodes);
-                }
-            }
-        }
+        this.parse2nodes();
         this.candidateNodes = null;
     }
 
@@ -220,36 +214,7 @@ public class ASTWrapper {
                 this.types.add((TypeDeclaration) node);
             }
         }
-        this.allNodes = new ArrayList<>();
-        this.method2statements = new HashMap<>();
-        for (TypeDeclaration clazz : this.types) {
-            List<ASTNode> components = clazz.bodyDeclarations();
-            for (int i = 0; i < components.size(); i++) {
-                ASTNode component = components.get(i);
-                if (component instanceof FieldDeclaration) {
-                    allNodes.add(component);
-                }
-                if (component instanceof Initializer) {
-                    Block block = ((Initializer) component).getBody();
-                    if (block != null) {
-                        allNodes.addAll(getAllStatements((block.statements())));
-                    }
-                }
-                if (component instanceof MethodDeclaration) {
-                    MethodDeclaration method = (MethodDeclaration) component;
-                    List<ASTNode> statements;
-                    Block block = method.getBody();
-                    if (block == null || block.statements().size() == 0) {
-                        statements = new ArrayList<>();
-                        this.allNodes.add(method);
-                    } else {
-                        statements = getAllStatements(block.statements());
-                        this.allNodes.addAll(statements);
-                    }
-                    this.method2statements.put(clazz.getName().toString() + ":" + createMethodSignature(method), statements);
-                }
-            }
-        }
+        this.parse2nodes();
         this.candidateNodes = null;
     }
 
@@ -269,7 +234,7 @@ public class ASTWrapper {
     // This method can be invoked only if the source code file has generated.
     public boolean writeToJavaFile() {
         String code = this.getCode();
-        String formattedCode;
+//        String formattedCode;
         try {
             File file = new File(this.filePath);
             if (!file.exists()) {
@@ -834,4 +799,15 @@ public class ASTWrapper {
         return this.initSeedPath;
     }
 
+    public List<ASTNode> getAllNodes() {
+        return allNodes;
+    }
+
+    public HashMap<String, List<ASTNode>> getMethod2statements() {
+        return method2statements;
+    }
+
+    public HashMap<String, HashSet<String>> getMethod2identifiers() {
+        return method2identifiers;
+    }
 }

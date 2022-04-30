@@ -39,6 +39,7 @@ import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
@@ -47,7 +48,18 @@ import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.security.SecureRandom;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -162,7 +174,7 @@ public class Util {
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
-    public static Map compilerOptions = JavaCore.getOptions();
+
 
     public static void initEnv() {
         String sp;
@@ -264,9 +276,6 @@ public class Util {
                 InferResultFolder.mkdir();
             }
         }
-        compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
-        compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
-        compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
     }
 
     public static <T> List<List<T>> listAveragePartition(List<T> source, int n) {
@@ -763,10 +772,17 @@ public class Util {
         }
     }
 
-    public static List<String> getIdentifiers(Block block) {
-        for(Statement statement : block.statements()) {
-
+    public static HashSet<String> getIdentifiers(Block block) {
+        HashSet<String> identifiers = new HashSet<>();
+        for (Statement statement : (List<Statement>) block.statements()) {
+            List<ASTNode> subNodes = getChildrenNodes(statement);
+            for (ASTNode subNode : subNodes) {
+                if (subNode instanceof SimpleName) {
+                    identifiers.add(((SimpleName) subNode).getIdentifier());
+                }
+            }
         }
+        return identifiers;
     }
 
     // get Direct file list of tarege folder path, mainly used to count sub_seed folders

@@ -21,7 +21,9 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
@@ -94,6 +96,12 @@ public class EnumClassWrapper extends Transform {
         } else {
             // Here, we think oldNode is a FieldDeclaration or Initializer
             if(srcNode instanceof FieldDeclaration) {
+                String varName = ((VariableDeclarationFragment) (((FieldDeclaration) srcNode).fragments().get(0))).getName().getIdentifier();
+                for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
+                    if(entry.getValue().contains(varName)) {
+                        return false;
+                    }
+                }
                 FieldDeclaration newStatement = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
                 listRewrite.insertLast(newStatement, null);
                 astRewrite.replace(srcNode, enumClass, null);
