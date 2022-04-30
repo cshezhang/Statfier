@@ -815,6 +815,7 @@ public class Util {
         File[] files = dir.listFiles();
         if (files == null) {
             System.err.println("GetFileName cannot find: " + path);
+            System.exit(-1);
         }
         for (File file : files) {
             if (file.isDirectory()) {

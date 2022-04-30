@@ -26,7 +26,7 @@ public class CFWrapperWithForFalse extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         ForStatement newForStatement = ast.newForStatement();
@@ -50,18 +50,18 @@ public class CFWrapperWithForFalse extends Transform {
         newForStatement.updaters().add(postfixExpression);
 
         Block newForBody = ast.newBlock();
-        Statement newStatement = (Statement) ASTNode.copySubtree(ast, sourceStatement);
+        Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         newForBody.statements().add(newStatement);
         newForStatement.setBody(newForBody);
-        Block methodBlock = getDirectBlockOfStatement(sourceStatement);
-        if(methodBlock.statements().contains(sourceStatement)) {
+        Block methodBlock = getDirectBlockOfStatement(srcNode);
+        if(methodBlock.statements().contains(srcNode)) {
             ListRewrite methodRewrite = astRewrite.getListRewrite(methodBlock, Block.STATEMENTS_PROPERTY);
-            methodRewrite.insertAfter(newForStatement, sourceStatement, null);
+            methodRewrite.insertBefore(newForStatement, srcNode, null);
         } else {
             Block newBlock = ast.newBlock();
-            newBlock.statements().add(ASTNode.copySubtree(ast, sourceStatement));
             newBlock.statements().add(newForStatement);
-            astRewrite.replace(sourceStatement, newBlock, null);
+            newBlock.statements().add(ASTNode.copySubtree(ast, srcNode));
+            astRewrite.replace(srcNode, newBlock, null);
         }
         return true;
     }

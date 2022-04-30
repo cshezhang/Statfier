@@ -21,25 +21,28 @@ public class CFWrapperWithIfFlase extends Transform {
         return instance;
     }
 
+    /*
+    S; -> if(false) S; S;
+     */
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        Statement newStatement = (Statement) ASTNode.copySubtree(ast, oldStatement);
+        Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         Block newIfBlock = ast.newBlock();
         newIfBlock.statements().add(newStatement);
         IfStatement newIfStatement = ast.newIfStatement();
         newIfStatement.setExpression(ast.newBooleanLiteral(false));
         newIfStatement.setThenStatement(newIfBlock);
-        Block oldBlock = getDirectBlockOfStatement(oldStatement);
-        if(oldBlock.statements().contains(oldStatement)) {
+        Block oldBlock = getDirectBlockOfStatement(srcNode);
+        if(oldBlock.statements().contains(srcNode)) {
             ListRewrite listRewrite = astRewrite.getListRewrite(oldBlock, Block.STATEMENTS_PROPERTY);
-            listRewrite.insertBefore(newIfStatement, oldStatement, null);
+            listRewrite.insertBefore(newIfStatement, srcNode, null);
         } else {
             Block newBlock = ast.newBlock();
-            newBlock.statements().add(ASTNode.copySubtree(ast, oldStatement));
             newBlock.statements().add(newIfStatement);
-            astRewrite.replace(oldStatement, newBlock, null);
+            newBlock.statements().add(ASTNode.copySubtree(ast, srcNode));
+            astRewrite.replace(srcNode, newBlock, null);
         }
         return true;
     }
