@@ -351,6 +351,9 @@ public class Util {
                 }
             }
         }
+        if (nodes.size() == 0) {
+            nodes.add(root);
+        }
         return nodes;
     }
 
@@ -873,22 +876,20 @@ public class Util {
     }
 
     public static MethodDeclaration getDirectMethodOfStatement(ASTNode node) {
-        if (node instanceof Statement) {
-            ASTNode parent = node.getParent();
-            while (!(parent instanceof MethodDeclaration)) {
-                parent = parent.getParent();
-                if (parent == null || parent.equals(parent.getParent())) {
-                    return null;
-                }
-            }
-            return (MethodDeclaration) parent;
-        } else {
-            if (node instanceof MethodDeclaration) {
-                return (MethodDeclaration) node;
-            } else {
+        if(node == null) {
+            return null;
+        }
+        if (node instanceof MethodDeclaration) {
+            return (MethodDeclaration) node;
+        }
+        ASTNode parent = node.getParent();
+        while (!(parent instanceof MethodDeclaration)) {
+            parent = parent.getParent();
+            if (parent == null || parent.equals(parent.getParent())) {
                 return null;
             }
         }
+        return (MethodDeclaration) parent;
     }
 
     public static TypeDeclaration getClassOfStatement(ASTNode statement) {

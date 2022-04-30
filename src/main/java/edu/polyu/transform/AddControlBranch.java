@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -102,6 +103,9 @@ public class AddControlBranch extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        if(Util.checkExpressionLiteral(node)) {
+            return nodes;
+        }
         if(node instanceof FieldDeclaration || node instanceof MethodDeclaration || node instanceof SuperConstructorInvocation) {
             return nodes;
         }

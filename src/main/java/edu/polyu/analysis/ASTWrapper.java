@@ -23,6 +23,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static edu.polyu.util.Util.COMPILE;
+import static edu.polyu.util.Util.getDirectBlockOfStatement;
 import static edu.polyu.util.Util.getIdentifiers;
 import static edu.polyu.util.Util.matcher;
 import static edu.polyu.util.Util.Path2Last;
@@ -327,6 +328,17 @@ public class ASTWrapper {
         if (resNodes.isEmpty()) {
             return resNodes;
         }
+        List<ASTNode> nodes2add = new ArrayList<>();
+        for(ASTNode node : resNodes) {
+            Block block = getDirectBlockOfStatement(node);
+            if(block != null) {
+                ASTNode outNode = block.getParent();
+                if(outNode instanceof IfStatement) {
+                    nodes2add.add(((IfStatement) outNode).getExpression());
+                }
+            }
+        }
+        resNodes.addAll(nodes2add);
         // Perform intra-procedural def-use analysis to get all candidate statements in this function
         // We may construct a better data flow analysis here
         HashSet<String> sources = new HashSet<>();

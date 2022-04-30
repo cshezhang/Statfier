@@ -90,6 +90,9 @@ public class CFWrapperWithForTrue extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        if(Util.checkExpressionLiteral(node)) {
+            return nodes;
+        }
         if(!InitCheck(node)) {
             return nodes;
         }

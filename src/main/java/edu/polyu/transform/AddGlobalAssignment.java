@@ -101,9 +101,9 @@ public class AddGlobalAssignment extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        nodes.add(statement);
+        nodes.add(node);
         return nodes;
     }
 

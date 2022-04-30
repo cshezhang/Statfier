@@ -1,6 +1,7 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
@@ -35,6 +36,9 @@ public class CFWrapperWithDoWhile extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        if(Util.checkExpressionLiteral(node)) {
+            return nodes;
+        }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;
