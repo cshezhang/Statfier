@@ -290,12 +290,14 @@ public class ASTWrapper {
                 List<Statement> statements = block.statements();
                 for (int i = 0; i < statements.size(); i++) {
                     Statement statement = (Statement) block.statements().get(i);
+                    List<ASTNode> subNodes = getChildrenNodes(statement);
                     System.out.println(statement.toString());
                     List<ASTNode> nodes = getChildrenNodes(statement);
                     for (ASTNode node : nodes) {
                         System.out.println(node + "  " + node.getClass() + "  " + String.format("0x%x", System.identityHashCode(node)));
                     }
                     System.out.println("-----------------");
+                    System.out.println(subNodes);
                 }
             }
         }
@@ -587,14 +589,17 @@ public class ASTWrapper {
                             succMutation.addAndGet(1);
                             newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
+                            System.out.println(newMutant.filename);
+                            System.out.println(transSeq.toString());
                             mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
                             seed2mutant.put(newMutant.initSeedPath, newMutant.filePath);
                             newMutant.transNodes.add(newSrcNode);
                             if (COMPILE) {
-                                newMutant.resetClassName();  // Rewrite class name and pkg definition
+                                newMutant.rewriteJavaCode();  // 1. Rewrite transformation, Don't remove this line, we need rewrite Java code twice
+                                newMutant.resetClassName();  // 2. Rewrite class name and pkg definition
                                 newMutant.removePackageDefinition();
                             }
-                            newMutant.rewriteJavaCode(); // Rewrite transformation
+                            newMutant.rewriteJavaCode(); //
                             if (newMutant.writeToJavaFile()) {
                                 newWrappers.add(newMutant);
                             }
@@ -652,6 +657,7 @@ public class ASTWrapper {
                 if (node instanceof SimpleName && ((SimpleName) node).getIdentifier().equals(srcName)) {
                     this.astRewrite.replace(node, this.ast.newSimpleName(this.filename), null);
                 }
+//                if(node instanceof SimpleType) && ((SimpleType) node).getName())
             }
         }
     }

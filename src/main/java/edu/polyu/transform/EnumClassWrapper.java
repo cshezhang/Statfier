@@ -61,7 +61,7 @@ public class EnumClassWrapper extends Transform {
         EnumConstantDeclaration enumConstant = ast.newEnumConstantDeclaration();
         enumConstant.setName(ast.newSimpleName("RED"));
         EnumDeclaration enumClass = ast.newEnumDeclaration();
-        enumClass.setName(ast.newSimpleName("enumClass" + enumCounter));
+        enumClass.setName(ast.newSimpleName("enumClass" + enumCounter++));
         enumClass.enumConstants().add(enumConstant);
         ListRewrite listRewrite = astRewrite.getListRewrite(enumClass, enumClass.getBodyDeclarationsProperty());
         if(oldMethod != null) {

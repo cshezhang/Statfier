@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.util.Util.getAllStatements;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
 
 // Control flow wrapper based on for-loop
@@ -66,9 +67,32 @@ public class CFWrapperWithForTrue extends Transform {
         return true;
     }
 
+    public static boolean InitCheck(ASTNode node) {
+        if(node instanceof ExpressionStatement && ((ExpressionStatement) node).getExpression() instanceof Assignment) {
+            Assignment assignment = (Assignment) ((ExpressionStatement) node).getExpression();
+            if(assignment.getLeftHandSide() instanceof SimpleName) {
+                String varName = ((SimpleName) assignment.getLeftHandSide()).getIdentifier();
+                MethodDeclaration method = getDirectMethodOfStatement(node);
+                List<Statement> statements = getAllStatements(method.getBody().statements());
+                for (Statement statement : statements) {
+                    if (statement instanceof VariableDeclarationStatement) {
+                        VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
+                        if (vdFragment.getName().getIdentifier().equals(varName) && vdFragment.getInitializer() == null) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        if(!InitCheck(node)) {
+            return nodes;
+        }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
             node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;

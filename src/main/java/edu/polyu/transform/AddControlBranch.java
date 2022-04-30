@@ -1,7 +1,23 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.ASTWrapper;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
@@ -37,7 +53,7 @@ public class AddControlBranch extends Transform {
         // True branch considers vd statement because of define range of variable
         // Namely, int a = 10; -> int a; if(true) { a = 10; } else { a = 10; }
         VariableDeclarationFragment newBoolVdFragment = ast.newVariableDeclarationFragment();
-        String varName = String.format("acb%d", varCounter);
+        String varName = String.format("acb%d", varCounter++);
         newBoolVdFragment.setName(ast.newSimpleName(varName));
         newBoolVdFragment.setInitializer(ast.newBooleanLiteral(true));
         VariableDeclarationStatement newBoolVdStatement = ast.newVariableDeclarationStatement(newBoolVdFragment);

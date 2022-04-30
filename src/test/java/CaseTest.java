@@ -5,21 +5,11 @@
  */
 public class CaseTest {
 
-    public static int getLiteral1() {
-        return 0;
+    public void foo() {
+        Integer i;
+        do {i = 10; break;} while(false);
+        System.out.println(i);
     }
 
-    public static void noFallthroughMethodNoDefault(int which) {
-        switch (0) {
-            case 0:
-                doSomething();
-                break;
-        }
-    }
-
-    public static void doSomething() {
-        System.out.println("Hello world!");
-        return;
-    }
 
 }
