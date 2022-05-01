@@ -6,8 +6,6 @@ import static edu.polyu.util.Invoker.invokePMD;
 import static edu.polyu.util.Invoker.invokeSpotBugs;
 import static edu.polyu.util.Util.*;
 
-import java.io.File;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

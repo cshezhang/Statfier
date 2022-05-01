@@ -13,9 +13,9 @@ import edu.umd.cs.findbugs.annotations.NoWarning;
 
 class DumbMethodInvocations {
 
-    @ExpectWarning("DMI_CONSTANT_DB_PASSWORD")
-    Connection getConnection2() throws SQLException {
-        return DriverManager.getConnection("jdbc:hsqldb:mem:test", "sa", "secret");
+    @ExpectWarning("DMI_LONG_BITS_TO_DOUBLE_INVOKED_ON_INT")
+    double convertToDouble(int i) {
+        return Double.longBitsToDouble(i);
     }
 
 }

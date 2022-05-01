@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.util.Util.PMD_MUTATION;
 import static edu.polyu.util.Util.checkExpressionLiteral;
 import static edu.polyu.util.Util.checkLiteralType;
 import static edu.polyu.util.Util.file2report;
@@ -93,8 +94,9 @@ public class AddMethodCallToLiteral extends Transform {
             return nodes;
         }
         List<ASTNode> subNodes = getChildrenNodes(node);
-        for (ASTNode subNode : subNodes) {
-            if (checkExpressionLiteral(subNode)) {
+        for (int i = subNodes.size() - 1; i >= 0; i--) {
+            ASTNode subNode = subNodes.get(i);
+            if (checkExpressionLiteral(subNode) && !subNode.toString().contains("jdbc:") && !subNode.toString().equals("sa")) {
                 nodes.add(subNode);
             }
         }
@@ -118,35 +120,40 @@ public class AddMethodCallToLiteral extends Transform {
         List<ASTNode> resNodes = new ArrayList<>();
         List<ASTNode> candidateNodes = new ArrayList<>();
         // Locate by column
-        for (ASTNode targetNode : nodes) {
-            int col = cu.getColumnNumber(targetNode.getStartPosition()), row = cu.getLineNumber(targetNode.getStartPosition());
-            Report report = file2report.get(wrapper.getFilePath());
-            if (report instanceof PMD_Report) {
-                PMD_Report pmd_report = (PMD_Report) report;
-                List<PMD_Violation> violations = pmd_report.getViolations();
-                for (PMD_Violation violation : violations) {
-                    if (violation.getBeginLine() == row) {
-                        candidateNodes.add(targetNode);
-                        if(col >= violation.getBeginCol() - 1 && col <= violation.getEndCol() + 1) {
-                            resNodes.add(targetNode);
+        if(PMD_MUTATION) {
+            for (ASTNode targetNode : nodes) {
+                int col = cu.getColumnNumber(targetNode.getStartPosition()), row = cu.getLineNumber(targetNode.getStartPosition());
+                Report report = file2report.get(wrapper.getFilePath());
+                if (report instanceof PMD_Report) {
+                    PMD_Report pmd_report = (PMD_Report) report;
+                    List<PMD_Violation> violations = pmd_report.getViolations();
+                    for (PMD_Violation violation : violations) {
+                        if (violation.getBeginLine() == row) {
+                            candidateNodes.add(targetNode);
+                            if (col >= violation.getBeginCol() - 1 && col <= violation.getEndCol() + 1) {
+                                resNodes.add(targetNode);
+                            }
                         }
                     }
                 }
             }
-        }
-        if (resNodes.size() == 0) { // Cannot locate by column, randomly select one node
-            if (candidateNodes.size() == 0) {
-                resNodes.add(nodes.get(random.nextInt(nodes.size())));
-            } else {
-                if (candidateNodes.size() > 2) {
-                    resNodes.add(candidateNodes.get(0));
-                    resNodes.add(candidateNodes.get(1));
+            if (resNodes.size() == 0) { // Cannot locate by column, randomly select one node
+                if (candidateNodes.size() == 0) {
+                    resNodes.add(nodes.get(random.nextInt(nodes.size())));
                 } else {
-                    resNodes.add(candidateNodes.get(0));
+                    if (candidateNodes.size() > 2) {
+                        resNodes.add(candidateNodes.get(0));
+                        resNodes.add(candidateNodes.get(1));
+                    } else {
+                        resNodes.add(candidateNodes.get(0));
+                    }
                 }
             }
+            return resNodes;
+        } else {
+            return nodes;
         }
-        return resNodes;
+
     }
 
 }

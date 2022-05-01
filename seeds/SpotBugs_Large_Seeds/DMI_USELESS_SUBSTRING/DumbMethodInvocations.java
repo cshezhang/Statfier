@@ -13,9 +13,10 @@ import edu.umd.cs.findbugs.annotations.NoWarning;
 
 class DumbMethodInvocations {
 
-    @ExpectWarning("DMI_CONSTANT_DB_PASSWORD")
-    Connection getConnection2() throws SQLException {
-        return DriverManager.getConnection("jdbc:hsqldb:mem:test", "sa", "secret");
+    @ExpectWarning("DMI_USELESS_SUBSTRING")
+    String f(String s) {
+        return s.substring(0);
     }
 
+    
 }
