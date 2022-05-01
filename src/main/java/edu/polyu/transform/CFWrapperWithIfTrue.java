@@ -36,6 +36,7 @@ public class CFWrapperWithIfTrue extends Transform {
         ifStatement.setExpression(ast.newBooleanLiteral(true));
         ifStatement.setThenStatement(block);
         astRewrite.replace(srcNode, ifStatement, null);
+        wrapper.getPriorNodes().add(ifStatement.getExpression());
         return true;
     }
 

@@ -39,11 +39,11 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        Expression targetLiteral = (Expression) targetNode;
-        TypeDeclaration clazz = Util.getClassOfStatement(sourceStatement);
+        Expression targetLiteral = (Expression) targetNode;  // Notice check, hence, targetNode is literal.
+        TypeDeclaration clazz = Util.getClassOfStatement(srcNode);
         String newVarName = "t2sg" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
@@ -56,6 +56,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
         ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
         listRewrite.insertFirst(fieldDeclaration, null);
         astRewrite.replace(targetLiteral, newVar, null);
+        wrapper.getPriorNodes().add(fieldDeclaration);
         return true;
     }
 

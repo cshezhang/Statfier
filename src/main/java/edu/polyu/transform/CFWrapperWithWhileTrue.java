@@ -36,6 +36,7 @@ public class CFWrapperWithWhileTrue extends Transform {
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         WhileStatement whileStatement = ast.newWhileStatement();
         whileStatement.setExpression(ast.newBooleanLiteral(true));
+        wrapper.getPriorNodes().add(whileStatement.getExpression());
         BreakStatement breakStatement = ast.newBreakStatement();
         Block block = ast.newBlock();
         block.statements().add(newStatement);

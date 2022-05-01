@@ -127,6 +127,9 @@ public class SpotBugs_TransformThread implements Runnable {
                 List<ASTWrapper> validWrappers = new ArrayList<>();
                 while (!wrappers.isEmpty()) {
                     ASTWrapper head = wrappers.pollFirst();
+                    if(head.getPriorNodes().size() > 0) {
+                        int a = 10;
+                    }
                     if (!head.isBuggy()) {
                         validWrappers.add(head);
                     }

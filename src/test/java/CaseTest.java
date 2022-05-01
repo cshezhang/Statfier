@@ -5,11 +5,11 @@
  */
 public class CaseTest {
 
-    public void foo() {
-        Integer i;
-        do {i = 10; break;} while(false);
-        System.out.println(i);
-    }
 
+        static final int t2sg0;
+
+        static {
+            t2sg0 = 0;
+        }
 
 }

@@ -3,6 +3,7 @@ package edu.polyu.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.jdi.Field;
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.analysis.LoopStatement;
 
@@ -34,6 +35,7 @@ import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -837,6 +839,17 @@ public class Util {
             }
             return pureNames;
         }
+    }
+
+    public static ASTNode getStatementOfNode(ASTNode node) {
+        if(node == null) {
+            return null;
+        }
+        ASTNode parNode = node;
+        while(parNode != null && !(parNode instanceof Statement || parNode instanceof FieldDeclaration)) {
+            parNode = parNode.getParent();
+        }
+        return parNode;
     }
 
     public static ASTNode getFirstBrotherOfStatement(ASTNode statement) {

@@ -9,7 +9,9 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.util.Util.checkExpressionLiteral;
 import static edu.polyu.util.Util.getDirectBlockOfStatement;
+import static edu.polyu.util.Util.spotBugsJarList;
 
 public class CFWrapperWithIfFlase extends Transform {
 
@@ -44,17 +46,21 @@ public class CFWrapperWithIfFlase extends Transform {
             newBlock.statements().add(ASTNode.copySubtree(ast, srcNode));
             astRewrite.replace(srcNode, newBlock, null);
         }
+        wrapper.getPriorNodes().add(newIfStatement);
         return true;
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+    public List<ASTNode> check(ASTWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
-                node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
+        if (checkExpressionLiteral(srcNode) || !(srcNode instanceof Statement)) {
             return nodes;
         }
-        nodes.add(node);
+        if (srcNode instanceof VariableDeclarationStatement || srcNode instanceof FieldDeclaration ||
+                srcNode instanceof MethodDeclaration || srcNode instanceof ReturnStatement || srcNode instanceof SuperConstructorInvocation) {
+            return nodes;
+        }
+        nodes.add(srcNode);
         return nodes;
     }
 
