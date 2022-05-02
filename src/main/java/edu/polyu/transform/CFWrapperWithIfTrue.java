@@ -46,8 +46,9 @@ public class CFWrapperWithIfTrue extends Transform {
         if (Util.checkExpressionLiteral(node)) {
             return nodes;
         }
-        ASTNode broNode = Util.getFirstBrotherOfStatement(node);
-        if (!(broNode.getParent().getParent() instanceof MethodDeclaration)) {
+        ASTNode par = node.getParent();
+        if (node instanceof Statement && (par instanceof IfStatement || par instanceof WhileStatement ||
+                par instanceof DoStatement || par instanceof ForStatement)) {
             return nodes;
         }
         if (node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||

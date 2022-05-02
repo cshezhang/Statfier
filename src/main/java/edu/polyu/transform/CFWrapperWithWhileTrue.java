@@ -2,7 +2,20 @@ package edu.polyu.transform;
 
 import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.util.Util;
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
@@ -52,7 +65,9 @@ public class CFWrapperWithWhileTrue extends Transform {
         if(Util.checkExpressionLiteral(node)) {
             return nodes;
         }
-        if (!(Util.getFirstBrotherOfStatement(node).getParent().getParent() instanceof MethodDeclaration)) {
+        ASTNode par = node.getParent();
+        if (node instanceof Statement && (par instanceof IfStatement || par instanceof WhileStatement ||
+                par instanceof DoStatement || par instanceof ForStatement)) {
             return nodes;
         }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||

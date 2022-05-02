@@ -861,7 +861,7 @@ public class Util {
                 System.exit(-1);
             }
         }
-        return currentStatement;
+        return parent;
     }
 
     public static ASTNode getFirstBrotherOfStatement(ASTNode statement) {

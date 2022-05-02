@@ -4,7 +4,23 @@ import static edu.polyu.util.Invoker.invokeCheckStyle;
 import static edu.polyu.util.Invoker.invokeInfer;
 import static edu.polyu.util.Invoker.invokePMD;
 import static edu.polyu.util.Invoker.invokeSpotBugs;
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
+import static edu.polyu.util.Util.INFER_MUTATION;
+import static edu.polyu.util.Util.PMD_MUTATION;
+import static edu.polyu.util.Util.Path2Last;
+import static edu.polyu.util.Util.SINGLE_TESTING;
+import static edu.polyu.util.Util.SONARQUBE_MUTATION;
+import static edu.polyu.util.Util.SONARQUBE_SEED_PATH;
+import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Util.THREAD_COUNT;
+import static edu.polyu.util.Util.file2bugs;
+import static edu.polyu.util.Util.file2report;
+import static edu.polyu.util.Util.file2row;
+import static edu.polyu.util.Util.getFilenamesFromFolder;
+import static edu.polyu.util.Util.getProperty;
+import static edu.polyu.util.Util.listAveragePartition;
+import static edu.polyu.util.Util.readSonarQubeResultFile;
+import static edu.polyu.util.Util.sep;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +32,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import edu.polyu.analysis.ASTWrapper;
-import edu.polyu.report.*;
-import edu.polyu.thread.*;
+import edu.polyu.report.CheckStyle_Report;
+import edu.polyu.report.CheckStyle_Violation;
+import edu.polyu.report.Infer_Report;
+import edu.polyu.report.Infer_Violation;
+import edu.polyu.report.PMD_Report;
+import edu.polyu.report.PMD_Violation;
+import edu.polyu.report.SonarQube_Report;
+import edu.polyu.report.SonarQube_Violation;
+import edu.polyu.report.SpotBugs_Report;
+import edu.polyu.report.SpotBugs_Violation;
+import edu.polyu.thread.CheckStyle_TransformThread;
+import edu.polyu.thread.Infer_TransformThread;
+import edu.polyu.thread.PMD_TransformThread;
+import edu.polyu.thread.SonarQube_TransformThread;
+import edu.polyu.thread.SpotBugs_TransformThread;
 
 /**
  * Description: This file is the main class for our framework
