@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import static edu.polyu.analysis.ASTWrapper.failMutation;
 import static edu.polyu.analysis.ASTWrapper.invalidSeed;
 import static edu.polyu.analysis.ASTWrapper.mutant2seq;
-import static edu.polyu.analysis.ASTWrapper.seed2mutant;
+import static edu.polyu.analysis.ASTWrapper.mutant2seed;
 import static edu.polyu.analysis.ASTWrapper.succMutation;
 import static edu.polyu.analysis.ASTWrapper.validSeed;
 import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
@@ -107,9 +107,9 @@ public class AutomaticTester {
             res.append("Valid Seed Size: " + validSeed + "\n");
             res.append("Succ Transform: " + succMutation + "\n");
             res.append("Fail Transform: " + failMutation + "\n");
-            res.append("Seed2Mutant:\n");
-            for(Map.Entry<String, String> entry : seed2mutant.entrySet()) {
-                res.append(entry.getKey() + "->" + entry.getValue() + "#" + mutant2seq.get(entry.getValue()) + "\n");
+            res.append("Mutant2Seed:\n");
+            for(Map.Entry<String, String> entry : mutant2seed.entrySet()) {
+                res.append(entry.getKey() + "->" + entry.getValue() + "#" + mutant2seq.get(entry.getKey()) + "\n");
             }
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             res.append(String.format(

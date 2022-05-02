@@ -1,3 +1,5 @@
+import com.google.common.base.Preconditions;
+
 /**
  * Description:
  * Author: Vanguard
@@ -5,11 +7,11 @@
  */
 public class CaseTest {
 
+    Object x;
 
-        static final int t2sg0;
-
-        static {
-            t2sg0 = 0;
-        }
+    public void test0(Object x) {
+        Preconditions.checkNotNull("x should be nonnull");
+        this.x = x;
+    }
 
 }

@@ -1,6 +1,5 @@
 package edu.polyu.analysis;
 
-import com.sun.jdi.Field;
 import edu.polyu.transform.Transform;
 import edu.polyu.util.TriTuple;
 import org.apache.commons.io.FileUtils;
@@ -22,7 +21,6 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
@@ -54,6 +52,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static edu.polyu.util.Util.COMPILE;
+import static edu.polyu.util.Util.SINGLE_TESTING;
 import static edu.polyu.util.Util.checkExpressionLiteral;
 import static edu.polyu.util.Util.getDirectBlockOfStatement;
 import static edu.polyu.util.Util.getIdentifiers;
@@ -106,7 +105,7 @@ public class ASTWrapper {
     private HashMap<String, HashSet<String>> method2identifiers;
     private List<ASTNode> candidateNodes;
 
-    public static HashMap<String, String> seed2mutant = new HashMap<>();
+    public static HashMap<String, String> mutant2seed = new HashMap<>();
     public static HashMap<String, String> mutant2seq = new HashMap<>();
 
     public static Map compilerOptions = JavaCore.getOptions();
@@ -298,6 +297,8 @@ public class ASTWrapper {
             }
             MethodDeclaration[] methods = clazz.getMethods();
             for (MethodDeclaration method : methods) {
+                List<ASTNode> nnodes = getChildrenNodes(method);
+                System.out.println(nnodes);
                 System.out.println("----------Method Name: " + method.getName() + "----------");
                 Block block = method.getBody();
                 if (block == null || block.statements().size() == 0) {
@@ -558,8 +559,6 @@ public class ASTWrapper {
                     succMutation.addAndGet(1);
                     newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
                     newMutant.transSeq.add(transform.getIndex());
-                    seed2mutant.put(newMutant.initSeedPath, newMutant.filePath);
-                    mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
                     newMutant.transNodes.add(newSrcNode);
                     if (COMPILE) {
                         newMutant.rewriteJavaCode(); // 1: Rewrite transformation
@@ -568,6 +567,8 @@ public class ASTWrapper {
                     }
                     newMutant.rewriteJavaCode();
                     if (newMutant.writeToJavaFile()) {
+                        mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
+                        mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
                         newWrappers.add(newMutant);
                     }
                 } else {
@@ -586,6 +587,9 @@ public class ASTWrapper {
     public List<ASTWrapper> TransformByGuidedLocation() {
         List<ASTWrapper> newWrappers = new ArrayList<>();
         try {
+            if(SINGLE_TESTING) {
+                System.out.println("Processing Wrapper Path:" + this.filePath);
+            }
             if (this.candidateNodes == null) {
                 this.candidateNodes = this.getCandidateNodes();
             }
@@ -627,10 +631,6 @@ public class ASTWrapper {
                             succMutation.addAndGet(1);
                             newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
-                            System.out.println(newMutant.filename);
-                            System.out.println(transSeq.toString());
-                            mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
-                            seed2mutant.put(newMutant.initSeedPath, newMutant.filePath);
                             newMutant.transNodes.add(newSrcNode);
                             if (COMPILE) {
                                 newMutant.rewriteJavaCode();  // 1. Rewrite transformation, Don't remove this line, we need rewrite Java code twice
@@ -639,6 +639,8 @@ public class ASTWrapper {
                             }
                             newMutant.rewriteJavaCode(); //
                             if (newMutant.writeToJavaFile()) {
+                                mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
+                                mutant2seq.put(newMutant.filePath, newMutant.transSeq.toString());
                                 newWrappers.add(newMutant);
                             }
                         } else {

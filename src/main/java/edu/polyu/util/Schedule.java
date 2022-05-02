@@ -90,12 +90,14 @@ public class Schedule {
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
+        List<String> failSeedPaths = new ArrayList<>();
         List<ASTWrapper> initWrappers = new ArrayList<>();
         for (int index = 0; index < seedFilePaths.size(); index++) {
             String seedFilePath = seedFilePaths.get(index);
             String[] tokens = seedFilePath.split(sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedFilePath)) {
+                failSeedPaths.add(seedFilePath);
                 continue;
             }
             initValidSeedWrapperSize++;
@@ -103,6 +105,15 @@ public class Schedule {
             initWrappers.add(seedWrapper);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
+        if(SINGLE_TESTING) {
+            for (ASTWrapper wrapper : initWrappers) {
+                System.out.println("Init Path: " + wrapper.getFilePath());
+            }
+            System.out.println("Fail Seed Size: " + failSeedPaths.size());
+            for(String path : failSeedPaths) {
+                System.out.println("Fail Seed Path: " + path);
+            }
+        }
         List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
         for (int i = 0; i < lists.size(); i++) {
             SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));

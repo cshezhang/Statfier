@@ -97,7 +97,7 @@ public class Util {
     public static final ASTMatcher matcher = new ASTMatcher();
     public static final boolean NO_SELECTION = Boolean.parseBoolean(getProperty("NO_SELECTION"));
     public static final boolean RANDOM_SELECTION = Boolean.parseBoolean(getProperty("RANDOM_SELECTION"));
-    public static final boolean TS_SELECTION = Boolean.parseBoolean(getProperty("TS_SELECTION"));
+    public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
@@ -852,6 +852,18 @@ public class Util {
         return parNode;
     }
 
+    public static ASTNode getDirectBrotherOfStatement(ASTNode statement) {
+        ASTNode parent = statement.getParent();
+        while (!(parent instanceof Statement)) {
+            parent = parent.getParent();
+            if (parent == null || parent.equals(parent.getParent())) {
+                System.err.println("Error in Finding Brother Statement!");
+                System.exit(-1);
+            }
+        }
+        return currentStatement;
+    }
+
     public static ASTNode getFirstBrotherOfStatement(ASTNode statement) {
         if (!(statement instanceof Statement)) {
             return null;
@@ -869,7 +881,7 @@ public class Util {
         if (!(currentStatement instanceof Statement)) {
             System.err.println("Error: Current Statement cannot be casted to Statement!");
         }
-        return (Statement) currentStatement;
+        return currentStatement;
     }
 
     public static Block getDirectBlockOfStatement(ASTNode statement) {

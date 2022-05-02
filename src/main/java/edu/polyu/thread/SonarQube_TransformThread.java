@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
-import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.util.Util.GUIDED_LOCATION;
 import static edu.polyu.util.Util.NO_SELECTION;
 import static edu.polyu.util.Util.RANDOM_LOCATION;
 import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.TS_SELECTION;
+import static edu.polyu.util.Util.DIV_SELECTION;
 
 public class SonarQube_TransformThread implements Runnable {
 
@@ -47,8 +47,8 @@ public class SonarQube_TransformThread implements Runnable {
                         if(RANDOM_SELECTION) {
                             wrappers.addAll(Random_Selection(mutants));
                         }
-                        if(TS_SELECTION) {
-                            wrappers.addAll(TS_Selection(mutants));
+                        if(DIV_SELECTION) {
+                            wrappers.addAll(Div_Selection(mutants));
                         }
                     }
                 } else {

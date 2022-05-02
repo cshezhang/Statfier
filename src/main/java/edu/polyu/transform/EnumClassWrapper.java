@@ -29,6 +29,7 @@ import static edu.polyu.util.Util.createMethodSignature;
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
+import static edu.polyu.util.Util.getStatementOfNode;
 
 public class EnumClassWrapper extends Transform {
 
@@ -123,7 +124,15 @@ public class EnumClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        List<ASTNode> subNodes = getChildrenNodes(node);
+        TypeDeclaration clazz = getClassOfStatement(node);
+        MethodDeclaration method = getDirectMethodOfStatement(node);
+        if(method == null) {  // means FieldDeclaration
+            if(getStatementOfNode(node) instanceof FieldDeclaration) {
+                nodes.add(node);
+            }
+            return nodes;
+        }
+        List<ASTNode> subNodes = getChildrenNodes(method);
         boolean hasThis = false;
         for(ASTNode subNode : subNodes) {
             if(subNode instanceof ThisExpression) {
@@ -132,16 +141,6 @@ public class EnumClassWrapper extends Transform {
             }
         }
         if(hasThis) {
-            return nodes;
-        }
-        if(node instanceof MethodDeclaration) {
-            nodes.add(node);
-            return nodes;
-        }
-        TypeDeclaration clazz = getClassOfStatement(node);
-        MethodDeclaration method = getDirectMethodOfStatement(node);
-        if(method == null) {  // means FieldDeclaration
-            nodes.add(node);
             return nodes;
         }
         boolean isOverride = false;

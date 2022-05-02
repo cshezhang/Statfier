@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
-import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommands;
 import static edu.polyu.util.Util.GUIDED_LOCATION;
@@ -24,7 +24,7 @@ import static edu.polyu.util.Util.SEARCH_DEPTH;
 import static edu.polyu.util.Util.SpotBugsClassFolder;
 import static edu.polyu.util.Util.SpotBugsPath;
 import static edu.polyu.util.Util.SpotBugsResultFolder;
-import static edu.polyu.util.Util.TS_SELECTION;
+import static edu.polyu.util.Util.DIV_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2row;
 
@@ -33,12 +33,10 @@ import static edu.polyu.util.Util.sep;
 
 public class SpotBugs_TransformThread implements Runnable {
 
-    private int currentDepth;
     private ArrayDeque<ASTWrapper> initWrappers;
 
     // initWrappers contains different seedFolderPaths and seedFolderNames, so we can get them from wrappers
     public SpotBugs_TransformThread(List<ASTWrapper> initWrappers) {
-        this.currentDepth = 0;
         this.initWrappers = new ArrayDeque<>() {
             {
                 addAll(initWrappers);
@@ -50,7 +48,8 @@ public class SpotBugs_TransformThread implements Runnable {
     public void run() {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
         for(ASTWrapper initWrapper : this.initWrappers) {
-            ArrayDeque<ASTWrapper> wrappers = new ArrayDeque<>(64);
+            int currentDepth = 0;
+            ArrayDeque<ASTWrapper> wrappers = new ArrayDeque<>();
             wrappers.add(initWrapper);
             for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
                 while (!wrappers.isEmpty()) {
@@ -69,8 +68,8 @@ public class SpotBugs_TransformThread implements Runnable {
                             if(RANDOM_SELECTION) {
                                 wrappers.addAll(Random_Selection(mutants));
                             }
-                            if(TS_SELECTION) {
-                                wrappers.addAll(TS_Selection(mutants));
+                            if(DIV_SELECTION) {
+                                wrappers.addAll(Div_Selection(mutants));
                             }
                         }
                     } else {
@@ -127,9 +126,6 @@ public class SpotBugs_TransformThread implements Runnable {
                 List<ASTWrapper> validWrappers = new ArrayList<>();
                 while (!wrappers.isEmpty()) {
                     ASTWrapper head = wrappers.pollFirst();
-                    if(head.getPriorNodes().size() > 0) {
-                        int a = 10;
-                    }
                     if (!head.isBuggy()) {
                         validWrappers.add(head);
                     }

@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import static edu.polyu.util.Util.createMethodSignature;
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getClassOfStatement;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
+import static edu.polyu.util.Util.getStatementOfNode;
 
 public class NestedClassWrapper extends Transform {
 
@@ -87,10 +89,22 @@ public class NestedClassWrapper extends Transform {
         }
     }
 
+//    public static boolean checkThisId(MethodDeclaration method) {
+//
+//    }
+
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        List<ASTNode> subNodes = getChildrenNodes(node);
+        TypeDeclaration clazz = getClassOfStatement(node);
+        MethodDeclaration method = getDirectMethodOfStatement(node);
+        if (method == null) {
+            if(getStatementOfNode(node) instanceof FieldDeclaration) {
+                nodes.add(node);  // FieldDeclaration
+            }
+            return nodes;
+        }
+        List<ASTNode> subNodes = getChildrenNodes(method);
         boolean hasThis = false;
         for(ASTNode subNode : subNodes) {
             if(subNode instanceof ThisExpression) {
@@ -99,16 +113,6 @@ public class NestedClassWrapper extends Transform {
             }
         }
         if(hasThis) {
-            return nodes;
-        }
-        if (node instanceof MethodDeclaration) {
-            nodes.add(node);
-            return nodes;
-        }
-        TypeDeclaration clazz = getClassOfStatement(node);
-        MethodDeclaration method = getDirectMethodOfStatement(node);
-        if (method == null) {
-            nodes.add(node);  // FieldDeclaration
             return nodes;
         }
         boolean isOverride = false;

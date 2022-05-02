@@ -43,10 +43,14 @@ public class CFWrapperWithIfTrue extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.checkExpressionLiteral(node)) {
+        if (Util.checkExpressionLiteral(node)) {
             return nodes;
         }
-        if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
+        ASTNode broNode = Util.getFirstBrotherOfStatement(node);
+        if (!(broNode.getParent().getParent() instanceof MethodDeclaration)) {
+            return nodes;
+        }
+        if (node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;
         }

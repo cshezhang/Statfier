@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
-import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.*;
 
@@ -59,8 +59,8 @@ public class Infer_TransformThread extends Thread {
                         if(RANDOM_SELECTION) {
                             wrappers.addAll(Random_Selection(mutants));
                         }
-                        if(TS_SELECTION) {
-                            wrappers.addAll(TS_Selection(mutants));
+                        if(DIV_SELECTION) {
+                            wrappers.addAll(Div_Selection(mutants));
                         }
                     }
                 } else {

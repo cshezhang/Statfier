@@ -16,7 +16,7 @@ import static edu.polyu.util.Util.random;
  */
 public class SelectionAlgorithm {
 
-    public static List<ASTWrapper> TS_Selection(List<ASTWrapper> mutants) {
+    public static List<ASTWrapper> Div_Selection(List<ASTWrapper> mutants) {
         List<ASTWrapper> res = new ArrayList<>();
         Map<String, Boolean> code2exist = new HashMap<>();
         for(ASTWrapper mutant : mutants) {

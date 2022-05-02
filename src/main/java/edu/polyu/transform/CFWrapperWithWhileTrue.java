@@ -52,6 +52,9 @@ public class CFWrapperWithWhileTrue extends Transform {
         if(Util.checkExpressionLiteral(node)) {
             return nodes;
         }
+        if (!(Util.getFirstBrotherOfStatement(node).getParent().getParent() instanceof MethodDeclaration)) {
+            return nodes;
+        }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;

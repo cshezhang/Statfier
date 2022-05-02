@@ -13,11 +13,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
-import static edu.polyu.analysis.SelectionAlgorithm.TS_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.CheckStyleConfigPath;
 import static edu.polyu.util.Util.CheckStylePath;
 import static edu.polyu.util.Util.CheckStyleResultFolder;
+import static edu.polyu.util.Util.DIV_SELECTION;
 import static edu.polyu.util.Util.GUIDED_LOCATION;
 import static edu.polyu.util.Util.NO_SELECTION;
 import static edu.polyu.util.Util.Path2Last;
@@ -25,7 +26,6 @@ import static edu.polyu.util.Util.RANDOM_LOCATION;
 import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
 import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.TS_SELECTION;
 import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2report;
 import static edu.polyu.util.Util.file2row;
@@ -74,8 +74,8 @@ public class CheckStyle_TransformThread implements Runnable {
                         if(RANDOM_SELECTION) {
                             wrappers.addAll(Random_Selection(mutants));
                         }
-                        if(TS_SELECTION) {
-                            wrappers.addAll(TS_Selection(mutants));
+                        if(DIV_SELECTION) {
+                            wrappers.addAll(Div_Selection(mutants));
                         }
                     }
                 } else {

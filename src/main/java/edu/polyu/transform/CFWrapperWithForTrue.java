@@ -44,24 +44,26 @@ public class CFWrapperWithForTrue extends Transform {
         newVdFragment.setName(ast.newSimpleName(controlVar));
         newVdFragment.setInitializer(ast.newNumberLiteral("0"));
 
-        VariableDeclarationExpression newVdExpression = ast.newVariableDeclarationExpression(newVdFragment);
-        newVdExpression.setType(ast.newPrimitiveType(PrimitiveType.INT));
-        newForStatement.initializers().add(newVdExpression);
+//        VariableDeclarationExpression newVdExpression = ast.newVariableDeclarationExpression(newVdFragment);
+//        newVdExpression.setType(ast.newPrimitiveType(PrimitiveType.INT));
+//        newForStatement.initializers().add(newVdExpression);
 
-        InfixExpression infixExpression = ast.newInfixExpression();
-        infixExpression.setLeftOperand(ast.newSimpleName(controlVar));
-        infixExpression.setOperator(InfixExpression.Operator.LESS);
-        infixExpression.setRightOperand(ast.newNumberLiteral("1"));
-        newForStatement.setExpression(infixExpression);
+//        InfixExpression infixExpression = ast.newInfixExpression();
+//        infixExpression.setLeftOperand(ast.newSimpleName(controlVar));
+//        infixExpression.setOperator(InfixExpression.Operator.LESS);
+//        infixExpression.setRightOperand(ast.newNumberLiteral("1"));
+//        newForStatement.setExpression(infixExpression);
+        newForStatement.setExpression(ast.newBooleanLiteral(true));
 
-        PostfixExpression postfixExpression = ast.newPostfixExpression();
-        postfixExpression.setOperand(ast.newSimpleName(controlVar));
-        postfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
-        newForStatement.updaters().add(postfixExpression);
+//        PostfixExpression postfixExpression = ast.newPostfixExpression();
+//        postfixExpression.setOperand(ast.newSimpleName(controlVar));
+//        postfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
+//        newForStatement.updaters().add(postfixExpression);
 
         Block newForBodyBlock = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         newForBodyBlock.statements().add(newStatement);
+        newForBodyBlock.statements().add(ast.newBreakStatement());
         newForStatement.setBody(newForBodyBlock);
         astRewrite.replace(srcNode, newForStatement, null);
         return true;
@@ -91,6 +93,9 @@ public class CFWrapperWithForTrue extends Transform {
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         if(Util.checkExpressionLiteral(node)) {
+            return nodes;
+        }
+        if (!(Util.getFirstBrotherOfStatement(node).getParent().getParent() instanceof MethodDeclaration)) {
             return nodes;
         }
         if(!InitCheck(node)) {
