@@ -21,7 +21,7 @@ public class ASTTesting {
             if(node instanceof SwitchStatement) {
                 List<ASTNode> nodes = new ArrayList<>();
                 for(ASTNode subNode : Util.getChildrenNodes(node)) {
-                    if(Util.checkExpressionLiteral(subNode)) {
+                    if(Util.isLiteral(subNode)) {
                         nodes.add(subNode);
                     }
                 }

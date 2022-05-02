@@ -21,6 +21,7 @@ import static edu.polyu.util.Util.RANDOM_LOCATION;
 import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
 import static edu.polyu.util.Util.DIV_SELECTION;
+import static edu.polyu.util.Util.SINGLE_TESTING;
 import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2report;
 import static edu.polyu.util.Util.file2row;
@@ -34,14 +35,12 @@ import static edu.polyu.util.Util.readPMDResultFile;
  */
 public class PMD_TransformThread implements Runnable {
 
-    private int currentDepth;
     private String seedFolderName;
     private String ruleCategory;
     private String ruleType;
     private ArrayDeque<ASTWrapper> wrappers;
 
     public PMD_TransformThread(List<ASTWrapper> initWrappers, String seedFolderName) {
-        this.currentDepth = 0;
         this.seedFolderName = seedFolderName;
         String[] tokens = seedFolderName.split("_");
         this.ruleCategory = tokens[0];
@@ -51,15 +50,18 @@ public class PMD_TransformThread implements Runnable {
                 addAll(initWrappers);
             }
         };
-        System.out.println("Rule: " + this.ruleType);
     }
 
     // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
     @Override
     public void run() {
+        int currentDepth = 0;
         for (int i = 1; i <= SEARCH_DEPTH; i++) {
             while (!wrappers.isEmpty()) {
                 ASTWrapper wrapper = wrappers.pollFirst();
+//                if(SINGLE_TESTING) {
+//                    System.out.println("Processing: " + wrapper.getFilePath());
+//                }
                 if (wrapper.depth == currentDepth) {
                     if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
                         List<ASTWrapper> mutants = new ArrayList<>();
@@ -90,8 +92,8 @@ public class PMD_TransformThread implements Runnable {
                     "-d", mutantFolderPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
                     "-f", "json",
-                    "-r", resultFilePath,
-                    "--no-cache"
+                    "-r", resultFilePath
+//                    "--no-cache"
             };
             PMD.runPmd(pmdConfig); // detect mutants of iter i
             List<PMD_Report> reports = readPMDResultFile(resultFilePath);

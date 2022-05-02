@@ -324,6 +324,14 @@ public class Util {
 //        }
 //    }
 
+    public static List<ASTNode> getChildrenNodes(List<ASTNode> roots) {
+        List<ASTNode> nodes = new ArrayList<>();
+        for(ASTNode node : roots) {
+            nodes.addAll(getChildrenNodes(node));
+        }
+        return nodes;
+    }
+
     public static List<ASTNode> getChildrenNodes(ASTNode root) {
         ArrayList<ASTNode> nodes = new ArrayList<>();
         if(root == null) {
@@ -358,7 +366,7 @@ public class Util {
         return nodes;
     }
 
-    public static boolean checkExpressionLiteral(ASTNode astNode) {
+    public static boolean isLiteral(ASTNode astNode) {
         if (astNode instanceof StringLiteral || astNode instanceof NumberLiteral
                 || astNode instanceof BooleanLiteral || astNode instanceof CharacterLiteral
             /*|| expression instanceof NullLiteral || expression instanceof TypeLiteral*/) {
@@ -396,6 +404,35 @@ public class Util {
         List<Statement> results = new ArrayList<>();
         ArrayDeque<Statement> que = new ArrayDeque<>();
         que.addAll(sourceStatements);
+        while (!que.isEmpty()) {
+            Statement head = que.pollFirst();
+            if (head instanceof IfStatement) {
+                que.addAll(getIfSubStatements((IfStatement) head));
+                continue;
+            }
+            if (head instanceof TryStatement) {
+                que.addAll(((TryStatement) head).getBody().statements());
+                continue;
+            }
+            if (LoopStatement.isLoopStatement(head)) {
+                LoopStatement loopStatement = new LoopStatement(head);
+                Statement body = loopStatement.getBody();
+                if (body instanceof Block) {
+                    que.addAll((List<Statement>) ((Block) body).statements());
+                } else {
+                    que.add(body);
+                }
+                continue;
+            }
+            results.add(head);
+        }
+        return results;
+    }
+
+    public static List<Statement> getSubStatements(Statement srcStatement) {
+        List<Statement> results = new ArrayList<>();
+        ArrayDeque<Statement> que = new ArrayDeque<>();
+        que.add(srcStatement);
         while (!que.isEmpty()) {
             Statement head = que.pollFirst();
             if (head instanceof IfStatement) {

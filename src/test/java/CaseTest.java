@@ -7,11 +7,12 @@ import com.google.common.base.Preconditions;
  */
 public class CaseTest {
 
-    Object x;
-
-    public void test0(Object x) {
-        Preconditions.checkNotNull("x should be nonnull");
-        this.x = x;
+    class inner extends CaseTest {
+        int a;
     }
+
+    Object o = new Object() {
+
+    };
 
 }
