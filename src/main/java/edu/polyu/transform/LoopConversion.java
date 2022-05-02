@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: Transfer a Loop to Lamda Expression Loop
+ * @Description: Transfer a Loop to Lambda Expression Loop
  * @Author: Vanguard
  * @Date: 2022-02-26 15:42
  */

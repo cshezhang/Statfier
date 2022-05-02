@@ -96,7 +96,7 @@ public class AddMethodCallToLiteral extends Transform {
         List<ASTNode> subNodes = getChildrenNodes(node);
         for (int i = subNodes.size() - 1; i >= 0; i--) {
             ASTNode subNode = subNodes.get(i);
-            if (checkExpressionLiteral(subNode) && !subNode.toString().contains("jdbc:") && !subNode.toString().equals("sa")) {
+            if (checkExpressionLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }

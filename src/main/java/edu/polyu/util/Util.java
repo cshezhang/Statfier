@@ -69,7 +69,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -130,7 +129,7 @@ public class Util {
     public static final long RANDOM_SEED3 = 1131573600;
     public static final long RANDOM_SEED4 = 1447106400;
     public static final long RANDOM_SEED5 = 1762725600;
-    public static int newVarCounter = 0;
+//    public static int newVarCounter = 0;
 
     // seeds, these variables
     public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
@@ -453,6 +452,9 @@ public class Util {
 
     public static List<Statement> getAllStatements(List<Statement> sourceStatements) {
         List<Statement> results = new ArrayList<>();
+        if(sourceStatements == null || sourceStatements.size() == 0) {
+            return results;
+        }
         ArrayDeque<Statement> que = new ArrayDeque<>();
         que.addAll(sourceStatements);
         while (!que.isEmpty()) {
@@ -829,6 +831,11 @@ public class Util {
                 fileList.add(file.getAbsolutePath());
             }
         }
+        for(int i = fileList.size() - 1; i >= 0; i--) {
+            if(fileList.get(i).contains(".DS_Store")) {
+                fileList.remove(i);
+            }
+        }
         if (getAbsolutePath) {
             return fileList;
         } else {
@@ -967,7 +974,11 @@ public class Util {
             if (token.contains(".")) {
                 return ast.newPrimitiveType(PrimitiveType.DOUBLE);
             } else {
-                return ast.newPrimitiveType(PrimitiveType.INT);
+                if(token.contains("L")) {
+                    return ast.newPrimitiveType(PrimitiveType.LONG);
+                } else {
+                    return ast.newPrimitiveType(PrimitiveType.INT);
+                }
             }
         }
         if (literalExpression instanceof StringLiteral) {

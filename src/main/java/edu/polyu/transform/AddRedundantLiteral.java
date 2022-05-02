@@ -14,7 +14,6 @@ import java.util.List;
 
 import static edu.polyu.util.Util.getChildrenNodes;
 
-
 /**
  * @Description: The mutant to add redundant literal
  * @Author: Vanguard

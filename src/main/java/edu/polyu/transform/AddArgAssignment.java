@@ -25,7 +25,9 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Util.checkExpressionLiteral;
+import static edu.polyu.util.Util.getChildrenNodes;
+
 
 /**
  * @Description: Add assignment mutatant
@@ -33,6 +35,8 @@ import static edu.polyu.util.Util.*;
  * @Date: 2021-10-05 12:49
  */
 public class AddArgAssignment extends Transform {
+
+    private static int newVarCounter = 0;
 
     private static AddArgAssignment addArgAssignment = new AddArgAssignment();
 

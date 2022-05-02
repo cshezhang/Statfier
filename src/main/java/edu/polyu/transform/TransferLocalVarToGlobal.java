@@ -15,7 +15,6 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
