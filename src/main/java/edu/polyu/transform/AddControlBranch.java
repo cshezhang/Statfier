@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -103,7 +104,7 @@ public class AddControlBranch extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.checkExpressionLiteral(node)) {
+        if(Util.isLiteral(node)) {
             return nodes;
         }
         if(node instanceof FieldDeclaration || node instanceof MethodDeclaration || node instanceof SuperConstructorInvocation) {

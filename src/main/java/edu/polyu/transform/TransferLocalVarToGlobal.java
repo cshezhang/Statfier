@@ -18,7 +18,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.checkExpressionLiteral;
+import static edu.polyu.util.Util.isLiteral;
 import static edu.polyu.util.Util.checkLiteralType;
 import static edu.polyu.util.Util.getChildrenNodes;
 import static edu.polyu.util.Util.getDirectMethodOfStatement;
@@ -80,7 +80,7 @@ public class TransferLocalVarToGlobal extends Transform {
         List<ASTNode> subNodes = getChildrenNodes(srcNode);
         for (int i = 0; i < subNodes.size(); i++) {
             ASTNode subNode = subNodes.get(i);
-            if (checkExpressionLiteral(subNode)) {
+            if (isLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }

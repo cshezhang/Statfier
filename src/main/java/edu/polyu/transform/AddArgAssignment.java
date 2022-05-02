@@ -10,23 +10,28 @@ import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.checkExpressionLiteral;
+import static edu.polyu.util.Util.isLiteral;
 import static edu.polyu.util.Util.getChildrenNodes;
+import static edu.polyu.util.Util.getSubStatements;
 
 
 /**
@@ -53,16 +58,19 @@ public class AddArgAssignment extends Transform {
      * Notice: New Assignment should be added final modifier
      */
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetExpression = null, rightExpression = null;
-        if(sourceStatement instanceof VariableDeclarationStatement) {
-            VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) sourceStatement;
+//        if(isLiteral(targetNode)) {
+//
+//        }
+        if(srcNode instanceof VariableDeclarationStatement) {
+            VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) srcNode;
             rightExpression = ((VariableDeclarationFragment) vdStatement.fragments().get(0)).getInitializer();
         }
-        if(sourceStatement instanceof ExpressionStatement) {
-            Expression expression = ((ExpressionStatement) sourceStatement).getExpression();
+        if(srcNode instanceof ExpressionStatement) {
+            Expression expression = ((ExpressionStatement) srcNode).getExpression();
             if(expression instanceof Assignment) {
                 rightExpression = ((Assignment) expression).getRightHandSide();
             }
@@ -71,7 +79,7 @@ public class AddArgAssignment extends Transform {
             }
         }
         for(ASTNode astNode : getChildrenNodes(rightExpression)) {
-            if(astNode instanceof Expression && checkExpressionLiteral((Expression)astNode)) {
+            if(astNode instanceof Expression && isLiteral((Expression)astNode)) {
                 targetExpression = (Expression) astNode;
             }
         }
@@ -143,16 +151,27 @@ public class AddArgAssignment extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(node instanceof VariableDeclarationStatement) {
+//        if (node instanceof IfStatement || node instanceof WhileStatement || node instanceof ForStatement) {
+//            List<Statement> subStatements = getSubStatements((Statement) node);
+//            for(Statement subStatement : subStatements) {
+//                List<ASTNode> subNodes = getChildrenNodes(subStatement);
+//                for(ASTNode subNode : subNodes) {
+//                    if(isLiteral(subNode)) {
+//                        nodes.add(subNode);
+//                    }
+//                }
+//            }
+//        }
+        if (node instanceof VariableDeclarationStatement) {
             VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
             Expression rightExpression = vdFragment.getInitializer();
-            if(rightExpression instanceof MethodInvocation || rightExpression instanceof ClassInstanceCreation) {
+            if (rightExpression instanceof MethodInvocation || rightExpression instanceof ClassInstanceCreation) {
                 nodes.add(node);
             }
         }
-        if(node instanceof ExpressionStatement) {
+        if (node instanceof ExpressionStatement) {
             Expression expression = ((ExpressionStatement) node).getExpression();
-            if(expression instanceof MethodInvocation || expression instanceof Assignment) {
+            if (expression instanceof MethodInvocation || expression instanceof Assignment) {
                 nodes.add(node);
             }
         }

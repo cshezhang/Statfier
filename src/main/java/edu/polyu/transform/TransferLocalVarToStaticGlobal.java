@@ -2,11 +2,14 @@ package edu.polyu.transform;
 
 
 import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.LoopStatement;
 import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -63,10 +66,20 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
         List<ASTNode> nodes = new ArrayList<>();
-        List<ASTNode> subNodes = getChildrenNodes(statement);
+        List<ASTNode> subNodes;
+        if(LoopStatement.isLoopStatement(statement)) {
+            LoopStatement loop = new LoopStatement(statement);
+            if(loop.getBody() instanceof Block) {
+                subNodes = getChildrenNodes((List<ASTNode>)((Block) loop.getBody()).statements());
+            } else {
+                subNodes = getChildrenNodes(loop.getBody());
+            }
+        } else {
+            subNodes = getChildrenNodes(statement);
+        }
         for(int i = 0; i < subNodes.size(); i++) {
             ASTNode subNode = subNodes.get(i);
-            if(Util.checkExpressionLiteral(subNode)) {
+            if(Util.isLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }

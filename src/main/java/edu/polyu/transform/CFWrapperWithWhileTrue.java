@@ -62,7 +62,7 @@ public class CFWrapperWithWhileTrue extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.checkExpressionLiteral(node)) {
+        if(Util.isLiteral(node)) {
             return nodes;
         }
         ASTNode par = node.getParent();

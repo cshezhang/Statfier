@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.checkExpressionLiteral;
+import static edu.polyu.util.Util.isLiteral;
 import static edu.polyu.util.Util.checkLiteralType;
 import static edu.polyu.util.Util.file2report;
 import static edu.polyu.util.Util.getChildrenNodes;
@@ -95,7 +95,7 @@ public class AddMethodCallToLiteral extends Transform {
         List<ASTNode> subNodes = getChildrenNodes(node);
         for (int i = subNodes.size() - 1; i >= 0; i--) {
             ASTNode subNode = subNodes.get(i);
-            if (checkExpressionLiteral(subNode)) {
+            if (isLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }

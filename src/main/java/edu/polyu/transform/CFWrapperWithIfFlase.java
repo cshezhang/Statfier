@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.checkExpressionLiteral;
+import static edu.polyu.util.Util.isLiteral;
 import static edu.polyu.util.Util.getDirectBlockOfStatement;
 import static edu.polyu.util.Util.spotBugsJarList;
 
@@ -61,7 +61,7 @@ public class CFWrapperWithIfFlase extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
-        if (checkExpressionLiteral(srcNode) || !(srcNode instanceof Statement)) {
+        if (isLiteral(srcNode) || !(srcNode instanceof Statement)) {
             return nodes;
         }
         if (srcNode instanceof VariableDeclarationStatement || srcNode instanceof FieldDeclaration ||

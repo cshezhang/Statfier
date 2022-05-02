@@ -126,6 +126,14 @@ public class EnumClassWrapper extends Transform {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
+        for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
+            if(component instanceof TypeDeclaration) {
+                Type parentType = ((TypeDeclaration) component).getSuperclassType();
+                if(parentType instanceof SimpleType && ((SimpleType) parentType).getName().toString().equals(clazz.getName().getIdentifier())) {
+                    return nodes;
+                }
+            }
+        }
         if(method == null) {  // means FieldDeclaration
             if(getStatementOfNode(node) instanceof FieldDeclaration) {
                 nodes.add(node);

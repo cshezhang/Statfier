@@ -84,12 +84,16 @@ public class CFWrapperWithForTrue extends Transform {
         return true;
     }
 
+    // int a; a = 10; int a;
     public static boolean InitCheck(ASTNode node) {
         if(node instanceof ExpressionStatement && ((ExpressionStatement) node).getExpression() instanceof Assignment) {
             Assignment assignment = (Assignment) ((ExpressionStatement) node).getExpression();
             if(assignment.getLeftHandSide() instanceof SimpleName) {
                 String varName = ((SimpleName) assignment.getLeftHandSide()).getIdentifier();
                 MethodDeclaration method = getDirectMethodOfStatement(node);
+                if(method == null || method.getBody() == null) {
+                    return false;
+                }
                 List<Statement> statements = getAllStatements(method.getBody().statements());
                 for (Statement statement : statements) {
                     if (statement instanceof VariableDeclarationStatement) {
@@ -107,7 +111,7 @@ public class CFWrapperWithForTrue extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.checkExpressionLiteral(node)) {
+        if(Util.isLiteral(node)) {
             return nodes;
         }
         ASTNode par = node.getParent();
@@ -115,9 +119,9 @@ public class CFWrapperWithForTrue extends Transform {
                 par instanceof DoStatement || par instanceof ForStatement)) {
             return nodes;
         }
-        if(!InitCheck(node)) {
-            return nodes;
-        }
+//        if(!InitCheck(node)) {
+//            return nodes;
+//        }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
             node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;
