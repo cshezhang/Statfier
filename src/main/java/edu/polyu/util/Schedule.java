@@ -47,6 +47,7 @@ import edu.polyu.thread.Infer_TransformThread;
 import edu.polyu.thread.PMD_TransformThread;
 import edu.polyu.thread.SonarQube_TransformThread;
 import edu.polyu.thread.SpotBugs_TransformThread;
+import edu.polyu.transform.SpotBugs_Exec;
 
 /**
  * Description: This file is the main class for our framework
@@ -108,7 +109,7 @@ public class Schedule {
 
     public void executeSpotBugsMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        ExecutorService threadPool = null;
         if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
             threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
         } else {
@@ -143,16 +144,21 @@ public class Schedule {
                 System.out.println("Fail Seed Path: " + path);
             }
         }
-        List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
-        for (int i = 0; i < lists.size(); i++) {
-            SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
-            threadPool.submit(thread);
-        }
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(threadPool == null) {
+            System.out.println("No Thread!");
+            SpotBugs_Exec.run(initWrappers);
+        } else {
+            List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+            for (int i = 0; i < lists.size(); i++) {
+                SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
+                threadPool.submit(thread);
+            }
+            threadPool.shutdown();
+            try {
+                threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

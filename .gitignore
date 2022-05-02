@@ -1,8 +1,5 @@
 # Customized Directories and Files
-mutants/
-results/
 target/
-config.properties
 PMD_Cache.bin
 PMD_Result.html
 .vscode/
@@ -55,12 +52,6 @@ PMD_Result.html
 
 # PMD Result
 *.cache
-
-# Infer Result
-src/main/java/edu/sustech/infer-out/
-
-# Class files folder
-src/main/java/edu/sustech/edu/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

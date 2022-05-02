@@ -4,7 +4,6 @@ import edu.polyu.analysis.ASTWrapper;
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.PMD_Violation;
 import edu.polyu.report.Report;
-import edu.polyu.report.Violation;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
