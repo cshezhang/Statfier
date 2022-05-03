@@ -21,6 +21,7 @@ import static edu.polyu.analysis.ASTWrapper.mutant2seq;
 import static edu.polyu.analysis.ASTWrapper.mutant2seed;
 import static edu.polyu.analysis.ASTWrapper.succMutation;
 import static edu.polyu.analysis.ASTWrapper.validSeed;
+import static edu.polyu.util.Invoker.failedCmds;
 import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
 import static edu.polyu.util.Util.INFER_MUTATION;
 import static edu.polyu.util.Util.PMD_MUTATION;
@@ -128,6 +129,12 @@ public class AutomaticTester {
                 bufferedWriter.write("Failed Reports:\n");
                 for(String report : failedReport) {
                     bufferedWriter.write(report + "\n");
+                }
+            }
+            if(SPOTBUGS_MUTATION) {
+                bufferedWriter.write("Failed Cmds:\n");
+                for(String failedCmd : failedCmds) {
+                    bufferedWriter.write(failedCmd + "\n");
                 }
             }
             bufferedWriter.close();

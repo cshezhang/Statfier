@@ -16,6 +16,7 @@ import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommands;
+import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Util.GUIDED_LOCATION;
 import static edu.polyu.util.Util.NO_SELECTION;
 import static edu.polyu.util.Util.RANDOM_LOCATION;
@@ -105,9 +106,11 @@ public class SpotBugs_TransformThread implements Runnable {
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath();
-                    invokeCommands(invokeCmds);
-                    String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
-                    reports.addAll(readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path));
+                    boolean hasExec = invokeCommandsByZT(invokeCmds);
+                    if(hasExec) {
+                        String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                        reports.addAll(readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path));
+                    }
                 }
                 for (SpotBugs_Report report : reports) {
                     if (!file2row.containsKey(report.getFilepath())) {

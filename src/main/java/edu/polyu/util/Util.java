@@ -26,18 +26,15 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PrimitiveType;
@@ -158,7 +155,7 @@ public class Util {
 
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
-    public final static String InferPath = "/home/vanguard/bin/Infer/bin/infer";
+    public final static String InferPath = "/home/vanguard/bin/infer/bin/infer";
     //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
 //    public final static String InferPath = "infer";
     public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";

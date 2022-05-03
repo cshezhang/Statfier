@@ -1,6 +1,11 @@
 package edu.polyu.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -47,24 +52,27 @@ import static edu.polyu.util.Util.subSeedFolderNameList;
  */
 public class Invoker {
 
-    public static void invokeCommandsByZT(String[] cmdArgs) {
+    public static List<String> failedCmds = new ArrayList<>();
+
+    public static boolean invokeCommandsByZT(String[] cmdArgs) {
         StringBuilder argStr = new StringBuilder();
-        for(String arg : cmdArgs) {
+        for (String arg : cmdArgs) {
             argStr.append(arg + " ");
         }
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
             int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
-
             // CheckStyle Return value is the number of bugs.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");
                 System.err.println(argStr);
+                return false;
             }
             if(SPOTBUGS_MUTATION && exitValue != 0) {
-                System.err.println("Execute SpotBugs Error!");
-                System.err.println(argStr);
-                System.exit(-1);
+//                System.err.println("Execute SpotBugs Error!");
+//                System.err.println(argStr);
+                failedCmds.add(argStr.toString());
+                return false;
             }
             if(INFER_MUTATION && exitValue != 0) {
                 System.err.println("Exit Value: " + exitValue);
@@ -72,14 +80,17 @@ public class Invoker {
                 System.err.println(argStr);
                 System.err.println("Error: " + new String(errorStream.toByteArray()));
                 System.exit(-1);
+                return false;
             }
         } catch (Exception e) {
             System.err.println(argStr);
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
-    public static void invokeCommands(String[] cmdArgs) {
+    public static boolean invokeCommands(String[] cmdArgs) {
         StringBuilder args = new StringBuilder();
         for(int i = 0; i < cmdArgs.length; i++) {
             args.append(cmdArgs[i] + " ");
@@ -97,23 +108,31 @@ public class Invoker {
             }
             int exitValue = process.waitFor();
             if(exitValue != 4 && exitValue != 0) {
-                System.err.println("Fail to Invoke Commands1: " + args);
-                System.err.println("Log: " + builder);
-                System.err.println("ExitValue: " + exitValue);
-                System.exit(-1);
+                if (SPOTBUGS_MUTATION) {
+                    failedCmds.add(args.toString());
+                } else {
+                    System.err.println("Fail to Invoke Commands1: " + args);
+                    System.err.println("Log: " + builder);
+                    System.err.println("ExitValue: " + exitValue);
+                    System.exit(-1);
+                }
+                return false;
             }
             process.getOutputStream().close();
         } catch (IOException e) {
             System.err.println("Fail to Invoke Commands2: " + args);
             e.printStackTrace();
+            return false;
         } catch (InterruptedException e) {
             System.err.println("Fail to Invoke Commands:3 " + args);
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     // folderPath is purely folder path and doesn't contain java file name.
-    public static void compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
+    public static boolean compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
         if(SINGLE_TESTING) {
             System.out.println("Compiling: " + fileName);
         }
@@ -134,7 +153,8 @@ public class Invoker {
             cmd_list.add(inferJarStr.toString());
         }
         cmd_list.add(srcFolderPath  + File.separator + fileName + ".java");
-        invokeCommandsByZT(cmd_list.toArray(new String[cmd_list.size()]));
+        boolean tag = invokeCommandsByZT(cmd_list.toArray(new String[cmd_list.size()]));
+        return tag;
     }
 
     private static ExecutorService threadPool;
