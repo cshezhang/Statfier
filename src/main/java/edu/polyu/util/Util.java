@@ -99,6 +99,7 @@ public class Util {
     //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
     public static String userdir = getProperty("USERDIR");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
+    public static int SEED_INDEX = Integer.parseInt(getProperty("SEED_INDEX"));
 
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
     public final static boolean RANDOM_LOCATION = Boolean.parseBoolean(getProperty("RANDOM_LOCATION"));
@@ -191,7 +192,21 @@ public class Util {
             inferJarStr.append(inferJarList.get(i) + sp);
         }
         inferJarStr.append(inferJarList.get(0));
-        random.setSeed(RANDOM_SEED5);
+        if(SEED_INDEX == 1) {
+            random.setSeed(RANDOM_SEED1);
+        }
+        if(SEED_INDEX == 2) {
+            random.setSeed(RANDOM_SEED2);
+        }
+        if(SEED_INDEX == 3) {
+            random.setSeed(RANDOM_SEED3);
+        }
+        if(SEED_INDEX == 4) {
+            random.setSeed(RANDOM_SEED4);
+        }
+        if(SEED_INDEX == 5) {
+            random.setSeed(RANDOM_SEED5);
+        }
         if (SINGLE_TESTING) {
             sourceSeedPath = SINGLE_TESTING_PATH;
         } else {
