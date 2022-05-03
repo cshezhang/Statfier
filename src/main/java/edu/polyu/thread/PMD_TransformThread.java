@@ -92,8 +92,8 @@ public class PMD_TransformThread implements Runnable {
                     "-d", mutantFolderPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
                     "-f", "json",
-                    "-r", resultFilePath
-//                    "--no-cache"
+                    "-r", resultFilePath,
+                    "--no-cache"
             };
             PMD.runPmd(pmdConfig); // detect mutants of iter i
             List<PMD_Report> reports = readPMDResultFile(resultFilePath);
