@@ -21,6 +21,8 @@ import static edu.polyu.analysis.ASTWrapper.mutant2seq;
 import static edu.polyu.analysis.ASTWrapper.mutant2seed;
 import static edu.polyu.analysis.ASTWrapper.succMutation;
 import static edu.polyu.analysis.ASTWrapper.validSeed;
+import static edu.polyu.thread.PMD_TransformThread.cnt1;
+import static edu.polyu.thread.PMD_TransformThread.cnt2;
 import static edu.polyu.util.Invoker.failedCmds;
 import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
 import static edu.polyu.util.Util.INFER_MUTATION;
@@ -139,6 +141,9 @@ public class AutomaticTester {
             }
             bufferedWriter.close();
             writer.close();
+            System.out.println("Cnt1: " + cnt1);
+            System.out.println("Cnt2: " + cnt2);
+            System.out.println("Ratio: " + cnt2 / (double)(cnt1));
         } catch (Exception e) {
             e.printStackTrace();
         }

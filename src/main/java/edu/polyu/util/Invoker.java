@@ -62,6 +62,7 @@ public class Invoker {
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
             int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
+//            System.out.println("Error: " + new String(errorStream.toByteArray()));
             // CheckStyle Return value is the number of bugs.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");

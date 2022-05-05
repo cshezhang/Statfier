@@ -29,9 +29,16 @@ public class CheckStyle_InvokeThread implements Runnable {
     @Override
     public void run() {
         List<String> filepaths = getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
-        for(String filepath : filepaths) {
-            int i = Integer.parseInt(Path2Last(filepath));
+        for(int i = 0; i < filepaths.size(); i++) {
+            String filepath = filepaths.get(i);
+//            System.out.println(filepath);
+//            int i = Integer.parseInt(Path2Last(filepath));
+//            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
             String configPath = CheckStyleConfigPath + File.separator + seedFolderName + i + ".xml";
+            File configFile = new File(configPath);
+            if(configFile.exists()) {
+                configPath = CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
+            }
             String reportPath = CheckStyleResultFolder + File.separator + "iter" + iterDepth + "_" + seedFolderName + i + "_Result.xml";
             String[] invokeCmds = new String[3];
             if(OSUtil.isWindows()) {

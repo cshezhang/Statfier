@@ -87,10 +87,16 @@ public class CheckStyle_TransformThread implements Runnable {
             // detect mutants of iter i
             String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
             List<String> mutantFilePaths = getFilenamesFromFolder(mutantFolderPath, true);
+//            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
             String configPath = CheckStyleConfigPath + File.separator + seedFolderName + configIndex + ".xml";
+            File configFile = new File(configPath);
+            if(configFile.exists()) {
+                configPath = CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
+            }
             List<CheckStyle_Report> reports = new ArrayList<>();
             // 这里还可以做一个configIndex是否match seedFolderName里边的index
-            for(String mutantFilePath : mutantFilePaths) {
+            for(int i = 0; i < mutantFilePaths.size(); i++) {
+                String mutantFilePath = mutantFilePaths.get(i);
                 String mutantFileName = Path2Last(mutantFilePath);
                 String reportFilePath = CheckStyleResultFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".xml";
                 String[] invokeCmds = new String[3];

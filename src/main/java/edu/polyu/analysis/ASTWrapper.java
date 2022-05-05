@@ -72,6 +72,7 @@ import static edu.polyu.util.Util.getFirstBrotherOfStatement;
 import static edu.polyu.util.Util.getSubStatements;
 import static edu.polyu.util.Util.mutantCounter;
 import static edu.polyu.util.Util.random;
+import static edu.polyu.util.Util.spotBugsJarList;
 import static edu.polyu.util.Util.userdir;
 
 /**
@@ -527,8 +528,6 @@ public class ASTWrapper {
     public static AtomicInteger validSeed = new AtomicInteger(0);
 
     public List<ASTWrapper> TransformByRandomLocation() {
-        List<ASTWrapper> newWrappers = new ArrayList<>();
-        int randomCount = 0;
         if (this.candidateNodes == null) {
             this.candidateNodes = this.allNodes;
         }
@@ -539,14 +538,17 @@ public class ASTWrapper {
                 validSeed.addAndGet(1);
             }
         }
+        int cnt = file2row.get(this.filePath).size();
+        System.out.println(cnt + " " + this.candidateNodes.size());
+        int randomCount = 0;
+        List<ASTWrapper> newWrappers = new ArrayList<>();
         while (true) {
-            if (++randomCount > 1) {
+            if (++randomCount > cnt) {
                 break;
             }
             ASTNode candidateNode = this.candidateNodes.get(random.nextInt(this.candidateNodes.size()));
             Transform transform = Transform.getTransformRandomly();
             List<ASTNode> targetNodes = transform.check(this, candidateNode);
-            System.out.println("Target Nodes have been found!");
             for (ASTNode targetNode : targetNodes) {
                 String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                 String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";

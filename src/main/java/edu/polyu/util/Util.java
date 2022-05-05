@@ -682,6 +682,10 @@ public class Util {
         HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
         List<CheckStyle_Report> results = new ArrayList<>();
         try {
+            File checkFile = new File(reportPath);
+            if(!checkFile.exists()) {
+                return results;
+            }
             FileInputStream inputStream = new FileInputStream(reportPath);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             List<String> errorInstances = new ArrayList<>();

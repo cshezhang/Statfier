@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
@@ -39,6 +40,9 @@ public class PMD_TransformThread implements Runnable {
     private String ruleCategory;
     private String ruleType;
     private ArrayDeque<ASTWrapper> wrappers;
+
+    public static long cnt1 = 0;
+    public static long cnt2 = 0;
 
     public PMD_TransformThread(List<ASTWrapper> initWrappers, String seedFolderName) {
         this.seedFolderName = seedFolderName;
@@ -70,15 +74,19 @@ public class PMD_TransformThread implements Runnable {
                         } else if (RANDOM_LOCATION) {
                             mutants = wrapper.TransformByRandomLocation();
                         }
+                        cnt1 += mutants.size();
                         if(NO_SELECTION) {
                             wrappers.addAll(mutants);
                         }
+                        List<ASTWrapper> reducedMutants = null;
                         if(RANDOM_SELECTION) {
-                            wrappers.addAll(Random_Selection(mutants));
+                            reducedMutants = Random_Selection(mutants);
                         }
                         if(DIV_SELECTION) {
-                            wrappers.addAll(Div_Selection(mutants));
+                            reducedMutants = Div_Selection(mutants);
                         }
+                        cnt2 += reducedMutants.size();
+                        wrappers.addAll(reducedMutants);
                     }
                 } else {
                     wrappers.addFirst(wrapper); // The last wrapper in current depth
