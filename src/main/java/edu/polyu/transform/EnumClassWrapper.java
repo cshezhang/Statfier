@@ -48,6 +48,7 @@ public class EnumClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         TypeDeclaration clazz = getClassOfStatement(srcNode);
+        List<ASTNode> classModifiers = clazz.modifiers();
         List<String> staticFieldNames = new ArrayList<>();
         for(FieldDeclaration fd : clazz.getFields()) {
             for(Object modifier : fd.modifiers()) {
@@ -62,6 +63,11 @@ public class EnumClassWrapper extends Transform {
         EnumConstantDeclaration enumConstant = ast.newEnumConstantDeclaration();
         enumConstant.setName(ast.newSimpleName("RED"));
         EnumDeclaration enumClass = ast.newEnumDeclaration();
+        for(ASTNode classModifier : classModifiers) {
+            if(classModifier instanceof Modifier) {
+                enumClass.modifiers().add(ASTNode.copySubtree(ast, classModifier));
+            }
+        }
         enumClass.setName(ast.newSimpleName("enumClass" + enumCounter++));
         enumClass.enumConstants().add(enumConstant);
         ListRewrite listRewrite = astRewrite.getListRewrite(enumClass, enumClass.getBodyDeclarationsProperty());
@@ -123,6 +129,85 @@ public class EnumClassWrapper extends Transform {
 
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
+        TypeDeclaration clazz = getClassOfStatement(node);
+        MethodDeclaration method = getDirectMethodOfStatement(node);
+        List<ASTNode> classModifiers = clazz.modifiers();
+        for(ASTNode classModifier : classModifiers) {
+            if(classModifier instanceof Modifier) {
+                if(((Modifier) classModifier).getKeyword().toString().contains("final")) {
+                    return nodes;
+                }
+            }
+        }
+        List<ASTNode> methodModifiers = (List<ASTNode>) method.modifiers();
+        for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
+            if(component instanceof TypeDeclaration) {
+                Type parentType = ((TypeDeclaration) component).getSuperclassType();
+                if(parentType instanceof SimpleType && ((SimpleType) parentType).getName().toString().equals(clazz.getName().getIdentifier())) {
+                    return nodes;
+                }
+            }
+        }
+        if (method == null) {
+            if(getStatementOfNode(node) instanceof FieldDeclaration) {
+                nodes.add(node);  // FieldDeclaration
+            }
+            return nodes;
+        }
+        List<ASTNode> subNodes = getChildrenNodes(method);
+        boolean hasThis = false;
+        for(ASTNode subNode : subNodes) {
+            if(subNode instanceof ThisExpression) {
+                hasThis = true;
+                break;
+            }
+        }
+        if(hasThis) {
+            return nodes;
+        }
+        boolean isOverride = false;
+        for (ASTNode modifier : methodModifiers) {
+            if (modifier instanceof MarkerAnnotation) {
+                String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
+                if (name.contains("Override")) {
+                    isOverride = true;
+                    break;
+                }
+                if(name.contains("Test")) {
+                    return nodes;
+                }
+            }
+            if(modifier instanceof Modifier) {
+                if(((Modifier) modifier).getKeyword().toString().contains("abstract")) {
+                    return nodes;
+                }
+            }
+        }
+        if (isOverride) {
+            if (clazz.superInterfaceTypes().size() > 0) {
+                return nodes;
+            }
+            Type superClazzType = clazz.getSuperclassType();
+            if (superClazzType == null) {
+                nodes.add(node);
+                return nodes;
+            }
+            if (superClazzType instanceof SimpleType) {
+                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
+                if (name.contains("Object")) {
+                    nodes.add(node);
+                    return nodes;
+                }
+            }
+            return nodes;
+        } else {
+            nodes.add(node);
+            return nodes;
+        }
+    }
+
+    public List<ASTNode> classCheck(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);

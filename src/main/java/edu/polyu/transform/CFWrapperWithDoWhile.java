@@ -6,6 +6,7 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
@@ -53,7 +54,7 @@ public class CFWrapperWithDoWhile extends Transform {
         }
         ASTNode par = node.getParent();
         if (node instanceof Statement && (par instanceof IfStatement || par instanceof WhileStatement ||
-                par instanceof DoStatement || par instanceof ForStatement)) {
+                par instanceof DoStatement || par instanceof ForStatement) || par instanceof EmptyStatement) {
             return nodes;
         }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||

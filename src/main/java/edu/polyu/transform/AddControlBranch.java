@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -14,6 +15,7 @@ import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
 import org.eclipse.jdt.core.dom.Type;
@@ -104,18 +106,19 @@ public class AddControlBranch extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.isLiteral(node)) {
+        if (Util.isLiteral(node)) {
             return nodes;
         }
-        if(node instanceof FieldDeclaration || node instanceof MethodDeclaration || node instanceof SuperConstructorInvocation) {
+        if (node instanceof FieldDeclaration || node instanceof MethodDeclaration || node instanceof SuperConstructorInvocation ||
+                node instanceof EmptyStatement || node instanceof ReturnStatement) {
             return nodes;
         }
-        if(node instanceof VariableDeclarationStatement) {
+        if (node instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;
-            if(vdStatement.getType() instanceof ArrayType) {
-                if(vdStatement.modifiers().size() > 0) {
+            if (vdStatement.getType() instanceof ArrayType) {
+                if (vdStatement.modifiers().size() > 0) {
                     Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
-                    if(modifier.getKeyword().toString().equals("final")) {
+                    if (modifier.getKeyword().toString().equals("final")) {
                         return nodes;
                     }
                 }

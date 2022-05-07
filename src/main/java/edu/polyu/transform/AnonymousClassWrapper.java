@@ -13,7 +13,6 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
@@ -46,6 +45,8 @@ public class AnonymousClassWrapper extends Transform {
     public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
+        TypeDeclaration clazz = getClassOfStatement(srcNode);
+        List<ASTNode> classModifiers = clazz.modifiers();
         MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
@@ -76,9 +77,14 @@ public class AnonymousClassWrapper extends Transform {
             fragment.setInitializer(instanceCreation);
             fragment.setName(ast.newSimpleName("acw" + varCounter++));
             // insert new FieldStatement containing Anonymous class
-            FieldDeclaration fieldDeclaration = ast.newFieldDeclaration(fragment);
-            fieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-            astRewrite.replace(oldMethod, fieldDeclaration, null);
+            FieldDeclaration newFieldDeclaration = ast.newFieldDeclaration(fragment);
+            newFieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+            for(ASTNode modifier : classModifiers) {
+                if(modifier instanceof Modifier) {
+                    newFieldDeclaration.modifiers().add(ASTNode.copySubtree(ast, modifier));
+                }
+            }
+            astRewrite.replace(oldMethod, newFieldDeclaration, null);
             return true;
         } else {
             if(srcNode instanceof FieldDeclaration) {
@@ -98,6 +104,11 @@ public class AnonymousClassWrapper extends Transform {
                 // insert new FieldStatement containing Anonymous class
                 FieldDeclaration newNode = ast.newFieldDeclaration(fragment);
                 newNode.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+                for(ASTNode modifier : classModifiers) {
+                    if(modifier instanceof Modifier) {
+                        newNode.modifiers().add(ASTNode.copySubtree(ast, modifier));
+                    }
+                }
                 astRewrite.replace(srcNode, newNode, null);
                 return true;
             } else {
@@ -111,6 +122,7 @@ public class AnonymousClassWrapper extends Transform {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
+        List<ASTNode> modifiers = (List<ASTNode>) method.modifiers();
         for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
             if(component instanceof TypeDeclaration) {
                 Type parentType = ((TypeDeclaration) component).getSuperclassType();
@@ -119,15 +131,15 @@ public class AnonymousClassWrapper extends Transform {
                 }
             }
         }
-        if (method == null) { // means global variable definition
-            if (getStatementOfNode(node) instanceof FieldDeclaration) {
-                nodes.add(node);
+        if (method == null) {
+            if(getStatementOfNode(node) instanceof FieldDeclaration) {
+                nodes.add(node);  // FieldDeclaration
             }
             return nodes;
         }
         List<ASTNode> subNodes = getChildrenNodes(method);
         boolean hasThis = false;
-        for (ASTNode subNode : subNodes) {
+        for(ASTNode subNode : subNodes) {
             if(subNode instanceof ThisExpression) {
                 hasThis = true;
                 break;
@@ -137,27 +149,35 @@ public class AnonymousClassWrapper extends Transform {
             return nodes;
         }
         boolean isOverride = false;
-        for(ASTNode modifier : (List<ASTNode>) method.modifiers()) {
-            if(modifier instanceof MarkerAnnotation) {
+        for (ASTNode modifier : modifiers) {
+            if (modifier instanceof MarkerAnnotation) {
                 String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
-                if(name.contains("Override")) {
+                if (name.contains("Override")) {
                     isOverride = true;
                     break;
                 }
+                if(name.contains("Test")) {
+                    return nodes;
+                }
+            }
+            if(modifier instanceof Modifier) {
+                if(((Modifier) modifier).getKeyword().toString().contains("abstract")) {
+                    return nodes;
+                }
             }
         }
-        if(isOverride) {
-            if(clazz.superInterfaceTypes().size() > 0) {
+        if (isOverride) {
+            if (clazz.superInterfaceTypes().size() > 0) {
                 return nodes;
             }
             Type superClazzType = clazz.getSuperclassType();
-            if(superClazzType == null) {
+            if (superClazzType == null) {
                 nodes.add(node);
                 return nodes;
             }
             if (superClazzType instanceof SimpleType) {
                 String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-                if(name.contains("Object")) {
+                if (name.contains("Object")) {
                     nodes.add(node);
                     return nodes;
                 }

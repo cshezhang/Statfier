@@ -4,6 +4,7 @@ import edu.polyu.analysis.ASTWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.InfixExpression;
@@ -82,7 +83,7 @@ public class CFWrapperWithForFalse extends Transform {
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
+        if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration || node instanceof EmptyStatement ||
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;
         }

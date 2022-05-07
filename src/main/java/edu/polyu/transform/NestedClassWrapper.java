@@ -88,15 +88,12 @@ public class NestedClassWrapper extends Transform {
         }
     }
 
-//    public static boolean checkThisId(MethodDeclaration method) {
-//
-//    }
-
     @Override
     public List<ASTNode> check(ASTWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfStatement(node);
         MethodDeclaration method = getDirectMethodOfStatement(node);
+        List<ASTNode> methodModifiers = (List<ASTNode>) method.modifiers();
         for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
             if(component instanceof TypeDeclaration) {
                 Type parentType = ((TypeDeclaration) component).getSuperclassType();
@@ -123,12 +120,20 @@ public class NestedClassWrapper extends Transform {
             return nodes;
         }
         boolean isOverride = false;
-        for (ASTNode modifier : (List<ASTNode>) method.modifiers()) {
+        for (ASTNode modifier : methodModifiers) {
             if (modifier instanceof MarkerAnnotation) {
                 String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
                 if (name.contains("Override")) {
                     isOverride = true;
                     break;
+                }
+                if(name.contains("Test")) {
+                    return nodes;
+                }
+            }
+            if(modifier instanceof Modifier) {
+                if(((Modifier) modifier).getKeyword().toString().contains("abstract")) {
+                    return nodes;
                 }
             }
         }

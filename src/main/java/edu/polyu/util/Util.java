@@ -707,14 +707,16 @@ public class Util {
                     }
                 }
                 if (endIndex == -1) {
-                    System.err.println("End Index Error!");
-                    System.exit(-1);
+                    return results;
+//                    System.err.println("End Index Error!");
+//                    System.exit(-1);
                 }
                 String content = errorInstance.substring(startIndex, endIndex);
                 int index1 = content.indexOf(".java") + ".java".length(), index2 = -1;
                 if (content.charAt(index1) != ':') {
-                    System.err.println("Index1 Error!");
-                    System.exit(-1);
+                    return results;
+//                    System.err.println("Index1 Error!");
+//                    System.exit(-1);
                 }
                 for (int i = index1 + 1; i < content.length(); i++) {
                     if (content.charAt(i) == ':') {

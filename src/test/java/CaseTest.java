@@ -1,18 +1,12 @@
-import com.google.common.base.Preconditions;
+import edu.umd.cs.findbugs.annotations.ExpectWarning;
+import org.junit.Test;
 
 /**
  * Description:
  * Author: Vanguard
  * Date: 2021/12/19 7:35 PM
  */
-public class CaseTest {
+public interface CaseTest {
 
-    class inner extends CaseTest {
-        int a;
-    }
-
-    Object o = new Object() {
-
-    };
-
+    abstract void method();
 }
