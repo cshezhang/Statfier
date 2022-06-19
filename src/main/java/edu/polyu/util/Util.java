@@ -3,9 +3,7 @@ package edu.polyu.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.jdi.Field;
 import edu.polyu.analysis.ASTWrapper;
-import edu.polyu.analysis.LoopStatement;
 
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
@@ -26,26 +24,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTMatcher;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.BooleanLiteral;
-import org.eclipse.jdt.core.dom.CharacterLiteral;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.NumberLiteral;
-import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.StringLiteral;
-import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,7 +38,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.security.SecureRandom;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -90,7 +67,6 @@ public class Util {
         }
     }
 
-    public static final ASTMatcher matcher = new ASTMatcher();
     public static final boolean NO_SELECTION = Boolean.parseBoolean(getProperty("NO_SELECTION"));
     public static final boolean RANDOM_SELECTION = Boolean.parseBoolean(getProperty("RANDOM_SELECTION"));
     public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
@@ -156,7 +132,7 @@ public class Util {
 
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
-    public final static String InferPath = "/home/vanguard/bin/infer/bin/infer";
+    public final static String InferPath = getProperty("INFER_PATH");
     //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
 //    public final static String InferPath = "infer";
     public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";
@@ -166,14 +142,13 @@ public class Util {
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
 
-    public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy line numbers
-    public static HashMap<String, HashSet<Integer>> file2col = new HashMap<>(); // filename -> set: buggy line numbers
+    public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy row numbers
+    public static HashMap<String, HashSet<Integer>> file2col = new HashMap<>(); // filename -> set: buggy column numbers
     public static HashMap<String, Report> file2report = new HashMap<>();
     public static HashMap<String, HashMap<String, HashSet<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
-
 
     public static void initEnv() {
         String sp;
@@ -310,21 +285,7 @@ public class Util {
         return result;
     }
 
-    public static String createMethodSignature(MethodDeclaration method) {
-        StringBuilder signature = new StringBuilder();
-        List<ASTNode> parameters = method.parameters();
-        signature.append(method.getName().toString());
-        for (ASTNode parameter : parameters) {
-            if (parameter instanceof SingleVariableDeclaration) {
-                SingleVariableDeclaration svd = (SingleVariableDeclaration) parameter;
-                signature.append(":" + svd.getType().toString());
-            } else {
-                System.err.println("What a Fucked Parameter: " + parameter);
-                System.exit(-1);
-            }
-        }
-        return signature.toString();
-    }
+
 
 //    public static void checkExecutionTime() {
 //        long executionTime = System.currentTimeMillis() - startTimeStamp - compileTime;
@@ -335,201 +296,6 @@ public class Util {
 //            System.exit(0);
 //        }
 //    }
-
-    public static List<ASTNode> getChildrenNodes(List<ASTNode> roots) {
-        List<ASTNode> nodes = new ArrayList<>();
-        for(ASTNode node : roots) {
-            nodes.addAll(getChildrenNodes(node));
-        }
-        return nodes;
-    }
-
-    public static List<ASTNode> getChildrenNodes(ASTNode root) {
-        ArrayList<ASTNode> nodes = new ArrayList<>();
-        if(root == null) {
-            return nodes;
-        }
-        ArrayDeque<ASTNode> que = new ArrayDeque<>();
-        que.add(root);
-        while (!que.isEmpty()) {
-            ASTNode head = que.pollFirst();
-            List<StructuralPropertyDescriptor> children = (List<StructuralPropertyDescriptor>) head.structuralPropertiesForType();
-            for (StructuralPropertyDescriptor descriptor : children) {
-                Object child = head.getStructuralProperty(descriptor);
-                if (child == null) {
-                    continue;
-                }
-                if (child instanceof ASTNode) {
-                    nodes.add((ASTNode) child);
-                    que.addLast((ASTNode) child);
-                }
-                if (child instanceof List) {
-                    List<ASTNode> newChildren = (List<ASTNode>) child;
-                    nodes.addAll(newChildren);
-                    for (ASTNode node : newChildren) {
-                        que.addLast(node);
-                    }
-                }
-            }
-        }
-        if (nodes.size() == 0) {
-            nodes.add(root);
-        }
-        return nodes;
-    }
-
-    public static boolean isLiteral(ASTNode astNode) {
-        if (astNode instanceof StringLiteral || astNode instanceof NumberLiteral
-                || astNode instanceof BooleanLiteral || astNode instanceof CharacterLiteral
-            /*|| expression instanceof NullLiteral || expression instanceof TypeLiteral*/) {
-            return true;
-        }
-        return false;
-    }
-
-    public static ArrayList<Statement> getIfSubStatements(IfStatement target) {
-        ArrayList<Statement> results = new ArrayList<>();
-        Statement thenStatement = target.getThenStatement();
-        Statement elseStatement = target.getElseStatement();
-        if (thenStatement != null) {
-            if (thenStatement instanceof Block) {
-                results.addAll(((Block) thenStatement).statements());
-            } else {
-                results.add(thenStatement);
-            }
-        }
-        if (elseStatement != null) {
-            if (elseStatement instanceof Block) {
-                results.addAll((List<Statement>) ((Block) elseStatement).statements());
-            } else {
-                results.add(elseStatement);
-            }
-        }
-        return results;
-    }
-
-    /*
-        This function can get all sub-statements of specific statement(s).
-        Sub-statement is defined as statement without containing block
-     */
-    public static List<Statement> getSubStatements(List<Statement> sourceStatements) {
-        List<Statement> results = new ArrayList<>();
-        ArrayDeque<Statement> que = new ArrayDeque<>();
-        que.addAll(sourceStatements);
-        while (!que.isEmpty()) {
-            Statement head = que.pollFirst();
-            if (head instanceof IfStatement) {
-                que.addAll(getIfSubStatements((IfStatement) head));
-                continue;
-            }
-            if (head instanceof TryStatement) {
-                que.addAll(((TryStatement) head).getBody().statements());
-                continue;
-            }
-            if (LoopStatement.isLoopStatement(head)) {
-                LoopStatement loopStatement = new LoopStatement(head);
-                Statement body = loopStatement.getBody();
-                if (body instanceof Block) {
-                    que.addAll((List<Statement>) ((Block) body).statements());
-                } else {
-                    que.add(body);
-                }
-                continue;
-            }
-            results.add(head);
-        }
-        return results;
-    }
-
-    public static List<Statement> getSubStatements(Statement srcStatement) {
-        List<Statement> results = new ArrayList<>();
-        ArrayDeque<Statement> que = new ArrayDeque<>();
-        que.add(srcStatement);
-        while (!que.isEmpty()) {
-            Statement head = que.pollFirst();
-            if (head instanceof IfStatement) {
-                que.addAll(getIfSubStatements((IfStatement) head));
-                continue;
-            }
-            if (head instanceof TryStatement) {
-                que.addAll(((TryStatement) head).getBody().statements());
-                continue;
-            }
-            if (LoopStatement.isLoopStatement(head)) {
-                LoopStatement loopStatement = new LoopStatement(head);
-                Statement body = loopStatement.getBody();
-                if (body instanceof Block) {
-                    que.addAll((List<Statement>) ((Block) body).statements());
-                } else {
-                    que.add(body);
-                }
-                continue;
-            }
-            results.add(head);
-        }
-        return results;
-    }
-
-    public static List<ASTNode> getAllNodes(List<ASTNode> srcNodes) {
-        List<ASTNode> resNodes = new ArrayList<>();
-        ArrayDeque<ASTNode> que = new ArrayDeque<>();
-        que.addAll(srcNodes);
-        while (!que.isEmpty()) {
-            ASTNode head = que.pollFirst();
-            resNodes.add(head);
-            if (head instanceof IfStatement) {
-                que.addAll(getIfSubStatements((IfStatement) head));
-                continue;
-            }
-            if (head instanceof TryStatement) {
-                que.addAll(((TryStatement) head).getBody().statements());
-                continue;
-            }
-            if (LoopStatement.isLoopStatement(head)) {
-                LoopStatement loopStatement = new LoopStatement(head);
-                Statement body = loopStatement.getBody();
-                if (body instanceof Block) {
-                    que.addAll((List<Statement>) ((Block) body).statements());
-                } else {
-                    que.add(body);
-                }
-                continue;
-            }
-        }
-        return resNodes;
-    }
-
-    public static List<Statement> getAllStatements(List<Statement> sourceStatements) {
-        List<Statement> results = new ArrayList<>();
-        if(sourceStatements == null || sourceStatements.size() == 0) {
-            return results;
-        }
-        ArrayDeque<Statement> que = new ArrayDeque<>();
-        que.addAll(sourceStatements);
-        while (!que.isEmpty()) {
-            Statement head = que.pollFirst();
-            results.add(head);
-            if (head instanceof IfStatement) {
-                que.addAll(getIfSubStatements((IfStatement) head));
-                continue;
-            }
-            if (head instanceof TryStatement) {
-                que.addAll(((TryStatement) head).getBody().statements());
-                continue;
-            }
-            if (LoopStatement.isLoopStatement(head)) {
-                LoopStatement loopStatement = new LoopStatement(head);
-                Statement body = loopStatement.getBody();
-                if (body instanceof Block) {
-                    que.addAll((List<Statement>) ((Block) body).statements());
-                } else {
-                    que.add(body);
-                }
-                continue;
-            }
-        }
-        return results;
-    }
 
     public static int calculatePMDResultFile(final String jsonPath) {
         ObjectMapper mapper = new ObjectMapper();
@@ -834,19 +600,6 @@ public class Util {
         }
     }
 
-    public static HashSet<String> getIdentifiers(Block block) {
-        HashSet<String> identifiers = new HashSet<>();
-        for (Statement statement : (List<Statement>) block.statements()) {
-            List<ASTNode> subNodes = getChildrenNodes(statement);
-            for (ASTNode subNode : subNodes) {
-                if (subNode instanceof SimpleName) {
-                    identifiers.add(((SimpleName) subNode).getIdentifier());
-                }
-            }
-        }
-        return identifiers;
-    }
-
     // get Direct file list of tarege folder path, mainly used to count sub_seed folders
     public static List<String> getDirectFilenamesFromFolder(String path, boolean getAbsolutePath) {
         LinkedList<String> fileList = new LinkedList<>();
@@ -903,94 +656,6 @@ public class Util {
         }
     }
 
-    public static ASTNode getStatementOfNode(ASTNode node) {
-        if(node == null) {
-            return null;
-        }
-        ASTNode parNode = node;
-        while(parNode != null && !(parNode instanceof Statement || parNode instanceof FieldDeclaration)) {
-            parNode = parNode.getParent();
-        }
-        return parNode;
-    }
-
-    public static ASTNode getDirectBrotherOfStatement(ASTNode statement) {
-        ASTNode parent = statement.getParent();
-        while (!(parent instanceof Statement)) {
-            parent = parent.getParent();
-            if (parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Brother Statement!");
-                System.exit(-1);
-            }
-        }
-        return parent;
-    }
-
-    public static ASTNode getFirstBrotherOfStatement(ASTNode statement) {
-        if (!(statement instanceof Statement)) {
-            return null;
-        }
-        ASTNode parent = statement.getParent();
-        ASTNode currentStatement = statement;
-        while (!(parent instanceof Block)) {
-            parent = parent.getParent();
-            currentStatement = currentStatement.getParent();
-            if (parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Brother Statement!");
-                System.exit(-1);
-            }
-        }
-        if (!(currentStatement instanceof Statement)) {
-            System.err.println("Error: Current Statement cannot be casted to Statement!");
-        }
-        return currentStatement;
-    }
-
-    public static Block getDirectBlockOfStatement(ASTNode statement) {
-        if (statement instanceof Statement) {
-            ASTNode parent = statement.getParent();
-            while (!(parent instanceof Block)) {
-                parent = parent.getParent();
-                if (parent == null || parent.equals(parent.getParent())) {
-                    System.err.println("Error in Finding Direct Block!");
-                    System.exit(-1);
-                }
-            }
-            return (Block) parent;
-        } else {
-            return null;
-        }
-    }
-
-    public static MethodDeclaration getDirectMethodOfStatement(ASTNode node) {
-        if(node == null) {
-            return null;
-        }
-        if (node instanceof MethodDeclaration) {
-            return (MethodDeclaration) node;
-        }
-        ASTNode parent = node.getParent();
-        while (!(parent instanceof MethodDeclaration)) {
-            parent = parent.getParent();
-            if (parent == null || parent.equals(parent.getParent())) {
-                return null;
-            }
-        }
-        return (MethodDeclaration) parent;
-    }
-
-    public static TypeDeclaration getClassOfStatement(ASTNode statement) {
-        ASTNode parent = statement.getParent();
-        while (parent != null && !(parent instanceof TypeDeclaration)) {
-            parent = parent.getParent();
-            if (parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Type!");
-                System.exit(-1);
-            }
-        }
-        return (TypeDeclaration) parent;
-    }
-
     public static String getProperty(String name) {
         if (properties.containsKey(name)) {
             return properties.getProperty(name);
@@ -1021,31 +686,6 @@ public class Util {
             filteredWrappers.add(wrappers.get(index));
         }
         return filteredWrappers;
-    }
-
-    public static Type checkLiteralType(AST ast, Expression literalExpression) {
-        if (literalExpression instanceof NumberLiteral) {
-            String token = ((NumberLiteral) literalExpression).getToken();
-            if (token.contains(".")) {
-                return ast.newPrimitiveType(PrimitiveType.DOUBLE);
-            } else {
-                if(token.contains("L")) {
-                    return ast.newPrimitiveType(PrimitiveType.LONG);
-                } else {
-                    return ast.newPrimitiveType(PrimitiveType.INT);
-                }
-            }
-        }
-        if (literalExpression instanceof StringLiteral) {
-            return ast.newSimpleType(ast.newSimpleName("String"));
-        }
-        if (literalExpression instanceof CharacterLiteral) {
-            return ast.newPrimitiveType(PrimitiveType.CHAR);
-        }
-        if (literalExpression instanceof BooleanLiteral) {
-            return ast.newPrimitiveType(PrimitiveType.BOOLEAN);
-        }
-        return ast.newSimpleType(ast.newSimpleName("Object"));
     }
 
 }
