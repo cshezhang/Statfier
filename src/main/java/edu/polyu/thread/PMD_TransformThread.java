@@ -1,6 +1,6 @@
 package edu.polyu.thread;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.PMD_Violation;
 import net.sourceforge.pmd.PMD;
@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
@@ -22,7 +21,6 @@ import static edu.polyu.util.Util.RANDOM_LOCATION;
 import static edu.polyu.util.Util.RANDOM_SELECTION;
 import static edu.polyu.util.Util.SEARCH_DEPTH;
 import static edu.polyu.util.Util.DIV_SELECTION;
-import static edu.polyu.util.Util.SINGLE_TESTING;
 import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2report;
 import static edu.polyu.util.Util.file2row;
@@ -39,12 +37,12 @@ public class PMD_TransformThread implements Runnable {
     private String seedFolderName;
     private String ruleCategory;
     private String ruleType;
-    private ArrayDeque<ASTWrapper> wrappers;
+    private ArrayDeque<TypeWrapper> wrappers;
 
     public static long cnt1 = 0;
     public static long cnt2 = 0;
 
-    public PMD_TransformThread(List<ASTWrapper> initWrappers, String seedFolderName) {
+    public PMD_TransformThread(List<TypeWrapper> initWrappers, String seedFolderName) {
         this.seedFolderName = seedFolderName;
         String[] tokens = seedFolderName.split("_");
         this.ruleCategory = tokens[0];
@@ -62,13 +60,13 @@ public class PMD_TransformThread implements Runnable {
         int currentDepth = 0;
         for (int i = 1; i <= SEARCH_DEPTH; i++) {
             while (!wrappers.isEmpty()) {
-                ASTWrapper wrapper = wrappers.pollFirst();
+                TypeWrapper wrapper = wrappers.pollFirst();
 //                if(SINGLE_TESTING) {
 //                    System.out.println("Processing: " + wrapper.getFilePath());
 //                }
                 if (wrapper.depth == currentDepth) {
                     if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<ASTWrapper> mutants = new ArrayList<>();
+                        List<TypeWrapper> mutants = new ArrayList<>();
                         if (GUIDED_LOCATION) {
                             mutants = wrapper.TransformByGuidedLocation();
                         } else if (RANDOM_LOCATION) {
@@ -78,7 +76,7 @@ public class PMD_TransformThread implements Runnable {
                         if(NO_SELECTION) {
                             wrappers.addAll(mutants);
                         }
-                        List<ASTWrapper> reducedMutants = null;
+                        List<TypeWrapper> reducedMutants = null;
                         if(RANDOM_SELECTION) {
                             reducedMutants = Random_Selection(mutants);
                         }
@@ -120,9 +118,9 @@ public class PMD_TransformThread implements Runnable {
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
             }
-            List<ASTWrapper> validWrappers = new ArrayList<>();
+            List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
-                ASTWrapper head = wrappers.pollFirst();
+                TypeWrapper head = wrappers.pollFirst();
                 if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
                     validWrappers.add(head);
                 }

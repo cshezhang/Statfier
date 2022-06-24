@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.ASTNode;
 
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ public abstract class Transform {
     private static List<Transform> transforms;
     public final static HashMap<String, Transform> name2transform;
 
-    public abstract List<ASTNode> check(ASTWrapper wrapper, ASTNode node);
-    public abstract boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode broNode, ASTNode srcNode);
+    public abstract List<ASTNode> check(TypeWrapper wrapper, ASTNode node);
+    public abstract boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode broNode, ASTNode srcNode);
 
     public String getIndex() {
         return this.getClass().getSimpleName();

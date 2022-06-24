@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -28,7 +28,7 @@ public class AddLocalAssignment extends Transform {
     * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
     * */
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) sourceStatement;
@@ -60,7 +60,7 @@ public class AddLocalAssignment extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
         List<ASTNode> nodes = new ArrayList<>();
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;

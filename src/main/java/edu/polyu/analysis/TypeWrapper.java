@@ -70,7 +70,6 @@ import static edu.polyu.util.Util.file2bugs;
 import static edu.polyu.util.Util.file2row;
 import static edu.polyu.util.Util.mutantCounter;
 import static edu.polyu.util.Util.random;
-import static edu.polyu.util.Util.spotBugsJarList;
 import static edu.polyu.util.Util.userdir;
 
 /**
@@ -78,7 +77,7 @@ import static edu.polyu.util.Util.userdir;
  * Author: Vanguard
  * Date: 2021-08-10 16:10
  */
-public class ASTWrapper {
+public class TypeWrapper {
 
     public int depth;
     private AST ast;
@@ -95,7 +94,7 @@ public class ASTWrapper {
     private String folderPath;
     private String folderName; // For PMD and CheckStyle, folderName equals to rule name
     private String parentPath;
-    private ASTWrapper parentWrapper;
+    private TypeWrapper parentWrapper;
     private String mutantFolder;
     private List<ASTNode> nodeIndex;
     private List<String> transSeq;
@@ -117,7 +116,7 @@ public class ASTWrapper {
         compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
     }
 
-    public ASTWrapper(String filePath, String folderName) {
+    public TypeWrapper(String filePath, String folderName) {
         this.depth = 0;
         this.filePath = filePath;
         this.initSeedPath = filePath;
@@ -212,7 +211,7 @@ public class ASTWrapper {
     }
 
     // Other cases need invoke this constructor, filename is defined in mutate function
-    public ASTWrapper(String filename, String filepath, String content, ASTWrapper parentWrapper) {
+    public TypeWrapper(String filename, String filepath, String content, TypeWrapper parentWrapper) {
         this.depth = parentWrapper.depth + 1;
         this.filePath = filepath;
         this.initSeedPath = parentWrapper.initSeedPath;
@@ -525,7 +524,7 @@ public class ASTWrapper {
     public static AtomicInteger invalidSeed = new AtomicInteger(0);
     public static AtomicInteger validSeed = new AtomicInteger(0);
 
-    public List<ASTWrapper> TransformByRandomLocation() {
+    public List<TypeWrapper> TransformByRandomLocation() {
         if (this.candidateNodes == null) {
             this.candidateNodes = this.allNodes;
         }
@@ -539,7 +538,7 @@ public class ASTWrapper {
         int cnt = file2row.get(this.filePath).size();
         System.out.println(cnt + " " + this.candidateNodes.size());
         int randomCount = 0;
-        List<ASTWrapper> newWrappers = new ArrayList<>();
+        List<TypeWrapper> newWrappers = new ArrayList<>();
         while (true) {
             if (++randomCount > cnt) {
                 break;
@@ -551,7 +550,7 @@ public class ASTWrapper {
                 String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                 String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
                 String content = this.document.get();
-                ASTWrapper newMutant = new ASTWrapper(mutantFilename, mutantPath, content, this);
+                TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
                 int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
                 int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
                 ASTNode newTargetNode = newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
@@ -594,8 +593,8 @@ public class ASTWrapper {
         return newWrappers;
     }
 
-    public List<ASTWrapper> TransformByGuidedLocation() {
-        List<ASTWrapper> newWrappers = new ArrayList<>();
+    public List<TypeWrapper> TransformByGuidedLocation() {
+        List<TypeWrapper> newWrappers = new ArrayList<>();
         try {
             if (this.candidateNodes == null) {
                 this.candidateNodes = this.getCandidateNodes();
@@ -614,7 +613,7 @@ public class ASTWrapper {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                         String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
                         String content = this.document.get();
-                        ASTWrapper newMutant = new ASTWrapper(mutantFilename, mutantPath, content, this);
+                        TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
                         // Node to be transformed
                         int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
                         int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
@@ -779,7 +778,7 @@ public class ASTWrapper {
         return this.transNodes;
     }
 
-    public ASTWrapper getParentWrapper() {
+    public TypeWrapper getParentWrapper() {
         return this.parentWrapper;
     }
 

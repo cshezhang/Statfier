@@ -3,7 +3,7 @@ package edu.polyu.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
@@ -666,9 +666,9 @@ public class Util {
         }
     }
 
-    public static List<ASTWrapper> randomMutantSampling(List<ASTWrapper> wrappers) {
+    public static List<TypeWrapper> randomMutantSampling(List<TypeWrapper> wrappers) {
         HashSet<Integer> selectedIndex = new HashSet<>();
-        List<ASTWrapper> filteredWrappers = new ArrayList<>();
+        List<TypeWrapper> filteredWrappers = new ArrayList<>();
         int targetSize = (int) (wrappers.size() * 0.1 + 0.5);
         while (selectedIndex.size() < targetSize) {
             for (int i = 0; i < wrappers.size(); i++) {

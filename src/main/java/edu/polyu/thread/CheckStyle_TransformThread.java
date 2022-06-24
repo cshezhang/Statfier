@@ -1,6 +1,6 @@
 package edu.polyu.thread;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
 import edu.polyu.util.OSUtil;
@@ -37,10 +37,10 @@ public class CheckStyle_TransformThread implements Runnable {
 
     private int currentDepth;
     private String seedFolderName; // equal to rule type
-    private ArrayDeque<ASTWrapper> wrappers;
+    private ArrayDeque<TypeWrapper> wrappers;
     private int configIndex;
 
-    public CheckStyle_TransformThread(ASTWrapper initWrapper, String seedFolderName, int configIndex) {
+    public CheckStyle_TransformThread(TypeWrapper initWrapper, String seedFolderName, int configIndex) {
         this.currentDepth = 0;
         this.seedFolderName = seedFolderName;
         this.wrappers = new ArrayDeque<>() {
@@ -59,10 +59,10 @@ public class CheckStyle_TransformThread implements Runnable {
                 System.out.println("TransformThread Depth: " + depth + " Folder: " + this.seedFolderName);
             }
             while (!wrappers.isEmpty()) {
-                ASTWrapper wrapper = wrappers.pollFirst();
+                TypeWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
                     if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<ASTWrapper> mutants = new ArrayList<>();
+                        List<TypeWrapper> mutants = new ArrayList<>();
                         if (GUIDED_LOCATION) {
                             mutants = wrapper.TransformByGuidedLocation();
                         } else if (RANDOM_LOCATION) {
@@ -130,9 +130,9 @@ public class CheckStyle_TransformThread implements Runnable {
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
             }
-            List<ASTWrapper> validWrappers = new ArrayList<>();
+            List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
-                ASTWrapper head = wrappers.pollFirst();
+                TypeWrapper head = wrappers.pollFirst();
                 if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
                     validWrappers.add(head);
                 }

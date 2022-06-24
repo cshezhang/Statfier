@@ -1,7 +1,7 @@
 package edu.polyu.transform;
 
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -25,7 +25,7 @@ public class CompoundExpression1 extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brother, ASTNode oldStatement) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         BooleanLiteral targetLiteral = (BooleanLiteral) targetNode;
@@ -45,7 +45,7 @@ public class CompoundExpression1 extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
         List<ASTNode> nodes = new ArrayList<>();
         List<ASTNode> subNodes = getChildrenNodes(statement);
         for(ASTNode subNode : subNodes) {

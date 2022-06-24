@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 import edu.polyu.util.OSUtil;
@@ -32,18 +32,18 @@ import static edu.polyu.util.Util.sep;
 
 public class SpotBugs_Exec {
 
-    public static void run(List<ASTWrapper> initWrappers) {
+    public static void run(List<TypeWrapper> initWrappers) {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
-        for(ASTWrapper initWrapper : initWrappers) {
+        for(TypeWrapper initWrapper : initWrappers) {
             int currentDepth = 0;
-            ArrayDeque<ASTWrapper> wrappers = new ArrayDeque<>();
+            ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
             wrappers.add(initWrapper);
             for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
                 while (!wrappers.isEmpty()) {
-                    ASTWrapper wrapper = wrappers.pollFirst();
+                    TypeWrapper wrapper = wrappers.pollFirst();
                     if (wrapper.depth == currentDepth) {
                         if (!wrapper.isBuggy()) {
-                            List<ASTWrapper> mutants = new ArrayList<>();
+                            List<TypeWrapper> mutants = new ArrayList<>();
                             if (GUIDED_LOCATION) {
                                 mutants = wrapper.TransformByGuidedLocation();
                             } else if (RANDOM_LOCATION) {
@@ -66,7 +66,7 @@ public class SpotBugs_Exec {
                     }
                 }
                 List<SpotBugs_Report> reports = new ArrayList<>();
-                for (ASTWrapper tmpWrapper : wrappers) {
+                for (TypeWrapper tmpWrapper : wrappers) {
                     String seedFilePath = tmpWrapper.getFilePath();
                     String seedFolderPath = tmpWrapper.getFolderPath();
                     String[] tokens = seedFilePath.split(sep);
@@ -110,9 +110,9 @@ public class SpotBugs_Exec {
                         bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                     }
                 }
-                List<ASTWrapper> validWrappers = new ArrayList<>();
+                List<TypeWrapper> validWrappers = new ArrayList<>();
                 while (!wrappers.isEmpty()) {
-                    ASTWrapper head = wrappers.pollFirst();
+                    TypeWrapper head = wrappers.pollFirst();
                     if (!head.isBuggy()) {
                         validWrappers.add(head);
                     }

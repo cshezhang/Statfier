@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static edu.polyu.analysis.ASTWrapper.failMutation;
-import static edu.polyu.analysis.ASTWrapper.invalidSeed;
-import static edu.polyu.analysis.ASTWrapper.mutant2seq;
-import static edu.polyu.analysis.ASTWrapper.mutant2seed;
-import static edu.polyu.analysis.ASTWrapper.succMutation;
-import static edu.polyu.analysis.ASTWrapper.validSeed;
+import static edu.polyu.analysis.TypeWrapper.failMutation;
+import static edu.polyu.analysis.TypeWrapper.invalidSeed;
+import static edu.polyu.analysis.TypeWrapper.mutant2seq;
+import static edu.polyu.analysis.TypeWrapper.mutant2seed;
+import static edu.polyu.analysis.TypeWrapper.succMutation;
+import static edu.polyu.analysis.TypeWrapper.validSeed;
 import static edu.polyu.thread.PMD_TransformThread.cnt1;
 import static edu.polyu.thread.PMD_TransformThread.cnt2;
 import static edu.polyu.util.Invoker.failedCmds;

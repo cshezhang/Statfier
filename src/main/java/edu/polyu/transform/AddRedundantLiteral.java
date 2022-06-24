@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Expression;
@@ -34,7 +34,7 @@ public class AddRedundantLiteral extends Transform {
      */
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherStatement, ASTNode sourceStatement) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         NumberLiteral targetLiteral = (NumberLiteral) targetNode;
@@ -62,7 +62,7 @@ public class AddRedundantLiteral extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
         List<ASTNode> nodes = new ArrayList<>();
         List<ASTNode> subNodes = getChildrenNodes(statement);
         for(int i = 0; i < subNodes.size(); i++) {

@@ -16,10 +16,10 @@ import static edu.polyu.util.Util.random;
  */
 public class SelectionAlgorithm {
 
-    public static List<ASTWrapper> Div_Selection(List<ASTWrapper> mutants) {
-        List<ASTWrapper> res = new ArrayList<>();
+    public static List<TypeWrapper> Div_Selection(List<TypeWrapper> mutants) {
+        List<TypeWrapper> res = new ArrayList<>();
         Map<String, Boolean> code2exist = new HashMap<>();
-        for(ASTWrapper mutant : mutants) {
+        for(TypeWrapper mutant : mutants) {
             String transType = mutant.getTransSeq().toString();
             ASTNode node = mutant.getTransNodes().get(mutant.getTransNodes().size() - 1);
 //            int nodeType = node.getNodeType();
@@ -32,11 +32,11 @@ public class SelectionAlgorithm {
         return res;
     }
 
-    public static List<ASTWrapper> Random_Selection(List<ASTWrapper> mutants) {
-        List<ASTWrapper> res = new ArrayList<>();
+    public static List<TypeWrapper> Random_Selection(List<TypeWrapper> mutants) {
+        List<TypeWrapper> res = new ArrayList<>();
         int cnt = 0;
 //        int limit = Div_Selection(mutants).size();
-        for(ASTWrapper mutant : mutants) {
+        for(TypeWrapper mutant : mutants) {
             if(random.nextDouble() > 0.5) {
                 res.add(mutant);
                 cnt++;

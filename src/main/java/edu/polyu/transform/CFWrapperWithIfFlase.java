@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -19,7 +19,6 @@ import java.util.List;
 
 import static edu.polyu.util.Util.isLiteral;
 import static edu.polyu.util.Util.getDirectBlockOfStatement;
-import static edu.polyu.util.Util.spotBugsJarList;
 
 public class CFWrapperWithIfFlase extends Transform {
 
@@ -35,7 +34,7 @@ public class CFWrapperWithIfFlase extends Transform {
     S; -> if(false) S; S;
      */
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brother, ASTNode srcNode) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
@@ -59,7 +58,7 @@ public class CFWrapperWithIfFlase extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode srcNode) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
         if (isLiteral(srcNode) || !(srcNode instanceof Statement)) {
             return nodes;

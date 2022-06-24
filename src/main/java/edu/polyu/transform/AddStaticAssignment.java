@@ -1,6 +1,6 @@
 package edu.polyu.transform;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
@@ -23,7 +23,7 @@ public class AddStaticAssignment extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         FieldDeclaration oldFieldDeclaration = (FieldDeclaration) srcNode;
@@ -55,7 +55,7 @@ public class AddStaticAssignment extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
         List<ASTNode> nodes = new ArrayList<>();
         if(statement instanceof FieldDeclaration) {
             nodes.add(statement);

@@ -1,7 +1,7 @@
 package edu.polyu.transform;
 
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.analysis.LoopStatement;
 import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
@@ -9,7 +9,6 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -42,7 +41,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, ASTWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetLiteral = (Expression) targetNode;  // Notice check, hence, targetNode is literal.
@@ -64,7 +63,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(ASTWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
         List<ASTNode> nodes = new ArrayList<>();
         List<ASTNode> subNodes;
         if(LoopStatement.isLoopStatement(statement)) {

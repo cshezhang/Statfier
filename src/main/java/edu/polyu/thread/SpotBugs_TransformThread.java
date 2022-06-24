@@ -1,6 +1,6 @@
 package edu.polyu.thread;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
 import edu.polyu.util.OSUtil;
@@ -35,10 +35,10 @@ import static edu.polyu.util.Util.sep;
 public class SpotBugs_TransformThread implements Runnable {
 
     private int currentDepth;
-    private ArrayDeque<ASTWrapper> wrappers;
+    private ArrayDeque<TypeWrapper> wrappers;
 
     // initWrappers contains different seedFolderPaths and seedFolderNames, so we can get them from wrappers
-    public SpotBugs_TransformThread(List<ASTWrapper> initWrappers) {
+    public SpotBugs_TransformThread(List<TypeWrapper> initWrappers) {
         this.currentDepth = 0;
         this.wrappers = new ArrayDeque<>() {
             {
@@ -55,10 +55,10 @@ public class SpotBugs_TransformThread implements Runnable {
                 System.out.println("TransformThread Depth: " + depth);
             }
             while (!wrappers.isEmpty()) {
-                ASTWrapper wrapper = wrappers.pollFirst();
+                TypeWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
                     if (!wrapper.isBuggy()) {
-                        List<ASTWrapper> mutants = new ArrayList<>();
+                        List<TypeWrapper> mutants = new ArrayList<>();
                         if (GUIDED_LOCATION) {
                             mutants = wrapper.TransformByGuidedLocation();
                         } else if (RANDOM_LOCATION) {
@@ -81,7 +81,7 @@ public class SpotBugs_TransformThread implements Runnable {
                 }
             }
             List<SpotBugs_Report> reports = new ArrayList<>();
-            for (ASTWrapper wrapper : wrappers) {
+            for (TypeWrapper wrapper : wrappers) {
                 String seedFilePath = wrapper.getFilePath();
                 String seedFolderPath = wrapper.getFolderPath();
                 String[] tokens = seedFilePath.split(sep);
@@ -127,9 +127,9 @@ public class SpotBugs_TransformThread implements Runnable {
                     bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
                 }
             }
-            List<ASTWrapper> validWrappers = new ArrayList<>();
+            List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
-                ASTWrapper head = wrappers.pollFirst();
+                TypeWrapper head = wrappers.pollFirst();
                 if (!head.isBuggy()) {
                     validWrappers.add(head);
                 }

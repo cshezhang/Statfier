@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.CheckStyle_Violation;
 import edu.polyu.report.Infer_Report;
@@ -79,7 +79,7 @@ public class Schedule {
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
-        List<ASTWrapper> initWrappers = new ArrayList<>();
+        List<TypeWrapper> initWrappers = new ArrayList<>();
         Map<String, Integer> file2index = new HashMap<>();  // source file -> config index
         for (int i = 0; i < seedFilePaths.size(); i++) {
             String seedFilePath = seedFilePaths.get(i);  // Absolute Path
@@ -89,13 +89,13 @@ public class Schedule {
                 continue;
             }
             initValidSeedWrapperSize++;
-            ASTWrapper seedWrapper = new ASTWrapper(seedFilePath, seedFolderName);
+            TypeWrapper seedWrapper = new TypeWrapper(seedFilePath, seedFolderName);
             initWrappers.add(seedWrapper);
             int configIndex = Character.getNumericValue(tokens[tokens.length - 1].charAt(tokens[tokens.length - 1].indexOf(".") - 1));
             file2index.put(seedFilePath, configIndex);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        for(ASTWrapper wrapper : initWrappers) {
+        for(TypeWrapper wrapper : initWrappers) {
             CheckStyle_TransformThread mutationThread = new CheckStyle_TransformThread(wrapper, wrapper.getFolderName(), file2index.get(wrapper.getFilePath()));
             threadPool.submit(mutationThread);
         }
@@ -121,7 +121,7 @@ public class Schedule {
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
         List<String> failSeedPaths = new ArrayList<>();
-        List<ASTWrapper> initWrappers = new ArrayList<>();
+        List<TypeWrapper> initWrappers = new ArrayList<>();
         for (int index = 0; index < seedFilePaths.size(); index++) {
             String seedFilePath = seedFilePaths.get(index);
             String[] tokens = seedFilePath.split(sep);
@@ -131,12 +131,12 @@ public class Schedule {
                 continue;
             }
             initValidSeedWrapperSize++;
-            ASTWrapper seedWrapper = new ASTWrapper(seedFilePath, seedFolderName);
+            TypeWrapper seedWrapper = new TypeWrapper(seedFilePath, seedFolderName);
             initWrappers.add(seedWrapper);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
         if(SINGLE_TESTING) {
-            for (ASTWrapper wrapper : initWrappers) {
+            for (TypeWrapper wrapper : initWrappers) {
                 System.out.println("Init Path: " + wrapper.getFilePath());
             }
             System.out.println("Fail Seed Size: " + failSeedPaths.size());
@@ -148,7 +148,7 @@ public class Schedule {
             System.out.println("No Thread!");
             SpotBugs_Exec.run(initWrappers);
         } else {
-            List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+            List<List<TypeWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
             for (int i = 0; i < lists.size(); i++) {
                 SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
                 threadPool.submit(thread);
@@ -174,7 +174,7 @@ public class Schedule {
         }
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
-        HashMap<String, List<ASTWrapper>> bug2wrapper = new HashMap<>();
+        HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
         List<PMD_TransformThread> mutationThreads = new ArrayList<>();
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
@@ -196,11 +196,11 @@ public class Schedule {
                 category2bugTypes.put(category, types);
             }
             initSeedWrapperSize++;
-            ASTWrapper seedWrapper = new ASTWrapper(seedPath, seedFolderName);
+            TypeWrapper seedWrapper = new TypeWrapper(seedPath, seedFolderName);
             if (bug2wrapper.containsKey(key)) {
                 bug2wrapper.get(key).add(seedWrapper);
             } else {
-                List<ASTWrapper> wrappers = new ArrayList<>();
+                List<TypeWrapper> wrappers = new ArrayList<>();
                 wrappers.add(seedWrapper);
                 bug2wrapper.put(key, wrappers);
             }
@@ -211,7 +211,7 @@ public class Schedule {
             HashSet<String> bugTypes = entry.getValue();
             for (String bugType : bugTypes) {
                 String seedFolderName = category + "_" + bugType;
-                List<ASTWrapper> wrappers = bug2wrapper.get(seedFolderName);
+                List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
                 PMD_TransformThread mutationThread = new PMD_TransformThread(wrappers, seedFolderName);
                 mutationThreads.add(mutationThread);
             }
@@ -237,15 +237,15 @@ public class Schedule {
                 threadPool = Executors.newCachedThreadPool();
             }
         }
-        List<ASTWrapper> initWrappers = new ArrayList<>();
+        List<TypeWrapper> initWrappers = new ArrayList<>();
         for(String filepath : file2report.keySet()) {
             String[] tokens = filepath.split(sep);
             String foldername = tokens[tokens.length - 2];
-            ASTWrapper wrapper = new ASTWrapper(filepath, foldername);
+            TypeWrapper wrapper = new TypeWrapper(filepath, foldername);
             initWrappers.add(wrapper);
         }
         System.out.println("All Initial Wrapper Size: " + initWrappers.size());
-        List<List<ASTWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+        List<List<TypeWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
         for(int i = 0; i < lists.size(); i++) {
             SonarQube_TransformThread thread = new SonarQube_TransformThread(lists.get(i));
             threadPool.submit(thread);
@@ -272,7 +272,7 @@ public class Schedule {
         }
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
-        HashMap<String, List<ASTWrapper>> bug2wrapper = new HashMap<>();
+        HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
         List<Infer_TransformThread> mutationThreads = new ArrayList<>();
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
@@ -283,19 +283,19 @@ public class Schedule {
                 continue;
             }
             initSeedWrapperSize++;
-            ASTWrapper seedWrapper = new ASTWrapper(seedPath, seedFolderName);
+            TypeWrapper seedWrapper = new TypeWrapper(seedPath, seedFolderName);
             if (bug2wrapper.containsKey(seedFolderName)) {
                 bug2wrapper.get(seedFolderName).add(seedWrapper);
             } else {
-                List<ASTWrapper> wrappers = new ArrayList<>();
+                List<TypeWrapper> wrappers = new ArrayList<>();
                 wrappers.add(seedWrapper);
                 bug2wrapper.put(seedFolderName, wrappers);
             }
         }
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
-        for (Map.Entry<String, List<ASTWrapper>> entry : bug2wrapper.entrySet()) {
+        for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrapper.entrySet()) {
             String seedFolderName = entry.getKey();
-            List<ASTWrapper> wrappers = bug2wrapper.get(seedFolderName);
+            List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
             Infer_TransformThread mutationThread = new Infer_TransformThread(wrappers, seedFolderName);
             mutationThreads.add(mutationThread);
         }

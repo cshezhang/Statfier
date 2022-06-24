@@ -1,6 +1,6 @@
 package edu.polyu.thread;
 
-import edu.polyu.analysis.ASTWrapper;
+import edu.polyu.analysis.TypeWrapper;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,9 @@ import static edu.polyu.util.Util.DIV_SELECTION;
 public class SonarQube_TransformThread implements Runnable {
 
     private int currentDepth;
-    private ArrayDeque<ASTWrapper> wrappers;
+    private ArrayDeque<TypeWrapper> wrappers;
 
-    public SonarQube_TransformThread(List<ASTWrapper> initWrappers) {
+    public SonarQube_TransformThread(List<TypeWrapper> initWrappers) {
         this.currentDepth = 0;
         this.wrappers = new ArrayDeque<>() {
             {
@@ -32,10 +32,10 @@ public class SonarQube_TransformThread implements Runnable {
     public void run() {
         for (int i = 1; i <= SEARCH_DEPTH; i++) {
             while (!wrappers.isEmpty()) {
-                ASTWrapper wrapper = wrappers.pollFirst();
+                TypeWrapper wrapper = wrappers.pollFirst();
                 if (wrapper.depth == currentDepth) {
                     if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<ASTWrapper> mutants = new ArrayList<>();
+                        List<TypeWrapper> mutants = new ArrayList<>();
                         if (GUIDED_LOCATION) {
                             mutants = wrapper.TransformByGuidedLocation();
                         } else if (RANDOM_LOCATION) {
