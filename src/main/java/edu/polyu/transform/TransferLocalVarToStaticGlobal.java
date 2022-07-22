@@ -3,7 +3,6 @@ package edu.polyu.transform;
 
 import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.analysis.LoopStatement;
-import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -19,8 +18,10 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.checkLiteralType;
-import static edu.polyu.util.Util.getChildrenNodes;
+import static edu.polyu.analysis.TypeWrapper.checkLiteralType;
+import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
+import static edu.polyu.analysis.TypeWrapper.isLiteral;
+import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * @Description: transfer local variable declaration to global scope in class, and this mutator contains static modifier
@@ -45,7 +46,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetLiteral = (Expression) targetNode;  // Notice check, hence, targetNode is literal.
-        TypeDeclaration clazz = Util.getClassOfStatement(srcNode);
+        TypeDeclaration clazz = getClassOfStatement(srcNode);
         String newVarName = "t2sg" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
@@ -78,7 +79,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
         }
         for(int i = 0; i < subNodes.size(); i++) {
             ASTNode subNode = subNodes.get(i);
-            if(Util.isLiteral(subNode)) {
+            if(isLiteral(subNode)) {
                 nodes.add(subNode);
             }
         }

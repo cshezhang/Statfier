@@ -25,8 +25,9 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.getAllStatements;
-import static edu.polyu.util.Util.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getAllStatements;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.isLiteral;
 
 // Control flow wrapper based on for-loop
 public class CFWrapperWithForTrue extends Transform {
@@ -111,7 +112,7 @@ public class CFWrapperWithForTrue extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.isLiteral(node)) {
+        if(isLiteral(node)) {
             return nodes;
         }
         ASTNode par = node.getParent();

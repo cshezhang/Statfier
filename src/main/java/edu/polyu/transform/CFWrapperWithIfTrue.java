@@ -20,6 +20,8 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.analysis.TypeWrapper.isLiteral;
+
 // Control flow warpper by if(true)
 public class CFWrapperWithIfTrue extends Transform {
 
@@ -55,7 +57,7 @@ public class CFWrapperWithIfTrue extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if (Util.isLiteral(node)) {
+        if (isLiteral(node)) {
             return nodes;
         }
         ASTNode par = node.getParent();

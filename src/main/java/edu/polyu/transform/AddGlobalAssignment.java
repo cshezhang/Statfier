@@ -20,7 +20,8 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.getStatementOfNode;
+import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getStatementOfNode;
 
 /**
  * @Description: static int a = b; -> static int a; static {a = b;}
@@ -40,7 +41,7 @@ public class AddGlobalAssignment extends Transform {
     public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        TypeDeclaration oldClazz = Util.getClassOfStatement(srcNode);
+        TypeDeclaration oldClazz = getClassOfStatement(srcNode);
         if (!(targetNode instanceof FieldDeclaration)) {
             return false;
         }

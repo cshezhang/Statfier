@@ -24,12 +24,12 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.analysis.TypeWrapper.checkLiteralType;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.isLiteral;
 import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.isLiteral;
-import static edu.polyu.util.Util.checkLiteralType;
 import static edu.polyu.util.Util.file2report;
-import static edu.polyu.util.Util.getChildrenNodes;
-import static edu.polyu.util.Util.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
 import static edu.polyu.util.Util.random;
 
 

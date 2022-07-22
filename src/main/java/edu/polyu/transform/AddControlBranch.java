@@ -27,6 +27,8 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.analysis.TypeWrapper.isLiteral;
+
 /**
  * @Description: Add control branch
  * @Author: Vanguard
@@ -105,7 +107,7 @@ public class AddControlBranch extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if (Util.isLiteral(node)) {
+        if (isLiteral(node)) {
             return nodes;
         }
         if (node instanceof FieldDeclaration || node instanceof MethodDeclaration || node instanceof SuperConstructorInvocation ||

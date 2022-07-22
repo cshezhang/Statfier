@@ -6,9 +6,17 @@ import edu.polyu.util.TriTuple;
 import edu.polyu.util.Util;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Util.SONARQUBE_SEED_PATH;
+import static edu.polyu.util.Util.mutantFolder;
+import static edu.polyu.util.Util.readFileByLine;
+
 
 /**
  * Description:

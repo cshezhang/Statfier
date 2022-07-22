@@ -1,6 +1,5 @@
 package edu.polyu.thread;
 
-import edu.polyu.util.AbstractIntegrationTest;
 import edu.polyu.util.OSUtil;
 
 import java.io.File;
@@ -14,7 +13,7 @@ import static edu.polyu.util.Util.SpotBugsClassFolder;
 import static edu.polyu.util.Util.SpotBugsPath;
 import static edu.polyu.util.Util.SpotBugsResultFolder;
 
-public class SpotBugs_InvokeThread extends AbstractIntegrationTest implements Runnable {
+public class SpotBugs_InvokeThread implements Runnable {
 
     private String seedFolderPath;
     private String seedFolderName;

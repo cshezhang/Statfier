@@ -20,11 +20,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import static edu.polyu.util.Util.createMethodSignature;
-import static edu.polyu.util.Util.getChildrenNodes;
-import static edu.polyu.util.Util.getClassOfStatement;
-import static edu.polyu.util.Util.getDirectMethodOfStatement;
-import static edu.polyu.util.Util.getStatementOfNode;
+import static edu.polyu.analysis.TypeWrapper.createMethodSignature;
+import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
+import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getStatementOfNode;
 
 public class NestedClassWrapper extends Transform {
 

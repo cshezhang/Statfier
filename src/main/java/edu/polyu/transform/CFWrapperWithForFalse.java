@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.getDirectBlockOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getDirectBlockOfStatement;
 
 public class CFWrapperWithForFalse extends Transform {
 

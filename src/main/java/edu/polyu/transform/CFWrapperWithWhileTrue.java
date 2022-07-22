@@ -21,6 +21,8 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.polyu.analysis.TypeWrapper.isLiteral;
+
 /**
  * @Description: Control flow wrapper by while(true)-break
  * @Author: Vanguard
@@ -62,7 +64,7 @@ public class CFWrapperWithWhileTrue extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(Util.isLiteral(node)) {
+        if(isLiteral(node)) {
             return nodes;
         }
         ASTNode par = node.getParent();

@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.getChildrenNodes;
+import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * @Description: The mutant to add redundant literal
