@@ -38,14 +38,6 @@ public abstract class Transform {
         return this.getClass().getSimpleName();
     }
 
-    /*
-    Add Final to Argument -> Method Invocation
-    Add Assignment -> Method Invocation (Only consider this condition)
-    Add Redundant Literal -> Assignment
-    Add Control Branch -> Expression Statement
-    Add Brackets -> Assignment
-    Add Argument Assignment -> MethodInvocation, Assignment, and ClassInstance
-     */
     static {
         transforms = new ArrayList<>();
         name2transform = new HashMap<>();

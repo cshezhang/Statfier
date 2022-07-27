@@ -44,6 +44,7 @@ import static edu.polyu.util.Utility.userdir;
 public class AutomaticTester {
 
     public static void main(String[] args) {
+        long time1 = System.currentTimeMillis();
         initEnv();
         Schedule schedule = Schedule.getInstance();
         try {
@@ -144,6 +145,10 @@ public class AutomaticTester {
             System.out.println("Cnt1: " + cnt1);
             System.out.println("Cnt2: " + cnt2);
             System.out.println("Ratio: " + cnt2 / (double)(cnt1));
+            long OVERALL_EXEC_TIME = System.currentTimeMillis() - time1;
+            long minutes = (OVERALL_EXEC_TIME / 1000) / 60;
+            long seconds = (OVERALL_EXEC_TIME / 1000) % 60;
+            System.out.format("%d min(s) %d sec(s).", minutes, seconds);
         } catch (Exception e) {
             e.printStackTrace();
         }
