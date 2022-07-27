@@ -14,23 +14,27 @@ import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.analysis.TypeWrapper.mutant2seed;
+import static edu.polyu.analysis.TypeWrapper.mutant2seq;
+import static edu.polyu.transform.Transform.singleLevelExplorer;
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.GUIDED_LOCATION;
-import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.RANDOM_LOCATION;
-import static edu.polyu.util.Util.RANDOM_SELECTION;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.SpotBugsClassFolder;
-import static edu.polyu.util.Util.SpotBugsPath;
-import static edu.polyu.util.Util.SpotBugsResultFolder;
-import static edu.polyu.util.Util.DIV_SELECTION;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2row;
+import static edu.polyu.util.Utility.COMPILE;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SEARCH_DEPTH;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.SpotBugsClassFolder;
+import static edu.polyu.util.Utility.SpotBugsPath;
+import static edu.polyu.util.Utility.SpotBugsResultFolder;
+import static edu.polyu.util.Utility.DIV_SELECTION;
+import static edu.polyu.util.Utility.file2bugs;
+import static edu.polyu.util.Utility.file2row;
 
-import static edu.polyu.util.Util.readSpotBugsResultFile;
-import static edu.polyu.util.Util.sep;
+import static edu.polyu.util.Utility.readSpotBugsResultFile;
+import static edu.polyu.util.Utility.sep;
 
 public class SpotBugs_TransformThread implements Runnable {
 
@@ -51,35 +55,7 @@ public class SpotBugs_TransformThread implements Runnable {
     public void run() {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            if (SINGLE_TESTING) {
-                System.out.println("TransformThread Depth: " + depth);
-            }
-            while (!wrappers.isEmpty()) {
-                TypeWrapper wrapper = wrappers.pollFirst();
-                if (wrapper.depth == currentDepth) {
-                    if (!wrapper.isBuggy()) {
-                        List<TypeWrapper> mutants = new ArrayList<>();
-                        if (GUIDED_LOCATION) {
-                            mutants = wrapper.TransformByGuidedLocation();
-                        } else if (RANDOM_LOCATION) {
-                            mutants = wrapper.TransformByRandomLocation();
-                        }
-                        if (NO_SELECTION) {
-                            wrappers.addAll(mutants);
-                        }
-                        if (RANDOM_SELECTION) {
-                            wrappers.addAll(Random_Selection(mutants));
-                        }
-                        if (DIV_SELECTION) {
-                            wrappers.addAll(Div_Selection(mutants));
-                        }
-                    }
-                } else {
-                    wrappers.addFirst(wrapper);
-                    currentDepth += 1;
-                    break;
-                }
-            }
+            singleLevelExplorer(this.wrappers, this.currentDepth++);
             List<SpotBugs_Report> reports = new ArrayList<>();
             for (TypeWrapper wrapper : wrappers) {
                 String seedFilePath = wrapper.getFilePath();

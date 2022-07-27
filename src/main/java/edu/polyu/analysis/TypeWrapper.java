@@ -63,14 +63,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static edu.polyu.util.Util.COMPILE;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.compactIssues;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.mutantCounter;
-import static edu.polyu.util.Util.random;
-import static edu.polyu.util.Util.userdir;
+import static edu.polyu.util.Utility.COMPILE;
+import static edu.polyu.util.Utility.Path2Last;
+import static edu.polyu.util.Utility.compactIssues;
+import static edu.polyu.util.Utility.file2bugs;
+import static edu.polyu.util.Utility.file2row;
+import static edu.polyu.util.Utility.mutantCounter;
+import static edu.polyu.util.Utility.random;
+import static edu.polyu.util.Utility.userdir;
 
 /**
  * Description: ASTWrapper is 1-to-1 a mutant or seed, it also contains some methods to perform different transformation schedule.
@@ -402,7 +402,7 @@ public class TypeWrapper {
                     }
                 }
             }
-            MethodDeclaration method = getDirectMethodOfStatement(resNodes.get(0));
+            MethodDeclaration method = getDirectMethodOfNode(resNodes.get(0));
             if (method != null) {
                 Block block = method.getBody();
                 if (block != null) {
@@ -566,20 +566,20 @@ public class TypeWrapper {
                 boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                 if (hasMutated) {
                     succMutation.addAndGet(1);
-                    newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
+                    newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                     newMutant.transSeq.add(transform.getIndex());
                     newMutant.transNodes.add(newSrcNode);
-                    if (COMPILE) {
-                        newMutant.rewriteJavaCode(); // 1: Rewrite transformation
-                        newMutant.resetClassName();  // 2: Rewrite class name and pkg definition
-                        newMutant.removePackageDefinition();
-                    }
-                    newMutant.rewriteJavaCode();
-                    if (newMutant.writeToJavaFile()) {
-                        mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
-                        mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
-                        newWrappers.add(newMutant);
-                    }
+                    newWrappers.add(newMutant);
+//                    if (COMPILE) {
+//                        newMutant.rewriteJavaCode(); // 1: Rewrite transformation
+//                        newMutant.resetClassName();  // 2: Rewrite class name and pkg definition
+//                        newMutant.removePackageDefinition();
+//                    }
+//                    newMutant.rewriteJavaCode();
+//                    if (newMutant.writeToJavaFile()) {
+//                        mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
+//                        mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
+//                    }
                 } else {
                     failMutation.addAndGet(1);
                     try {
@@ -637,20 +637,20 @@ public class TypeWrapper {
                         boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                         if (hasMutated) {
                             succMutation.addAndGet(1);
-                            newMutant.nodeIndex.add(targetNode); // Add transformation type and it will be used in mutant selection
+                            newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
                             newMutant.transNodes.add(newSrcNode);
-                            if (COMPILE) {
-                                newMutant.rewriteJavaCode();  // 1. Rewrite transformation, Don't remove this line, we need rewrite Java code twice
-                                newMutant.resetClassName();  // 2. Rewrite class name and pkg definition
-                                newMutant.removePackageDefinition();
-                            }
-                            newMutant.rewriteJavaCode(); //
-                            if (newMutant.writeToJavaFile()) {
-                                mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
-                                mutant2seq.put(newMutant.filePath, newMutant.transSeq.toString());
-                                newWrappers.add(newMutant);
-                            }
+                            newWrappers.add(newMutant);
+//                            if (COMPILE) {
+//                                newMutant.rewriteJavaCode();  // 1. Rewrite transformation, Don't remove this line, we need rewrite Java code twice
+//                                newMutant.resetClassName();  // 2. Rewrite class name and pkg definition
+//                                newMutant.removePackageDefinition();
+//                            }
+//                            newMutant.rewriteJavaCode(); //
+//                            if (newMutant.writeToJavaFile()) {
+//                                mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
+//                                mutant2seq.put(newMutant.filePath, newMutant.transSeq.toString());
+//                            }
                         } else {
                             failMutation.addAndGet(1);
                             Files.deleteIfExists(Paths.get(mutantPath));
@@ -1106,8 +1106,8 @@ public class TypeWrapper {
         }
     }
 
-    public static MethodDeclaration getDirectMethodOfStatement(ASTNode node) {
-        if(node == null) {
+    public static MethodDeclaration getDirectMethodOfNode(ASTNode node) {
+        if(node == null || node instanceof FieldDeclaration) {
             return null;
         }
         if (node instanceof MethodDeclaration) {
@@ -1123,8 +1123,8 @@ public class TypeWrapper {
         return (MethodDeclaration) parent;
     }
 
-    public static TypeDeclaration getClassOfStatement(ASTNode statement) {
-        ASTNode parent = statement.getParent();
+    public static TypeDeclaration getClassOfNode(ASTNode node) {
+        ASTNode parent = node.getParent();
         while (parent != null && !(parent instanceof TypeDeclaration)) {
             parent = parent.getParent();
             if (parent == null || parent.equals(parent.getParent())) {

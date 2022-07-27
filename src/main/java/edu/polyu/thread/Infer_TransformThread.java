@@ -14,8 +14,9 @@ import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
+import static edu.polyu.transform.Transform.singleLevelExplorer;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Utility.*;
 
 /**
  * Description: Infer Transformation Thread
@@ -38,38 +39,17 @@ public class Infer_TransformThread extends Thread {
         };
     }
 
-    // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
+    /* Iteration process from 1 to SEARCH_DEPTH
+    1. Program transform to generate mutant;
+    2. Invoke static analyzer to detect bugs;
+     */
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
-            while (!wrappers.isEmpty()) {
-                TypeWrapper wrapper = wrappers.pollFirst();
-                if (wrapper.depth == currentDepth) {
-                    if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<TypeWrapper> mutants = new ArrayList<>();
-                        if (GUIDED_LOCATION) {
-                            mutants = wrapper.TransformByGuidedLocation();
-                        } else if (RANDOM_LOCATION) {
-                            mutants = wrapper.TransformByRandomLocation();
-                        }
-                        if(NO_SELECTION) {
-                            wrappers.addAll(mutants);
-                        }
-                        if(RANDOM_SELECTION) {
-                            wrappers.addAll(Random_Selection(mutants));
-                        }
-                        if(DIV_SELECTION) {
-                            wrappers.addAll(Div_Selection(mutants));
-                        }
-                    }
-                } else {
-                    wrappers.addFirst(wrapper); // The last wrapper in current depth
-                    currentDepth += 1;
-                    break;
-                }
+            if(SINGLE_TESTING) {
+                System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
-            // detect mutants of iter i
+            singleLevelExplorer(this.wrappers, this.currentDepth++);
             String mutantFolderPath = mutantFolder + File.separator + "iter" + depth;
             List<String> filepaths = getFilenamesFromFolder(mutantFolderPath, true);
             List<Infer_Report> reports = new ArrayList<>();

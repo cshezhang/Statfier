@@ -4,7 +4,7 @@ import net.sourceforge.pmd.PMD;
 
 import java.io.File;
 
-import static edu.polyu.util.Util.PMDResultFolder;
+import static edu.polyu.util.Utility.PMDResultFolder;
 
 /**
  * Description: Previous main process for testing PMD with multi thread

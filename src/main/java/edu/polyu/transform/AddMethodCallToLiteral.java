@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.analysis.TypeWrapper.checkLiteralType;
-import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfNode;
 import static edu.polyu.analysis.TypeWrapper.isLiteral;
-import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.file2report;
+import static edu.polyu.util.Utility.PMD_MUTATION;
+import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
-import static edu.polyu.util.Util.random;
+import static edu.polyu.util.Utility.random;
 
 
 /**
@@ -62,7 +62,7 @@ public class AddMethodCallToLiteral extends Transform {
         newBlock.statements().add(returnStatement);
         newMethod.setBody(newBlock);
         returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
+        MethodDeclaration oldMethod = getDirectMethodOfNode(srcNode);
         if(oldMethod == null) {
             return false;  // It means that this statement is not located in a method, may stay in a initializer of class
         }

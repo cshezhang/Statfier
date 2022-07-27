@@ -6,13 +6,13 @@ import java.io.File;
 import java.util.List;
 
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.InferClassFolder;
-import static edu.polyu.util.Util.InferPath;
-import static edu.polyu.util.Util.InferResultFolder;
-import static edu.polyu.util.Util.JAVAC_PATH;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.inferJarStr;
+import static edu.polyu.util.Utility.InferClassFolder;
+import static edu.polyu.util.Utility.InferPath;
+import static edu.polyu.util.Utility.InferResultFolder;
+import static edu.polyu.util.Utility.JAVAC_PATH;
+import static edu.polyu.util.Utility.Path2Last;
+import static edu.polyu.util.Utility.getFilenamesFromFolder;
+import static edu.polyu.util.Utility.inferJarStr;
 
 /**
  * @Description:

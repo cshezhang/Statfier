@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Author: Vanguard
  * @Date: 2021-08-11 11:06
  */
-public class Util {
+public class Utility {
 
     public static Properties properties;
 
@@ -609,6 +609,9 @@ public class Util {
             System.err.println("GetDirectFile Cannot find: " + path);
         }
         for (File file : files) {
+            if(file.getName().contains("DS_Store")) {
+                continue;
+            }
             fileList.add(file.getAbsolutePath());
         }
         if (getAbsolutePath) {
@@ -633,15 +636,13 @@ public class Util {
             System.exit(-1);
         }
         for (File file : files) {
+            if(file.getName().contains("DS_Store")) {
+                continue;
+            }
             if (file.isDirectory()) {
                 fileList.addAll(getFilenamesFromFolder(file.getAbsolutePath(), getAbsolutePath));
             } else {
                 fileList.add(file.getAbsolutePath());
-            }
-        }
-        for(int i = fileList.size() - 1; i >= 0; i--) {
-            if(fileList.get(i).contains(".DS_Store")) {
-                fileList.remove(i);
             }
         }
         if (getAbsolutePath) {

@@ -23,8 +23,8 @@ import java.util.Map;
 
 import static edu.polyu.analysis.TypeWrapper.createMethodSignature;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
-import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
-import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfNode;
 import static edu.polyu.analysis.TypeWrapper.getStatementOfNode;
 
 public class AnonymousClassWrapper extends Transform {
@@ -45,9 +45,9 @@ public class AnonymousClassWrapper extends Transform {
     public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        TypeDeclaration clazz = getClassOfStatement(srcNode);
+        TypeDeclaration clazz = getClassOfNode(srcNode);
         List<ASTNode> classModifiers = clazz.modifiers();
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
+        MethodDeclaration oldMethod = getDirectMethodOfNode(srcNode);
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
         instanceCreation.setType(ast.newSimpleType(ast.newSimpleName("Object")));
@@ -55,7 +55,7 @@ public class AnonymousClassWrapper extends Transform {
             if(oldMethod.isConstructor()) {
                 return false;
             }
-            TypeDeclaration type = getClassOfStatement(srcNode);
+            TypeDeclaration type = getClassOfNode(srcNode);
             String methodKey = type.getName().toString() + ":" + createMethodSignature(oldMethod);
             for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
                 if(!entry.getKey().equals(methodKey) && entry.getValue().contains(oldMethod.getName().getIdentifier())) {
@@ -120,8 +120,14 @@ public class AnonymousClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        TypeDeclaration clazz = getClassOfStatement(node);
-        MethodDeclaration method = getDirectMethodOfStatement(node);
+        TypeDeclaration clazz = getClassOfNode(node);
+        MethodDeclaration method = getDirectMethodOfNode(node);
+        if (method == null) {
+            if(getStatementOfNode(node) instanceof FieldDeclaration) {
+                nodes.add(node);  // FieldDeclaration
+            }
+            return nodes;
+        }
         List<ASTNode> modifiers = (List<ASTNode>) method.modifiers();
         for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
             if(component instanceof TypeDeclaration) {
@@ -130,12 +136,6 @@ public class AnonymousClassWrapper extends Transform {
                     return nodes;
                 }
             }
-        }
-        if (method == null) {
-            if(getStatementOfNode(node) instanceof FieldDeclaration) {
-                nodes.add(node);  // FieldDeclaration
-            }
-            return nodes;
         }
         List<ASTNode> subNodes = getChildrenNodes(method);
         boolean hasThis = false;

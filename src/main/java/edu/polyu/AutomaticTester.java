@@ -21,20 +21,20 @@ import static edu.polyu.analysis.TypeWrapper.mutant2seq;
 import static edu.polyu.analysis.TypeWrapper.mutant2seed;
 import static edu.polyu.analysis.TypeWrapper.succMutation;
 import static edu.polyu.analysis.TypeWrapper.validSeed;
-import static edu.polyu.thread.PMD_TransformThread.cnt1;
-import static edu.polyu.thread.PMD_TransformThread.cnt2;
+import static edu.polyu.transform.Transform.cnt1;
+import static edu.polyu.transform.Transform.cnt2;
 import static edu.polyu.util.Invoker.failedCmds;
-import static edu.polyu.util.Util.CHECKSTYLE_MUTATION;
-import static edu.polyu.util.Util.INFER_MUTATION;
-import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.SONARQUBE_MUTATION;
-import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.util.Util.compactIssues;
-import static edu.polyu.util.Util.failedReport;
-import static edu.polyu.util.Util.initEnv;
-import static edu.polyu.util.Util.sourceSeedPath;
-import static edu.polyu.util.Util.startTimeStamp;
-import static edu.polyu.util.Util.userdir;
+import static edu.polyu.util.Utility.CHECKSTYLE_MUTATION;
+import static edu.polyu.util.Utility.INFER_MUTATION;
+import static edu.polyu.util.Utility.PMD_MUTATION;
+import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
+import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Utility.compactIssues;
+import static edu.polyu.util.Utility.failedReport;
+import static edu.polyu.util.Utility.initEnv;
+import static edu.polyu.util.Utility.sourceSeedPath;
+import static edu.polyu.util.Utility.startTimeStamp;
+import static edu.polyu.util.Utility.userdir;
 
 /**
  * Description: Main Process for automatic testing

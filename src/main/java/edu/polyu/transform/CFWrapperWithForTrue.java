@@ -2,7 +2,6 @@ package edu.polyu.transform;
 
 
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.analysis.TypeWrapper.getAllStatements;
-import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfNode;
 import static edu.polyu.analysis.TypeWrapper.isLiteral;
 
 // Control flow wrapper based on for-loop
@@ -91,7 +90,7 @@ public class CFWrapperWithForTrue extends Transform {
             Assignment assignment = (Assignment) ((ExpressionStatement) node).getExpression();
             if(assignment.getLeftHandSide() instanceof SimpleName) {
                 String varName = ((SimpleName) assignment.getLeftHandSide()).getIdentifier();
-                MethodDeclaration method = getDirectMethodOfStatement(node);
+                MethodDeclaration method = getDirectMethodOfNode(node);
                 if(method == null || method.getBody() == null) {
                     return false;
                 }

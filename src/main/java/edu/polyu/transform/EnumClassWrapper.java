@@ -27,8 +27,8 @@ import java.util.Map;
 
 import static edu.polyu.analysis.TypeWrapper.createMethodSignature;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
-import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
-import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfNode;
 import static edu.polyu.analysis.TypeWrapper.getStatementOfNode;
 
 public class EnumClassWrapper extends Transform {
@@ -47,7 +47,7 @@ public class EnumClassWrapper extends Transform {
     public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherNode, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        TypeDeclaration clazz = getClassOfStatement(srcNode);
+        TypeDeclaration clazz = getClassOfNode(srcNode);
         List<ASTNode> classModifiers = clazz.modifiers();
         List<String> staticFieldNames = new ArrayList<>();
         for(FieldDeclaration fd : clazz.getFields()) {
@@ -59,7 +59,7 @@ public class EnumClassWrapper extends Transform {
                 }
             }
         }
-        MethodDeclaration oldMethod = getDirectMethodOfStatement(srcNode);
+        MethodDeclaration oldMethod = getDirectMethodOfNode(srcNode);
         EnumConstantDeclaration enumConstant = ast.newEnumConstantDeclaration();
         enumConstant.setName(ast.newSimpleName("RED"));
         EnumDeclaration enumClass = ast.newEnumDeclaration();
@@ -75,7 +75,7 @@ public class EnumClassWrapper extends Transform {
             if(oldMethod.isConstructor()) {
                 return false;
             }
-            TypeDeclaration type = getClassOfStatement(srcNode);
+            TypeDeclaration type = getClassOfNode(srcNode);
             String methodKey = type.getName().toString() + ":" + createMethodSignature(oldMethod);
             for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
                 if(!entry.getKey().equals(methodKey) && entry.getValue().contains(oldMethod.getName().getIdentifier())) {
@@ -130,8 +130,14 @@ public class EnumClassWrapper extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        TypeDeclaration clazz = getClassOfStatement(node);
-        MethodDeclaration method = getDirectMethodOfStatement(node);
+        TypeDeclaration clazz = getClassOfNode(node);
+        MethodDeclaration method = getDirectMethodOfNode(node);
+        if (method == null) {
+            if(getStatementOfNode(node) instanceof FieldDeclaration) {
+                nodes.add(node);  // FieldDeclaration
+            }
+            return nodes;
+        }
         List<ASTNode> classModifiers = clazz.modifiers();
         for(ASTNode classModifier : classModifiers) {
             if(classModifier instanceof Modifier) {
@@ -148,12 +154,6 @@ public class EnumClassWrapper extends Transform {
                     return nodes;
                 }
             }
-        }
-        if (method == null) {
-            if(getStatementOfNode(node) instanceof FieldDeclaration) {
-                nodes.add(node);  // FieldDeclaration
-            }
-            return nodes;
         }
         List<ASTNode> subNodes = getChildrenNodes(method);
         boolean hasThis = false;
@@ -209,8 +209,8 @@ public class EnumClassWrapper extends Transform {
 
     public List<ASTNode> classCheck(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        TypeDeclaration clazz = getClassOfStatement(node);
-        MethodDeclaration method = getDirectMethodOfStatement(node);
+        TypeDeclaration clazz = getClassOfNode(node);
+        MethodDeclaration method = getDirectMethodOfNode(node);
         for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
             if(component instanceof TypeDeclaration) {
                 Type parentType = ((TypeDeclaration) component).getSuperclassType();

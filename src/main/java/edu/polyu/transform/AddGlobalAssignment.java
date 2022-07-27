@@ -1,7 +1,6 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Assignment;
@@ -20,7 +19,7 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
 import static edu.polyu.analysis.TypeWrapper.getStatementOfNode;
 
 /**
@@ -41,7 +40,7 @@ public class AddGlobalAssignment extends Transform {
     public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brotherStatement, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        TypeDeclaration oldClazz = getClassOfStatement(srcNode);
+        TypeDeclaration oldClazz = getClassOfNode(srcNode);
         if (!(targetNode instanceof FieldDeclaration)) {
             return false;
         }

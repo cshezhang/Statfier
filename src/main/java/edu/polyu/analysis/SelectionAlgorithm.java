@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static edu.polyu.util.Util.random;
+import static edu.polyu.util.Utility.random;
 
 /**
  * @Description: This class is to save different algorithms.

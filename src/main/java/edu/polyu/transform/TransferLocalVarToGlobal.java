@@ -1,7 +1,6 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Expression;
@@ -19,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.analysis.TypeWrapper.checkLiteralType;
-import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
 import static edu.polyu.analysis.TypeWrapper.isLiteral;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
-import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getDirectMethodOfNode;
 
 public class TransferLocalVarToGlobal extends Transform {
 
@@ -42,7 +41,7 @@ public class TransferLocalVarToGlobal extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression literalNode = (Expression) targetNode;
-        TypeDeclaration clazz = getClassOfStatement(srcNode);
+        TypeDeclaration clazz = getClassOfNode(srcNode);
         String newVarName = "t2g" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
@@ -60,7 +59,7 @@ public class TransferLocalVarToGlobal extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
-        MethodDeclaration method = getDirectMethodOfStatement(srcNode);
+        MethodDeclaration method = getDirectMethodOfNode(srcNode);
         if (method != null) {
             for (ASTNode modifier : (List<ASTNode>) method.modifiers()) {
                 if(modifier instanceof Modifier) {

@@ -13,9 +13,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.util.Util.BASE_SEED_PATH;
-import static edu.polyu.util.Util.calculatePMDResultFile;
-import static edu.polyu.util.Util.userdir;
+import static edu.polyu.util.Utility.BASE_SEED_PATH;
+import static edu.polyu.util.Utility.calculatePMDResultFile;
+import static edu.polyu.util.Utility.userdir;
 
 public class PMDCaseChecker {
 

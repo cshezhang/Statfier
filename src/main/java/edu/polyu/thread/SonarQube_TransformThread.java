@@ -7,12 +7,12 @@ import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
-import static edu.polyu.util.Util.GUIDED_LOCATION;
-import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.RANDOM_LOCATION;
-import static edu.polyu.util.Util.RANDOM_SELECTION;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.DIV_SELECTION;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SEARCH_DEPTH;
+import static edu.polyu.util.Utility.DIV_SELECTION;
 
 public class SonarQube_TransformThread implements Runnable {
 

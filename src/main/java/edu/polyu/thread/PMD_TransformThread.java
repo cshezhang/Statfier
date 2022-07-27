@@ -14,18 +14,23 @@ import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
-import static edu.polyu.util.Util.GUIDED_LOCATION;
-import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.PMDResultFolder;
-import static edu.polyu.util.Util.RANDOM_LOCATION;
-import static edu.polyu.util.Util.RANDOM_SELECTION;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.DIV_SELECTION;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2report;
-import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.mutantFolder;
-import static edu.polyu.util.Util.readPMDResultFile;
+import static edu.polyu.analysis.TypeWrapper.mutant2seed;
+import static edu.polyu.analysis.TypeWrapper.mutant2seq;
+import static edu.polyu.transform.Transform.singleLevelExplorer;
+import static edu.polyu.util.Utility.COMPILE;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
+import static edu.polyu.util.Utility.PMDResultFolder;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SEARCH_DEPTH;
+import static edu.polyu.util.Utility.DIV_SELECTION;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.file2bugs;
+import static edu.polyu.util.Utility.file2report;
+import static edu.polyu.util.Utility.file2row;
+import static edu.polyu.util.Utility.mutantFolder;
+import static edu.polyu.util.Utility.readPMDResultFile;
 
 /**
  * Description: This file is the MAIN class for testing PMD with multi threads
@@ -34,13 +39,11 @@ import static edu.polyu.util.Util.readPMDResultFile;
  */
 public class PMD_TransformThread implements Runnable {
 
+    private int currentDepth = 0;
     private String seedFolderName;
     private String ruleCategory;
     private String ruleType;
     private ArrayDeque<TypeWrapper> wrappers;
-
-    public static long cnt1 = 0;
-    public static long cnt2 = 0;
 
     public PMD_TransformThread(List<TypeWrapper> initWrappers, String seedFolderName) {
         this.seedFolderName = seedFolderName;
@@ -57,43 +60,13 @@ public class PMD_TransformThread implements Runnable {
     // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
     @Override
     public void run() {
-        int currentDepth = 0;
-        for (int i = 1; i <= SEARCH_DEPTH; i++) {
-            while (!wrappers.isEmpty()) {
-                TypeWrapper wrapper = wrappers.pollFirst();
-//                if(SINGLE_TESTING) {
-//                    System.out.println("Processing: " + wrapper.getFilePath());
-//                }
-                if (wrapper.depth == currentDepth) {
-                    if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<TypeWrapper> mutants = new ArrayList<>();
-                        if (GUIDED_LOCATION) {
-                            mutants = wrapper.TransformByGuidedLocation();
-                        } else if (RANDOM_LOCATION) {
-                            mutants = wrapper.TransformByRandomLocation();
-                        }
-                        cnt1 += mutants.size();
-                        if(NO_SELECTION) {
-                            wrappers.addAll(mutants);
-                        }
-                        List<TypeWrapper> reducedMutants = null;
-                        if(RANDOM_SELECTION) {
-                            reducedMutants = Random_Selection(mutants);
-                        }
-                        if(DIV_SELECTION) {
-                            reducedMutants = Div_Selection(mutants);
-                        }
-                        cnt2 += reducedMutants.size();
-                        wrappers.addAll(reducedMutants);
-                    }
-                } else {
-                    wrappers.addFirst(wrapper); // The last wrapper in current depth
-                    currentDepth += 1;
-                    break;
-                }
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            if(SINGLE_TESTING) {
+                System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
-            String resultFilePath = PMDResultFolder.getAbsolutePath() + File.separator + "iter" + i + "_" + seedFolderName + "_Result.json";
-            String mutantFolderPath = mutantFolder + File.separator + "iter" + i + File.separator + seedFolderName;
+            singleLevelExplorer(this.wrappers, this.currentDepth++);
+            String resultFilePath = PMDResultFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
+            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
             String[] pmdConfig = {
                     "-d", mutantFolderPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
@@ -101,7 +74,7 @@ public class PMD_TransformThread implements Runnable {
                     "-r", resultFilePath,
                     "--no-cache"
             };
-            PMD.runPmd(pmdConfig); // detect mutants of iter i
+            PMD.runPmd(pmdConfig); // detect mutants of level i
             List<PMD_Report> reports = readPMDResultFile(resultFilePath);
             for (PMD_Report report : reports) {
                 file2report.put(report.getFilepath(), report);

@@ -3,7 +3,7 @@ package edu.polyu;
 import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.util.TriTuple;
-import edu.polyu.util.Util;
+import edu.polyu.util.Utility;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static edu.polyu.util.Util.SONARQUBE_SEED_PATH;
-import static edu.polyu.util.Util.mutantFolder;
-import static edu.polyu.util.Util.readFileByLine;
+import static edu.polyu.util.Utility.SONARQUBE_SEED_PATH;
+import static edu.polyu.util.Utility.mutantFolder;
+import static edu.polyu.util.Utility.readFileByLine;
 
 
 /**
@@ -33,8 +33,8 @@ public class DiffSQAnalysis {
     public static void analysis(String mappingPath, String reportPath1, String reportPath2) {
         System.out.println("Report Path1: " + reportPath1);
         System.out.println("Report Path2: " + reportPath2);
-        List<SonarQube_Report> reports1 = Util.readSonarQubeResultFile(reportPath1, SONARQUBE_SEED_PATH);
-        List<SonarQube_Report> reports2 = Util.readSonarQubeResultFile(reportPath2, mutantFolder + File.separator + "iter1");
+        List<SonarQube_Report> reports1 = Utility.readSonarQubeResultFile(reportPath1, SONARQUBE_SEED_PATH);
+        List<SonarQube_Report> reports2 = Utility.readSonarQubeResultFile(reportPath2, mutantFolder + File.separator + "iter1");
         for (SonarQube_Report report : reports1) {
             file2report.put(report.getFilepath(), report);
             if (file2bug.containsKey(report.getFilepath())) {

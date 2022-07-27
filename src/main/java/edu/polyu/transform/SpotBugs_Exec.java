@@ -16,19 +16,19 @@ import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommands;
-import static edu.polyu.util.Util.DIV_SELECTION;
-import static edu.polyu.util.Util.GUIDED_LOCATION;
-import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.RANDOM_LOCATION;
-import static edu.polyu.util.Util.RANDOM_SELECTION;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.SpotBugsClassFolder;
-import static edu.polyu.util.Util.SpotBugsPath;
-import static edu.polyu.util.Util.SpotBugsResultFolder;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.readSpotBugsResultFile;
-import static edu.polyu.util.Util.sep;
+import static edu.polyu.util.Utility.DIV_SELECTION;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SEARCH_DEPTH;
+import static edu.polyu.util.Utility.SpotBugsClassFolder;
+import static edu.polyu.util.Utility.SpotBugsPath;
+import static edu.polyu.util.Utility.SpotBugsResultFolder;
+import static edu.polyu.util.Utility.file2bugs;
+import static edu.polyu.util.Utility.file2row;
+import static edu.polyu.util.Utility.readSpotBugsResultFile;
+import static edu.polyu.util.Utility.sep;
 
 public class SpotBugs_Exec {
 

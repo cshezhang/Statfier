@@ -1,6 +1,6 @@
 package edu.polyu.casecheck;
 
-import edu.polyu.util.Util;
+import edu.polyu.util.Utility;
 import edu.polyu.report.SpotBugs_Report;
 
 import java.io.BufferedReader;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
-import static edu.polyu.util.Util.*;
+import static edu.polyu.util.Utility.*;
 
 public class SpotBugsChecker {
 
@@ -85,7 +85,7 @@ public class SpotBugsChecker {
     }
 
     public static void main(String[] args) {
-        List<String> allSeedList = Util.getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
+        List<String> allSeedList = Utility.getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
         HashMap<String, List<String>> rule2seedlist = new HashMap<>();
 //        compileFirstIterJavaFiles(allSeedList);
         HashSet<String> ruleCounter = new HashSet<>();

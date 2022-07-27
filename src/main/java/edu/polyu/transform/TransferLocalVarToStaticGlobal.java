@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.analysis.TypeWrapper.checkLiteralType;
-import static edu.polyu.analysis.TypeWrapper.getClassOfStatement;
+import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
 import static edu.polyu.analysis.TypeWrapper.isLiteral;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
 
@@ -46,7 +46,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetLiteral = (Expression) targetNode;  // Notice check, hence, targetNode is literal.
-        TypeDeclaration clazz = getClassOfStatement(srcNode);
+        TypeDeclaration clazz = getClassOfNode(srcNode);
         String newVarName = "t2sg" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();

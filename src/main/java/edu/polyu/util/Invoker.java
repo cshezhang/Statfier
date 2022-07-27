@@ -22,27 +22,27 @@ import edu.polyu.thread.PMD_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
-import static edu.polyu.util.Util.CheckStyleResultFolder;
-import static edu.polyu.util.Util.INFER_MUTATION;
-import static edu.polyu.util.Util.InferResultFolder;
-import static edu.polyu.util.Util.JAVAC_PATH;
-import static edu.polyu.util.Util.PMDResultFolder;
-import static edu.polyu.util.Util.PMD_MUTATION;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.SPOTBUGS_MUTATION;
-import static edu.polyu.util.Util.SpotBugsResultFolder;
-import static edu.polyu.util.Util.THREAD_COUNT;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.getProperty;
-import static edu.polyu.util.Util.inferJarStr;
-import static edu.polyu.util.Util.readCheckStyleResultFile;
-import static edu.polyu.util.Util.readInferResultFile;
-import static edu.polyu.util.Util.readPMDResultFile;
-import static edu.polyu.util.Util.readSpotBugsResultFile;
-import static edu.polyu.util.Util.sep;
-import static edu.polyu.util.Util.spotBugsJarStr;
-import static edu.polyu.util.Util.subSeedFolderNameList;
+import static edu.polyu.util.Utility.CheckStyleResultFolder;
+import static edu.polyu.util.Utility.INFER_MUTATION;
+import static edu.polyu.util.Utility.InferResultFolder;
+import static edu.polyu.util.Utility.JAVAC_PATH;
+import static edu.polyu.util.Utility.PMDResultFolder;
+import static edu.polyu.util.Utility.PMD_MUTATION;
+import static edu.polyu.util.Utility.Path2Last;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Utility.SpotBugsResultFolder;
+import static edu.polyu.util.Utility.THREAD_COUNT;
+import static edu.polyu.util.Utility.getFilenamesFromFolder;
+import static edu.polyu.util.Utility.getProperty;
+import static edu.polyu.util.Utility.inferJarStr;
+import static edu.polyu.util.Utility.readCheckStyleResultFile;
+import static edu.polyu.util.Utility.readInferResultFile;
+import static edu.polyu.util.Utility.readPMDResultFile;
+import static edu.polyu.util.Utility.readSpotBugsResultFile;
+import static edu.polyu.util.Utility.sep;
+import static edu.polyu.util.Utility.spotBugsJarStr;
+import static edu.polyu.util.Utility.subSeedFolderNameList;
 
 
 /*

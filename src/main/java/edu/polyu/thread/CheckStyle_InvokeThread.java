@@ -6,12 +6,11 @@ import java.io.File;
 import java.util.List;
 
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.CheckStyleConfigPath;
-import static edu.polyu.util.Util.CheckStylePath;
-import static edu.polyu.util.Util.CheckStyleResultFolder;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
+import static edu.polyu.util.Utility.CheckStyleConfigPath;
+import static edu.polyu.util.Utility.CheckStylePath;
+import static edu.polyu.util.Utility.CheckStyleResultFolder;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.getFilenamesFromFolder;
 
 public class CheckStyle_InvokeThread implements Runnable {
     private int iterDepth;

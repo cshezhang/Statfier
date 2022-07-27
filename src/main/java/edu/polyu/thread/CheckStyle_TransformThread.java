@@ -14,24 +14,28 @@ import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
+import static edu.polyu.analysis.TypeWrapper.mutant2seed;
+import static edu.polyu.analysis.TypeWrapper.mutant2seq;
+import static edu.polyu.transform.Transform.singleLevelExplorer;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.CheckStyleConfigPath;
-import static edu.polyu.util.Util.CheckStylePath;
-import static edu.polyu.util.Util.CheckStyleResultFolder;
-import static edu.polyu.util.Util.DIV_SELECTION;
-import static edu.polyu.util.Util.GUIDED_LOCATION;
-import static edu.polyu.util.Util.NO_SELECTION;
-import static edu.polyu.util.Util.Path2Last;
-import static edu.polyu.util.Util.RANDOM_LOCATION;
-import static edu.polyu.util.Util.RANDOM_SELECTION;
-import static edu.polyu.util.Util.SEARCH_DEPTH;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.file2bugs;
-import static edu.polyu.util.Util.file2report;
-import static edu.polyu.util.Util.file2row;
-import static edu.polyu.util.Util.getFilenamesFromFolder;
-import static edu.polyu.util.Util.mutantFolder;
-import static edu.polyu.util.Util.readCheckStyleResultFile;
+import static edu.polyu.util.Utility.COMPILE;
+import static edu.polyu.util.Utility.CheckStyleConfigPath;
+import static edu.polyu.util.Utility.CheckStylePath;
+import static edu.polyu.util.Utility.CheckStyleResultFolder;
+import static edu.polyu.util.Utility.DIV_SELECTION;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
+import static edu.polyu.util.Utility.Path2Last;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SEARCH_DEPTH;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.file2bugs;
+import static edu.polyu.util.Utility.file2report;
+import static edu.polyu.util.Utility.file2row;
+import static edu.polyu.util.Utility.getFilenamesFromFolder;
+import static edu.polyu.util.Utility.mutantFolder;
+import static edu.polyu.util.Utility.readCheckStyleResultFile;
 
 public class CheckStyle_TransformThread implements Runnable {
 
@@ -58,32 +62,7 @@ public class CheckStyle_TransformThread implements Runnable {
             if(SINGLE_TESTING) {
                 System.out.println("TransformThread Depth: " + depth + " Folder: " + this.seedFolderName);
             }
-            while (!wrappers.isEmpty()) {
-                TypeWrapper wrapper = wrappers.pollFirst();
-                if (wrapper.depth == currentDepth) {
-                    if (!wrapper.isBuggy()) { // Insert to queue only wrapper is not buggy
-                        List<TypeWrapper> mutants = new ArrayList<>();
-                        if (GUIDED_LOCATION) {
-                            mutants = wrapper.TransformByGuidedLocation();
-                        } else if (RANDOM_LOCATION) {
-                            mutants = wrapper.TransformByRandomLocation();
-                        }
-                        if(NO_SELECTION) {
-                            wrappers.addAll(mutants);
-                        }
-                        if(RANDOM_SELECTION) {
-                            wrappers.addAll(Random_Selection(mutants));
-                        }
-                        if(DIV_SELECTION) {
-                            wrappers.addAll(Div_Selection(mutants));
-                        }
-                    }
-                } else {
-                    wrappers.addFirst(wrapper); // The last wrapper in current depth
-                    currentDepth += 1;
-                    break;
-                }
-            }
+            singleLevelExplorer(this.wrappers, this.currentDepth++);
             // detect mutants of iter i
             String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
             List<String> mutantFilePaths = getFilenamesFromFolder(mutantFolderPath, true);

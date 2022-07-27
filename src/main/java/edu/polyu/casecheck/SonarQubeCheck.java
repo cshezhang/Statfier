@@ -1,6 +1,6 @@
 package edu.polyu.casecheck;
 
-import edu.polyu.util.Util;
+import edu.polyu.util.Utility;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -36,7 +36,7 @@ public class SonarQubeCheck {
     }
 
     public static void main(String[] args) {
-        List<String> filePaths = Util.getFilenamesFromFolder(testFolder, true);
+        List<String> filePaths = Utility.getFilenamesFromFolder(testFolder, true);
 //        System.out.println("File Size: " + filePaths.size());
         HashSet<String> res = new HashSet<>();
         for(String filePath : filePaths) {

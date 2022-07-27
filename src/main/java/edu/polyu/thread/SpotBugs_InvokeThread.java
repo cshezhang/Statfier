@@ -7,11 +7,11 @@ import java.util.List;
 
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Util.BASE_SEED_PATH;
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.SpotBugsClassFolder;
-import static edu.polyu.util.Util.SpotBugsPath;
-import static edu.polyu.util.Util.SpotBugsResultFolder;
+import static edu.polyu.util.Utility.BASE_SEED_PATH;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.SpotBugsClassFolder;
+import static edu.polyu.util.Utility.SpotBugsPath;
+import static edu.polyu.util.Utility.SpotBugsResultFolder;
 
 public class SpotBugs_InvokeThread implements Runnable {
 

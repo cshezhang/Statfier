@@ -3,12 +3,23 @@ package edu.polyu.transform;
 import edu.polyu.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.ASTNode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static edu.polyu.util.Util.SINGLE_TESTING;
-import static edu.polyu.util.Util.random;
+import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.analysis.TypeWrapper.mutant2seed;
+import static edu.polyu.analysis.TypeWrapper.mutant2seq;
+import static edu.polyu.util.Utility.COMPILE;
+import static edu.polyu.util.Utility.DIV_SELECTION;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.random;
 
 /*
  * @Description: The General Class for Mutants.
@@ -53,8 +64,8 @@ public abstract class Transform {
 //            transforms.add(CFWrapperWithIfFlase.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
-            transforms.add(CompoundExpression1.getInstance());
-            transforms.add(CompoundExpression2.getInstance());
+//            transforms.add(CompoundExpression1.getInstance());
+//            transforms.add(CompoundExpression2.getInstance());
             transforms.add(EnumClassWrapper.getInstance());
             transforms.add(NestedClassWrapper.getInstance());
             transforms.add(TransferLocalVarToGlobal.getInstance());
@@ -76,8 +87,8 @@ public abstract class Transform {
 //                transforms.add(CFWrapperWithIfFlase.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
-            transforms.add(CompoundExpression1.getInstance());
-            transforms.add(CompoundExpression2.getInstance());
+//            transforms.add(CompoundExpression1.getInstance());
+//            transforms.add(CompoundExpression2.getInstance());
             transforms.add(EnumClassWrapper.getInstance());
             transforms.add(NestedClassWrapper.getInstance());
             transforms.add(TransferLocalVarToGlobal.getInstance());
@@ -96,6 +107,54 @@ public abstract class Transform {
 
     public static List<Transform> getTransforms() {
         return transforms;
+    }
+
+    public static long cnt1 = 0;
+    public static long cnt2 = 0;
+
+    public static void singleLevelExplorer(ArrayDeque<TypeWrapper> wrappers, int currentDepth) {
+        while (!wrappers.isEmpty()) {
+            TypeWrapper wrapper = wrappers.pollFirst();
+            if (wrapper.depth == currentDepth) {
+                if (!wrapper.isBuggy()) {
+                    List<TypeWrapper> mutants = new ArrayList<>();
+                    if (GUIDED_LOCATION) {
+                        mutants = wrapper.TransformByGuidedLocation();
+                    } else if (RANDOM_LOCATION) {
+                        mutants = wrapper.TransformByRandomLocation();
+                    }
+                    cnt1 += mutants.size();
+                    List<TypeWrapper> reducedMutants = null;
+                    if (NO_SELECTION) {
+                        reducedMutants = mutants;
+                    }
+                    if (RANDOM_SELECTION) {
+                        reducedMutants = Random_Selection(mutants);
+                    }
+                    if (DIV_SELECTION) {
+                        reducedMutants = Div_Selection(mutants);
+                    }
+                    cnt2 += reducedMutants.size();
+                    for(int j = 0; j < reducedMutants.size(); j++) {
+                        TypeWrapper newMutant = reducedMutants.get(j);
+                        if (COMPILE) {
+                            newMutant.rewriteJavaCode();  // 1. Rewrite transformation, Don't remove this line, we need rewrite Java code twice
+                            newMutant.resetClassName();  // 2. Rewrite class name and pkg definition
+                            newMutant.removePackageDefinition();
+                        }
+                        newMutant.rewriteJavaCode(); //
+                        if (newMutant.writeToJavaFile()) {
+                            mutant2seed.put(newMutant.getFilePath(), newMutant.getInitSeedPath());
+                            mutant2seq.put(newMutant.getFilePath(), newMutant.getTransSeq().toString());
+                        }
+                    }
+                    wrappers.addAll(reducedMutants);
+                }
+            } else {
+                wrappers.addFirst(wrapper);
+                break;
+            }
+        }
     }
 
 }

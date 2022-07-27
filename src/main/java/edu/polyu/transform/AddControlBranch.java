@@ -1,7 +1,6 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.util.Util;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
