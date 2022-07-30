@@ -2,6 +2,7 @@
 target/
 PMD_Cache.bin
 PMD_Result.html
+config.properties
 .vscode/
 .DS_Store
 .settings/
