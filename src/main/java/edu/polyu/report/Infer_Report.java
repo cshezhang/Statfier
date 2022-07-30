@@ -21,8 +21,8 @@ public class Infer_Report extends Report {
         this.violations.add(violation);
     }
 
-    @Override
     public String getFilepath() {
         return this.filepath;
     }
+
 }

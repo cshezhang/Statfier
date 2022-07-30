@@ -240,8 +240,8 @@ public class Schedule {
         List<TypeWrapper> initWrappers = new ArrayList<>();
         for(String filepath : file2report.keySet()) {
             String[] tokens = filepath.split(sep);
-            String foldername = tokens[tokens.length - 2];
-            TypeWrapper wrapper = new TypeWrapper(filepath, foldername);
+            String folderName = tokens[tokens.length - 2];
+            TypeWrapper wrapper = new TypeWrapper(filepath, folderName);
             initWrappers.add(wrapper);
         }
         System.out.println("All Initial Wrapper Size: " + initWrappers.size());
@@ -319,108 +319,24 @@ public class Schedule {
         if (SONARQUBE_MUTATION) {
             System.out.println("Begin to Analyze first round SonarQube Result File...");
             String initReportPath = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
-            List<SonarQube_Report> reports = readSonarQubeResultFile(initReportPath, SONARQUBE_SEED_PATH);
-            System.out.println("Report Size: " + reports.size());
-            for(SonarQube_Report report : reports) {
-                file2report.put(report.getFilepath(), report);
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (SonarQube_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
+            readSonarQubeResultFile(initReportPath, SONARQUBE_SEED_PATH);
             System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
             return;
         }
         if (INFER_MUTATION) {
-            System.out.println("Begin to Inokve Infer for Init...");
-            List<Infer_Report> reports = invokeInfer(iterDepth, seedFolderPath);
-            for (Infer_Report report : reports) {
-                file2report.put(report.getFilepath(), report);
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (Infer_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
-            System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            return;
+            invokeInfer(iterDepth, seedFolderPath);
         }
         if (CHECKSTYLE_MUTATION) {
-            List<CheckStyle_Report> reports = invokeCheckStyle(iterDepth, seedFolderPath);
-            for (CheckStyle_Report report : reports) {
-                file2report.put(report.getFilepath(), report);
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (CheckStyle_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
-            System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            return;
+            invokeCheckStyle(iterDepth, seedFolderPath);
         }
         if (PMD_MUTATION) {
-            List<PMD_Report> reports = invokePMD(iterDepth, seedFolderPath);
-            for (PMD_Report report : reports) {
-                file2report.put(report.getFilepath(), report);
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (PMD_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.beginLine);
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
-            if (SINGLE_TESTING) {
-                System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            }
-            return;
+            invokePMD(iterDepth, seedFolderPath);
         }
         if (SPOTBUGS_MUTATION) {
-            List<SpotBugs_Report> reports = invokeSpotBugs(seedFolderPath);
-            for (SpotBugs_Report report : reports) {
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (SpotBugs_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
-            if (SINGLE_TESTING) {
-                System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            }
+            invokeSpotBugs(seedFolderPath);
+        }
+        if (SINGLE_TESTING) {
+            System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
         }
     }
 

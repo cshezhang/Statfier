@@ -20,13 +20,13 @@ import java.util.List;
 import static edu.polyu.analysis.TypeWrapper.getDirectBlockOfStatement;
 import static edu.polyu.analysis.TypeWrapper.isLiteral;
 
-public class CFWrapperWithIfFlase extends Transform {
+public class CFWrapperWithIfFalse extends Transform {
 
-    private static final CFWrapperWithIfFlase instance = new CFWrapperWithIfFlase();
+    private static final CFWrapperWithIfFalse instance = new CFWrapperWithIfFalse();
 
-    private CFWrapperWithIfFlase() {}
+    private CFWrapperWithIfFalse() {}
 
-    public static CFWrapperWithIfFlase getInstance() {
+    public static CFWrapperWithIfFalse getInstance() {
         return instance;
     }
 

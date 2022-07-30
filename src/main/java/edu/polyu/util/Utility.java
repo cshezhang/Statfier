@@ -16,6 +16,7 @@ import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
+import edu.polyu.report.Violation;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -142,10 +143,12 @@ public class Utility {
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
 
-    public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy row numbers
-    public static HashMap<String, HashSet<Integer>> file2col = new HashMap<>(); // filename -> set: buggy column numbers
+    public static HashMap<String, List<Integer>> file2row = new HashMap<>(); // filename -> set: buggy row numbers
+    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> set: buggy column numbers
+//    public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy row numbers
+//    public static HashMap<String, HashSet<Integer>> file2col = new HashMap<>(); // filename -> set: buggy column numbers
     public static HashMap<String, Report> file2report = new HashMap<>();
-    public static HashMap<String, HashMap<String, HashSet<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
+    public static HashMap<String, HashMap<String, List<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
@@ -318,7 +321,7 @@ public class Utility {
         return count;
     }
 
-    public static List<PMD_Report> readPMDResultFile(final String jsonPath) {
+    public static void readPMDResultFile(final String jsonPath) {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(jsonPath);
@@ -342,7 +345,21 @@ public class Utility {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return pmd_reports;
+        for (PMD_Report report : pmd_reports) {
+            file2report.put(report.getFilepath(), report);
+            if (!file2row.containsKey(report.getFilepath())) {
+                file2row.put(report.getFilepath(), new ArrayList<>());
+                file2bugs.put(report.getFilepath(), new HashMap<>());
+            }
+            for (PMD_Violation violation : report.getViolations()) {
+                file2row.get(report.getFilepath()).add(violation.beginLine);
+                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                if (!bug2cnt.containsKey(violation.getBugType())) {
+                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+                }
+                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+            }
+        }
     }
 
     public static List<String> readFileByLine(String filepath) {
@@ -378,12 +395,11 @@ public class Utility {
         return true;
     }
 
-    public static List<SonarQube_Report> readSonarQubeResultFile(String reportPath, String seedFolderPath) {
+    public static void readSonarQubeResultFile(String reportPath, String seedFolderPath) {
         if (SINGLE_TESTING) {
             System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
         }
         HashMap<String, SonarQube_Report> name2report = new HashMap<>();
-        List<SonarQube_Report> results = new ArrayList<>();
 //        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
 //                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
         try {
@@ -440,17 +456,29 @@ public class Utility {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        results.addAll(name2report.values());
-        return results;
+        for(SonarQube_Report report : name2report.values()) {
+            file2report.put(report.getFilepath(), report);
+            if (!file2row.containsKey(report.getFilepath())) {
+                file2row.put(report.getFilepath(), new ArrayList<>());
+                file2bugs.put(report.getFilepath(), new HashMap<>());
+            }
+            for (SonarQube_Violation violation : report.getViolations()) {
+                file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                if (!bug2cnt.containsKey(violation.getBugType())) {
+                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+                }
+                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+            }
+        }
     }
 
-    public static List<CheckStyle_Report> readCheckStyleResultFile(String reportPath) { // one report -> one file
+    public static void readCheckStyleResultFile(String reportPath) { // one report -> one file
         HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
-        List<CheckStyle_Report> results = new ArrayList<>();
         try {
             File checkFile = new File(reportPath);
             if(!checkFile.exists()) {
-                return results;
+                return;
             }
             FileInputStream inputStream = new FileInputStream(reportPath);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -473,14 +501,14 @@ public class Utility {
                     }
                 }
                 if (endIndex == -1) {
-                    return results;
+                    return;
 //                    System.err.println("End Index Error!");
 //                    System.exit(-1);
                 }
                 String content = errorInstance.substring(startIndex, endIndex);
                 int index1 = content.indexOf(".java") + ".java".length(), index2 = -1;
                 if (content.charAt(index1) != ':') {
-                    return results;
+                    return;
 //                    System.err.println("Index1 Error!");
 //                    System.exit(-1);
                 }
@@ -491,7 +519,6 @@ public class Utility {
                     }
                 }
                 filepath = content.substring(0, index1);
-
                 int row = 0, col = -1;
                 try {
                     row = Integer.parseInt(content.substring(index1 + 1, index2));
@@ -503,7 +530,6 @@ public class Utility {
                 }
                 CheckStyle_Violation violation = new CheckStyle_Violation(filepath);
                 violation.setBeginLine(row);
-                violation.setBeginColumn(col);
                 index1 = errorInstance.lastIndexOf('[');
                 String bugType = errorInstance.substring(index1 + 1, errorInstance.length() - 1);
                 violation.setBugType(bugType);
@@ -511,7 +537,6 @@ public class Utility {
                     name2report.get(filepath).addViolation(violation);
                 } else {
                     CheckStyle_Report newReport = new CheckStyle_Report(filepath);
-                    results.add(newReport);
                     newReport.addViolation(violation);
                     name2report.put(filepath, newReport);
                 }
@@ -519,20 +544,33 @@ public class Utility {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return results;
+        for (CheckStyle_Report report : name2report.values()) {
+            file2report.put(report.getFilepath(), report);
+            if (!file2row.containsKey(report.getFilepath())) {
+                file2row.put(report.getFilepath(), new ArrayList<>());
+                file2bugs.put(report.getFilepath(), new HashMap<>());
+            }
+            for (CheckStyle_Violation violation : report.getViolations()) {
+                file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                if (!bug2cnt.containsKey(violation.getBugType())) {
+                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+                }
+                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+            }
+        }
     }
 
     public static List<String> failedReport = new ArrayList<>();
 
     // seedFolderPath has iter depth information
-    public static List<Infer_Report> readInferResultFile(String seedFilepath, String reportPath) {
-        List<Infer_Report> results = new ArrayList<>();
+    public static void readInferResultFile(String seedFilepath, String reportPath) {
         HashMap<String, Infer_Report> name2report = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         File reportFile = new File(reportPath);
         if (!reportFile.exists()) {
             failedReport.add(reportPath);
-            return results;
+            return;
         }
         try {
             JsonNode rootNode = mapper.readTree(reportFile);
@@ -552,17 +590,29 @@ public class Utility {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        results.addAll(name2report.values());
-        return results;
+        for (Infer_Report report : name2report.values()) {
+            file2report.put(report.getFilepath(), report);
+            if (!file2row.containsKey(report.getFilepath())) {
+                file2row.put(report.getFilepath(), new ArrayList<>());
+                file2bugs.put(report.getFilepath(), new HashMap<>());
+            }
+            for (Infer_Violation violation : report.getViolations()) {
+                file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                if (!bug2cnt.containsKey(violation.getBugType())) {
+                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+                }
+                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+            }
+        }
     }
 
     // Variable seedFolderPath contains sub seed folder name
-    public static List<SpotBugs_Report> readSpotBugsResultFile(String seedFolderPath, String reportPath) {
+    public static void readSpotBugsResultFile(String seedFolderPath, String reportPath) {
         if (SINGLE_TESTING) {
             System.out.println("SpotBugs Detection Resutl FileName: " + reportPath);
         }
-        HashMap<String, SpotBugs_Report> name2report = new HashMap<>();
-        List<SpotBugs_Report> results = new ArrayList<>();
+        HashMap<String, SpotBugs_Report> filepath2report = new HashMap<>();
         SAXReader saxReader = new SAXReader();
         try {
             Document report = saxReader.read(new File(reportPath));
@@ -573,20 +623,32 @@ public class Utility {
                 for (Element sourceLine : sourceLines) {
                     SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath, sourceLine, bugInstance.attribute("type").getText());
                     String filepath = violation.getFilepath();
-                    if (name2report.containsKey(filepath)) {
-                        name2report.get(filepath).addViolation(violation);
+                    if (filepath2report.containsKey(filepath)) {
+                        filepath2report.get(filepath).addViolation(violation);
                     } else {
                         SpotBugs_Report spotBugs_report = new SpotBugs_Report(filepath);
                         spotBugs_report.addViolation(violation);
-                        name2report.put(filepath, spotBugs_report);
+                        filepath2report.put(filepath, spotBugs_report);
                     }
                 }
             }
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        results.addAll(name2report.values());
-        return results;
+        for (SpotBugs_Report report : filepath2report.values()) {
+            if (!file2row.containsKey(report.getFilepath())) {
+                file2row.put(report.getFilepath(), new ArrayList<>());
+                file2bugs.put(report.getFilepath(), new HashMap<>());
+            }
+            for (SpotBugs_Violation violation : report.getViolations()) {
+                file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                if (!bug2cnt.containsKey(violation.getBugType())) {
+                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+                }
+                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+            }
+        }
     }
 
     // Get the last token in the path, not include postfix, e.g., .java
@@ -600,7 +662,7 @@ public class Utility {
         }
     }
 
-    // get Direct file list of tarege folder path, mainly used to count sub_seed folders
+    // get Direct file list of target folder path, mainly used to count sub_seed folders
     public static List<String> getDirectFilenamesFromFolder(String path, boolean getAbsolutePath) {
         LinkedList<String> fileList = new LinkedList<>();
         File dir = new File(path);

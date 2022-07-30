@@ -74,24 +74,9 @@ public class Infer_TransformThread extends Thread {
                 invokeCmds[2] = "python3 cmd.py " + cmd;
                 invokeCommandsByZT(invokeCmds);
                 String resultFilePath = reportFolderPath + File.separator + "report.json";
-                reports.addAll(readInferResultFile(srcJavaPath, resultFilePath));
+                readInferResultFile(srcJavaPath, resultFilePath);
             }
             System.out.println("Report Size: " + reports.size());
-            for (Infer_Report report : reports) {
-                file2report.put(report.getFilepath(), report);
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (Infer_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                }
-            }
             List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
                 TypeWrapper head = wrappers.pollFirst();

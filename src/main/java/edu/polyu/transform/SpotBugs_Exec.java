@@ -2,14 +2,11 @@ package edu.polyu.transform;
 
 import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.SpotBugs_Report;
-import edu.polyu.report.SpotBugs_Violation;
 import edu.polyu.util.OSUtil;
 
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
@@ -25,8 +22,6 @@ import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.SpotBugsClassFolder;
 import static edu.polyu.util.Utility.SpotBugsPath;
 import static edu.polyu.util.Utility.SpotBugsResultFolder;
-import static edu.polyu.util.Utility.file2bugs;
-import static edu.polyu.util.Utility.file2row;
 import static edu.polyu.util.Utility.readSpotBugsResultFile;
 import static edu.polyu.util.Utility.sep;
 
@@ -65,7 +60,6 @@ public class SpotBugs_Exec {
                         break;
                     }
                 }
-                List<SpotBugs_Report> reports = new ArrayList<>();
                 for (TypeWrapper tmpWrapper : wrappers) {
                     String seedFilePath = tmpWrapper.getFilePath();
                     String seedFolderPath = tmpWrapper.getFolderPath();
@@ -94,21 +88,7 @@ public class SpotBugs_Exec {
                             + classFolder.getAbsolutePath();
                     invokeCommands(invokeCmds);
                     String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
-                    reports.addAll(readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path));
-                }
-                for (SpotBugs_Report report : reports) {
-                    if (!file2row.containsKey(report.getFilepath())) {
-                        file2row.put(report.getFilepath(), new HashSet<>());
-                        file2bugs.put(report.getFilepath(), new HashMap<>());
-                    }
-                    for (SpotBugs_Violation violation : report.getViolations()) {
-                        file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                        HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                        if (!bug2cnt.containsKey(violation.getBugType())) {
-                            bug2cnt.put(violation.getBugType(), new HashSet<>());
-                        }
-                        bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                    }
+                    readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path);
                 }
                 List<TypeWrapper> validWrappers = new ArrayList<>();
                 while (!wrappers.isEmpty()) {

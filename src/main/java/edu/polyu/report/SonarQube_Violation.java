@@ -10,13 +10,12 @@ public class SonarQube_Violation extends Violation {
         this.beginLine = beginLine;
     }
 
-    @Override
     public String getBugType() {
         return this.bugType;
     }
 
-    @Override
     public int getBeginLine() {
         return this.beginLine;
     }
+
 }

@@ -21,7 +21,6 @@ public class SonarQube_Report extends Report {
         return this.violations;
     }
 
-    @Override
     public String getFilepath() {
         return this.filepath;
     }

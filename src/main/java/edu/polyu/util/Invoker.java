@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 import edu.polyu.report.CheckStyle_Report;
 import edu.polyu.report.Infer_Report;
 import edu.polyu.report.PMD_Report;
-import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.thread.CheckStyle_InvokeThread;
 import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
@@ -183,7 +182,7 @@ public class Invoker {
 
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in SpotBugsClassFolder
-    public static List<SpotBugs_Report> invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
+    public static void invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
         if(seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
@@ -200,17 +199,15 @@ public class Invoker {
         waitThreadPoolEnding();
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
-        List<SpotBugs_Report> reports = new ArrayList<>();
         for(String subSeedFolderName : subSeedFolderNameList) {
             List<String> reportPaths = getFilenamesFromFolder(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName, true);
             for(String reportPath : reportPaths) {
-                reports.addAll(readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath));
+                readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
         }
-        return reports;
     }
 
-    public static List<Infer_Report> invokeInfer(int iterDepth, String seedFolderPath) {
+    public static void invokeInfer(int iterDepth, String seedFolderPath) {
         initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new Infer_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
@@ -221,26 +218,23 @@ public class Invoker {
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         for(String seedPath : seedPaths) {
             String reportPath = InferResultFolder.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
-            reports.addAll(readInferResultFile(seedPath, reportPath));
+            readInferResultFile(seedPath, reportPath);
         }
-        return reports;
     }
 
-    public static List<CheckStyle_Report> invokeCheckStyle(int iterDepth, String seedFolderPath) {
+    public static void invokeCheckStyle(int iterDepth, String seedFolderPath) {
         initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new CheckStyle_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding();
-        List<CheckStyle_Report> reports = new ArrayList<>();
         List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
         for(int i = 0; i < reportPaths.size(); i++) {
-            reports.addAll(readCheckStyleResultFile(reportPaths.get(i)));
+            readCheckStyleResultFile(reportPaths.get(i));
         }
-        return reports;
     }
 
-    public static List<PMD_Report> invokePMD(int iterDepth, String seedFolderPath) {
+    public static void invokePMD(int iterDepth, String seedFolderPath) {
         initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new PMD_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
@@ -248,9 +242,8 @@ public class Invoker {
         waitThreadPoolEnding();
         List<PMD_Report> reports = new ArrayList<>();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            reports.addAll(readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json"));
+            readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json");
         }
-        return reports;
     }
 
 }

@@ -4,12 +4,11 @@ import org.dom4j.Element;
 
 import java.io.File;
 
-/*
+/**
  * @Intro: Save a bug instance in report.
  * @Author: Vanguard
  * @Date: 2021-10-18 11:21:56
  */
-
 public class SpotBugs_Violation extends Violation {
     
     private String filepath;
@@ -36,12 +35,10 @@ public class SpotBugs_Violation extends Violation {
         return this.filepath;
     }
 
-    @Override
     public int getBeginLine() {
         return this.beginLine;
     }
 
-    @Override
     public String getBugType() {
         return this.bugType;
     }

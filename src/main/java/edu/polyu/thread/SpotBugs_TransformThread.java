@@ -56,7 +56,6 @@ public class SpotBugs_TransformThread implements Runnable {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             singleLevelExplorer(this.wrappers, this.currentDepth++);
-            List<SpotBugs_Report> reports = new ArrayList<>();
             for (TypeWrapper wrapper : wrappers) {
                 String seedFilePath = wrapper.getFilePath();
                 String seedFolderPath = wrapper.getFolderPath();
@@ -86,21 +85,7 @@ public class SpotBugs_TransformThread implements Runnable {
                 boolean hasExec = invokeCommandsByZT(invokeCmds);
                 if (hasExec) {
                     String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
-                    reports.addAll(readSpotBugsResultFile(wrapper.getFolderPath(), report_path));
-                }
-            }
-            for (SpotBugs_Report report : reports) {
-                if (!file2row.containsKey(report.getFilepath())) {
-                    file2row.put(report.getFilepath(), new HashSet<>());
-                    file2bugs.put(report.getFilepath(), new HashMap<>());
-                }
-                for (SpotBugs_Violation violation : report.getViolations()) {
-                    file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                    HashMap<String, HashSet<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                    if (!bug2cnt.containsKey(violation.getBugType())) {
-                        bug2cnt.put(violation.getBugType(), new HashSet<>());
-                    }
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+                    readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
                 }
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();

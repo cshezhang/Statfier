@@ -68,7 +68,7 @@ public class EnumClassWrapper extends Transform {
                 enumClass.modifiers().add(ASTNode.copySubtree(ast, classModifier));
             }
         }
-        enumClass.setName(ast.newSimpleName("enumClass" + enumCounter++));
+        enumClass.setName(ast.newSimpleName("enumClass_" + enumCounter++));
         enumClass.enumConstants().add(enumConstant);
         ListRewrite listRewrite = astRewrite.getListRewrite(enumClass, enumClass.getBodyDeclarationsProperty());
         if(oldMethod != null) {

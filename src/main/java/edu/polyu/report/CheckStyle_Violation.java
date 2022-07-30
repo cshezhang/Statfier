@@ -5,7 +5,6 @@ public class CheckStyle_Violation extends Violation {
     private String fileName;
     private String bugType;
     private int beginLine;
-    private int beginColumn;
 
     public CheckStyle_Violation(String fileName) {
         this.fileName = fileName;
@@ -31,12 +30,9 @@ public class CheckStyle_Violation extends Violation {
         this.beginLine = beginLine;
     }
 
-    public void setBeginColumn(int beginColumn) {
-        this.beginColumn = beginColumn;
-    }
-
     @Override
     public String toString() {
         return "File: " + this.fileName + " Line: " + this.beginLine + " Type: " + this.bugType;
     }
+
 }

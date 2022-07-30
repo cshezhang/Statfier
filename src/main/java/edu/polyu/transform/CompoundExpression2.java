@@ -26,6 +26,18 @@ public class CompoundExpression2 extends Transform {
     }
 
     @Override
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
+        List<ASTNode> nodes = new ArrayList<>();
+        List<ASTNode> subNodes = getChildrenNodes(node);
+        for (ASTNode subNode : subNodes) {
+            if (subNode instanceof BooleanLiteral) {
+                nodes.add(subNode);
+            }
+        }
+        return nodes;
+    }
+
+    @Override
     public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brother, ASTNode sourceStatement) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
@@ -45,15 +57,4 @@ public class CompoundExpression2 extends Transform {
         return true;
     }
 
-    @Override
-    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
-        List<ASTNode> nodes = new ArrayList<>();
-        List<ASTNode> subNodes = getChildrenNodes(statement);
-        for (ASTNode subNode : subNodes) {
-            if (subNode instanceof BooleanLiteral) {
-                nodes.add(subNode);
-            }
-        }
-        return nodes;
-    }
 }

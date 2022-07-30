@@ -46,7 +46,7 @@ public class AnonymousClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         TypeDeclaration clazz = getClassOfNode(srcNode);
-        List<ASTNode> classModifiers = clazz.modifiers();
+//        List<ASTNode> classModifiers = clazz.modifiers();
         MethodDeclaration oldMethod = getDirectMethodOfNode(srcNode);
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
@@ -79,11 +79,11 @@ public class AnonymousClassWrapper extends Transform {
             // insert new FieldStatement containing Anonymous class
             FieldDeclaration newFieldDeclaration = ast.newFieldDeclaration(fragment);
             newFieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-            for(ASTNode modifier : classModifiers) {
-                if(modifier instanceof Modifier) {
-                    newFieldDeclaration.modifiers().add(ASTNode.copySubtree(ast, modifier));
-                }
-            }
+//            for(ASTNode modifier : classModifiers) {
+//                if(modifier instanceof Modifier) {
+//                    newFieldDeclaration.modifiers().add(ASTNode.copySubtree(ast, modifier));
+//                }
+//            }
             astRewrite.replace(oldMethod, newFieldDeclaration, null);
             return true;
         } else {
@@ -100,15 +100,15 @@ public class AnonymousClassWrapper extends Transform {
                 // Init value of new FieldDeclaration
                 VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
                 fragment.setInitializer(instanceCreation);
-                fragment.setName(ast.newSimpleName("acw" + varCounter++));
+                fragment.setName(ast.newSimpleName("ACW_" + varCounter++));
                 // insert new FieldStatement containing Anonymous class
                 FieldDeclaration newNode = ast.newFieldDeclaration(fragment);
                 newNode.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-                for(ASTNode modifier : classModifiers) {
-                    if(modifier instanceof Modifier) {
-                        newNode.modifiers().add(ASTNode.copySubtree(ast, modifier));
-                    }
-                }
+//                for(ASTNode modifier : classModifiers) {
+//                    if(modifier instanceof Modifier) {
+//                        newNode.modifiers().add(ASTNode.copySubtree(ast, modifier));
+//                    }
+//                }
                 astRewrite.replace(srcNode, newNode, null);
                 return true;
             } else {

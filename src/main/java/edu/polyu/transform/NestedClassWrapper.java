@@ -62,7 +62,7 @@ public class NestedClassWrapper extends Transform {
                 }
             }
             TypeDeclaration nestedClass = ast.newTypeDeclaration();
-            nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
+            nestedClass.setName(ast.newSimpleName("subClass_" + nestedClassCounter++));
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
             nestedClass.bodyDeclarations().add(newMethod);
             astRewrite.replace(oldMethod, nestedClass, null);

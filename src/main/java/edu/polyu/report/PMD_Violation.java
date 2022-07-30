@@ -33,12 +33,10 @@ public class PMD_Violation extends Violation {
         this.description = reportNode.get("ruleset") + ":[" + reportNode.get("rule") + ", " + reportNode.get("description").toString() + "]";
     }
 
-    @Override
     public String getBugType() {
         return this.bugType;
     }
 
-    @Override
     public int getBeginLine() {
         return this.beginLine;
     }

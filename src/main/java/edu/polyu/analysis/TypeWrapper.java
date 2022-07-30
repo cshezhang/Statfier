@@ -87,6 +87,7 @@ public class TypeWrapper {
     private String filename;
     private String initSeedPath;
     private int violations;
+    public int expectedNumbers;
     private int parViolations;
     private Document document;
     private ASTParser parser;
@@ -118,6 +119,7 @@ public class TypeWrapper {
 
     public TypeWrapper(String filePath, String folderName) {
         this.depth = 0;
+        this.expectedNumbers = 0;
         this.filePath = filePath;
         this.initSeedPath = filePath;
         File targetFile = new File(filePath);
@@ -137,6 +139,44 @@ public class TypeWrapper {
         this.transSeq = new ArrayList<>();
         this.transNodes = new ArrayList<>();
         this.parse2nodes();
+    }
+
+    // Other cases need invoke this constructor, filename is defined in mutate function
+    public TypeWrapper(String filename, String filepath, String content, TypeWrapper parentWrapper) {
+        this.depth = parentWrapper.depth + 1;
+        this.expectedNumbers = 0;
+        this.filePath = filepath;
+        this.initSeedPath = parentWrapper.initSeedPath;
+        this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
+        this.filename = filename;
+        this.document = new Document(content);
+        this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
+        this.parViolations = parentWrapper.violations;
+        this.parentPath = parentWrapper.filePath;
+        this.parentWrapper = parentWrapper;
+        this.nodeIndex = new ArrayList<>();
+        this.transSeq = new ArrayList<>();
+        this.transNodes = new ArrayList<>();
+        File targetFile = new File(filePath);
+        this.folderPath = targetFile.getParentFile().getAbsolutePath();
+        this.parse2nodes();
+    }
+
+    public void updateAST(String source) {
+        this.document = new Document(source);
+        this.parse2nodes();
+    }
+
+    public void rewriteJavaCode() {
+        TextEdit edits = this.astRewrite.rewriteAST(this.document, null);
+        try {
+            edits.apply(this.document);
+        } catch (Exception e) {
+            System.err.println("Fail to Rewrite Java Document!");
+            e.printStackTrace();
+        }
+        String newCode = this.document.get();
+        updateAST(newCode);
     }
 
     private void parse2nodes() {
@@ -210,43 +250,6 @@ public class TypeWrapper {
         this.candidateNodes = null;
     }
 
-    // Other cases need invoke this constructor, filename is defined in mutate function
-    public TypeWrapper(String filename, String filepath, String content, TypeWrapper parentWrapper) {
-        this.depth = parentWrapper.depth + 1;
-        this.filePath = filepath;
-        this.initSeedPath = parentWrapper.initSeedPath;
-        this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
-        this.filename = filename;
-        this.document = new Document(content);
-        this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
-        this.parViolations = parentWrapper.violations;
-        this.parentPath = parentWrapper.filePath;
-        this.parentWrapper = parentWrapper;
-        this.nodeIndex = new ArrayList<>();
-        this.transSeq = new ArrayList<>();
-        this.transNodes = new ArrayList<>();
-        File targetFile = new File(filePath);
-        this.folderPath = targetFile.getParentFile().getAbsolutePath();
-        this.parse2nodes();
-    }
-
-    public void updateAST(String source) {
-        this.document = new Document(source);
-        this.parse2nodes();
-    }
-
-    public void rewriteJavaCode() {
-        TextEdit edits = this.astRewrite.rewriteAST(this.document, null);
-        try {
-            edits.apply(this.document);
-        } catch (Exception e) {
-            System.err.println("Fail to Rewrite Java Document!");
-            e.printStackTrace();
-        }
-        String newCode = this.document.get();
-        updateAST(newCode);
-    }
-
     // This method can be invoked only if the source code file has generated.
     public boolean writeToJavaFile() {
         String code = this.getCode();
@@ -298,6 +301,10 @@ public class TypeWrapper {
             }
             MethodDeclaration[] methods = clazz.getMethods();
             for (MethodDeclaration method : methods) {
+                int line1 = this.cu.getLineNumber(method.getStartPosition());
+                int line2 = this.cu.getLineNumber(method.getStartPosition() + method.getLength());
+                System.out.println(line1);
+                System.out.println(line2);
                 List<ASTNode> nnodes = getChildrenNodes(method);
                 System.out.println(nnodes);
                 System.out.println("----------Method Name: " + method.getName() + "----------");
@@ -309,7 +316,6 @@ public class TypeWrapper {
                 for (int i = 0; i < statements.size(); i++) {
                     Statement statement = (Statement) block.statements().get(i);
                     List<ASTNode> subNodes = getChildrenNodes(statement);
-                    System.out.println(statement.toString());
                     List<ASTNode> nodes = getChildrenNodes(statement);
                     for (ASTNode node : nodes) {
                         System.out.println(node + "  " + node.getClass() + "  " + String.format("0x%x", System.identityHashCode(node)));
@@ -325,12 +331,12 @@ public class TypeWrapper {
       This function can get all related statemnts of its ASTWrapper by taint analysis.
     */
     public List<ASTNode> getCandidateNodes() {
-        HashSet<Integer> validLines = file2row.get(this.filePath);
+        List<Integer> validLines = file2row.get(this.filePath);
         List<ASTNode> resNodes = new ArrayList<>();
         if (validLines == null) { // no warning in this file
             return resNodes;
         }
-        validLines.remove(-1);
+//        validLines.remove(-1);
         if (validLines != null && validLines.size() > 0) {
             for (ASTNode node : this.allNodes) {
                 int row = this.cu.getLineNumber(node.getStartPosition());
@@ -441,8 +447,8 @@ public class TypeWrapper {
         boolean buggy = false;
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
-            Map<String, HashSet<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
-            Map<String, HashSet<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
+            Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
+            Map<String, List<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
             if (mutant_bug2lines == null && source_bug2lines == null) {
                 System.err.println("What the fuck? Both reports don't have bugs?");
@@ -454,14 +460,14 @@ public class TypeWrapper {
             if (source_bug2lines == null) {
                 source_bug2lines = new HashMap<>();
             }
-            List<Map.Entry<String, HashSet<Integer>>> potentialFPs = new ArrayList<>();
-            List<Map.Entry<String, HashSet<Integer>>> potentialFNs = new ArrayList<>();
-            for (Map.Entry<String, HashSet<Integer>> entry : mutant_bug2lines.entrySet()) {
-                if (!source_bug2lines.containsKey(entry.getKey())) {
+            List<Map.Entry<String, List<Integer>>> potentialFPs = new ArrayList<>();
+            List<Map.Entry<String, List<Integer>>> potentialFNs = new ArrayList<>();
+            for (Map.Entry<String, List<Integer>> entry : mutant_bug2lines.entrySet()) {
+                if (!source_bug2lines.containsKey(entry.getKey())) { // check bug type
                     potentialFPs.add(entry); // Because mutant has, but source does not have.
                 } else {
-                    Set<Integer> source_bugs = source_bug2lines.get(entry.getKey());
-                    Set<Integer> mutant_bugs = mutant_bug2lines.get(entry.getKey());
+                    List<Integer> source_bugs = source_bug2lines.get(entry.getKey());
+                    List<Integer> mutant_bugs = mutant_bug2lines.get(entry.getKey());
                     if (source_bugs.size() == mutant_bugs.size()) {
                         continue;
                     }
@@ -469,7 +475,7 @@ public class TypeWrapper {
                         potentialFNs.add(entry);
                     } else {
                         if (this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
-                            if (source_bugs.size() + 1 < mutant_bugs.size()) {
+                            if (source_bugs.size() + this.expectedNumbers < mutant_bugs.size()) {
                                 potentialFPs.add(entry);
                             }
                         } else {
@@ -478,8 +484,8 @@ public class TypeWrapper {
                     }
                 }
             }
-            for (Map.Entry<String, HashSet<Integer>> entry : source_bug2lines.entrySet()) {
-                if (!mutant_bug2lines.containsKey(entry.getKey())) {
+            for (Map.Entry<String, List<Integer>> entry : source_bug2lines.entrySet()) {
+                if (!mutant_bug2lines.containsKey(entry.getKey())) {  // check bug type
                     potentialFNs.add(entry); // Because parent has, but child does not have.
                 }
             }

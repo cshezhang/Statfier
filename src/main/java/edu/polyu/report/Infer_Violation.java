@@ -11,28 +11,20 @@ import org.dom4j.Element;
 public class Infer_Violation extends Violation {
 
     private int row;
-    private int col;
     private String bugType;
 
 
     public Infer_Violation(JsonNode violation) {
         this.row = violation.get("line").asInt();
-        this.col = violation.get("column").asInt();
         this.bugType = violation.get("bug_type").asText();
     }
 
-    @Override
     public String getBugType() {
         return this.bugType;
     }
 
-    @Override
     public int getBeginLine() {
         return this.row;
-    }
-
-    public int getColNumber() {
-        return this.col;
     }
 
 }

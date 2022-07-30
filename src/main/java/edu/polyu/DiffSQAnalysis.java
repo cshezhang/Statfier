@@ -33,44 +33,8 @@ public class DiffSQAnalysis {
     public static void analysis(String mappingPath, String reportPath1, String reportPath2) {
         System.out.println("Report Path1: " + reportPath1);
         System.out.println("Report Path2: " + reportPath2);
-        List<SonarQube_Report> reports1 = Utility.readSonarQubeResultFile(reportPath1, SONARQUBE_SEED_PATH);
-        List<SonarQube_Report> reports2 = Utility.readSonarQubeResultFile(reportPath2, mutantFolder + File.separator + "iter1");
-        for (SonarQube_Report report : reports1) {
-            file2report.put(report.getFilepath(), report);
-            if (file2bug.containsKey(report.getFilepath())) {
-                System.err.println("Error in SQ Diff1!");
-                System.exit(-1);
-            }
-            Map<String, Set<Integer>> bug2cnt = new HashMap<>();
-            file2bug.put(report.getFilepath(), bug2cnt);
-            for (SonarQube_Violation violation : report.getViolations()) {
-                if (bug2cnt.containsKey(violation.getBugType())) {
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                } else {
-                    Set<Integer> cnt = new HashSet<>();
-                    cnt.add(violation.getBeginLine());
-                    bug2cnt.put(violation.getBugType(), cnt);
-                }
-            }
-        }
-        for (SonarQube_Report report : reports2) {
-            file2report.put(report.getFilepath(), report);
-            if (file2bug.containsKey(report.getFilepath())) {
-                System.err.println("Error in SQ Diff2!");
-                System.exit(-1);
-            }
-            Map<String, Set<Integer>> bug2cnt = new HashMap<>();
-            file2bug.put(report.getFilepath(), bug2cnt);
-            for (SonarQube_Violation violation : report.getViolations()) {
-                if (bug2cnt.containsKey(violation.getBugType())) {
-                    bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-                } else {
-                    Set<Integer> cnt = new HashSet<>();
-                    cnt.add(violation.getBeginLine());
-                    bug2cnt.put(violation.getBugType(), cnt);
-                }
-            }
-        }
+        Utility.readSonarQubeResultFile(reportPath1, SONARQUBE_SEED_PATH);
+        Utility.readSonarQubeResultFile(reportPath2, mutantFolder + File.separator + "iter1");
         List<String> lines = readFileByLine(mappingPath);
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);

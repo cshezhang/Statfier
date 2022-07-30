@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.polyu.analysis.TypeWrapper.isLiteral;
+import static edu.polyu.util.Utility.file2row;
 
 /**
  * @Description: Add control branch
@@ -63,6 +64,14 @@ public class AddControlBranch extends Transform {
         VariableDeclarationStatement newBoolVdStatement = ast.newVariableDeclarationStatement(newBoolVdFragment);
         newBoolVdStatement.setType(ast.newPrimitiveType(PrimitiveType.BOOLEAN));
         // Final modifier can be added by a specific transformation
+        int startLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition());
+        int endLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition() + srcNode.getLength());
+        List<Integer> rows = file2row.get(wrapper.getParentWrapper().getFilePath());
+        for(Integer row : rows) {
+            if(row >= startLine && row <= endLine) {
+                wrapper.expectedNumbers++;
+            }
+        }
         if(srcNode instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) srcNode;
             VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
@@ -113,22 +122,24 @@ public class AddControlBranch extends Transform {
                 node instanceof EmptyStatement || node instanceof ReturnStatement) {
             return nodes;
         }
-        if (node instanceof VariableDeclarationStatement) {
-            VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;
-            if (vdStatement.getType() instanceof ArrayType) {
-                if (vdStatement.modifiers().size() > 0) {
-                    Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
-                    if (modifier.getKeyword().toString().equals("final")) {
-                        return nodes;
+        if(node instanceof Statement) {
+            if (node instanceof VariableDeclarationStatement) {
+                VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;
+                if (vdStatement.getType() instanceof ArrayType) {
+                    if (vdStatement.modifiers().size() > 0) {
+                        Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
+                        if (modifier.getKeyword().toString().equals("final")) {
+                            return nodes;
+                        }
                     }
                 }
+                VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
+                if (vdFragment.getInitializer() == null) {
+                    return nodes;
+                }
             }
-            VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
-            if(vdFragment.getInitializer() == null) {
-                return nodes;
-            }
+            nodes.add(node);
         }
-        nodes.add(node);
         return nodes;
     }
 }

@@ -154,8 +154,7 @@ public class SpotBugsChecker {
                 String[] tokens = reportPath.split(sep);
                 String reportName = tokens[tokens.length - 1].substring(0, tokens[tokens.length - 1].length() - 11);
                 String seedPath = "/home/vanguard/projects/SAMutator/seeds/" + reportName + ".java";
-                List<SpotBugs_Report> reports = readSpotBugsResultFile(seedPath, reportPath);
-                System.out.println(reports.size());
+                readSpotBugsResultFile(seedPath, reportPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
