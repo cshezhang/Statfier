@@ -35,6 +35,7 @@ import static edu.polyu.util.Utility.THREAD_COUNT;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
 import static edu.polyu.util.Utility.getProperty;
 import static edu.polyu.util.Utility.inferJarStr;
+import static edu.polyu.util.Utility.initThreadPool;
 import static edu.polyu.util.Utility.readCheckStyleResultFile;
 import static edu.polyu.util.Utility.readInferResultFile;
 import static edu.polyu.util.Utility.readPMDResultFile;
@@ -42,6 +43,7 @@ import static edu.polyu.util.Utility.readSpotBugsResultFile;
 import static edu.polyu.util.Utility.sep;
 import static edu.polyu.util.Utility.spotBugsJarStr;
 import static edu.polyu.util.Utility.subSeedFolderNameList;
+import static edu.polyu.util.Utility.waitThreadPoolEnding;
 
 
 /*
@@ -157,29 +159,6 @@ public class Invoker {
         return tag;
     }
 
-    private static ExecutorService threadPool;
-
-    private static void initThreadPool() {
-        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            } else {
-                threadPool = Executors.newSingleThreadExecutor();
-            }
-        }
-    }
-
-    private static void waitThreadPoolEnding() {
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in SpotBugsClassFolder
     public static void invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
@@ -189,14 +168,14 @@ public class Invoker {
         if(SINGLE_TESTING) {
             System.out.println("Invoke SpotBugs Path: " + seedFolderPath);
         }
-        initThreadPool();
+        ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
             threadPool.submit(new SpotBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
-        waitThreadPoolEnding();
+        waitThreadPoolEnding(threadPool);
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         for(String subSeedFolderName : subSeedFolderNameList) {
@@ -208,12 +187,11 @@ public class Invoker {
     }
 
     public static void invokeInfer(int iterDepth, String seedFolderPath) {
-        initThreadPool();
+        ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new Infer_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
-        waitThreadPoolEnding();
-        List<Infer_Report> reports = new ArrayList<>();
+        waitThreadPoolEnding(threadPool);
         System.out.println("Infer Result Folder: " + InferResultFolder.getAbsolutePath());
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         for(String seedPath : seedPaths) {
@@ -223,11 +201,11 @@ public class Invoker {
     }
 
     public static void invokeCheckStyle(int iterDepth, String seedFolderPath) {
-        initThreadPool();
+        ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new CheckStyle_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
-        waitThreadPoolEnding();
+        waitThreadPoolEnding(threadPool);
         List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
         for(int i = 0; i < reportPaths.size(); i++) {
             readCheckStyleResultFile(reportPaths.get(i));
@@ -235,12 +213,11 @@ public class Invoker {
     }
 
     public static void invokePMD(int iterDepth, String seedFolderPath) {
-        initThreadPool();
+        ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             threadPool.submit(new PMD_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
         }
-        waitThreadPoolEnding();
-        List<PMD_Report> reports = new ArrayList<>();
+        waitThreadPoolEnding(threadPool);
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json");
         }

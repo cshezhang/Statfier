@@ -52,7 +52,8 @@ public class SpotBugs_InvokeThread implements Runnable {
             invokeCmds[2] = SpotBugsPath + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
-                            + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class";
+//                            + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class";
+                            + classFolder.getAbsolutePath();
             invokeCommandsByZT(invokeCmds);
         }
     }

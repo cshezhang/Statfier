@@ -61,29 +61,6 @@ public class SpotBugsChecker {
         return warningLabels;
     }
 
-    private static ExecutorService threadPool;
-
-    private static void initThreadPool() {
-        if(Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            } else {
-                threadPool = Executors.newSingleThreadExecutor();
-            }
-        }
-    }
-
-    private static void waitThreadPoolEnding() {
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
         List<String> allSeedList = Utility.getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
         HashMap<String, List<String>> rule2seedlist = new HashMap<>();
@@ -148,7 +125,7 @@ public class SpotBugsChecker {
 //            threadPool.submit(new SpotBugs_InvokeThread(SPOTBUGS_SEED_PATH  + File.separator + ruleType, ruleType, getFilenamesFromFolder(SPOTBUGS_SEED_PATH  + File.separator + ruleType, false)));
 //        }
 //        waitThreadPoolEnding();
-        List<String> reportPaths = getFilenamesFromFolder(userdir  + File.separator + "results", true);
+        List<String> reportPaths = getFilenamesFromFolder(EVALUATION_PATH  + File.separator + "results", true);
         for(String reportPath : reportPaths) {
             try {
                 String[] tokens = reportPath.split(sep);

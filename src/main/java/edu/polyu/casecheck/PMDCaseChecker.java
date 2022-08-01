@@ -15,7 +15,7 @@ import java.util.List;
 
 import static edu.polyu.util.Utility.BASE_SEED_PATH;
 import static edu.polyu.util.Utility.calculatePMDResultFile;
-import static edu.polyu.util.Utility.userdir;
+import static edu.polyu.util.Utility.EVALUATION_PATH;
 
 public class PMDCaseChecker {
 
@@ -76,7 +76,7 @@ public class PMDCaseChecker {
             }
             final String[] FILE_HEADER = {"Filepath", "Category", "Rule", "Description", "Detect", "Expect", "XML_PATH"};
             CSVFormat format = CSVFormat.DEFAULT.withHeader(FILE_HEADER);
-            String resultPath = userdir  + File.separator + "CaseCheck_allRules.log";
+            String resultPath = EVALUATION_PATH  + File.separator + "CaseCheck_allRules.log";
             System.out.println("Result Path: " + resultPath);
             // Write to CSV file
             CSVPrinter printer = null;
@@ -109,7 +109,7 @@ public class PMDCaseChecker {
         String ruleCategory = tokens[0];
         String ruleType = tokens[1];
         String resultFileName = fileNameWithSuffix.substring(0, fileNameWithSuffix.length() - 5) + "_Result.json";
-        String resultFilePath =  userdir  + File.separator + "PMD_Case_Check"  + File.separator + resultFileName;
+        String resultFilePath =  EVALUATION_PATH  + File.separator + "PMD_Case_Check"  + File.separator + resultFileName;
         String[] pmdArgs = {
             "-d", seedFolderPath  + File.separator + fileNameWithSuffix,
             "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,

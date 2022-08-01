@@ -16,7 +16,6 @@ import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
-import edu.polyu.report.Violation;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -46,6 +45,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -74,7 +76,7 @@ public class Utility {
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
-    public static String userdir = getProperty("USERDIR");
+    public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
     public static int SEED_INDEX = Integer.parseInt(getProperty("SEED_INDEX"));
 
@@ -111,25 +113,26 @@ public class Utility {
     public final static String AST_TESTING_PATH = "." + File.separator + "src" + File.separator + "test" + File.separator + "java" + File.separator + "ASTTestingCases";
     public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
     //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
-    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Seeds";
-    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Seeds";
+    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Seeds1";
+    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Small";
+//    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Seeds1";
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
 
     // mutants
-    public final static File mutantFolder = new File(userdir + File.separator + "mutants");
-    public final static File resultFolder = new File(userdir + File.separator + "results");
+    public final static File mutantFolder = new File(EVALUATION_PATH + File.separator + "mutants");
+    public final static File resultFolder = new File(EVALUATION_PATH + File.separator + "results");
 
     // results
-//    public final static File resultFolder = new File(userdir  + File.separator + "results");
-    public final static File PMDResultFolder = new File(userdir + File.separator + "PMD_Results");
-    public final static File InferResultFolder = new File(userdir + File.separator + "Infer_Results");
-    public final static File InferClassFolder = new File(userdir + File.separator + "Infer_Classes");
-    public final static File SpotBugsResultFolder = new File(userdir + File.separator + "SpotBugs_Results");
-    public final static File SpotBugsClassFolder = new File(userdir + File.separator + "SpotBugs_Classes");
-    public final static File CheckStyleResultFolder = new File(userdir + File.separator + "CheckStyle_results");
+//    public final static File resultFolder = new File(EVALUATION_PATH  + File.separator + "results");
+    public final static File PMDResultFolder = new File(EVALUATION_PATH + File.separator + "PMD_Results");
+    public final static File InferResultFolder = new File(EVALUATION_PATH + File.separator + "Infer_Results");
+    public final static File InferClassFolder = new File(EVALUATION_PATH + File.separator + "Infer_Classes");
+    public final static File SpotBugsResultFolder = new File(EVALUATION_PATH + File.separator + "SpotBugs_Results");
+    public final static File SpotBugsClassFolder = new File(EVALUATION_PATH + File.separator + "SpotBugs_Classes");
+    public final static File CheckStyleResultFolder = new File(EVALUATION_PATH + File.separator + "CheckStyle_results");
 
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
@@ -143,10 +146,8 @@ public class Utility {
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
 
-    public static HashMap<String, List<Integer>> file2row = new HashMap<>(); // filename -> set: buggy row numbers
-    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> set: buggy column numbers
-//    public static HashMap<String, HashSet<Integer>> file2row = new HashMap<>(); // filename -> set: buggy row numbers
-//    public static HashMap<String, HashSet<Integer>> file2col = new HashMap<>(); // filename -> set: buggy column numbers
+    public static HashMap<String, List<Integer>> file2row = new HashMap<>(); // String: filename -> List: row numbers of different bugs
+//    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> List: buggy column numbers
     public static HashMap<String, Report> file2report = new HashMap<>();
     public static HashMap<String, HashMap<String, List<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
@@ -205,13 +206,13 @@ public class Utility {
             }
         }
         try {
-            File ud = new File(userdir);
+            File ud = new File(EVALUATION_PATH);
             if (ud.exists()) {
-                FileUtils.deleteDirectory(new File(userdir));
+                FileUtils.deleteDirectory(new File(EVALUATION_PATH));
             }
             ud.mkdir();
             if (!ud.exists()) {
-                System.err.println("Fail to create userdir!\n");
+                System.err.println("Fail to create EVALUATION_PATH!\n");
                 System.exit(-1);
             }
             if (!resultFolder.mkdir()) {
@@ -269,6 +270,29 @@ public class Utility {
         }
     }
 
+    public static ExecutorService initThreadPool() {
+        ExecutorService threadPool;
+        if(Boolean.parseBoolean(getProperty("FIXED_THREAD_POOL"))) {
+            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
+        } else {
+            if (Boolean.parseBoolean(getProperty("CACHED_THREAD_POOL"))) {
+                threadPool = Executors.newCachedThreadPool();
+            } else {
+                threadPool = Executors.newSingleThreadExecutor();
+            }
+        }
+        return threadPool;
+    }
+
+    public static void waitThreadPoolEnding(ExecutorService threadPool) {
+        threadPool.shutdown();
+        try {
+            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static <T> List<List<T>> listAveragePartition(List<T> source, int n) {
         List<List<T>> result = new ArrayList<List<T>>();
         int remaider = source.size() % n;
@@ -287,8 +311,6 @@ public class Utility {
         }
         return result;
     }
-
-
 
 //    public static void checkExecutionTime() {
 //        long executionTime = System.currentTimeMillis() - startTimeStamp - compileTime;

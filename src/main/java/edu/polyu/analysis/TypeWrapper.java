@@ -70,7 +70,7 @@ import static edu.polyu.util.Utility.file2bugs;
 import static edu.polyu.util.Utility.file2row;
 import static edu.polyu.util.Utility.mutantCounter;
 import static edu.polyu.util.Utility.random;
-import static edu.polyu.util.Utility.userdir;
+import static edu.polyu.util.Utility.EVALUATION_PATH;
 
 /**
  * Description: ASTWrapper is 1-to-1 a mutant or seed, it also contains some methods to perform different transformation schedule.
@@ -134,7 +134,7 @@ public class TypeWrapper {
         this.parentPath = null;
         this.parentWrapper = null;
         this.parViolations = 0;
-        this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
+        this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
         this.transNodes = new ArrayList<>();
@@ -150,7 +150,7 @@ public class TypeWrapper {
         this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
         this.document = new Document(content);
-        this.mutantFolder = userdir + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
+        this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
         this.parentWrapper = parentWrapper;

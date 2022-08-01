@@ -18,9 +18,11 @@ import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.util.Utility.file2row;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
 import static edu.polyu.util.Utility.getProperty;
+import static edu.polyu.util.Utility.initThreadPool;
 import static edu.polyu.util.Utility.listAveragePartition;
 import static edu.polyu.util.Utility.readSonarQubeResultFile;
 import static edu.polyu.util.Utility.sep;
+import static edu.polyu.util.Utility.waitThreadPoolEnding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,14 +70,7 @@ public class Schedule {
 
     public void executeCheckStyleMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = Executors.newSingleThreadExecutor();
-        if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            }
-        }
+        ExecutorService threadPool = initThreadPool();
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
@@ -99,24 +94,12 @@ public class Schedule {
             CheckStyle_TransformThread mutationThread = new CheckStyle_TransformThread(wrapper, wrapper.getFolderName(), file2index.get(wrapper.getFilePath()));
             threadPool.submit(mutationThread);
         }
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitThreadPoolEnding(threadPool);
     }
 
     public void executeSpotBugsMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = null;
-        if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            }
-        }
+        ExecutorService threadPool = initThreadPool();
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
@@ -153,25 +136,13 @@ public class Schedule {
                 SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
                 threadPool.submit(thread);
             }
-            threadPool.shutdown();
-            try {
-                threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitThreadPoolEnding(threadPool);
         }
     }
 
     public void executePMDMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = Executors.newSingleThreadExecutor();
-        if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            }
-        }
+        ExecutorService threadPool = initThreadPool();
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
@@ -219,24 +190,12 @@ public class Schedule {
         for (int i = 0; i < mutationThreads.size(); i++) {
             threadPool.submit(mutationThreads.get(i));
         }
-        threadPool.shutdown();
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitThreadPoolEnding(threadPool);
     }
 
     public void executeSonarQubeMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = Executors.newSingleThreadExecutor();
-        if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            }
-        }
+        ExecutorService threadPool = initThreadPool();
         List<TypeWrapper> initWrappers = new ArrayList<>();
         for(String filepath : file2report.keySet()) {
             String[] tokens = filepath.split(sep);
@@ -250,26 +209,12 @@ public class Schedule {
             SonarQube_TransformThread thread = new SonarQube_TransformThread(lists.get(i));
             threadPool.submit(thread);
         }
-        threadPool.shutdown();
-        System.out.println("Init Transform Thread Finished!");
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Exec Transform Thread Finished!");
+        waitThreadPoolEnding(threadPool);
     }
 
     public void executeInferMutation(String seedFolderPath) {
         locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = Executors.newSingleThreadExecutor();
-        if (Boolean.parseBoolean(getProperty("FIXED_THREADPOOL"))) {
-            threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-        } else {
-            if (Boolean.parseBoolean(getProperty("CACHED_THREADPOOL"))) {
-                threadPool = Executors.newCachedThreadPool();
-            }
-        }
+        ExecutorService threadPool = initThreadPool();
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
@@ -302,14 +247,7 @@ public class Schedule {
         for (int i = 0; i < mutationThreads.size(); i++) {
             threadPool.submit(mutationThreads.get(i));
         }
-        threadPool.shutdown();
-        System.out.println("Init Transform Thread Finished!");
-        try {
-            threadPool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Exec Transform Thread Finished!");
+        waitThreadPoolEnding(threadPool);
     }
 
     // This function only can invoke static analysis tool and cannot include other parts.

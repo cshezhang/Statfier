@@ -34,7 +34,7 @@ import static edu.polyu.util.Utility.failedReport;
 import static edu.polyu.util.Utility.initEnv;
 import static edu.polyu.util.Utility.sourceSeedPath;
 import static edu.polyu.util.Utility.startTimeStamp;
-import static edu.polyu.util.Utility.userdir;
+import static edu.polyu.util.Utility.EVALUATION_PATH;
 
 /**
  * Description: Main Process for automatic testing
@@ -92,7 +92,7 @@ public class AutomaticTester {
                     allValidMutantNumber += subEntry.getValue().size();
                 }
                 root.put("Results", bugs);
-                File jsonFile = new File(userdir + File.separator + "results" + File.separator + rule + ".json");
+                File jsonFile = new File(EVALUATION_PATH + File.separator + "results" + File.separator + rule + ".json");
                 if(!jsonFile.exists()) {
                     jsonFile.createNewFile();
                 }
@@ -121,7 +121,7 @@ public class AutomaticTester {
                             TimeUnit.MILLISECONDS.toMinutes(executionTime),
                             TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
             );
-            File resFile = new File(userdir + File.separator + "Output.log");
+            File resFile = new File(EVALUATION_PATH + File.separator + "Output.log");
             if (!resFile.exists()) {
                 resFile.createNewFile();
             }
@@ -135,7 +135,7 @@ public class AutomaticTester {
                 }
             }
             if(SPOTBUGS_MUTATION) {
-                bufferedWriter.write("Failed Cmds:\n");
+                bufferedWriter.write("Failed Commands:\n");
                 for(String failedCmd : failedCmds) {
                     bufferedWriter.write(failedCmd + "\n");
                 }
@@ -153,5 +153,6 @@ public class AutomaticTester {
             e.printStackTrace();
         }
     }
+
 }
 
