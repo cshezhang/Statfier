@@ -1,0 +1,30 @@
+package edu.polyu;
+
+import edu.polyu.analysis.TypeWrapper;
+import edu.polyu.util.Utility;
+import org.junit.Test;
+
+import java.util.List;
+
+public class ModuleTester {
+
+
+    @Test
+    public void testDiffIteration() {
+        String path1 = "C:\\Users\\austin\\evaluation\\PMD_Large\\results";
+        String path2 = "C:\\Users\\austin\\evaluation\\PMD_Large_Iter2\\results";
+        List<String> names1 = Utility.getFilenamesFromFolder(path1, false);
+        List<String> names2 = Utility.getFilenamesFromFolder(path2, false);
+        for(String name : names2) {
+            if(!names1.contains(name)) {
+                System.out.println(name);
+            }
+        }
+    }
+
+    @Test
+    public void testAST() {
+        System.out.println(System.getProperty("user.dir"));
+    }
+
+}

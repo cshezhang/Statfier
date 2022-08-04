@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class AddMethodCallToLiteral extends Transform {
     }
 
     @Override
-    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode broStatement, ASTNode srcNode) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode broNode, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration newMethod = ast.newMethodDeclaration();
@@ -62,12 +63,14 @@ public class AddMethodCallToLiteral extends Transform {
         newBlock.statements().add(returnStatement);
         newMethod.setBody(newBlock);
         returnStatement.setExpression((Expression) ASTNode.copySubtree(ast, targetNode));
-        MethodDeclaration oldMethod = getDirectMethodOfNode(srcNode);
-        if(oldMethod == null) {
-            return false;  // It means that this statement is not located in a method, may stay in a initializer of class
+        MethodDeclaration directMethod = getDirectMethodOfNode(srcNode);
+        if(directMethod == null || directMethod.isConstructor()) {
+            // It means that this statement is not located in a method, may stay in an initializer of class.
+            // Besides, we do not apply this transform for constructor.
+            return false;
         }
         boolean hasStatic = false;
-        for(ASTNode modifier : (List<ASTNode>) oldMethod.modifiers()) {
+        for(ASTNode modifier : (List<ASTNode>) directMethod.modifiers()) {
             if(modifier instanceof Modifier) {
                 if(((Modifier) modifier).getKeyword().toString().equals("static")) {
                     hasStatic = true;
@@ -77,7 +80,7 @@ public class AddMethodCallToLiteral extends Transform {
         if(hasStatic) {
             newMethod.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.STATIC_KEYWORD));
         }
-        TypeDeclaration clazz = (TypeDeclaration) oldMethod.getParent();
+        TypeDeclaration clazz = (TypeDeclaration) directMethod.getParent();
         ListRewrite listRewrite = astRewrite.getListRewrite(clazz, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
         listRewrite.insertFirst(newMethod, null);
         MethodInvocation newMethodInvocation = ast.newMethodInvocation();

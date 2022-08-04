@@ -59,6 +59,10 @@ public class TransferLocalVarToGlobal extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
+        TypeDeclaration clazz = getClassOfNode(srcNode);
+        if(clazz == null || clazz.isInterface()) {
+            return nodes;
+        }
         MethodDeclaration method = getDirectMethodOfNode(srcNode);
         if (method != null) {
             for (ASTNode modifier : (List<ASTNode>) method.modifiers()) {

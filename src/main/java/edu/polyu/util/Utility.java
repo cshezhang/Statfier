@@ -75,7 +75,7 @@ public class Utility {
     public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-    //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;;
+    //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
     public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
     public static int SEED_INDEX = Integer.parseInt(getProperty("SEED_INDEX"));
@@ -113,7 +113,7 @@ public class Utility {
     public final static String AST_TESTING_PATH = "." + File.separator + "src" + File.separator + "test" + File.separator + "java" + File.separator + "ASTTestingCases";
     public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
     //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
-    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Seeds1";
+    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Large";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Small";
 //    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Seeds1";
@@ -240,7 +240,6 @@ public class Utility {
         if (PMD_MUTATION && !PMDResultFolder.exists()) {
             PMDResultFolder.mkdir();
         }
-
         if (SPOTBUGS_MUTATION) {
             if (!SpotBugsClassFolder.exists()) {
                 SpotBugsClassFolder.mkdir();

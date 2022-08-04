@@ -87,7 +87,7 @@ public abstract class Transform {
             transforms.add(CompoundExpression4.getInstance());
             transforms.add(EnumClassWrapper.getInstance());
             transforms.add(NestedClassWrapper.getInstance());
-            transforms.add(TransferLocalVarToGlobal.getInstance());
+//            transforms.add(TransferLocalVarToGlobal.getInstance());
             transforms.add(TransferLocalVarToStaticGlobal.getInstance());
             transforms.add(AddStaticAssignment.getInstance());
             transforms.add(AddStaticModifier.getInstance());

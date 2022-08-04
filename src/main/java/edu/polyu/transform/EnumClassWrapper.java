@@ -131,6 +131,9 @@ public class EnumClassWrapper extends Transform {
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfNode(node);
+        if(clazz == null || clazz.isInterface()) {  // filter interface, annotation, and enum
+            return nodes;
+        }
         MethodDeclaration method = getDirectMethodOfNode(node);
         if (method == null) {
             if(getStatementOfNode(node) instanceof FieldDeclaration) {

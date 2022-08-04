@@ -64,18 +64,22 @@ public class TransferLocalVarToStaticGlobal extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(TypeWrapper wrapper, ASTNode statement) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode srcNode) {
         List<ASTNode> nodes = new ArrayList<>();
+        TypeDeclaration clazz = getClassOfNode(srcNode);
+        if(clazz == null || clazz.isInterface()) {
+            return nodes;
+        }
         List<ASTNode> subNodes;
-        if(LoopStatement.isLoopStatement(statement)) {
-            LoopStatement loop = new LoopStatement(statement);
+        if(LoopStatement.isLoopStatement(srcNode)) {
+            LoopStatement loop = new LoopStatement(srcNode);
             if(loop.getBody() instanceof Block) {
                 subNodes = getChildrenNodes((List<ASTNode>)((Block) loop.getBody()).statements());
             } else {
                 subNodes = getChildrenNodes(loop.getBody());
             }
         } else {
-            subNodes = getChildrenNodes(statement);
+            subNodes = getChildrenNodes(srcNode);
         }
         for(int i = 0; i < subNodes.size(); i++) {
             ASTNode subNode = subNodes.get(i);

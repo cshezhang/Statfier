@@ -43,6 +43,8 @@ public class NestedClassWrapper extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = getDirectMethodOfNode(srcNode);
+        TypeDeclaration nestedClass = ast.newTypeDeclaration();
+        nestedClass.setName(ast.newSimpleName("subClass_" + nestedClassCounter++));
         if (oldMethod != null) {
             if (oldMethod.isConstructor()) {
                 return false;
@@ -61,8 +63,6 @@ public class NestedClassWrapper extends Transform {
                     }
                 }
             }
-            TypeDeclaration nestedClass = ast.newTypeDeclaration();
-            nestedClass.setName(ast.newSimpleName("subClass_" + nestedClassCounter++));
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
             nestedClass.bodyDeclarations().add(newMethod);
             astRewrite.replace(oldMethod, nestedClass, null);
@@ -75,8 +75,6 @@ public class NestedClassWrapper extends Transform {
                         return false;
                     }
                 }
-                TypeDeclaration nestedClass = ast.newTypeDeclaration();
-                nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
                 FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
                 nestedClass.bodyDeclarations().add(newFieldDeclaration);
                 astRewrite.replace(srcNode, nestedClass, null);
@@ -91,6 +89,9 @@ public class NestedClassWrapper extends Transform {
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfNode(node);
+        if(clazz == null || clazz.isInterface()) {
+            return nodes;
+        }
         MethodDeclaration method = getDirectMethodOfNode(node);
         if (method == null) {
             if(getStatementOfNode(node) instanceof FieldDeclaration) {
