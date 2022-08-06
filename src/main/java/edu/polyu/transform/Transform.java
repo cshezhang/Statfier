@@ -78,7 +78,7 @@ public abstract class Transform {
             transforms.add(CFWrapperWithDoWhile.getInstance());
 //                transforms.add(CFWrapperWithForFalse.getInstance());
             transforms.add(CFWrapperWithForTrue.getInstance());
-//                transforms.add(CFWrapperWithIfFlase.getInstance());
+//                transforms.add(CFWrapperWithIfFalse.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
 //            transforms.add(CompoundExpression1.getInstance());
