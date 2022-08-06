@@ -14,6 +14,12 @@
     </properties>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>org.sonarsource.sonarqube</groupId>-->
+<!--            <artifactId>sonar-server</artifactId>-->
+<!--            <version>7.2</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.codehaus.sonar</groupId>
             <artifactId>sonar-ws-client</artifactId>
