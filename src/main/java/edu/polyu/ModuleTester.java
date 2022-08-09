@@ -12,20 +12,29 @@ import java.util.List;
 public class ModuleTester {
 
     @Test
-    public void testSonarQube() {
-        HttpConnector httpConnector = HttpConnector.newBuilder().url("http://localhost:9000").credentials("admin", "admin").build();
-        SearchWsRequest issueSearchRequest = new SearchWsRequest();
-        issueSearchRequest.setPageSize(1000);
-        issueSearchRequest.setResolved(false);
-        List<String> bugTypesList = new ArrayList<String>();
-        bugTypesList.add("BUG");
-        issueSearchRequest.setTypes(bugTypesList);
-        WsClient wsClient = WsClientFactories.getDefault().newClient(httpConnector);
-        Issues.SearchWsResponse issuesResponse =  wsClient.issues().search(issueSearchRequest);
-        System.out.println(issuesResponse.getIssuesList());
-
-        System.out.println("DONE");
+    public void testEqual() {
+        String s1 = "123";
+        String s2 = "1";
+        String s3 = "23";
+        System.out.println(s1.equals(s2 + s3));
+        System.out.println(s1 == s2 + s3);
     }
+
+//    @Test
+//    public void testSonarQube() {
+//        HttpConnector httpConnector = HttpConnector.newBuilder().url("http://localhost:9000").credentials("admin", "admin").build();
+//        SearchWsRequest issueSearchRequest = new SearchWsRequest();
+//        issueSearchRequest.setPageSize(1000);
+//        issueSearchRequest.setResolved(false);
+//        List<String> bugTypesList = new ArrayList<String>();
+//        bugTypesList.add("BUG");
+//        issueSearchRequest.setTypes(bugTypesList);
+//        WsClient wsClient = WsClientFactories.getDefault().newClient(httpConnector);
+//        Issues.SearchWsResponse issuesResponse =  wsClient.issues().search(issueSearchRequest);
+//        System.out.println(issuesResponse.getIssuesList());
+//
+//        System.out.println("DONE");
+//    }
 
     @Test
     public void testDiffIteration() {
