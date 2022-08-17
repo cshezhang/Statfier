@@ -18,6 +18,7 @@ import edu.polyu.report.PMD_Report;
 import edu.polyu.thread.CheckStyle_InvokeThread;
 import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
+import edu.polyu.thread.SonarQube_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
@@ -183,6 +184,20 @@ public class Invoker {
             for(String reportPath : reportPaths) {
                 readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
+        }
+    }
+
+    public static void invokeSonarQube(int iterDepth, String seedFolderPath) {
+        ExecutorService threadPool = initThreadPool();
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+            threadPool.submit(new SonarQube_InvokeThread(seedFolderPath, subSeedFolderNameList.get(i)));
+        }
+        waitThreadPoolEnding(threadPool);
+        System.out.println("SonarQube Result Folder: xxx");
+        List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
+        for(String seedPath : seedPaths) {
+            String reportPath = SonarQube.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
+            readInferResultFile(seedPath, reportPath);
         }
     }
 

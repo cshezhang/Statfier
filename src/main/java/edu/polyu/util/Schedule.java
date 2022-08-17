@@ -255,11 +255,12 @@ public class Schedule {
         String seedFolderName = Path2Last(seedFolderPath);
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=" + iterDepth);
         if (SONARQUBE_MUTATION) {
-            System.out.println("Begin to Analyze first round SonarQube Result File...");
-            String initReportPath = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
-            readSonarQubeResultFile(initReportPath, SONARQUBE_SEED_PATH);
-            System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-            return;
+
+//            System.out.println("Begin to Analyze first round SonarQube Result File...");
+//            String initReportPath = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
+//            readSonarQubeResultFile(initReportPath, SONARQUBE_SEED_PATH);
+//            System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
+//            return;
         }
         if (INFER_MUTATION) {
             invokeInfer(iterDepth, seedFolderPath);

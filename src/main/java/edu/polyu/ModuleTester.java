@@ -11,17 +11,37 @@ import java.util.List;
 
 public class ModuleTester {
 
-    @Test
-    public void testEqual() {
-        String s1 = "123";
-        String s2 = "1";
-        String s3 = "23";
-        System.out.println(s1.equals(s2 + s3));
-        System.out.println(s1 == s2 + s3);
+    int a1 = 0;
+
+    public void test(int a2) {
+        int a3 = 0;
+        System.out.println(a1);
+        System.out.println(a2);
+        System.out.println(a3);
     }
 
 //    @Test
-//    public void testSonarQube() {
+//    public void testEqual() {
+//        String s1 = "123";
+//        String s2 = "1";
+//        String s3 = "23";
+//        System.out.println(s1.equals(s2 + s3));
+//        System.out.println(s1 == s2 + s3);
+//    }
+
+    @Test
+    public void testSonarQubeInvocation() {
+//        sonar-scanner \
+//        -Dsonar.projectKey=Statfier \
+//        -Dsonar.sources=. \
+//        -Dsonar.host.url=http://localhost:9000 \
+//        -Dsonar.login=sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9
+        String[] invokeCommands = new String[5];
+
+    }
+
+    @Test
+    public void testSonarQube() {
 //        HttpConnector httpConnector = HttpConnector.newBuilder().url("http://localhost:9000").credentials("admin", "admin").build();
 //        SearchWsRequest issueSearchRequest = new SearchWsRequest();
 //        issueSearchRequest.setPageSize(1000);
@@ -34,7 +54,7 @@ public class ModuleTester {
 //        System.out.println(issuesResponse.getIssuesList());
 //
 //        System.out.println("DONE");
-//    }
+    }
 
     @Test
     public void testDiffIteration() {

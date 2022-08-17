@@ -133,10 +133,12 @@ public class Utility {
     public final static File SpotBugsResultFolder = new File(EVALUATION_PATH + File.separator + "SpotBugs_Results");
     public final static File SpotBugsClassFolder = new File(EVALUATION_PATH + File.separator + "SpotBugs_Classes");
     public final static File CheckStyleResultFolder = new File(EVALUATION_PATH + File.separator + "CheckStyle_results");
+    public final static File SonarQubeResultFolder = new File(EVALUATION_PATH + File.separator + "SonarQube_Results");
 
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
     public final static String InferPath = getProperty("INFER_PATH");
+    public final static String SonarScannerPath = getProperty("SONAR_SCANNER_PATH");
     //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
 //    public final static String InferPath = "infer";
     public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";

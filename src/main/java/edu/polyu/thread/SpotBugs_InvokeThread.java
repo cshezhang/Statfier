@@ -7,7 +7,6 @@ import java.util.List;
 
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Utility.BASE_SEED_PATH;
 import static edu.polyu.util.Utility.SINGLE_TESTING;
 import static edu.polyu.util.Utility.SpotBugsClassFolder;
 import static edu.polyu.util.Utility.SpotBugsPath;
@@ -41,20 +40,20 @@ public class SpotBugs_InvokeThread implements Runnable {
             if(SINGLE_TESTING) {
                 System.out.println("Report: " + reportPath);
             }
-            String[] invokeCmds = new String[3];
+            String[] invokeCommands = new String[3];
             if(OSUtil.isWindows()) {
-                invokeCmds[0] = "cmd.exe";
-                invokeCmds[1] = "/c";
+                invokeCommands[0] = "cmd.exe";
+                invokeCommands[1] = "/c";
             } else {
-                invokeCmds[0] = "/bin/bash";
-                invokeCmds[1] = "-c";
+                invokeCommands[0] = "/bin/bash";
+                invokeCommands[1] = "-c";
             }
-            invokeCmds[2] = SpotBugsPath + " -textui"
+            invokeCommands[2] = SpotBugsPath + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
 //                            + classFolder.getAbsolutePath()  + File.separator + seedFileName + ".class";
                             + classFolder.getAbsolutePath();
-            invokeCommandsByZT(invokeCmds);
+            invokeCommandsByZT(invokeCommands);
         }
     }
 
