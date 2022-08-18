@@ -8,10 +8,10 @@ sonar.sourceEncoding=UTF-8
 sonar.scm.disabled=true
 sonar.cpd.exclusions=**/*
 
-sonar.sources=/Users/austin/projects/SAMutator/seeds/SonarQube_Small
+sonar.sources=/Users/austin/projects/SAMutator/seeds/SonarQube_Test
 
 sonar.java.source=17
 
 # Wrong on purpose - the project could be compiled (with maven) and provide binaries
-sonar.java.binaries=/Users/austin/projects/SAMutator/seeds/SonarQube_Small/dummy-binaries/
-sonar.java.test.binaries=/Users/austin/projects/SAMutator/seeds/SonarQube_Small/dummy-binaries/
+sonar.java.binaries=/Users/austin/projects/SAMutator/seeds/SonarQube_Test/dummy-binaries/
+sonar.java.test.binaries=/Users/austin/projects/SAMutator/seeds/SonarQube_Test/dummy-binaries/

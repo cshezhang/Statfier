@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -78,6 +79,7 @@ public class Utility {
     //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
     public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
+    public static String PROJECT_PATH = System.getProperty("user.dir");
     public static int SEED_INDEX = Integer.parseInt(getProperty("SEED_INDEX"));
 
     public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
@@ -91,6 +93,9 @@ public class Utility {
     public final static boolean CHECKSTYLE_MUTATION = Boolean.parseBoolean(getProperty("CHECKSTYLE_MUTATION"));
     public final static boolean SONARQUBE_MUTATION = Boolean.parseBoolean(getProperty("SONARQUBE_MUTATION"));
     public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION) ? true : false;
+
+    public final static String SONARQUBE_PROJECT_KEY = getProperty("SONAR_QUBE_PROJECT_KEY");
+    public final static String SONARQUBE_LOGIN = getProperty("SONAR_QUBE_LOGIN");
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
@@ -116,10 +121,10 @@ public class Utility {
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Large";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Small";
 //    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
-    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Seeds1";
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
+    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Small";
 
     // mutants
     public final static File mutantFolder = new File(EVALUATION_PATH + File.separator + "mutants");
@@ -239,35 +244,26 @@ public class Utility {
                 subSeedFolder.mkdir();
             }
         }
-        if (PMD_MUTATION && !PMDResultFolder.exists()) {
+        if (PMD_MUTATION) {
             PMDResultFolder.mkdir();
         }
         if (SPOTBUGS_MUTATION) {
-            if (!SpotBugsClassFolder.exists()) {
-                SpotBugsClassFolder.mkdir();
-            }
-            if (!SpotBugsResultFolder.exists()) {
-                SpotBugsResultFolder.mkdir();
-                for (String subSeedFolderName : subSeedFolderNameList) {
-                    File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName);
-                    if (reportFolder.exists()) {
-                        System.err.println("Init Error!");
-                        System.exit(-1);
-                    }
-                    reportFolder.mkdir();
-                }
+            SpotBugsClassFolder.mkdir();
+            SpotBugsResultFolder.mkdir();
+            for (String subSeedFolderName : subSeedFolderNameList) {
+                File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName);
+                reportFolder.mkdir();
             }
         }
-        if (CHECKSTYLE_MUTATION && !CheckStyleResultFolder.exists()) {
+        if (CHECKSTYLE_MUTATION) {
             CheckStyleResultFolder.mkdir();
         }
         if (INFER_MUTATION) {
-            if (!InferClassFolder.exists()) {
-                InferClassFolder.mkdir();
-            }
-            if (!InferResultFolder.exists()) {
-                InferResultFolder.mkdir();
-            }
+            InferClassFolder.mkdir();
+            InferResultFolder.mkdir();
+        }
+        if(SONARQUBE_MUTATION) {
+            SonarQubeResultFolder.mkdir();
         }
     }
 
@@ -344,10 +340,10 @@ public class Utility {
         return count;
     }
 
-    public static void readPMDResultFile(final String jsonPath) {
+    public static void readPMDResultFile(final String reportPath) {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        File jsonFile = new File(jsonPath);
+        File jsonFile = new File(reportPath);
         try {
             JsonNode rootNode = mapper.readTree(jsonFile);
             JsonNode reportNodes = rootNode.get("files");
@@ -363,7 +359,7 @@ public class Utility {
                 pmd_reports.add(newReport);
             }
         } catch (JsonProcessingException e) {
-            System.err.println("Exceptional Json Path:" + jsonPath);
+            System.err.println("Exceptional Json Path:" + reportPath);
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
@@ -400,6 +396,22 @@ public class Utility {
         return lines;
     }
 
+    public static boolean writeFileByLine(String outputPath, String content) {
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(outputPath));
+            OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+            BufferedWriter bw = new BufferedWriter(osw);
+            bw.write(content + "\n");
+            bw.close();
+            osw.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public static boolean writeFileByLine(String outputPath, List<String> lines) {
         try {
             FileOutputStream fos = new FileOutputStream(new File(outputPath));
@@ -418,68 +430,31 @@ public class Utility {
         return true;
     }
 
-    public static void readSonarQubeResultFile(String reportPath, String seedFolderPath) {
-        if (SINGLE_TESTING) {
-            System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
-        }
-        HashMap<String, SonarQube_Report> name2report = new HashMap<>();
-//        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
-//                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
+    public static void readSonarQubeResultFile(String jsonContent) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, SonarQube_Report> path2report = new HashMap<>(); // seed path -> report
         try {
-            Reader reader = new FileReader(reportPath);
-            CSVParser format = CSVFormat.EXCEL.withFirstRecordAsHeader()
-                    .withIgnoreHeaderCase()
-                    .withTrim()
-                    .withDelimiter('\t')
-                    .parse(reader);
-            List<CSVRecord> records = format.getRecords();
-//            CSVFormat format = CSVFormat.EXCEL.withHeader(FILE_HEADER).withSkipHeaderRecord(true)
-//                    .withIgnoreEmptyLines(true)
-//                    .withTrim()
-//                    .withDelimiter('\t');
-//            Reader in = new FileReader(reportPath);
-//            Iterable<CSVRecord> records = format.parse(in);
-            String lineNumber, bugType, component, flows;
-            for (CSVRecord record : records) {
-                lineNumber = record.get("line");
-                if (lineNumber.trim().equals("-")) {
-                    continue;
-                }
-                bugType = record.get("rule");
-                component = record.get("component");
-                flows = record.get("flows");
-                String file;
-                if (component.contains(".java")) {
-                    file = component;
+            JsonNode rootNode = mapper.readTree(jsonContent);
+            JsonNode issueNodes = rootNode.get("issues");
+            for (int i = 0; i < issueNodes.size(); i++) {
+                JsonNode issueNode = issueNodes.get(i);
+                String componentPath = issueNode.get("component").asText().split(":")[1];
+                String seedFilePath = PROJECT_PATH + File.separator + componentPath;
+                SonarQube_Report report;
+                if(seedFilePath.contains(seedFilePath)) {
+                    report = path2report.get(seedFilePath);
                 } else {
-                    if (flows.contains(".java")) {
-                        file = flows;
-                    } else {
-                        continue;
-                    }
+                    report = new SonarQube_Report(seedFilePath);
+                    path2report.put(seedFilePath, report);
                 }
-                String filepath = seedFolderPath + File.separator + file.substring(file.indexOf(":") + 1);
-                if (!name2report.containsKey(filepath)) {
-                    SonarQube_Report report = new SonarQube_Report(filepath);
-                    name2report.put(filepath, report);
-                }
-                SonarQube_Report report = name2report.get(filepath);
-                if (lineNumber.contains(".0")) {
-                    lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
-                }
-                try {
-                    SonarQube_Violation violation = new SonarQube_Violation(bugType, Integer.parseInt(lineNumber));
-                    report.addViolation(violation);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                SonarQube_Violation violation = new SonarQube_Violation(issueNode);
+                report.addViolation(violation);
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error in Json Processing.");
+            e.printStackTrace();
         }
-        for(SonarQube_Report report : name2report.values()) {
+        for(SonarQube_Report report : path2report.values()) {
             file2report.put(report.getFilepath(), report);
             if (!file2row.containsKey(report.getFilepath())) {
                 file2row.put(report.getFilepath(), new ArrayList<>());
@@ -495,6 +470,82 @@ public class Utility {
             }
         }
     }
+
+//    public static void old_readSonarQubeResultFile(String reportPath, String seedFolderPath) {
+//        if (SINGLE_TESTING) {
+//            System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
+//        }
+//        HashMap<String, SonarQube_Report> name2report = new HashMap<>();
+//        try {
+//            Reader reader = new FileReader(reportPath);
+//            CSVParser format = CSVFormat.EXCEL.withFirstRecordAsHeader()
+//                    .withIgnoreHeaderCase()
+//                    .withTrim()
+//                    .withDelimiter('\t')
+//                    .parse(reader);
+//            List<CSVRecord> records = format.getRecords();
+////            CSVFormat format = CSVFormat.EXCEL.withHeader(FILE_HEADER).withSkipHeaderRecord(true)
+////                    .withIgnoreEmptyLines(true)
+////                    .withTrim()
+////                    .withDelimiter('\t');
+////            Reader in = new FileReader(reportPath);
+////            Iterable<CSVRecord> records = format.parse(in);
+//            String lineNumber, bugType, component, flows;
+//            for (CSVRecord record : records) {
+//                lineNumber = record.get("line");
+//                if (lineNumber.trim().equals("-")) {
+//                    continue;
+//                }
+//                bugType = record.get("rule");
+//                component = record.get("component");
+//                flows = record.get("flows");
+//                String file;
+//                if (component.contains(".java")) {
+//                    file = component;
+//                } else {
+//                    if (flows.contains(".java")) {
+//                        file = flows;
+//                    } else {
+//                        continue;
+//                    }
+//                }
+//                String filepath = seedFolderPath + File.separator + file.substring(file.indexOf(":") + 1);
+//                if (!name2report.containsKey(filepath)) {
+//                    SonarQube_Report report = new SonarQube_Report(filepath);
+//                    name2report.put(filepath, report);
+//                }
+//                SonarQube_Report report = name2report.get(filepath);
+//                if (lineNumber.contains(".0")) {
+//                    lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
+//                }
+//                try {
+//                    SonarQube_Violation violation = new SonarQube_Violation(bugType, Integer.parseInt(lineNumber));
+//                    report.addViolation(violation);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        for(SonarQube_Report report : name2report.values()) {
+//            file2report.put(report.getFilepath(), report);
+//            if (!file2row.containsKey(report.getFilepath())) {
+//                file2row.put(report.getFilepath(), new ArrayList<>());
+//                file2bugs.put(report.getFilepath(), new HashMap<>());
+//            }
+//            for (SonarQube_Violation violation : report.getViolations()) {
+//                file2row.get(report.getFilepath()).add(violation.getBeginLine());
+//                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+//                if (!bug2cnt.containsKey(violation.getBugType())) {
+//                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+//                }
+//                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+//            }
+//        }
+//    }
 
     public static void readCheckStyleResultFile(String reportPath) { // one report -> one file
         HashMap<String, CheckStyle_Report> name2report = new HashMap<>();

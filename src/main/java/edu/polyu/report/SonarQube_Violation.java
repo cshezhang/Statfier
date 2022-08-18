@@ -1,13 +1,15 @@
 package edu.polyu.report;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class SonarQube_Violation extends Violation {
 
     private String bugType;
     private int beginLine;
 
-    public SonarQube_Violation(String bugType, int beginLine) {
-        this.bugType = bugType;
-        this.beginLine = beginLine;
+    public SonarQube_Violation(JsonNode issueNode) {
+        this.bugType = issueNode.get("rule").asText();
+        this.beginLine = issueNode.get("textRange").get("startLine").asInt();
     }
 
     public String getBugType() {

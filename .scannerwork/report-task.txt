@@ -2,5 +2,5 @@ projectKey=Statfier
 serverUrl=http://localhost:9000
 serverVersion=9.6.0.59041
 dashboardUrl=http://localhost:9000/dashboard?id=Statfier
-ceTaskId=AYKu65onr_WsOzr7iqE5
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYKu65onr_WsOzr7iqE5
+ceTaskId=AYKvWt4mr_WsOzr7iqE8
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYKvWt4mr_WsOzr7iqE8

@@ -6,6 +6,8 @@ import java.io.File;
 
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.SONARQUBE_LOGIN;
+import static edu.polyu.util.Utility.SONARQUBE_PROJECT_KEY;
 import static edu.polyu.util.Utility.SonarScannerPath;
 
 public class SonarQube_InvokeThread implements Runnable {
@@ -33,10 +35,10 @@ public class SonarQube_InvokeThread implements Runnable {
             invokeCommands[1] = "-c";
         }
         invokeCommands[2] = SonarScannerPath
-                + " -Dsonar.projectKey=Statfier"
+                + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
                 + " -Dsonar.sources=" + this.seedFolderPath
                 + " -Dsonar.host.url=http://localhost:9000"
-                + " -Dsonar.login=sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9";
+                + " -Dsonar.login=" + SONARQUBE_LOGIN;
         invokeCommandsByZT(invokeCommands);
     }
 

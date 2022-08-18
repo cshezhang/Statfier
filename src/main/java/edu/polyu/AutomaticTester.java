@@ -23,7 +23,7 @@ import static edu.polyu.analysis.TypeWrapper.succMutation;
 import static edu.polyu.analysis.TypeWrapper.validSeed;
 import static edu.polyu.transform.Transform.cnt1;
 import static edu.polyu.transform.Transform.cnt2;
-import static edu.polyu.util.Invoker.failedCmds;
+import static edu.polyu.util.Invoker.failedCommands;
 import static edu.polyu.util.Utility.CHECKSTYLE_MUTATION;
 import static edu.polyu.util.Utility.INFER_MUTATION;
 import static edu.polyu.util.Utility.PMD_MUTATION;
@@ -136,7 +136,7 @@ public class AutomaticTester {
             }
             if(SPOTBUGS_MUTATION) {
                 bufferedWriter.write("Failed Commands:\n");
-                for(String failedCmd : failedCmds) {
+                for(String failedCmd : failedCommands) {
                     bufferedWriter.write(failedCmd + "\n");
                 }
             }

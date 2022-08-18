@@ -6,8 +6,18 @@ import org.sonarqube.ws.Issues;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.WsClient;
 import org.sonarqube.ws.client.WsClientFactories;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static edu.polyu.util.Invoker.invokeCommandsByZT;
 
 public class ModuleTester {
 
@@ -20,24 +30,52 @@ public class ModuleTester {
         System.out.println(a3);
     }
 
-//    @Test
-//    public void testEqual() {
-//        String s1 = "123";
-//        String s2 = "1";
-//        String s3 = "23";
-//        System.out.println(s1.equals(s2 + s3));
-//        System.out.println(s1 == s2 + s3);
-//    }
-
     @Test
     public void testSonarQubeInvocation() {
-//        sonar-scanner \
-//        -Dsonar.projectKey=Statfier \
-//        -Dsonar.sources=. \
-//        -Dsonar.host.url=http://localhost:9000 \
-//        -Dsonar.login=sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9
-        String[] invokeCommands = new String[5];
-
+//        String[] invokeCommands = new String[2];
+//        invokeCommands[0] = "sonar-scanner";
+//        invokeCommands[1] = "-Dproject.settings=" + "./seeds/SonarQube_Test/settings";
+////        invokeCommands[1] = "-Dsonar.projectKey=Statfier";
+////        invokeCommands[2] = "-Dsonar.sources=" + SONARQUBE_SEED_PATH;
+////        invokeCommands[3] = "-Dsonar.host.url=http://localhost:9000";
+////        invokeCommands[4] = "-Dsonar.login=sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9";
+////        invokeCommands[5] = "-Dsonar.sonar.java.binaries=" + SONARQUBE_SEED_PATH + File.separator + "dummy-binaries";
+////        invokeCommands[6] = "-Dsonar.sonar.java.test.binaries=" + SONARQUBE_SEED_PATH + File.separator + "dummy-binaries";
+//        boolean tag = invokeCommandsByZT(invokeCommands, true);
+//        if(tag) {
+//            System.out.println("Success to execute SonarQube!");
+//        } else {
+//            System.out.println("Fail to execute SonarQube!");
+//        }
+//        String link = "curl -u sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9: http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";  // Url to access
+        String link = "curl http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";  // Url to access
+        String[] tokens = new String[4];
+        tokens[0] = "curl";
+        tokens[1] = "-u";
+        tokens[2] = "sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9:";
+        tokens[3] = "http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";
+        String jsonContent = invokeCommandsByZT(tokens, "json");
+        if(jsonContent == null) {
+            System.err.println("Fail to get Json content!");
+        }
+//        try {
+//            URL url = new URL(link);
+//            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+//            connection.connect();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+//            String line;
+//            StringBuilder stringBuilder = new StringBuilder();
+//            while ((line = reader.readLine()) != null) {
+//                stringBuilder.append(line);
+//            }
+//            reader.close();
+//            connection.disconnect();
+//            System.out.println(stringBuilder);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Test
@@ -75,3 +113,4 @@ public class ModuleTester {
     }
 
 }
+

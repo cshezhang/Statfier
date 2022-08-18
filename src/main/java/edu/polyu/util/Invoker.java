@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,11 @@ import static edu.polyu.util.Utility.PMDResultFolder;
 import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.Path2Last;
 import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.SONARQUBE_LOGIN;
+import static edu.polyu.util.Utility.SONARQUBE_PROJECT_KEY;
 import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Utility.SonarQubeResultFolder;
+import static edu.polyu.util.Utility.SonarScannerPath;
 import static edu.polyu.util.Utility.SpotBugsResultFolder;
 import static edu.polyu.util.Utility.THREAD_COUNT;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
@@ -40,11 +45,13 @@ import static edu.polyu.util.Utility.initThreadPool;
 import static edu.polyu.util.Utility.readCheckStyleResultFile;
 import static edu.polyu.util.Utility.readInferResultFile;
 import static edu.polyu.util.Utility.readPMDResultFile;
+import static edu.polyu.util.Utility.readSonarQubeResultFile;
 import static edu.polyu.util.Utility.readSpotBugsResultFile;
 import static edu.polyu.util.Utility.sep;
 import static edu.polyu.util.Utility.spotBugsJarStr;
 import static edu.polyu.util.Utility.subSeedFolderNameList;
 import static edu.polyu.util.Utility.waitThreadPoolEnding;
+import static edu.polyu.util.Utility.writeFileByLine;
 
 
 /*
@@ -54,7 +61,27 @@ import static edu.polyu.util.Utility.waitThreadPoolEnding;
  */
 public class Invoker {
 
-    public static List<String> failedCmds = new ArrayList<>();
+    public static List<String> failedCommands = new ArrayList<>();
+
+    public static String invokeCommandsByZT(String[] cmdArgs, String returnFormat) {
+        StringBuilder argStr = new StringBuilder();
+        for (String arg : cmdArgs) {
+            argStr.append(arg + " ");
+        }
+        try {
+            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
+            String out = new ProcessExecutor().command(cmdArgs).readOutput(true).redirectError(errorStream).execute().outputUTF8();
+            if(returnFormat.equalsIgnoreCase("json")) {
+                return out;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println(argStr);
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public static boolean invokeCommandsByZT(String[] cmdArgs) {
         StringBuilder argStr = new StringBuilder();
@@ -74,7 +101,7 @@ public class Invoker {
             if(SPOTBUGS_MUTATION && exitValue != 0) {
 //                System.err.println("Execute SpotBugs Error!");
 //                System.err.println(argStr);
-                failedCmds.add(argStr.toString());
+                failedCommands.add(argStr.toString());
                 return false;
             }
             if(INFER_MUTATION && exitValue != 0) {
@@ -112,7 +139,7 @@ public class Invoker {
             int exitValue = process.waitFor();
             if(exitValue != 4 && exitValue != 0) {
                 if (SPOTBUGS_MUTATION) {
-                    failedCmds.add(args.toString());
+                    failedCommands.add(args.toString());
                 } else {
                     System.err.println("Fail to Invoke Commands1: " + args);
                     System.err.println("Log: " + builder);
@@ -187,24 +214,67 @@ public class Invoker {
         }
     }
 
-    public static void invokeSonarQube(int iterDepth, String seedFolderPath) {
-        ExecutorService threadPool = initThreadPool();
-        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new SonarQube_InvokeThread(seedFolderPath, subSeedFolderNameList.get(i)));
+    public static void writeSettingFile(String path2test, String settingFilePath) {
+        List<String> contents = new ArrayList<>();
+        contents.add("sonar.projectKey=Statfier\nsonar.projectName=Statfier\nsonar.projectVersion=1.0");
+        contents.add("sonar.login=" + SONARQUBE_PROJECT_KEY);
+        contents.add("sonar.sourceEncoding=UTF-8");
+        contents.add("sonar.scm.disabled=true");
+        contents.add("sonar.cpd.exclusions=**/*");
+        contents.add("sonar.sources=" + path2test);
+        contents.add("sonar.java.source=17");
+        File dummyFolder = new File(path2test + File.separator + "dummy-binaries");
+        if(!dummyFolder.exists()) {
+            dummyFolder.mkdir();
         }
-        waitThreadPoolEnding(threadPool);
-        System.out.println("SonarQube Result Folder: xxx");
-        List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
-        for(String seedPath : seedPaths) {
-            String reportPath = SonarQube.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
-            readInferResultFile(seedPath, reportPath);
+        File dummyFile = new File(path2test + File.separator + "dummy-binaries" + File.separator + "dummy.txt");
+        if(!dummyFile.exists()) {
+            try {
+                dummyFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        contents.add("sonar.java.binaries=" + dummyFolder.getAbsolutePath());
+        contents.add("sonar.java.test.binaries=" + dummyFolder.getAbsolutePath());
+        writeFileByLine(settingFilePath, contents);
+    }
+
+    public static void invokeSonarQube(String seedFolderPath) {
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+            String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderNameList.get(i);
+            if(SINGLE_TESTING) {
+                System.out.println("Seed path: " + subSeedFolderPath);
+            }
+            String settingPath = subSeedFolderPath + File.separator + "settings";
+            writeSettingFile(subSeedFolderPath, settingPath);
+            String[] invokeCommands = new String[3];
+            if(OSUtil.isWindows()) {
+                invokeCommands[0] = "cmd.exe";
+                invokeCommands[1] = "/c";
+            } else {
+                invokeCommands[0] = "/bin/bash";
+                invokeCommands[1] = "-c";
+            }
+            invokeCommands[2] = SonarScannerPath + " -Dproject.settings=" + settingPath;
+            invokeCommandsByZT(invokeCommands);
+//            System.out.println("SonarQube Result Folder: xxx");
+            String[] curlCommands = new String[4];
+            curlCommands[0] = "curl";
+            curlCommands[1] = "-u";
+            curlCommands[2] = "sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9:";
+            curlCommands[3] = "http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";
+            String jsonContent = invokeCommandsByZT(curlCommands, "json");
+            String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + ".json";
+            writeFileByLine(reportPath, jsonContent);
+            readSonarQubeResultFile(jsonContent);
         }
     }
 
-    public static void invokeInfer(int iterDepth, String seedFolderPath) {
+    public static void invokeInfer(String seedFolderPath) {
         ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new Infer_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
+            threadPool.submit(new Infer_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
         System.out.println("Infer Result Folder: " + InferResultFolder.getAbsolutePath());
@@ -215,10 +285,10 @@ public class Invoker {
         }
     }
 
-    public static void invokeCheckStyle(int iterDepth, String seedFolderPath) {
+    public static void invokeCheckStyle(String seedFolderPath) {
         ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new CheckStyle_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
+            threadPool.submit(new CheckStyle_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
         List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
@@ -227,14 +297,14 @@ public class Invoker {
         }
     }
 
-    public static void invokePMD(int iterDepth, String seedFolderPath) {
+    public static void invokePMD(String seedFolderPath) {
         ExecutorService threadPool = initThreadPool();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new PMD_InvokeThread(iterDepth, seedFolderPath, subSeedFolderNameList.get(i)));
+            threadPool.submit(new PMD_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + subSeedFolderNameList.get(i) + "_Result.json");
+            readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
         }
     }
 

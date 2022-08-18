@@ -1,17 +1,35 @@
 package edu.polyu.util;
 
+import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
+import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
+import static edu.polyu.transform.Transform.singleLevelExplorer;
+import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCheckStyle;
+import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Invoker.invokeInfer;
 import static edu.polyu.util.Invoker.invokePMD;
+import static edu.polyu.util.Invoker.invokeSonarQube;
 import static edu.polyu.util.Invoker.invokeSpotBugs;
+import static edu.polyu.util.Invoker.writeSettingFile;
 import static edu.polyu.util.Utility.CHECKSTYLE_MUTATION;
+import static edu.polyu.util.Utility.DIV_SELECTION;
+import static edu.polyu.util.Utility.GUIDED_LOCATION;
 import static edu.polyu.util.Utility.INFER_MUTATION;
+import static edu.polyu.util.Utility.NO_SELECTION;
 import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.Path2Last;
+import static edu.polyu.util.Utility.RANDOM_LOCATION;
+import static edu.polyu.util.Utility.RANDOM_SELECTION;
+import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.SINGLE_TESTING;
 import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
 import static edu.polyu.util.Utility.SONARQUBE_SEED_PATH;
 import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Utility.SonarQubeResultFolder;
+import static edu.polyu.util.Utility.SonarScannerPath;
+import static edu.polyu.util.Utility.SpotBugsClassFolder;
+import static edu.polyu.util.Utility.SpotBugsPath;
+import static edu.polyu.util.Utility.SpotBugsResultFolder;
 import static edu.polyu.util.Utility.THREAD_COUNT;
 import static edu.polyu.util.Utility.file2bugs;
 import static edu.polyu.util.Utility.file2report;
@@ -20,10 +38,16 @@ import static edu.polyu.util.Utility.getFilenamesFromFolder;
 import static edu.polyu.util.Utility.getProperty;
 import static edu.polyu.util.Utility.initThreadPool;
 import static edu.polyu.util.Utility.listAveragePartition;
+import static edu.polyu.util.Utility.mutantFolder;
 import static edu.polyu.util.Utility.readSonarQubeResultFile;
+import static edu.polyu.util.Utility.readSpotBugsResultFile;
 import static edu.polyu.util.Utility.sep;
+import static edu.polyu.util.Utility.subSeedFolderNameList;
 import static edu.polyu.util.Utility.waitThreadPoolEnding;
+import static edu.polyu.util.Utility.writeFileByLine;
 
+import java.io.File;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,6 +75,8 @@ import edu.polyu.thread.SonarQube_TransformThread;
 import edu.polyu.thread.SpotBugs_TransformThread;
 import edu.polyu.transform.SpotBugs_Exec;
 
+import javax.swing.*;
+
 /**
  * Description: This file is the main class for our framework
  * Author: Vanguard
@@ -69,7 +95,7 @@ public class Schedule {
     }
 
     public void executeCheckStyleMutation(String seedFolderPath) {
-        locateMutationCode(0, seedFolderPath);
+        locateMutationCode(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
@@ -98,7 +124,7 @@ public class Schedule {
     }
 
     public void executeSpotBugsMutation(String seedFolderPath) {
-        locateMutationCode(0, seedFolderPath);
+        locateMutationCode(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
@@ -141,7 +167,7 @@ public class Schedule {
     }
 
     public void executePMDMutation(String seedFolderPath) {
-        locateMutationCode(0, seedFolderPath);
+        locateMutationCode(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
@@ -193,27 +219,87 @@ public class Schedule {
         waitThreadPoolEnding(threadPool);
     }
 
+    public void singleThreadWorker(ArrayDeque<TypeWrapper> wrappers) {
+        int currentDepth = 0;
+        for (int i = 1; i <= SEARCH_DEPTH; i++) {  // perform BFS-based program transformation
+            singleLevelExplorer(wrappers, currentDepth++);
+            for(String subSeedFolderName : subSeedFolderNameList) {
+                String subSeedFolderPath = mutantFolder + File.separator + "iter" + (i - 1) + "_" + subSeedFolderName;
+                String settingPath = subSeedFolderPath + File.separator + "settings";
+                writeSettingFile(subSeedFolderPath, settingPath);
+                String[] invokeCommands = new String[3];
+                if (OSUtil.isWindows()) {
+                    invokeCommands[0] = "cmd.exe";
+                    invokeCommands[1] = "/c";
+                } else {
+                    invokeCommands[0] = "/bin/bash";
+                    invokeCommands[1] = "-c";
+                }
+                invokeCommands[2] = SonarScannerPath + " -Dproject.settings=" + settingPath;
+                boolean hasExec = invokeCommandsByZT(invokeCommands);
+                if(hasExec) {
+                    String[] curlCommands = new String[4];
+                    curlCommands[0] = "curl";
+                    curlCommands[1] = "-u";
+                    curlCommands[2] = "sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9:";
+                    curlCommands[3] = "http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";
+                    String jsonContent = invokeCommandsByZT(curlCommands, "json");
+                    String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter" + i + "_" + subSeedFolderNameList.get(i) + ".json";
+                    writeFileByLine(reportPath, jsonContent);
+                    readSonarQubeResultFile(jsonContent);
+                } else {
+                    System.err.println("Fail to execute SonarQube in: " + subSeedFolderPath);
+                }
+            }
+//            for (TypeWrapper wrapper : wrappers) {
+//                String seedFilePath = wrapper.getFilePath();
+//                String[] tokens = seedFilePath.split(sep);
+//                String seedFileNameWithSuffix = tokens[tokens.length - 1];
+//                String subSeedFolderName = tokens[tokens.length - 2];
+//                String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
+//                String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+//                String[] invokeCmds = new String[3];
+//                String settingPath = "";
+//                if (OSUtil.isWindows()) {
+//                    invokeCmds[0] = "cmd.exe";
+//                    invokeCmds[1] = "/c";
+//                } else {
+//                    invokeCmds[0] = "/bin/bash";
+//                    invokeCmds[1] = "-c";
+//                }
+//                invokeCmds[2] = SonarScannerPath + " -Dproject.settings=" + settingPath;
+//                boolean hasExec = invokeCommandsByZT(invokeCmds);
+//                if (hasExec) {
+//                    String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+//                    readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
+//                }
+//            }
+            List<TypeWrapper> validWrappers = new ArrayList<>();
+            while (!wrappers.isEmpty()) {
+                TypeWrapper head = wrappers.pollFirst();
+                if (!head.isBuggy()) {
+                    validWrappers.add(head);
+                }
+            }
+            wrappers.addAll(validWrappers);
+        }
+    }
+
     public void executeSonarQubeMutation(String seedFolderPath) {
-        locateMutationCode(0, seedFolderPath);
-        ExecutorService threadPool = initThreadPool();
-        List<TypeWrapper> initWrappers = new ArrayList<>();
+        locateMutationCode(seedFolderPath);
+        ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
         for(String filepath : file2report.keySet()) {
             String[] tokens = filepath.split(sep);
             String folderName = tokens[tokens.length - 2];
             TypeWrapper wrapper = new TypeWrapper(filepath, folderName);
-            initWrappers.add(wrapper);
+            wrappers.add(wrapper);
         }
-        System.out.println("All Initial Wrapper Size: " + initWrappers.size());
-        List<List<TypeWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
-        for(int i = 0; i < lists.size(); i++) {
-            SonarQube_TransformThread thread = new SonarQube_TransformThread(lists.get(i));
-            threadPool.submit(thread);
-        }
-        waitThreadPoolEnding(threadPool);
+        System.out.println("All Initial Wrapper Size: " + wrappers.size());
+        singleThreadWorker(wrappers);
     }
 
     public void executeInferMutation(String seedFolderPath) {
-        locateMutationCode(0, seedFolderPath);
+        locateMutationCode(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
@@ -251,31 +337,26 @@ public class Schedule {
     }
 
     // This function only can invoke static analysis tool and cannot include other parts.
-    public void locateMutationCode(int iterDepth, String seedFolderPath) {
+    public void locateMutationCode(String seedFolderPath) {
         String seedFolderName = Path2Last(seedFolderPath);
-        System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=" + iterDepth);
-        if (SONARQUBE_MUTATION) {
-
-//            System.out.println("Begin to Analyze first round SonarQube Result File...");
-//            String initReportPath = "/home/vanguard/evaluation/SonarQube_Seeds1.csv";
-//            readSonarQubeResultFile(initReportPath, SONARQUBE_SEED_PATH);
-//            System.out.println("Init Finished! Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
-//            return;
-        }
+        System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=0");
         if (INFER_MUTATION) {
-            invokeInfer(iterDepth, seedFolderPath);
+            invokeInfer(seedFolderPath);
         }
         if (CHECKSTYLE_MUTATION) {
-            invokeCheckStyle(iterDepth, seedFolderPath);
+            invokeCheckStyle(seedFolderPath);
         }
         if (PMD_MUTATION) {
-            invokePMD(iterDepth, seedFolderPath);
+            invokePMD(seedFolderPath);
         }
         if (SPOTBUGS_MUTATION) {
             invokeSpotBugs(seedFolderPath);
         }
+        if (SONARQUBE_MUTATION) {
+            invokeSonarQube(seedFolderPath);
+        }
         if (SINGLE_TESTING) {
-            System.out.println("Iteration Level: " + iterDepth + ", File Size: " + file2bugs.keySet().size());
+            System.out.println("Init File Size: " + file2bugs.keySet().size());
         }
     }
 
