@@ -16,9 +16,6 @@ import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -29,14 +26,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,7 +118,7 @@ public class Utility {
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
-    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Small";
+    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Test";
 
     // mutants
     public final static File mutantFolder = new File(EVALUATION_PATH + File.separator + "mutants");
@@ -160,6 +154,8 @@ public class Utility {
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
+
+    public static List<String> failedReport = new ArrayList<>();
 
     public static void initEnv() {
         String sp;
@@ -441,7 +437,7 @@ public class Utility {
                 String componentPath = issueNode.get("component").asText().split(":")[1];
                 String seedFilePath = PROJECT_PATH + File.separator + componentPath;
                 SonarQube_Report report;
-                if(seedFilePath.contains(seedFilePath)) {
+                if(path2report.containsKey(seedFilePath)) {
                     report = path2report.get(seedFilePath);
                 } else {
                     report = new SonarQube_Report(seedFilePath);
@@ -471,92 +467,16 @@ public class Utility {
         }
     }
 
-//    public static void old_readSonarQubeResultFile(String reportPath, String seedFolderPath) {
-//        if (SINGLE_TESTING) {
-//            System.out.println("SonarQube Detection Resutl FileName: " + reportPath);
-//        }
-//        HashMap<String, SonarQube_Report> name2report = new HashMap<>();
-//        try {
-//            Reader reader = new FileReader(reportPath);
-//            CSVParser format = CSVFormat.EXCEL.withFirstRecordAsHeader()
-//                    .withIgnoreHeaderCase()
-//                    .withTrim()
-//                    .withDelimiter('\t')
-//                    .parse(reader);
-//            List<CSVRecord> records = format.getRecords();
-////            CSVFormat format = CSVFormat.EXCEL.withHeader(FILE_HEADER).withSkipHeaderRecord(true)
-////                    .withIgnoreEmptyLines(true)
-////                    .withTrim()
-////                    .withDelimiter('\t');
-////            Reader in = new FileReader(reportPath);
-////            Iterable<CSVRecord> records = format.parse(in);
-//            String lineNumber, bugType, component, flows;
-//            for (CSVRecord record : records) {
-//                lineNumber = record.get("line");
-//                if (lineNumber.trim().equals("-")) {
-//                    continue;
-//                }
-//                bugType = record.get("rule");
-//                component = record.get("component");
-//                flows = record.get("flows");
-//                String file;
-//                if (component.contains(".java")) {
-//                    file = component;
-//                } else {
-//                    if (flows.contains(".java")) {
-//                        file = flows;
-//                    } else {
-//                        continue;
-//                    }
-//                }
-//                String filepath = seedFolderPath + File.separator + file.substring(file.indexOf(":") + 1);
-//                if (!name2report.containsKey(filepath)) {
-//                    SonarQube_Report report = new SonarQube_Report(filepath);
-//                    name2report.put(filepath, report);
-//                }
-//                SonarQube_Report report = name2report.get(filepath);
-//                if (lineNumber.contains(".0")) {
-//                    lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
-//                }
-//                try {
-//                    SonarQube_Violation violation = new SonarQube_Violation(bugType, Integer.parseInt(lineNumber));
-//                    report.addViolation(violation);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        for(SonarQube_Report report : name2report.values()) {
-//            file2report.put(report.getFilepath(), report);
-//            if (!file2row.containsKey(report.getFilepath())) {
-//                file2row.put(report.getFilepath(), new ArrayList<>());
-//                file2bugs.put(report.getFilepath(), new HashMap<>());
-//            }
-//            for (SonarQube_Violation violation : report.getViolations()) {
-//                file2row.get(report.getFilepath()).add(violation.getBeginLine());
-//                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-//                if (!bug2cnt.containsKey(violation.getBugType())) {
-//                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
-//                }
-//                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-//            }
-//        }
-//    }
-
     public static void readCheckStyleResultFile(String reportPath) { // one report -> one file
         HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
+        File checkFile = new File(reportPath);
+        if(!checkFile.exists()) {
+            return;
+        }
+        List<String> errorInstances = new ArrayList<>();
         try {
-            File checkFile = new File(reportPath);
-            if(!checkFile.exists()) {
-                return;
-            }
             FileInputStream inputStream = new FileInputStream(reportPath);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            List<String> errorInstances = new ArrayList<>();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.contains("[ERROR]")) {
@@ -565,58 +485,54 @@ public class Utility {
             }
             inputStream.close();
             bufferedReader.close();
-            String filepath;
-            for (String errorInstance : errorInstances) {
-                int startIndex = errorInstance.indexOf(' ') + 1, endIndex = -1;
-                for (int i = startIndex + 1; i < errorInstance.length(); i++) {
-                    if (errorInstance.charAt(i) == ' ') {
-                        endIndex = i;
-                        break;
-                    }
-                }
-                if (endIndex == -1) {
-                    return;
-//                    System.err.println("End Index Error!");
-//                    System.exit(-1);
-                }
-                String content = errorInstance.substring(startIndex, endIndex);
-                int index1 = content.indexOf(".java") + ".java".length(), index2 = -1;
-                if (content.charAt(index1) != ':') {
-                    return;
-//                    System.err.println("Index1 Error!");
-//                    System.exit(-1);
-                }
-                for (int i = index1 + 1; i < content.length(); i++) {
-                    if (content.charAt(i) == ':') {
-                        index2 = i;
-                        break;
-                    }
-                }
-                filepath = content.substring(0, index1);
-                int row = 0, col = -1;
-                try {
-                    row = Integer.parseInt(content.substring(index1 + 1, index2));
-                    if (index2 < content.length() - 1) {
-                        col = Integer.parseInt(content.substring(index2 + 1, content.length() - 1));
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                CheckStyle_Violation violation = new CheckStyle_Violation(filepath);
-                violation.setBeginLine(row);
-                index1 = errorInstance.lastIndexOf('[');
-                String bugType = errorInstance.substring(index1 + 1, errorInstance.length() - 1);
-                violation.setBugType(bugType);
-                if (name2report.containsKey(filepath)) {
-                    name2report.get(filepath).addViolation(violation);
-                } else {
-                    CheckStyle_Report newReport = new CheckStyle_Report(filepath);
-                    newReport.addViolation(violation);
-                    name2report.put(filepath, newReport);
-                }
-            }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        String filepath;
+        for (String errorInstance : errorInstances) {
+            int startIndex = errorInstance.indexOf(' ') + 1, endIndex = -1;
+            for (int i = startIndex + 1; i < errorInstance.length(); i++) {
+                if (errorInstance.charAt(i) == ' ') {
+                    endIndex = i;
+                    break;
+                }
+            }
+            if (endIndex == -1) {
+                return;
+            }
+            String content = errorInstance.substring(startIndex, endIndex);
+            int index1 = content.indexOf(".java") + ".java".length(), index2 = -1;
+            if (content.charAt(index1) != ':') {
+                return;
+            }
+            for (int i = index1 + 1; i < content.length(); i++) {
+                if (content.charAt(i) == ':') {
+                    index2 = i;
+                    break;
+                }
+            }
+            filepath = content.substring(0, index1);
+            int row = 0, col = -1;
+            try {
+                row = Integer.parseInt(content.substring(index1 + 1, index2));
+//                    if (index2 < content.length() - 1) {
+//                        col = Integer.parseInt(content.substring(index2 + 1, content.length() - 1));
+//                    }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            CheckStyle_Violation violation = new CheckStyle_Violation(filepath);
+            violation.setBeginLine(row);
+            index1 = errorInstance.lastIndexOf('[');
+            String bugType = errorInstance.substring(index1 + 1, errorInstance.length() - 1);
+            violation.setBugType(bugType);
+            if (name2report.containsKey(filepath)) {
+                name2report.get(filepath).addViolation(violation);
+            } else {
+                CheckStyle_Report newReport = new CheckStyle_Report(filepath);
+                newReport.addViolation(violation);
+                name2report.put(filepath, newReport);
+            }
         }
         for (CheckStyle_Report report : name2report.values()) {
             file2report.put(report.getFilepath(), report);
@@ -635,7 +551,7 @@ public class Utility {
         }
     }
 
-    public static List<String> failedReport = new ArrayList<>();
+
 
     // seedFolderPath has iter depth information
     public static void readInferResultFile(String seedFilepath, String reportPath) {

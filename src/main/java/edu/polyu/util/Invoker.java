@@ -214,20 +214,21 @@ public class Invoker {
         }
     }
 
-    public static void writeSettingFile(String path2test, String settingFilePath) {
+    // Add setting and dummy-binaries folder for SonarQube seed folder
+    public static void writeSettingFile(String seedFolderPath, String settingFilePath) {
         List<String> contents = new ArrayList<>();
         contents.add("sonar.projectKey=Statfier\nsonar.projectName=Statfier\nsonar.projectVersion=1.0");
         contents.add("sonar.login=" + SONARQUBE_PROJECT_KEY);
         contents.add("sonar.sourceEncoding=UTF-8");
         contents.add("sonar.scm.disabled=true");
         contents.add("sonar.cpd.exclusions=**/*");
-        contents.add("sonar.sources=" + path2test);
+        contents.add("sonar.sources=" + seedFolderPath);
         contents.add("sonar.java.source=17");
-        File dummyFolder = new File(path2test + File.separator + "dummy-binaries");
+        File dummyFolder = new File(seedFolderPath + File.separator + "dummy-binaries");
         if(!dummyFolder.exists()) {
             dummyFolder.mkdir();
         }
-        File dummyFile = new File(path2test + File.separator + "dummy-binaries" + File.separator + "dummy.txt");
+        File dummyFile = new File(seedFolderPath + File.separator + "dummy-binaries" + File.separator + "dummy.txt");
         if(!dummyFile.exists()) {
             try {
                 dummyFile.createNewFile();
@@ -258,7 +259,6 @@ public class Invoker {
             }
             invokeCommands[2] = SonarScannerPath + " -Dproject.settings=" + settingPath;
             invokeCommandsByZT(invokeCommands);
-//            System.out.println("SonarQube Result Folder: xxx");
             String[] curlCommands = new String[4];
             curlCommands[0] = "curl";
             curlCommands[1] = "-u";
