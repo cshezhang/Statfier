@@ -426,7 +426,7 @@ public class Utility {
         return true;
     }
 
-    public static void readSonarQubeResultFile(String jsonContent) {
+    public static void readSonarQubeResultFile(String jsonContent, String subSeedFolderPath) {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, SonarQube_Report> path2report = new HashMap<>(); // seed path -> report
         try {
@@ -435,7 +435,7 @@ public class Utility {
             for (int i = 0; i < issueNodes.size(); i++) {
                 JsonNode issueNode = issueNodes.get(i);
                 String componentPath = issueNode.get("component").asText().split(":")[1];
-                String seedFilePath = PROJECT_PATH + File.separator + componentPath;
+                String seedFilePath = subSeedFolderPath + File.separator + componentPath;
                 SonarQube_Report report;
                 if(path2report.containsKey(seedFilePath)) {
                     report = path2report.get(seedFilePath);

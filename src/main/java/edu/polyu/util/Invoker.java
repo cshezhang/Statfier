@@ -243,7 +243,8 @@ public class Invoker {
 
     public static void invokeSonarQube(String seedFolderPath) {
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderNameList.get(i);
+            String subSeedFolderName = subSeedFolderNameList.get(i);
+            String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             if(SINGLE_TESTING) {
                 System.out.println("Seed path: " + subSeedFolderPath);
             }
@@ -265,9 +266,9 @@ public class Invoker {
             curlCommands[2] = "sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9:";
             curlCommands[3] = "http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";
             String jsonContent = invokeCommandsByZT(curlCommands, "json");
-            String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + ".json";
+            String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderName + ".json";
             writeFileByLine(reportPath, jsonContent);
-            readSonarQubeResultFile(jsonContent);
+            readSonarQubeResultFile(jsonContent, subSeedFolderPath);
         }
     }
 

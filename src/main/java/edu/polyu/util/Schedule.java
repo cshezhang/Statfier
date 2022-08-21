@@ -54,26 +54,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.report.CheckStyle_Report;
-import edu.polyu.report.CheckStyle_Violation;
-import edu.polyu.report.Infer_Report;
-import edu.polyu.report.Infer_Violation;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.PMD_Violation;
-import edu.polyu.report.SonarQube_Report;
-import edu.polyu.report.SonarQube_Violation;
-import edu.polyu.report.SpotBugs_Report;
-import edu.polyu.report.SpotBugs_Violation;
 import edu.polyu.thread.CheckStyle_TransformThread;
 import edu.polyu.thread.Infer_TransformThread;
 import edu.polyu.thread.PMD_TransformThread;
-import edu.polyu.thread.SonarQube_TransformThread;
 import edu.polyu.thread.SpotBugs_TransformThread;
 import edu.polyu.transform.SpotBugs_Exec;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
 
 import javax.swing.*;
 
@@ -246,7 +234,7 @@ public class Schedule {
                     String jsonContent = invokeCommandsByZT(curlCommands, "json");
                     String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter" + i + "_" + subSeedFolderNameList.get(i) + ".json";
                     writeFileByLine(reportPath, jsonContent);
-                    readSonarQubeResultFile(jsonContent);
+                    readSonarQubeResultFile(jsonContent, subSeedFolderPath);
                 } else {
                     System.err.println("Fail to execute SonarQube in: " + subSeedFolderPath);
                 }
