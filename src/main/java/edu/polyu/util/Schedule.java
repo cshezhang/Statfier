@@ -56,6 +56,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import edu.polyu.analysis.TypeWrapper;
+import edu.polyu.report.Report;
+import edu.polyu.report.SpotBugs_Report;
+import edu.polyu.report.SpotBugs_Violation;
 import edu.polyu.thread.CheckStyle_TransformThread;
 import edu.polyu.thread.Infer_TransformThread;
 import edu.polyu.thread.PMD_TransformThread;
@@ -109,6 +112,25 @@ public class Schedule {
             threadPool.submit(mutationThread);
         }
         waitThreadPoolEnding(threadPool);
+    }
+
+    public void testSpotBugsCoverage(String seedFolderPath) {
+        String seedFolderName = Path2Last(seedFolderPath);
+        System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=0");
+        invokeSpotBugs(seedFolderPath);
+        HashSet<String> bugTypes = new HashSet<>();
+        for(Map.Entry<String, Report> entry : file2report.entrySet()) {
+            System.out.println("Processing file: " + entry.getKey());
+            SpotBugs_Report report = (SpotBugs_Report) entry.getValue();
+            for(SpotBugs_Violation violation : report.getViolations()) {
+                bugTypes.add(violation.getBugType());
+                System.out.println(violation.getBugType());
+            }
+        }
+        for(String bugType : bugTypes) {
+            System.out.println(bugType);
+        }
+        System.out.println("Bug Type Size: " + bugTypes.size());
     }
 
     public void executeSpotBugsMutation(String seedFolderPath) {

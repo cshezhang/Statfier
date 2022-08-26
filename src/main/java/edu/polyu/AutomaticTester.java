@@ -29,6 +29,7 @@ import static edu.polyu.util.Utility.INFER_MUTATION;
 import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
 import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
+import static edu.polyu.util.Utility.TEST_COVERAGE;
 import static edu.polyu.util.Utility.compactIssues;
 import static edu.polyu.util.Utility.failedReport;
 import static edu.polyu.util.Utility.initEnv;
@@ -53,7 +54,11 @@ public class AutomaticTester {
                 schedule.executePMDMutation(sourceSeedPath);
             }
             if (SPOTBUGS_MUTATION) {
-                schedule.executeSpotBugsMutation(sourceSeedPath);
+                if(TEST_COVERAGE) {
+                    schedule.testSpotBugsCoverage(sourceSeedPath);
+                } else {
+                    schedule.executeSpotBugsMutation(sourceSeedPath);
+                }
             }
             if (CHECKSTYLE_MUTATION) {
                 schedule.executeCheckStyleMutation(sourceSeedPath);

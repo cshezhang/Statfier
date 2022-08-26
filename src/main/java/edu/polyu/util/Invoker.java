@@ -217,8 +217,9 @@ public class Invoker {
     // Add setting and dummy-binaries folder for SonarQube seed folder
     public static void writeSettingFile(String seedFolderPath, String settingFilePath) {
         List<String> contents = new ArrayList<>();
-        contents.add("sonar.projectKey=Statfier\nsonar.projectName=Statfier\nsonar.projectVersion=1.0");
-        contents.add("sonar.login=" + SONARQUBE_PROJECT_KEY);
+        contents.add("sonar.projectKey=" + SONARQUBE_PROJECT_KEY);
+        contents.add("sonar.projectName=Statfier\nsonar.projectVersion=1.0");
+        contents.add("sonar.login=" + SONARQUBE_LOGIN);
         contents.add("sonar.sourceEncoding=UTF-8");
         contents.add("sonar.scm.disabled=true");
         contents.add("sonar.cpd.exclusions=**/*");
@@ -258,6 +259,7 @@ public class Invoker {
                 invokeCommands[0] = "/bin/bash";
                 invokeCommands[1] = "-c";
             }
+            System.out.println(settingPath);
             invokeCommands[2] = SonarScannerPath + " -Dproject.settings=" + settingPath;
             invokeCommandsByZT(invokeCommands);
             String[] curlCommands = new String[4];
