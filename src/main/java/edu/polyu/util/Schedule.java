@@ -119,13 +119,8 @@ public class Schedule {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + seedFolderName + ", Depth=0");
         invokeSpotBugs(seedFolderPath);
         HashSet<String> bugTypes = new HashSet<>();
-        for(Map.Entry<String, Report> entry : file2report.entrySet()) {
-            System.out.println("Processing file: " + entry.getKey());
-            SpotBugs_Report report = (SpotBugs_Report) entry.getValue();
-            for(SpotBugs_Violation violation : report.getViolations()) {
-                bugTypes.add(violation.getBugType());
-                System.out.println(violation.getBugType());
-            }
+        for(HashMap<String, List<Integer>> entry : file2bugs.values()) {
+            bugTypes.addAll(entry.keySet());
         }
         for(String bugType : bugTypes) {
             System.out.println(bugType);

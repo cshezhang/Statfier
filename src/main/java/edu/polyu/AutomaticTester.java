@@ -56,6 +56,7 @@ public class AutomaticTester {
             if (SPOTBUGS_MUTATION) {
                 if(TEST_COVERAGE) {
                     schedule.testSpotBugsCoverage(sourceSeedPath);
+                    System.exit(0);
                 } else {
                     schedule.executeSpotBugsMutation(sourceSeedPath);
                 }
