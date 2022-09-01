@@ -60,10 +60,9 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static edu.polyu.util.Utility.COMPILE;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.Path2Last;
 import static edu.polyu.util.Utility.compactIssues;
 import static edu.polyu.util.Utility.file2bugs;
@@ -253,27 +252,23 @@ public class TypeWrapper {
     // This method can be invoked only if the source code file has generated.
     public boolean writeToJavaFile() {
         String code = this.getCode();
-//        String formattedCode;
         try {
             File file = new File(this.filePath);
             if (!file.exists()) {
                 file.createNewFile();
             }
-//            formattedCode = new Formatter().formatSource(code);
-//            if (code.contains("enum ")) {
-//                formattedCode = new Formatter().formatSource(code);
-//            } else {
-//                formattedCode = code;
-//            }
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-            return true;
+            if(DEBUG_STATFIER) {
+                System.out.println("Writing Variant Path: " + this.filePath);
+            }
         } catch (IOException e) {
             System.err.println("Fail to Write to Java File!");
             e.printStackTrace();
+            return false;
         }
-        return false;
+        return true;
     }
 
     public void printBasicInfo() {
@@ -618,6 +613,9 @@ public class TypeWrapper {
                     for (ASTNode targetNode : targetNodes) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                         String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
+                        if(DEBUG_STATFIER) {
+                            System.out.println("Try to write file: " + mutantPath);
+                        }
                         String content = this.document.get();
                         TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
                         // Node to be transformed
@@ -642,6 +640,9 @@ public class TypeWrapper {
                         }
                         boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                         if (hasMutated) {
+                            if(DEBUG_STATFIER) {
+                                System.out.println("Success to write the file.");
+                            }
                             succMutation.addAndGet(1);
                             newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
@@ -658,6 +659,7 @@ public class TypeWrapper {
 //                                mutant2seq.put(newMutant.filePath, newMutant.transSeq.toString());
 //                            }
                         } else {
+                            System.out.println("Fail to write the file!");
                             failMutation.addAndGet(1);
                             Files.deleteIfExists(Paths.get(mutantPath));
                         }

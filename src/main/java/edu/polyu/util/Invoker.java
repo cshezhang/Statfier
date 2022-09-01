@@ -8,21 +8,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import edu.polyu.report.CheckStyle_Report;
-import edu.polyu.report.Infer_Report;
-import edu.polyu.report.PMD_Report;
 import edu.polyu.thread.CheckStyle_InvokeThread;
 import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
-import edu.polyu.thread.SonarQube_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
+import static edu.polyu.util.Utility.CNES_PATH;
+import static edu.polyu.util.Utility.CNES_ReportName;
 import static edu.polyu.util.Utility.CheckStyleResultFolder;
 import static edu.polyu.util.Utility.INFER_MUTATION;
 import static edu.polyu.util.Utility.InferResultFolder;
@@ -30,16 +25,15 @@ import static edu.polyu.util.Utility.JAVAC_PATH;
 import static edu.polyu.util.Utility.PMDResultFolder;
 import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.Path2Last;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.SONARQUBE_LOGIN;
+import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
 import static edu.polyu.util.Utility.SONARQUBE_PROJECT_KEY;
+import static edu.polyu.util.Utility.SONAR_SCANNER_PATH;
 import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
 import static edu.polyu.util.Utility.SonarQubeResultFolder;
-import static edu.polyu.util.Utility.SonarScannerPath;
 import static edu.polyu.util.Utility.SpotBugsResultFolder;
-import static edu.polyu.util.Utility.THREAD_COUNT;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
-import static edu.polyu.util.Utility.getProperty;
 import static edu.polyu.util.Utility.inferJarStr;
 import static edu.polyu.util.Utility.initThreadPool;
 import static edu.polyu.util.Utility.readCheckStyleResultFile;
@@ -54,7 +48,7 @@ import static edu.polyu.util.Utility.waitThreadPoolEnding;
 import static edu.polyu.util.Utility.writeFileByLine;
 
 
-/*
+/**
  * @Description: This class is used for different invocation functions.
  * @Author: Vanguard
  * @Date: 2021-10-27 14:20:55
@@ -62,26 +56,6 @@ import static edu.polyu.util.Utility.writeFileByLine;
 public class Invoker {
 
     public static List<String> failedCommands = new ArrayList<>();
-
-    public static String invokeCommandsByZT(String[] cmdArgs, String returnFormat) {
-        StringBuilder argStr = new StringBuilder();
-        for (String arg : cmdArgs) {
-            argStr.append(arg + " ");
-        }
-        try {
-            ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
-            String out = new ProcessExecutor().command(cmdArgs).readOutput(true).redirectError(errorStream).execute().outputUTF8();
-            if(returnFormat.equalsIgnoreCase("json")) {
-                return out;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            System.err.println(argStr);
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public static boolean invokeCommandsByZT(String[] cmdArgs) {
         StringBuilder argStr = new StringBuilder();
@@ -91,24 +65,28 @@ public class Invoker {
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
             int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
-//            System.out.println("Error: " + new String(errorStream.toByteArray()));
-            // CheckStyle Return value is the number of bugs.
+            // CheckStyle Return value is the number of bugs, hence regard it.
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.err.println("Execute PMD Error!");
                 System.err.println(argStr);
                 return false;
             }
             if(SPOTBUGS_MUTATION && exitValue != 0) {
-//                System.err.println("Execute SpotBugs Error!");
-//                System.err.println(argStr);
                 failedCommands.add(argStr.toString());
                 return false;
             }
             if(INFER_MUTATION && exitValue != 0) {
-                System.err.println("Exit Value: " + exitValue);
+                System.err.println("Invoke Infer Error Value: " + exitValue);
                 System.err.println("Execute Infer Error!");
                 System.err.println(argStr);
-                System.err.println("Error: " + new String(errorStream.toByteArray()));
+                System.err.println("Error Msg: " + new String(errorStream.toByteArray()));
+                System.exit(-1);
+                return false;
+            }
+            if(SONARQUBE_MUTATION && exitValue != 0) {
+                System.err.println("Invoke SonarQube Error and Return Value: " + exitValue);
+                System.err.println(argStr);
+                System.err.println("Error Msg: " + new String(errorStream.toByteArray()));
                 System.exit(-1);
                 return false;
             }
@@ -163,7 +141,7 @@ public class Invoker {
 
     // folderPath is purely folder path and doesn't contain java file name.
     public static boolean compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
-        if(SINGLE_TESTING) {
+        if(DEBUG_STATFIER) {
             System.out.println("Compiling: " + fileName);
         }
         if(!fileName.endsWith(".java")) {
@@ -193,7 +171,7 @@ public class Invoker {
         if(seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
-        if(SINGLE_TESTING) {
+        if(DEBUG_STATFIER) {
             System.out.println("Invoke SpotBugs Path: " + seedFolderPath);
         }
         ExecutorService threadPool = initThreadPool();
@@ -218,13 +196,14 @@ public class Invoker {
     public static void writeSettingFile(String seedFolderPath, String settingFilePath) {
         List<String> contents = new ArrayList<>();
         contents.add("sonar.projectKey=" + SONARQUBE_PROJECT_KEY);
-        contents.add("sonar.projectName=Statfier\nsonar.projectVersion=1.0");
+        contents.add("sonar.projectName=" + SONARQUBE_PROJECT_KEY);
+        contents.add("sonar.projectVersion=1.0");
         contents.add("sonar.login=" + SONARQUBE_LOGIN);
         contents.add("sonar.sourceEncoding=UTF-8");
         contents.add("sonar.scm.disabled=true");
         contents.add("sonar.cpd.exclusions=**/*");
         contents.add("sonar.sources=" + seedFolderPath);
-        contents.add("sonar.java.source=17");
+        contents.add("sonar.java.source=11");
         File dummyFolder = new File(seedFolderPath + File.separator + "dummy-binaries");
         if(!dummyFolder.exists()) {
             dummyFolder.mkdir();
@@ -246,7 +225,7 @@ public class Invoker {
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
-            if(SINGLE_TESTING) {
+            if(DEBUG_STATFIER) {
                 System.out.println("Seed path: " + subSeedFolderPath);
             }
             String settingPath = subSeedFolderPath + File.separator + "settings";
@@ -259,18 +238,31 @@ public class Invoker {
                 invokeCommands[0] = "/bin/bash";
                 invokeCommands[1] = "-c";
             }
-            System.out.println(settingPath);
-            invokeCommands[2] = SonarScannerPath + " -Dproject.settings=" + settingPath;
-            invokeCommandsByZT(invokeCommands);
-            String[] curlCommands = new String[4];
-            curlCommands[0] = "curl";
-            curlCommands[1] = "-u";
-            curlCommands[2] = "sqp_b5cd7ba6cd143a589260158df861fcf43a20f5b9:";
-            curlCommands[3] = "http://localhost:9000/api/issues/search?componentKeys=Statfier&facets=types&facetMode=count";
-            String jsonContent = invokeCommandsByZT(curlCommands, "json");
-            String reportPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderName + ".json";
-            writeFileByLine(reportPath, jsonContent);
-            readSonarQubeResultFile(jsonContent, subSeedFolderPath);
+            System.out.println("Setting file path: " + settingPath);
+            invokeCommands[2] = SONAR_SCANNER_PATH + " -Dproject.settings=" + settingPath;
+            invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
+            try {
+                Thread.currentThread().sleep(3000);
+            } catch (InterruptedException e) {
+                System.err.println("Interrupt waiting SQ!");
+            }
+            String reportFolderPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderName;
+            List<String> CNES_Commands = new ArrayList<>();
+            CNES_Commands.add("java");
+            CNES_Commands.add("-jar");
+            CNES_Commands.add(CNES_PATH);
+            CNES_Commands.add("-p");
+            CNES_Commands.add(SONARQUBE_PROJECT_KEY);
+            CNES_Commands.add("-t");
+            CNES_Commands.add(SONARQUBE_LOGIN);
+            CNES_Commands.add("-m");
+            CNES_Commands.add("-w");
+            CNES_Commands.add("-e");
+            CNES_Commands.add("-o");
+            CNES_Commands.add(reportFolderPath);
+            invokeCommandsByZT(CNES_Commands.toArray(new String[CNES_Commands.size()]));  // invoke CNES to export analysis report
+            String reportPath = reportFolderPath + File.separator + CNES_ReportName;
+            readSonarQubeResultFile(reportPath);
         }
     }
 

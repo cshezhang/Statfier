@@ -5,10 +5,10 @@ import edu.polyu.util.OSUtil;
 import java.io.File;
 
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.SONARQUBE_LOGIN;
 import static edu.polyu.util.Utility.SONARQUBE_PROJECT_KEY;
-import static edu.polyu.util.Utility.SonarScannerPath;
+import static edu.polyu.util.Utility.SONAR_SCANNER_PATH;
 
 public class SonarQube_InvokeThread implements Runnable {
 
@@ -23,7 +23,7 @@ public class SonarQube_InvokeThread implements Runnable {
     @Override
     public void run() {
         // seedFileName is used to specify class folder name
-        if(SINGLE_TESTING) {
+        if(DEBUG_STATFIER) {
             System.out.println("Seed path: " + seedFolderPath + File.separator + seedFolderName);
         }
         String[] invokeCommands = new String[3];
@@ -34,7 +34,7 @@ public class SonarQube_InvokeThread implements Runnable {
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
         }
-        invokeCommands[2] = SonarScannerPath
+        invokeCommands[2] = SONAR_SCANNER_PATH
                 + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
                 + " -Dsonar.sources=" + this.seedFolderPath
                 + " -Dsonar.host.url=http://localhost:9000"

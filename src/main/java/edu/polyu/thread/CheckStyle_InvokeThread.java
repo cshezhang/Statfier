@@ -9,7 +9,7 @@ import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Utility.CheckStyleConfigPath;
 import static edu.polyu.util.Utility.CheckStylePath;
 import static edu.polyu.util.Utility.CheckStyleResultFolder;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
 
 public class CheckStyle_InvokeThread implements Runnable {
@@ -48,7 +48,7 @@ public class CheckStyle_InvokeThread implements Runnable {
                 invokeCmds[1] = "-c";
             }
             invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filepath;
-            if(SINGLE_TESTING) {
+            if(DEBUG_STATFIER) {
                 System.out.println(invokeCmds[2]);
             }
             invokeCommandsByZT(invokeCmds);

@@ -29,7 +29,7 @@ import static edu.polyu.util.Utility.Path2Last;
 import static edu.polyu.util.Utility.RANDOM_LOCATION;
 import static edu.polyu.util.Utility.RANDOM_SELECTION;
 import static edu.polyu.util.Utility.SEARCH_DEPTH;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.file2bugs;
 import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.util.Utility.file2row;
@@ -59,7 +59,7 @@ public class CheckStyle_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            if(SINGLE_TESTING) {
+            if(DEBUG_STATFIER) {
                 System.out.println("TransformThread Depth: " + depth + " Folder: " + this.seedFolderName);
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
@@ -88,7 +88,7 @@ public class CheckStyle_TransformThread implements Runnable {
                 }
                 invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
                                 + configPath + " " + mutantFilePath;
-                if(SINGLE_TESTING) {
+                if(DEBUG_STATFIER) {
                     System.out.println(invokeCmds[2]);
                 }
                 invokeCommandsByZT(invokeCmds);

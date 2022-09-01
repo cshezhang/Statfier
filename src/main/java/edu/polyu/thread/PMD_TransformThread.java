@@ -25,7 +25,7 @@ import static edu.polyu.util.Utility.RANDOM_LOCATION;
 import static edu.polyu.util.Utility.RANDOM_SELECTION;
 import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.DIV_SELECTION;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.file2bugs;
 import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.util.Utility.file2row;
@@ -61,7 +61,7 @@ public class PMD_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            if(SINGLE_TESTING) {
+            if(DEBUG_STATFIER) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);

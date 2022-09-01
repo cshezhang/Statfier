@@ -2,18 +2,13 @@ package edu.polyu.thread;
 
 import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.Infer_Report;
-import edu.polyu.report.Infer_Violation;
 import edu.polyu.util.OSUtil;
 
 import java.io.File;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
-import static edu.polyu.analysis.SelectionAlgorithm.Random_Selection;
-import static edu.polyu.analysis.SelectionAlgorithm.Div_Selection;
 import static edu.polyu.transform.Transform.singleLevelExplorer;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
 import static edu.polyu.util.Utility.*;
@@ -46,7 +41,7 @@ public class Infer_TransformThread extends Thread {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            if(SINGLE_TESTING) {
+            if(DEBUG_STATFIER) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
@@ -59,7 +54,7 @@ public class Infer_TransformThread extends Thread {
                 String srcJavaPath = filepaths.get(i);
                 String filename = Path2Last(srcJavaPath);
                 String reportFolderPath = InferResultFolder + File.separator + "iter" + depth + "_" + filename;
-                String cmd = InferPath + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
+                String cmd = INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
                         " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
                         " -cp " + inferJarStr + " " + srcJavaPath;
                 System.out.println(this.getName() + "-" + cmd);

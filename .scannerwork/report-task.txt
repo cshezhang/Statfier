@@ -1,6 +1,6 @@
-projectKey=Statfier
+projectKey=AutomaticTester
 serverUrl=http://localhost:9000
-serverVersion=9.6.0.59041
-dashboardUrl=http://localhost:9000/dashboard?id=Statfier
-ceTaskId=AYLU9raRQ9708uS-JwYV
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYLU9raRQ9708uS-JwYV
+serverVersion=8.9.9.56886
+dashboardUrl=http://localhost:9000/dashboard?id=AutomaticTester
+ceTaskId=AYLz9LxmHT3vr1Cki7OW
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYLz9LxmHT3vr1Cki7OW

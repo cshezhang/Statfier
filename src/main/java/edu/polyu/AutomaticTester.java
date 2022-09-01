@@ -29,7 +29,6 @@ import static edu.polyu.util.Utility.INFER_MUTATION;
 import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
 import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
-import static edu.polyu.util.Utility.TEST_COVERAGE;
 import static edu.polyu.util.Utility.compactIssues;
 import static edu.polyu.util.Utility.failedReport;
 import static edu.polyu.util.Utility.initEnv;
@@ -44,22 +43,17 @@ import static edu.polyu.util.Utility.EVALUATION_PATH;
  */
 public class AutomaticTester {
 
+    // Main Automatic Entry
     public static void main(String[] args) {
         long time1 = System.currentTimeMillis();
         initEnv();
         Schedule schedule = Schedule.getInstance();
         try {
-            // Main Automatic Entry
             if (PMD_MUTATION) {
                 schedule.executePMDMutation(sourceSeedPath);
             }
             if (SPOTBUGS_MUTATION) {
-                if(TEST_COVERAGE) {
-                    schedule.testSpotBugsCoverage(sourceSeedPath);
-                    System.exit(0);
-                } else {
-                    schedule.executeSpotBugsMutation(sourceSeedPath);
-                }
+                schedule.executeSpotBugsMutation(sourceSeedPath);
             }
             if (CHECKSTYLE_MUTATION) {
                 schedule.executeCheckStyleMutation(sourceSeedPath);
@@ -99,7 +93,7 @@ public class AutomaticTester {
                 }
                 root.put("Results", bugs);
                 File jsonFile = new File(EVALUATION_PATH + File.separator + "results" + File.separator + rule + ".json");
-                if(!jsonFile.exists()) {
+                if (!jsonFile.exists()) {
                     jsonFile.createNewFile();
                 }
                 FileWriter jsonWriter = new FileWriter(jsonFile);
@@ -118,7 +112,7 @@ public class AutomaticTester {
             res.append("Succ Transform: " + succMutation + "\n");
             res.append("Fail Transform: " + failMutation + "\n");
             res.append("Mutant2Seed:\n");
-            for(Map.Entry<String, String> entry : mutant2seed.entrySet()) {
+            for (Map.Entry<String, String> entry : mutant2seed.entrySet()) {
                 res.append(entry.getKey() + "->" + entry.getValue() + "#" + mutant2seq.get(entry.getKey()) + "\n");
             }
             long executionTime = System.currentTimeMillis() - startTimeStamp;
@@ -134,15 +128,15 @@ public class AutomaticTester {
             FileWriter writer = new FileWriter(resFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             bufferedWriter.write(res.toString());
-            if(INFER_MUTATION) {
+            if (INFER_MUTATION) {
                 bufferedWriter.write("Failed Reports:\n");
-                for(String report : failedReport) {
+                for (String report : failedReport) {
                     bufferedWriter.write(report + "\n");
                 }
             }
-            if(SPOTBUGS_MUTATION) {
+            if (SPOTBUGS_MUTATION) {
                 bufferedWriter.write("Failed Commands:\n");
-                for(String failedCmd : failedCommands) {
+                for (String failedCmd : failedCommands) {
                     bufferedWriter.write(failedCmd + "\n");
                 }
             }
@@ -150,7 +144,7 @@ public class AutomaticTester {
             writer.close();
             System.out.println("Cnt1: " + cnt1);
             System.out.println("Cnt2: " + cnt2);
-            System.out.println("Ratio: " + cnt2 / (double)(cnt1));
+            System.out.println("Ratio: " + cnt2 / (double) (cnt1));
             long OVERALL_EXEC_TIME = System.currentTimeMillis() - time1;
             long minutes = (OVERALL_EXEC_TIME / 1000) / 60;
             long seconds = (OVERALL_EXEC_TIME / 1000) % 60;

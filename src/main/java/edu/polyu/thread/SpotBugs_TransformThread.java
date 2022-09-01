@@ -25,7 +25,7 @@ import static edu.polyu.util.Utility.NO_SELECTION;
 import static edu.polyu.util.Utility.RANDOM_LOCATION;
 import static edu.polyu.util.Utility.RANDOM_SELECTION;
 import static edu.polyu.util.Utility.SEARCH_DEPTH;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.SpotBugsClassFolder;
 import static edu.polyu.util.Utility.SpotBugsPath;
 import static edu.polyu.util.Utility.SpotBugsResultFolder;

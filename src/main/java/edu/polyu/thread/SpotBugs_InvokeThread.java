@@ -7,7 +7,7 @@ import java.util.List;
 
 import static edu.polyu.util.Invoker.compileJavaSourceFile;
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.SpotBugsClassFolder;
 import static edu.polyu.util.Utility.SpotBugsPath;
 import static edu.polyu.util.Utility.SpotBugsResultFolder;
@@ -37,7 +37,7 @@ public class SpotBugs_InvokeThread implements Runnable {
             compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
 //            String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
             String reportPath = SpotBugsResultFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
-            if(SINGLE_TESTING) {
+            if(DEBUG_STATFIER) {
                 System.out.println("Report: " + reportPath);
             }
             String[] invokeCommands = new String[3];

@@ -18,7 +18,7 @@ import static edu.polyu.util.Utility.GUIDED_LOCATION;
 import static edu.polyu.util.Utility.NO_SELECTION;
 import static edu.polyu.util.Utility.RANDOM_LOCATION;
 import static edu.polyu.util.Utility.RANDOM_SELECTION;
-import static edu.polyu.util.Utility.SINGLE_TESTING;
+import static edu.polyu.util.Utility.DEBUG_STATFIER;
 import static edu.polyu.util.Utility.random;
 
 /*
@@ -41,7 +41,7 @@ public abstract class Transform {
     static {
         transforms = new ArrayList<>();
         name2transform = new HashMap<>();
-        if (SINGLE_TESTING) {
+        if (DEBUG_STATFIER) {
 //            transforms.add(AddArgAssignment.getInstance());
 //            transforms.add(AddBrackets.getInstance());
             transforms.add(AddControlBranch.getInstance());
@@ -108,7 +108,7 @@ public abstract class Transform {
     public static long cnt1 = 0;
     public static long cnt2 = 0;
 
-    public static void singleLevelExplorer(ArrayDeque<TypeWrapper> wrappers, int currentDepth) {
+    public static void singleLevelExplorer(ArrayDeque<TypeWrapper> wrappers, int currentDepth) {  // Current depth means the depth of variants in wrappers, not the iteration level
         while (!wrappers.isEmpty()) {
             TypeWrapper wrapper = wrappers.pollFirst();
             if (wrapper.depth == currentDepth) {
@@ -118,6 +118,12 @@ public abstract class Transform {
                         mutants = wrapper.TransformByGuidedLocation();
                     } else if (RANDOM_LOCATION) {
                         mutants = wrapper.TransformByRandomLocation();
+                    }
+                    if(DEBUG_STATFIER) {
+                        System.out.println("Mutant Size: " + mutants.size());
+                        for(TypeWrapper type : wrappers) {
+                            System.out.println("Mutant Path: " + type.getFilePath());
+                        }
                     }
                     cnt1 += mutants.size();
                     List<TypeWrapper> reducedMutants = null;

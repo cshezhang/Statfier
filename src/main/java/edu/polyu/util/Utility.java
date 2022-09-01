@@ -16,6 +16,9 @@ import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SonarQube_Violation;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.report.SpotBugs_Violation;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -26,18 +29,22 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -65,19 +72,18 @@ public class Utility {
         }
     }
 
-    public static final boolean TEST_COVERAGE = Boolean.parseBoolean(getProperty("TEST_COVERAGE"));
     public static final boolean NO_SELECTION = Boolean.parseBoolean(getProperty("NO_SELECTION"));
     public static final boolean RANDOM_SELECTION = Boolean.parseBoolean(getProperty("RANDOM_SELECTION"));
     public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
     //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
+    public static String PROJECT_PATH = getProperty("PROJECT_PATH");
     public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
-    public static String PROJECT_PATH = System.getProperty("user.dir");
     public static int SEED_INDEX = Integer.parseInt(getProperty("SEED_INDEX"));
 
-    public final static boolean SINGLE_TESTING = Boolean.parseBoolean(getProperty("SINGLE_TESTING"));
+    public final static boolean DEBUG_STATFIER = Boolean.parseBoolean(getProperty("DEBUG"));
     public final static boolean RANDOM_LOCATION = Boolean.parseBoolean(getProperty("RANDOM_LOCATION"));
     public final static boolean GUIDED_LOCATION = Boolean.parseBoolean(getProperty("GUIDED_LOCATION"));
 
@@ -100,6 +106,9 @@ public class Utility {
 
     public static final String sep = "/|\\\\";
 
+    public static final Date date = new Date();
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+    public static final String CNES_ReportName = sdf.format(date) + "-" + SONARQUBE_PROJECT_KEY + "-issues-report.csv";
     public static final SecureRandom random = new SecureRandom();
     public static final long RANDOM_SEED1 = 1649250511;
     public static final long RANDOM_SEED2 = 815954400;
@@ -111,11 +120,11 @@ public class Utility {
     // seeds, these variables
     public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
     public final static String AST_TESTING_PATH = "." + File.separator + "src" + File.separator + "test" + File.separator + "java" + File.separator + "ASTTestingCases";
-    public final static String SINGLE_TESTING_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
+    public final static String DEBUG_STATFIER_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
     //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
     public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Large";
     public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large";
-//    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
+    //    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
     public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
@@ -137,10 +146,13 @@ public class Utility {
 
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
-    public final static String InferPath = getProperty("INFER_PATH");
-    public final static String SonarScannerPath = getProperty("SONAR_SCANNER_PATH");
+    public final static String INFER_PATH = getProperty("INFER_PATH");
+    public final static String CNES_PATH = getProperty("CNES_PATH");
+
+    public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
     //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
 //    public final static String InferPath = "infer";
+
     public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + File.separator + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath + File.separator + "Infer_Dependency", true);
@@ -149,7 +161,7 @@ public class Utility {
     public static StringBuilder inferJarStr = new StringBuilder();
 
     public static HashMap<String, List<Integer>> file2row = new HashMap<>(); // String: filename -> List: row numbers of different bugs
-//    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> List: buggy column numbers
+    //    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> List: buggy column numbers
     public static HashMap<String, Report> file2report = new HashMap<>();
     public static HashMap<String, HashMap<String, List<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
 
@@ -175,39 +187,35 @@ public class Utility {
             inferJarStr.append(inferJarList.get(i) + sp);
         }
         inferJarStr.append(inferJarList.get(0));
-        if(SEED_INDEX == 1) {
+        if (SEED_INDEX == 1) {
             random.setSeed(RANDOM_SEED1);
         }
-        if(SEED_INDEX == 2) {
+        if (SEED_INDEX == 2) {
             random.setSeed(RANDOM_SEED2);
         }
-        if(SEED_INDEX == 3) {
+        if (SEED_INDEX == 3) {
             random.setSeed(RANDOM_SEED3);
         }
-        if(SEED_INDEX == 4) {
+        if (SEED_INDEX == 4) {
             random.setSeed(RANDOM_SEED4);
         }
-        if(SEED_INDEX == 5) {
+        if (SEED_INDEX == 5) {
             random.setSeed(RANDOM_SEED5);
         }
-        if (SINGLE_TESTING) {
-            sourceSeedPath = SINGLE_TESTING_PATH;
-        } else {
-            if (PMD_MUTATION) {
-                sourceSeedPath = PMD_SEED_PATH;
-            }
-            if (SPOTBUGS_MUTATION) {
-                sourceSeedPath = SPOTBUGS_SEED_PATH;
-            }
-            if (SONARQUBE_MUTATION) {
-                sourceSeedPath = SONARQUBE_SEED_PATH;
-            }
-            if (CHECKSTYLE_MUTATION) {
-                sourceSeedPath = CHECKSTYLE_SEED_PATH;
-            }
-            if (INFER_MUTATION) {
-                sourceSeedPath = INFER_SEED_PATH;
-            }
+        if (PMD_MUTATION) {
+            sourceSeedPath = PMD_SEED_PATH;
+        }
+        if (SPOTBUGS_MUTATION) {
+            sourceSeedPath = SPOTBUGS_SEED_PATH;
+        }
+        if (SONARQUBE_MUTATION) {
+            sourceSeedPath = SONARQUBE_SEED_PATH;
+        }
+        if (CHECKSTYLE_MUTATION) {
+            sourceSeedPath = CHECKSTYLE_SEED_PATH;
+        }
+        if (INFER_MUTATION) {
+            sourceSeedPath = INFER_SEED_PATH;
         }
         try {
             File ud = new File(EVALUATION_PATH);
@@ -259,14 +267,14 @@ public class Utility {
             InferClassFolder.mkdir();
             InferResultFolder.mkdir();
         }
-        if(SONARQUBE_MUTATION) {
+        if (SONARQUBE_MUTATION) {
             SonarQubeResultFolder.mkdir();
         }
     }
 
     public static ExecutorService initThreadPool() {
         ExecutorService threadPool;
-        if(Boolean.parseBoolean(getProperty("FIXED_THREAD_POOL"))) {
+        if (Boolean.parseBoolean(getProperty("FIXED_THREAD_POOL"))) {
             threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
         } else {
             if (Boolean.parseBoolean(getProperty("CACHED_THREAD_POOL"))) {
@@ -427,31 +435,92 @@ public class Utility {
         return true;
     }
 
-    public static void readSonarQubeResultFile(String jsonContent, String subSeedFolderPath) {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, SonarQube_Report> path2report = new HashMap<>(); // seed path -> report
-        try {
-            JsonNode rootNode = mapper.readTree(jsonContent);
-            JsonNode issueNodes = rootNode.get("issues");
-            for (int i = 0; i < issueNodes.size(); i++) {
-                JsonNode issueNode = issueNodes.get(i);
-                String componentPath = issueNode.get("component").asText().split(":")[1];
-                String seedFilePath = subSeedFolderPath + File.separator + componentPath;
-                SonarQube_Report report;
-                if(path2report.containsKey(seedFilePath)) {
-                    report = path2report.get(seedFilePath);
-                } else {
-                    report = new SonarQube_Report(seedFilePath);
-                    path2report.put(seedFilePath, report);
-                }
-                SonarQube_Violation violation = new SonarQube_Violation(issueNode);
-                report.addViolation(violation);
-            }
-        } catch (JsonProcessingException e) {
-            System.err.println("Error in Json Processing.");
-            e.printStackTrace();
+    public static void readSonarQubeResultFile(String reportPath) {
+        if (DEBUG_STATFIER) {
+            System.out.println("SonarQube Detection Result FileName: " + reportPath);
         }
-        for(SonarQube_Report report : path2report.values()) {
+        HashMap<String, SonarQube_Report> name2report = new HashMap<>();
+//        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
+//                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
+        File reportFile = new File(reportPath);
+        if (!reportFile.exists()) {
+            System.out.println("Report Path: " + reportFile.getAbsoluteFile());
+            System.exit(-1);
+        }
+        Reader reader;
+        CSVParser format;
+        List<CSVRecord> records = null;
+        try {
+            reader = new FileReader(reportPath);
+            format = CSVFormat.EXCEL.withFirstRecordAsHeader()
+                    .withIgnoreHeaderCase()
+                    .withTrim()
+                    .withDelimiter('\t')
+                    .parse(reader);
+            records = format.getRecords();
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot find SonarQube report file by path!");
+            System.exit(-1);
+        } catch (IOException e) {
+            System.err.println("IO error in parsing SonarQube report!");
+            System.exit(-1);
+        }
+        String lineNumber, bugType, component, flows;
+        if(records.isEmpty()) {
+            System.err.println("Empty Record Path: " + reportPath);
+            System.exit(-1);
+        }
+        CSVRecord testRecord = records.get(0);
+        boolean textRange = false;
+        for (String item : testRecord.toList()) {
+            if (item.equals("textRange")) {
+                textRange = true;
+            }
+        }
+        for (CSVRecord record : records) {
+            if (textRange) {
+                String tuples = record.get("line");
+                int startIndex = tuples.indexOf('=');
+                int endIndex = tuples.indexOf(',');
+                lineNumber = tuples.substring(startIndex + 1, endIndex);
+            } else {
+                lineNumber = record.get("line");
+            }
+            if (lineNumber.trim().equals("-")) {
+                continue;
+            }
+            bugType = record.get("rule");
+            component = record.get("component");
+            flows = record.get("flows");
+            String file;
+            if (component.contains(".java")) {
+                file = component;
+            } else {
+                if (flows.contains(".java")) {
+                    file = flows;
+                } else {
+                    continue;
+                }
+            }
+            String filepath;
+            if(reportPath.contains("iter0")) {
+                filepath = PROJECT_PATH + File.separator + file.substring(file.indexOf(":") + 1);
+            } else {
+                filepath = EVALUATION_PATH + File.separator + file.substring(file.indexOf(":") + 1);
+            }
+            if (!name2report.containsKey(filepath)) {
+                SonarQube_Report report = new SonarQube_Report(filepath);
+                name2report.put(filepath, report);
+            }
+            SonarQube_Report report = name2report.get(filepath);
+            if (lineNumber.contains(".0")) {
+                lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
+            }
+            SonarQube_Violation violation = new SonarQube_Violation(bugType, Integer.parseInt(lineNumber));
+            report.addViolation(violation);
+        }
+
+        for (SonarQube_Report report : name2report.values()) {
             file2report.put(report.getFilepath(), report);
             if (!file2row.containsKey(report.getFilepath())) {
                 file2row.put(report.getFilepath(), new ArrayList<>());
@@ -471,7 +540,7 @@ public class Utility {
     public static void readCheckStyleResultFile(String reportPath) { // one report -> one file
         HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
         File checkFile = new File(reportPath);
-        if(!checkFile.exists()) {
+        if (!checkFile.exists()) {
             return;
         }
         List<String> errorInstances = new ArrayList<>();
@@ -553,7 +622,6 @@ public class Utility {
     }
 
 
-
     // seedFolderPath has iter depth information
     public static void readInferResultFile(String seedFilepath, String reportPath) {
         HashMap<String, Infer_Report> name2report = new HashMap<>();
@@ -600,8 +668,8 @@ public class Utility {
 
     // Variable seedFolderPath contains sub seed folder name
     public static void readSpotBugsResultFile(String seedFolderPath, String reportPath) {
-        if (SINGLE_TESTING) {
-            System.out.println("SpotBugs Detection Resutl FileName: " + reportPath);
+        if (DEBUG_STATFIER) {
+            System.out.println("SpotBugs Detection Result FileName: " + reportPath);
         }
         HashMap<String, SpotBugs_Report> filepath2report = new HashMap<>();
         SAXReader saxReader = new SAXReader();
@@ -662,7 +730,7 @@ public class Utility {
             System.err.println("GetDirectFile Cannot find: " + path);
         }
         for (File file : files) {
-            if(file.getName().charAt(0) == '.') {
+            if (file.getName().charAt(0) == '.') {
                 continue;
             }
             fileList.add(file.getAbsolutePath());
@@ -689,7 +757,7 @@ public class Utility {
             System.exit(-1);
         }
         for (File file : files) {
-            if(file.getName().charAt(0) == '.') {
+            if (file.getName().charAt(0) == '.') {
                 continue;
             }
             if (file.isDirectory()) {

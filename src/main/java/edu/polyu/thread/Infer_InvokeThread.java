@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.List;
 
 import static edu.polyu.util.Invoker.invokeCommandsByZT;
+import static edu.polyu.util.Utility.INFER_PATH;
 import static edu.polyu.util.Utility.InferClassFolder;
-import static edu.polyu.util.Utility.InferPath;
 import static edu.polyu.util.Utility.InferResultFolder;
 import static edu.polyu.util.Utility.JAVAC_PATH;
 import static edu.polyu.util.Utility.Path2Last;
@@ -40,7 +40,7 @@ public class Infer_InvokeThread implements Runnable {
             String srcJavaPath = filepaths.get(i);
             String filename = Path2Last(srcJavaPath);
             String reportFolderPath = InferResultFolder + File.separator + "iter" + iterDepth + "_" + filename;
-            String cmd = "\"" + InferPath + " run -o " + reportFolderPath + " -- " + JAVAC_PATH +
+            String cmd = "\"" + INFER_PATH + " run -o " + reportFolderPath + " -- " + JAVAC_PATH +
                     " -d " + InferClassFolder.getAbsolutePath() + File.separator + filename +
                     " -cp " + inferJarStr + " " + srcJavaPath + "\"";
             String[] invokeCmds = new String[3];
