@@ -179,7 +179,7 @@ public class TypeWrapper {
     }
 
     private void parse2nodes() {
-        this.parser = ASTParser.newParser(AST.JLS3);
+        this.parser = ASTParser.newParser(AST.JLS11);
         this.parser.setCompilerOptions(compilerOptions);
         this.parser.setSource(document.get().toCharArray());
         this.cu = (CompilationUnit) parser.createAST(null);

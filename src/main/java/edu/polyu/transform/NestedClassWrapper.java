@@ -29,8 +29,7 @@ public class NestedClassWrapper extends Transform {
 
     private static NestedClassWrapper nestedClassWrapper = new NestedClassWrapper();
 
-    private NestedClassWrapper() {
-    }
+    private NestedClassWrapper() {}
 
     public static NestedClassWrapper getInstance() {
         return nestedClassWrapper;

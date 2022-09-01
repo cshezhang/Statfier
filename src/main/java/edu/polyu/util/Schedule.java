@@ -11,7 +11,6 @@ import static edu.polyu.util.Invoker.writeSettingFile;
 import static edu.polyu.util.Utility.CNES_PATH;
 import static edu.polyu.util.Utility.CNES_ReportName;
 import static edu.polyu.util.Utility.EVALUATION_PATH;
-import static edu.polyu.util.Utility.PROJECT_PATH;
 import static edu.polyu.util.Utility.Path2Last;
 import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.DEBUG_STATFIER;
@@ -44,8 +43,8 @@ import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.thread.CheckStyle_TransformThread;
 import edu.polyu.thread.Infer_TransformThread;
 import edu.polyu.thread.PMD_TransformThread;
+import edu.polyu.thread.SpotBugs_Exec;
 import edu.polyu.thread.SpotBugs_TransformThread;
-import edu.polyu.transform.SpotBugs_Exec;
 
 /**
  * Description: This file is the main class for our framework

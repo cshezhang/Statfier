@@ -118,8 +118,8 @@ public class AutomaticTester {
             long executionTime = System.currentTimeMillis() - startTimeStamp;
             res.append(String.format(
                     "Overall Execution Time is: " + String.format("%d min, %d sec",
-                            TimeUnit.MILLISECONDS.toMinutes(executionTime),
-                            TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
+                        TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                        TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
             );
             File resFile = new File(EVALUATION_PATH + File.separator + "Output.log");
             if (!resFile.exists()) {

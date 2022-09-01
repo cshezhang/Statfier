@@ -147,7 +147,7 @@ public class Utility {
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
     public final static String INFER_PATH = getProperty("INFER_PATH");
-    public final static String CNES_PATH = getProperty("CNES_PATH");
+    public final static String CNES_PATH = toolPath + File.separator + "sonar-cnes-report-4.1.2.jar";
 
     public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
     //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
