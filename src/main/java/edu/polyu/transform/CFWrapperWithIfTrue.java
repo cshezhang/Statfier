@@ -42,14 +42,14 @@ public class CFWrapperWithIfTrue extends Transform {
                 return false;
             }
         }
-        IfStatement ifStatement = ast.newIfStatement();
+        IfStatement newIfStatement = ast.newIfStatement();
         Block block = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
         block.statements().add(newStatement);
-        ifStatement.setExpression(ast.newBooleanLiteral(true));
-        ifStatement.setThenStatement(block);
-        astRewrite.replace(srcNode, ifStatement, null);
-        wrapper.getPriorNodes().add(ifStatement.getExpression());
+        newIfStatement.setExpression(ast.newBooleanLiteral(true));
+        newIfStatement.setThenStatement(block);
+        astRewrite.replace(srcNode, newIfStatement, null);
+        wrapper.getPriorNodes().add(newIfStatement.getExpression());
         return true;
     }
 
