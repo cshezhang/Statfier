@@ -1,3 +1,6 @@
+import junit.framework.JUnit4TestAdapter;
+import junit.framework.TestCase;
+
 import java.util.ArrayList;
 
 /**
@@ -5,7 +8,7 @@ import java.util.ArrayList;
  * Author: Vanguard
  * Date: 2022/9/1 15:30
  */
-public class ASTCase {
+public class ASTCase extends TestCase {
 
     public void foo() {
         if(1 == 2) {}

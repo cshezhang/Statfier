@@ -6,6 +6,7 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static edu.polyu.analysis.TypeWrapper.checkClassProperty;
 import static edu.polyu.analysis.TypeWrapper.createMethodSignature;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
 import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
@@ -74,7 +76,7 @@ public class AnonymousClassWrapper extends Transform {
             // Init value of new FieldDeclaration
             VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
             fragment.setInitializer(instanceCreation);
-            fragment.setName(ast.newSimpleName("anonymousClassWrapper_" + varCounter++));
+            fragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
             // insert new FieldStatement containing Anonymous class
             FieldDeclaration newFieldDeclaration = ast.newFieldDeclaration(fragment);
             newFieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
@@ -99,7 +101,7 @@ public class AnonymousClassWrapper extends Transform {
                 // Init value of new FieldDeclaration
                 VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
                 fragment.setInitializer(instanceCreation);
-                fragment.setName(ast.newSimpleName("anonymousClassWrapper_" + varCounter++));
+                fragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
                 // insert new FieldStatement containing Anonymous class
                 FieldDeclaration newNode = ast.newFieldDeclaration(fragment);
                 newNode.setType(ast.newSimpleType(ast.newSimpleName("Object")));
@@ -120,7 +122,7 @@ public class AnonymousClassWrapper extends Transform {
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfNode(node);
-        if(clazz == null || clazz.isInterface()) {
+        if(!checkClassProperty(clazz)) {
             return nodes;
         }
         MethodDeclaration method = getDirectMethodOfNode(node);

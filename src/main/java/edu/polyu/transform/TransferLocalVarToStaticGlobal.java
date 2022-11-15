@@ -47,7 +47,7 @@ public class TransferLocalVarToStaticGlobal extends Transform {
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetLiteral = (Expression) targetNode;  // Notice check, hence, targetNode is literal.
         TypeDeclaration clazz = getClassOfNode(srcNode);
-        String newVarName = "t2sg" + varCounter++;
+        String newVarName = "LOCAL_STATIC" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         newVdFragment.setName(newVar);

@@ -77,7 +77,10 @@ public class AddControlBranch extends Transform {
             VariableDeclarationFragment oldFragment = (VariableDeclarationFragment) oldVdStatement.fragments().get(0);
             VariableDeclarationFragment newFragment = ast.newVariableDeclarationFragment();
             newFragment.setName(ast.newSimpleName(oldFragment.getName().toString()));
-            newFragment.setExtraDimensions(oldFragment.getExtraDimensions());
+            for(int i = 0; i < oldFragment.getExtraDimensions(); i++) {
+                newFragment.extraDimensions().add(ASTNode.copySubtree(ast, (ASTNode) oldFragment.extraDimensions().get(i)));
+            }
+//            newFragment.setExtraDimensions(oldFragment.getExtraDimensions());
             VariableDeclarationStatement newVdStatement = ast.newVariableDeclarationStatement(newFragment);
             newVdStatement.setType((Type) ASTNode.copySubtree(ast, oldVdStatement.getType()));
             Assignment assignment = ast.newAssignment();

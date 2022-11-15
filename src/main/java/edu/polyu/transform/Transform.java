@@ -72,7 +72,7 @@ public abstract class Transform {
             transforms.add(AddControlBranch.getInstance());
             transforms.add(AddGlobalAssignment.getInstance());
             transforms.add(AddLocalAssignment.getInstance());
-            transforms.add(AddMethodCallToLiteral.getInstance());
+//            transforms.add(AddMethodCallToLiteral.getInstance());
             transforms.add(AddRedundantLiteral.getInstance());
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());

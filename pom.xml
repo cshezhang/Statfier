@@ -17,7 +17,7 @@
         <dependency>
             <groupId>net.sourceforge.pmd</groupId>
             <artifactId>pmd-java</artifactId>
-            <version>6.47.0</version>
+            <version>6.51.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

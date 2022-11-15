@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static edu.polyu.analysis.TypeWrapper.checkClassProperty;
 import static edu.polyu.analysis.TypeWrapper.createMethodSignature;
 import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
 import static edu.polyu.analysis.TypeWrapper.getClassOfNode;
@@ -131,7 +132,7 @@ public class EnumClassWrapper extends Transform {
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
         TypeDeclaration clazz = getClassOfNode(node);
-        if(clazz == null || clazz.isInterface()) {  // filter interface, annotation, and enum
+        if(!checkClassProperty(clazz)) {
             return nodes;
         }
         MethodDeclaration method = getDirectMethodOfNode(node);

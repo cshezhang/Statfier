@@ -37,7 +37,10 @@ public class AddLocalAssignment extends Transform {
         Expression newInitializer = (Expression) ASTNode.copySubtree(ast, initializer);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         newVdFragment.setName(ast.newSimpleName(oldFragment.getName().toString()));
-        newVdFragment.setExtraDimensions(oldFragment.getExtraDimensions());
+        for(int i = 0; i < oldFragment.getExtraDimensions(); i++) {
+            newVdFragment.extraDimensions().add(ASTNode.copySubtree(ast, (ASTNode) oldFragment.extraDimensions().get(i)));
+        }
+//        newVdFragment.setExtraDimensions(oldFragment.getExtraDimensions());
         VariableDeclarationStatement newVdStatement = ast.newVariableDeclarationStatement(newVdFragment);
         newVdStatement.setType((Type) ASTNode.copySubtree(ast, oldVdStatement.getType()));
         if(!oldVdStatement.modifiers().isEmpty()) {

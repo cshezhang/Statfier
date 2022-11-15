@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -659,7 +660,6 @@ public class TypeWrapper {
 //                                mutant2seq.put(newMutant.filePath, newMutant.transSeq.toString());
 //                            }
                         } else {
-                            System.out.println("Fail to write the file!");
                             failMutation.addAndGet(1);
                             Files.deleteIfExists(Paths.get(mutantPath));
                         }
@@ -1112,6 +1112,26 @@ public class TypeWrapper {
         } else {
             return null;
         }
+    }
+
+    public static boolean checkClassProperty(TypeDeclaration clazz) {
+        if(clazz == null || clazz.isInterface()) {
+            return false;
+        }
+        if(clazz.getSuperclassType() != null && clazz.getSuperclassType().toString().contains("TestCase")) {
+            return false;
+        }
+        if(clazz.getParent() instanceof CompilationUnit) {
+            CompilationUnit cu = (CompilationUnit) clazz.getParent();
+            List<ImportDeclaration> imports = cu.imports();
+            for(ImportDeclaration im : imports) {
+                String name = im.getName().getFullyQualifiedName();
+                if(name.contains("org.junit.jupiter") || name.contains("org.junit")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static MethodDeclaration getDirectMethodOfNode(ASTNode node) {
