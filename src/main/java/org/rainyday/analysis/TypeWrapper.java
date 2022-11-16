@@ -1,5 +1,6 @@
 package org.rainyday.analysis;
 
+import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.rainyday.transform.Transform;
 import org.rainyday.util.TriTuple;
 import org.apache.commons.io.FileUtils;
@@ -53,6 +54,7 @@ import org.eclipse.text.edits.TextEdit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -373,8 +375,28 @@ public class TypeWrapper {
         // Perform intra-procedural def-use analysis to get all candidate statements in this function
         // We may construct a better data flow analysis here
         HashSet<String> sources = new HashSet<>();
+        List<ASTNode> methodNodes = new ArrayList<>();
         Expression rightExpression = null;
         for (ASTNode node : resNodes) {
+            if(node instanceof FieldDeclaration) {
+                String fieldName = ((VariableDeclarationFragment) ((FieldDeclaration) node).fragments().get(0)).getName().getFullyQualifiedName();
+                for(Map.Entry<String, List<ASTNode>> entry : this.method2statements.entrySet()) {
+                    List<ASTNode> statements = entry.getValue();
+                    for(ASTNode statement : statements) {
+                        if(statement instanceof VariableDeclarationStatement) {
+                            break;
+                        }
+                        if(statement instanceof ExpressionStatement && ((ExpressionStatement) statement).getExpression() instanceof Assignment) {
+                            for (ASTNode subNode : getChildrenNodes(statement)) {
+                                if (subNode instanceof SimpleName && ((SimpleName) subNode).getIdentifier().equals(fieldName)) {
+                                    methodNodes.add(statement);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             if (node instanceof VariableDeclarationStatement) {
                 rightExpression =
                         ((VariableDeclarationFragment)
@@ -436,6 +458,7 @@ public class TypeWrapper {
                 resNodes.remove(i);
             }
         }
+        resNodes.addAll(methodNodes);
         return resNodes;
     }
 

@@ -77,7 +77,7 @@ public class Utility {
     public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-    //    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
+//    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
     public static String PROJECT_PATH = getProperty("PROJECT_PATH");
     public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
