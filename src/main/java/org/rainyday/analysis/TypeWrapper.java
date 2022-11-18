@@ -304,8 +304,8 @@ public class TypeWrapper {
                 int line2 = this.cu.getLineNumber(method.getStartPosition() + method.getLength());
                 System.out.println(line1);
                 System.out.println(line2);
-                List<ASTNode> nnodes = getChildrenNodes(method);
-                System.out.println(nnodes);
+                List<ASTNode> subNodes = getChildrenNodes(method);
+                System.out.println(subNodes);
                 System.out.println("----------Method Name: " + method.getName() + "----------");
                 Block block = method.getBody();
                 if (block == null || block.statements().size() == 0) {
@@ -314,13 +314,13 @@ public class TypeWrapper {
                 List<Statement> statements = block.statements();
                 for (int i = 0; i < statements.size(); i++) {
                     Statement statement = (Statement) block.statements().get(i);
-                    List<ASTNode> subNodes = getChildrenNodes(statement);
+                    List<ASTNode> subSubNodes = getChildrenNodes(statement);
                     List<ASTNode> nodes = getChildrenNodes(statement);
                     for (ASTNode node : nodes) {
                         System.out.println(node + "  " + node.getClass() + "  " + String.format("0x%x", System.identityHashCode(node)));
                     }
                     System.out.println("-----------------");
-                    System.out.println(subNodes);
+                    System.out.println(subSubNodes);
                 }
             }
         }
