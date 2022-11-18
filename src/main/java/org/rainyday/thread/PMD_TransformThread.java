@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Invoker.invokeCommandsByZT;
+import static org.rainyday.util.Utility.PMD_PATH;
 
 /**
  * Description: This file is the MAIN class for testing PMD with multi threads

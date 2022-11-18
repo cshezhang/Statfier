@@ -106,10 +106,18 @@ public class AddControlBranch extends Transform {
             newIfStatement.setExpression(ast.newSimpleName(varName));
             newIfStatement.setThenStatement(thenBlock);
             newIfStatement.setElseStatement(elseBlock);
-            Block newBlock = ast.newBlock();
-            newBlock.statements().add(newBoolVdStatement);
-            newBlock.statements().add(newIfStatement);
-            astRewrite.replace(srcNode, newBlock, null);
+            if(srcNode.getParent() instanceof Block) {
+                ListRewrite listRewrite = astRewrite.getListRewrite(srcNode.getParent(), Block.STATEMENTS_PROPERTY);
+                listRewrite.insertAfter(newBoolVdStatement, srcNode, null);
+                listRewrite.insertAfter(newIfStatement, newBoolVdStatement, null);
+                listRewrite.remove(srcNode, null);
+            } else {
+                Block newBlock = ast.newBlock();
+                newBlock.statements().add(newBoolVdStatement);
+                newBlock.statements().add(newIfStatement);
+                astRewrite.replace(srcNode, newBlock, null);
+            }
+
         }
         return true;
     }

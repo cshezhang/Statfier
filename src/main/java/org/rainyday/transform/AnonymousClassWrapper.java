@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static org.rainyday.analysis.TypeWrapper.getChildrenNodes;
+
 public class AnonymousClassWrapper extends Transform {
 
     private static int varCounter;
@@ -120,8 +122,17 @@ public class AnonymousClassWrapper extends Transform {
         MethodDeclaration method = TypeWrapper.getDirectMethodOfNode(node);
         if (method == null) {
             if(TypeWrapper.getStatementOfNode(node) instanceof FieldDeclaration) {
+                List<ASTNode> subNodes = getChildrenNodes(node);
+                for(ASTNode subNode : subNodes) {
+                    if(subNode instanceof ThisExpression) {
+                        return nodes;
+                    }
+                }
                 nodes.add(node);  // FieldDeclaration
             }
+            return nodes;
+        }
+        if(method.getName().getIdentifier().toLowerCase().startsWith("test")) {
             return nodes;
         }
         List<ASTNode> modifiers = (List<ASTNode>) method.modifiers();
@@ -133,7 +144,7 @@ public class AnonymousClassWrapper extends Transform {
                 }
             }
         }
-        List<ASTNode> subNodes = TypeWrapper.getChildrenNodes(method);
+        List<ASTNode> subNodes = getChildrenNodes(method);
         boolean hasThis = false;
         for(ASTNode subNode : subNodes) {
             if(subNode instanceof ThisExpression) {

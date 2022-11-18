@@ -133,8 +133,17 @@ public class EnumClassWrapper extends Transform {
         MethodDeclaration method = TypeWrapper.getDirectMethodOfNode(node);
         if (method == null) {
             if(TypeWrapper.getStatementOfNode(node) instanceof FieldDeclaration) {
+                List<ASTNode> subNodes = getChildrenNodes(node);
+                for(ASTNode subNode : subNodes) {
+                    if(subNode instanceof ThisExpression) {
+                        return nodes;
+                    }
+                }
                 nodes.add(node);  // FieldDeclaration
             }
+            return nodes;
+        }
+        if(method.getName().getIdentifier().toLowerCase().startsWith("test")) {
             return nodes;
         }
         List<ASTNode> classModifiers = clazz.modifiers();

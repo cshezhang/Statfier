@@ -1,5 +1,6 @@
 package org.rainyday.transform;
 
+import org.rainyday.analysis.LoopStatement;
 import org.rainyday.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -36,9 +37,13 @@ public class LoopConversion2 extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         WhileStatement oldStatement = (WhileStatement) targetNode;
-        Expression condition = oldStatement.getExpression();
-        Expression newCondition = (Expression) ASTNode.copySubtree(ast, condition);
-        Statement newBody = (Statement) ASTNode.copySubtree(ast, oldStatement);
+        LoopStatement loopStatement = new LoopStatement(oldStatement);
+        if(!loopStatement.isReachable()) {
+            return false;
+        }
+        Expression oldCondition = oldStatement.getExpression();
+        Expression newCondition = (Expression) ASTNode.copySubtree(ast, oldCondition);
+        Statement newBody = (Statement) ASTNode.copySubtree(ast, oldStatement.getBody());
         DoStatement newStatement = ast.newDoStatement();
         newStatement.setExpression(newCondition);
         newStatement.setBody(newBody);

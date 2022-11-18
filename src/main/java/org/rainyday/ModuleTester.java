@@ -8,16 +8,16 @@ public class ModuleTester {
 
     @Test
     public void testAST() {
-        TypeWrapper wrapper = new TypeWrapper("src/test/java/ASTCase.java", "");
+        TypeWrapper wrapper = new TypeWrapper("src/test/java/Foo.java", "");
         wrapper.printBasicInfo();
     }
 
     @Test
     public void testPMD() {
         String[] pmdArgs = {
-                "-d", "./src/test/java/ASTCase.java",
+                "-d", "./TestCase/Case1.java",
 //                "-R", "./PMD_config.xml",
-                "-R", "category/java/design.xml/SingularField",
+//                "-R", "category/java/design.xml/SingularField",
 //                "-R", "category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal",
 //                "-R", "category/java/errorprone.xml/TestClassWithoutTestCases",
 //                "-R", "category/java/codestyle.xml/AvoidProtectedMethodInFinalClassNotExtending",
@@ -82,7 +82,7 @@ public class ModuleTester {
 //                "-R", "category/java/performance.xml/InsufficientStringBufferDeclaration",
 //                "-R", "category/java/performance.xml/UselessStringValueOf",
 //                "-R", "category/java/performance.xml/UseArraysAsList",
-//                "-R", "category/java/security.xml/HardCodedCryptoKey",
+                "-R", "category/java/security.xml/HardCodedCryptoKey",
 //                "-R", "category/java/security.xml/InsecureCryptoIv",
 //                "-R", "category/java/errorprone.xml/AvoidFieldNameMatchingMethodName",
                 "-f", "html",

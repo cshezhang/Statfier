@@ -1,6 +1,7 @@
 package org.rainyday.analysis;
 
 
+import net.sf.saxon.instruct.While;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.internal.compiler.ast.Literal;
 
@@ -51,7 +52,7 @@ public class LoopStatement {
         return this.expression;
     }
 
-    public boolean checkReachable() {
+    public boolean isReachable() {
         if(this.expression instanceof BooleanLiteral && !((BooleanLiteral) this.expression).booleanValue()) {
             return false;
         }
@@ -68,6 +69,27 @@ public class LoopStatement {
             return true;
         }
         return false;
+    }
+
+    public boolean isForStatement() {
+        return this.loopStatement instanceof ForStatement;
+    }
+
+    public boolean isWhileStatement() {
+        return this.loopStatement instanceof WhileStatement;
+    }
+
+    public boolean isDoStatement() {
+        return this.loopStatement instanceof DoStatement;
+    }
+
+    public boolean isEnhancedForStatement() {
+        return this.loopStatement instanceof EnhancedForStatement;
+    }
+
+    @Override
+    public String toString() {
+        return this.loopStatement.toString();
     }
 
 }

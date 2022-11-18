@@ -70,6 +70,7 @@ import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.compactIssues;
 import static org.rainyday.util.Utility.file2bugs;
 import static org.rainyday.util.Utility.file2row;
+import static org.rainyday.util.Utility.isInvalidModifier;
 import static org.rainyday.util.Utility.mutantCounter;
 import static org.rainyday.util.Utility.random;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
@@ -550,6 +551,7 @@ public class TypeWrapper {
     public static AtomicInteger validSeed = new AtomicInteger(0);
 
     public List<TypeWrapper> TransformByRandomLocation() {
+        List<TypeWrapper> newWrappers = new ArrayList<>();
         if (this.candidateNodes == null) {
             this.candidateNodes = this.allNodes;
         }
@@ -563,12 +565,15 @@ public class TypeWrapper {
         int cnt = file2row.get(this.filePath).size();
         System.out.println(cnt + " " + this.candidateNodes.size());
         int randomCount = 0;
-        List<TypeWrapper> newWrappers = new ArrayList<>();
         while (true) {
             if (++randomCount > cnt) {
                 break;
             }
             ASTNode candidateNode = this.candidateNodes.get(random.nextInt(this.candidateNodes.size()));
+            TypeDeclaration type = getClassOfNode(candidateNode);
+            if(isInvalidModifier(type)) {
+                continue;
+            }
             Transform transform = Transform.getTransformRandomly();
             List<ASTNode> targetNodes = transform.check(this, candidateNode);
             for (ASTNode targetNode : targetNodes) {
@@ -619,6 +624,9 @@ public class TypeWrapper {
     }
 
     public List<TypeWrapper> TransformByGuidedLocation() {
+        if(this.filePath.contains("HardCodedCryptoKey5")) {
+            int a = 10;
+        }
         List<TypeWrapper> newWrappers = new ArrayList<>();
         try {
             if (this.candidateNodes == null) {
@@ -632,6 +640,9 @@ public class TypeWrapper {
                 }
             }
             for (ASTNode candidateNode : candidateNodes) {
+                if(isInvalidModifier(candidateNode)) {
+                   continue;
+                }
                 for (Transform transform : Transform.getTransforms()) {
                     List<ASTNode> targetNodes = transform.check(this, candidateNode);
                     for (ASTNode targetNode : targetNodes) {

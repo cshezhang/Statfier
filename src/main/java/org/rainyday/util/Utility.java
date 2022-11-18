@@ -3,6 +3,9 @@ package org.rainyday.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.rainyday.analysis.TypeWrapper;
 
 import org.rainyday.report.CheckStyle_Report;
@@ -51,6 +54,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.rainyday.analysis.TypeWrapper.getClassOfNode;
 
 /**
  * @Description: Utility Class for SAMutator
@@ -122,11 +127,11 @@ public class Utility {
     public final static String AST_TESTING_PATH = "." + File.separator + "src" + File.separator + "test" + File.separator + "java" + File.separator + "ASTTestingCases";
     public final static String DEBUG_STATFIER_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
     //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
-    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Large";
-    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large";
+    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Test";
+    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Test";
     //    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
     public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
-    public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Seeds";
+    public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Large";
     public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
     public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Test";
 
@@ -145,6 +150,7 @@ public class Utility {
     public final static File SonarQubeResultFolder = new File(EVALUATION_PATH + File.separator + "SonarQube_Results");
 
     // tools
+    public final static String PMD_PATH = toolPath + File.separator + "PMD" + File.separator + "bin" + File.separator + "run.sh";
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
     public final static String INFER_PATH = getProperty("INFER_PATH");
     public final static String CNES_PATH = toolPath + File.separator + "sonar-cnes-report-4.1.2.jar";
@@ -808,6 +814,35 @@ public class Utility {
             filteredWrappers.add(wrappers.get(index));
         }
         return filteredWrappers;
+    }
+
+    public static boolean isInvalidModifier(ASTNode node) {
+        TypeDeclaration type = getClassOfNode(node);
+        if(type == null) {
+            return false;
+        }
+        List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
+        for(ASTNode m_node : modifiers) {
+            Modifier modifier = (Modifier) m_node;
+            if(modifier.isAbstract() || modifier.isNative()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isInvalidModifier(TypeDeclaration type) {
+        if(type == null) {
+            return false;
+        }
+        List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
+        for(ASTNode node : modifiers) {
+            Modifier modifier = (Modifier) node;
+            if(modifier.isAbstract() || modifier.isNative()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

@@ -42,15 +42,15 @@ public class LoopConversion1 extends Transform {
 
 
     @Override
-    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode broNode, ASTNode oldNode) {
+    public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode broNode, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-        LoopStatement loopStatement = new LoopStatement(oldNode);
-        if (loopStatement.checkReachable()) {
+        LoopStatement loopStatement = new LoopStatement(targetNode);
+        if (!loopStatement.isReachable()) {
             return false;
         }
         MethodInvocation newExpression = ast.newMethodInvocation();
-        if (loopStatement.getBody() instanceof EnhancedForStatement) {
+        if (loopStatement.isEnhancedForStatement()) {
             SimpleName varName = ast.newSimpleName(((SimpleName) loopStatement.getExpression()).getIdentifier());
             newExpression.setExpression(varName);
             newExpression.setName(ast.newSimpleName("forEach"));
@@ -62,11 +62,11 @@ public class LoopConversion1 extends Transform {
             lambdaExpression.setBody(ASTNode.copySubtree(ast, ((EnhancedForStatement) loopStatement.getBody()).getBody()));
             newExpression.arguments().add(lambdaExpression);
             ExpressionStatement newStatement = ast.newExpressionStatement(newExpression);
-            astRewrite.replace(oldNode, newStatement, null);
+            astRewrite.replace(targetNode, newStatement, null);
             return true;
         }
-        if (loopStatement.getBody() instanceof ForStatement) {
-            ForStatement forStatement = (ForStatement) oldNode;
+        if (loopStatement.isForStatement()) {
+            ForStatement forStatement = (ForStatement) targetNode;
             Statement initStatement;  // Integer a = list.get(i);
             if (forStatement.getBody() instanceof Block) {
                 initStatement = (Statement) ((Block) forStatement.getBody()).statements().get(0);
@@ -78,40 +78,55 @@ public class LoopConversion1 extends Transform {
                 Expression rightOperand = ((InfixExpression) expression).getRightOperand();
                 VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) initStatement).fragments().get(0);
                 Expression initializer = vdFragment.getInitializer();
-                if (rightOperand instanceof MethodInvocation && initializer instanceof MethodInvocation) {  // list.get(i)
-                    if(((MethodInvocation) rightOperand).getExpression() instanceof SimpleName && ((MethodInvocation) initializer).getExpression() instanceof SimpleName) {
-                        String sizeInvoker = ((SimpleName) ((MethodInvocation) rightOperand).getExpression()).getIdentifier(); // list in list.size()
-                        String getInvoker = ((SimpleName) ((MethodInvocation) initializer).getExpression()).getIdentifier(); // list
-                        String get = ((MethodInvocation) initializer).getName().getIdentifier(); // get
-                        if (getInvoker.equals(sizeInvoker) && "get".equals(get)) {
+                if (rightOperand instanceof MethodInvocation) {  // list.get(i)
+                    if (initializer instanceof MethodInvocation) {
+                        if (((MethodInvocation) rightOperand).getExpression() instanceof SimpleName && ((MethodInvocation) initializer).getExpression() instanceof SimpleName) {
+                            String sizeInvoker = ((SimpleName) ((MethodInvocation) rightOperand).getExpression()).getIdentifier(); // list in list.size()
+                            String getInvoker = ((SimpleName) ((MethodInvocation) initializer).getExpression()).getIdentifier(); // list
+                            String get = ((MethodInvocation) initializer).getName().getIdentifier(); // get
+                            if (getInvoker.equals(sizeInvoker) && "get".equals(get)) {
+                                String varName = vdFragment.getName().getIdentifier(); // a from Integer a = list.get(i);
+                                newExpression.setName(ast.newSimpleName(getInvoker)); // item in list.forEach(item)
+                                newExpression.setName(ast.newSimpleName("forEach"));
+                                LambdaExpression lambdaExpression = ast.newLambdaExpression();
+                                VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
+                                fragment.setName(ast.newSimpleName(varName)); // list in list.forEach(item)
+                                lambdaExpression.parameters().add(fragment);
+                                Block newBlock = (Block) ASTNode.copySubtree(ast, forStatement.getBody());
+                                newBlock.statements().remove(0);
+                                lambdaExpression.setBody(newBlock);
+                                ExpressionStatement newStatement = ast.newExpressionStatement(newExpression);
+                                astRewrite.replace(targetNode, newStatement, null);
+                                return true;
+                            }
+                        }
+                    } else {
+                        if (((MethodInvocation) rightOperand).getExpression() instanceof SimpleName) {
                             String varName = vdFragment.getName().getIdentifier(); // a from Integer a = list.get(i);
-                            newExpression.setName(ast.newSimpleName(getInvoker)); // item in list.forEach(item)
+                            if(varName.endsWith("s")) {
+                                varName = varName.substring(0, varName.length() - 1);
+                            } else {
+                                varName = "forEachVar";
+                            }
+                            String sizeInvoker = ((SimpleName) ((MethodInvocation) rightOperand).getExpression()).getIdentifier();
                             newExpression.setName(ast.newSimpleName("forEach"));
+                            newExpression.setExpression(ast.newSimpleName(sizeInvoker)); // item in list.forEach(item)
                             LambdaExpression lambdaExpression = ast.newLambdaExpression();
                             VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
                             fragment.setName(ast.newSimpleName(varName)); // list in list.forEach(item)
                             lambdaExpression.parameters().add(fragment);
                             Block newBlock = (Block) ASTNode.copySubtree(ast, forStatement.getBody());
-                            newBlock.statements().remove(0);
                             lambdaExpression.setBody(newBlock);
+                            newExpression.arguments().add(lambdaExpression);
                             ExpressionStatement newStatement = ast.newExpressionStatement(newExpression);
-                            astRewrite.replace(oldNode, newStatement, null);
-                            return true;
-                        } else {
+                            astRewrite.replace(targetNode, newStatement, null);
                             return true;
                         }
-                    } else {
-                        return false;
                     }
-                } else {
-                    return false;
                 }
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
     @Override
