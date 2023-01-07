@@ -5,6 +5,7 @@ PMD_Result.html
 config.properties
 .vscode/
 .DS_Store
+.scannerwork/
 .settings/
 .project
 .classpath

@@ -5,10 +5,6 @@ import org.rainyday.util.Utility;
 
 import java.io.File;
 
-import static org.rainyday.util.Invoker.invokeCommands;
-import static org.rainyday.util.Invoker.invokeCommandsByZT;
-import static org.rainyday.util.Utility.PMD_PATH;
-
 /**
  * Description: Previous main process for testing PMD with multi thread
  * Author: Vanguard
