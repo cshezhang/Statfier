@@ -65,7 +65,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.rainyday.util.Utility.DEBUG_STATFIER;
+import static org.rainyday.util.Utility.COMPILE;
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.compactIssues;
 import static org.rainyday.util.Utility.file2bugs;
@@ -264,7 +265,7 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-            if(DEBUG_STATFIER) {
+            if(DEBUG) {
                 System.out.println("Writing Variant Path: " + this.filePath);
             }
         } catch (IOException e) {
@@ -545,25 +546,12 @@ public class TypeWrapper {
         return buggy;
     }
 
-    public static AtomicInteger succMutation = new AtomicInteger(0);
-    public static AtomicInteger failMutation = new AtomicInteger(0);
-    public static AtomicInteger invalidSeed = new AtomicInteger(0);
-    public static AtomicInteger validSeed = new AtomicInteger(0);
-
     public List<TypeWrapper> TransformByRandomLocation() {
         List<TypeWrapper> newWrappers = new ArrayList<>();
         if (this.candidateNodes == null) {
             this.candidateNodes = this.allNodes;
         }
-        if (this.depth == 0) {
-            if (this.candidateNodes.size() == 0) {
-                invalidSeed.addAndGet(1);
-            } else {
-                validSeed.addAndGet(1);
-            }
-        }
         int cnt = file2row.get(this.filePath).size();
-        System.out.println(cnt + " " + this.candidateNodes.size());
         int randomCount = 0;
         while (true) {
             if (++randomCount > cnt) {
@@ -595,23 +583,11 @@ public class TypeWrapper {
                 }
                 boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                 if (hasMutated) {
-                    succMutation.addAndGet(1);
                     newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                     newMutant.transSeq.add(transform.getIndex());
                     newMutant.transNodes.add(newSrcNode);
                     newWrappers.add(newMutant);
-//                    if (COMPILE) {
-//                        newMutant.rewriteJavaCode(); // 1: Rewrite transformation
-//                        newMutant.resetClassName();  // 2: Rewrite class name and pkg definition
-//                        newMutant.removePackageDefinition();
-//                    }
-//                    newMutant.rewriteJavaCode();
-//                    if (newMutant.writeToJavaFile()) {
-//                        mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
-//                        mutant2seq.put(newMutant.getFilePath(), newMutant.transSeq.toString());
-//                    }
                 } else {
-                    failMutation.addAndGet(1);
                     try {
                         Files.deleteIfExists(Paths.get(mutantPath));
                     } catch (IOException e) {
@@ -624,21 +600,18 @@ public class TypeWrapper {
     }
 
     public List<TypeWrapper> TransformByGuidedLocation() {
-        if(this.filePath.contains("HardCodedCryptoKey5")) {
-            int a = 10;
-        }
         List<TypeWrapper> newWrappers = new ArrayList<>();
         try {
             if (this.candidateNodes == null) {
                 this.candidateNodes = this.getCandidateNodes();
             }
-            if (this.depth == 0) {
-                if (this.candidateNodes.size() == 0) {
-                    invalidSeed.addAndGet(1);
-                } else {
-                    validSeed.addAndGet(1);
-                }
-            }
+//            if (this.depth == 0) {
+//                if (this.candidateNodes.size() == 0) {
+//                    invalidSeed.addAndGet(1);
+//                } else {
+//                    validSeed.addAndGet(1);
+//                }
+//            }
             for (ASTNode candidateNode : candidateNodes) {
                 if(isInvalidModifier(candidateNode)) {
                    continue;
@@ -648,7 +621,7 @@ public class TypeWrapper {
                     for (ASTNode targetNode : targetNodes) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                         String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
-                        if(DEBUG_STATFIER) {
+                        if(DEBUG) {
                             System.out.println("Try to write file: " + mutantPath);
                         }
                         String content = this.document.get();
@@ -675,26 +648,16 @@ public class TypeWrapper {
                         }
                         boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                         if (hasMutated) {
-                            if(DEBUG_STATFIER) {
+                            if(DEBUG) {
                                 System.out.println("Success to write the file.");
                             }
-                            succMutation.addAndGet(1);
+//                            succMutation.addAndGet(1);
                             newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
                             newMutant.transNodes.add(newSrcNode);
                             newWrappers.add(newMutant);
-//                            if (COMPILE) {
-//                                newMutant.rewriteJavaCode();  // 1. Rewrite transformation, Don't remove this line, we need rewrite Java code twice
-//                                newMutant.resetClassName();  // 2. Rewrite class name and pkg definition
-//                                newMutant.removePackageDefinition();
-//                            }
-//                            newMutant.rewriteJavaCode(); //
-//                            if (newMutant.writeToJavaFile()) {
-//                                mutant2seed.put(newMutant.filePath, newMutant.initSeedPath);
-//                                mutant2seq.put(newMutant.filePath, newMutant.transSeq.toString());
-//                            }
                         } else {
-                            failMutation.addAndGet(1);
+//                            failMutation.addAndGet(1);
                             Files.deleteIfExists(Paths.get(mutantPath));
                         }
                     }

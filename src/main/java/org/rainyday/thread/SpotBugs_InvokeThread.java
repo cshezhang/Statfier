@@ -7,6 +7,7 @@ import org.rainyday.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.reportFolder;
 
 public class SpotBugs_InvokeThread implements Runnable {
@@ -34,7 +35,7 @@ public class SpotBugs_InvokeThread implements Runnable {
             Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
 //            String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
             String reportPath = reportFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
-            if(Utility.DEBUG_STATFIER) {
+            if(DEBUG) {
                 System.out.println("Report: " + reportPath);
             }
             String[] invokeCommands = new String[3];

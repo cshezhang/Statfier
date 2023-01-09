@@ -133,21 +133,24 @@ public class AddControlBranch extends Transform {
             return nodes;
         }
         if(node instanceof Statement) {
-            if (node instanceof VariableDeclarationStatement) {
-                VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;
-                if (vdStatement.getType() instanceof ArrayType) {
-                    if (vdStatement.modifiers().size() > 0) {
-                        Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
-                        if (modifier.getKeyword().toString().equals("final")) {
-                            return nodes;
-                        }
-                    }
-                }
-                VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
-                if (vdFragment.getInitializer() == null) {
-                    return nodes;
-                }
+            if(node instanceof VariableDeclarationStatement) {
+               return nodes;
             }
+//            if (node instanceof VariableDeclarationStatement) {
+//                VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;
+//                if (vdStatement.getType() instanceof ArrayType) {
+//                    if (vdStatement.modifiers().size() > 0) {
+//                        Modifier modifier = (Modifier) vdStatement.modifiers().get(0);
+//                        if (modifier.getKeyword().toString().equals("final")) {
+//                            return nodes;
+//                        }
+//                    }
+//                }
+//                VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
+//                if (vdFragment.getInitializer() == null) {
+//                    return nodes;
+//                }
+//            }
             nodes.add(node);
         }
         return nodes;

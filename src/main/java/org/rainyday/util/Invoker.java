@@ -20,7 +20,7 @@ import static org.rainyday.util.Utility.INFER_MUTATION;
 import static org.rainyday.util.Utility.JAVAC_PATH;
 import static org.rainyday.util.Utility.PMD_MUTATION;
 import static org.rainyday.util.Utility.Path2Last;
-import static org.rainyday.util.Utility.DEBUG_STATFIER;
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.SONARQUBE_LOGIN;
 import static org.rainyday.util.Utility.SONARQUBE_MUTATION;
 import static org.rainyday.util.Utility.SONARQUBE_PROJECT_KEY;
@@ -135,7 +135,7 @@ public class Invoker {
 
     // folderPath is purely folder path and doesn't contain java file name.
     public static boolean compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
-        if(DEBUG_STATFIER) {
+        if(DEBUG) {
             System.out.println("Compiling: " + fileName);
         }
         if(!fileName.endsWith(".java")) {
@@ -165,7 +165,7 @@ public class Invoker {
         if(seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
-        if(DEBUG_STATFIER) {
+        if(DEBUG) {
             System.out.println("Invoke SpotBugs Path: " + seedFolderPath);
         }
         ExecutorService threadPool = initThreadPool();
@@ -219,7 +219,7 @@ public class Invoker {
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
-            if(DEBUG_STATFIER) {
+            if(DEBUG) {
                 System.out.println("Seed path: " + subSeedFolderPath);
             }
             String settingPath = subSeedFolderPath + File.separator + "settings";

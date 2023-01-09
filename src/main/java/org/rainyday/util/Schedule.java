@@ -4,7 +4,7 @@ import static org.rainyday.transform.Transform.singleLevelExplorer;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
-import static org.rainyday.util.Utility.DEBUG_STATFIER;
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.SONARQUBE_LOGIN;
 import static org.rainyday.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.rainyday.util.Utility.SONAR_SCANNER_PATH;
@@ -53,7 +53,7 @@ public class Schedule {
         return tester;
     }
 
-    public void executeCheckStyleMutation(String seedFolderPath) {
+    public void executeCheckStyleTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         Invoker.invokeCheckStyle(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
@@ -76,14 +76,14 @@ public class Schedule {
             file2index.put(seedFilePath, configIndex);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        for(TypeWrapper wrapper : initWrappers) {
+        for (TypeWrapper wrapper : initWrappers) {
             CheckStyle_TransformThread mutationThread = new CheckStyle_TransformThread(wrapper, wrapper.getFolderName(), file2index.get(wrapper.getFilePath()));
             threadPool.submit(mutationThread);
         }
         waitThreadPoolEnding(threadPool);
     }
 
-    public void executeSpotBugsMutation(String seedFolderPath) {
+    public void executeSpotBugsTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         Invoker.invokeSpotBugs(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
@@ -105,16 +105,16 @@ public class Schedule {
             initWrappers.add(seedWrapper);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        if(DEBUG_STATFIER) {
+        if (DEBUG) {
             for (TypeWrapper wrapper : initWrappers) {
                 System.out.println("Init Path: " + wrapper.getFilePath());
             }
             System.out.println("Fail Seed Size: " + failSeedPaths.size());
-            for(String path : failSeedPaths) {
+            for (String path : failSeedPaths) {
                 System.out.println("Fail Seed Path: " + path);
             }
         }
-        if(threadPool == null) {
+        if (threadPool == null) {
             System.out.println("No Thread!");
             SpotBugs_Exec.run(initWrappers);
         } else {
@@ -127,14 +127,14 @@ public class Schedule {
         }
     }
 
-    public void executePMDMutation(String seedFolderPath) {
+    public void executePMDTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         Invoker.invokePMD(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
-        List<PMD_TransformThread> mutationThreads = new ArrayList<>();
+        List<PMD_TransformThread> transformThreads = new ArrayList<>();
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
@@ -172,11 +172,11 @@ public class Schedule {
                 String seedFolderName = category + "_" + bugType;
                 List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
                 PMD_TransformThread mutationThread = new PMD_TransformThread(wrappers, seedFolderName);
-                mutationThreads.add(mutationThread);
+                transformThreads.add(mutationThread);
             }
         }
-        for (int i = 0; i < mutationThreads.size(); i++) {
-            threadPool.submit(mutationThreads.get(i));
+        for (int i = 0; i < transformThreads.size(); i++) {
+            threadPool.submit(transformThreads.get(i));
         }
         waitThreadPoolEnding(threadPool);
     }
@@ -185,7 +185,7 @@ public class Schedule {
         int currentDepth = 0;
         for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
             singleLevelExplorer(wrappers, currentDepth++);
-            for(String subSeedFolderName : subSeedFolderNameList) {
+            for (String subSeedFolderName : subSeedFolderNameList) {
                 String subSeedFolderPath = mutantFolder + File.separator + "iter" + iter + File.separator + subSeedFolderName;
                 String settingPath = subSeedFolderPath + File.separator + "settings";
                 Invoker.writeSettingFile(subSeedFolderPath, settingPath);
@@ -197,14 +197,14 @@ public class Schedule {
                     invokeCommands[0] = "/bin/bash";
                     invokeCommands[1] = "-c";
                 }
-                invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectBaseDir=" + EVALUATION_PATH +  " -Dproject.settings=" + settingPath;
+                invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + " -Dproject.settings=" + settingPath;
                 boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                 try {
                     Thread.currentThread().sleep(5000);
                 } catch (InterruptedException e) {
                     System.err.println("Interruption error!");
                 }
-                if(hasExec) {
+                if (hasExec) {
                     List<String> CNES_Commands = new ArrayList<>();
                     CNES_Commands.add("java");
                     CNES_Commands.add("-jar");
@@ -219,7 +219,7 @@ public class Schedule {
                     String CNES_ReportFolderPath = "";
                     String reportPath = CNES_ReportFolderPath + File.separator + "CNES_ReportName";
                     Invoker.invokeCommandsByZT(CNES_Commands.toArray(new String[CNES_Commands.size()]));
-                    if(DEBUG_STATFIER) {
+                    if (DEBUG) {
                         System.out.println("Reading result file: " + reportPath);
                     }
                     readSonarQubeResultFile(reportPath);
@@ -238,11 +238,11 @@ public class Schedule {
         }
     }
 
-    public void executeSonarQubeMutation(String seedFolderPath) {
+    public void executeSonarQubeTransform(String seedFolderPath) {
         System.out.println("Invoke SonarQube for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         Invoker.invokeSonarQube(seedFolderPath);
         ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
-        for(String filepath : file2report.keySet()) {
+        for (String filepath : file2report.keySet()) {
             String[] tokens = filepath.split(sep);
             String folderName = tokens[tokens.length - 2];
             TypeWrapper wrapper = new TypeWrapper(filepath, folderName);
@@ -252,7 +252,7 @@ public class Schedule {
         singleThreadWorker(wrappers);
     }
 
-    public void executeInferMutation(String seedFolderPath) {
+    public void executeInferTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         Invoker.invokeInfer(seedFolderPath);
         ExecutorService threadPool = initThreadPool();

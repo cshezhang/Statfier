@@ -11,10 +11,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.classFolder;
 import static org.rainyday.util.Utility.inferJarStr;
 import static org.rainyday.util.Utility.reportFolder;
+import static org.rainyday.transform.Transform.singleLevelExplorer;
 
 /**
  * Description: Infer Transformation Thread
@@ -44,7 +45,7 @@ public class Infer_TransformThread extends Thread {
     @Override
     public void run() {
         for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
-            if(Utility.DEBUG_STATFIER) {
+            if(DEBUG) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);

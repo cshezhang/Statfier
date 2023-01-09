@@ -7,6 +7,7 @@ import org.rainyday.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.reportFolder;
 
 public class CheckStyle_InvokeThread implements Runnable {
@@ -45,7 +46,7 @@ public class CheckStyle_InvokeThread implements Runnable {
                 invokeCmds[1] = "-c";
             }
             invokeCmds[2] = "java -jar " + Utility.CheckStylePath + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filepath;
-            if(Utility.DEBUG_STATFIER) {
+            if(DEBUG) {
                 System.out.println(invokeCmds[2]);
             }
             Invoker.invokeCommandsByZT(invokeCmds);

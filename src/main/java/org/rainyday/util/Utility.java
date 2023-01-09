@@ -82,13 +82,13 @@ public class Utility {
     public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
+    public final static long MAX_EXECUTION_TIME = 60 * 60 * 1000;
     public static String PROJECT_PATH = getProperty("PROJECT_PATH");
     public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
     public static int SEED_INDEX = Integer.parseInt(getProperty("SEED_INDEX"));
 
-    public final static boolean DEBUG_STATFIER = Boolean.parseBoolean(getProperty("DEBUG"));
+    public final static boolean DEBUG = Boolean.parseBoolean(getProperty("DEBUG"));
     public final static boolean RANDOM_LOCATION = Boolean.parseBoolean(getProperty("RANDOM_LOCATION"));
     public final static boolean GUIDED_LOCATION = Boolean.parseBoolean(getProperty("GUIDED_LOCATION"));
 
@@ -132,6 +132,7 @@ public class Utility {
     public final static File mutantFolder = new File(EVALUATION_PATH + File.separator + "mutants");
     public final static File reportFolder = new File(EVALUATION_PATH + File.separator + "reports");
     public final static File classFolder = new File(EVALUATION_PATH + File.separator + "classes");
+    public final static File resultFolder = new File(EVALUATION_PATH + File.separator + "results");
 
     // tools
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
@@ -219,6 +220,16 @@ public class Utility {
             }
             if (!mutantFolder.mkdir()) {
                 System.err.println("Fail to create mutant folder!\n");
+                System.exit(-1);
+            }
+            if (SPOTBUGS_MUTATION || INFER_MUTATION) {
+                if (!classFolder.mkdir()) {
+                    System.err.println("Fail to create class folder!\n");
+                    System.exit(-1);
+                }
+            }
+            if (!resultFolder.mkdir()) {
+                System.err.println("Fail to create result folder!\n");
                 System.exit(-1);
             }
         } catch (Exception e) {
@@ -401,7 +412,7 @@ public class Utility {
     }
 
     public static void readSonarQubeResultFile(String reportPath) {
-        if (DEBUG_STATFIER) {
+        if (DEBUG) {
             System.out.println("SonarQube Detection Result FileName: " + reportPath);
         }
         HashMap<String, SonarQube_Report> name2report = new HashMap<>();
@@ -431,7 +442,7 @@ public class Utility {
             System.exit(-1);
         }
         String lineNumber, bugType, component, flows;
-        if(records.isEmpty()) {
+        if (records.isEmpty()) {
             System.err.println("Empty Record Path: " + reportPath);
             System.exit(-1);
         }
@@ -468,7 +479,7 @@ public class Utility {
                 }
             }
             String filepath;
-            if(reportPath.contains("iter0")) {
+            if (reportPath.contains("iter0")) {
                 filepath = PROJECT_PATH + File.separator + file.substring(file.indexOf(":") + 1);
             } else {
                 filepath = EVALUATION_PATH + File.separator + file.substring(file.indexOf(":") + 1);
@@ -633,7 +644,7 @@ public class Utility {
 
     // Variable seedFolderPath contains sub seed folder name
     public static void readSpotBugsResultFile(String seedFolderPath, String reportPath) {
-        if (DEBUG_STATFIER) {
+        if (DEBUG) {
             System.out.println("SpotBugs Detection Result FileName: " + reportPath);
         }
         HashMap<String, SpotBugs_Report> filepath2report = new HashMap<>();
@@ -777,13 +788,13 @@ public class Utility {
 
     public static boolean isInvalidModifier(ASTNode node) {
         TypeDeclaration type = getClassOfNode(node);
-        if(type == null) {
+        if (type == null) {
             return false;
         }
         List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
-        for(ASTNode m_node : modifiers) {
+        for (ASTNode m_node : modifiers) {
             Modifier modifier = (Modifier) m_node;
-            if(modifier.isAbstract() || modifier.isNative()) {
+            if (modifier.isAbstract() || modifier.isNative()) {
                 return true;
             }
         }
@@ -791,13 +802,13 @@ public class Utility {
     }
 
     public static boolean isInvalidModifier(TypeDeclaration type) {
-        if(type == null) {
+        if (type == null) {
             return false;
         }
         List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
-        for(ASTNode node : modifiers) {
+        for (ASTNode node : modifiers) {
             Modifier modifier = (Modifier) node;
-            if(modifier.isAbstract() || modifier.isNative()) {
+            if (modifier.isAbstract() || modifier.isNative()) {
                 return true;
             }
         }

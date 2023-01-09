@@ -61,10 +61,10 @@ public class CFWrapperWithForFalse extends Transform {
         postfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
         newForStatement.updaters().add(postfixExpression);
 
-        Block newForBody = ast.newBlock();
+        Block newBodyBlock = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);
-        newForBody.statements().add(newStatement);
-        newForStatement.setBody(newForBody);
+        newBodyBlock.statements().add(newStatement);
+        newForStatement.setBody(newBodyBlock);
         Block methodBlock = TypeWrapper.getDirectBlockOfStatement(srcNode);
         if(methodBlock.statements().contains(srcNode)) {
             ListRewrite methodRewrite = astRewrite.getListRewrite(methodBlock, Block.STATEMENTS_PROPERTY);
@@ -81,6 +81,9 @@ public class CFWrapperWithForFalse extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
+        if(!(node instanceof Statement)) { // The node to be transformed must be a statement.
+            return nodes;
+        }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration || node instanceof EmptyStatement ||
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;

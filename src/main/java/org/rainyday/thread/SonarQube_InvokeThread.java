@@ -4,6 +4,8 @@ import org.rainyday.util.OSUtil;
 import org.rainyday.util.Invoker;
 import org.rainyday.util.Utility;
 
+import static org.rainyday.util.Utility.DEBUG;
+
 import java.io.File;
 
 public class SonarQube_InvokeThread implements Runnable {
@@ -19,7 +21,7 @@ public class SonarQube_InvokeThread implements Runnable {
     @Override
     public void run() {
         // seedFileName is used to specify class folder name
-        if(Utility.DEBUG_STATFIER) {
+        if(DEBUG) {
             System.out.println("Seed path: " + seedFolderPath + File.separator + seedFolderName);
         }
         String[] invokeCommands = new String[3];

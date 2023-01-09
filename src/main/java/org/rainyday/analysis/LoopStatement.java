@@ -63,6 +63,10 @@ public class LoopStatement {
         return this.body;
     }
 
+    public Statement getLoopStatement() {
+        return this.loopStatement;
+    }
+
     public static boolean isLoopStatement(ASTNode node) {
         if (node instanceof EnhancedForStatement || node instanceof ForStatement
                 || node instanceof WhileStatement || node instanceof DoStatement) {

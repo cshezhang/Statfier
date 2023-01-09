@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
 import static org.rainyday.util.Utility.mutantFolder;
 import static org.rainyday.util.Utility.reportFolder;
@@ -43,7 +44,7 @@ public class PMD_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-            if(Utility.DEBUG_STATFIER) {
+            if(DEBUG) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);

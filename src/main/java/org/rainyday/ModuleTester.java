@@ -17,6 +17,7 @@ public class ModuleTester {
         String[] pmdArgs = {
                 "-d", "./TestCase/Case1.java",
 //                "-R", "./PMD_config.xml",
+                "-R", "category/java/errorprone.xml/CloseResource",
 //                "-R", "category/java/design.xml/SingularField",
 //                "-R", "category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal",
 //                "-R", "category/java/errorprone.xml/TestClassWithoutTestCases",
@@ -82,7 +83,7 @@ public class ModuleTester {
 //                "-R", "category/java/performance.xml/InsufficientStringBufferDeclaration",
 //                "-R", "category/java/performance.xml/UselessStringValueOf",
 //                "-R", "category/java/performance.xml/UseArraysAsList",
-                "-R", "category/java/security.xml/HardCodedCryptoKey",
+//                "-R", "category/java/security.xml/HardCodedCryptoKey",
 //                "-R", "category/java/security.xml/InsecureCryptoIv",
 //                "-R", "category/java/errorprone.xml/AvoidFieldNameMatchingMethodName",
                 "-f", "html",

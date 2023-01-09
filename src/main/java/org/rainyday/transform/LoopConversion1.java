@@ -51,15 +51,23 @@ public class LoopConversion1 extends Transform {
         }
         MethodInvocation newExpression = ast.newMethodInvocation();
         if (loopStatement.isEnhancedForStatement()) {
+            if(!(loopStatement.getExpression() instanceof SimpleName)) {
+                return false;
+            }
             SimpleName varName = ast.newSimpleName(((SimpleName) loopStatement.getExpression()).getIdentifier());
             newExpression.setExpression(varName);
             newExpression.setName(ast.newSimpleName("forEach"));
             LambdaExpression lambdaExpression = ast.newLambdaExpression();
             VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
-            SingleVariableDeclaration var = ((EnhancedForStatement) loopStatement.getBody()).getParameter();
+            SingleVariableDeclaration var = ((EnhancedForStatement) loopStatement.getLoopStatement()).getParameter();
             fragment.setName(ast.newSimpleName(var.getName().getIdentifier()));
             lambdaExpression.parameters().add(fragment);
-            lambdaExpression.setBody(ASTNode.copySubtree(ast, ((EnhancedForStatement) loopStatement.getBody()).getBody()));
+            ASTNode newBody = ASTNode.copySubtree(ast, ((EnhancedForStatement) loopStatement.getLoopStatement()).getBody());
+            if(newBody instanceof Block || newBody instanceof Expression) {
+                lambdaExpression.setBody(newBody);
+            } else {
+                return false;
+            }
             newExpression.arguments().add(lambdaExpression);
             ExpressionStatement newStatement = ast.newExpressionStatement(newExpression);
             astRewrite.replace(targetNode, newStatement, null);
@@ -69,8 +77,14 @@ public class LoopConversion1 extends Transform {
             ForStatement forStatement = (ForStatement) targetNode;
             Statement initStatement;  // Integer a = list.get(i);
             if (forStatement.getBody() instanceof Block) {
+                if(forStatement.getBody() == null || ((Block)forStatement.getBody()).statements().size() == 0) {
+                    return false;
+                }
                 initStatement = (Statement) ((Block) forStatement.getBody()).statements().get(0);
             } else {
+                return false;
+            }
+            if(forStatement.getExpression() == null) {
                 return false;
             }
             Expression expression = forStatement.getExpression();  // i < list.size()

@@ -11,9 +11,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.reportFolder;
+import static org.rainyday.transform.Transform.singleLevelExplorer;
 
 public class CheckStyle_TransformThread implements Runnable {
 
@@ -37,7 +38,7 @@ public class CheckStyle_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
-            if (Utility.DEBUG_STATFIER) {
+            if (DEBUG) {
                 System.out.println("TransformThread Depth: " + depth + " Folder: " + this.seedFolderName);
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
@@ -66,7 +67,7 @@ public class CheckStyle_TransformThread implements Runnable {
                 }
                 invokeCmds[2] = "java -jar " + Utility.CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
                         + configPath + " " + mutantFilePath;
-                if (Utility.DEBUG_STATFIER) {
+                if (DEBUG) {
                     System.out.println(invokeCmds[2]);
                 }
                 Invoker.invokeCommandsByZT(invokeCmds);
