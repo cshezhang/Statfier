@@ -7,6 +7,8 @@ import org.rainyday.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.rainyday.util.Utility.reportFolder;
+
 public class SpotBugs_InvokeThread implements Runnable {
 
     private String seedFolderPath;
@@ -25,13 +27,13 @@ public class SpotBugs_InvokeThread implements Runnable {
             String seedFileNameWithSuffix = this.seedFileNamesWithSuffix.get(i);
             String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
             // seedFileName is used to specify class folder name
-            File classFolder = new File(Utility.SpotBugsClassFolder.getAbsolutePath()  + File.separator + seedFileName);
+            File classFolder = new File(Utility.classFolder.getAbsolutePath()  + File.separator + seedFileName);
             if(!classFolder.exists()) {
                 classFolder.mkdirs();
             }
             Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
 //            String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
-            String reportPath = Utility.SpotBugsResultFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
+            String reportPath = reportFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
             if(Utility.DEBUG_STATFIER) {
                 System.out.println("Report: " + reportPath);
             }

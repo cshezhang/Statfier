@@ -16,13 +16,8 @@ import org.rainyday.thread.PMD_InvokeThread;
 import org.rainyday.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
-import static org.rainyday.util.Utility.CNES_PATH;
-import static org.rainyday.util.Utility.CNES_ReportName;
-import static org.rainyday.util.Utility.CheckStyleResultFolder;
 import static org.rainyday.util.Utility.INFER_MUTATION;
-import static org.rainyday.util.Utility.InferResultFolder;
 import static org.rainyday.util.Utility.JAVAC_PATH;
-import static org.rainyday.util.Utility.PMDResultFolder;
 import static org.rainyday.util.Utility.PMD_MUTATION;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.DEBUG_STATFIER;
@@ -31,8 +26,6 @@ import static org.rainyday.util.Utility.SONARQUBE_MUTATION;
 import static org.rainyday.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.rainyday.util.Utility.SONAR_SCANNER_PATH;
 import static org.rainyday.util.Utility.SPOTBUGS_MUTATION;
-import static org.rainyday.util.Utility.SonarQubeResultFolder;
-import static org.rainyday.util.Utility.SpotBugsResultFolder;
 import static org.rainyday.util.Utility.getFilenamesFromFolder;
 import static org.rainyday.util.Utility.inferJarStr;
 import static org.rainyday.util.Utility.initThreadPool;
@@ -42,6 +35,7 @@ import static org.rainyday.util.Utility.readPMDResultFile;
 import static org.rainyday.util.Utility.readSonarQubeResultFile;
 import static org.rainyday.util.Utility.readSpotBugsResultFile;
 import static org.rainyday.util.Utility.sep;
+import static org.rainyday.util.Utility.reportFolder;
 import static org.rainyday.util.Utility.spotBugsJarStr;
 import static org.rainyday.util.Utility.subSeedFolderNameList;
 import static org.rainyday.util.Utility.waitThreadPoolEnding;
@@ -185,7 +179,7 @@ public class Invoker {
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         for(String subSeedFolderName : subSeedFolderNameList) {
-            List<String> reportPaths = getFilenamesFromFolder(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName, true);
+            List<String> reportPaths = getFilenamesFromFolder(reportFolder.getAbsolutePath() + File.separator + subSeedFolderName, true);
             for(String reportPath : reportPaths) {
                 readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
@@ -246,11 +240,10 @@ public class Invoker {
             } catch (InterruptedException e) {
                 System.err.println("Interrupt waiting SQ!");
             }
-            String reportFolderPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderName;
+            String reportFolderPath = reportFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderName;
             List<String> CNES_Commands = new ArrayList<>();
             CNES_Commands.add("java");
             CNES_Commands.add("-jar");
-            CNES_Commands.add(CNES_PATH);
             CNES_Commands.add("-p");
             CNES_Commands.add(SONARQUBE_PROJECT_KEY);
             CNES_Commands.add("-t");
@@ -261,7 +254,7 @@ public class Invoker {
             CNES_Commands.add("-o");
             CNES_Commands.add(reportFolderPath);
             invokeCommandsByZT(CNES_Commands.toArray(new String[CNES_Commands.size()]));  // invoke CNES to export analysis report
-            String reportPath = reportFolderPath + File.separator + CNES_ReportName;
+            String reportPath = reportFolderPath + File.separator + "CNES_ReportName";
             readSonarQubeResultFile(reportPath);
         }
     }
@@ -272,10 +265,10 @@ public class Invoker {
             threadPool.submit(new Infer_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
-        System.out.println("Infer Result Folder: " + InferResultFolder.getAbsolutePath());
+        System.out.println("Infer Result Folder: " + reportFolder.getAbsolutePath());
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         for(String seedPath : seedPaths) {
-            String reportPath = InferResultFolder.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
+            String reportPath = reportFolder.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
             readInferResultFile(seedPath, reportPath);
         }
     }
@@ -286,7 +279,7 @@ public class Invoker {
             threadPool.submit(new CheckStyle_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
-        List<String> reportPaths = getFilenamesFromFolder(CheckStyleResultFolder.getAbsolutePath(), true);
+        List<String> reportPaths = getFilenamesFromFolder(reportFolder.getAbsolutePath(), true);
         for(int i = 0; i < reportPaths.size(); i++) {
             readCheckStyleResultFile(reportPaths.get(i));
         }
@@ -299,7 +292,7 @@ public class Invoker {
         }
         waitThreadPoolEnding(threadPool);
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            readPMDResultFile(PMDResultFolder.getAbsolutePath()  + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
+            readPMDResultFile(reportFolder.getAbsolutePath()  + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
         }
     }
 

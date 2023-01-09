@@ -5,6 +5,8 @@ import org.rainyday.util.Utility;
 
 import java.io.File;
 
+import static org.rainyday.util.Utility.reportFolder;
+
 /**
  * Description: Previous main process for testing PMD with multi thread
  * Author: Vanguard
@@ -35,7 +37,7 @@ public class PMD_InvokeThread implements Runnable {
             "-d", seedFolderPath  + File.separator + seedFolderName,
             "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
             "-f", "json",
-            "-r", Utility.PMDResultFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json",
+            "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json",
             "--no-cache"
         };
         PMD.runPmd(pmdConfig);

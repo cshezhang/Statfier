@@ -11,6 +11,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.rainyday.util.Utility.reportFolder;
+
 public class SpotBugs_TransformThread implements Runnable {
 
     private int currentDepth;
@@ -39,12 +41,12 @@ public class SpotBugs_TransformThread implements Runnable {
                 String subSeedFolderName = tokens[tokens.length - 2];
                 String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                 // Filename is used to specify class folder name
-                File classFolder = new File(Utility.SpotBugsClassFolder.getAbsolutePath() + File.separator + seedFileName);
+                File classFolder = new File(Utility.classFolder.getAbsolutePath() + File.separator + seedFileName);
                 if (!classFolder.exists()) {
                     classFolder.mkdirs();
                 }
                 Invoker.compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                String reportPath = Utility.SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                String reportPath = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                 String[] invokeCmds = new String[3];
                 if (OSUtil.isWindows()) {
                     invokeCmds[0] = "cmd.exe";
@@ -59,7 +61,7 @@ public class SpotBugs_TransformThread implements Runnable {
                         + classFolder.getAbsolutePath();
                 boolean hasExec = Invoker.invokeCommandsByZT(invokeCmds);
                 if (hasExec) {
-                    String report_path = Utility.SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                    String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     Utility.readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
                 }
             }

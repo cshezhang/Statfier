@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Utility.classFolder;
+import static org.rainyday.util.Utility.inferJarStr;
+import static org.rainyday.util.Utility.reportFolder;
 
 /**
  * Description: Infer Transformation Thread
@@ -53,10 +56,10 @@ public class Infer_TransformThread extends Thread {
             for(int i = 0; i < filepaths.size(); i++) {
                 String srcJavaPath = filepaths.get(i);
                 String filename = Utility.Path2Last(srcJavaPath);
-                String reportFolderPath = Utility.InferResultFolder + File.separator + "iter" + depth + "_" + filename;
+                String reportFolderPath = reportFolder + File.separator + "iter" + depth + "_" + filename;
                 String cmd = Utility.INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + Utility.JAVAC_PATH +
-                        " -d " + Utility.InferClassFolder.getAbsolutePath() + File.separator + filename +
-                        " -cp " + Utility.inferJarStr + " " + srcJavaPath;
+                        " -d " + classFolder.getAbsolutePath() + File.separator + filename +
+                        " -cp " + inferJarStr + " " + srcJavaPath;
                 System.out.println(this.getName() + "-" + cmd);
                 String[] invokeCmds = new String[3];
                 if(OSUtil.isWindows()) {

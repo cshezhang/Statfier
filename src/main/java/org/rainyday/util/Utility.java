@@ -82,7 +82,7 @@ public class Utility {
     public static final boolean DIV_SELECTION = Boolean.parseBoolean(getProperty("DIV_SELECTION"));
     public static final int THREAD_COUNT = Integer.parseInt(getProperty("THREAD_COUNT"));
     public static final int SEARCH_DEPTH = Integer.parseInt(getProperty("SEARCH_DEPTH"));
-//    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
+    public final static long MAX_EXECUTION_TIME = Long.parseLong(getProperty("EXEC_TIME")) * 60 * 1000;
     public static String PROJECT_PATH = getProperty("PROJECT_PATH");
     public static String EVALUATION_PATH = getProperty("EVALUATION_PATH");
     public static String JAVAC_PATH = getProperty("JAVAC_PATH");
@@ -113,7 +113,6 @@ public class Utility {
 
     public static final Date date = new Date();
     public static final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-    public static final String CNES_ReportName = sdf.format(date) + "-" + SONARQUBE_PROJECT_KEY + "-issues-report.csv";
     public static final SecureRandom random = new SecureRandom();
     public static final long RANDOM_SEED1 = 1649250511;
     public static final long RANDOM_SEED2 = 815954400;
@@ -122,43 +121,24 @@ public class Utility {
     public static final long RANDOM_SEED5 = 1762725600;
 //    public static int newVarCounter = 0;
 
-    // seeds, these variables
-    public final static String BASE_SEED_PATH = getProperty("SEED_PATH");
-    public final static String AST_TESTING_PATH = "." + File.separator + "src" + File.separator + "test" + File.separator + "java" + File.separator + "ASTTestingCases";
-    public final static String DEBUG_STATFIER_PATH = BASE_SEED_PATH + File.separator + "SingleTesting";
-    //    public final static String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Ground_Truth";
-    public final static String PMD_SEED_PATH = BASE_SEED_PATH + File.separator + "PMD_Test";
-    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Test";
-    //    public final static String SPOTBUGS_SEED_PATH = BASE_SEED_PATH + File.separator + "SpotBugs_Large_Seeds";
-    public final static String INFER_SEED_PATH = BASE_SEED_PATH + File.separator + "Infer_Seeds";
-    public final static String CHECKSTYLE_SEED_PATH = BASE_SEED_PATH + File.separator + "CheckStyle_Large";
-    public final static String CheckStyleConfigPath = BASE_SEED_PATH + File.separator + "CheckStyle_Configs";
-    public final static String SONARQUBE_SEED_PATH = BASE_SEED_PATH + File.separator + "SonarQube_Test";
+    // seeds
+    public final static String PMD_SEED_PATH = getProperty("PMD_SEED_PATH");
+    public final static String SPOTBUGS_SEED_PATH = getProperty("SPOTBUGS_SEED_PATH");
+    public final static String INFER_SEED_PATH = getProperty("INFER_SEED_PATH");
+    public final static String CHECKSTYLE_SEED_PATH = getProperty("CHECKSTYLE_SEED_PATH");
+    public final static String SONARQUBE_SEED_PATH = getProperty("SONARQUBE_SEED_PATH");
 
-    // mutants
+    // mutants and results
     public final static File mutantFolder = new File(EVALUATION_PATH + File.separator + "mutants");
-    public final static File resultFolder = new File(EVALUATION_PATH + File.separator + "results");
-
-    // results
-//    public final static File resultFolder = new File(EVALUATION_PATH  + File.separator + "results");
-    public final static File PMDResultFolder = new File(EVALUATION_PATH + File.separator + "PMD_Results");
-    public final static File InferResultFolder = new File(EVALUATION_PATH + File.separator + "Infer_Results");
-    public final static File InferClassFolder = new File(EVALUATION_PATH + File.separator + "Infer_Classes");
-    public final static File SpotBugsResultFolder = new File(EVALUATION_PATH + File.separator + "SpotBugs_Results");
-    public final static File SpotBugsClassFolder = new File(EVALUATION_PATH + File.separator + "SpotBugs_Classes");
-    public final static File CheckStyleResultFolder = new File(EVALUATION_PATH + File.separator + "CheckStyle_results");
-    public final static File SonarQubeResultFolder = new File(EVALUATION_PATH + File.separator + "SonarQube_Results");
+    public final static File reportFolder = new File(EVALUATION_PATH + File.separator + "reports");
+    public final static File classFolder = new File(EVALUATION_PATH + File.separator + "classes");
 
     // tools
-    public final static String PMD_PATH = toolPath + File.separator + "PMD" + File.separator + "bin" + File.separator + "run.sh";
     public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
     public final static String INFER_PATH = getProperty("INFER_PATH");
-    public final static String CNES_PATH = toolPath + File.separator + "sonar-cnes-report-4.1.2.jar";
+    public final static String CheckStyleConfigPath = toolPath + File.separator + "CheckStyle_Configs";
 
     public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
-    //    public final static String InferPath = "~" + File.separator + "bin"  + File.separator + "Infer"  + File.separator + "bin"  + File.separator + "infer";
-//    public final static String InferPath = "infer";
-
     public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + File.separator + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath + File.separator + "Infer_Dependency", true);
@@ -233,7 +213,7 @@ public class Utility {
                 System.err.println("Fail to create EVALUATION_PATH!\n");
                 System.exit(-1);
             }
-            if (!resultFolder.mkdir()) {
+            if (!reportFolder.mkdir()) {
                 System.err.println("Fail to create result folder!\n");
                 System.exit(-1);
             }
@@ -254,27 +234,6 @@ public class Utility {
                 File subSeedFolder = new File(iter.getAbsolutePath() + File.separator + subSeedFolderName);
                 subSeedFolder.mkdir();
             }
-        }
-        if (PMD_MUTATION) {
-            PMDResultFolder.mkdir();
-        }
-        if (SPOTBUGS_MUTATION) {
-            SpotBugsClassFolder.mkdir();
-            SpotBugsResultFolder.mkdir();
-            for (String subSeedFolderName : subSeedFolderNameList) {
-                File reportFolder = new File(SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName);
-                reportFolder.mkdir();
-            }
-        }
-        if (CHECKSTYLE_MUTATION) {
-            CheckStyleResultFolder.mkdir();
-        }
-        if (INFER_MUTATION) {
-            InferClassFolder.mkdir();
-            InferResultFolder.mkdir();
-        }
-        if (SONARQUBE_MUTATION) {
-            SonarQubeResultFolder.mkdir();
         }
     }
 

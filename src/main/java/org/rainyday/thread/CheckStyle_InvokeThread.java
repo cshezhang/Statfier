@@ -7,6 +7,8 @@ import org.rainyday.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.rainyday.util.Utility.reportFolder;
+
 public class CheckStyle_InvokeThread implements Runnable {
     private int iterDepth;
     private String seedFolderPath;
@@ -33,7 +35,7 @@ public class CheckStyle_InvokeThread implements Runnable {
             if(configFile.exists()) {
                 configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
             }
-            String reportPath = Utility.CheckStyleResultFolder + File.separator + "iter" + iterDepth + "_" + seedFolderName + i + "_Result.xml";
+            String reportPath = reportFolder + File.separator + "iter" + iterDepth + "_" + seedFolderName + i + "_Result.xml";
             String[] invokeCmds = new String[3];
             if(OSUtil.isWindows()) {
                 invokeCmds[0] = "cmd.exe";

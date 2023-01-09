@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static org.rainyday.util.Utility.sourceSeedPath;
+
 /**
  * Description: Main Process for automatic testing
  * Author: Vanguard
@@ -33,19 +35,19 @@ public class AutomaticTester {
         Schedule schedule = Schedule.getInstance();
         try {
             if (Utility.PMD_MUTATION) {
-                schedule.executePMDMutation(Utility.sourceSeedPath);
+                schedule.executePMDMutation(sourceSeedPath);
             }
             if (Utility.SPOTBUGS_MUTATION) {
-                schedule.executeSpotBugsMutation(Utility.sourceSeedPath);
+                schedule.executeSpotBugsMutation(sourceSeedPath);
             }
             if (Utility.CHECKSTYLE_MUTATION) {
-                schedule.executeCheckStyleMutation(Utility.sourceSeedPath);
+                schedule.executeCheckStyleMutation(sourceSeedPath);
             }
             if (Utility.INFER_MUTATION) {
-                schedule.executeInferMutation(Utility.sourceSeedPath);
+                schedule.executeInferMutation(sourceSeedPath);
             }
             if (Utility.SONARQUBE_MUTATION) {
-                schedule.executeSonarQubeMutation(Utility.sourceSeedPath);
+                schedule.executeSonarQubeMutation(sourceSeedPath);
             }
             int rules = Utility.compactIssues.keySet().size();
             int seqCount = 0;

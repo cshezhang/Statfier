@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.rainyday.transform.Transform.singleLevelExplorer;
-import static org.rainyday.util.Invoker.invokeCommandsByZT;
-import static org.rainyday.util.Utility.PMD_PATH;
+import static org.rainyday.util.Utility.SEARCH_DEPTH;
+import static org.rainyday.util.Utility.mutantFolder;
+import static org.rainyday.util.Utility.reportFolder;
 
 /**
  * Description: This file is the MAIN class for testing PMD with multi threads
@@ -41,13 +42,13 @@ public class PMD_TransformThread implements Runnable {
     // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
     @Override
     public void run() {
-        for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             if(Utility.DEBUG_STATFIER) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
-            String resultFilePath = Utility.PMDResultFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-            String mutantFolderPath = Utility.mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+            String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
+            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
             String[] pmdConfig = {
                     "-d", mutantFolderPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,

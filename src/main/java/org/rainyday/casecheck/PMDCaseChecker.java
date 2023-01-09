@@ -13,13 +13,12 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.rainyday.util.Utility.BASE_SEED_PATH;
+import static org.rainyday.util.Utility.PMD_SEED_PATH;
 import static org.rainyday.util.Utility.calculatePMDResultFile;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
 
 public class PMDCaseChecker {
 
-    private static final String PMD_SEED_PATH = BASE_SEED_PATH  + File.separator + "PMD_Seeds";
     private static final String pmdCSVPath = "."  + File.separator + "scripts"  + File.separator + "PMDSeedData.csv";
 
     static class DiffRecord {

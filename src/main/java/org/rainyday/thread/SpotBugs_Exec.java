@@ -4,6 +4,7 @@ import org.rainyday.analysis.TypeWrapper;
 import org.rainyday.util.OSUtil;
 import org.rainyday.analysis.SelectionAlgorithm;
 import org.rainyday.util.Invoker;
+import org.rainyday.util.Utility;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -16,10 +17,9 @@ import static org.rainyday.util.Utility.NO_SELECTION;
 import static org.rainyday.util.Utility.RANDOM_LOCATION;
 import static org.rainyday.util.Utility.RANDOM_SELECTION;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
-import static org.rainyday.util.Utility.SpotBugsClassFolder;
 import static org.rainyday.util.Utility.SpotBugsPath;
-import static org.rainyday.util.Utility.SpotBugsResultFolder;
 import static org.rainyday.util.Utility.readSpotBugsResultFile;
+import static org.rainyday.util.Utility.reportFolder;
 import static org.rainyday.util.Utility.sep;
 
 public class SpotBugs_Exec {
@@ -65,12 +65,12 @@ public class SpotBugs_Exec {
                     String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
-                    File classFolder = new File(SpotBugsClassFolder.getAbsolutePath()  + File.separator + seedFileName);
+                    File classFolder = new File(Utility.classFolder.getAbsolutePath()  + File.separator + seedFileName);
                     if (!classFolder.exists()) {
                         classFolder.mkdirs();
                     }
                     Invoker.compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                    String reportPath = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                    String reportPath = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     String[] invokeCmds = new String[3];
                     if(OSUtil.isWindows()) {
                         invokeCmds[0] = "cmd.exe";
@@ -84,7 +84,7 @@ public class SpotBugs_Exec {
                             + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath();
                     Invoker.invokeCommands(invokeCmds);
-                    String report_path = SpotBugsResultFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                    String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path);
                 }
                 List<TypeWrapper> validWrappers = new ArrayList<>();

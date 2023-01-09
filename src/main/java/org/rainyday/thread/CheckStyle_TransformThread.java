@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Utility.Path2Last;
+import static org.rainyday.util.Utility.reportFolder;
 
 public class CheckStyle_TransformThread implements Runnable {
 
@@ -35,7 +37,7 @@ public class CheckStyle_TransformThread implements Runnable {
     @Override
     public void run() {
         for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
-            if(Utility.DEBUG_STATFIER) {
+            if (Utility.DEBUG_STATFIER) {
                 System.out.println("TransformThread Depth: " + depth + " Folder: " + this.seedFolderName);
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
@@ -45,17 +47,17 @@ public class CheckStyle_TransformThread implements Runnable {
 //            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
             String configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + configIndex + ".xml";
             File configFile = new File(configPath);
-            if(configFile.exists()) {
+            if (configFile.exists()) {
                 configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
             }
             List<CheckStyle_Report> reports = new ArrayList<>();
             // 这里还可以做一个configIndex是否match seedFolderName里边的index
-            for(int i = 0; i < mutantFilePaths.size(); i++) {
+            for (int i = 0; i < mutantFilePaths.size(); i++) {
                 String mutantFilePath = mutantFilePaths.get(i);
-                String mutantFileName = Utility.Path2Last(mutantFilePath);
-                String reportFilePath = Utility.CheckStyleResultFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".xml";
+                String mutantFileName = Path2Last(mutantFilePath);
+                String reportFilePath = reportFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".xml";
                 String[] invokeCmds = new String[3];
-                if(OSUtil.isWindows()) {
+                if (OSUtil.isWindows()) {
                     invokeCmds[0] = "cmd.exe";
                     invokeCmds[1] = "/c";
                 } else {
@@ -63,8 +65,8 @@ public class CheckStyle_TransformThread implements Runnable {
                     invokeCmds[1] = "-c";
                 }
                 invokeCmds[2] = "java -jar " + Utility.CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
-                                + configPath + " " + mutantFilePath;
-                if(Utility.DEBUG_STATFIER) {
+                        + configPath + " " + mutantFilePath;
+                if (Utility.DEBUG_STATFIER) {
                     System.out.println(invokeCmds[2]);
                 }
                 Invoker.invokeCommandsByZT(invokeCmds);

@@ -1,8 +1,6 @@
 package org.rainyday.util;
 
 import static org.rainyday.transform.Transform.singleLevelExplorer;
-import static org.rainyday.util.Utility.CNES_PATH;
-import static org.rainyday.util.Utility.CNES_ReportName;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
@@ -10,7 +8,6 @@ import static org.rainyday.util.Utility.DEBUG_STATFIER;
 import static org.rainyday.util.Utility.SONARQUBE_LOGIN;
 import static org.rainyday.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.rainyday.util.Utility.SONAR_SCANNER_PATH;
-import static org.rainyday.util.Utility.SonarQubeResultFolder;
 import static org.rainyday.util.Utility.THREAD_COUNT;
 import static org.rainyday.util.Utility.file2report;
 import static org.rainyday.util.Utility.file2row;
@@ -211,7 +208,6 @@ public class Schedule {
                     List<String> CNES_Commands = new ArrayList<>();
                     CNES_Commands.add("java");
                     CNES_Commands.add("-jar");
-                    CNES_Commands.add(CNES_PATH);
                     CNES_Commands.add("-p");
                     CNES_Commands.add(SONARQUBE_PROJECT_KEY);
                     CNES_Commands.add("-t");
@@ -220,9 +216,8 @@ public class Schedule {
                     CNES_Commands.add("-w");
                     CNES_Commands.add("-e");
                     CNES_Commands.add("-o");
-                    String CNES_ReportFolderPath = SonarQubeResultFolder.getAbsolutePath() + File.separator + "iter" + iter + "_" + subSeedFolderName;
-                    CNES_Commands.add(CNES_ReportFolderPath);
-                    String reportPath = CNES_ReportFolderPath + File.separator + CNES_ReportName;
+                    String CNES_ReportFolderPath = "";
+                    String reportPath = CNES_ReportFolderPath + File.separator + "CNES_ReportName";
                     Invoker.invokeCommandsByZT(CNES_Commands.toArray(new String[CNES_Commands.size()]));
                     if(DEBUG_STATFIER) {
                         System.out.println("Reading result file: " + reportPath);

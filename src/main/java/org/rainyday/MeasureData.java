@@ -9,7 +9,6 @@ import org.rainyday.util.Utility;
 
 import java.util.List;
 
-import static org.rainyday.util.Utility.BASE_SEED_PATH;
 import static org.rainyday.util.Utility.readFileByLine;
 
 /**
