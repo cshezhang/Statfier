@@ -143,7 +143,7 @@ def main():
   #   print("entry:" + str(k) + "   " + str(file2rule[k]))
   for filepath in filepaths:
       # sub_folder_path = '/home/+ File.separator/projects/SAMutator/seeds/' + 'Sub_Seeds_' + str(i)
-    filename = filepath.split(sep)[-1]
+    filename = filepath.split(reg_sep)[-1]
     # print("filename: " + str(filename))
     # if filename not in file2rule.keys():
     #   print("Not in")

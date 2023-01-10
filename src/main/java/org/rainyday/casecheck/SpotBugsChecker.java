@@ -124,7 +124,7 @@ public class SpotBugsChecker {
         List<String> reportPaths = getFilenamesFromFolder(EVALUATION_PATH  + File.separator + "results", true);
         for(String reportPath : reportPaths) {
             try {
-                String[] tokens = reportPath.split(sep);
+                String[] tokens = reportPath.split(reg_sep);
                 String reportName = tokens[tokens.length - 1].substring(0, tokens[tokens.length - 1].length() - 11);
                 String seedPath = "/home/vanguard/projects/SAMutator/seeds/" + reportName + ".java";
                 readSpotBugsResultFile(seedPath, reportPath);

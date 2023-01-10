@@ -109,7 +109,8 @@ public class Utility {
     public static long startTimeStamp = System.currentTimeMillis();
     public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
-    public static final String sep = "/|\\\\";
+    public static final String reg_sep = "/|\\\\";
+    public static final String sep = File.separator;
 
     public static final Date date = new Date();
     public static final SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
@@ -154,7 +155,6 @@ public class Utility {
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
-
     public static List<String> failedReport = new ArrayList<>();
 
     public static void initEnv() {
@@ -238,6 +238,10 @@ public class Utility {
         // subSeedFolder, like security_hardcodedCryptoKey
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         // Generate mutant folder from iter1 -> iter8
+        for(String subSeedFolderName : subSeedFolderNameList) {
+            File subSeedFolder = new File(reportFolder.getAbsolutePath() + File.separator + subSeedFolderName);
+            subSeedFolder.mkdir();
+        }
         for (int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + File.separator + "iter" + i);
             iter.mkdir();
@@ -377,7 +381,7 @@ public class Utility {
         return lines;
     }
 
-    public static boolean writeFileByLine(String outputPath, String content) {
+    public static boolean writeLinesToFile(String outputPath, String content) {
         try {
             FileOutputStream fos = new FileOutputStream(new File(outputPath));
             OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
@@ -393,7 +397,7 @@ public class Utility {
         return true;
     }
 
-    public static boolean writeFileByLine(String outputPath, List<String> lines) {
+    public static boolean writeLinesToFile(String outputPath, List<String> lines) {
         try {
             FileOutputStream fos = new FileOutputStream(new File(outputPath));
             OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
@@ -688,7 +692,7 @@ public class Utility {
 
     // Get the last token in the path, not include postfix, e.g., .java
     public static String Path2Last(String path) {
-        String[] tokens = path.split(sep);
+        String[] tokens = path.split(reg_sep);
         String target = tokens[tokens.length - 1];
         if (target.contains(".")) {
             return target.substring(0, target.indexOf('.'));
@@ -716,7 +720,7 @@ public class Utility {
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
             for (String srcName : fileList) {
-                String[] tokens = srcName.split(sep);
+                String[] tokens = srcName.split(reg_sep);
                 pureNames.add(tokens[tokens.length - 1]);
             }
             return pureNames;
@@ -747,7 +751,7 @@ public class Utility {
         } else {
             LinkedList<String> pureNames = new LinkedList<>();
             for (String srcName : fileList) {
-                String[] tokens = srcName.split(sep);
+                String[] tokens = srcName.split(reg_sep);
                 pureNames.add(tokens[tokens.length - 1]);
             }
             return pureNames;
@@ -793,6 +797,9 @@ public class Utility {
         }
         List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
         for (ASTNode m_node : modifiers) {
+            if(!(m_node instanceof Modifier)) { // Annotation
+                return false;
+            }
             Modifier modifier = (Modifier) m_node;
             if (modifier.isAbstract() || modifier.isNative()) {
                 return true;

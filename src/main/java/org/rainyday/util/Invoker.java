@@ -34,12 +34,12 @@ import static org.rainyday.util.Utility.readInferResultFile;
 import static org.rainyday.util.Utility.readPMDResultFile;
 import static org.rainyday.util.Utility.readSonarQubeResultFile;
 import static org.rainyday.util.Utility.readSpotBugsResultFile;
-import static org.rainyday.util.Utility.sep;
 import static org.rainyday.util.Utility.reportFolder;
+import static org.rainyday.util.Utility.sep;
 import static org.rainyday.util.Utility.spotBugsJarStr;
 import static org.rainyday.util.Utility.subSeedFolderNameList;
 import static org.rainyday.util.Utility.waitThreadPoolEnding;
-import static org.rainyday.util.Utility.writeFileByLine;
+import static org.rainyday.util.Utility.writeLinesToFile;
 
 
 /**
@@ -160,7 +160,7 @@ public class Invoker {
     }
 
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
-    // Generated class files are saved in SpotBugsClassFolder
+    // Generated class files are saved in classFolder
     public static void invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
         if(seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
@@ -212,7 +212,7 @@ public class Invoker {
         }
         contents.add("sonar.java.binaries=" + dummyFolder.getAbsolutePath());
         contents.add("sonar.java.test.binaries=" + dummyFolder.getAbsolutePath());
-        writeFileByLine(settingFilePath, contents);
+        writeLinesToFile(settingFilePath, contents);
     }
 
     public static void invokeSonarQube(String seedFolderPath) {

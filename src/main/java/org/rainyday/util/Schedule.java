@@ -1,6 +1,9 @@
 package org.rainyday.util;
 
+import static org.rainyday.transform.Transform.cnt1;
+import static org.rainyday.transform.Transform.cnt2;
 import static org.rainyday.transform.Transform.singleLevelExplorer;
+import static org.rainyday.util.Invoker.failedCommands;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
@@ -16,11 +19,16 @@ import static org.rainyday.util.Utility.initThreadPool;
 import static org.rainyday.util.Utility.listAveragePartition;
 import static org.rainyday.util.Utility.mutantFolder;
 import static org.rainyday.util.Utility.readSonarQubeResultFile;
+import static org.rainyday.util.Utility.reg_sep;
 import static org.rainyday.util.Utility.sep;
 import static org.rainyday.util.Utility.subSeedFolderNameList;
 import static org.rainyday.util.Utility.waitThreadPoolEnding;
+import static org.rainyday.util.Utility.writeLinesToFile;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +36,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.rainyday.analysis.TypeWrapper;
 import org.rainyday.thread.CheckStyle_TransformThread;
 import org.rainyday.thread.Infer_TransformThread;
@@ -64,7 +76,7 @@ public class Schedule {
         Map<String, Integer> file2index = new HashMap<>();  // source file -> config index
         for (int i = 0; i < seedFilePaths.size(); i++) {
             String seedFilePath = seedFilePaths.get(i);  // Absolute Path
-            String[] tokens = seedFilePath.split(sep);
+            String[] tokens = seedFilePath.split(reg_sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedFilePath)) {  // Check whether this seed has warning
                 continue;
@@ -94,7 +106,7 @@ public class Schedule {
         List<TypeWrapper> initWrappers = new ArrayList<>();
         for (int index = 0; index < seedFilePaths.size(); index++) {
             String seedFilePath = seedFilePaths.get(index);
-            String[] tokens = seedFilePath.split(sep);
+            String[] tokens = seedFilePath.split(reg_sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedFilePath)) {
                 failSeedPaths.add(seedFilePath);
@@ -139,7 +151,7 @@ public class Schedule {
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(sep);
+            String[] tokens = seedPath.split(reg_sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedPath)) {
                 continue;
@@ -243,7 +255,7 @@ public class Schedule {
         Invoker.invokeSonarQube(seedFolderPath);
         ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
         for (String filepath : file2report.keySet()) {
-            String[] tokens = filepath.split(sep);
+            String[] tokens = filepath.split(reg_sep);
             String folderName = tokens[tokens.length - 2];
             TypeWrapper wrapper = new TypeWrapper(filepath, folderName);
             wrappers.add(wrapper);
@@ -263,7 +275,7 @@ public class Schedule {
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(sep);
+            String[] tokens = seedPath.split(reg_sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedPath)) {
                 continue;
@@ -290,5 +302,95 @@ public class Schedule {
         }
         waitThreadPoolEnding(threadPool);
     }
+
+    public static void writeEvaluationResult() {
+        int rules = Utility.compactIssues.keySet().size();
+        int seqCount = 0;
+        int allValidVariantNumber = 0;
+        for (Map.Entry<String, HashMap<String, List<TriTuple>>> entry : Utility.compactIssues.entrySet()) {
+            String rule = entry.getKey();
+            HashMap<String, List<TriTuple>> seq2mutants = entry.getValue();
+            seqCount += seq2mutants.size();
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode root = mapper.createObjectNode();
+            root.put("Rule", rule);
+            root.put("SeqSize", seq2mutants.size());
+            ArrayNode bugs = mapper.createArrayNode();
+            for (Map.Entry<String, List<TriTuple>> subEntry : seq2mutants.entrySet()) {
+                ObjectNode bug = mapper.createObjectNode();
+                bug.put("Transform_Sequence", subEntry.getKey());
+                ArrayNode tuples = mapper.createArrayNode();
+                for (TriTuple triTuple : subEntry.getValue()) {
+                    ObjectNode tuple = mapper.createObjectNode();
+                    tuple.put("Seed", triTuple.first);
+                    tuple.put("Mutant", triTuple.second);
+                    tuple.put("BugType", triTuple.third);
+                    tuples.add(tuple);
+                }
+                bug.put("Bugs", tuples);
+                bugs.add(bug);
+                allValidVariantNumber += subEntry.getValue().size();
+            }
+            root.put("Results", bugs);
+            File jsonFile = new File(Utility.EVALUATION_PATH + File.separator + "results" + File.separator + rule + ".json");
+            try {
+                if (!jsonFile.exists()) {
+                    jsonFile.createNewFile();
+                }
+                FileWriter jsonWriter = new FileWriter(jsonFile);
+                BufferedWriter jsonBufferedWriter = new BufferedWriter(jsonWriter);
+                jsonBufferedWriter.write(root.toString());
+                jsonBufferedWriter.close();
+                jsonWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        StringBuilder res = new StringBuilder();
+        res.append("Rule Size: " + rules + "\n");
+        res.append("Detected Rules: " + Utility.compactIssues.keySet() + "\n");
+        res.append("Unique Sequence: " + seqCount + "\n");
+        res.append("Valid Mutant Size(Potential Bug): " + allValidVariantNumber + "\n");
+        res.append("Mutant2Seed:\n");
+        for (Map.Entry<String, String> entry : TypeWrapper.mutant2seed.entrySet()) {
+            res.append(entry.getKey() + "->" + entry.getValue() + "#" + TypeWrapper.mutant2seq.get(entry.getKey()) + "\n");
+        }
+        long executionTime = System.currentTimeMillis() - Utility.startTimeStamp;
+        res.append(String.format(
+                "Overall Execution Time is: " + String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                        TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
+        );
+        File resFile = new File(Utility.EVALUATION_PATH + File.separator + "Output.log");
+        try {
+            if (!resFile.exists()) {
+                resFile.createNewFile();
+            }
+            FileWriter writer = new FileWriter(resFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            bufferedWriter.write(res.toString());
+            if (Utility.INFER_MUTATION) {
+                bufferedWriter.write("Failed Reports:\n");
+                for (String report : Utility.failedReport) {
+                    bufferedWriter.write(report + "\n");
+                }
+            }
+            if (Utility.SPOTBUGS_MUTATION) {
+                bufferedWriter.write("Failed Commands:\n");
+                for (String failedCmd : failedCommands) {
+                    bufferedWriter.write(failedCmd + "\n");
+                }
+            }
+            bufferedWriter.close();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("All variants size: " + cnt1);
+        System.out.println("Reduced variants size: " + cnt2);
+        System.out.println("Ratio: " + cnt2.get() / (double) (cnt1.get()));
+        writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
+    }
+
 
 }

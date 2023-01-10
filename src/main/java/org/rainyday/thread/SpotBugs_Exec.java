@@ -19,6 +19,7 @@ import static org.rainyday.util.Utility.RANDOM_SELECTION;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
 import static org.rainyday.util.Utility.SpotBugsPath;
 import static org.rainyday.util.Utility.readSpotBugsResultFile;
+import static org.rainyday.util.Utility.reg_sep;
 import static org.rainyday.util.Utility.reportFolder;
 import static org.rainyday.util.Utility.sep;
 
@@ -60,7 +61,7 @@ public class SpotBugs_Exec {
                 for (TypeWrapper tmpWrapper : wrappers) {
                     String seedFilePath = tmpWrapper.getFilePath();
                     String seedFolderPath = tmpWrapper.getFolderPath();
-                    String[] tokens = seedFilePath.split(sep);
+                    String[] tokens = seedFilePath.split(reg_sep);
                     String seedFileNameWithSuffix = tokens[tokens.length - 1];
                     String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
@@ -83,7 +84,7 @@ public class SpotBugs_Exec {
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath();
-                    Invoker.invokeCommands(invokeCmds);
+                    Invoker.invokeCommandsByZT(invokeCmds);
                     String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path);
                 }
