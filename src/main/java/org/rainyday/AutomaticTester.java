@@ -3,6 +3,7 @@ package org.rainyday;
 import org.rainyday.util.Schedule;
 import org.rainyday.util.Utility;
 
+import static org.rainyday.util.Schedule.writeEvaluationResult;
 import static org.rainyday.util.Utility.sourceSeedPath;
 
 /**
@@ -31,6 +32,7 @@ public class AutomaticTester {
         if (Utility.SONARQUBE_MUTATION) {
             schedule.executeSonarQubeTransform(sourceSeedPath);
         }
+        writeEvaluationResult();
         long OVERALL_EXEC_TIME = System.currentTimeMillis() - time1;
         long minutes = (OVERALL_EXEC_TIME / 1000) / 60;
         long seconds = (OVERALL_EXEC_TIME / 1000) % 60;

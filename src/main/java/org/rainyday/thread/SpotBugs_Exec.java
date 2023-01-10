@@ -21,7 +21,6 @@ import static org.rainyday.util.Utility.SpotBugsPath;
 import static org.rainyday.util.Utility.readSpotBugsResultFile;
 import static org.rainyday.util.Utility.reg_sep;
 import static org.rainyday.util.Utility.reportFolder;
-import static org.rainyday.util.Utility.sep;
 
 public class SpotBugs_Exec {
 

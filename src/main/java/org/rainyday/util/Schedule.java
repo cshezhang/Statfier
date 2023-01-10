@@ -347,6 +347,9 @@ public class Schedule {
             }
         }
         StringBuilder res = new StringBuilder();
+        res.append("All variants size: " + cnt1);
+        res.append("Reduced variants size: " + cnt2);
+        res.append("Ratio: " + cnt2.get() / (double) (cnt1.get()));
         res.append("Rule Size: " + rules + "\n");
         res.append("Detected Rules: " + Utility.compactIssues.keySet() + "\n");
         res.append("Unique Sequence: " + seqCount + "\n");
@@ -386,9 +389,6 @@ public class Schedule {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("All variants size: " + cnt1);
-        System.out.println("Reduced variants size: " + cnt2);
-        System.out.println("Ratio: " + cnt2.get() / (double) (cnt1.get()));
         writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
     }
 
