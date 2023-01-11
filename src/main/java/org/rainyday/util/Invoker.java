@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
+import net.sourceforge.pmd.PMD;
 import org.rainyday.thread.CheckStyle_InvokeThread;
 import org.rainyday.thread.Infer_InvokeThread;
 import org.rainyday.thread.PMD_InvokeThread;
@@ -19,6 +20,7 @@ import org.zeroturnaround.exec.ProcessExecutor;
 import static org.rainyday.util.Utility.INFER_MUTATION;
 import static org.rainyday.util.Utility.JAVAC_PATH;
 import static org.rainyday.util.Utility.PMD_MUTATION;
+import static org.rainyday.util.Utility.PMD_SEED_PATH;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.SONARQUBE_LOGIN;
@@ -26,6 +28,7 @@ import static org.rainyday.util.Utility.SONARQUBE_MUTATION;
 import static org.rainyday.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.rainyday.util.Utility.SONAR_SCANNER_PATH;
 import static org.rainyday.util.Utility.SPOTBUGS_MUTATION;
+import static org.rainyday.util.Utility.THREAD_COUNT;
 import static org.rainyday.util.Utility.getFilenamesFromFolder;
 import static org.rainyday.util.Utility.inferJarStr;
 import static org.rainyday.util.Utility.initThreadPool;
@@ -286,13 +289,33 @@ public class Invoker {
     }
 
     public static void invokePMD(String seedFolderPath) {
-        ExecutorService threadPool = initThreadPool();
-        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new PMD_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
-        }
-        waitThreadPoolEnding(threadPool);
-        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            readPMDResultFile(reportFolder.getAbsolutePath()  + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
+        if(THREAD_COUNT > 1) {
+            ExecutorService threadPool = initThreadPool();
+            for (int i = 0; i < subSeedFolderNameList.size(); i++) {
+                threadPool.submit(new PMD_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
+            }
+            waitThreadPoolEnding(threadPool);
+            for (int i = 0; i < subSeedFolderNameList.size(); i++) {
+                readPMDResultFile(reportFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
+            }
+        } else {
+            for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+                String seedFolderName = subSeedFolderNameList.get(i);
+                String[] tokens = seedFolderName.split("_");
+                String ruleCategory = tokens[0];
+                String ruleType = tokens[1];
+                String[] pmdConfig = {
+                        "-d", seedFolderPath  + File.separator + seedFolderName,
+                        "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
+                        "-f", "json",
+                        "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json",
+                        "--no-cache"
+                };
+                PMD.runPmd(pmdConfig);
+            }
+            for (int i = 0; i < subSeedFolderNameList.size(); i++) {
+                readPMDResultFile(reportFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
+            }
         }
     }
 

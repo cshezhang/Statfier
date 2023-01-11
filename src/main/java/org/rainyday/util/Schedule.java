@@ -4,6 +4,7 @@ import static org.rainyday.transform.Transform.cnt1;
 import static org.rainyday.transform.Transform.cnt2;
 import static org.rainyday.transform.Transform.singleLevelExplorer;
 import static org.rainyday.util.Invoker.failedCommands;
+import static org.rainyday.util.Invoker.invokePMD;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
 import static org.rainyday.util.Utility.INFER_MUTATION;
 import static org.rainyday.util.Utility.Path2Last;
@@ -23,6 +24,7 @@ import static org.rainyday.util.Utility.listAveragePartition;
 import static org.rainyday.util.Utility.mutantFolder;
 import static org.rainyday.util.Utility.readSonarQubeResultFile;
 import static org.rainyday.util.Utility.reg_sep;
+import static org.rainyday.util.Utility.reportFolder;
 import static org.rainyday.util.Utility.sep;
 import static org.rainyday.util.Utility.subSeedFolderNameList;
 import static org.rainyday.util.Utility.waitThreadPoolEnding;
@@ -44,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import net.sourceforge.pmd.PMD;
 import org.rainyday.analysis.TypeWrapper;
 import org.rainyday.thread.CheckStyle_TransformThread;
 import org.rainyday.thread.Infer_TransformThread;
@@ -144,12 +147,10 @@ public class Schedule {
 
     public void executePMDTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
-        Invoker.invokePMD(seedFolderPath);
-        ExecutorService threadPool = initThreadPool();
+        invokePMD(seedFolderPath);
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
         HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
-        List<PMD_TransformThread> transformThreads = new ArrayList<>();
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
@@ -180,20 +181,63 @@ public class Schedule {
             }
         }
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
-        for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
-            String category = entry.getKey();
-            HashSet<String> bugTypes = entry.getValue();
-            for (String bugType : bugTypes) {
-                String seedFolderName = category + "_" + bugType;
-                List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
-                PMD_TransformThread mutationThread = new PMD_TransformThread(wrappers, seedFolderName);
-                transformThreads.add(mutationThread);
+        if(THREAD_COUNT > 1) {
+            List<PMD_TransformThread> transformThreads = new ArrayList<>();
+            ExecutorService threadPool = initThreadPool();
+            for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
+                String category = entry.getKey();
+                HashSet<String> bugTypes = entry.getValue();
+                for (String bugType : bugTypes) {
+                    String seedFolderName = category + "_" + bugType;
+                    List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
+                    PMD_TransformThread mutationThread = new PMD_TransformThread(wrappers, seedFolderName);
+                    transformThreads.add(mutationThread);
+                }
+            }
+            for (int i = 0; i < transformThreads.size(); i++) {
+                threadPool.submit(transformThreads.get(i));
+            }
+            waitThreadPoolEnding(threadPool);
+        } else {
+            for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
+                String category = entry.getKey();
+                HashSet<String> bugTypes = entry.getValue();
+                for (String bugType : bugTypes) {
+                    int currentDepth = 0;
+                    String seedFolderName = category + "_" + bugType;
+                    ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
+                        {
+                            addAll(bug2wrapper.get(seedFolderName));  // init by the wrappers in level 0
+                        }
+                    };
+                    for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+                        if(DEBUG) {
+                            System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
+                        }
+                        singleLevelExplorer(wrappers, currentDepth++);
+                        String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
+                        String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+                        String[] pmdConfig = {
+                                "-d", mutantFolderPath,
+                                "-R", "category/java/" + category + ".xml/" + bugType,
+                                "-f", "json",
+                                "-r", resultFilePath,
+                                "--no-cache"
+                        };
+                        PMD.runPmd(pmdConfig); // detect mutants of level i
+                        Utility.readPMDResultFile(resultFilePath);
+                        List<TypeWrapper> validWrappers = new ArrayList<>();
+                        while (!wrappers.isEmpty()) {
+                            TypeWrapper head = wrappers.pollFirst();
+                            if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
+                                validWrappers.add(head);
+                            }
+                        }
+                        wrappers.addAll(validWrappers);
+                    }
+                }
             }
         }
-        for (int i = 0; i < transformThreads.size(); i++) {
-            threadPool.submit(transformThreads.get(i));
-        }
-        waitThreadPoolEnding(threadPool);
     }
 
     public void singleThreadWorker(ArrayDeque<TypeWrapper> wrappers) {
@@ -350,17 +394,17 @@ public class Schedule {
             }
         }
         List<String> output = new ArrayList<>();
-        output.add("All variants size: " + cnt1 + "\n");
-        output.add("Reduced variants size: " + cnt2 + "\n");
-        output.add("Ratio: " + cnt2.get() / (double) (cnt1.get()) + "\n");
+        output.add("All variants size: " + cnt1);
+        output.add("Reduced variants size: " + cnt2);
+        output.add("Ratio: " + cnt2.get() / (double) (cnt1.get()));
         output.add("Rule Size: " + rules + "\n");
-        output.add("Detected Rules: " + Utility.compactIssues.keySet() + "\n");
-        output.add("Unique Sequence: " + seqCount + "\n");
-        output.add("Valid Mutant Size(Potential Bug): " + allValidVariantNumber + "\n");
+        output.add("Detected Rules: " + Utility.compactIssues.keySet());
+        output.add("Unique Sequence: " + seqCount);
+        output.add("Valid Mutant Size(Potential Bug): " + allValidVariantNumber);
         List<String> mutant2seed = new ArrayList<>();
-        mutant2seed.add("Mutant2Seed:\n");
+        mutant2seed.add("Mutant2Seed:");
         for (Map.Entry<String, String> entry : TypeWrapper.mutant2seed.entrySet()) {
-            mutant2seed.add(entry.getKey() + "->" + entry.getValue() + "#" + TypeWrapper.mutant2seq.get(entry.getKey()) + "\n");
+            mutant2seed.add(entry.getKey() + "->" + entry.getValue() + "#" + TypeWrapper.mutant2seq.get(entry.getKey()));
         }
         writeLinesToFile(EVALUATION_PATH + sep + "mutant2seed.log", mutant2seed);
         if(INFER_MUTATION) {
