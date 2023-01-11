@@ -119,6 +119,14 @@ public class AnonymousClassWrapper extends Transform {
         if(!TypeWrapper.checkClassProperty(clazz)) {
             return nodes;
         }
+        List<ASTNode> typeModifiers = clazz.modifiers();
+        for(ASTNode modifier : typeModifiers) {
+            if(modifier instanceof Modifier) {
+                if(modifier.toString().contains("final")) {
+                    return nodes;
+                }
+            }
+        }
         MethodDeclaration method = TypeWrapper.getDirectMethodOfNode(node);
         if (method == null) {
             if(TypeWrapper.getStatementOfNode(node) instanceof FieldDeclaration) {
@@ -168,7 +176,8 @@ public class AnonymousClassWrapper extends Transform {
                 }
             }
             if(modifier instanceof Modifier) {
-                if(((Modifier) modifier).getKeyword().toString().contains("abstract")) {
+                String modifierName = ((Modifier) modifier).getKeyword().toString();
+                if(modifierName.contains("abstract")) {
                     return nodes;
                 }
             }

@@ -17,7 +17,11 @@ public class ModuleTester {
         String[] pmdArgs = {
                 "-d", "./TestCase/Case1.java",
 //                "-R", "./PMD_config.xml",
-                "-R", "category/java/errorprone.xml/CloseResource",
+                "-R", "category/java/performance.xml/ConsecutiveAppendsShouldReuse",
+//                "-R", "category/java/codestyle.xml/AvoidProtectedFieldInFinalClass",
+//                "-R", "category/java/errorprone.xml/CloseResource",
+//                "-R", "category/java/errorprone.xml/AssignmentInOperand",
+//                "-R", "category/java/errorprone.xml/AvoidMultipleUnaryOperators",
 //                "-R", "category/java/design.xml/SingularField",
 //                "-R", "category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal",
 //                "-R", "category/java/errorprone.xml/TestClassWithoutTestCases",
@@ -94,7 +98,6 @@ public class ModuleTester {
         };
         PMD.main(pmdArgs);
     }
-
 
 
 }

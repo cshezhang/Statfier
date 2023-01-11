@@ -11,8 +11,6 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.rainyday.analysis.TypeWrapper.getChildrenNodes;
-
 /**
  * Description:
  * Author: Vanguard

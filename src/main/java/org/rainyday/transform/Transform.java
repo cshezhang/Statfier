@@ -16,6 +16,7 @@ import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.DIV_SELECTION;
 import static org.rainyday.util.Utility.GUIDED_LOCATION;
 import static org.rainyday.util.Utility.NO_SELECTION;
+import static org.rainyday.util.Utility.PMD_MUTATION;
 import static org.rainyday.util.Utility.RANDOM_LOCATION;
 import static org.rainyday.util.Utility.RANDOM_SELECTION;
 
@@ -74,23 +75,25 @@ public abstract class Transform {
             transforms.add(AddGlobalAssignment.getInstance());
             transforms.add(AddLocalAssignment.getInstance());
             transforms.add(AddMethodCallToLiteral.getInstance());
-            transforms.add(AddRedundantLiteral.getInstance());
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
             transforms.add(CFWrapperWithForTrue.getInstance());
-            transforms.add(CFWrapperWithIfFalse.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
-            transforms.add(CompoundExpression1.getInstance());
-            transforms.add(CompoundExpression2.getInstance());
-            transforms.add(CompoundExpression3.getInstance());
-            transforms.add(CompoundExpression4.getInstance());
             transforms.add(EnumClassWrapper.getInstance());
             transforms.add(NestedClassWrapper.getInstance());
             transforms.add(TransferLocalVarToGlobal.getInstance());
             transforms.add(TransferLocalVarToStaticGlobal.getInstance());
             transforms.add(AddStaticAssignment.getInstance());
             transforms.add(AddStaticModifier.getInstance());
+            if(!PMD_MUTATION) {
+                transforms.add(CFWrapperWithIfFalse.getInstance());
+                transforms.add(CompoundExpression1.getInstance());
+                transforms.add(CompoundExpression2.getInstance());
+                transforms.add(CompoundExpression3.getInstance());
+                transforms.add(CompoundExpression4.getInstance());
+                transforms.add(AddRedundantLiteral.getInstance());
+            }
         }
         for (Transform transform : transforms) {
             name2transform.put(transform.getIndex(), transform);

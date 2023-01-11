@@ -1,5 +1,6 @@
 package org.rainyday.transform;
 
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.rainyday.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -87,6 +88,13 @@ public class CFWrapperWithForFalse extends Transform {
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration || node instanceof EmptyStatement ||
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;
+        }
+        if(node.getParent().getParent() instanceof MethodDeclaration) {
+            MethodDeclaration method = (MethodDeclaration) node.getParent().getParent();
+            List<ASTNode> statements = method.getBody().statements();
+            if(method.isConstructor() && !statements.isEmpty() && node == statements.get(0) && node instanceof ConstructorInvocation) {
+                return nodes;
+            }
         }
         nodes.add(node);
         return nodes;

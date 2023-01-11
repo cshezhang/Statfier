@@ -69,6 +69,7 @@ import static org.rainyday.util.Utility.COMPILE;
 import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.compactIssues;
+import static org.rainyday.util.Utility.compareNode;
 import static org.rainyday.util.Utility.file2bugs;
 import static org.rainyday.util.Utility.file2row;
 import static org.rainyday.util.Utility.isInvalidModifier;
@@ -1183,56 +1184,6 @@ public class TypeWrapper {
             return ast.newPrimitiveType(PrimitiveType.BOOLEAN);
         }
         return ast.newSimpleType(ast.newSimpleName("Object"));
-    }
-
-    public static final ASTMatcher matcher = new ASTMatcher();
-    public boolean compareNode(ASTNode node1, ASTNode node2) {
-        if (node1.toString().equals(node2.toString())) {
-            return true;
-        }
-        if (node1 instanceof MethodDeclaration) {
-            return matcher.match((MethodDeclaration) node1, node2);
-        }
-        if (node1 instanceof IfStatement) {
-            return matcher.match((IfStatement) node1, node2);
-        }
-        if (node1 instanceof SwitchStatement) {
-            return matcher.match((SwitchStatement) node1, node2);
-        }
-        if (node1 instanceof WhileStatement) {
-            return matcher.match((WhileStatement) node1, node2);
-        }
-        if (node1 instanceof DoStatement) {
-            return matcher.match((DoStatement) node1, node2);
-        }
-        if (node1 instanceof ForStatement) {
-            return matcher.match((ForStatement) node1, node2);
-        }
-        if (node1 instanceof TryStatement) {
-            return matcher.match((TryStatement) node1, node2);
-        }
-        if (node1 instanceof EnhancedForStatement) {
-            return matcher.match((EnhancedForStatement) node1, node2);
-        }
-        if (node1 instanceof TypeDeclarationStatement) {
-            return matcher.match((TypeDeclarationStatement) node1, node2);
-        }
-        if (node1 instanceof BreakStatement) {
-            return matcher.match((BreakStatement) node1, node2);
-        }
-        if (node1 instanceof EmptyStatement) {
-            return matcher.match((EmptyStatement) node1, node2);
-        }
-        if (node1 instanceof ThrowStatement) {
-            return matcher.match((ThrowStatement) node1, node2);
-        }
-        if (node1 instanceof SwitchStatement) {
-            return matcher.match((SwitchStatement) node1, node2);
-        }
-        if (node1 instanceof Block) {
-            return matcher.match((Block) node1, node2);
-        }
-        return false;
     }
 
 }

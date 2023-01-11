@@ -1,5 +1,6 @@
 package org.rainyday.transform;
 
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.rainyday.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -23,9 +24,11 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.rainyday.util.Utility.compareNode;
 import static org.rainyday.util.Utility.file2row;
 
 /**
@@ -135,6 +138,13 @@ public class AddControlBranch extends Transform {
         if(node instanceof Statement) {
             if(node instanceof VariableDeclarationStatement) {
                return nodes;
+            }
+            if(node.getParent().getParent() instanceof MethodDeclaration) {
+                MethodDeclaration method = (MethodDeclaration) node.getParent().getParent();
+                List<ASTNode> statements = method.getBody().statements();
+                if(method.isConstructor() && !statements.isEmpty() && node == statements.get(0) && node instanceof ConstructorInvocation) {
+                    return nodes;
+                }
             }
 //            if (node instanceof VariableDeclarationStatement) {
 //                VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;

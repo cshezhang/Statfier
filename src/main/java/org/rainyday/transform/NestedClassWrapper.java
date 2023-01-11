@@ -40,11 +40,16 @@ public class NestedClassWrapper extends Transform {
         MethodDeclaration oldMethod = TypeWrapper.getDirectMethodOfNode(srcNode);
         TypeDeclaration nestedClass = ast.newTypeDeclaration();
         nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
+        TypeDeclaration type = TypeWrapper.getClassOfNode(srcNode);
+        for(ASTNode classModifier : (List<ASTNode>) type.modifiers()) {
+            if(classModifier instanceof Modifier) {
+                nestedClass.modifiers().add(ASTNode.copySubtree(ast, classModifier));
+            }
+        }
         if (oldMethod != null) {
             if (oldMethod.isConstructor()) {
                 return false;
             }
-            TypeDeclaration type = TypeWrapper.getClassOfNode(srcNode);
             String methodKey = type.getName().toString() + ":" + TypeWrapper.createMethodSignature(oldMethod);
             for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
                 if(!entry.getKey().equals(methodKey) && entry.getValue().contains(oldMethod.getName().getIdentifier())) {

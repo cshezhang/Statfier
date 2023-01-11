@@ -3,9 +3,23 @@ package org.rainyday.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EmptyStatement;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
 import org.rainyday.analysis.TypeWrapper;
 
 import org.rainyday.report.CheckStyle_Report;
@@ -818,6 +832,56 @@ public class Utility {
             if (modifier.isAbstract() || modifier.isNative()) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private static final ASTMatcher matcher = new ASTMatcher();
+    public static boolean compareNode(ASTNode node1, ASTNode node2) {
+        if (node1.toString().equals(node2.toString())) {
+            return true;
+        }
+        if (node1 instanceof MethodDeclaration) {
+            return matcher.match((MethodDeclaration) node1, node2);
+        }
+        if (node1 instanceof IfStatement) {
+            return matcher.match((IfStatement) node1, node2);
+        }
+        if (node1 instanceof SwitchStatement) {
+            return matcher.match((SwitchStatement) node1, node2);
+        }
+        if (node1 instanceof WhileStatement) {
+            return matcher.match((WhileStatement) node1, node2);
+        }
+        if (node1 instanceof DoStatement) {
+            return matcher.match((DoStatement) node1, node2);
+        }
+        if (node1 instanceof ForStatement) {
+            return matcher.match((ForStatement) node1, node2);
+        }
+        if (node1 instanceof TryStatement) {
+            return matcher.match((TryStatement) node1, node2);
+        }
+        if (node1 instanceof EnhancedForStatement) {
+            return matcher.match((EnhancedForStatement) node1, node2);
+        }
+        if (node1 instanceof TypeDeclarationStatement) {
+            return matcher.match((TypeDeclarationStatement) node1, node2);
+        }
+        if (node1 instanceof BreakStatement) {
+            return matcher.match((BreakStatement) node1, node2);
+        }
+        if (node1 instanceof EmptyStatement) {
+            return matcher.match((EmptyStatement) node1, node2);
+        }
+        if (node1 instanceof ThrowStatement) {
+            return matcher.match((ThrowStatement) node1, node2);
+        }
+        if (node1 instanceof SwitchStatement) {
+            return matcher.match((SwitchStatement) node1, node2);
+        }
+        if (node1 instanceof Block) {
+            return matcher.match((Block) node1, node2);
         }
         return false;
     }
