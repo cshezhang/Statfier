@@ -5,13 +5,16 @@ import static org.rainyday.transform.Transform.cnt2;
 import static org.rainyday.transform.Transform.singleLevelExplorer;
 import static org.rainyday.util.Invoker.failedCommands;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
+import static org.rainyday.util.Utility.INFER_MUTATION;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
 import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.SONARQUBE_LOGIN;
 import static org.rainyday.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.rainyday.util.Utility.SONAR_SCANNER_PATH;
+import static org.rainyday.util.Utility.SPOTBUGS_MUTATION;
 import static org.rainyday.util.Utility.THREAD_COUNT;
+import static org.rainyday.util.Utility.failedReport;
 import static org.rainyday.util.Utility.file2report;
 import static org.rainyday.util.Utility.file2row;
 import static org.rainyday.util.Utility.getFilenamesFromFolder;
@@ -346,51 +349,33 @@ public class Schedule {
                 e.printStackTrace();
             }
         }
-        StringBuilder res = new StringBuilder();
-        res.append("All variants size: " + cnt1);
-        res.append("Reduced variants size: " + cnt2);
-        res.append("Ratio: " + cnt2.get() / (double) (cnt1.get()));
-        res.append("Rule Size: " + rules + "\n");
-        res.append("Detected Rules: " + Utility.compactIssues.keySet() + "\n");
-        res.append("Unique Sequence: " + seqCount + "\n");
-        res.append("Valid Mutant Size(Potential Bug): " + allValidVariantNumber + "\n");
-        res.append("Mutant2Seed:\n");
+        List<String> output = new ArrayList<>();
+        output.add("All variants size: " + cnt1 + "\n");
+        output.add("Reduced variants size: " + cnt2 + "\n");
+        output.add("Ratio: " + cnt2.get() / (double) (cnt1.get()) + "\n");
+        output.add("Rule Size: " + rules + "\n");
+        output.add("Detected Rules: " + Utility.compactIssues.keySet() + "\n");
+        output.add("Unique Sequence: " + seqCount + "\n");
+        output.add("Valid Mutant Size(Potential Bug): " + allValidVariantNumber + "\n");
+        List<String> mutant2seed = new ArrayList<>();
+        mutant2seed.add("Mutant2Seed:\n");
         for (Map.Entry<String, String> entry : TypeWrapper.mutant2seed.entrySet()) {
-            res.append(entry.getKey() + "->" + entry.getValue() + "#" + TypeWrapper.mutant2seq.get(entry.getKey()) + "\n");
+            mutant2seed.add(entry.getKey() + "->" + entry.getValue() + "#" + TypeWrapper.mutant2seq.get(entry.getKey()) + "\n");
+        }
+        writeLinesToFile(EVALUATION_PATH + sep + "mutant2seed.log", mutant2seed);
+        if(INFER_MUTATION) {
+            writeLinesToFile(EVALUATION_PATH + sep + "FailedReports.log", failedReport);
+        }
+        if(SPOTBUGS_MUTATION) {
+            writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
         }
         long executionTime = System.currentTimeMillis() - Utility.startTimeStamp;
-        res.append(String.format(
+        output.add(String.format(
                 "Overall Execution Time is: " + String.format("%d min, %d sec",
                         TimeUnit.MILLISECONDS.toMinutes(executionTime),
                         TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
         );
-        File resFile = new File(Utility.EVALUATION_PATH + File.separator + "Output.log");
-        try {
-            if (!resFile.exists()) {
-                resFile.createNewFile();
-            }
-            FileWriter writer = new FileWriter(resFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            bufferedWriter.write(res.toString());
-            if (Utility.INFER_MUTATION) {
-                bufferedWriter.write("Failed Reports:\n");
-                for (String report : Utility.failedReport) {
-                    bufferedWriter.write(report + "\n");
-                }
-            }
-            if (Utility.SPOTBUGS_MUTATION) {
-                bufferedWriter.write("Failed Commands:\n");
-                for (String failedCmd : failedCommands) {
-                    bufferedWriter.write(failedCmd + "\n");
-                }
-            }
-            bufferedWriter.close();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
+        writeLinesToFile(EVALUATION_PATH + File.separator + "Output.log", output);
     }
-
 
 }
