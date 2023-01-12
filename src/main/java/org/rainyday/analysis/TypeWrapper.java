@@ -552,6 +552,7 @@ public class TypeWrapper {
     }
 
     public static int transformedSeed = 0;
+    // 只是random location，没有random transformation
     public List<TypeWrapper> TransformByRandomLocation() {
         List<TypeWrapper> newWrappers = new ArrayList<>();
         transformedSeed++;
@@ -560,9 +561,9 @@ public class TypeWrapper {
         }
         int cnt;
         if(file2row.containsKey(this.filePath)) {
-            cnt = file2row.get(this.filePath).size() * Transform.getTransforms().size();
+            cnt = file2row.get(this.filePath).size();
         } else {
-            cnt = Transform.getTransforms().size();
+            cnt = 1;
         }
         Set<ASTNode> visited = new HashSet<>();
         int randomCount = 0;
