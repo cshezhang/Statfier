@@ -558,7 +558,12 @@ public class TypeWrapper {
         if (this.candidateNodes == null) {
             this.candidateNodes = this.allNodes;
         }
-        int cnt = file2row.get(this.filePath).size() * Transform.getTransforms().size();
+        int cnt;
+        if(file2row.containsKey(this.filePath)) {
+            cnt = file2row.get(this.filePath).size() * Transform.getTransforms().size();
+        } else {
+            cnt = Transform.getTransforms().size();
+        }
         Set<ASTNode> visited = new HashSet<>();
         int randomCount = 0;
         while (true) {

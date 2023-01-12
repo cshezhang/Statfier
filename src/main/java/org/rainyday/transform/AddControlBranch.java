@@ -68,11 +68,15 @@ public class AddControlBranch extends Transform {
         // Final modifier can be added by a specific transformation
         int startLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition());
         int endLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition() + srcNode.getLength());
-        List<Integer> rows = file2row.get(wrapper.getParentWrapper().getFilePath());
-        for(Integer row : rows) {
-            if(row >= startLine && row <= endLine) {
-                wrapper.expectedNumbers++;
+        if(file2row.containsKey(wrapper.getParentWrapper().getFilePath())) {
+            List<Integer> rows = file2row.get(wrapper.getParentWrapper().getFilePath());
+            for (Integer row : rows) {
+                if (row >= startLine && row <= endLine) {
+                    wrapper.expectedNumbers++;
+                }
             }
+        } else {
+            return false;
         }
         if(srcNode instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement oldVdStatement = (VariableDeclarationStatement) srcNode;

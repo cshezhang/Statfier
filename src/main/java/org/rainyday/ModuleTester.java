@@ -15,9 +15,9 @@ public class ModuleTester {
     @Test
     public void testPMD() {
         String[] pmdArgs = {
-//                "-d", "./TestCase/Case1.java",
-                "-d", "./src/test/java/ASTCase.java",
-                "-R", "category/java/bestpractices.xml/MethodReturnsInternalArray",
+                "-d", "./TestCase/Case1.java",
+//                "-d", "./src/test/java/ASTCase.java",
+//                "-R", "category/java/bestpractices.xml/MethodReturnsInternalArray",
 //                "-R", "./PMD_config.xml",
 //                "-R", "category/java/bestpractices.xml/JUnitUseExpected",
 //                "-R", "category/java/bestpractices.xml/JUnitAssertionsShouldIncludeMessage",
@@ -95,7 +95,7 @@ public class ModuleTester {
 //                "-R", "category/java/performance.xml/UselessStringValueOf",
 //                "-R", "category/java/performance.xml/UseArraysAsList",
 //                "-R", "category/java/security.xml/HardCodedCryptoKey",
-//                "-R", "category/java/security.xml/InsecureCryptoIv",
+                "-R", "category/java/security.xml/InsecureCryptoIv",
 //                "-R", "category/java/errorprone.xml/AvoidFieldNameMatchingMethodName",
                 "-f", "html",
                 "-r", "./PMD_Result.html",

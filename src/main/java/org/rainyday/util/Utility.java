@@ -346,6 +346,9 @@ public class Utility {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(reportPath);
+        if(reportPath.contains("mutant126")) {
+            int a = 10;
+        }
         try {
             JsonNode rootNode = mapper.readTree(jsonFile);
             JsonNode reportNodes = rootNode.get("files");
