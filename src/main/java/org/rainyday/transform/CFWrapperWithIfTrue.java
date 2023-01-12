@@ -58,6 +58,9 @@ public class CFWrapperWithIfTrue extends Transform {
         if (TypeWrapper.isLiteral(node)) {
             return nodes;
         }
+        if(!(node instanceof Statement) && !(node instanceof Block)) {
+            return nodes;
+        }
         ASTNode par = node.getParent();
         if (node instanceof Statement && (par instanceof IfStatement || par instanceof WhileStatement ||
                 par instanceof DoStatement || par instanceof ForStatement)) {

@@ -52,6 +52,9 @@ public class CFWrapperWithDoWhile extends Transform {
         if(TypeWrapper.isLiteral(node)) {
             return nodes;
         }
+        if(!(node instanceof Statement) && !(node instanceof Block)) {
+            return nodes;
+        }
         ASTNode par = node.getParent();
         if (node instanceof Statement && (par instanceof IfStatement || par instanceof WhileStatement ||
                 par instanceof DoStatement || par instanceof ForStatement) || par instanceof EmptyStatement) {
@@ -65,6 +68,9 @@ public class CFWrapperWithDoWhile extends Transform {
             MethodDeclaration method = (MethodDeclaration) node.getParent().getParent();
             List<ASTNode> statements = method.getBody().statements();
             if(method.isConstructor() && !statements.isEmpty() && node == statements.get(0) && node instanceof ConstructorInvocation) {
+                return nodes;
+            }
+            if(method.getName().getIdentifier().equals("finalize")) {
                 return nodes;
             }
         }

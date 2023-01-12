@@ -111,14 +111,14 @@ public class CFWrapperWithForTrue extends Transform {
         if(TypeWrapper.isLiteral(node)) {
             return nodes;
         }
+        if(!(node instanceof Statement) && !(node instanceof Block)) {
+            return nodes;
+        }
         ASTNode par = node.getParent();
         if (node instanceof Statement && (par instanceof IfStatement || par instanceof WhileStatement ||
                 par instanceof DoStatement || par instanceof ForStatement)) {
             return nodes;
         }
-//        if(!InitCheck(node)) {
-//            return nodes;
-//        }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
             node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;

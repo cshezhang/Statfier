@@ -74,6 +74,9 @@ public class CFWrapperWithWhileTrue extends Transform {
                 node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
             return nodes;
         }
+        if(!(node instanceof Statement) && !(node instanceof Block)) {
+            return nodes;
+        }
         if(node.getParent().getParent() instanceof MethodDeclaration) {
             MethodDeclaration method = (MethodDeclaration) node.getParent().getParent();
             List<ASTNode> statements = method.getBody().statements();

@@ -142,9 +142,19 @@ public class AddControlBranch extends Transform {
             if(node.getParent().getParent() instanceof MethodDeclaration) {
                 MethodDeclaration method = (MethodDeclaration) node.getParent().getParent();
                 List<ASTNode> statements = method.getBody().statements();
-                if(method.isConstructor() && !statements.isEmpty() && node == statements.get(0) && node instanceof ConstructorInvocation) {
+                if(statements.isEmpty()) {
                     return nodes;
                 }
+                ASTNode firstStatement = statements.get(0);
+                if(method.isConstructor() && node == firstStatement && node instanceof ConstructorInvocation) {
+                    return nodes;
+                }
+                if(method.getName().getIdentifier().equals("finalize")) {
+                    return nodes;
+                }
+//                if(method.getName().getIdentifier().equals("finalize") && method.getBody().getLength() == 1 && firstStatement instanceof ExpressionStatement && firstStatement.toString().contains("finalize")) {
+//                    return nodes;
+//                }
             }
 //            if (node instanceof VariableDeclarationStatement) {
 //                VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) node;

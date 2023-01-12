@@ -140,6 +140,9 @@ public class AnonymousClassWrapper extends Transform {
             }
             return nodes;
         }
+        if(!method.isConstructor() && method.getName().getIdentifier().equals(clazz.getName().getIdentifier())) {
+            return nodes;
+        }
         if(method.getName().getIdentifier().toLowerCase().startsWith("test")) {
             return nodes;
         }

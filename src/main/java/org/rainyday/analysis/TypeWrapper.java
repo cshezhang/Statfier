@@ -63,6 +63,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.rainyday.util.Utility.COMPILE;
@@ -70,12 +71,14 @@ import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.compactIssues;
 import static org.rainyday.util.Utility.compareNode;
+import static org.rainyday.util.Utility.failedT;
 import static org.rainyday.util.Utility.file2bugs;
 import static org.rainyday.util.Utility.file2row;
 import static org.rainyday.util.Utility.isInvalidModifier;
 import static org.rainyday.util.Utility.mutantCounter;
 import static org.rainyday.util.Utility.random;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
+import static org.rainyday.util.Utility.successfulT;
 
 /**
  * Description: ASTWrapper is 1-to-1 a mutant or seed, it also contains some methods to perform different transformation schedule.
@@ -185,7 +188,7 @@ public class TypeWrapper {
     }
 
     private void parse2nodes() {
-        this.parser = ASTParser.newParser(AST.JLS11);
+        this.parser = ASTParser.newParser(AST.getJLSLatest());
         this.parser.setCompilerOptions(compilerOptions);
         this.parser.setSource(document.get().toCharArray());
         this.cu = (CompilationUnit) parser.createAST(null);
@@ -203,6 +206,7 @@ public class TypeWrapper {
         this.method2identifiers = new HashMap<>();
         int initializerCount = 0;
         for (TypeDeclaration type : this.types) {
+            this.allNodes.add(type);
             List<ASTNode> components = type.bodyDeclarations();
             for (int i = 0; i < components.size(); i++) {
                 ASTNode component = components.get(i);
@@ -547,52 +551,71 @@ public class TypeWrapper {
         return buggy;
     }
 
+    public static int transformedSeed = 0;
     public List<TypeWrapper> TransformByRandomLocation() {
         List<TypeWrapper> newWrappers = new ArrayList<>();
+        transformedSeed++;
         if (this.candidateNodes == null) {
             this.candidateNodes = this.allNodes;
         }
-        int cnt = file2row.get(this.filePath).size();
+        int cnt = file2row.get(this.filePath).size() * Transform.getTransforms().size();
+        Set<ASTNode> visited = new HashSet<>();
         int randomCount = 0;
         while (true) {
-            if (++randomCount > cnt) {
+            if(this.candidateNodes.isEmpty()) {
                 break;
             }
             ASTNode candidateNode = this.candidateNodes.get(random.nextInt(this.candidateNodes.size()));
+            if(!visited.contains(candidateNode)) {
+                visited.add(candidateNode);
+                this.candidateNodes.remove(candidateNode);
+            } else {
+                if(visited.size() >= this.candidateNodes.size()) {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            if (++randomCount > cnt) {
+                break;
+            }
             TypeDeclaration type = getClassOfNode(candidateNode);
             if(isInvalidModifier(type)) {
                 continue;
             }
-            Transform transform = Transform.getTransformRandomly();
-            List<ASTNode> targetNodes = transform.check(this, candidateNode);
-            for (ASTNode targetNode : targetNodes) {
-                String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
-                String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
-                String content = this.document.get();
-                TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
-                int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
-                int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
-                ASTNode newTargetNode = newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
-                if (newTargetNode == null) {
-                    continue;
-                }
-                int oldLineNumber2 = this.cu.getLineNumber(candidateNode.getStartPosition());
-                int oldColNumber2 = this.cu.getColumnNumber(candidateNode.getStartPosition());
-                ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldLineNumber2, oldColNumber2);
-                if (newSrcNode == null) {
-                    continue;
-                }
-                boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
-                if (hasMutated) {
-                    newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
-                    newMutant.transSeq.add(transform.getIndex());
-                    newMutant.transNodes.add(newSrcNode);
-                    newWrappers.add(newMutant);
-                } else {
-                    try {
-                        Files.deleteIfExists(Paths.get(mutantPath));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            for(Transform transform : Transform.getTransforms()) {
+                List<ASTNode> targetNodes = transform.check(this, candidateNode);
+                for (ASTNode targetNode : targetNodes) {
+                    String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
+                    String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
+                    String content = this.document.get();
+                    TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
+                    int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
+                    int oldColNumber1 = this.cu.getColumnNumber(targetNode.getStartPosition());
+                    ASTNode newTargetNode = newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
+                    if (newTargetNode == null) {
+                        continue;
+                    }
+                    int oldLineNumber2 = this.cu.getLineNumber(candidateNode.getStartPosition());
+                    int oldColNumber2 = this.cu.getColumnNumber(candidateNode.getStartPosition());
+                    ASTNode newSrcNode = newMutant.searchNodeByPosition(candidateNode, oldLineNumber2, oldColNumber2);
+                    if (newSrcNode == null) {
+                        continue;
+                    }
+                    boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
+                    if (hasMutated) {
+                        successfulT++;
+                        newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
+                        newMutant.transSeq.add(transform.getIndex());
+                        newMutant.transNodes.add(newSrcNode);
+                        newWrappers.add(newMutant);
+                    } else {
+                        failedT++;
+                        try {
+                            Files.deleteIfExists(Paths.get(mutantPath));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -606,13 +629,10 @@ public class TypeWrapper {
             if (this.candidateNodes == null) {
                 this.candidateNodes = this.getCandidateNodes();
             }
-//            if (this.depth == 0) {
-//                if (this.candidateNodes.size() == 0) {
-//                    invalidSeed.addAndGet(1);
-//                } else {
-//                    validSeed.addAndGet(1);
-//                }
-//            }
+            if(this.candidateNodes.size() == 0) {
+                return newWrappers;
+            }
+            transformedSeed++;
             for (ASTNode candidateNode : candidateNodes) {
                 if(isInvalidModifier(candidateNode)) {
                    continue;
@@ -652,13 +672,13 @@ public class TypeWrapper {
                             if(DEBUG) {
                                 System.out.println("Success to write the file.");
                             }
-//                            succMutation.addAndGet(1);
+                            successfulT++;
                             newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
                             newMutant.transNodes.add(newSrcNode);
                             newWrappers.add(newMutant);
                         } else {
-//                            failMutation.addAndGet(1);
+                            failedT++;
                             Files.deleteIfExists(Paths.get(mutantPath));
                         }
                     }
@@ -1150,7 +1170,7 @@ public class TypeWrapper {
     }
 
     public static TypeDeclaration getClassOfNode(ASTNode node) {
-        ASTNode parent = node.getParent();
+        ASTNode parent = node;
         while (parent != null && !(parent instanceof TypeDeclaration)) {
             parent = parent.getParent();
             if (parent == null || parent.equals(parent.getParent())) {

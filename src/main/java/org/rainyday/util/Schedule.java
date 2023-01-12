@@ -16,6 +16,7 @@ import static org.rainyday.util.Utility.SONAR_SCANNER_PATH;
 import static org.rainyday.util.Utility.SPOTBUGS_MUTATION;
 import static org.rainyday.util.Utility.THREAD_COUNT;
 import static org.rainyday.util.Utility.failedReport;
+import static org.rainyday.util.Utility.failedT;
 import static org.rainyday.util.Utility.file2report;
 import static org.rainyday.util.Utility.file2row;
 import static org.rainyday.util.Utility.getFilenamesFromFolder;
@@ -27,8 +28,10 @@ import static org.rainyday.util.Utility.reg_sep;
 import static org.rainyday.util.Utility.reportFolder;
 import static org.rainyday.util.Utility.sep;
 import static org.rainyday.util.Utility.subSeedFolderNameList;
+import static org.rainyday.util.Utility.successfulT;
 import static org.rainyday.util.Utility.waitThreadPoolEnding;
 import static org.rainyday.util.Utility.writeLinesToFile;
+import static org.rainyday.analysis.TypeWrapper.transformedSeed;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -181,7 +184,7 @@ public class Schedule {
             }
         }
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
-        if(THREAD_COUNT > 1) {
+        if (THREAD_COUNT > 1) {
             List<PMD_TransformThread> transformThreads = new ArrayList<>();
             ExecutorService threadPool = initThreadPool();
             for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
@@ -211,7 +214,7 @@ public class Schedule {
                         }
                     };
                     for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-                        if(DEBUG) {
+                        if (DEBUG) {
                             System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
                         }
                         singleLevelExplorer(wrappers, currentDepth++);
@@ -396,21 +399,25 @@ public class Schedule {
         List<String> output = new ArrayList<>();
         output.add("All variants size: " + cnt1);
         output.add("Reduced variants size: " + cnt2);
-        output.add("Ratio: " + cnt2.get() / (double) (cnt1.get()));
+        output.add("Reduction Ratio: " + cnt2.get() / (double) (cnt1.get()));
+        output.add("Transformed Seeds: " + transformedSeed++);
+        output.add("Successful Transform size: " + successfulT);
+        output.add("Failed Transform size: " + failedT);
+        output.add("Successful Transform Ratio: " + (successfulT) / (double) (successfulT + failedT));
         output.add("Rule Size: " + rules + "\n");
         output.add("Detected Rules: " + Utility.compactIssues.keySet());
         output.add("Unique Sequence: " + seqCount);
-        output.add("Valid Mutant Size(Potential Bug): " + allValidVariantNumber);
+        output.add("Valid Mutant Size (Potential Bug): " + allValidVariantNumber);
         List<String> mutant2seed = new ArrayList<>();
         mutant2seed.add("Mutant2Seed:");
         for (Map.Entry<String, String> entry : TypeWrapper.mutant2seed.entrySet()) {
             mutant2seed.add(entry.getKey() + "->" + entry.getValue() + "#" + TypeWrapper.mutant2seq.get(entry.getKey()));
         }
         writeLinesToFile(EVALUATION_PATH + sep + "mutant2seed.log", mutant2seed);
-        if(INFER_MUTATION) {
+        if (INFER_MUTATION) {
             writeLinesToFile(EVALUATION_PATH + sep + "FailedReports.log", failedReport);
         }
-        if(SPOTBUGS_MUTATION) {
+        if (SPOTBUGS_MUTATION) {
             writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
         }
         long executionTime = System.currentTimeMillis() - Utility.startTimeStamp;

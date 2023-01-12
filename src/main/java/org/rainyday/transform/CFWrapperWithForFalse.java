@@ -82,7 +82,7 @@ public class CFWrapperWithForFalse extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(!(node instanceof Statement)) { // The node to be transformed must be a statement.
+        if(!(node instanceof Statement) && !(node instanceof Block)) {
             return nodes;
         }
         if(node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration || node instanceof EmptyStatement ||

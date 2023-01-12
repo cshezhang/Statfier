@@ -3,6 +3,7 @@ package org.rainyday.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.sf.saxon.expr.PJConverter;
 import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -68,6 +69,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.AbstractOwnableSynchronizer;
 
 import static org.rainyday.analysis.TypeWrapper.getClassOfNode;
 
@@ -121,7 +123,6 @@ public class Utility {
 
     public static String sourceSeedPath = null;
     public static long startTimeStamp = System.currentTimeMillis();
-    public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
     public static final String reg_sep = "/|\\\\";
     public static final String sep = File.separator;
@@ -134,7 +135,9 @@ public class Utility {
     public static final long RANDOM_SEED3 = 1131573600;
     public static final long RANDOM_SEED4 = 1447106400;
     public static final long RANDOM_SEED5 = 1762725600;
-//    public static int newVarCounter = 0;
+    public static int failedT = 0;
+    public static int successfulT = 0;
+    public static AtomicInteger mutantCounter = new AtomicInteger(0);
 
     // seeds
     public final static String PMD_SEED_PATH = getProperty("PMD_SEED_PATH");
@@ -828,9 +831,11 @@ public class Utility {
         }
         List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
         for (ASTNode node : modifiers) {
-            Modifier modifier = (Modifier) node;
-            if (modifier.isAbstract() || modifier.isNative()) {
-                return true;
+            if(node instanceof Modifier) {
+                Modifier modifier = (Modifier) node;
+                if (modifier.isAbstract() || modifier.isNative()) {
+                    return true;
+                }
             }
         }
         return false;

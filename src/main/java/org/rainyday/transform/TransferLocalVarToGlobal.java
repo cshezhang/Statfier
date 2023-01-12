@@ -38,7 +38,7 @@ public class TransferLocalVarToGlobal extends Transform {
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression literalNode = (Expression) targetNode;
         TypeDeclaration clazz = TypeWrapper.getClassOfNode(srcNode);
-        String newVarName = "LOCAL_GLOBAL" + varCounter++;
+        String newVarName = "localGLOBAL" + varCounter++;
         SimpleName newVar = ast.newSimpleName(newVarName);
         VariableDeclarationFragment newVdFragment = ast.newVariableDeclarationFragment();
         newVdFragment.setName(newVar);

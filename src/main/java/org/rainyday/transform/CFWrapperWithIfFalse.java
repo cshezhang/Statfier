@@ -55,16 +55,19 @@ public class CFWrapperWithIfFalse extends Transform {
     }
 
     @Override
-    public List<ASTNode> check(TypeWrapper wrapper, ASTNode srcNode) {
+    public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if (TypeWrapper.isLiteral(srcNode) || !(srcNode instanceof Statement)) {
+        if (TypeWrapper.isLiteral(node)) {
             return nodes;
         }
-        if (srcNode instanceof VariableDeclarationStatement || srcNode instanceof FieldDeclaration ||
-                srcNode instanceof MethodDeclaration || srcNode instanceof ReturnStatement || srcNode instanceof SuperConstructorInvocation) {
+        if(!(node instanceof Statement) && !(node instanceof Block)) {
             return nodes;
         }
-        nodes.add(srcNode);
+        if (node instanceof VariableDeclarationStatement || node instanceof FieldDeclaration ||
+                node instanceof MethodDeclaration || node instanceof ReturnStatement || node instanceof SuperConstructorInvocation) {
+            return nodes;
+        }
+        nodes.add(node);
         return nodes;
     }
 

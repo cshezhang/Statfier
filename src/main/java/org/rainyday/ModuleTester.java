@@ -8,16 +8,23 @@ public class ModuleTester {
 
     @Test
     public void testAST() {
-        TypeWrapper wrapper = new TypeWrapper("src/test/java/Foo.java", "");
+        TypeWrapper wrapper = new TypeWrapper("./TestCase/Case1.java", "");
         wrapper.printBasicInfo();
     }
 
     @Test
     public void testPMD() {
         String[] pmdArgs = {
-                "-d", "./TestCase/Case1.java",
+//                "-d", "./TestCase/Case1.java",
+                "-d", "./src/test/java/ASTCase.java",
+                "-R", "category/java/bestpractices.xml/MethodReturnsInternalArray",
 //                "-R", "./PMD_config.xml",
-                "-R", "category/java/performance.xml/ConsecutiveAppendsShouldReuse",
+//                "-R", "category/java/bestpractices.xml/JUnitUseExpected",
+//                "-R", "category/java/bestpractices.xml/JUnitAssertionsShouldIncludeMessage",
+//                "-R", "category/java/performance.xml/InefficientStringBuffering",
+//                "-R", "category/java/bestpractices.xml/ForLoopCanBeForeach",
+//                "-R", "category/java/codestyle.xml/FieldNamingConventions",
+//                "-R", "category/java/performance.xml/ConsecutiveAppendsShouldReuse",
 //                "-R", "category/java/codestyle.xml/AvoidProtectedFieldInFinalClass",
 //                "-R", "category/java/errorprone.xml/CloseResource",
 //                "-R", "category/java/errorprone.xml/AssignmentInOperand",
