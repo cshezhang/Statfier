@@ -208,6 +208,7 @@ public class Schedule {
                 for (String bugType : bugTypes) {
                     int currentDepth = 0;
                     String seedFolderName = category + "_" + bugType;
+                    System.out.println("Detection: " + seedFolderName);
                     ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
                         {
                             addAll(bug2wrapper.get(seedFolderName));  // init by the wrappers in level 0

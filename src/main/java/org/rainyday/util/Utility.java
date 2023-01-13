@@ -255,9 +255,11 @@ public class Utility {
         // subSeedFolder, like security_hardcodedCryptoKey
         subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
         // Generate mutant folder from iter1 -> iter8
-        for(String subSeedFolderName : subSeedFolderNameList) {
-            File subSeedFolder = new File(reportFolder.getAbsolutePath() + File.separator + subSeedFolderName);
-            subSeedFolder.mkdir();
+        if(!PMD_MUTATION) {
+            for (String subSeedFolderName : subSeedFolderNameList) {
+                File subSeedFolder = new File(reportFolder.getAbsolutePath() + File.separator + subSeedFolderName);
+                subSeedFolder.mkdir();
+            }
         }
         for (int i = 1; i <= 8; i++) {
             File iter = new File(mutantFolder.getAbsolutePath() + File.separator + "iter" + i);
