@@ -123,10 +123,8 @@ public abstract class Transform {
                         mutants = wrapper.TransformByRandomLocation();
                     }
                     if (DEBUG) {
+                        System.out.println("Src Path: " + wrapper.getFilePath());
                         System.out.println("Mutant Size: " + mutants.size());
-                        for (TypeWrapper mutant : mutants) {
-                            System.out.println("Mutant Path: " + mutant.getFilePath());
-                        }
                     }
                     cnt1.addAndGet(mutants.size());
                     List<TypeWrapper> reducedMutants = null;
@@ -138,6 +136,9 @@ public abstract class Transform {
                     }
                     if (DIV_SELECTION) {
                         reducedMutants = SelectionAlgorithm.Div_Selection(mutants);
+                    }
+                    if(DEBUG) {
+                        System.out.println("Reduced Mutant Size: " + reducedMutants.size());
                     }
                     cnt2.addAndGet(reducedMutants.size());
                     for (int j = 0; j < reducedMutants.size(); j++) {

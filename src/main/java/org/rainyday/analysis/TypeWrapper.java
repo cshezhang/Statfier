@@ -257,9 +257,6 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-            if(DEBUG) {
-                System.out.println("Writing Variant Path: " + this.filePath);
-            }
         } catch (IOException e) {
             System.err.println("Fail to Write to Java File!");
             e.printStackTrace();
@@ -635,9 +632,6 @@ public class TypeWrapper {
                     for (ASTNode targetNode : targetNodes) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
                         String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
-                        if(DEBUG) {
-                            System.out.println("Try to write file: " + mutantPath);
-                        }
                         String content = this.document.get();
                         TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
                         // Node to be transformed
@@ -662,9 +656,6 @@ public class TypeWrapper {
                         }
                         boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
                         if (hasMutated) {
-                            if(DEBUG) {
-                                System.out.println("Success to write the file.");
-                            }
                             successfulT++;
                             newMutant.nodeIndex.add(targetNode); // Add transformation type, it will be used in mutant selection
                             newMutant.transSeq.add(transform.getIndex());
