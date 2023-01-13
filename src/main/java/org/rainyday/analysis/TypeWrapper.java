@@ -1,30 +1,23 @@
 package org.rainyday.analysis;
 
-import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.rainyday.transform.Transform;
 import org.rainyday.util.TriTuple;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
-import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EmptyStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
@@ -38,12 +31,9 @@ import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -54,7 +44,6 @@ import org.eclipse.text.edits.TextEdit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -64,21 +53,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.rainyday.util.Utility.COMPILE;
 import static org.rainyday.util.Utility.DEBUG;
-import static org.rainyday.util.Utility.Path2Last;
-import static org.rainyday.util.Utility.compactIssues;
-import static org.rainyday.util.Utility.compareNode;
+import static org.rainyday.util.Utility.random;
 import static org.rainyday.util.Utility.failedT;
 import static org.rainyday.util.Utility.file2bugs;
 import static org.rainyday.util.Utility.file2row;
-import static org.rainyday.util.Utility.isInvalidModifier;
+import static org.rainyday.util.Utility.Path2Last;
+import static org.rainyday.util.Utility.compareNode;
+import static org.rainyday.util.Utility.compactIssues;
 import static org.rainyday.util.Utility.mutantCounter;
-import static org.rainyday.util.Utility.random;
 import static org.rainyday.util.Utility.EVALUATION_PATH;
 import static org.rainyday.util.Utility.successfulT;
+import static org.rainyday.util.Utility.isInvalidModifier;
 
 /**
  * Description: ASTWrapper is 1-to-1 a mutant or seed, it also contains some methods to perform different transformation schedule.
@@ -103,7 +90,7 @@ public class TypeWrapper {
     private String folderPath;
     private String folderName; // For PMD and CheckStyle, folderName equals to rule name
     private String parentPath;
-    private TypeWrapper parentWrapper;
+//    private TypeWrapper parentWrapper;
     private String mutantFolder;
     private List<ASTNode> nodeIndex;
     private List<String> transSeq;
@@ -140,8 +127,8 @@ public class TypeWrapper {
         this.folderName = folderName; // folderName -> subSeedFolderName
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
         this.parentPath = null;
-        this.parentWrapper = null;
-        this.parViolations = 0;
+//        this.parentWrapper = null;
+//        this.parViolations = 0;
         this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
@@ -161,7 +148,7 @@ public class TypeWrapper {
         this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
-        this.parentWrapper = parentWrapper;
+//        this.parentWrapper = parentWrapper;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
         this.transNodes = new ArrayList<>();
@@ -782,6 +769,10 @@ public class TypeWrapper {
         return this.folderName;
     }
 
+    public String getParentPath() {
+        return this.parentPath;
+    }
+
     public int getViolations() {
         return this.violations;
     }
@@ -810,14 +801,6 @@ public class TypeWrapper {
         return this.transNodes;
     }
 
-    public TypeWrapper getParentWrapper() {
-        return this.parentWrapper;
-    }
-
-    public List<ASTNode> getNodeIndex() {
-        return this.nodeIndex;
-    }
-
     public int getDepth() {
         return depth;
     }
@@ -836,14 +819,6 @@ public class TypeWrapper {
 
     public String getInitSeedPath() {
         return this.initSeedPath;
-    }
-
-    public List<ASTNode> getAllNodes() {
-        return allNodes;
-    }
-
-    public HashMap<String, List<ASTNode>> getMethod2statements() {
-        return method2statements;
     }
 
     public HashMap<String, HashSet<String>> getMethod2identifiers() {

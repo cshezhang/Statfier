@@ -4,7 +4,6 @@ import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.rainyday.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.EmptyStatement;
@@ -13,7 +12,6 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
@@ -24,11 +22,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.rainyday.util.Utility.compareNode;
 import static org.rainyday.util.Utility.file2row;
 
 /**
@@ -68,8 +64,8 @@ public class AddControlBranch extends Transform {
         // Final modifier can be added by a specific transformation
         int startLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition());
         int endLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition() + srcNode.getLength());
-        if(file2row.containsKey(wrapper.getParentWrapper().getFilePath())) {
-            List<Integer> rows = file2row.get(wrapper.getParentWrapper().getFilePath());
+        if(file2row.containsKey(wrapper.getParentPath())) {
+            List<Integer> rows = file2row.get(wrapper.getParentPath());
             for (Integer row : rows) {
                 if (row >= startLine && row <= endLine) {
                     wrapper.expectedNumbers++;
