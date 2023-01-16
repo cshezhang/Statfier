@@ -98,7 +98,7 @@ public class AddArgAssignment extends Transform {
             if(value.contains(".")) {
                 newVdStatement.setType(ast.newPrimitiveType(PrimitiveType.DOUBLE));
             } else {
-                if(value.endsWith("L")) {
+                if(value.endsWith("L") || value.endsWith("l")) {
                     newVdStatement.setType(ast.newPrimitiveType(PrimitiveType.LONG));
                 } else {
                     value = value.toLowerCase();
