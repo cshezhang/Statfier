@@ -398,12 +398,12 @@ public class Schedule {
             }
         }
         List<String> output = new ArrayList<>();
-        output.add("All variants size: " + cnt1);
-        output.add("Reduced variants size: " + cnt2);
+        output.add("All Variants Size: " + cnt1);
+        output.add("Reduced variants Size: " + cnt2);
         output.add("Reduction Ratio: " + cnt2.get() / (double) (cnt1.get()));
         output.add("Transformed Seeds: " + transformedSeed++);
-        output.add("Successful Transform size: " + successfulT);
-        output.add("Failed Transform size: " + failedT);
+        output.add("Successful Transform Size: " + successfulT);
+        output.add("Failed Transform Size: " + failedT);
         output.add("Successful Transform Ratio: " + (successfulT) / (double) (successfulT + failedT));
         output.add("Rule Size: " + rules + "\n");
         output.add("Detected Rules: " + Utility.compactIssues.keySet());

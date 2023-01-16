@@ -11,6 +11,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.rainyday.util.Utility.CheckStyleConfigPath;
+import static org.rainyday.util.Utility.CheckStylePath;
 import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.reportFolder;
@@ -46,10 +48,10 @@ public class CheckStyle_TransformThread implements Runnable {
             String mutantFolderPath = Utility.mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
             List<String> mutantFilePaths = Utility.getFilenamesFromFolder(mutantFolderPath, true);
 //            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
-            String configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + configIndex + ".xml";
+            String configPath = CheckStyleConfigPath + File.separator + seedFolderName + configIndex + ".xml";
             File configFile = new File(configPath);
             if (configFile.exists()) {
-                configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
+                configPath = CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
             }
             List<CheckStyle_Report> reports = new ArrayList<>();
             // 这里还可以做一个configIndex是否match seedFolderName里边的index
@@ -65,7 +67,7 @@ public class CheckStyle_TransformThread implements Runnable {
                     invokeCmds[0] = "/bin/bash";
                     invokeCmds[1] = "-c";
                 }
-                invokeCmds[2] = "java -jar " + Utility.CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
+                invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
                         + configPath + " " + mutantFilePath;
                 if (DEBUG) {
                     System.out.println(invokeCmds[2]);

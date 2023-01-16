@@ -69,7 +69,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.AbstractOwnableSynchronizer;
 
 import static org.rainyday.analysis.TypeWrapper.getClassOfNode;
 
@@ -147,20 +146,20 @@ public class Utility {
     public final static String SONARQUBE_SEED_PATH = getProperty("SONARQUBE_SEED_PATH");
 
     // mutants and results
-    public final static File mutantFolder = new File(EVALUATION_PATH + File.separator + "mutants");
-    public final static File reportFolder = new File(EVALUATION_PATH + File.separator + "reports");
-    public final static File classFolder = new File(EVALUATION_PATH + File.separator + "classes");
-    public final static File resultFolder = new File(EVALUATION_PATH + File.separator + "results");
+    public final static File mutantFolder = new File(EVALUATION_PATH + sep + "mutants");
+    public final static File reportFolder = new File(EVALUATION_PATH + sep + "reports");
+    public final static File classFolder = new File(EVALUATION_PATH + sep + "classes");
+    public final static File resultFolder = new File(EVALUATION_PATH + sep + "results");
 
     // tools
-    public final static String SpotBugsPath = toolPath + File.separator + "SpotBugs" + File.separator + "bin" + File.separator + "spotbugs";
+    public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
     public final static String INFER_PATH = getProperty("INFER_PATH");
-    public final static String CheckStyleConfigPath = toolPath + File.separator + "CheckStyle_Configs";
+    public final static String CheckStyleConfigPath = toolPath + sep + "CheckStyle_Configs";
 
     public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
-    public final static String CheckStylePath = toolPath + File.separator + "checkstyle.jar";
-    public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + File.separator + "SpotBugs_Dependency", true);
-    public static List<String> inferJarList = getFilenamesFromFolder(toolPath + File.separator + "Infer_Dependency", true);
+    public final static String CheckStylePath = toolPath + sep + "CheckStyle.jar";
+    public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + sep + "SpotBugs_Dependency", true);
+    public static List<String> inferJarList = getFilenamesFromFolder(toolPath + sep + "Infer_Dependency", true);
     public static List<String> subSeedFolderNameList;
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
@@ -222,6 +221,11 @@ public class Utility {
             sourceSeedPath = INFER_SEED_PATH;
         }
         try {
+            File file = new File(CheckStylePath);
+            if(!file.exists()) {
+                System.err.println("CheckStyle is not existed!");
+                System.exit(-1);
+            }
             File ud = new File(EVALUATION_PATH);
             if (ud.exists()) {
                 FileUtils.deleteDirectory(new File(EVALUATION_PATH));
@@ -257,15 +261,15 @@ public class Utility {
         // Generate mutant folder from iter1 -> iter8
         if(!PMD_MUTATION) {
             for (String subSeedFolderName : subSeedFolderNameList) {
-                File subSeedFolder = new File(reportFolder.getAbsolutePath() + File.separator + subSeedFolderName);
+                File subSeedFolder = new File(reportFolder.getAbsolutePath() + sep + subSeedFolderName);
                 subSeedFolder.mkdir();
             }
         }
         for (int i = 1; i <= 8; i++) {
-            File iter = new File(mutantFolder.getAbsolutePath() + File.separator + "iter" + i);
+            File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();
             for (String subSeedFolderName : subSeedFolderNameList) {
-                File subSeedFolder = new File(iter.getAbsolutePath() + File.separator + subSeedFolderName);
+                File subSeedFolder = new File(iter.getAbsolutePath() + sep + subSeedFolderName);
                 subSeedFolder.mkdir();
             }
         }
@@ -506,9 +510,9 @@ public class Utility {
             }
             String filepath;
             if (reportPath.contains("iter0")) {
-                filepath = PROJECT_PATH + File.separator + file.substring(file.indexOf(":") + 1);
+                filepath = PROJECT_PATH + sep + file.substring(file.indexOf(":") + 1);
             } else {
-                filepath = EVALUATION_PATH + File.separator + file.substring(file.indexOf(":") + 1);
+                filepath = EVALUATION_PATH + sep + file.substring(file.indexOf(":") + 1);
             }
             if (!name2report.containsKey(filepath)) {
                 SonarQube_Report report = new SonarQube_Report(filepath);

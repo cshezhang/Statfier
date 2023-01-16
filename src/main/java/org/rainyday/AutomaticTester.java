@@ -4,6 +4,7 @@ import org.rainyday.util.Schedule;
 import org.rainyday.util.Utility;
 
 import static org.rainyday.util.Schedule.writeEvaluationResult;
+import static org.rainyday.util.Utility.initEnv;
 import static org.rainyday.util.Utility.sourceSeedPath;
 
 /**
@@ -15,7 +16,7 @@ public class AutomaticTester {
 
     public static void main(String[] args) {
         long time1 = System.currentTimeMillis();
-        Utility.initEnv();
+        initEnv();
         Schedule schedule = Schedule.getInstance();
         if (Utility.PMD_MUTATION) {
             schedule.executePMDTransform(sourceSeedPath);
