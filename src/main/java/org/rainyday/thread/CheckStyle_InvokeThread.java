@@ -7,6 +7,7 @@ import org.rainyday.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.rainyday.util.Utility.CHECKSTYLE_PATH;
 import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.reportFolder;
 
@@ -45,7 +46,7 @@ public class CheckStyle_InvokeThread implements Runnable {
                 invokeCmds[0] = "/bin/bash";
                 invokeCmds[1] = "-c";
             }
-            invokeCmds[2] = "java -jar " + Utility.CheckStylePath + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filepath;
+            invokeCmds[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filepath;
             if(DEBUG) {
                 System.out.println(invokeCmds[2]);
             }

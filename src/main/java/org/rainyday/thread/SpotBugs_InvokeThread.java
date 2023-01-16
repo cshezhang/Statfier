@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.List;
 
 import static org.rainyday.util.Utility.DEBUG;
+import static org.rainyday.util.Utility.SPOTBUGS_PATH;
 import static org.rainyday.util.Utility.reportFolder;
 
 public class SpotBugs_InvokeThread implements Runnable {
@@ -46,7 +47,7 @@ public class SpotBugs_InvokeThread implements Runnable {
                 invokeCommands[0] = "/bin/bash";
                 invokeCommands[1] = "-c";
             }
-            invokeCommands[2] = Utility.SpotBugsPath + " -textui"
+            invokeCommands[2] = SPOTBUGS_PATH + " -textui"
                             + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath();
             Invoker.invokeCommandsByZT(invokeCommands);

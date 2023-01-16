@@ -11,8 +11,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.rainyday.util.Utility.CHECKSTYLE_PATH;
 import static org.rainyday.util.Utility.CheckStyleConfigPath;
-import static org.rainyday.util.Utility.CheckStylePath;
 import static org.rainyday.util.Utility.DEBUG;
 import static org.rainyday.util.Utility.Path2Last;
 import static org.rainyday.util.Utility.reportFolder;
@@ -67,7 +67,7 @@ public class CheckStyle_TransformThread implements Runnable {
                     invokeCmds[0] = "/bin/bash";
                     invokeCmds[1] = "-c";
                 }
-                invokeCmds[2] = "java -jar " + CheckStylePath + " -f" + " plain" + " -o " + reportFilePath + " -c "
+                invokeCmds[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c "
                         + configPath + " " + mutantFilePath;
                 if (DEBUG) {
                     System.out.println(invokeCmds[2]);

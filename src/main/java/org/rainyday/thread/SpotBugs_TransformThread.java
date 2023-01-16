@@ -11,6 +11,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.rainyday.util.Utility.SPOTBUGS_PATH;
 import static org.rainyday.util.Utility.reportFolder;
 
 public class SpotBugs_TransformThread implements Runnable {
@@ -55,7 +56,7 @@ public class SpotBugs_TransformThread implements Runnable {
                     invokeCmds[0] = "/bin/bash";
                     invokeCmds[1] = "-c";
                 }
-                invokeCmds[2] = Utility.SpotBugsPath + " -textui"
+                invokeCmds[2] = SPOTBUGS_PATH + " -textui"
 //                            + " -include " + configPath
                         + " -xml:withMessages" + " -output " + reportPath + " "
                         + classFolder.getAbsolutePath();

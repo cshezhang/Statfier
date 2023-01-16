@@ -17,7 +17,7 @@ import static org.rainyday.util.Utility.NO_SELECTION;
 import static org.rainyday.util.Utility.RANDOM_LOCATION;
 import static org.rainyday.util.Utility.RANDOM_SELECTION;
 import static org.rainyday.util.Utility.SEARCH_DEPTH;
-import static org.rainyday.util.Utility.SpotBugsPath;
+import static org.rainyday.util.Utility.SPOTBUGS_PATH;
 import static org.rainyday.util.Utility.readSpotBugsResultFile;
 import static org.rainyday.util.Utility.reg_sep;
 import static org.rainyday.util.Utility.reportFolder;
@@ -79,7 +79,7 @@ public class SpotBugs_Exec {
                         invokeCmds[0] = "/bin/bash";
                         invokeCmds[1] = "-c";
                     }
-                    invokeCmds[2] = SpotBugsPath + " -textui"
+                    invokeCmds[2] = SPOTBUGS_PATH + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath();

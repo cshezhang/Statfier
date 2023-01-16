@@ -152,12 +152,11 @@ public class Utility {
     public final static File resultFolder = new File(EVALUATION_PATH + sep + "results");
 
     // tools
-    public final static String SpotBugsPath = toolPath + sep + "SpotBugs" + sep + "bin" + sep + "spotbugs";
-    public final static String INFER_PATH = getProperty("INFER_PATH");
+    public final static String SPOTBUGS_PATH = getProperty("SPOTBUGS_PATH");
+    public final static String CHECKSTYLE_PATH = getProperty("CHECKSTYLE_PATH");
     public final static String CheckStyleConfigPath = toolPath + sep + "CheckStyle_Configs";
-
+    public final static String INFER_PATH = getProperty("INFER_PATH");
     public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
-    public final static String CheckStylePath = toolPath + sep + "CheckStyle.jar";
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + sep + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath + sep + "Infer_Dependency", true);
     public static List<String> subSeedFolderNameList;
@@ -221,9 +220,14 @@ public class Utility {
             sourceSeedPath = INFER_SEED_PATH;
         }
         try {
-            File file = new File(CheckStylePath);
+            File file = new File(CHECKSTYLE_PATH);
             if(!file.exists()) {
                 System.err.println("CheckStyle is not existed!");
+                System.exit(-1);
+            }
+            file = new File(SPOTBUGS_PATH);
+            if(!file.exists()) {
+                System.err.println("SpotBugs is not existed");
                 System.exit(-1);
             }
             File ud = new File(EVALUATION_PATH);
