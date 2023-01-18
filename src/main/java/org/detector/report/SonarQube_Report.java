@@ -5,10 +5,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.detector.util.Utility.EVALUATION_PATH;
+import static org.detector.util.Utility.PROJECT_PATH;
+import static org.detector.util.Utility.file2bugs;
+import static org.detector.util.Utility.file2report;
+import static org.detector.util.Utility.file2row;
 import static org.detector.util.Utility.sep;
 
 public class SonarQube_Report implements Report {
@@ -25,6 +30,10 @@ public class SonarQube_Report implements Report {
         this.violations.add(violation);
     }
 
+    public void addViolations(List<SonarQube_Violation> violations) {
+        this.violations.addAll(violations);
+    }
+
     public List<SonarQube_Violation> getViolations() {
         return this.violations;
     }
@@ -33,7 +42,13 @@ public class SonarQube_Report implements Report {
         return this.filepath;
     }
 
-    public static void readSonarQubeResultFile(String ruleName, String jsonContent, Map<String, SonarQube_Report> path2report) {
+    @Override
+    public String toString() {
+        return "SQ Report: " + this.filepath + " Size: " + this.violations.size();
+    }
+
+    public static void readSonarQubeResultFile(String ruleName, String jsonContent) {
+        Map<String, SonarQube_Report> path2report = new HashMap<>();
         JSONObject root = new JSONObject(jsonContent);
         int total = root.getInt("total");
         if(total > 10000) {
@@ -49,7 +64,12 @@ public class SonarQube_Report implements Report {
                 JSONObject issue = (JSONObject) issues.get(i);
                 if(issue.has("component") && issue.has("textRange")) {
                     String component = issue.getString("component");
-                    String filePath = EVALUATION_PATH + sep + component.split(":")[1];
+                    String filePath;
+                    if(component.startsWith("iter0")) {
+                        filePath = PROJECT_PATH + sep + component.split(":")[1];
+                    } else {
+                        filePath = EVALUATION_PATH + sep + component.split(":")[1];
+                    }
                     JSONObject textRange = (JSONObject) issue.get("textRange");
                     int startLine = textRange.getInt("startLine");
                     int endLine = textRange.getInt("endLine");
@@ -68,6 +88,26 @@ public class SonarQube_Report implements Report {
             } catch (JSONException e) {
                 System.err.println(jsonContent);
                 e.printStackTrace();
+            }
+        }
+        for (SonarQube_Report report : path2report.values()) {
+            if(file2report.containsKey(report.getFilepath())) {
+                SonarQube_Report r = (SonarQube_Report) file2report.get(report.getFilepath());
+                r.addViolations(report.getViolations());
+            } else {
+                file2report.put(report.getFilepath(), report);
+            }
+            if (!file2row.containsKey(report.getFilepath())) {
+                file2row.put(report.getFilepath(), new ArrayList<>());
+                file2bugs.put(report.getFilepath(), new HashMap<>());
+            }
+            for (SonarQube_Violation violation : report.getViolations()) {
+                file2row.get(report.getFilepath()).add(violation.getBeginLine());
+                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
+                if (!bug2cnt.containsKey(violation.getBugType())) {
+                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
+                }
+                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
             }
         }
     }

@@ -113,7 +113,7 @@ public abstract class Transform {
 
     public static void singleLevelExplorer(ArrayDeque<TypeWrapper> wrappers, int currentDepth) {  // Current depth means the depth of variants in wrappers, not the iteration level
         while (!wrappers.isEmpty()) {
-            TypeWrapper wrapper = wrappers.pollFirst();
+            TypeWrapper wrapper = wrappers.pollFirst(); // remove TypeWrapper in currentDepth level
             if (wrapper.depth == currentDepth) {
                 if (!wrapper.isBuggy()) {
                     List<TypeWrapper> mutants = new ArrayList<>();

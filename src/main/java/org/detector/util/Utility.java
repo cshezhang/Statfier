@@ -64,6 +64,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -172,6 +173,7 @@ public class Utility {
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
     public static List<String> failedReport = new ArrayList<>();
+    public static Set<String> SonarQubeRuleNames;
 
     public static void initEnv() {
         String sp;
@@ -278,6 +280,22 @@ public class Utility {
                 subSeedFolder.mkdir();
             }
         }
+        SonarQubeRuleNames = getSonarQubeRuleNames();
+    }
+
+    public static Set<String> getSonarQubeRuleNames() {
+        String ruleNamePath = PROJECT_PATH + sep + "tools" + sep + "SonarQube_Rules.txt";
+        List<String> lines = readFileByLine(ruleNamePath);
+        if(lines.size() > 1) {
+            System.err.println("Expected line number is ONE!");
+            System.exit(-1);
+        }
+        String[] ruleNames = lines.get(0).split(",");
+        Set<String> ruleNameSet = new HashSet<>();
+        for(String ruleName : ruleNames) {
+            ruleNameSet.add(ruleName);
+        }
+        return ruleNameSet;
     }
 
     public static ExecutorService initThreadPool() {

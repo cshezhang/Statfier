@@ -3,9 +3,14 @@ package org.detector.util;
 import static org.detector.transform.Transform.cnt1;
 import static org.detector.transform.Transform.cnt2;
 import static org.detector.transform.Transform.singleLevelExplorer;
+import static org.detector.util.Invoker.createSonarQubeProject;
+import static org.detector.util.Invoker.deleteSonarQubeProject;
 import static org.detector.util.Invoker.failedCommands;
+import static org.detector.util.Invoker.invokeCommandsByZT;
+import static org.detector.util.Invoker.invokeCommandsByZTWithOutput;
 import static org.detector.util.Invoker.invokePMD;
 import static org.detector.util.Invoker.invokeSonarQube;
+import static org.detector.util.Invoker.writeSettingFile;
 import static org.detector.util.Utility.EVALUATION_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.Path2Last;
@@ -15,9 +20,11 @@ import static org.detector.util.Utility.SONARQUBE_LOGIN;
 import static org.detector.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
+import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.THREAD_COUNT;
 import static org.detector.util.Utility.failedReport;
 import static org.detector.util.Utility.failedT;
+import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.file2report;
 import static org.detector.util.Utility.file2row;
 import static org.detector.util.Utility.getFilenamesFromFolder;
@@ -30,6 +37,7 @@ import static org.detector.util.Utility.reportFolder;
 import static org.detector.util.Utility.sep;
 import static org.detector.util.Utility.subSeedFolderNameList;
 import static org.detector.util.Utility.successfulT;
+import static org.detector.util.Utility.waitTaskEnd;
 import static org.detector.util.Utility.waitThreadPoolEnding;
 import static org.detector.util.Utility.writeLinesToFile;
 import static org.detector.analysis.TypeWrapper.transformedSeed;
@@ -52,11 +60,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.sourceforge.pmd.PMD;
 import org.detector.analysis.TypeWrapper;
+import org.detector.report.SonarQube_Report;
 import org.detector.thread.CheckStyle_TransformThread;
 import org.detector.thread.Infer_TransformThread;
 import org.detector.thread.PMD_TransformThread;
 import org.detector.thread.SpotBugs_Exec;
 import org.detector.thread.SpotBugs_TransformThread;
+import org.json.JSONObject;
 
 /**
  * Description: This file is the main class for our framework
@@ -209,7 +219,9 @@ public class Schedule {
                 for (String bugType : bugTypes) {
                     int currentDepth = 0;
                     String seedFolderName = category + "_" + bugType;
-                    System.out.println("Detection: " + seedFolderName);
+                    if(DEBUG) {
+                        System.out.println("Detection: " + seedFolderName);
+                    }
                     ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
                         {
                             addAll(bug2wrapper.get(seedFolderName));  // init by the wrappers in level 0
@@ -248,11 +260,23 @@ public class Schedule {
     public void singleThreadWorker(ArrayDeque<TypeWrapper> wrappers) {
         int currentDepth = 0;
         for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
+            // Before invocation: wrappers includes type wrappers in iter
+            // After invocation: wrappers includes type wrappers in iter + 1
             singleLevelExplorer(wrappers, currentDepth++);
             for (String subSeedFolderName : subSeedFolderNameList) {
                 String subSeedFolderPath = mutantFolder + File.separator + "iter" + iter + File.separator + subSeedFolderName;
+                if(DEBUG) {
+                    System.out.println("Seed path: " + subSeedFolderPath);
+                }
                 String settingPath = subSeedFolderPath + File.separator + "settings";
-                Invoker.writeSettingFile(subSeedFolderPath, settingPath);
+                String newProjectName = "iter" + iter + "_" + subSeedFolderName;
+                deleteSonarQubeProject(newProjectName);
+                boolean isCreated = createSonarQubeProject(newProjectName);
+                if(!isCreated) {
+                    System.err.println("ProjectName: " + newProjectName + " is not created!");
+                    continue;
+                }
+                writeSettingFile(subSeedFolderPath, settingPath, newProjectName);
                 String[] invokeCommands = new String[3];
                 if (OSUtil.isWindows()) {
                     invokeCommands[0] = "cmd.exe";
@@ -262,33 +286,36 @@ public class Schedule {
                     invokeCommands[1] = "-c";
                 }
                 invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + " -Dproject.settings=" + settingPath;
-                boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
-                try {
-                    Thread.currentThread().sleep(5000);
-                } catch (InterruptedException e) {
-                    System.err.println("Interruption error!");
-                }
-                if (hasExec) {
-                    List<String> CNES_Commands = new ArrayList<>();
-                    CNES_Commands.add("java");
-                    CNES_Commands.add("-jar");
-                    CNES_Commands.add("-p");
-                    CNES_Commands.add(SONARQUBE_PROJECT_KEY);
-                    CNES_Commands.add("-t");
-                    CNES_Commands.add(SONARQUBE_LOGIN);
-                    CNES_Commands.add("-m");
-                    CNES_Commands.add("-w");
-                    CNES_Commands.add("-e");
-                    CNES_Commands.add("-o");
-                    String CNES_ReportFolderPath = "";
-                    String reportPath = CNES_ReportFolderPath + File.separator + "CNES_ReportName";
-                    Invoker.invokeCommandsByZT(CNES_Commands.toArray(new String[CNES_Commands.size()]));
-                    if (DEBUG) {
-                        System.out.println("Reading result file: " + reportPath);
-                    }
-                    readSonarQubeResultFile(reportPath);
+                boolean hasExec = invokeCommandsByZT(invokeCommands);
+                if(hasExec) {
+                    waitTaskEnd(newProjectName);
                 } else {
-                    System.err.println("Fail to execute SonarQube in: " + subSeedFolderPath);
+                    return;
+                }
+                List<String> ruleNames = new ArrayList<>(SonarQubeRuleNames);
+                String[] curlCommands = new String[4];
+                for (int i = 0; i < ruleNames.size(); i++) {
+                    String ruleName = ruleNames.get(i);
+                    if(DEBUG) {
+                        System.out.println("Request rule: " + ruleName);
+                    }
+                    curlCommands[0] = "curl";
+                    curlCommands[1] = "-u";
+                    curlCommands[2] = "admin:123456";
+                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
+                    String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
+                    SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
+                    JSONObject root = new JSONObject(jsonContent);
+                    int total = root.getInt("total");
+                    int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
+                    for (int p = 2; p <= count; p++) {
+                        curlCommands[0] = "curl";
+                        curlCommands[1] = "-u";
+                        curlCommands[2] = "admin:123456";
+                        curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
+                        jsonContent = invokeCommandsByZTWithOutput(curlCommands);
+                        SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
+                    }
                 }
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();
@@ -305,8 +332,10 @@ public class Schedule {
     public void executeSonarQubeTransform(String seedFolderPath) {
         System.out.println("Invoke SonarQube for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         invokeSonarQube(seedFolderPath);
+        System.out.println(file2report);
+        System.out.println(file2row);
         ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
-        for (String filepath : file2report.keySet()) {
+        for (String filepath : file2row.keySet()) {
             String[] tokens = filepath.split(reg_sep);
             String folderName = tokens[tokens.length - 2];
             TypeWrapper wrapper = new TypeWrapper(filepath, folderName);

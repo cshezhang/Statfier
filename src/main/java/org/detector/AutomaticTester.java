@@ -12,7 +12,7 @@ import static org.detector.util.Utility.initEnv;
 import static org.detector.util.Utility.sourceSeedPath;
 
 /**
- * Description: Main Process for automatic testing
+ * Description: Main process for automatic testing
  * Author: Vanguard
  * Date: 2021-08-08 16:20
  */

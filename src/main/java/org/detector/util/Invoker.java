@@ -34,6 +34,7 @@ import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
+import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.THREAD_COUNT;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
@@ -213,22 +214,23 @@ public class Invoker {
     }
 
     // Add setting and dummy-binaries folder for SonarQube seed folder
-    public static void writeSettingFile(String seedFolderPath, String settingFilePath) {
+    public static void writeSettingFile(String seedFolderPath, String settingFilePath, String projectName) {
         List<String> contents = new ArrayList<>();
-        contents.add("sonar.projectKey=" + SONARQUBE_PROJECT_KEY);
-        contents.add("sonar.projectName=" + SONARQUBE_PROJECT_KEY);
+        contents.add("sonar.projectKey=" + projectName);
+        contents.add("sonar.projectName=" + projectName);
         contents.add("sonar.projectVersion=1.0");
-        contents.add("sonar.login=" + SONARQUBE_LOGIN);
+        contents.add("sonar.login=admin");
+        contents.add("sonar.password=123456");
         contents.add("sonar.sourceEncoding=UTF-8");
         contents.add("sonar.scm.disabled=true");
         contents.add("sonar.cpd.exclusions=**/*");
         contents.add("sonar.sources=" + seedFolderPath);
         contents.add("sonar.java.source=11");
-        File dummyFolder = new File(seedFolderPath + File.separator + "dummy-binaries");
+        File dummyFolder = new File(seedFolderPath + sep + "dummy-binaries");
         if(!dummyFolder.exists()) {
             dummyFolder.mkdir();
         }
-        File dummyFile = new File(seedFolderPath + File.separator + "dummy-binaries" + File.separator + "dummy.txt");
+        File dummyFile = new File(seedFolderPath + sep + "dummy-binaries" + sep + "dummy.txt");
         if(!dummyFile.exists()) {
             try {
                 dummyFile.createNewFile();
@@ -241,45 +243,45 @@ public class Invoker {
         writeLinesToFile(settingFilePath, contents);
     }
 
-    public static Set<String> getRuleNames() {
-        String ruleNamePath = PROJECT_PATH + sep + "tools" + sep + "SonarQube_Rules.txt";
-        List<String> lines = readFileByLine(ruleNamePath);
-        if(lines.size() > 1) {
-            System.err.println("Expected line number is ONE!");
-            System.exit(-1);
-        }
-        String[] ruleNames = lines.get(0).split(",");
-        Set<String> ruleNameSet = new HashSet<>();
-        for(String ruleName : ruleNames) {
-            ruleNameSet.add(ruleName);
-        }
-//        String seedFolderPath = "/Users/austin/projects/sonar-java/java-checks/src/main/java/org/sonar/java/checks";
-//        List<String> filePaths = Utility.getFilenamesFromFolder(seedFolderPath, true);
-//        Set<String> ruleNameSet = new HashSet<>();
-//        for (String filePath : filePaths) {
-//            List<String> lines = readLines(filePath);
-//            for (String line : lines) {
-//                if (line.contains("@Rule(")) {
-//                    String ruleName = line.substring(line.indexOf('\"') + 1, line.lastIndexOf('\"'));
-//                    ruleNameSet.add(ruleName);
-//                }
-//            }
-//        }
-//        System.out.println("Searched " + ruleNameSet.size() + " SonarQube Rules.");
-//        System.out.println(ruleNameSet);
-        return ruleNameSet;
+    public static void deleteSonarQubeProject(String projectName) {
+        String[] curlPostCommands = new String[6];
+        curlPostCommands[0] = "curl";
+        curlPostCommands[1] = "-u";
+        curlPostCommands[2] = "admin:123456";
+        curlPostCommands[3] = "-X";
+        curlPostCommands[4] = "POST";
+        curlPostCommands[5] = "http://localhost:9000/api/projects/delete?project=" + projectName;
+        invokeCommandsByZT(curlPostCommands);
     }
 
+    public static boolean createSonarQubeProject(String projectName) {
+        String[] curlPostCommands = new String[6];
+        curlPostCommands[0] = "curl";
+        curlPostCommands[1] = "-u";
+        curlPostCommands[2] = "admin:123456";
+        curlPostCommands[3] = "-X";
+        curlPostCommands[4] = "POST";
+        curlPostCommands[5] = "http://localhost:9000/api/projects/create?name=" + projectName + "&project=" + projectName;
+        return invokeCommandsByZT(curlPostCommands);
+    }
+
+    // First level process
     public static void invokeSonarQube(String seedFolderPath) {
-        Map<String, SonarQube_Report> srcPath2Report = new HashMap<>();
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             if(DEBUG) {
                 System.out.println("Seed path: " + subSeedFolderPath);
             }
-            String settingPath = subSeedFolderPath + File.separator + "settings";
-            writeSettingFile(subSeedFolderPath, settingPath);
+            String newProjectName = "iter0_" + subSeedFolderName;
+            deleteSonarQubeProject(newProjectName);
+            boolean isCreated = createSonarQubeProject(newProjectName);
+            if(!isCreated) {
+                System.err.println("NewProjectName: " + newProjectName + " is not created!");
+                continue;
+            }
+            String settingPath = subSeedFolderPath + sep + "settings";
+            writeSettingFile(subSeedFolderPath, settingPath, newProjectName);
             String[] invokeCommands = new String[3];
             if(OSUtil.isWindows()) {
                 invokeCommands[0] = "cmd.exe";
@@ -288,24 +290,25 @@ public class Invoker {
                 invokeCommands[0] = "/bin/bash";
                 invokeCommands[1] = "-c";
             }
-            System.out.println("Setting file path: " + settingPath);
             invokeCommands[2] = SONAR_SCANNER_PATH + " -Dproject.settings=" + settingPath;
             boolean hasExec = invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
             if(hasExec) {
-                waitTaskEnd(SONARQUBE_PROJECT_KEY);
+                waitTaskEnd(newProjectName);
             } else {
                 return;
             }
-            System.out.println("SonarQube invocation has finished.");
-            List<String> ruleNames = new ArrayList<>(getRuleNames());
+            List<String> ruleNames = new ArrayList<>(SonarQubeRuleNames);
+            String[] curlCommands = new String[4];
             for (String ruleName : ruleNames) {
-                String[] curlCommands = new String[4];
+                if(DEBUG) {
+                    System.out.println("Request rule: " + ruleName);
+                }
                 curlCommands[0] = "curl";
                 curlCommands[1] = "-u";
                 curlCommands[2] = "admin:123456";
-                curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_KEY + "&rules=java:" + ruleName;
+                curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
                 String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent, srcPath2Report);
+                SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
                 JSONObject root = new JSONObject(jsonContent);
                 int total = root.getInt("total");
                 int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
@@ -313,12 +316,11 @@ public class Invoker {
                     curlCommands[0] = "curl";
                     curlCommands[1] = "-u";
                     curlCommands[2] = "admin:123456";
-                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + SONARQUBE_PROJECT_KEY + "&rules=java:" + ruleName;
+                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
                     jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                    SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent, srcPath2Report);
+                    SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
                 }
             }
-
         }
     }
 

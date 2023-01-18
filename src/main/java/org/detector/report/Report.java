@@ -1,5 +1,7 @@
 package org.detector.report;
 
+import java.util.List;
+
 /**
  * Description:
  * Author: Vanguard

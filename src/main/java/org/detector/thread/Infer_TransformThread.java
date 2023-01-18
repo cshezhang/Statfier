@@ -45,15 +45,15 @@ public class Infer_TransformThread extends Thread {
     @Override
     public void run() {
         for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
-            if(DEBUG) {
-                System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
-            }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
             String mutantFolderPath = Utility.mutantFolder + File.separator + "iter" + depth;
             List<String> filepaths = Utility.getFilenamesFromFolder(mutantFolderPath, true);
+            if(DEBUG) {
+                System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
+                System.out.println(this.getName() + "-" + "Begin to Read Reports and File Size: " + filepaths.size());
+                System.out.println("Mutant Folder: " + mutantFolderPath);
+            }
             List<Infer_Report> reports = new ArrayList<>();
-            System.out.println(this.getName() + "-" + "Begin to Read Reports and File Size: " + filepaths.size());
-            System.out.println("Mutant Folder: " + mutantFolderPath);
             for(int i = 0; i < filepaths.size(); i++) {
                 String srcJavaPath = filepaths.get(i);
                 String filename = Utility.Path2Last(srcJavaPath);
@@ -75,7 +75,6 @@ public class Infer_TransformThread extends Thread {
                 String resultFilePath = reportFolderPath + File.separator + "report.json";
                 Utility.readInferResultFile(srcJavaPath, resultFilePath);
             }
-            System.out.println("Report Size: " + reports.size());
             List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
                 TypeWrapper head = wrappers.pollFirst();
@@ -84,7 +83,6 @@ public class Infer_TransformThread extends Thread {
                 }
             }
             wrappers.addAll(validWrappers);
-            System.out.println("End Iteration!");
         }
     }
 
