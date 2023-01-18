@@ -1,0 +1,12 @@
+sonar.projectKey=iter0_18
+sonar.projectName=iter0_18
+sonar.projectVersion=1.0
+sonar.login=admin
+sonar.password=123456
+sonar.sourceEncoding=UTF-8
+sonar.scm.disabled=true
+sonar.cpd.exclusions=**/*
+sonar.sources=/Users/austin/projects/SAMutator/seeds/SonarQube_Validation/18
+sonar.java.source=11
+sonar.java.binaries=/Users/austin/projects/SAMutator/seeds/SonarQube_Validation/18/dummy-binaries
+sonar.java.test.binaries=/Users/austin/projects/SAMutator/seeds/SonarQube_Validation/18/dummy-binaries

@@ -7,6 +7,7 @@ import org.detector.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.classFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.reportFolder;
@@ -32,7 +33,9 @@ public class Infer_InvokeThread implements Runnable {
     @Override
     public void run() {
         List<String> filepaths = Utility.getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
-        System.out.println("InvokeT Path:" + seedFolderPath + " Name:" + seedFolderName + " Size:" + filepaths.size());
+        if(DEBUG) {
+            System.out.println("InvokeT Path:" + seedFolderPath + " Name:" + seedFolderName + " Size:" + filepaths.size());
+        }
         for(int i = 0; i < filepaths.size(); i++) {
             String srcJavaPath = filepaths.get(i);
             String filename = Utility.Path2Last(srcJavaPath);

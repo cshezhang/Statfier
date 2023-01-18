@@ -240,7 +240,10 @@ public class Invoker {
         }
         contents.add("sonar.java.binaries=" + dummyFolder.getAbsolutePath());
         contents.add("sonar.java.test.binaries=" + dummyFolder.getAbsolutePath());
-        writeLinesToFile(settingFilePath, contents);
+        File settingFile = new File(settingFilePath);
+        if(!settingFile.exists()) {
+            writeLinesToFile(settingFilePath, contents);
+        }
     }
 
     public static void deleteSonarQubeProject(String projectName) {

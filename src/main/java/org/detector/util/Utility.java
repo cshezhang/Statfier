@@ -448,7 +448,7 @@ public class Utility {
 
     public static boolean writeLinesToFile(String outputPath, List<String> lines) {
         try {
-            FileOutputStream fos = new FileOutputStream(new File(outputPath));
+            FileOutputStream fos = new FileOutputStream(outputPath);
             OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
             BufferedWriter bw = new BufferedWriter(osw);
             for (String line : lines) {

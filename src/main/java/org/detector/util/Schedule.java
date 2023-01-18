@@ -332,8 +332,6 @@ public class Schedule {
     public void executeSonarQubeTransform(String seedFolderPath) {
         System.out.println("Invoke SonarQube for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         invokeSonarQube(seedFolderPath);
-        System.out.println(file2report);
-        System.out.println(file2row);
         ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
         for (String filepath : file2row.keySet()) {
             String[] tokens = filepath.split(reg_sep);
