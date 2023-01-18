@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.detector.analysis.TypeWrapper.getChildrenNodes;
+import static org.detector.util.Utility.hasStaticModifier;
 
 public class TransferLocalVarToGlobal extends Transform {
 
@@ -76,6 +77,9 @@ public class TransferLocalVarToGlobal extends Transform {
                 }
                 parNode = parNode.getParent();
             }
+        }
+        if(hasStaticModifier(srcNode)) {
+            return nodes;
         }
         List<ASTNode> subNodes = TypeWrapper.getChildrenNodes(srcNode);
         for (int i = 0; i < subNodes.size(); i++) {

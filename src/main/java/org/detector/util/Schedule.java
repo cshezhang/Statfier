@@ -3,6 +3,7 @@ package org.detector.util;
 import static org.detector.transform.Transform.cnt1;
 import static org.detector.transform.Transform.cnt2;
 import static org.detector.transform.Transform.singleLevelExplorer;
+import static org.detector.util.Invoker.compileJavaSourceFile;
 import static org.detector.util.Invoker.createSonarQubeProject;
 import static org.detector.util.Invoker.deleteSonarQubeProject;
 import static org.detector.util.Invoker.failedCommands;
@@ -20,6 +21,7 @@ import static org.detector.util.Utility.SONARQUBE_LOGIN;
 import static org.detector.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
+import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.THREAD_COUNT;
 import static org.detector.util.Utility.failedReport;
@@ -32,6 +34,7 @@ import static org.detector.util.Utility.initThreadPool;
 import static org.detector.util.Utility.listAveragePartition;
 import static org.detector.util.Utility.mutantFolder;
 import static org.detector.util.Utility.readSonarQubeResultFile;
+import static org.detector.util.Utility.readSpotBugsResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
 import static org.detector.util.Utility.sep;
@@ -59,6 +62,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.sourceforge.pmd.PMD;
+import org.apache.commons.io.FileUtils;
 import org.detector.analysis.TypeWrapper;
 import org.detector.report.SonarQube_Report;
 import org.detector.thread.CheckStyle_TransformThread;
@@ -66,6 +70,7 @@ import org.detector.thread.Infer_TransformThread;
 import org.detector.thread.PMD_TransformThread;
 import org.detector.thread.SpotBugs_Exec;
 import org.detector.thread.SpotBugs_TransformThread;
+import org.detector.transform.Transform;
 import org.json.JSONObject;
 
 /**
@@ -115,11 +120,10 @@ public class Schedule {
         waitThreadPoolEnding(threadPool);
     }
 
-    public void executeSpotBugsTransform(String seedFolderPath) {
-        System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
-        Invoker.invokeSpotBugs(seedFolderPath);
-        ExecutorService threadPool = initThreadPool();
-        List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
+    public void executeSpotBugsTransform(String initSeedFolderPath) {
+        System.out.println("Invoke Analyzer for " + initSeedFolderPath + " and Analysis Output Folder is: " + Path2Last(initSeedFolderPath) + ", Depth=0");
+        Invoker.invokeSpotBugs(initSeedFolderPath);
+        List<String> seedFilePaths = getFilenamesFromFolder(initSeedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
         List<String> failSeedPaths = new ArrayList<>();
@@ -146,16 +150,83 @@ public class Schedule {
                 System.out.println("Fail Seed Path: " + path);
             }
         }
-        if (threadPool == null) {
-            System.out.println("No Thread!");
-            SpotBugs_Exec.run(initWrappers);
-        } else {
-            List<List<TypeWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
-            for (int i = 0; i < lists.size(); i++) {
-                SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
-                threadPool.submit(thread);
+        List<List<TypeWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
+        if(THREAD_COUNT > 1) {
+            ExecutorService threadPool = initThreadPool();
+            if (threadPool == null) {
+                System.out.println("No Thread!");
+                SpotBugs_Exec.run(initWrappers);
+            } else {
+                for (int i = 0; i < lists.size(); i++) {
+                    SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
+                    threadPool.submit(thread);
+                }
+                waitThreadPoolEnding(threadPool);
             }
-            waitThreadPoolEnding(threadPool);
+        } else {
+            for (int i = 0; i < lists.size(); i++) {
+                int currentDepth = 0;
+                List<TypeWrapper> wrappers = new ArrayList<>() {
+                    {
+                        addAll(initWrappers);
+                    }
+                };
+                for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
+                    Transform.singleLevelExplorer(wrappers, currentDepth++);
+                    for (int j = wrappers.size() - 1; j >= 0; j--) {
+                        TypeWrapper wrapper = wrappers.get(j);
+                        String seedFilePath = wrapper.getFilePath();
+                        String seedFolderPath = wrapper.getFolderPath();
+                        String[] tokens = seedFilePath.split(Utility.sep);
+                        String seedFileNameWithSuffix = tokens[tokens.length - 1];
+                        String subSeedFolderName = tokens[tokens.length - 2];
+                        String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
+                        // Filename is used to specify class folder name
+                        File classFolder = new File(Utility.classFolder.getAbsolutePath() + File.separator + seedFileName);
+                        if (!classFolder.exists()) {
+                            classFolder.mkdirs();
+                        }
+                        boolean isCompiled = compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
+                        if(!isCompiled) { // Failed compilation point
+//                            failedCompilation.add(wrapper);
+                            wrappers.remove(j);
+                            try {
+                                FileUtils.deleteDirectory(classFolder);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            continue;
+                        }
+                        String reportPath = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                        String[] invokeCmds = new String[3];
+                        if (OSUtil.isWindows()) {
+                            invokeCmds[0] = "cmd.exe";
+                            invokeCmds[1] = "/c";
+                        } else {
+                            invokeCmds[0] = "/bin/bash";
+                            invokeCmds[1] = "-c";
+                        }
+                        invokeCmds[2] = SPOTBUGS_PATH + " -textui"
+//                            + " -include " + configPath
+                                + " -xml:withMessages" + " -output " + reportPath + " "
+                                + classFolder.getAbsolutePath();
+                        boolean hasExec = Invoker.invokeCommandsByZT(invokeCmds);
+                        if (hasExec) {
+                            String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                            readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
+                        }
+                    }
+                    List<TypeWrapper> validWrappers = new ArrayList<>();
+                    while (!wrappers.isEmpty()) {
+                        TypeWrapper head = wrappers.get(0);
+                        wrappers.remove(0);
+                        if (!head.isBuggy()) {
+                            validWrappers.add(head);
+                        }
+                    }
+                    wrappers.addAll(validWrappers);
+                }
+            }
         }
     }
 

@@ -15,10 +15,12 @@ import static org.detector.util.Utility.COMPILE;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.DIV_SELECTION;
 import static org.detector.util.Utility.GUIDED_LOCATION;
+import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.NO_SELECTION;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.RANDOM_LOCATION;
 import static org.detector.util.Utility.RANDOM_SELECTION;
+import static org.detector.util.Utility.SONARQUBE_MUTATION;
 
 /*
  * @Description: The General Class for Mutants.
@@ -74,7 +76,9 @@ public abstract class Transform {
             transforms.add(AddControlBranch.getInstance());
             transforms.add(AddGlobalAssignment.getInstance());
             transforms.add(AddLocalAssignment.getInstance());
-            transforms.add(AddMethodCallToLiteral.getInstance());
+            if(INFER_MUTATION || SONARQUBE_MUTATION) {
+                transforms.add(AddMethodCallToLiteral.getInstance());
+            }
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
             transforms.add(CFWrapperWithForTrue.getInstance());
@@ -100,10 +104,6 @@ public abstract class Transform {
         }
     }
 
-    public static Transform getTransformRandomly() {
-        return transforms.get(Utility.random.nextInt(transforms.size()));
-    }
-
     public static List<Transform> getTransforms() {
         return transforms;
     }
@@ -111,9 +111,63 @@ public abstract class Transform {
     public static AtomicInteger cnt1 = new AtomicInteger(0);
     public static AtomicInteger cnt2 = new AtomicInteger(0);
 
+    public static void singleLevelExplorer(List<TypeWrapper> wrappers, int currentDepth) {  // Current depth means the depth of variants in wrappers, not the iteration level
+        while (!wrappers.isEmpty()) {
+            TypeWrapper wrapper = wrappers.get(0); // remove TypeWrapper in currentDepth level
+            wrappers.remove(0);
+            if (wrapper.depth == currentDepth) {
+                if (!wrapper.isBuggy()) {
+                    List<TypeWrapper> mutants = new ArrayList<>();
+                    if (GUIDED_LOCATION) {
+                        mutants = wrapper.TransformByGuidedLocation();
+                    } else if (RANDOM_LOCATION) {
+                        mutants = wrapper.TransformByRandomLocation();
+                    }
+                    if (DEBUG) {
+                        System.out.println("Src Path: " + wrapper.getFilePath());
+                        System.out.println("Mutant Size: " + mutants.size());
+                    }
+                    cnt1.addAndGet(mutants.size());
+                    List<TypeWrapper> reducedMutants = null;
+                    if (NO_SELECTION) {
+                        reducedMutants = mutants;
+                    }
+                    if (RANDOM_SELECTION) {
+                        reducedMutants = SelectionAlgorithm.Random_Selection(mutants);
+                    }
+                    if (DIV_SELECTION) {
+                        reducedMutants = SelectionAlgorithm.Div_Selection(mutants);
+                    }
+                    if(DEBUG) {
+                        System.out.println("Reduced Mutant Size: " + reducedMutants.size());
+                    }
+                    cnt2.addAndGet(reducedMutants.size());
+                    for (int j = 0; j < reducedMutants.size(); j++) {
+                        TypeWrapper newMutant = reducedMutants.get(j);
+                        if (COMPILE) {
+                            newMutant.rewriteJavaCode();  // 1. Rewrite transformation, don't remove this line, we need rewrite Java code twice
+                            newMutant.resetClassName();  // 2. Rewrite class name and pkg definition
+                            newMutant.removePackageDefinition();
+                        }
+                        newMutant.rewriteJavaCode();
+                        if (newMutant.writeToJavaFile()) {
+                            TypeWrapper.mutant2seed.put(newMutant.getFilePath(), newMutant.getInitSeedPath());
+                            TypeWrapper.mutant2seq.put(newMutant.getFilePath(), newMutant.getTransSeq().toString());
+                        }
+                    }
+                    wrappers.addAll(reducedMutants);
+                }
+            } else {
+                wrappers.add(0, wrapper);
+                break;
+            }
+        }
+    }
+
     public static void singleLevelExplorer(ArrayDeque<TypeWrapper> wrappers, int currentDepth) {  // Current depth means the depth of variants in wrappers, not the iteration level
         while (!wrappers.isEmpty()) {
             TypeWrapper wrapper = wrappers.pollFirst(); // remove TypeWrapper in currentDepth level
+            wrappers.remove(0);
             if (wrapper.depth == currentDepth) {
                 if (!wrapper.isBuggy()) {
                     List<TypeWrapper> mutants = new ArrayList<>();

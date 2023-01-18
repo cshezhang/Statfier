@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EmptyStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -19,6 +20,7 @@ import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.json.JSONObject;
 import org.detector.analysis.TypeWrapper;
@@ -949,6 +951,25 @@ public class Utility {
                 System.exit(-1);
             }
         }
+    }
+
+    public static boolean hasStaticModifier(ASTNode node) {
+        List<ASTNode> modifiers = null;
+        if(node instanceof FieldDeclaration) {
+            modifiers = ((FieldDeclaration) node).modifiers();
+        }
+        if(node instanceof VariableDeclarationStatement) {
+            modifiers = ((VariableDeclarationStatement) node).modifiers();
+        }
+        if(modifiers == null) {
+            return false;
+        }
+        for(ASTNode modifier : modifiers) {
+            if(modifier instanceof Modifier && ((Modifier) modifier).getKeyword().equals(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

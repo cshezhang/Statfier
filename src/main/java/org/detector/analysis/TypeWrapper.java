@@ -464,10 +464,12 @@ public class TypeWrapper {
                 System.exit(-1);
             }
             if (mutant_bug2lines == null) {
-                mutant_bug2lines = new HashMap<>();
+//                mutant_bug2lines = new HashMap<>();
+                return buggy;
             }
             if (source_bug2lines == null) {
-                source_bug2lines = new HashMap<>();
+//                source_bug2lines = new HashMap<>();
+                return buggy;
             }
             List<Map.Entry<String, List<Integer>>> potentialFPs = new ArrayList<>();
             List<Map.Entry<String, List<Integer>>> potentialFNs = new ArrayList<>();

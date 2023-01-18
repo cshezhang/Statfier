@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.detector.analysis.TypeWrapper.getChildrenNodes;
+import static org.detector.analysis.TypeWrapper.getStatementOfNode;
 
 public class AnonymousClassWrapper extends Transform {
 
@@ -129,7 +130,12 @@ public class AnonymousClassWrapper extends Transform {
         }
         MethodDeclaration method = TypeWrapper.getDirectMethodOfNode(node);
         if (method == null) {
-            if(TypeWrapper.getStatementOfNode(node) instanceof FieldDeclaration) {
+            ASTNode statement = getStatementOfNode(node);
+            if(statement instanceof FieldDeclaration) {
+                VariableDeclarationFragment fragment = (VariableDeclarationFragment) ((FieldDeclaration) statement).fragments().get(0);
+                if(fragment.getName().getIdentifier().equals("serialVersionUID")) {
+                    return nodes;
+                }
                 List<ASTNode> subNodes = getChildrenNodes(node);
                 for(ASTNode subNode : subNodes) {
                     if(subNode instanceof ThisExpression) {
