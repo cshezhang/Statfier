@@ -373,8 +373,8 @@ public class Invoker {
                         "-d", seedFolderPath  + File.separator + seedFolderName,
                         "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
                         "-f", "json",
-                        "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json",
-                        "--no-cache"
+                        "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"
+//                        "--no-cache"
                 };
                 PMD.runPmd(pmdConfig);
             }

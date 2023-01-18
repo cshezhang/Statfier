@@ -94,14 +94,12 @@ public class ModuleTester {
 //                "-R", "category/java/performance.xml/InsufficientStringBufferDeclaration",
 //                "-R", "category/java/performance.xml/UselessStringValueOf",
 //                "-R", "category/java/performance.xml/UseArraysAsList",
-//                "-R", "category/java/security.xml/HardCodedCryptoKey",
-                "-R", "category/java/security.xml/InsecureCryptoIv",
+                "-R", "category/java/security.xml/HardCodedCryptoKey",
+//                "-R", "category/java/security.xml/InsecureCryptoIv",
 //                "-R", "category/java/errorprone.xml/AvoidFieldNameMatchingMethodName",
                 "-f", "html",
                 "-r", "./PMD_Result.html",
 //                "--debug",
-                "--no-cache"
-
         };
         PMD.main(pmdArgs);
     }

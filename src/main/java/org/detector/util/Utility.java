@@ -171,6 +171,7 @@ public class Utility {
     //    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> List: buggy column numbers
     public static HashMap<String, Report> file2report = new HashMap<>();
     public static HashMap<String, HashMap<String, List<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
+    public static HashMap<String, Boolean> noReport = new HashMap<>();
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
@@ -377,9 +378,6 @@ public class Utility {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(reportPath);
-        if(reportPath.contains("mutant126")) {
-            int a = 10;
-        }
         try {
             JsonNode rootNode = mapper.readTree(jsonFile);
             JsonNode reportNodes = rootNode.get("files");

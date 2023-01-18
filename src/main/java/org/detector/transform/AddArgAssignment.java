@@ -56,9 +56,6 @@ public class AddArgAssignment extends Transform {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         Expression targetExpression = null, rightExpression = null;
-//        if(isLiteral(targetNode)) {
-//
-//        }
         if(srcNode instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) srcNode;
             rightExpression = ((VariableDeclarationFragment) vdStatement.fragments().get(0)).getInitializer();

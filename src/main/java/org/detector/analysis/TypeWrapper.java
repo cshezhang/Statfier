@@ -54,6 +54,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.detector.util.Utility.PMD_MUTATION;
+import static org.detector.util.Utility.SONARQUBE_MUTATION;
+import static org.detector.util.Utility.noReport;
 import static org.detector.util.Utility.random;
 import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2bugs;
@@ -454,6 +457,9 @@ public class TypeWrapper {
 
     public boolean isBuggy() {
         boolean buggy = false;
+        if(this.filePath.contains("mutant_5")) {
+            int a = 10;
+        }
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
@@ -464,12 +470,18 @@ public class TypeWrapper {
                 System.exit(-1);
             }
             if (mutant_bug2lines == null) {
-//                mutant_bug2lines = new HashMap<>();
-                return buggy;
+                if(noReport.containsKey(this.filePath)) {
+                    return false;
+                } else {
+                    mutant_bug2lines = new HashMap<>();
+                }
             }
             if (source_bug2lines == null) {
-//                source_bug2lines = new HashMap<>();
-                return buggy;
+                if(PMD_MUTATION || SONARQUBE_MUTATION) {
+                    source_bug2lines = new HashMap<>();
+                } else {
+                    return false;
+                }
             }
             List<Map.Entry<String, List<Integer>>> potentialFPs = new ArrayList<>();
             List<Map.Entry<String, List<Integer>>> potentialFNs = new ArrayList<>();

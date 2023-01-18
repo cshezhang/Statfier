@@ -1,14 +1,11 @@
 
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Foo {
 
-    String getLiteral18() {
-        return "ALL_ZEROS_HERE";
-    }
-
     void encrypt() {
-        byte[] staticIv = getLiteral18().getBytes();
-        IvParameterSpec iv = new IvParameterSpec(staticIv);
+        String str;
+        str = "hard coded key here";
+        SecretKeySpec keySpec =  new SecretKeySpec(str.getBytes("UTF-8"), "AES");
     }
 }

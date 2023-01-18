@@ -36,8 +36,7 @@ public class PMD_InvokeThread implements Runnable {
             "-d", seedFolderPath  + File.separator + seedFolderName,
             "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
             "-f", "json",
-            "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json",
-            "--no-cache"
+            "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
         };
         PMD.runPmd(pmdConfig);
     }

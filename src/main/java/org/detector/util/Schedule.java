@@ -33,6 +33,7 @@ import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.initThreadPool;
 import static org.detector.util.Utility.listAveragePartition;
 import static org.detector.util.Utility.mutantFolder;
+import static org.detector.util.Utility.noReport;
 import static org.detector.util.Utility.readSonarQubeResultFile;
 import static org.detector.util.Utility.readSpotBugsResultFile;
 import static org.detector.util.Utility.reg_sep;
@@ -188,7 +189,7 @@ public class Schedule {
                         }
                         boolean isCompiled = compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
                         if(!isCompiled) { // Failed compilation point
-//                            failedCompilation.add(wrapper);
+                            noReport.put(wrapper.getFilePath(), true);
                             wrappers.remove(j);
                             try {
                                 FileUtils.deleteDirectory(classFolder);
@@ -309,8 +310,7 @@ public class Schedule {
                                 "-d", mutantFolderPath,
                                 "-R", "category/java/" + category + ".xml/" + bugType,
                                 "-f", "json",
-                                "-r", resultFilePath,
-                                "--no-cache"
+                                "-r", resultFilePath
                         };
                         PMD.runPmd(pmdConfig); // detect mutants of level i
                         Utility.readPMDResultFile(resultFilePath);

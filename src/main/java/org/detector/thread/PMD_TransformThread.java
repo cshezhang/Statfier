@@ -54,8 +54,7 @@ public class PMD_TransformThread implements Runnable {
                     "-d", mutantFolderPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
                     "-f", "json",
-                    "-r", resultFilePath,
-                    "--no-cache"
+                    "-r", resultFilePath
             };
             PMD.runPmd(pmdConfig); // detect mutants of level i
             Utility.readPMDResultFile(resultFilePath);
