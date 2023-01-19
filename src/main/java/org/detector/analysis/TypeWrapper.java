@@ -534,7 +534,7 @@ public class TypeWrapper {
                         long seconds = (execTime / 1000) % 60;
                         if(!bugExistence.containsKey(entry.getKey())) {
                             bugExistence.put(entry.getKey(), true);
-                            System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                            System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                         }
                     } else {
                         if (this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
@@ -546,7 +546,7 @@ public class TypeWrapper {
                                 long seconds = (execTime / 1000) % 60;
                                 if(!bugExistence.containsKey(entry.getKey())) {
                                     bugExistence.put(entry.getKey(), true);
-                                    System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                                    System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                                 }
                             }
                         } else {
@@ -557,7 +557,7 @@ public class TypeWrapper {
                             long seconds = (execTime / 1000) % 60;
                             if(!bugExistence.containsKey(entry.getKey())) {
                                 bugExistence.put(entry.getKey(), true);
-                                System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                                System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                             }
                         }
                     }
@@ -572,7 +572,7 @@ public class TypeWrapper {
                     long seconds = (execTime / 1000) % 60;
                     if(!bugExistence.containsKey(entry.getKey())) {
                         bugExistence.put(entry.getKey(), true);
-                        System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                        System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                     }
                 }
             }
