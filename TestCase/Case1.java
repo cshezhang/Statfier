@@ -1,39 +1,21 @@
-/*
-  asdfdasf
-  sadasf
-  dasd
-* */
-
-
-
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Test {
-  Object anonWrap404 =
-      new Object() {
-        void f(Connection con, Integer key) throws SQLException {
-          StringBuffer sql = new StringBuffer("SELECT * FROM xxx  WHERE xxx_id = ?");
-          PreparedStatement ps = con.prepareStatement(sql.toString());
-          try {
-            ps.setInt(1, key.intValue());
-            ResultSet rs = ps.executeQuery();
-            try {
-              rs.next();
-              int index = 1;
-              Integer firstQuestionId = new Integer(rs.getInt(index++));
-              String description = rs.getString(index++);
-              Float approvalScore = new Float(rs.getFloat(index++));
-            } finally {
-              rs.close();
-            }
-          } finally {
-            ps.close();
-          }
-        }
-      };
-}
 
+    public void foo(Integer[] ints) {
+        // could just use Arrays.asList(ints)
+        List l = new ArrayList(10);
+        for (int i = 0; i < 100; i++) {
+            final boolean acb110 = true;
+            if (acb110) {
+                l.add(ints[i]);
+            } else {
+                l.add(ints[i]);
+            }
+        }
+        for (int i = 0; i < 100; i++) {
+            l.add(a[i].toString()); // won't trigger the rule
+        }
+    }
+}

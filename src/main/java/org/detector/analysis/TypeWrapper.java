@@ -111,11 +111,12 @@ public class TypeWrapper {
 
     public static Map compilerOptions = JavaCore.getOptions();
     static {
-        compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
-        compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
-        compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
+        compilerOptions.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_11);
+        compilerOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_11);
+        compilerOptions.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_11);
     }
 
+    public static List<String> failedParse = new ArrayList<>();
     public TypeWrapper(String filePath, String folderName) {
         this.depth = 0;
         this.expectedNumbers = 0;
@@ -123,7 +124,8 @@ public class TypeWrapper {
         this.initSeedPath = filePath;
         File targetFile = new File(filePath);
         try {
-            this.document = new Document(FileUtils.readFileToString(targetFile, "UTF-8"));
+            String content = FileUtils.readFileToString(targetFile, "UTF-8");
+            this.document = new Document(content);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -261,17 +263,17 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-            String[] invokeCommands = new String[5];
-            invokeCommands[0] = "java";
-            invokeCommands[1] = "-jar";
-            invokeCommands[2] = GOOGLE_FORMAT_PATH;
-            invokeCommands[3] = "--replace";
-            invokeCommands[4] = this.filePath;
-            boolean isFormatted = Invoker.invokeCommandsByZT(invokeCommands);
-            if(!isFormatted) {
-                FileUtils.delete(file);
-                return false;
-            }
+//            String[] invokeCommands = new String[5];
+//            invokeCommands[0] = "java";
+//            invokeCommands[1] = "-jar";
+//            invokeCommands[2] = GOOGLE_FORMAT_PATH;
+//            invokeCommands[3] = "--replace";
+//            invokeCommands[4] = this.filePath;
+//            boolean isFormatted = Invoker.invokeCommandsByZT(invokeCommands);
+//            if(!isFormatted) {
+//                FileUtils.delete(file);
+//                return false;
+//            }
         } catch (IOException e) {
             System.err.println("Fail to Write to Java File!");
             e.printStackTrace();

@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.Statement;
@@ -60,6 +61,7 @@ public class AddControlBranch extends Transform {
         newBoolVdFragment.setName(ast.newSimpleName(varName));
         newBoolVdFragment.setInitializer(ast.newBooleanLiteral(true));
         VariableDeclarationStatement newBoolVdStatement = ast.newVariableDeclarationStatement(newBoolVdFragment);
+        newBoolVdStatement.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
         newBoolVdStatement.setType(ast.newPrimitiveType(PrimitiveType.BOOLEAN));
         // Final modifier can be added by a specific transformation
         int startLine = wrapper.getCompilationUnit().getLineNumber(srcNode.getStartPosition());

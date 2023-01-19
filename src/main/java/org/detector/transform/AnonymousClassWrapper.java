@@ -133,8 +133,14 @@ public class AnonymousClassWrapper extends Transform {
             ASTNode statement = getStatementOfNode(node);
             if(statement instanceof FieldDeclaration) {
                 VariableDeclarationFragment fragment = (VariableDeclarationFragment) ((FieldDeclaration) statement).fragments().get(0);
-                if(fragment.getName().getIdentifier().equals("serialVersionUID")) {
+                String varName = fragment.getName().getIdentifier();
+                if(varName.equals("serialVersionUID")) {
                     return nodes;
+                }
+                for(MethodDeclaration methodDeclaration : clazz.getMethods()) {
+                    if(methodDeclaration.getName().getIdentifier().equals(varName)) {
+                        return nodes;
+                    }
                 }
                 List<ASTNode> subNodes = getChildrenNodes(node);
                 for(ASTNode subNode : subNodes) {

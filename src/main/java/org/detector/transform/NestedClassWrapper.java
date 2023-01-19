@@ -3,6 +3,7 @@ package org.detector.transform;
 import org.detector.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -13,6 +14,7 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -65,6 +67,9 @@ public class NestedClassWrapper extends Transform {
             }
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
             nestedClass.bodyDeclarations().add(newMethod);
+//            astRewrite.remove(oldMethod, null);
+//            ListRewrite listRewrite = astRewrite.getListRewrite(type, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
+//            listRewrite.insertFirst(nestedClass, null);
             astRewrite.replace(oldMethod, nestedClass, null);
             return true;
         } else {
@@ -77,6 +82,9 @@ public class NestedClassWrapper extends Transform {
                 }
                 FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
                 nestedClass.bodyDeclarations().add(newFieldDeclaration);
+//                astRewrite.remove(srcNode, null);
+//                ListRewrite listRewrite = astRewrite.getListRewrite(type, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
+//                listRewrite.insertFirst(nestedClass, null);
                 astRewrite.replace(srcNode, nestedClass, null);
                 return true;
             } else {
@@ -97,8 +105,14 @@ public class NestedClassWrapper extends Transform {
             ASTNode statement = TypeWrapper.getStatementOfNode(node);
             if(statement instanceof FieldDeclaration) {
                 VariableDeclarationFragment fragment = (VariableDeclarationFragment) ((FieldDeclaration) statement).fragments().get(0);
-                if(fragment.getName().getIdentifier().equals("serialVersionUID")) {
+                String varName = fragment.getName().getIdentifier();
+                if(varName.equals("serialVersionUID") || varName.equalsIgnoreCase(clazz.getName().getIdentifier())) {
                     return nodes;
+                }
+                for(MethodDeclaration methodDeclaration : clazz.getMethods()) {
+                    if(methodDeclaration.getName().getIdentifier().equals(varName)) {
+                        return nodes;
+                    }
                 }
                 List<ASTNode> subNodes = getChildrenNodes(node);
                 for(ASTNode subNode : subNodes) {

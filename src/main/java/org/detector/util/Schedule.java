@@ -1,5 +1,6 @@
 package org.detector.util;
 
+import static org.detector.analysis.TypeWrapper.failedParse;
 import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.transform.Transform.cnt1;
 import static org.detector.transform.Transform.cnt2;
@@ -527,6 +528,7 @@ public class Schedule {
                         TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
         );
         writeLinesToFile(EVALUATION_PATH + File.separator + "Output.log", output);
+        writeLinesToFile(EVALUATION_PATH + sep + "FailedParse.log", failedParse);
     }
 
 }

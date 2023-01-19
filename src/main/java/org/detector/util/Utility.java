@@ -411,6 +411,21 @@ public class Utility {
         }
     }
 
+    public static String readFile(String filepath) {
+        StringBuilder builder = new StringBuilder();
+        try {
+            FileInputStream fis = new FileInputStream(filepath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            String str;
+            while ((str = br.readLine()) != null) {
+                builder.append(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return builder.toString();
+    }
+
     public static List<String> readFileByLine(String filepath) {
         List<String> lines = new ArrayList<>();
         try {

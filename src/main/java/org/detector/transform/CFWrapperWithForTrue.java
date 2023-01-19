@@ -12,11 +12,15 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -56,21 +60,21 @@ public class CFWrapperWithForTrue extends Transform {
         newVdFragment.setName(ast.newSimpleName(controlVar));
         newVdFragment.setInitializer(ast.newNumberLiteral("0"));
 
-//        VariableDeclarationExpression newVdExpression = ast.newVariableDeclarationExpression(newVdFragment);
-//        newVdExpression.setType(ast.newPrimitiveType(PrimitiveType.INT));
-//        newForStatement.initializers().add(newVdExpression);
+        VariableDeclarationExpression newVdExpression = ast.newVariableDeclarationExpression(newVdFragment);
+        newVdExpression.setType(ast.newPrimitiveType(PrimitiveType.INT));
+        newForStatement.initializers().add(newVdExpression);
 
-//        InfixExpression infixExpression = ast.newInfixExpression();
-//        infixExpression.setLeftOperand(ast.newSimpleName(controlVar));
-//        infixExpression.setOperator(InfixExpression.Operator.LESS);
-//        infixExpression.setRightOperand(ast.newNumberLiteral("1"));
-//        newForStatement.setExpression(infixExpression);
-        newForStatement.setExpression(ast.newBooleanLiteral(true));
+        InfixExpression infixExpression = ast.newInfixExpression();
+        infixExpression.setLeftOperand(ast.newSimpleName(controlVar));
+        infixExpression.setOperator(InfixExpression.Operator.LESS);
+        infixExpression.setRightOperand(ast.newNumberLiteral("1"));
+        newForStatement.setExpression(infixExpression);
+//        newForStatement.setExpression(ast.newBooleanLiteral(true));
 
-//        PostfixExpression postfixExpression = ast.newPostfixExpression();
-//        postfixExpression.setOperand(ast.newSimpleName(controlVar));
-//        postfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
-//        newForStatement.updaters().add(postfixExpression);
+        PostfixExpression postfixExpression = ast.newPostfixExpression();
+        postfixExpression.setOperand(ast.newSimpleName(controlVar));
+        postfixExpression.setOperator(PostfixExpression.Operator.INCREMENT);
+        newForStatement.updaters().add(postfixExpression);
 
         Block newForBodyBlock = ast.newBlock();
         Statement newStatement = (Statement) ASTNode.copySubtree(ast, srcNode);

@@ -135,8 +135,14 @@ public class EnumClassWrapper extends Transform {
             ASTNode statement = TypeWrapper.getStatementOfNode(node);
             if(statement instanceof FieldDeclaration) {
                 VariableDeclarationFragment fragment = (VariableDeclarationFragment) ((FieldDeclaration) statement).fragments().get(0);
+                String varName = fragment.getName().getIdentifier();
                 if(fragment.getName().getIdentifier().equals("serialVersionUID")) {
                     return nodes;
+                }
+                for(MethodDeclaration methodDeclaration : clazz.getMethods()) {
+                    if(methodDeclaration.getName().getIdentifier().equals(varName)) {
+                        return nodes;
+                    }
                 }
                 List<ASTNode> subNodes = getChildrenNodes(node);
                 for(ASTNode subNode : subNodes) {

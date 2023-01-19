@@ -1,14 +1,21 @@
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ExecutorServiceUsage {
-  public void executor_service_method_invocation() {
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
-    executorService.submit(
-        new Runnable() {
-          @Override
-          public void run() {}
-        });
+public class ExecutorsUsage {
+  public void static_usage_of_Executors() {
+    Executors.newSingleThreadExecutor()
+        .submit(
+            new Runnable() {
+              @Override
+              public void run() {}
+            });
+    Executors.newFixedThreadPool(1)
+        .submit(
+            new Callable<Object>() {
+              @Override
+              public Object call() throws Exception {
+                return null;
+              }
+            });
   }
 }
 
