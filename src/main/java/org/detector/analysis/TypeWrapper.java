@@ -493,10 +493,10 @@ public class TypeWrapper {
                 System.exit(-1);
             }
             if (mutant_bug2lines == null) {
-                if(noReport.containsKey(this.filePath)) {
-                    return false;
-                } else {
+                if(PMD_MUTATION || SONARQUBE_MUTATION) {
                     mutant_bug2lines = new HashMap<>();
+                } else {
+                    return false;
                 }
             }
             if (source_bug2lines == null) {
@@ -506,6 +506,20 @@ public class TypeWrapper {
                     return false;
                 }
             }
+//            if (mutant_bug2lines == null) {
+//                if(noReport.containsKey(this.filePath)) {
+//                    return false;
+//                } else {
+//                    mutant_bug2lines = new HashMap<>();
+//                }
+//            }
+//            if (source_bug2lines == null) {
+//                if(noReport.containsKey(this.filePath)) {
+//                    source_bug2lines = new HashMap<>();
+//                } else {
+//                    return false;
+//                }
+//            }
             List<Map.Entry<String, List<Integer>>> potentialFPs = new ArrayList<>();
             List<Map.Entry<String, List<Integer>>> potentialFNs = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
