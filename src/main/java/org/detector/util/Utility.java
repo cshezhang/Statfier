@@ -119,7 +119,7 @@ public class Utility {
     public final static String toolPath = getProperty("TOOL_PATH");
 
     public static String sourceSeedPath = null;
-    public static long startTimeStamp = System.currentTimeMillis();
+    public static final long startTimeStamp = System.currentTimeMillis();
 
     public static final String reg_sep = "/|\\\\";
     public static final String sep = File.separator;

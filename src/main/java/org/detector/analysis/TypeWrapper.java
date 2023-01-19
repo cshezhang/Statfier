@@ -47,13 +47,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
@@ -68,6 +72,7 @@ import static org.detector.util.Utility.compareNode;
 import static org.detector.util.Utility.compactIssues;
 import static org.detector.util.Utility.mutantCounter;
 import static org.detector.util.Utility.EVALUATION_PATH;
+import static org.detector.util.Utility.startTimeStamp;
 import static org.detector.util.Utility.successfulT;
 import static org.detector.util.Utility.isInvalidModifier;
 
@@ -470,11 +475,10 @@ public class TypeWrapper {
         return resNodes;
     }
 
+    public static ConcurrentHashMap<String, Boolean> bugExistence = new ConcurrentHashMap<>();
+
     public boolean isBuggy() {
         boolean buggy = false;
-        if(this.filePath.contains("mutant_5")) {
-            int a = 10;
-        }
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
@@ -500,9 +504,18 @@ public class TypeWrapper {
             }
             List<Map.Entry<String, List<Integer>>> potentialFPs = new ArrayList<>();
             List<Map.Entry<String, List<Integer>>> potentialFNs = new ArrayList<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (Map.Entry<String, List<Integer>> entry : mutant_bug2lines.entrySet()) {
                 if (!source_bug2lines.containsKey(entry.getKey())) { // check bug type
                     potentialFPs.add(entry); // Because mutant has, but source does not have.
+                    String sd = sdf.format(new Date(Long.parseLong(String.valueOf(System.currentTimeMillis()))));
+                    long execTime = System.currentTimeMillis() - startTimeStamp;
+                    long minutes = (execTime / 1000) / 60;
+                    long seconds = (execTime / 1000) % 60;
+                    if(!bugExistence.containsKey(entry.getKey())) {
+                        bugExistence.put(entry.getKey(), true);
+                        System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                    }
                 } else {
                     List<Integer> source_bugs = source_bug2lines.get(entry.getKey());
                     List<Integer> mutant_bugs = mutant_bug2lines.get(entry.getKey());
@@ -511,13 +524,37 @@ public class TypeWrapper {
                     }
                     if (source_bugs.size() > mutant_bugs.size()) {
                         potentialFNs.add(entry);
+                        String sd = sdf.format(new Date(Long.parseLong(String.valueOf(System.currentTimeMillis()))));
+                        long execTime = System.currentTimeMillis() - startTimeStamp;
+                        long minutes = (execTime / 1000) / 60;
+                        long seconds = (execTime / 1000) % 60;
+                        if(!bugExistence.containsKey(entry.getKey())) {
+                            bugExistence.put(entry.getKey(), true);
+                            System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                        }
                     } else {
                         if (this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
                             if (source_bugs.size() + this.expectedNumbers < mutant_bugs.size()) {
                                 potentialFPs.add(entry);
+                                String sd = sdf.format(new Date(Long.parseLong(String.valueOf(System.currentTimeMillis()))));
+                                long execTime = System.currentTimeMillis() - startTimeStamp;
+                                long minutes = (execTime / 1000) / 60;
+                                long seconds = (execTime / 1000) % 60;
+                                if(!bugExistence.containsKey(entry.getKey())) {
+                                    bugExistence.put(entry.getKey(), true);
+                                    System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                                }
                             }
                         } else {
                             potentialFPs.add(entry);
+                            String sd = sdf.format(new Date(Long.parseLong(String.valueOf(System.currentTimeMillis()))));
+                            long execTime = System.currentTimeMillis() - startTimeStamp;
+                            long minutes = (execTime / 1000) / 60;
+                            long seconds = (execTime / 1000) % 60;
+                            if(!bugExistence.containsKey(entry.getKey())) {
+                                bugExistence.put(entry.getKey(), true);
+                                System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                            }
                         }
                     }
                 }
@@ -525,6 +562,14 @@ public class TypeWrapper {
             for (Map.Entry<String, List<Integer>> entry : source_bug2lines.entrySet()) {
                 if (!mutant_bug2lines.containsKey(entry.getKey())) {  // check bug type
                     potentialFNs.add(entry); // Because parent has, but child does not have.
+                    String sd = sdf.format(new Date(Long.parseLong(String.valueOf(System.currentTimeMillis()))));
+                    long execTime = System.currentTimeMillis() - startTimeStamp;
+                    long minutes = (execTime / 1000) / 60;
+                    long seconds = (execTime / 1000) % 60;
+                    if(!bugExistence.containsKey(entry.getKey())) {
+                        bugExistence.put(entry.getKey(), true);
+                        System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                    }
                 }
             }
             for (int i = 0; i < potentialFPs.size(); i++) {
