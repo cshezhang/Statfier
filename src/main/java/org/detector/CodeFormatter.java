@@ -1,16 +1,11 @@
 package org.detector;
 
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import org.detector.util.Invoker;
 import org.detector.util.Utility;
 
 import java.util.List;
 
 import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;
-import static org.detector.util.Utility.PMD_MUTATION;
-import static org.detector.util.Utility.TOOL_PATH;
-import static org.detector.util.Utility.sep;
 
 /**
  * Description:
