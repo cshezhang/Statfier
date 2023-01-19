@@ -16,14 +16,12 @@ tokens = (default)STATIC_IMPORT
 
 package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
-import static java.lang.Math.abs; // ok
-import static org.antlr.v4.runtime.Recognizer.EOF; // ok
+// ok
+// ok
 
 import org.antlr.v4.runtime.*; // violation
 
-import java.util.Set; // violation
+// violation
 
-public class InputImportOrderStaticGroupOrder1
-{
+public class InputImportOrderStaticGroupOrder1 {}
 
-}

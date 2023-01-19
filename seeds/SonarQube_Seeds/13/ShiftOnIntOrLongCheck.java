@@ -11,47 +11,47 @@ class ShiftOnIntOrLongCheck {
 
   public int shift(int a) {
     int b;
-    b = a <<  31;
+    b = a << 31;
     b = a >> -31;
-    b = a <<  32; // Noncompliant {{Remove this useless shift}}
+    b = a << 32; // Noncompliant {{Remove this useless shift}}
     b = a >> -32; // Noncompliant [[sc=11;ec=13]] {{Remove this useless shift}}
-    b = a <<  33; // Noncompliant {{Either make "a" a "long" or correct this shift to 1}}
+    b = a << 33; // Noncompliant {{Either make "a" a "long" or correct this shift to 1}}
     b = a >> -33; // Noncompliant {{Either make "a" a "long" or correct this shift to -1}}
 
-    a <<=  31;
+    a <<= 31;
     a >>= -31;
-    a <<=  32; // Noncompliant
+    a <<= 32; // Noncompliant
     a >>= -32; // Noncompliant
-    a <<=  33; // Noncompliant
+    a <<= 33; // Noncompliant
     a >>= -33; // Noncompliant
     return b << +48; // Noncompliant
   }
 
   public long shift(long a) {
     long b;
-    b = a >>  63;
+    b = a >> 63;
     b = a << -63;
-    b = a >>  64; // Noncompliant
+    b = a >> 64; // Noncompliant
     b = a << -64; // Noncompliant
-    b = a >>  65; // Noncompliant {{Correct this shift to 1}}
+    b = a >> 65; // Noncompliant {{Correct this shift to 1}}
     b = a << -65; // Noncompliant {{Correct this shift to -1}}
 
-    a >>=  63;
+    a >>= 63;
     a <<= -63;
-    a >>=  64; // Noncompliant
+    a >>= 64; // Noncompliant
     a <<= -64; // Noncompliant
-    a >>=  65; // Noncompliant
+    a >>= 65; // Noncompliant
     a <<= -65; // Noncompliant [[sc=7;ec=10]]
     return b >> +96; // Noncompliant
   }
 
   public long shiftOtherCases(long a, long b) {
     long c;
-    long[] d = new long[]{1L};
-    Long[] e = new Long[]{1L};
+    long[] d = new long[] {1L};
+    Long[] e = new Long[] {1L};
     c = a >> b;
     c = a << (b + 3);
-    c = a >> returnLong(); //Compliant
+    c = a >> returnLong(); // Compliant
     c = (a - 3) << (b + 3);
     c = (a - 3) >> 63;
     c = (a - 3) << 64; // Noncompliant
@@ -66,8 +66,8 @@ class ShiftOnIntOrLongCheck {
 
   public int shiftOtherCases(int a, int b) {
     int c;
-    int[] d = new int[]{1};
-    Integer[] e = new Integer[]{1};
+    int[] d = new int[] {1};
+    Integer[] e = new Integer[] {1};
     c = a << b;
     c = a >> (b + 3);
     c = a << returnInt();
@@ -112,6 +112,7 @@ class ShiftOnIntOrLongCheck {
     System.out.println();
     System.out.println();
     b2 = (byte) (value >> 0); // Noncompliant  - aligned but interrupted
-    b2 = (byte) (value    >> 0); // Noncompliant  - aligned but interrupted
+    b2 = (byte) (value >> 0); // Noncompliant  - aligned but interrupted
   }
 }
+

@@ -1,4 +1,3 @@
-
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
@@ -26,3 +25,4 @@ class Alias {
 class A {
   int f = 0;
 }
+

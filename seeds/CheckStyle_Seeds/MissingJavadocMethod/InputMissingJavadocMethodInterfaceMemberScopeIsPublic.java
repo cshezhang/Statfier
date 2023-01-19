@@ -15,22 +15,19 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
 
 public interface InputMissingJavadocMethodInterfaceMemberScopeIsPublic {
 
-    enum Enum {
+  enum Enum {
+    ;
 
-        ;
+    public static void method() {} // violation
 
-        public static void method() {} // violation
+    void packagePrivateMethod() {}
+  }
 
-        void packagePrivateMethod() {}
+  class Class {
 
-    }
+    public void method() {} // violation
 
-    class Class {
-
-        public void method() {} // violation
-
-        void packagePrivateMethod() {}
-
-    }
-
+    void packagePrivateMethod() {}
+  }
 }
+

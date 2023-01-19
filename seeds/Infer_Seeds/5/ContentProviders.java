@@ -1,7 +1,3 @@
-
-
-
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.res.AssetFileDescriptor;
@@ -78,3 +74,4 @@ public abstract class ContentProviders extends ContentProvider {
     return 0;
   }
 }
+

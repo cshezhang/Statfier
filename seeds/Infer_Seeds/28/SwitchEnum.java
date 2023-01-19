@@ -1,4 +1,3 @@
-
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
@@ -27,3 +26,4 @@ enum EnumClass {
   VALUE2,
   VALUE3
 }
+

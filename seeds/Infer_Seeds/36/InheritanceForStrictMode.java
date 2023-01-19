@@ -1,8 +1,4 @@
-
-
 /** Test for checking how @NullsafeStrict mode plays with inheritance rule */
-
-
 import codetoanalyze.java.annotation.NullsafeStrict;
 import javax.annotation.Nullable;
 
@@ -81,3 +77,4 @@ public class InheritanceForStrictMode {
         String badToRemoveNullableInChildren, @Nullable String okToAddNullableInChildren) {}
   }
 }
+

@@ -1,7 +1,5 @@
-
-
-public class Foo{
-  public void bar(){
+public class Foo {
+  public void bar() {
     Logger.log("first"); // OK, first occurrence is allowed
     Logger.log("second"); // OK, second occurrence is allowed
     Logger.log("third"); // violation
@@ -9,4 +7,4 @@ public class Foo{
     Logger.log("fifth"); // violation
   }
 }
-        
+

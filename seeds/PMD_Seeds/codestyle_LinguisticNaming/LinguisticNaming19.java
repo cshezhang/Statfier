@@ -1,13 +1,12 @@
-
 public class BooleanFieldsMethodFP {
-    Boolean canFly;
+  Boolean canFly;
 
-    public Boolean isFull() {
-        return true;
-    }
+  public Boolean isFull() {
+    return true;
+  }
 
-    public void myMethod() {
-        Boolean hasLegs;
-    }
+  public void myMethod() {
+    Boolean hasLegs;
+  }
 }
-        
+

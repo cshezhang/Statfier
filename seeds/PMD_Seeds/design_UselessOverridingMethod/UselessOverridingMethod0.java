@@ -1,7 +1,6 @@
-
 public class Foo extends Bar {
-    public void foo() {
-        super.foo();
-    }
+  public void foo() {
+    super.foo();
+  }
 }
-        
+

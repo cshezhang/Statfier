@@ -1,15 +1,11 @@
-
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class TournamentTest extends TestCase {
-    Tournament tournament;
+  Tournament tournament;
 
-    public void testGetBestTeam() {
-    }
+  public void testGetBestTeam() {}
 
-    // this is ok tho
-    public void test_getBestTeam() {
-    }
+  // this is ok tho
+  public void test_getBestTeam() {}
 }
-        
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    public TestSuite suite() {}
+  public TestSuite suite() {}
 }
-        
+

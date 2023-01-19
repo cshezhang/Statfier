@@ -1,5 +1,4 @@
-
 package foo;
-public class Foo {
-}
-        
+
+public class Foo {}
+

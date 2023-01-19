@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import java.util.regex.Pattern;
@@ -35,3 +33,4 @@ class Regexp {
     potentiallyCostly();
   }
 }
+

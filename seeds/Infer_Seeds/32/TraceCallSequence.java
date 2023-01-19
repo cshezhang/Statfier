@@ -1,7 +1,3 @@
-
-
-
-
 class TraceCallSequence {
   static void begin() {}
 
@@ -136,3 +132,4 @@ class TraceCallSequence {
     }
   }
 }
+

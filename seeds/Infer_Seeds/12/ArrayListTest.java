@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class ArrayListTest {
@@ -270,3 +269,4 @@ class ArrayListTest {
     }
   }
 }
+

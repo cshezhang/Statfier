@@ -1,7 +1,6 @@
-
 public class Foo {
-    Foo() {
-        super();
-    }
+  Foo() {
+    super();
+  }
 }
-        
+

@@ -1,9 +1,7 @@
-
 abstract class Foo {
 
-    class Inner {
-        void ohio() {}
-    }
-
+  class Inner {
+    void ohio() {}
+  }
 }
-        
+

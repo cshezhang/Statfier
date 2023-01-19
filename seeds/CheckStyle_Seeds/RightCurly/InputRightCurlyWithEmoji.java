@@ -11,77 +11,90 @@ package com.puppycrawl.tools.checkstyle.checks.blocks.rightcurly;
 
 public class InputRightCurlyWithEmoji {
 
-    static Runnable r = () -> {
+  static Runnable r =
+      () -> {
         String.valueOf("Hello world 🥳 🎄 !!");
-    }; // ok
+      }; // ok
 
-    private void method2() {
-        String x = "🎄🤣";
-        { String y = "🎄🤣🎄🤣";} // ok
-        try {
-            if (x.equals("🎄🤣")) {
+  private void method2() {
+    String x = "🎄🤣";
+    {
+      String y = "🎄🤣🎄🤣";
+    } // ok
+    try {
+      if (x.equals("🎄🤣")) {
 
-            } // violation
-              // ''}' should be on the same line as the next part of a multi-block statement'
-            else if (!x.equals("🎄🤣")) {
-                ;
-            } // violation
-              // ''}' should be on the same line as the next part of a multi-block statement'
-            else {
-                x = "🎄🤣";
-            } // ok
-            switch (x) {
-                case "\uD83C\uDF84\uD83E\uDD23":
-                    break;
-                default: {
-                    break;
-                }
-            }
+      } // violation
+      // ''}' should be on the same line as the next part of a multi-block statement'
+      else if (!x.equals("🎄🤣")) {
+        ;
+      } // violation
+      // ''}' should be on the same line as the next part of a multi-block statement'
+      else {
+        x = "🎄🤣";
+      } // ok
+      switch (x) {
+        case "\uD83C\uDF84\uD83E\uDD23":
+          break;
+        default:
+          {
+            break;
+          }
+      }
 
-            switch ("🤣") {
-                case "qw": {
-                    return;
-                } // ok
-                default: {
-                    return;
-                }
-            }
-        }
-        // violation above
-        // ''}' at column 9 should be on the same line as the next part of a multi-block statement'
-        catch (Exception e) {
-        }
-        while (x == "🎄") {
-        }
-
+      switch ("🤣") {
+        case "qw":
+          {
+            return;
+          } // ok
+        default:
+          {
+            return;
+          }
+      }
     }
-
-    public void foo3() {
-        String a = "😆🤩";
-        int i = 1;
-        do {
-            i++;
-            String.CASE_INSENSITIVE_ORDER.equals(i + " ");
-        } while (a.equals("🧐")); // ok
+    // violation above
+    // ''}' at column 9 should be on the same line as the next part of a multi-block statement'
+    catch (Exception e) {
     }
+    while (x == "🎄") {}
+  }
 
-    String method4(String a) {
-        if (a.equals("🎄")) a = "😆"; return "😆🤩"; }
-    // violation above ''}' at column 50 should have line break before.'
+  public void foo3() {
+    String a = "😆🤩";
+    int i = 1;
+    do {
+      i++;
+      String.CASE_INSENSITIVE_ORDER.equals(i + " ");
+    } while (a.equals("🧐")); // ok
+  }
 
-    public void foo4() {String a = "😆🤩";} // ok
-    interface Interface3 {
-        void display();
+  String method4(String a) {
+    if (a.equals("🎄")) a = "😆";
+    return "😆🤩";
+  }
+  // violation above ''}' at column 50 should have line break before.'
 
-        interface Interface4 {
-            default boolean foo5(){
-                return "qwwe".equals("🎄🤣");}}
-        // violation above ''}' at column 44 should have line break before.'
+  public void foo4() {
+    String a = "😆🤩";
+  } // ok
+
+  interface Interface3 {
+    void display();
+
+    interface Interface4 {
+      default boolean foo5() {
+        return "qwwe".equals("🎄🤣");
+      }
     }
-    public void foo5() {
+    // violation above ''}' at column 44 should have line break before.'
+  }
 
-        do { // violation below ''}' at column 41 should have line break before.'
-            String a = new String("🤣🤣");}
-         while (true);
-    }
+  public void foo5() {
+
+    do { // violation below ''}' at column 41 should have line break before.'
+      String a = new String("🤣🤣");
+    } while (true);
+  }
 }
+

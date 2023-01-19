@@ -29,12 +29,14 @@ public class CollectionInappropriateCallsCheck {
     String[] myArrayString = new String[] {"myString"};
     Integer[] myArrayInteger = new Integer[] {Integer.valueOf(1)};
 
-    myList.contains(myInteger); // Noncompliant [[sc=12;ec=20]] {{A "List<String>" cannot contain a "Integer".}}
+    myList.contains(
+        myInteger); // Noncompliant [[sc=12;ec=20]] {{A "List<String>" cannot contain a "Integer".}}
     myList.remove(myInteger); // Noncompliant {{A "List<String>" cannot contain a "Integer".}}
     myList.removeAll(myNumberList); // Noncompliant {{A "List<String>" cannot contain a "Number".}}
     myList.removeAll(Arrays.asList("a", "b"));
     mySetList.removeAll(mySetList);
-    mySetList.removeAll(mySetList.get(0)); // Noncompliant {{A "List<Set>" cannot contain a "Integer".}}
+    mySetList.removeAll(
+        mySetList.get(0)); // Noncompliant {{A "List<Set>" cannot contain a "Integer".}}
     mySetList.removeAll(null);
     mySetList.removeAll(notTypedList);
     myList.contains(myString); // Compliant
@@ -44,8 +46,10 @@ public class CollectionInappropriateCallsCheck {
     mySetList.remove(B.returnOne()); // Noncompliant {{A "List<Set>" cannot contain a "Integer".}}
     myBList.contains(new B()); // Compliant
     myBList.remove(new A()); // Compliant
-    myList.contains(myArrayInteger); // Noncompliant {{A "List<String>" cannot contain a "Integer[]".}}
-    myList.remove(myArrayInteger[0]); // Noncompliant {{A "List<String>" cannot contain a "Integer".}}
+    myList.contains(
+        myArrayInteger); // Noncompliant {{A "List<String>" cannot contain a "Integer[]".}}
+    myList.remove(
+        myArrayInteger[0]); // Noncompliant {{A "List<String>" cannot contain a "Integer".}}
     myList.remove(myArrayString[0]); // Compliant
     myASet.contains(new C()); // Compliant
     myASet.remove(new B()); // Compliant
@@ -53,43 +57,58 @@ public class CollectionInappropriateCallsCheck {
 
     Map<A, String> mapAString = new HashMap<>();
     mapAString.containsKey(null);
-    mapAString.containsKey("key"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
+    mapAString.containsKey(
+        "key"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
     mapAString.containsValue("val");
-    mapAString.get("key"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
-    mapAString.getOrDefault("key", "val"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
-    mapAString.remove("key"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
+    mapAString.get(
+        "key"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
+    mapAString.getOrDefault(
+        "key",
+        "val"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
+    mapAString.remove(
+        "key"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
     mapAString.remove(new A(), "val");
-    mapAString.remove(new A(), new A()); // Noncompliant {{A "Map<A, String>" cannot contain a "A" in a "String" type.}}
+    mapAString.remove(
+        new A(),
+        new A()); // Noncompliant {{A "Map<A, String>" cannot contain a "A" in a "String" type.}}
     mapAString.remove("key", new A()); // Noncompliant
-                                       // Noncompliant@-1
-    mapAString.remove("key", "val"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
+    // Noncompliant@-1
+    mapAString.remove(
+        "key",
+        "val"); // Noncompliant {{A "Map<A, String>" cannot contain a "String" in a "A" type.}}
 
     Map<String, A> mapStringA = new HashMap<>();
     mapStringA.containsKey("key");
-    mapStringA.containsValue("val"); // Noncompliant {{A "Map<String, A>" cannot contain a "String" in a "A" type.}}
+    mapStringA.containsValue(
+        "val"); // Noncompliant {{A "Map<String, A>" cannot contain a "String" in a "A" type.}}
     mapStringA.get("key");
     mapStringA.getOrDefault("key", new A());
     mapStringA.remove("key");
     mapStringA.remove(new A(), "val"); // Noncompliant
-                                       // Noncompliant@-1
-    mapStringA.remove(new A(), new A()); // Noncompliant {{A "Map<String, A>" cannot contain a "A" in a "String" type.}}
+    // Noncompliant@-1
+    mapStringA.remove(
+        new A(),
+        new A()); // Noncompliant {{A "Map<String, A>" cannot contain a "A" in a "String" type.}}
     mapStringA.remove("key", new A());
-    mapStringA.remove("key", "val"); // Noncompliant {{A "Map<String, A>" cannot contain a "String" in a "A" type.}}
+    mapStringA.remove(
+        "key",
+        "val"); // Noncompliant {{A "Map<String, A>" cannot contain a "String" in a "A" type.}}
   }
 
   void streamLambdaWithRawtypeCollection(String myString, Collection<String> myCol) {
-    ((Collection) myCol).stream().filter(item -> {
-      return myCol.contains(item);
-    });
+    ((Collection) myCol)
+        .stream()
+            .filter(
+                item -> {
+                  return myCol.contains(item);
+                });
   }
 
   private static Integer returnOne() {
     return Integer.valueOf(1);
   }
 
-  static class A {
-
-  }
+  static class A {}
 
   static class B extends A {
     public String value;
@@ -125,6 +144,7 @@ public class CollectionInappropriateCallsCheck {
 
   static class D {
     List myList = Lists.newArrayList(1);
+
     void myMethod() {
       myList.contains(1); // Compliant
     }
@@ -181,25 +201,25 @@ public class CollectionInappropriateCallsCheck {
   static class F<T> {
     java.util.Vector<F<String>> vectors;
     Set<Class> set;
+
     void f(F f, Class<?> clazz) {
       vectors.contains(f);
       set.contains(clazz);
     }
-
   }
 
   static class G {
     <E> void foo(Set<? extends E> set, Object o) {
       set.contains(o); // Compliant
     }
+
     <E> void foo2(Set<? extends E> set, E o) {
       set.contains(o);
     }
   }
 
   static class H<K, V> {
-    static class Entry<K, V> {
-    }
+    static class Entry<K, V> {}
 
     void foo(Entry<?, ?> entry, Set<Entry<K, V>> entries) {
       entries.remove(entry); // Compliant
@@ -223,12 +243,16 @@ public class CollectionInappropriateCallsCheck {
       return null;
     }
   }
+
   static class SomeClass<T> {}
+
   static class WrongCollectionElement<K> extends ArrayList<SomeClass<K>> {
     SomeClass<K> field;
+
     void foo() {
       remove(field); // compliant type of collection is SomeClass<K>
     }
+
     @Override
     public boolean remove(Object o) {
       return true;
@@ -266,19 +290,31 @@ public class CollectionInappropriateCallsCheck {
   static class FlatMapUsage {
     public void test(Set<Integer> used, List<List<Integer>> allInts) {
       allInts.stream()
-        .flatMap(List::stream)
-        .filter(i -> !used.contains(i)); // Compliant - list of lists is flattened into a list of integers
+          .flatMap(List::stream)
+          .filter(
+              i ->
+                  !used.contains(
+                      i)); // Compliant - list of lists is flattened into a list of integers
     }
   }
 
   static class Animal {}
+
   static class Color {}
+
   abstract static class ColorList implements java.util.List<Color> {}
+
   abstract static class ColorAnimalMap implements java.util.Map<Color, Animal> {}
+
   abstract static class SpecificColorList extends ColorList {}
 
   static class TestColorList {
-    void foo(ColorList colors, SpecificColorList specificColors, ColorAnimalMap colorAnimalMap, Color c, Animal a) {
+    void foo(
+        ColorList colors,
+        SpecificColorList specificColors,
+        ColorAnimalMap colorAnimalMap,
+        Color c,
+        Animal a) {
       colors.remove(c);
       specificColors.remove(c);
       specificColors.remove(c);
@@ -287,12 +323,24 @@ public class CollectionInappropriateCallsCheck {
       specificColors.lastIndexOf(c);
       colorAnimalMap.get(c);
 
-      colors.remove(a); // Noncompliant {{"ColorList" is a "Collection<Color>" which cannot contain a "Animal".}}
-      specificColors.remove(a); // Noncompliant {{"SpecificColorList" is a "Collection<Color>" which cannot contain a "Animal".}}
-      specificColors.contains(a); // Noncompliant {{"SpecificColorList" is a "Collection<Color>" which cannot contain a "Animal".}}
-      specificColors.indexOf(a); // Noncompliant {{"SpecificColorList" is a "List<Color>" which cannot contain a "Animal".}}
-      specificColors.lastIndexOf(a); // Noncompliant {{"SpecificColorList" is a "List<Color>" which cannot contain a "Animal".}}
-      colorAnimalMap.get(a); // Noncompliant {{"ColorAnimalMap" is a "Map<Color, Animal>" which cannot contain a "Animal" in a "Color" type.}}
+      colors.remove(
+          a); // Noncompliant {{"ColorList" is a "Collection<Color>" which cannot contain a
+              // "Animal".}}
+      specificColors.remove(
+          a); // Noncompliant {{"SpecificColorList" is a "Collection<Color>" which cannot contain a
+              // "Animal".}}
+      specificColors.contains(
+          a); // Noncompliant {{"SpecificColorList" is a "Collection<Color>" which cannot contain a
+              // "Animal".}}
+      specificColors.indexOf(
+          a); // Noncompliant {{"SpecificColorList" is a "List<Color>" which cannot contain a
+              // "Animal".}}
+      specificColors.lastIndexOf(
+          a); // Noncompliant {{"SpecificColorList" is a "List<Color>" which cannot contain a
+              // "Animal".}}
+      colorAnimalMap.get(
+          a); // Noncompliant {{"ColorAnimalMap" is a "Map<Color, Animal>" which cannot contain a
+              // "Animal" in a "Color" type.}}
     }
   }
 
@@ -302,7 +350,8 @@ public class CollectionInappropriateCallsCheck {
       integerList.contains(1); // Compliant, auto-boxing to Integer
       integerList.contains(Integer.valueOf(1)); // Compliant, auto-boxing to Integer
       integerList.contains(1.2); // Noncompliant {{A "List<Integer>" cannot contain a "double".}}
-      integerList.contains(Double.valueOf(1.2)); // Noncompliant {{A "List<Integer>" cannot contain a "Double".}}
+      integerList.contains(
+          Double.valueOf(1.2)); // Noncompliant {{A "List<Integer>" cannot contain a "Double".}}
 
       List<Number> numberList = new ArrayList<>();
       numberList.contains(1); // Compliant, auto-boxing to Integer, which is a subtype of Number.
@@ -314,10 +363,12 @@ public class CollectionInappropriateCallsCheck {
     void mapWithNumberAsKey(int intArgs, double doubleArg) {
       Map<Number, String> testMap = new HashMap<>();
       testMap.put(Integer.valueOf(1), "one");
-      if (testMap.containsKey(intArgs)) { // Compliant, auto-boxing to Integer, which is a subtype of Number.
+      if (testMap.containsKey(
+          intArgs)) { // Compliant, auto-boxing to Integer, which is a subtype of Number.
         testMap.get(intArgs); // Compliant, auto-boxing to Integer, which is a subtype of Number.
         testMap.get(doubleArg); // Compliant, auto-boxing to Integer, which is a subtype of Number.
       }
     }
   }
 }
+

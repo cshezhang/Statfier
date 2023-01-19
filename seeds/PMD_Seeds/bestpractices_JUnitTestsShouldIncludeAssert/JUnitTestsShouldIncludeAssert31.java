@@ -1,4 +1,3 @@
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,4 +8,4 @@ class JUnit5AssertJTest {
     Assertions.assertThat("FOO").isNotNull();
   }
 }
-        
+

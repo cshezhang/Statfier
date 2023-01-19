@@ -1,5 +1,4 @@
-
 public class UsingVolatile {
-    private volatile String field;
+  private volatile String field;
 }
-        
+

@@ -1,10 +1,12 @@
+import java.lang.annotation.*;
+import java.lang.management.*;
+import java.lang.ref.*;
+import java.lang.reflect.*;
 
-            import java.lang.ref.*;
-            import java.lang.reflect.*;
-            import java.lang.annotation.*;
-            import java.lang.management.*;
-            public class Foo {
-                Annotation a; Method m; WeakReference r;
-                RuntimeMXBean x;
-            }
-            
+public class Foo {
+  Annotation a;
+  Method m;
+  WeakReference r;
+  RuntimeMXBean x;
+}
+

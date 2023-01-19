@@ -1,10 +1,7 @@
-
-
 public class Test extends TreeSet { // violation
   public <T extends java.util.HashSet> void method() { // violation
 
-    LinkedHashMap<Integer, String> lhmap =
-        new LinkedHashMap<Integer, String>(); // violation
+    LinkedHashMap<Integer, String> lhmap = new LinkedHashMap<Integer, String>(); // violation
     TreeMap<Integer, String> treemap = new TreeMap<Integer, String>(); // violation
     Test t; // OK
     HashMap<String, String> hmap; // violation
@@ -13,6 +10,5 @@ public class Test extends TreeSet { // violation
     java.lang.IllegalArgumentException illegalex; // OK
     java.util.TreeSet treeset; // violation
   }
-
 }
-        
+

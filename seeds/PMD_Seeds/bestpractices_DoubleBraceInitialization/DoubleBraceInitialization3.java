@@ -1,8 +1,9 @@
-
 enum Foo {
-    A {
-        // neg in enum cons
-        {addAll("a","b","c");}
-    };
+  A {
+    // neg in enum cons
+    {
+      addAll("a", "b", "c");
+    }
+  };
 }
-        
+

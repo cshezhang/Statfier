@@ -1,4 +1,3 @@
-
 import com.google.common.base.Objects;
 import java.io.File;
 import java.util.ArrayList;
@@ -124,3 +123,4 @@ class ListTest {
     for (File f : files) {}
   }
 }
+

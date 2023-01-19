@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.Expensive;
 
 public class ExpensiveSubtypingExample extends ExpensiveInterfaceExample.C {
@@ -11,3 +7,4 @@ public class ExpensiveSubtypingExample extends ExpensiveInterfaceExample.C {
 
   public void m4() {}
 }
+

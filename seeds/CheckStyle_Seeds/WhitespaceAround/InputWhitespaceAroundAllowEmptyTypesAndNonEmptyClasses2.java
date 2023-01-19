@@ -25,33 +25,46 @@ import java.util.function.Supplier;
 
 public class InputWhitespaceAroundAllowEmptyTypesAndNonEmptyClasses2 {
 
-    private Object object;
+  private Object object;
 
-    class SomeClass{ // violation ''{' is not preceded with whitespace'
-        int a = 5;
+  class SomeClass { // violation ''{' is not preceded with whitespace'
+    int a = 5;
+  }
+
+  public class CheckstyleTest { // violation ''{' is not preceded with whitespace'
+    private static final int SOMETHING = 1;
+  }
+
+  class MyClass {
+    int a;
+  } // violation ''{' is not preceded with whitespace'
+
+  class SomeTestClass {
+    int a;
+  } // 3 violations
+
+  class TestClass {
+    int a;
+  }
+
+  int b; // violation ''}' is not followed by whitespace'
+
+  class Table {}
+
+  interface SupplierFunction<T> extends Function<Supplier<T>, T> {}
+
+  class NoMtyCls {
+    void foo1() {
+      foo2();
     }
+  } // violation ''{' is not preceded with whitespace'
 
-    public class CheckstyleTest{ // violation ''{' is not preceded with whitespace'
-        private static final int SOMETHING = 1;
-    }
-
-    class MyClass{ int a; } // violation ''{' is not preceded with whitespace'
-
-    class SomeTestClass{int a;} // 3 violations
-
-    class TestClass { int a; }int b; // violation ''}' is not followed by whitespace'
-
-    class Table {}
-
-    interface SupplierFunction<T> extends Function<Supplier<T>, T> {}
-
-        class NoMtyCls{ void foo1() { foo2(); } } // violation ''{' is not preceded with whitespace'
-
-    public void foo2() {
-        do {} while (true); // 2 violations
-    }
+  public void foo2() {
+    do {} while (true); // 2 violations
+  }
 }
 
-    class EmptyAndNonEmptyClasses2{ // violation ''{' is not preceded with whitespace'
-        int x;
+class EmptyAndNonEmptyClasses2 { // violation ''{' is not preceded with whitespace'
+  int x;
 }
+

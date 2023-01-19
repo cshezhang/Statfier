@@ -1,11 +1,10 @@
-
 public class Foo {
-    private Foo fooField;
+  private Foo fooField;
 
-    public void bar() {
-        Biz.getFoo().buz();
-    }
+  public void bar() {
+    Biz.getFoo().buz();
+  }
 
-    private void buz() {}
+  private void buz() {}
 }
-        
+

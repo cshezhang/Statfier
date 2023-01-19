@@ -1,5 +1,3 @@
-
-
 public class SomeClass {
 
   private String field;
@@ -7,15 +5,18 @@ public class SomeClass {
 
   public SomeClass(String testField) { // violation, 'testField' param hides 'testField' field
   }
+
   public void method(String param) { // OK
-      String field = param; // violation, 'field' variable hides 'field' field
+    String field = param; // violation, 'field' variable hides 'field' field
   }
+
   public void setTestField(String testField) { // violation, 'testField' param
-                                               // hides 'testField' field
-      this.field = field;
+    // hides 'testField' field
+    this.field = field;
   }
+
   public SomeClass setField(String field) { // violation, 'field' param hides 'field' field
-      this.field = field;
+    this.field = field;
   }
 }
-        
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    long x = 0L;
+  long x = 0L;
 }
-        
+

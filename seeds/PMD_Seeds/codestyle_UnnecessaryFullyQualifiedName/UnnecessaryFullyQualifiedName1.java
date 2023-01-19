@@ -1,5 +1,4 @@
-
 import java.util.List;
-public class Foo implements List {
-}
-        
+
+public class Foo implements List {}
+

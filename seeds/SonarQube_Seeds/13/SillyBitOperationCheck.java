@@ -6,11 +6,11 @@ class SillyBitOperationCheck {
     int bitMask = 0x000F;
 
     result = bitMask & -1; // Noncompliant {{Remove this silly bit operation.}}
-    result = bitMask | 0;  // Noncompliant [[sc=22;ec=23]] {{Remove this silly bit operation.}}
-    result = bitMask ^ 0;  // Noncompliant {{Remove this silly bit operation.}}
+    result = bitMask | 0; // Noncompliant [[sc=22;ec=23]] {{Remove this silly bit operation.}}
+    result = bitMask ^ 0; // Noncompliant {{Remove this silly bit operation.}}
     result &= -1; // Noncompliant [[sc=12;ec=14]] {{Remove this silly bit operation.}}
-    result |= 0;  // Noncompliant {{Remove this silly bit operation.}}
-    result ^= 0;  // Noncompliant {{Remove this silly bit operation.}}
+    result |= 0; // Noncompliant {{Remove this silly bit operation.}}
+    result ^= 0; // Noncompliant {{Remove this silly bit operation.}}
 
     result = bitMask & 1; // Compliant
     result = bitMask | 1; // compliant
@@ -25,14 +25,15 @@ class SillyBitOperationCheck {
     resultLong = bitMaskLong & 0L; // Compliant
     resultLong = bitMaskLong & returnLong(); // Compliant
     resultLong = bitMaskLong & 0x0F; // Compliant
-    
+
     resultLong = bitMaskLong & 0xFFFFFFFFFFFFFFFFL; // Compliant
     resultLong = bitMaskLong & 0xFFFFFFFFFFFFFFFEL; // Compliant
     resultLong = bitMaskLong & 0x8000000000000000L; // Compliant
     resultLong = 0x8000000000000000L & bitMaskLong; // Compliant
   }
-  
+
   private long returnLong() {
     return Long.valueOf(1L);
   }
 }
+

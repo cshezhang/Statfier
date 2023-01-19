@@ -1,7 +1,3 @@
-
-
-
-
 import android.support.annotation.UiThread;
 import codetoanalyze.java.annotation.Functional;
 import codetoanalyze.java.annotation.Initializer;
@@ -461,3 +457,4 @@ class WeirdAnnotation {
     f = 0;
   }
 }
+

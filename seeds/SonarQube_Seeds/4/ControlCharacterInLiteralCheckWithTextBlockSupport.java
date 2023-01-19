@@ -26,7 +26,6 @@ public class ControlCharacterInLiteralCheckWithTextBlockSupport {
     """
 			U+0009 Compliant code
 			""",
-    
   };
 
   public String returnWithU0009() {
@@ -42,3 +41,4 @@ public class ControlCharacterInLiteralCheckWithTextBlockSupport {
       """;
   }
 }
+

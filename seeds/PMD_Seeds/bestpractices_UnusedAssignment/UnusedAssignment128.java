@@ -1,15 +1,16 @@
+import somewhere.Worker;
 
-            import somewhere.Worker;
+class A {
+  private boolean ignore = true; // used
 
-            class A {
-                private boolean ignore = true;  // used
+  A() {
+    ignore = false; // used
+  }
 
-                A() {
-                    ignore = false; // used
-                }
+  private Worker worker = new Worker(this.foo()); // there is a leak here
 
-                private Worker worker = new Worker(this.foo()); // there is a leak here
+  A foo() {
+    return null;
+  } // is virtual
+}
 
-                A foo() { return null; } // is virtual
-            }
-            

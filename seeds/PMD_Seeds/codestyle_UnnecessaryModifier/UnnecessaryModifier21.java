@@ -1,7 +1,6 @@
-
 interface Foo {
-    class Bar {
-        public int buz;
-    }
+  class Bar {
+    public int buz;
+  }
 }
-        
+

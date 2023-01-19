@@ -1,5 +1,4 @@
-
 public @interface Foo {
-    String FOO = "foo";
+  String FOO = "foo";
 }
-        
+

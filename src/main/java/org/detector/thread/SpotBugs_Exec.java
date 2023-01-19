@@ -11,6 +11,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.DIV_SELECTION;
 import static org.detector.util.Utility.GUIDED_LOCATION;
 import static org.detector.util.Utility.NO_SELECTION;
@@ -18,7 +19,6 @@ import static org.detector.util.Utility.RANDOM_LOCATION;
 import static org.detector.util.Utility.RANDOM_SELECTION;
 import static org.detector.util.Utility.SEARCH_DEPTH;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
-import static org.detector.util.Utility.readSpotBugsResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
 

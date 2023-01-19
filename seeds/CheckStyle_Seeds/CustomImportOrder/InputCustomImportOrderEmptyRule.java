@@ -12,9 +12,8 @@ sortImportsInGroupAlphabetically = (default)false
 
 package com.puppycrawl.tools.checkstyle.checks.imports.customimportorder;
 
-import java.util.Map;
 
-import java.util.List; // violation
+// violation
 
-public class InputCustomImportOrderEmptyRule {
-}
+public class InputCustomImportOrderEmptyRule {}
+

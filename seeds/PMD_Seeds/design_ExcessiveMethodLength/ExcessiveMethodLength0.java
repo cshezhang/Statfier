@@ -1,7 +1,6 @@
-
 public class Foo {
-    public static void main(String args[]) {
-        bar();
-    }
+  public static void main(String args[]) {
+    bar();
+  }
 }
-        
+

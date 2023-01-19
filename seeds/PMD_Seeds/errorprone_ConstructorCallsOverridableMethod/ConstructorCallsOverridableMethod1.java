@@ -1,8 +1,8 @@
-
 public class Foo {
-    public Foo() {
-        bar();
-    }
-    protected void bar() {}
+  public Foo() {
+    bar();
+  }
+
+  protected void bar() {}
 }
-        
+

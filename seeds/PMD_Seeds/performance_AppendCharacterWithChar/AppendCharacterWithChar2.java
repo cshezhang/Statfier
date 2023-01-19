@@ -1,7 +1,6 @@
-
 public class Foo {
-    public void bar(StringBuffer sb) {
-        sb.append("a" + "foo");
-    }
+  public void bar(StringBuffer sb) {
+    sb.append("a" + "foo");
+  }
 }
-        
+

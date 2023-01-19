@@ -1,32 +1,27 @@
 package sfBugs;
 
+import com.google.inject.Inject;
 import org.apache.tapestry.spring.SpringBean;
 
-import com.google.inject.Inject;
-
 /**
- * With annotations and inversion of control being all the rage these days, a
- * new pattern seems to be gaining popularity: annotating class fields with
- * something like '@SpringBean' (wicket/spring) or '@Inject' (Google Guice), and
- * somehow have them instantiated by reflection by the framework.
+ * With annotations and inversion of control being all the rage these days, a new pattern seems to
+ * be gaining popularity: annotating class fields with something like '@SpringBean' (wicket/spring)
+ * or '@Inject' (Google Guice), and somehow have them instantiated by reflection by the framework.
  */
-
 public class Bug1718130 {
-    @Inject
-    Object x;
+  @Inject Object x;
 
-    @SpringBean
-    Object y;
+  @SpringBean Object y;
 
-    Object z;
+  Object z;
 
-    Bug1718130() {
-        z = y;
-    }
+  Bug1718130() {
+    z = y;
+  }
 
-    @Override
-    public int hashCode() {
-        return x.hashCode() + y.hashCode() + z.hashCode();
-    }
-
+  @Override
+  public int hashCode() {
+    return x.hashCode() + y.hashCode() + z.hashCode();
+  }
 }
+

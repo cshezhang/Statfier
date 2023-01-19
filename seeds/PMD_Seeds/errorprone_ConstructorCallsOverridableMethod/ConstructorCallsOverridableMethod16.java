@@ -1,9 +1,8 @@
-
 public class Foo {
-    public Foo() {
-        bar(true);
-    }
+  public Foo() {
+    bar(true);
+  }
 
-    public void bar(boolean b) {}
+  public void bar(boolean b) {}
 }
-        
+

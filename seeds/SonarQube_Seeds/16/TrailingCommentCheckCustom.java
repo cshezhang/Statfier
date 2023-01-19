@@ -2,9 +2,9 @@ package checks;
 
 class TrailingCommentCheckCustom {
   int i = 0,
-  // Noncompliant@+1
-    j = 0, // This is non-compliant
-    k = 0;
+      // Noncompliant@+1
+      j = 0, // This is non-compliant
+      k = 0;
 
   // This is compliant
   // Noncompliant@+1
@@ -31,3 +31,4 @@ class TrailingCommentCheckCustom {
     }
   }
 }
+

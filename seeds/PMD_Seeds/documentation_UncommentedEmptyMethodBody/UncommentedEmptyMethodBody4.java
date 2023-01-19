@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo() {
-        statement();
-    }
+  void foo() {
+    statement();
+  }
 }
-        
+

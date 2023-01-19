@@ -11,82 +11,69 @@ tokens = (default)LITERAL_WHILE, LITERAL_TRY, LITERAL_FINALLY, LITERAL_DO, \
 package com.puppycrawl.tools.checkstyle.checks.blocks.emptyblock;
 
 import java.io.*; // star import for instantiation tests
-import java.awt.Dimension; // explicit import for instantiation tests
-import java.awt.Color;
+// explicit import for instantiation tests
 
-/**
- * Test case for detecting empty block statements.
- **/
-class InputEmptyBlockSemanticStatement
-{
-    static {
-        Boolean x = new Boolean(true);
+/** Test case for detecting empty block statements. */
+class InputEmptyBlockSemanticStatement {
+  static {
+    Boolean x = new Boolean(true);
+  }
+
+  {
+    Boolean x = new Boolean(true);
+    Boolean[] y = new Boolean[] {Boolean.TRUE, Boolean.FALSE};
+  }
+
+  Boolean getBoolean() {
+    return new java.lang.Boolean(true);
+  }
+
+  void exHandlerTest() {
+    try { // violation 'Must have at least one statement.'
+    } finally { // violation 'Must have at least one statement'
     }
-
-    {
-        Boolean x = new Boolean(true);
-        Boolean[] y = new Boolean[]{Boolean.TRUE, Boolean.FALSE};
+    try { // violation 'Must have at least one statement'
+      // something
+    } finally { // violation 'Must have at least one statement'
+      // something
     }
-
-    Boolean getBoolean()
-    {
-        return new java.lang.Boolean(true);
+    try { // ok
+      ; // something
+    } finally { // ok
+      ; // statement
     }
+  }
 
-    void exHandlerTest()
-    {
-        try {   // violation 'Must have at least one statement.'
-        }
-        finally {   // violation 'Must have at least one statement'
-        }
-        try {   // violation 'Must have at least one statement'
-            // something
-        }
-        finally {   // violation 'Must have at least one statement'
-            // something
-        }
-        try {   // ok
-            ; // something
-        }
-        finally {   // ok
-            ; // statement
-        }
+  /** test * */
+  private static final long IGNORE = 666l + 666L;
+
+  public class EqualsVsHashCode1 {
+    public boolean equals(int a) {
+      return a == 1;
     }
+  }
 
-    /** test **/
-    private static final long IGNORE = 666l + 666L;
+  // empty instance initializer
+  { // violation 'Must have at least one statement'
+  }
 
-    public class EqualsVsHashCode1
-    {
-        public boolean equals(int a)
-        {
-            return a == 1;
-        }
+  private class InputBraces {}
+
+  synchronized void foo() {
+    synchronized (this) {
+    } // violation 'Must have at least one statement'
+    synchronized (Class.class) { // ok
+      synchronized (new Object()) { // violation 'Must have at least one statement'
+        // text
+      }
     }
+  }
 
-    // empty instance initializer
-    {   // violation 'Must have at least one statement'
-    }
+  static {
+    int a = 0;
+  }
 
-    private class InputBraces {
-
-    }
-
-    synchronized void foo() {
-        synchronized (this) {}  // violation 'Must have at least one statement'
-        synchronized (Class.class) { // ok
-            synchronized (new Object()) {   // violation 'Must have at least one statement'
-                // text
-            }
-        }
-    }
-
-
-    static {
-
-        int a = 0;}
-
-    static {    // violation 'Must have at least one statement'
-
-    }
+  static { // violation 'Must have at least one statement'
+  }
 }
+

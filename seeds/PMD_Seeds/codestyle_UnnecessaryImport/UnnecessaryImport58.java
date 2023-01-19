@@ -1,9 +1,8 @@
+import java.lang.invoke.MethodHandles;
 
-            import java.lang.invoke.MethodHandles;
+public class Foo {
+  static {
+    MethodHandles.argumentsWithCombiner(); // use it
+  }
+}
 
-            public class Foo {
-                static {
-                    MethodHandles.argumentsWithCombiner();// use it
-                }
-            }
-            

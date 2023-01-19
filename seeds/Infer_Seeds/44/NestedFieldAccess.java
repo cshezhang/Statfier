@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 public class NestedFieldAccess {
@@ -202,3 +198,4 @@ public class NestedFieldAccess {
     }
   }
 }
+

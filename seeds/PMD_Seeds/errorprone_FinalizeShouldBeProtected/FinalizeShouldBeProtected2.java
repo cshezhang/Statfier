@@ -1,5 +1,4 @@
-
 public class Foo {
-    protected void finalize() {}
+  protected void finalize() {}
 }
-        
+

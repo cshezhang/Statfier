@@ -1,5 +1,4 @@
-
 package foo.bar;
-public class Foo {
-}
-        
+
+public class Foo {}
+

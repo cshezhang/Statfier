@@ -15,64 +15,64 @@ package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
 public class InputLeftCurlyTestEolSwitch {
 
-    public void doStuff() {
-        int x = 1;
-        switch (x) {
-            case 0:
-            { // violation ''{' at column 13 should be on the previous line'
-                break;
-            }
-            case (1+0):
-            { // violation ''{' at column 13 should be on the previous line'
-                break;
-            }
-            case 2: {
-                break;
-            }
-            default:
-            { // violation ''{' at column 13 should be on the previous line'
-                break;
-            }
-            case 3:
-            case 4:
-                x++;
-                { // OK, standalone block
-                }
-                break;
-            case 5: {
-                }
-                break;
-            case (5
-                +1):
-            { // violation ''{' at column 13 should be on the previous line'
-                break;
-            }
-            case 7
-                :
-            { // violation ''{' at column 13 should be on the previous line'
-                break;
-            }
+  public void doStuff() {
+    int x = 1;
+    switch (x) {
+      case 0:
+        { // violation ''{' at column 13 should be on the previous line'
+          break;
         }
-        switch (x) {
-            case 0: {
-                break;
-            }
-            default:
-                // do nothing
+      case (1 + 0):
+        { // violation ''{' at column 13 should be on the previous line'
+          break;
+        }
+      case 2:
+        {
+          break;
+        }
+      default:
+        { // violation ''{' at column 13 should be on the previous line'
+          break;
+        }
+      case 3:
+      case 4:
+        x++;
+        { // OK, standalone block
+        }
+        break;
+      case 5:
+        {
+        }
+        break;
+      case (5 + 1):
+        { // violation ''{' at column 13 should be on the previous line'
+          break;
+        }
+      case 7:
+        { // violation ''{' at column 13 should be on the previous line'
+          break;
         }
     }
-
-    public @interface SomeAnnotation {
-
-        String value() default "";
-
-    }
-
-    public interface SomeInterface {
-
-        default String method() {
-            return null;
+    switch (x) {
+      case 0:
+        {
+          break;
         }
+      default:
+        // do nothing
     }
+  }
 
+  public @interface SomeAnnotation {
+
+    String value() default "";
+  }
+
+  public interface SomeInterface {
+
+    default String method() {
+      return null;
+    }
+  }
 }
+

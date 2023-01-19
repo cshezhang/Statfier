@@ -1,5 +1,4 @@
-
 public class TestForX {
-    public void testBad() { }
+  public void testBad() {}
 }
-        
+

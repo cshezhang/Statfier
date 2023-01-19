@@ -1,10 +1,9 @@
-
 import org.junit.Test;
 
 public class MyTest {
-    @Test
-    public void someTest() {}
+  @Test
+  public void someTest() {}
 
-    public void help(int arg) {}
+  public void help(int arg) {}
 }
-        
+

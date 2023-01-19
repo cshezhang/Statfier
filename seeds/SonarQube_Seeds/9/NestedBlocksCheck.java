@@ -11,46 +11,50 @@ class NestedBlocksCheck {
       System.out.println();
     }
 
-    while (b) {
-    }
+    while (b) {}
 
-    do {
-    } while (false);
+    do {} while (false);
 
-    for (int i = 0; i < 42; i++) {
-    }
+    for (int i = 0; i < 42; i++) {}
 
     switch (s) {
-      case "a": { // Compliant
-      }
-      case "b": { // Compliant
-        break;
-      }
-      case "c": { // Compliant
-        doSomething();
-      }
-      case "d": { // Compliant
-        doSomething();
-        break;
-      }
-      case "e": { // Compliant
-        doSomething();
-        doSomething();
-      }
-      case "f": { // Compliant
-        doSomething();
-        doSomething();
-        break;
-      }
+      case "a":
+        { // Compliant
+        }
+      case "b":
+        { // Compliant
+          break;
+        }
+      case "c":
+        { // Compliant
+          doSomething();
+        }
+      case "d":
+        { // Compliant
+          doSomething();
+          break;
+        }
+      case "e":
+        { // Compliant
+          doSomething();
+          doSomething();
+        }
+      case "f":
+        { // Compliant
+          doSomething();
+          doSomething();
+          break;
+        }
       case "0":
     }
 
     switch (s) {
-      case "a": {
-        { // Noncompliant
-          System.out.println();
+      case "a":
+        {
+          { // Noncompliant
+            System.out.println();
+          }
         }
-      }
       case "b":
         { // Noncompliant
           doSomething();
@@ -85,9 +89,7 @@ class NestedBlocksCheck {
     }
   }
 
-
-  private void doSomething() {
-  }
+  private void doSomething() {}
 
   {
     { // Noncompliant
@@ -99,3 +101,4 @@ class NestedBlocksCheck {
     }
   }
 }
+

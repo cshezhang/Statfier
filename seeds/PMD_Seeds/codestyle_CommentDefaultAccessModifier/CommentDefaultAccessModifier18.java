@@ -1,7 +1,6 @@
-
 public class Foo {
-    @interface Bar {
-        String baz();
-    }
+  @interface Bar {
+    String baz();
+  }
 }
-        
+

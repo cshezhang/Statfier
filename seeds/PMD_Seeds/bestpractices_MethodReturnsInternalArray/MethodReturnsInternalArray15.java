@@ -1,10 +1,8 @@
-
 public class MethodReturnsInternalArrayCase {
-    private static final byte[] DATA = {};
+  private static final byte[] DATA = {};
 
-    protected final byte[] getData()
-    {
-        return DATA;
-    }
+  protected final byte[] getData() {
+    return DATA;
+  }
 }
-        
+

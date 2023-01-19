@@ -7,3 +7,4 @@ class CHECKERS_EXPENSIVE_OVERRIDES_UNANNOTATED implements I {
   @Expensive
   public void foo() {}
 }
+

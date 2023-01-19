@@ -1,5 +1,6 @@
-
 public class Foo {
-    public Foo() {super(7);}
+  public Foo() {
+    super(7);
+  }
 }
-        
+

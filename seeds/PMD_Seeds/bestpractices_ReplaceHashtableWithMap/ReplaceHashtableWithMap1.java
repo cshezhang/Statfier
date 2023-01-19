@@ -1,6 +1,4 @@
-
 public class Foo {
-    void bar(Hashtable h) {
-    }
+  void bar(Hashtable h) {}
 }
-        
+

@@ -17,121 +17,149 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
  * scope = "private"
  * excludeScope = "protected"
  */
-public class InputMissingJavadocMethodNoJavadoc3 //comment test
-{
+public class InputMissingJavadocMethodNoJavadoc3 // comment test
+ {
+  public int i1;
+  protected int i2;
+  int i3;
+  private int i4;
+
+  public void foo1() {} // violation
+
+  protected void foo2() {} // ok
+
+  void foo3() {} // violation
+
+  private void foo4() {} // violation
+
+  protected class ProtectedInner {
+    public int i1;
+    protected int i2;
+    int i3;
+    private int i4;
+
+    public void foo1() {}
+
+    protected void foo2() {} // ok
+
+    void foo3() {}
+
+    private void foo4() {}
+  }
+
+  class PackageInner {
     public int i1;
     protected int i2;
     int i3;
     private int i4;
 
     public void foo1() {} // violation
+
     protected void foo2() {} // ok
+
     void foo3() {} // violation
+
     private void foo4() {} // violation
+  }
 
-    protected class ProtectedInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
+  private class PrivateInner {
+    public int i1;
+    protected int i2;
+    int i3;
+    private int i4;
 
-        public void foo1() {}
-        protected void foo2() {} // ok
-        void foo3() {}
-        private void foo4() {}
-    }
+    public void foo1() {} // violation
 
-    class PackageInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
+    protected void foo2() {} // ok
 
-        public void foo1() {} // violation
-        protected void foo2() {} // ok
-        void foo3() {} // violation
-        private void foo4() {} // violation
-    }
+    void foo3() {} // violation
 
-    private class PrivateInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
-
-        public void foo1() {} // violation
-        protected void foo2() {} // ok
-        void foo3() {} // violation
-        private void foo4() {} // violation
-    }
+    private void foo4() {} // violation
+  }
 }
 
 class PackageClass3 {
+  public int i1;
+  protected int i2;
+  int i3;
+  private int i4;
+
+  public void foo1() {} // violation
+
+  protected void foo2() {} // ok
+
+  void foo3() {} // violation
+
+  private void foo4() {} // violation
+
+  public class PublicInner {
     public int i1;
     protected int i2;
     int i3;
     private int i4;
 
     public void foo1() {} // violation
+
     protected void foo2() {} // ok
+
     void foo3() {} // violation
+
     private void foo4() {} // violation
+  }
 
-    public class PublicInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
+  protected class ProtectedInner {
+    public int i1;
+    protected int i2;
+    int i3;
+    private int i4;
 
-        public void foo1() {} // violation
-        protected void foo2() {} // ok
-        void foo3() {} // violation
-        private void foo4() {} // violation
-    }
+    public void foo1() {} // violation
 
-    protected class ProtectedInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
+    protected void foo2() {} // ok
 
-        public void foo1() {} // violation
-        protected void foo2() {} // ok
-        void foo3() {} // violation
-        private void foo4() {} // violation
-    }
+    void foo3() {} // violation
 
-    class PackageInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
+    private void foo4() {} // violation
+  }
 
-        public void foo1() {} // violation
-        protected void foo2() {} // ok
-        void foo3() {} // violation
-        private void foo4() {} // violation
-    }
+  class PackageInner {
+    public int i1;
+    protected int i2;
+    int i3;
+    private int i4;
 
-    private class PrivateInner {
-        public int i1;
-        protected int i2;
-        int i3;
-        private int i4;
+    public void foo1() {} // violation
 
-        public void foo1() {} // violation
-        protected void foo2() {} // ok
-        void foo3() {} // violation
-        private void foo4() {} // violation
-    }
+    protected void foo2() {} // ok
 
-    class IgnoredName {
-        // ignore by name
-        private int logger;
-        // no warning, 'serialVersionUID' fields do not require Javadoc
-        private static final long serialVersionUID = 0;
-    }
+    void foo3() {} // violation
 
-    /**/
-    void methodWithTwoStarComment() {} // violation
+    private void foo4() {} // violation
+  }
+
+  private class PrivateInner {
+    public int i1;
+    protected int i2;
+    int i3;
+    private int i4;
+
+    public void foo1() {} // violation
+
+    protected void foo2() {} // ok
+
+    void foo3() {} // violation
+
+    private void foo4() {} // violation
+  }
+
+  class IgnoredName {
+    // ignore by name
+    private int logger;
+    // no warning, 'serialVersionUID' fields do not require Javadoc
+    private static final long serialVersionUID = 0;
+  }
+
+  /**/
+  void methodWithTwoStarComment() {} // violation
 }
+

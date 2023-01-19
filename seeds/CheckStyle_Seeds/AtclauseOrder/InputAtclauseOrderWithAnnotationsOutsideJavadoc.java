@@ -12,28 +12,32 @@ tagOrder = (default)@author, @deprecated, @exception, @param, @return, \
 package com.puppycrawl.tools.checkstyle.checks.javadoc.atclauseorder;
 
 public class InputAtclauseOrderWithAnnotationsOutsideJavadoc {
-    /**
-     * Some javadoc.
-     *
-     * @author max
-     * @deprecated Some javadoc.
-     * @see Some javadoc.   // violation
-     * @version 1.0         // violation
-     * @since Some javadoc. // violation
-     */
-    @Deprecated
-    public boolean branchContains(int type) { return true; }
+  /**
+   * Some javadoc.
+   *
+   * @author max
+   * @deprecated Some javadoc.
+   * @see Some javadoc. // violation
+   * @version 1.0 // violation
+   * @since Some javadoc. // violation
+   */
+  @Deprecated
+  public boolean branchContains(int type) {
+    return true;
+  }
 
-    /**
-     * Some javadoc.
-     *
-     * @author max
-     * @deprecated Some javadoc.
-     * @see Some javadoc.   // violation
-     * @version 1.0         // violation
-     * @since Some javadoc. // violation
-     */
-    public boolean branchContains2(int type) { return true; }
+  /**
+   * Some javadoc.
+   *
+   * @author max
+   * @deprecated Some javadoc.
+   * @see Some javadoc. // violation
+   * @version 1.0 // violation
+   * @since Some javadoc. // violation
+   */
+  public boolean branchContains2(int type) {
+    return true;
+  }
 }
 
 /**
@@ -41,43 +45,38 @@ public class InputAtclauseOrderWithAnnotationsOutsideJavadoc {
  *
  * @author max
  * @deprecated Some javadoc.
- * @see Some javadoc.   // violation
- * @version 1.0         // violation
+ * @see Some javadoc. // violation
+ * @version 1.0 // violation
  * @since Some javadoc. // violation
  */
 @Deprecated
-class TestClass {
+class TestClass {}
 
-}
+class TestInnerClasses extends InputAtclauseOrderWithAnnotationsOutsideJavadoc {
+  /**
+   * Some javadoc.
+   *
+   * @author max
+   * @deprecated Some javadoc.
+   * @see Some javadoc. // violation
+   * @version 1.0 // violation
+   * @since Some javadoc. // violation
+   */
+  @Deprecated TestClass one = new TestClass() {};
 
-class TestInnerClasses extends InputAtclauseOrderWithAnnotationsOutsideJavadoc{
-    /**
-     * Some javadoc.
-     *
-     * @author max
-     * @deprecated Some javadoc.
-     * @see Some javadoc.   // violation
-     * @version 1.0         // violation
-     * @since Some javadoc. // violation
-     */
-    @Deprecated
-    TestClass one = new TestClass(){
-
-    };
-
-    /**
-     * Some javadoc.
-     *
-     * @author max
-     * @deprecated Some javadoc.
-     * @see Some javadoc.   // violation
-     * @version 1.0         // violation
-     * @since Some javadoc. // violation
-     */
-    @Override
-    public boolean branchContains(int type) {
-        return false;
-    }
+  /**
+   * Some javadoc.
+   *
+   * @author max
+   * @deprecated Some javadoc.
+   * @see Some javadoc. // violation
+   * @version 1.0 // violation
+   * @since Some javadoc. // violation
+   */
+  @Override
+  public boolean branchContains(int type) {
+    return false;
+  }
 }
 
 /**
@@ -85,8 +84,8 @@ class TestInnerClasses extends InputAtclauseOrderWithAnnotationsOutsideJavadoc{
  *
  * @author max
  * @deprecated Some javadoc.
- * @see Some javadoc.   // violation
- * @version 1.0         // violation
+ * @see Some javadoc. // violation
+ * @version 1.0 // violation
  * @since Some javadoc. // violation
  */
 @Deprecated
@@ -97,9 +96,10 @@ enum TestEnums {}
  *
  * @author max
  * @deprecated Some javadoc.
- * @see Some javadoc.   // violation
- * @version 1.0         // violation
+ * @see Some javadoc. // violation
+ * @version 1.0 // violation
  * @since Some javadoc. // violation
  */
 @Deprecated
 interface TestInterfaces {}
+

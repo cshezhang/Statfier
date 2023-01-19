@@ -1,6 +1,3 @@
-
-
-
 class StringBuilderTest {
 
   StringBuilder mId;
@@ -26,3 +23,4 @@ class StringBuilderTest {
     new_linear(str);
   }
 }
+

@@ -1,8 +1,6 @@
-
 class Foo {
-    {
-        while (true) {
-        }
-    }
+  {
+    while (true) {}
+  }
 }
-        
+

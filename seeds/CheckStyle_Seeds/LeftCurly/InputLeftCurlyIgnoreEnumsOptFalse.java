@@ -14,22 +14,31 @@ tokens = (default)ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, \
 package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
 public class InputLeftCurlyIgnoreEnumsOptFalse {
-    enum Colors {RED, // violation ''{' at column 17 should have line break after'
-        BLUE,
-        GREEN;
-        // violation below ''{' at column 44 should have line break after'
-        @Override public String toString() { return ""; };
+  enum Colors {
+    RED, // violation ''{' at column 17 should have line break after'
+    BLUE,
+    GREEN;
+    // violation below ''{' at column 44 should have line break after'
+    @Override
+    public String toString() {
+      return "";
     }
+    ;
+  }
 
-    enum Languages {
-        JAVA,
-        PHP,
-        SCALA,
-        C,
-        PASCAL
-    }
+  enum Languages {
+    JAVA,
+    PHP,
+    SCALA,
+    C,
+    PASCAL
+  }
 
-    void method1(int a) {
-        switch (a) {case 1: ; }
+  void method1(int a) {
+    switch (a) {
+      case 1:
+        ;
     }
+  }
 }
+

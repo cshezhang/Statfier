@@ -1,4 +1,5 @@
 package codetoanalyze.java.impurity;
+
 import java.util.ArrayList;
 
 class Test {
@@ -103,3 +104,4 @@ class Test {
     global_array_set_impure(3, 1);
   }
 }
+

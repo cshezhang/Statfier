@@ -1,4 +1,2 @@
+public interface Foo {}
 
-public interface Foo {
-}
-        

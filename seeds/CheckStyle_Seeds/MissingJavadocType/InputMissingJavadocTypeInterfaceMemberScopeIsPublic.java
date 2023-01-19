@@ -12,12 +12,10 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadoctype;
 
 public interface InputMissingJavadocTypeInterfaceMemberScopeIsPublic { // violation
 
-    enum Enum { // violation
+  enum Enum { // violation
+  }
 
-    }
-
-    class Class { // violation
-
-    }
-
+  class Class { // violation
+  }
 }
+

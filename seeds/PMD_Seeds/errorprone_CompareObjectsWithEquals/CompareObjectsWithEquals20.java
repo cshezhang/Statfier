@@ -1,9 +1,8 @@
+class MyClass {
+  static final MyClass MISSING = new MyClass();
 
-            class MyClass {
-                static final MyClass MISSING = new MyClass();
+  public static void isMissing(MyClass obj) {
+    return obj == MISSING; // no violation expected...
+  }
+}
 
-                public static void isMissing(MyClass obj) {
-                    return obj == MISSING; // no violation expected...
-                }
-            }
-        

@@ -17,3 +17,4 @@ class AnonymousClassShouldBeLambdaCheck_java7 {
     }
   }
 }
+

@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 public class NoReuseUndefFunctionValues {
@@ -24,3 +20,4 @@ public class NoReuseUndefFunctionValues {
     }
   }
 }
+

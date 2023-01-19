@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 public class DynamicDispatch {
@@ -154,3 +150,4 @@ public class DynamicDispatch {
     InferTaint.inferSensitiveSink(launderedSource);
   }
 }
+

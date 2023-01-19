@@ -11,34 +11,31 @@ sortImportsInGroupAlphabetically = (default)false
 
 */
 
-//non-compiled with javac: special package and requires imports from the same package
+// non-compiled with javac: special package and requires imports from the same package
 package com.puppycrawl.tools.checkstyle.checks.imports.customimportorder;
 
-import com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck;
-import com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck;
-import com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderOption;
 
 // every import from javadoc package has comment in brackets indicating presence of keywords
 // Javadoc, Check, Tag. For example J_T = Javadoc, no Check, Tag
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocNodeImpl; // violation
+// violation
 
 // STANDARD - keyword Check
 
-import com.puppycrawl.tools.checkstyle.checks.javadoc.AbstractJavadocCheck; // violation
-import com.puppycrawl.tools.checkstyle.checks.javadoc.AtclauseOrderCheck; // (_C_)
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTagContinuationIndentationCheck; // (JCT)
+// violation
+// (_C_)
+// (JCT)
 
 // SPECIAL_IMPORTS - keyword Tag
 
-import com.puppycrawl.tools.checkstyle.checks.javadoc.InvalidJavadocTag; // violation
-//import com.puppycrawl.tools.checkstyle.checks.javadoc.TagParser; // (__T)
-import com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck; // violation
+// violation
+// import com.puppycrawl.tools.checkstyle.checks.javadoc.TagParser; // (__T)
+// violation
 
 import com.puppycrawl.tools.checkstyle.*;
-//import com.puppycrawl.tools.checkstyle.checks.javadoc.HtmlTag;
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTag; // violation
-import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck; // violation
-import com.puppycrawl.tools.checkstyle.checks.javadoc.NonEmptyAtclauseDescriptionCheck; // violation
+// import com.puppycrawl.tools.checkstyle.checks.javadoc.HtmlTag;
+// violation
+// violation
+// violation
 
-public class InputCustomImportOrder_OverlappingPatterns {
-}
+public class InputCustomImportOrder_OverlappingPatterns {}
+

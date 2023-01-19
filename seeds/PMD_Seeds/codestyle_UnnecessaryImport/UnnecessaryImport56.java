@@ -1,6 +1,6 @@
+import java.lang.Thread.UncaughtExceptionHandler;
 
-            import java.lang.Thread.UncaughtExceptionHandler;
-            public class Foo {
-                UncaughtExceptionHandler used;
-            }
-            
+public class Foo {
+  UncaughtExceptionHandler used;
+}
+

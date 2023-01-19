@@ -1,5 +1,6 @@
 package sfBugs;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import java.io.File;
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -7,107 +8,90 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import edu.umd.cs.findbugs.annotations.NonNull;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 @ThreadSafe
 public class Bug1871376 implements Serializable {
 
-    private static final long serialVersionUID = new Long(1L);
+  private static final long serialVersionUID = new Long(1L);
 
-    @GuardedBy("Bug1871376.class")
-    private static boolean s_builtAMap = false;
+  @GuardedBy("Bug1871376.class")
+  private static boolean s_builtAMap = false;
 
-    private final Date m_created = new Date();
+  private final Date m_created = new Date();
 
-    @GuardedBy("itself")
-    private NonSerializableMap m_map = null;
+  @GuardedBy("itself")
+  private NonSerializableMap m_map = null;
 
-    public Bug1871376() {
+  public Bug1871376() {
 
-        boolean done = false;
+    boolean done = false;
 
-        if (!done)
+    if (!done) done = true;
 
-            done = true;
+    new File("temp.txt").delete();
+  }
 
-        new File("temp.txt").delete();
+  public Date getCreationDate() {
 
-    }
+    return m_created;
+  }
 
-    public Date getCreationDate() {
+  public String getFirstCharOfKey(@NonNull String key) {
 
-        return m_created;
+    String value = null;
 
-    }
+    if (null == m_map) {
 
-    public String getFirstCharOfKey(@NonNull String key) {
-
-        String value = null;
-
+      synchronized (this) {
         if (null == m_map) {
 
-            synchronized (this) {
+          System.out.println("Value: " + m_map.get(key));
 
-                if (null == m_map) {
+          m_map = new NonSerializableMap();
 
-                    System.out.println("Value: " + m_map.get(key));
+          value = m_map.get(key);
 
-                    m_map = new NonSerializableMap();
-
-                    value = m_map.get(key);
-
-                    s_builtAMap = true;
-
-                }
-
-            }
-
-        } else {
-
-            value = m_map.get(key);
-
+          s_builtAMap = true;
         }
+      }
 
-        return value.substring(0, 1);
+    } else {
 
+      value = m_map.get(key);
     }
 
-    public synchronized static boolean didBuildAMap() {
+    return value.substring(0, 1);
+  }
 
-        return s_builtAMap;
+  public static synchronized boolean didBuildAMap() {
 
+    return s_builtAMap;
+  }
+
+  public static void main(String[] args) {
+
+    Bug1871376 buggy = new Bug1871376();
+
+    String key = null;
+
+    buggy.getFirstCharOfKey(key);
+
+    synchronized (buggy) {
+      System.out.println("Built a map: " + s_builtAMap);
     }
+  }
 
-    public static void main(String[] args) {
+  private class NonSerializableMap extends AbstractMap<String, String> {
 
-        Bug1871376 buggy = new Bug1871376();
+    private final Map<String, String> m_map = new HashMap<String, String>();
 
-        String key = null;
+    @Override
+    public Set<java.util.Map.Entry<String, String>> entrySet() {
 
-        buggy.getFirstCharOfKey(key);
-
-        synchronized (buggy) {
-
-            System.out.println("Built a map: " + s_builtAMap);
-
-        }
-
+      return m_map.entrySet();
     }
-
-    private class NonSerializableMap extends AbstractMap<String, String> {
-
-        private final Map<String, String> m_map = new HashMap<String, String>();
-
-        @Override
-        public Set<java.util.Map.Entry<String, String>> entrySet() {
-
-            return m_map.entrySet();
-
-        }
-
-    }
-
+  }
 }
+

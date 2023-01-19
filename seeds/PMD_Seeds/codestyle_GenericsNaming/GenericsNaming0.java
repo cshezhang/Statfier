@@ -1,5 +1,2 @@
+public interface Foo<B extends Bar> {}
 
-public interface Foo <B extends Bar>
-{
-}
-        

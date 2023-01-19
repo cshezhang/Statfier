@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ThreadConfined;
 import codetoanalyze.java.annotation.ThreadSafe;
 
@@ -125,3 +121,4 @@ class ThreadConfinedField {
 class UnannotadedImplementation implements UnannotatedInterface {
   public void foo() {}
 }
+

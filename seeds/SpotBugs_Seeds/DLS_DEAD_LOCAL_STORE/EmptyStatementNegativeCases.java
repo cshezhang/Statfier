@@ -17,7 +17,6 @@
 package com.google.errorprone.bugpatterns;
 
 /**
- *
  * @author eaftan@google.com (Eddie Aftandilian)
  */
 public class EmptyStatementNegativeCases {
@@ -32,13 +31,12 @@ public class EmptyStatementNegativeCases {
 
   public static void negativeCase2() {
     int i = 0;
-    for (;;) {
+    for (; ; ) {
       if (i > 10) {
         break;
       }
       i++;
     }
   }
-
-
 }
+

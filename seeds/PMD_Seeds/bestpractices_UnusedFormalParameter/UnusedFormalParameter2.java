@@ -1,7 +1,6 @@
-
 class Foo {
-    private void foo (String s) {
-        String str = s.toString();
-    }
+  private void foo(String s) {
+    String str = s.toString();
+  }
 }
-        
+

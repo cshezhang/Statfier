@@ -16,9 +16,7 @@
 
 package com.google.errorprone.bugpatterns;
 
-
 /**
- *
  * @author eaftan@google.com (Eddie Aftandilian)
  */
 public class CovariantEqualsPositiveCase3 {
@@ -26,10 +24,9 @@ public class CovariantEqualsPositiveCase3 {
   boolean isInVersion;
   String whitelist;
 
-  //BUG: Suggestion includes "Did you mean '@Override'"
+  // BUG: Suggestion includes "Did you mean '@Override'"
   public boolean equals(CovariantEqualsPositiveCase3 that) {
-    return ((this.isInVersion == that.isInVersion) &&
-            this.whitelist.equals(that.whitelist));
+    return ((this.isInVersion == that.isInVersion) && this.whitelist.equals(that.whitelist));
   }
-
 }
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        throw new NullPointerException();
-    }
+  void bar() {
+    throw new NullPointerException();
+  }
 }
-        
+

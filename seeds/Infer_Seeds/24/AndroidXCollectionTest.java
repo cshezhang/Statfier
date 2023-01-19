@@ -1,4 +1,3 @@
-
 import androidx.collection.SparseArrayCompat;
 
 public class AndroidXCollectionTest {
@@ -13,3 +12,4 @@ public class AndroidXCollectionTest {
     iterate_over_sparsearraycompat_linear(sa);
   }
 }
+

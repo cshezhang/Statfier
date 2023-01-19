@@ -1,5 +1,4 @@
-
 public class Foo {
-    String bar = null;
+  String bar = null;
 }
-        
+

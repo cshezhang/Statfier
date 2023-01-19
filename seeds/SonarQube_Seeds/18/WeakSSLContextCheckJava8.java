@@ -6,10 +6,14 @@ import javax.net.ssl.SSLContext;
 
 class WeakSSLContextCheckJava8 {
 
-  void foo(String protocol, String provider) throws NoSuchAlgorithmException, NoSuchProviderException {
+  void foo(String protocol, String provider)
+      throws NoSuchAlgorithmException, NoSuchProviderException {
     bar(SSLContext.getInstance(protocol));
 
-    bar(SSLContext.getInstance("SSL")); // Noncompliant [[sc=32;ec=37]] {{Change this code to use a stronger protocol.}}
+    bar(
+        SSLContext.getInstance(
+            "SSL")); // Noncompliant [[sc=32;ec=37]] {{Change this code to use a stronger
+                     // protocol.}}
     bar(SSLContext.getInstance("SSLv2")); // Noncompliant
     bar(SSLContext.getInstance("SSLv3")); // Noncompliant
     bar(SSLContext.getInstance("TLS")); // compliant, refer to latest version of protocol
@@ -30,5 +34,5 @@ class WeakSSLContextCheckJava8 {
   void bar(SSLContext ctx) {
     System.out.println(ctx);
   }
-
 }
+

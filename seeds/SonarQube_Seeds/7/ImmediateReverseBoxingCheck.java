@@ -3,18 +3,24 @@ package checks;
 abstract class ImmediateReverseBoxingCheck {
 
   public void processInt(String s, int a) {}
+
   public void processInteger(String s, Integer... a) {}
 
   void intBoxingAndUnboxing(int int1, Integer integer1, String string, Double double1) {
     new Integer(int1).intValue(); // Noncompliant [[sc=5;ec=22]] {{Remove the boxing of "int1".}}
-    new Integer(1 + 2).intValue(); // Noncompliant [[sc=5;ec=23]] {{Remove the boxing to "Integer".}}
+    new Integer(1 + 2)
+        .intValue(); // Noncompliant [[sc=5;ec=23]] {{Remove the boxing to "Integer".}}
     Integer.valueOf(int1).intValue(); // Noncompliant
     Integer.valueOf(1 + 2).intValue(); // Noncompliant
     processInt(string, new Integer(int1)); // Noncompliant
     new Integer(int1).toString();
     integer1.intValue();
-    Integer.valueOf(integer1); // Noncompliant [[sc=5;ec=20]] {{Remove the boxing to "Integer"; The argument is already of the same type.}}
-    Double.valueOf(double1); // Noncompliant {{Remove the boxing to "Double"; The argument is already of the same type.}}
+    Integer.valueOf(
+        integer1); // Noncompliant [[sc=5;ec=20]] {{Remove the boxing to "Integer"; The argument is
+                   // already of the same type.}}
+    Double.valueOf(
+        double1); // Noncompliant {{Remove the boxing to "Double"; The argument is already of the
+                  // same type.}}
     Long.valueOf(integer1); // Compliant
     int int2 = new Integer(1); // Noncompliant {{Remove the boxing to "Integer".}}
     int2 = new Integer(1); // Noncompliant
@@ -25,7 +31,9 @@ abstract class ImmediateReverseBoxingCheck {
 
   void intUnboxingAndBoxing(int int1, Integer integer1, String string, Number number) {
     new Integer(integer1.intValue()); // Noncompliant {{Remove the unboxing of "integer1".}}
-    new Integer(integer1); // Noncompliant [[sc=9;ec=16]] {{Remove the boxing to "Integer"; The argument is already of the same type.}}
+    new Integer(
+        integer1); // Noncompliant [[sc=9;ec=16]] {{Remove the boxing to "Integer"; The argument is
+                   // already of the same type.}}
     new Long(integer1); // Compliant
     new Integer(int1);
     new Integer(string.length());
@@ -65,7 +73,10 @@ abstract class ImmediateReverseBoxingCheck {
   void quickFixes(int int1, Integer integer1, Double double1, double doublePrimitive) {
     // Visit METHOD_INVOCATION
     // valueOf - checkForUnboxing
-    Double.valueOf(double1.doubleValue()); // Noncompliant [[sc=20;ec=41;quickfixes=qf1]] {{Remove the unboxing of "double1".}}
+    Double.valueOf(
+        double1
+            .doubleValue()); // Noncompliant [[sc=20;ec=41;quickfixes=qf1]] {{Remove the unboxing of
+                             // "double1".}}
     // fix@qf1 {{Remove the unboxing}}
     // edit@qf1 [[sc=27;ec=41]] {{}}
 
@@ -123,11 +134,11 @@ abstract class ImmediateReverseBoxingCheck {
   }
 
   public void examineInt(int a) {
-    //...
+    // ...
   }
 
   public void examineInteger(Integer a) {
     // ...
   }
-
 }
+

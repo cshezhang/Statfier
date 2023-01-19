@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 
 public class RequiredProps {
@@ -575,3 +573,4 @@ public class RequiredProps {
     }
   }
 }
+

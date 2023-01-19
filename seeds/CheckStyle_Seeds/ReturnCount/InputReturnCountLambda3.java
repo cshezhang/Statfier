@@ -14,59 +14,66 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-
 public class InputReturnCountLambda3 {
 
-    Runnable fieldWithOneReturnInLambda = () -> {
+  Runnable fieldWithOneReturnInLambda =
+      () -> {
         return;
-    };
+      };
 
-    Callable<Integer> fieldWithTwoReturnInLambda = () -> {
+  Callable<Integer> fieldWithTwoReturnInLambda =
+      () -> {
         if (hashCode() == 0) return 0;
         else return 1;
-    };
+      };
 
-    Optional<Integer> methodWithOneReturnInLambda() {
-        return Optional.of(hashCode()).filter(i -> {
-            return i > 0;
-        });
-    }
+  Optional<Integer> methodWithOneReturnInLambda() {
+    return Optional.of(hashCode())
+        .filter(
+            i -> {
+              return i > 0;
+            });
+  }
 
-    Optional<Integer> methodWithTwoReturnInLambda() { // violation
-        return Optional.of(hashCode()).filter(i -> {
-            if (i > 0) return true;
-            else return false;
-        });
-    }
+  Optional<Integer> methodWithTwoReturnInLambda() { // violation
+    return Optional.of(hashCode())
+        .filter(
+            i -> {
+              if (i > 0) return true;
+              else return false;
+            });
+  }
 
-    Optional<Object> methodWithThreeReturnInLambda(int number) { // violation
-        return Optional.of(number).map(i -> {
-            if (i == 42) return true;
-            else if (i == 7) return true;
-            else return false;
-        });
-    }
+  Optional<Object> methodWithThreeReturnInLambda(int number) { // violation
+    return Optional.of(number)
+        .map(
+            i -> {
+              if (i == 42) return true;
+              else if (i == 7) return true;
+              else return false;
+            });
+  }
 
-    int methodWithTwoReturnWithLambdas(final int number) { // violation
-        if (hashCode() > 0) {
-            new Thread(
-                () -> {
-                }
-            ).start();
-            return number;
-        } else {
-            return Optional.of(hashCode()).orElseGet(() -> {
+  int methodWithTwoReturnWithLambdas(final int number) { // violation
+    if (hashCode() > 0) {
+      new Thread(() -> {}).start();
+      return number;
+    } else {
+      return Optional.of(hashCode())
+          .orElseGet(
+              () -> {
                 if (number > 0) return number;
                 else return 0;
-            });
-        }
+              });
     }
+  }
 
-    Supplier<Supplier<Integer>> methodWithOneReturnPerLambda() { // violation
-        return () -> {
-            return () -> {
-                return 1;
-            };
-        };
-    }
+  Supplier<Supplier<Integer>> methodWithOneReturnPerLambda() { // violation
+    return () -> {
+      return () -> {
+        return 1;
+      };
+    };
+  }
 }
+

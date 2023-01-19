@@ -16,10 +16,10 @@ tokens = IMPORT
 
 package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE; // ok
-import static java.awt.Button.ABORT; // ok
-import java.awt.Dialog; // ok
-import java.awt.Button; // violation
+// ok
+// ok
+// ok
+// violation
 
-public class InputImportOrder_HonorsTokensProperty {
-}
+public class InputImportOrder_HonorsTokensProperty {}
+

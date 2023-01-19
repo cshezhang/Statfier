@@ -1,10 +1,8 @@
-
-
 public class Test {
 
   public int a;
   protected int b;
-  public int c;            // OK, access modifiers not considered while validating
+  public int c; // OK, access modifiers not considered while validating
 
   Test() {
     this.a = 0;
@@ -14,10 +12,10 @@ public class Test {
     // This method does nothing
   }
 
-  Test(int a) {            // violation, constructor definition in wrong order
+  Test(int a) { // violation, constructor definition in wrong order
     this.a = a;
   }
 
-  private String name;     // violation, instance variable declaration in wrong order
+  private String name; // violation, instance variable declaration in wrong order
 }
-        
+

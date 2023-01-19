@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ThreadSafe;
 import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.concurrent.GuardedBy;
@@ -140,3 +136,4 @@ class GuardedByUiThread {
     a = b = c = d = 0;
   }
 }
+

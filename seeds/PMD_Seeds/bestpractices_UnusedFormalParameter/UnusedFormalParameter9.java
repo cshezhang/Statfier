@@ -1,5 +1,4 @@
-
 class Foo {
-    public Foo(int s) {}
+  public Foo(int s) {}
 }
-        
+

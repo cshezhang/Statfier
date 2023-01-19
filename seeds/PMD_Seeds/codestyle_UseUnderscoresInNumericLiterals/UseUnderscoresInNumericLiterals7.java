@@ -1,5 +1,4 @@
-
 public class Foo {
-    Integer number = 1_11_21_1211;
+  Integer number = 1_11_21_1211;
 }
-        
+

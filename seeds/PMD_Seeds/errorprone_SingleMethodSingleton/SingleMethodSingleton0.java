@@ -1,17 +1,16 @@
-
 public class Singleton {
 
-    private static Singleton singleton = new Singleton();
+  private static Singleton singleton = new Singleton();
 
-    private Singleton() { }
+  private Singleton() {}
 
-    public static Singleton getInstance() {
-        return singleton;
-    }
+  public static Singleton getInstance() {
+    return singleton;
+  }
 
-    public static Singleton getInstance(Object obj) {
-        Singleton singleton = (Singleton) obj;
-        return singleton;
-    }
+  public static Singleton getInstance(Object obj) {
+    Singleton singleton = (Singleton) obj;
+    return singleton;
+  }
 }
-        
+

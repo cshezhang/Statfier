@@ -1,5 +1,4 @@
-
 public class Foo {
-    Foo() {}
+  Foo() {}
 }
-        
+

@@ -1,4 +1,2 @@
+public class Foo extends FooError {}
 
-public class Foo extends FooError {
-}
-        

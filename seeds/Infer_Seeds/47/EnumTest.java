@@ -1,5 +1,3 @@
-
-
 enum MyEnum {
   MyEnum1,
   MyEnum2,
@@ -14,3 +12,4 @@ class EnumTest {
     for (Object obj : MyEnum.class.getEnumConstants()) {}
   }
 }
+

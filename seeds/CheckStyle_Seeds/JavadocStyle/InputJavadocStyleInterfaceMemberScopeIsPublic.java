@@ -17,24 +17,27 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.javadocstyle;
 
 public interface InputJavadocStyleInterfaceMemberScopeIsPublic {
 
-    /** */ // violation
-    enum Enum {
+  /** */
+  // violation
+  enum Enum {
 
-        /** */ // violation
-        CONSTANT(0);
+    /** */
+    // violation
+    CONSTANT(0);
 
-        /** */ // ok
-        final int value;
+    /** */
+    // ok
+    final int value;
 
-        /** */ // ok
-        Enum(int value) {
-            this.value = value;
-        }
-
-        /** */ // ok
-        void method() {
-        }
-
+    /** */
+    // ok
+    Enum(int value) {
+      this.value = value;
     }
 
+    /** */
+    // ok
+    void method() {}
+  }
 }
+

@@ -1,5 +1,4 @@
-
 public class UnusedAssignmentNative {
-    public final native void call(int p);
+  public final native void call(int p);
 }
-        
+

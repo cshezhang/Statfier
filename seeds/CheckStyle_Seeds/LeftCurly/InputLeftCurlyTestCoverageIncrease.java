@@ -14,70 +14,61 @@ tokens = (default)ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, \
 package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
 public class InputLeftCurlyTestCoverageIncrease {
-    // inner interfaces with different scopes
+  // inner interfaces with different scopes
 
+  private interface PrivateInterface { // violation ''{' at column 5 should be on the previous line'
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-    private interface PrivateInterface
-    { // violation ''{' at column 5 should be on the previous line'
-        public String CA = "CONST A";
-        String CB = "CONST b";
+    public void ma();
 
-        public void ma();
-        void mb();
-    }
+    void mb();
+  }
 
-    interface PackageInnerInterface
-    { // violation ''{' at column 5 should be on the previous line'
-        public String CA = "CONST A";
-        String CB = "CONST b";
+  interface PackageInnerInterface { // violation ''{' at column 5 should be on the previous line'
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-        public void ma();
-        void mb();
-    }
+    public void ma();
 
-    protected interface ProtectedInnerInterface
-    { // violation ''{' at column 5 should be on the previous line'
-        public String CA = "CONST A";
-        String CB = "CONST b";
+    void mb();
+  }
 
-        public void ma();
-        void mb();
-    }
+  protected
+  interface ProtectedInnerInterface { // violation ''{' at column 5 should be on the previous line'
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-    public interface PublicInnerInterface
-    { // violation ''{' at column 5 should be on the previous line'
-        public String CA = "CONST A";
-        String CB = "CONST b";
+    public void ma();
 
-        public void ma();
-        void mb();
-    }
+    void mb();
+  }
 
-    private
-    class
- MyClass1
-  {
-    }
-    class
-    MyClass2 { // violation ''{' at column 14 should be on a new line'
-    }
+  public
+  interface PublicInnerInterface { // violation ''{' at column 5 should be on the previous line'
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-    private
-    interface
-    MyInterface1 { // violation ''{' at column 18 should be on a new line'
-    }
+    public void ma();
 
-    interface
-    MyInterface2 { // violation ''{' at column 18 should be on a new line'
-    }
+    void mb();
+  }
 
-    protected
-    enum
-    MyEnum { // violation ''{' at column 12 should be on a new line'
-    }
+  private class MyClass1 {}
 
-    private
-    @interface
-    MyAnnotation { // violation ''{' at column 18 should be on a new line'
-    }
+  class MyClass2 { // violation ''{' at column 14 should be on a new line'
+  }
+
+  private interface MyInterface1 { // violation ''{' at column 18 should be on a new line'
+  }
+
+  interface MyInterface2 { // violation ''{' at column 18 should be on a new line'
+  }
+
+  protected enum MyEnum { // violation ''{' at column 12 should be on a new line'
+  }
+
+  private @interface MyAnnotation { // violation ''{' at column 18 should be on a new line'
+  }
 }
+

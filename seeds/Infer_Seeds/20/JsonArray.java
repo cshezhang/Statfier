@@ -1,7 +1,3 @@
-
-
-
-
 public class JsonArray implements JsonType {
 
   public StringBuilder array = new StringBuilder("[");
@@ -13,3 +9,4 @@ public class JsonArray implements JsonType {
     JsonUtils.serialize(array, value);
   }
 }
+

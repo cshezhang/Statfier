@@ -1,7 +1,3 @@
-
-
-
-
 import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -224,3 +220,4 @@ public class Intents {
     mActivity.startActivity(new Intent("action", uri, mActivity, MyActivity.class));
   }
 }
+

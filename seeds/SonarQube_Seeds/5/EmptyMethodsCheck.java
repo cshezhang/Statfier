@@ -3,15 +3,13 @@ package checks;
 class EmptyMethodsCheck {
   class A {
     // Compliant - there is other constructors
-    public A() {
-    }
+    public A() {}
 
-    public A(int c) {
-    }
+    public A(int c) {}
 
-    // Noncompliant@+1 [[sc=18;ec=19]] {{Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.}}
-    private void f() {
-    }
+    // Noncompliant@+1 [[sc=18;ec=19]] {{Add a nested comment explaining why this method is empty,
+    // throw an UnsupportedOperationException or complete the implementation.}}
+    private void f() {}
 
     // Compliant
     private void g() {
@@ -36,12 +34,10 @@ class EmptyMethodsCheck {
 
   class AwithGenerics {
     // Compliant
-    private <T> AwithGenerics() {
-    }
+    private <T> AwithGenerics() {}
 
     // Noncompliant@+1
-    private <T> void f() {
-    }
+    private <T> void f() {}
   }
 
   abstract class Abstract {
@@ -49,30 +45,27 @@ class EmptyMethodsCheck {
     private void f() {
       abstract class B {
         // Compliant
-        private void g() {
-        }
+        private void g() {}
       }
 
       class C {
         // Noncompliant@+1
-        private void g() {
-        }
+        private void g() {}
       }
     }
 
-    IFoo bar = new IFoo() {
-      // Noncompliant@+1
-      public void f() {
-      }
-    };
+    IFoo bar =
+        new IFoo() {
+          // Noncompliant@+1
+          public void f() {}
+        };
   }
 
   enum AEnum {
     ;
 
     // Noncompliant@+1
-    public void f() {
-    }
+    public void f() {}
 
     public void g() {
       // Compliant
@@ -84,32 +77,28 @@ class EmptyMethodsCheck {
       ;
 
       // Noncompliant@+1
-      public void f() {
-      }
+      public void f() {}
     }
   }
 
   public interface IFoo {
 
-    static IFoo FOO = new IFoo() {
-      // Noncompliant@+1
-      public void foo() {
-      }
+    static IFoo FOO =
+        new IFoo() {
+          // Noncompliant@+1
+          public void foo() {}
 
-      // Compliant
-      public void bar() {
-        System.out.println();
-      }
-    };
-
+          // Compliant
+          public void bar() {
+            System.out.println();
+          }
+        };
   }
 
   enum Foo {
-
     FOO {
       // Noncompliant@+1
-      public void foo() {
-      }
+      public void foo() {}
 
       // Compliant
       public int bar() {
@@ -118,16 +107,13 @@ class EmptyMethodsCheck {
     };
 
     // Noncompliant@+1
-    public void foo() {
-    }
-
+    public void foo() {}
   }
 
   class Constructors {
     class C {
       // Noncompliant@+1
-      public C() {
-      }
+      public C() {}
     }
 
     class D {
@@ -139,21 +125,18 @@ class EmptyMethodsCheck {
 
     class E {
       // Compliant - not public
-      E() {
-      }
+      E() {}
     }
 
     class F {
       // Compliant - not a no-arg constructor
-      public F(int i) {
-      }
+      public F(int i) {}
     }
   }
 
   record MyRecord() {
     // Noncompliant@+1
-    void foo() {
-    }
+    void foo() {}
   }
 
   class QuickFixes {
@@ -163,16 +146,17 @@ class EmptyMethodsCheck {
     // edit@qf0 [[sc=26;ec=26]] {{ /* TODO document why this constructor is empty */ }}
 
     // Noncompliant@+1 [[sc=18;ec=29;quickfixes=qf1]]
-    private void emptyMethod() {
-    }
+    private void emptyMethod() {}
     // fix@qf1 {{Insert placeholder comment}}
-    // edit@qf1 [[sl=+0;el=+1;sc=33;ec=5]] {{\n      // TODO document why this method is empty\n    }}
+    // edit@qf1 [[sl=+0;el=+1;sc=33;ec=5]] {{\n      // TODO document why this method is empty\n
+    // }}
 
     // Noncompliant@+1 [[sc=18;ec=30;quickfixes=qf2]]
-    private void emptyMethod2() {
+    private void emptyMethod2() {}
 
-    }
     // fix@qf2 {{Insert placeholder comment}}
-    // edit@qf2 [[sl=+0;el=+2;sc=34;ec=5]] {{\n      // TODO document why this method is empty\n    }}
+    // edit@qf2 [[sl=+0;el=+2;sc=34;ec=5]] {{\n      // TODO document why this method is empty\n
+    // }}
   }
 }
+

@@ -4,29 +4,41 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 
 public class AccessibilityChangeOnRecordsCheck {
-  record Person(String name, int age) {
-  }
+  record Person(String name, int age) {}
 
   private void modifyAccessibility() throws IllegalAccessException, NoSuchFieldException {
     Person person = new Person("A", 26);
     Field field = Person.class.getDeclaredField("name");
     field.setAccessible(true);
-    field.set(person, "B"); // Noncompliant {{Remove this private field update which will never succeed}}[[secondary=-1]]
-
+    field.set(
+        person,
+        "B"); // Noncompliant {{Remove this private field update which will never
+              // succeed}}[[secondary=-1]]
 
     Field nameField = Person.class.getDeclaredField("name");
     nameField.setAccessible(false);
-    nameField.set(person, "B"); // Noncompliant {{Remove this private field update which will never succeed}}
+    nameField.set(
+        person, "B"); // Noncompliant {{Remove this private field update which will never succeed}}
 
     Field ageField = Person.class.getDeclaredField("age");
-    ageField.setInt(person, 42); // Noncompliant {{Remove this private field update which will never succeed}}
+    ageField.setInt(
+        person, 42); // Noncompliant {{Remove this private field update which will never succeed}}
 
+    Person.class
+        .getField("age")
+        .setInt(
+            person,
+            42); // Noncompliant {{Remove this private field update which will never succeed}}
+    Person.class
+        .getDeclaredField("age")
+        .setInt(
+            person,
+            42); // Noncompliant {{Remove this private field update which will never succeed}}
 
-    Person.class.getField("age").setInt(person, 42); // Noncompliant {{Remove this private field update which will never succeed}}
-    Person.class.getDeclaredField("age").setInt(person, 42); // Noncompliant {{Remove this private field update which will never succeed}}
-
-    Person.class.getFields()[0].set(person, null); // Noncompliant {{Remove this private field update which will never succeed}}
-    Person.class.getDeclaredFields()[0].set(person, null); // Noncompliant {{Remove this private field update which will never succeed}}
+    Person.class.getFields()[0].set(
+        person, null); // Noncompliant {{Remove this private field update which will never succeed}}
+    Person.class.getDeclaredFields()[0].set(
+        person, null); // Noncompliant {{Remove this private field update which will never succeed}}
   }
 
   class ChildOfAccessibleObject extends AccessibleObject {
@@ -56,3 +68,4 @@ public class AccessibilityChangeOnRecordsCheck {
     field.set(individual, "B"); // Compliant as S6216 only checks Records
   }
 }
+

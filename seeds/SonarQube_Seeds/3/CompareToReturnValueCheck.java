@@ -75,5 +75,5 @@ class CompareToReturnValueCheck {
       return Short.MAX_VALUE; // Compliant
     }
   }
-
 }
+

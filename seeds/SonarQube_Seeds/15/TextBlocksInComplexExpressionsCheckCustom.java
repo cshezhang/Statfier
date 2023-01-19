@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 class TextBlocksInComplexExpressionsCheckCustom {
 
   // Compliant
-  Supplier<String> supplier = () -> """
+  Supplier<String> supplier =
+      () ->
+          """
     <project>
       <modelVersion>4.0.0</modelVersion>
       <parent>
@@ -19,15 +21,17 @@ class TextBlocksInComplexExpressionsCheckCustom {
       <artifactId>my-module</artifactId>
       <version>1</version>
     </project>
-    
-    
+
+
     ABC
     """;
-  
+
   void fun(List<String> listOfStrings) {
     listOfStrings.stream()
-      // Noncompliant@+1
-      .map(str -> !"""
+        // Noncompliant@+1
+        .map(
+            str ->
+                !"""
         <project>
           <modelVersion>4.0.0</modelVersion>
           <parent>
@@ -35,7 +39,7 @@ class TextBlocksInComplexExpressionsCheckCustom {
             <artifactId>my-app</artifactId>
             <version>1</version>
           </parent>
-         
+
           <groupId>com.mycompany.app</groupId>
           <artifactId>my-module</artifactId>
           <version>1</version>
@@ -43,13 +47,15 @@ class TextBlocksInComplexExpressionsCheckCustom {
         ABC
         ABC
         CBA
-        """.equals(str));
-  } 
+        """
+                    .equals(str));
+  }
 
   void fun2(List<String> listOfStrings) {
     listOfStrings.stream()
-      .map(str -> { // Noncompliant@+1
-        return !"""
+        .map(
+            str -> { // Noncompliant@+1
+              return !"""
           <project>
             <modelVersion>4.0.0</modelVersion>
             <parent>
@@ -65,14 +71,17 @@ class TextBlocksInComplexExpressionsCheckCustom {
           ABC
           ABC
           CBA
-          """.equals(str);
-      });
+          """
+                  .equals(str);
+            });
   }
 
   void fun3(List<String> listOfStrings) {
     listOfStrings.stream()
-      // Compliant
-      .map(str -> !"""
+        // Compliant
+        .map(
+            str ->
+                !"""
     <project>
       <modelVersion>4.0.0</modelVersion>
       <parent>
@@ -80,17 +89,17 @@ class TextBlocksInComplexExpressionsCheckCustom {
         <artifactId>my-app</artifactId>
         <version>1</version>
       </parent>
-     
+
       <groupId>com.mycompany.app</groupId>
       <artifactId>my-module</artifactId>
       <version>1</version>
     </project>
     ABC
-    CBA    """.equals(str));
+    CBA    """
+                    .equals(str));
 
-
-
-    String myTextBlock = """
+    String myTextBlock =
+        """
     <project>
       <modelVersion>4.0.0</modelVersion>
       <parent>
@@ -98,15 +107,14 @@ class TextBlocksInComplexExpressionsCheckCustom {
         <artifactId>my-app</artifactId>
         <version>1</version>
       </parent>
-     
+
       <groupId>com.mycompany.app</groupId>
       <artifactId>my-module</artifactId>
       <version>1</version>
     </project>
     """;
 
-    listOfStrings.stream()
-      .map(str -> !myTextBlock.equals(str)); // Compliant
+    listOfStrings.stream().map(str -> !myTextBlock.equals(str)); // Compliant
   }
-  
 }
+

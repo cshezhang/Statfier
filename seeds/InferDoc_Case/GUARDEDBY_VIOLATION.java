@@ -8,3 +8,4 @@ public class GUARDEDBY_VIOLATION {
     f = s; // unprotected access here
   }
 }
+

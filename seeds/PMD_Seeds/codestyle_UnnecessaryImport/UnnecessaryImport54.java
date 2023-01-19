@@ -1,8 +1,8 @@
+import static java.lang.String.*;
 
-            import static java.lang.String.*;
-            public class Foo {
-                static {
-                    valueOf(1);
-                }
-            }
-            
+public class Foo {
+  static {
+    valueOf(1);
+  }
+}
+

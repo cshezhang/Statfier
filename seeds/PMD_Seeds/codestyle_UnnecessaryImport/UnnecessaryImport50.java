@@ -1,6 +1,5 @@
 
-            import java.lang.String;
-            public class Foo {
-                String foo;
-            }
-            
+public class Foo {
+  String foo;
+}
+

@@ -1,7 +1,3 @@
-
-
-
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import codetoanalyze.java.annotation.Assertions;
@@ -362,3 +358,4 @@ public class NullMethodCall {
     return object1 == null ? object2.toString() : "null";
   }
 }
+

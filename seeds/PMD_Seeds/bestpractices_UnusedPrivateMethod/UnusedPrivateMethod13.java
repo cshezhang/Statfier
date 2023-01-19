@@ -1,6 +1,8 @@
-
 public class Foo {
-    static { foo(); }
-    private static void foo() {}
+  static {
+    foo();
+  }
+
+  private static void foo() {}
 }
-        
+

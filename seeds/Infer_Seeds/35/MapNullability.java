@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 /** Check how we model the behavior of Map nullability */
@@ -133,3 +129,4 @@ public class MapNullability {
     }
   }
 }
+

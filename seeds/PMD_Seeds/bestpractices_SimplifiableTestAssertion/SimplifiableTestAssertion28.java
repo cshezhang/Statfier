@@ -1,8 +1,8 @@
+public class Foo {
+  Object a, b;
 
-            public class Foo {
-                Object a,b;
-                public void test1() {
-                    assertTrue(a.equals(b));
-                }
-            }
-            
+  public void test1() {
+    assertTrue(a.equals(b));
+  }
+}
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    public final String BAR = "42";
+  public final String BAR = "42";
 }
-        
+

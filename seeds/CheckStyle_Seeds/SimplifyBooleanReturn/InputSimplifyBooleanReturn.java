@@ -7,95 +7,88 @@ SimplifyBooleanReturn
 package com.puppycrawl.tools.checkstyle.checks.coding.simplifybooleanreturn;
 
 /**
-   Contains boolean logic that can be simplified.
-
-   @author lkuehne
+ * Contains boolean logic that can be simplified.
+ *
+ * @author lkuehne
  */
-public class InputSimplifyBooleanReturn
-{
+public class InputSimplifyBooleanReturn {
 
-    public static boolean isOddMillis()
-    {
-        boolean even = System.currentTimeMillis() % 2 == 0;
+  public static boolean isOddMillis() {
+    boolean even = System.currentTimeMillis() % 2 == 0;
 
-        // can be simplified to "if (even)"
-        if (even == true) { // violation
-            return false;
-        }
-        else {
-            return true;
-        }
-        // return can be simplified to "return !even"
+    // can be simplified to "if (even)"
+    if (even == true) { // violation
+      return false;
+    } else {
+      return true;
+    }
+    // return can be simplified to "return !even"
+  }
+
+  public static boolean isOddMillis2() {
+    boolean even = System.currentTimeMillis() % 2 == 0;
+    // can be simplified to "return !even"
+    if (!even) // violation
+    return true;
+    else return false;
+  }
+
+  public static boolean giveMeTrue() {
+    boolean tt = isOddMillis() || true;
+    boolean ff = isOddMillis() && false;
+    return !false || (true != false);
+  }
+
+  public void tryToProvokeNPE() {
+    if (true) {
+    } else {
     }
 
-    public static boolean isOddMillis2()
-    {
-        boolean even = System.currentTimeMillis() % 2 == 0;
-        // can be simplified to "return !even"
-        if (!even) // violation
-            return true;
-        else
-            return false;
+    if (true) {
+      return;
+    } else {
+      return;
     }
+  }
 
-    public static boolean giveMeTrue()
-    {
-        boolean tt = isOddMillis() || true;
-        boolean ff = isOddMillis() && false;
-        return !false || (true != false);
+  public boolean ifNoElse() {
+    if (isOddMillis()) {
+      return true;
     }
+    return false;
+  }
 
-    public void tryToProvokeNPE()
-    {
-        if (true) {
-        }
-        else {
-        }
+  boolean a() {
+    boolean asd = false;
+    boolean dasa = true;
 
-        if (true) {
-            return;
-        }
-        else {
-            return;
-        }
+    if (asd) {
+      return true;
+    } else {
+      return dasa;
     }
+  }
 
-    public boolean ifNoElse()
-    {
-        if (isOddMillis()) {
-            return true;
-        }
-        return false;
+  boolean aa() {
+    boolean asd = false;
+    boolean dasa = true;
+
+    if (asd) {
+      return dasa;
+    } else {
+      return true;
     }
+  }
 
-    boolean a() {
-        boolean asd = false;
-        boolean dasa = true;
+  boolean b() {
+    boolean asd = false;
 
-        if (asd) {
-            return true;
-        } else {
-            return dasa;
-        }
-    }
+    if (asd)
+      ;
+    else
+      ;
 
-    boolean aa() {
-        boolean asd = false;
-        boolean dasa = true;
-
-        if (asd) {
-            return dasa;
-        } else {
-            return true;
-        }
-    }
-
-    boolean b() {
-        boolean asd = false;
-
-        if(asd);
-        else;
-
-        return true;
-    }
+    return true;
+  }
 }
+

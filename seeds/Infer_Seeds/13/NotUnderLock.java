@@ -1,5 +1,3 @@
-
-
 import com.google.common.util.concurrent.SettableFuture;
 
 public class NotUnderLock {
@@ -19,3 +17,4 @@ public class NotUnderLock {
     }
   }
 }
+

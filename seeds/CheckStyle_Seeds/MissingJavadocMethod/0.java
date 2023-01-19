@@ -1,11 +1,8 @@
-
-
 public class Test {
   public Test() {} // violation, missing javadoc for constructor
+
   public void test() {} // violation, missing javadoc for method
-  /**
-   * Some description here.
-   */
+  /** Some description here. */
   public void test2() {} // OK
 
   @Override
@@ -14,7 +11,9 @@ public class Test {
   }
 
   private void test1() {} // OK
+
   protected void test2() {} // OK
+
   void test3() {} // OK
 }
-        
+

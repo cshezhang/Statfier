@@ -1,10 +1,10 @@
-
 public class Foo {
-    void foo() {
-        try {
-        } catch (Exception e) {
-            ;
-        } finally {}
+  void foo() {
+    try {
+    } catch (Exception e) {
+      ;
+    } finally {
     }
+  }
 }
-        
+

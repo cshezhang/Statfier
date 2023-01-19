@@ -1,10 +1,9 @@
-
 public class Foo {
-    void bar() {
-        try {
-        } catch (SomeException se) {
-            se.getMessage();
-        }
+  void bar() {
+    try {
+    } catch (SomeException se) {
+      se.getMessage();
     }
+  }
 }
-        
+

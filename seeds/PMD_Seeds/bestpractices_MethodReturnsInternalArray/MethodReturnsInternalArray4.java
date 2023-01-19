@@ -1,6 +1,9 @@
-
 public class Foo {
-    String [] arr;
-    String [] getArr() {String[] arr; return this.arr;}
+  String[] arr;
+
+  String[] getArr() {
+    String[] arr;
+    return this.arr;
+  }
 }
-        
+

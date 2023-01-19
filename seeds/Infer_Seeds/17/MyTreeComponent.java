@@ -1,5 +1,3 @@
-
-
 class MyTreeComponent extends Component {
   @TreeProp Object prop1; // implicitly non-optional
 
@@ -27,3 +25,4 @@ class MyTreeComponent extends Component {
     }
   }
 }
+

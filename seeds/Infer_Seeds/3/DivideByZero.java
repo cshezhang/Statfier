@@ -1,7 +1,3 @@
-
-
-
-
 public class DivideByZero {
 
   public int divByZeroLocal(String s) {
@@ -32,3 +28,4 @@ public class DivideByZero {
     return divideByZeroInterProc(x);
   }
 }
+

@@ -1,7 +1,6 @@
-
 public class FooTest {
-    public static Test suite() {
-        return new TestSuite();
-    }
+  public static Test suite() {
+    return new TestSuite();
+  }
 }
-        
+

@@ -1,8 +1,7 @@
-
 public class GCCall {
-    public GCCall() {
-        // Explicit gc call !
-        System.gc();
-    }
+  public GCCall() {
+    // Explicit gc call !
+    System.gc();
+  }
 }
-        
+

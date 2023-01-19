@@ -1,20 +1,20 @@
-
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class Test {
-    private static final Log __log = LogFactory.getLog(Test.class);
-    public void test() {
-        // okay:
-        __log.debug("log something");
+  private static final Log __log = LogFactory.getLog(Test.class);
 
-        // okay:
-        __log.debug("log something with exception", e);
+  public void test() {
+    // okay:
+    __log.debug("log something");
 
-        // good:
-        if (__log.isDebugEnabled()) {
-        __log.debug("bla: " + this, e);
-        }
+    // okay:
+    __log.debug("log something with exception", e);
+
+    // good:
+    if (__log.isDebugEnabled()) {
+      __log.debug("bla: " + this, e);
     }
+  }
 }
-        
+

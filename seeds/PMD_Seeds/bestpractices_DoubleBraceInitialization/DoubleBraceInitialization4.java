@@ -1,6 +1,7 @@
-
 class Foo {
-    // neg in regular class
-    {addAll("a","b","c");}
+  // neg in regular class
+  {
+    addAll("a", "b", "c");
+  }
 }
-        
+

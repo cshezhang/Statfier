@@ -1,9 +1,8 @@
-
 public class MyConstants {
-    public static final String FOOO = "FOOO";
+  public static final String FOOO = "FOOO";
 
-    private MyConstants() {
-        // whitelisted
-    }
+  private MyConstants() {
+    // whitelisted
+  }
 }
-        
+

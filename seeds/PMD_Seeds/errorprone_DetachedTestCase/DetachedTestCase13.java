@@ -1,7 +1,6 @@
-
 public class NotATest {
-    public void notATest() {}
+  public void notATest() {}
 
-    public void notATestEither() { }
+  public void notATestEither() {}
 }
-        
+

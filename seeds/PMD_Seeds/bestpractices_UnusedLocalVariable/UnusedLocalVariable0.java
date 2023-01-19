@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo() {
-        String fr = new String();
-    }
+  void foo() {
+    String fr = new String();
+  }
 }
-        
+

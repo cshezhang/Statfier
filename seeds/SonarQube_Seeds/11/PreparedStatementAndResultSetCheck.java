@@ -16,15 +16,22 @@ abstract class PreparedStatementAndResultSetCheck {
   private static final int INDEX_1 = 1;
 
   abstract PreparedStatement getPreparedStatement();
+
   abstract PreparedStatement getPreparedStatement(String s);
+
   abstract int getIntValue();
+
   abstract String getQuery();
 
   void foo(Connection connection) throws SQLException {
-    PreparedStatement ps = connection.prepareStatement("SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
+    PreparedStatement ps =
+        connection.prepareStatement(
+            "SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
 
-    ps.setDate(0, new Date(0)); // Noncompliant [[sc=16;ec=17]] {{PreparedStatement indices start at 1.}}
-    ps.setDouble(3, 0.0); // Noncompliant [[sc=18;ec=19]] {{This "PreparedStatement" only has 2 parameters.}}
+    ps.setDate(
+        0, new Date(0)); // Noncompliant [[sc=16;ec=17]] {{PreparedStatement indices start at 1.}}
+    ps.setDouble(
+        3, 0.0); // Noncompliant [[sc=18;ec=19]] {{This "PreparedStatement" only has 2 parameters.}}
     ps.setString(getIntValue(), ""); // Compliant - first argument can not be evaluated
     ps.setInt(1, 0); // Compliant
 
@@ -35,10 +42,12 @@ abstract class PreparedStatementAndResultSetCheck {
   }
 
   void bar(Connection connection) throws SQLException {
-    PreparedStatement ps = connection.prepareStatement("SELECT fname, lname FROM employees where hireDate > 1986");
+    PreparedStatement ps =
+        connection.prepareStatement("SELECT fname, lname FROM employees where hireDate > 1986");
 
     ps.setDate(0, new Date(0)); // Noncompliant {{PreparedStatement indices start at 1.}}
-    ps.setDouble(3, 0.0); // Noncompliant [[sc=18;ec=19]] {{This "PreparedStatement" has no parameters.}}
+    ps.setDouble(
+        3, 0.0); // Noncompliant [[sc=18;ec=19]] {{This "PreparedStatement" has no parameters.}}
   }
 
   void dam(Connection connection, String query) throws SQLException {
@@ -54,8 +63,10 @@ abstract class PreparedStatementAndResultSetCheck {
   }
 
   void elk() throws SQLException {
-    getPreparedStatement().setDate(0, new Date(0)); // Noncompliant {{PreparedStatement indices start at 1.}}
-    getPreparedStatement().setDouble(3, 0.0); // Compliant - Query of the preparedStatement is unknown
+    getPreparedStatement()
+        .setDate(0, new Date(0)); // Noncompliant {{PreparedStatement indices start at 1.}}
+    getPreparedStatement()
+        .setDouble(3, 0.0); // Compliant - Query of the preparedStatement is unknown
   }
 
   void gra() throws SQLException {
@@ -70,17 +81,22 @@ abstract class PreparedStatementAndResultSetCheck {
   }
 
   void hio(boolean test) throws SQLException {
-    PreparedStatement ps = getPreparedStatement("SELECT fname, lname FROM employees where hireDate > 1986");
+    PreparedStatement ps =
+        getPreparedStatement("SELECT fname, lname FROM employees where hireDate > 1986");
 
     if (test) {
-      ps = getPreparedStatement("SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
+      ps =
+          getPreparedStatement(
+              "SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
       ps.setDouble(1, 0.0); // Compliant - last assignment is used
       ps.setDouble(2, 0.0); // Compliant
     }
 
     ps = getPreparedStatement("SELECT fname, lname FROM employees where hireDate > 1986");
 
-    PreparedStatement ps2 = getPreparedStatement("SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
+    PreparedStatement ps2 =
+        getPreparedStatement(
+            "SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
     ps2.setDouble(1, 0.0); // Compliant
 
     int a;
@@ -96,23 +112,29 @@ abstract class PreparedStatementAndResultSetCheck {
     if (test) {
       ps = getPreparedStatement("SELECT fname, lname FROM employees where hireDate > ?");
     } else {
-      ps = getPreparedStatement("SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
+      ps =
+          getPreparedStatement(
+              "SELECT fname, lname FROM employees where hireDate > ? and salary < ?");
     }
 
     ps.setDouble(1, 0.0); // Compliant - last assignment is used
-    ps.setDouble(2, 0.0); // Compliant FALSE NEGATIVE - in then would have been applied, there would be no 2nd parameter (CFG?)
+    ps.setDouble(
+        2,
+        0.0); // Compliant FALSE NEGATIVE - in then would have been applied, there would be no 2nd
+              // parameter (CFG?)
   }
 
   public void reproducer(Connection connection) throws SQLException {
     String selectClause = ";";
-    selectClause = "SELECT anything FROM somewhere "
-      + selectClause;
+    selectClause = "SELECT anything FROM somewhere " + selectClause;
 
     PreparedStatement statement = connection.prepareStatement(selectClause);
-    statement.setString(1, "anything"); // Noncompliant {{This "PreparedStatement" has no parameters.}}
+    statement.setString(
+        1, "anything"); // Noncompliant {{This "PreparedStatement" has no parameters.}}
   }
 
-  public void updateCoffeeSales(HashMap<String, Integer> salesForWeek, Connection con, String param) throws SQLException {
+  public void updateCoffeeSales(HashMap<String, Integer> salesForWeek, Connection con, String param)
+      throws SQLException {
 
     String dbName = "doug";
 
@@ -123,9 +145,7 @@ abstract class PreparedStatementAndResultSetCheck {
     String updateString = "update " + dbName + ".COFFEES set SALES = ?";
 
     String updateStatement =
-          "update " + dbName + ".COFFEES " +
-                  "set TOTAL = TOTAL + ? " +
-                  "where COF_NAME = ?";
+        "update " + dbName + ".COFFEES " + "set TOTAL = TOTAL + ? " + "where COF_NAME = ?";
 
     try {
       PreparedStatement ps = con.prepareStatement(updateStatement);
@@ -143,7 +163,7 @@ abstract class PreparedStatementAndResultSetCheck {
 
       for (Map.Entry<String, Integer> e : salesForWeek.entrySet()) {
         updateSales.setInt(1, e.getValue().intValue()); // Compliant
-        updateSales.setString(2, e.getKey());  // Noncompliant
+        updateSales.setString(2, e.getKey()); // Noncompliant
         updateTotal.setInt(1, e.getValue().intValue()); // Compliant
         updateTotal.setString(2, e.getKey()); // Compliant
         other.setInt(2, getIntValue()); // Noncompliant
@@ -160,10 +180,10 @@ abstract class PreparedStatementAndResultSetCheck {
       testParam = con.prepareStatement(param + param);
       testParam.setInt(3, 0); // Compliant
 
-      String[] array = new String[]{""};
+      String[] array = new String[] {""};
       PreparedStatement qix = con.prepareStatement(array[0]);
       qix.setString(3, ""); // Compliant
-    } catch(SQLException e) {
+    } catch (SQLException e) {
     }
   }
 
@@ -187,8 +207,11 @@ abstract class PreparedStatementAndResultSetCheck {
         e.printStackTrace();
       }
     }
-    public PreparedStatement prepareInsertRequest(String tableName, int argsNum) throws SQLException {
-      return conn.prepareStatement("INSERT INTO " + tableName + " VALUES (?" + Strings.repeat(",?", argsNum - 1) + ")");
+
+    public PreparedStatement prepareInsertRequest(String tableName, int argsNum)
+        throws SQLException {
+      return conn.prepareStatement(
+          "INSERT INTO " + tableName + " VALUES (?" + Strings.repeat(",?", argsNum - 1) + ")");
     }
   }
 
@@ -255,3 +278,4 @@ abstract class PreparedStatementAndResultSetCheck {
     statement.setString(4, password); // Noncompliant
   }
 }
+

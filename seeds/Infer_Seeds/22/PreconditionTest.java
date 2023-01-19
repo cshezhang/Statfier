@@ -1,4 +1,3 @@
-
 import com.google.common.base.Preconditions;
 import java.util.ArrayList;
 
@@ -32,3 +31,4 @@ class PreconditionTest {
     for (Integer el : mediaList) {}
   }
 }
+

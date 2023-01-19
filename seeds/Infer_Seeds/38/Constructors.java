@@ -1,5 +1,3 @@
-
-
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
@@ -61,3 +59,4 @@ public class Constructors {
     return sSingleton2;
   }
 }
+

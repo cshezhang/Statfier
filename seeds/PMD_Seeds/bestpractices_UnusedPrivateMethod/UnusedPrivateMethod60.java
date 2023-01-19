@@ -1,6 +1,5 @@
-
 public class Foo {
-    @Deprecated
-    private void foo() {}
+  @Deprecated
+  private void foo() {}
 }
-        
+

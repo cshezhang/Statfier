@@ -1,5 +1,4 @@
-
 package foo.BarBuz;
-public class Foo {
-}
-        
+
+public class Foo {}
+

@@ -1,7 +1,6 @@
+import java.io.*;
 
-            import java.io.*;
-            import java.io.*;
-            public class Foo {
-                File f;
-            }
-            
+public class Foo {
+  File f;
+}
+

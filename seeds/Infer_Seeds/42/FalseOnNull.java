@@ -1,7 +1,3 @@
-
-
-
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -40,3 +36,4 @@ import java.lang.annotation.Target;
  * <p>See also {@code @TrueOnNull} and {@code @PropagatesNullable} annotations.
  */
 public @interface FalseOnNull {}
+

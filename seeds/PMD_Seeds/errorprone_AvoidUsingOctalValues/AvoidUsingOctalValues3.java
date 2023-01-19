@@ -1,5 +1,4 @@
-
 public class Foo {
-    double d = 0.1;
+  double d = 0.1;
 }
-        
+

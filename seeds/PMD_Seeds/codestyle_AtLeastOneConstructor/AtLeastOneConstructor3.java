@@ -1,7 +1,6 @@
-
 public class Foo {
-    public class Bar {
-        public Bar() {}
-    }
+  public class Bar {
+    public Bar() {}
+  }
 }
-        
+

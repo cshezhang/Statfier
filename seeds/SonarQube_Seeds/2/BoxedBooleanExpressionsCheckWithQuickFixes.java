@@ -19,7 +19,7 @@ public class BoxedBooleanExpressionsCheckWithQuickFixes {
       foo();
     }
 
-    for (;B;) { // Noncompliant [[sc=11;ec=12;quickfixes=qf3]]
+    for (; B; ) { // Noncompliant [[sc=11;ec=12;quickfixes=qf3]]
       // fix@qf3 {{Use the primitive boolean expression}}
       // edit@qf3 [[sc=11;ec=11]] {{Boolean.TRUE.equals(}}
       // edit@qf3 [[sc=12;ec=12]] {{)}}
@@ -56,11 +56,8 @@ public class BoxedBooleanExpressionsCheckWithQuickFixes {
     return Boolean.TRUE;
   }
 
-  private void foo() {
-  }
+  private void foo() {}
 
-  private void bar() {
-  }
-
-
+  private void bar() {}
 }
+

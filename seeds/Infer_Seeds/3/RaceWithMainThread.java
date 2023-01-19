@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.concurrent.ThreadSafe;
 
 class OurThreadUtils {
@@ -245,3 +241,4 @@ class Unmarked {
     return mField;
   }
 }
+

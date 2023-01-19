@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
@@ -388,3 +384,4 @@ class TestInitializerAnnotation {
     }
   }
 }
+

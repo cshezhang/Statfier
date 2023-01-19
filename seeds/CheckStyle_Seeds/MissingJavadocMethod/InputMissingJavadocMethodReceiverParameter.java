@@ -21,25 +21,25 @@ import java.nio.ByteBuffer;
 
 public class InputMissingJavadocMethodReceiverParameter { // ok
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})
-    public @interface Ann {
-        /**
-         * A dummy annotation to check Java 8's receiver parameter handling.
-         *
-         * @return a class
-         */
-        Class<?> value() default Object.class;
-    }
-
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.TYPE_USE, ElementType.TYPE_PARAMETER})
+  public @interface Ann {
     /**
-     * Function to check handling of Java 8's receiver parameter.
+     * A dummy annotation to check Java 8's receiver parameter handling.
      *
-     * @param buffer dummy argument
+     * @return a class
      */
-    public void foo(@Ann(Object.class) InputMissingJavadocMethodReceiverParameter this,
-            final ByteBuffer buffer) {
-        buffer.putInt(1);
-    }
+    Class<?> value() default Object.class;
+  }
 
+  /**
+   * Function to check handling of Java 8's receiver parameter.
+   *
+   * @param buffer dummy argument
+   */
+  public void foo(
+      @Ann(Object.class) InputMissingJavadocMethodReceiverParameter this, final ByteBuffer buffer) {
+    buffer.putInt(1);
+  }
 }
+

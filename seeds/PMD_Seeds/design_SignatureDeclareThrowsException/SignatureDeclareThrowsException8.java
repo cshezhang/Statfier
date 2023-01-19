@@ -1,6 +1,6 @@
-
 import junit.framework.*;
+
 public class Foo extends TestCase {
-    void bar() throws Exception {}
+  void bar() throws Exception {}
 }
-        
+

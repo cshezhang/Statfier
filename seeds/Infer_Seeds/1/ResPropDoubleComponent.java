@@ -1,5 +1,3 @@
-
-
 /**
  * using @Prop(resType = ..) allows you to set the Prop with any of .propname, .propnameRes, or
  * .propnameAttr
@@ -47,3 +45,4 @@ public class ResPropDoubleComponent extends Component {
     }
   }
 }
+

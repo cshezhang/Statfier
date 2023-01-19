@@ -1,6 +1,3 @@
-
-
-
 import codetoanalyze.java.annotation.Assertions;
 import com.google.common.base.Preconditions;
 import javax.annotation.Nullable;
@@ -241,3 +238,4 @@ public class ConditionRedundant {
     }
   }
 }
+

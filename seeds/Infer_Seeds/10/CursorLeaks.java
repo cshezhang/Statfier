@@ -1,7 +1,3 @@
-
-
-
-
 import android.app.DownloadManager;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
@@ -237,3 +233,4 @@ public class CursorLeaks {
     return createWrapper(cursor);
   }
 }
+

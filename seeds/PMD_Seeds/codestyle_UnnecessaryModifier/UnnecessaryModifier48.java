@@ -1,7 +1,6 @@
-
 public class TestClass {
-    private final int getValue() {
-        return 0;
-    }
+  private final int getValue() {
+    return 0;
+  }
 }
-        
+

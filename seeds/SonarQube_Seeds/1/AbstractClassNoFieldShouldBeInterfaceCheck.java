@@ -9,26 +9,31 @@ abstract class AbstractClassNoFieldShouldBeInterfaceCheckA {
 
   abstract void method();
 }
-abstract class AbstractClassNoFieldShouldBeInterfaceCheckB { // Noncompliant [[sc=16;ec=59]] {{Convert the abstract class "AbstractClassNoFieldShouldBeInterfaceCheckB" into an interface.}}
-  int method(){
+
+abstract
+class AbstractClassNoFieldShouldBeInterfaceCheckB { // Noncompliant [[sc=16;ec=59]] {{Convert the
+                                                    // abstract class
+                                                    // "AbstractClassNoFieldShouldBeInterfaceCheckB"
+                                                    // into an interface.}}
+  int method() {
     return 1;
   }
+
   class AbstractClassNoFieldShouldBeInterfaceCheckF {}
 }
+
 class AbstractClassNoFieldShouldBeInterfaceCheckC {
-  int method(){
+  int method() {
     return 1;
   }
 }
 
 abstract class AbstractClassNoFieldShouldBeInterfaceCheckD {
-  protected void method() {
-
-  }
+  protected void method() {}
 }
 
-abstract class AbstractClassNoFieldShouldBeInterfaceCheckE extends AbstractClassNoFieldShouldBeInterfaceCheckA {
-}
+abstract class AbstractClassNoFieldShouldBeInterfaceCheckE
+    extends AbstractClassNoFieldShouldBeInterfaceCheckA {}
 
 abstract class AbstractClassNoFieldShouldBeInterfaceCheckF {
   public abstract double v();
@@ -49,13 +54,14 @@ abstract class AbstractClassNoFieldShouldBeInterfaceCheckG {
 
 abstract class AbstractClassNoFieldShouldBeInterfaceCheckCar { // Compliant - has private methods
   public void start() {
-      turnOnLights();
-      startEngine();
+    turnOnLights();
+    startEngine();
   }
 
   public abstract void stop();
 
   private void turnOnLights() {}
+
   private void startEngine() {}
 }
 
@@ -65,14 +71,17 @@ abstract class AbstractClassNoFieldShouldBeInterfaceCheckFoo { // Noncompliant
   static AbstractClassNoFieldShouldBeInterfaceCheckFoo create(String name) {
     return new AbstractClassNoFieldShouldBeInterfaceCheckFooImplem();
   }
+
   abstract String name();
+
   @AutoValue.Builder
   abstract static class Builder { // Noncompliant
     abstract Builder namer(String name);
   }
 }
 
-class AbstractClassNoFieldShouldBeInterfaceCheckFooImplem extends AbstractClassNoFieldShouldBeInterfaceCheckFoo {
+class AbstractClassNoFieldShouldBeInterfaceCheckFooImplem
+    extends AbstractClassNoFieldShouldBeInterfaceCheckFoo {
   @Override
   String name() {
     return null;
@@ -83,7 +92,8 @@ class AbstractClassNoFieldShouldBeInterfaceCheckFooImplem extends AbstractClassN
 @AutoOneOf(AbstractClassNoFieldShouldBeInterfaceCheckStringOrInteger.Kind.class)
 abstract class AbstractClassNoFieldShouldBeInterfaceCheckStringOrInteger { // Noncompliant
   public enum Kind {
-    STRING, INTEGER
+    STRING,
+    INTEGER
   }
 }
 
@@ -96,3 +106,4 @@ abstract class AbstractClassNoFieldShouldBeInterfaceCheckBar { // Compliant
 abstract class AbstractClassNoFieldShouldBeInterfaceCheckWithFullAnnotation { // Compliant
   abstract String name();
 }
+

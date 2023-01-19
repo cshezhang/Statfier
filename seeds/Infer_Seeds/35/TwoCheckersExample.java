@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.Expensive;
 import codetoanalyze.java.annotation.PerformanceCritical;
 import com.google.common.collect.ImmutableList;
@@ -19,3 +15,4 @@ public class TwoCheckersExample {
     return shouldRaiseImmutableCastError();
   }
 }
+

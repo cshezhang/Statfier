@@ -1,14 +1,15 @@
-
 public class MethodTypeAndNameIsInconsistentWithPrefixTo {
-    void grapeToWine() { // violation
-        // do something
-    }
+  void grapeToWine() { // violation
+    // do something
+  }
 
-    int hopsToBeer() {
-        return 1;
-    }
+  int hopsToBeer() {
+    return 1;
+  }
 
-    void doneTooMuch() { // shouldn't report a violation, since "To" is not followed by uppercase letter
-    }
+  void
+      doneTooMuch() { // shouldn't report a violation, since "To" is not followed by uppercase
+                      // letter
+  }
 }
-        
+

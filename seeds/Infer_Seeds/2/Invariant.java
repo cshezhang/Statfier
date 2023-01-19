@@ -1,4 +1,3 @@
-
 import java.util.List;
 
 class Invariant {
@@ -56,3 +55,4 @@ class Invariant {
     for (int i = 0; i < items.size(); i++) {}
   }
 }
+

@@ -1,6 +1,4 @@
-
 public class Foo {
-    public Foo() throws IOException {
-    }
+  public Foo() throws IOException {}
 }
-        
+

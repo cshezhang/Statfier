@@ -8,31 +8,31 @@ import javax.validation.constraints.NotNull;
 class BoxedBooleanExpressionsCheck {
 
   void emptyFor(Boolean B) {
-    for (;;) {
+    for (; ; ) {
       foo();
     }
   }
 
   void boxedFor1(Boolean B) {
-    for (;B;) { // Noncompliant {{Use the primitive boolean expression here.}}
+    for (; B; ) { // Noncompliant {{Use the primitive boolean expression here.}}
       foo();
     }
   }
 
   void boxedFor2(Boolean B) {
-    for (;Boolean.TRUE.equals(B);) { // Compliant
+    for (; Boolean.TRUE.equals(B); ) { // Compliant
       foo();
     }
   }
 
   void primitiveFor(boolean b) {
-    for (;b;) {
+    for (; b; ) {
       foo();
     }
   }
 
   void nullCheckFor(Boolean B) {
-    for (;B != null;) {
+    for (; B != null; ) {
       foo();
     }
   }
@@ -333,14 +333,33 @@ class BoxedBooleanExpressionsCheck {
 
   public @interface NonNull {}
   // no need to be a well-known annotation, the semantic of the name is enough
-  @NonNull Boolean getCustomNonNull() { return Math.random() > 0.5 ? Boolean.FALSE : Boolean.TRUE; }
+  @NonNull
+  Boolean getCustomNonNull() {
+    return Math.random() > 0.5 ? Boolean.FALSE : Boolean.TRUE;
+  }
 
-  @Nonnull Boolean getNonnull() { return getCustomNonNull(); }
-  @NotNull Boolean getNotNull() { return getCustomNonNull(); }
-  @CheckForNull Boolean getNullable() { return null; }
+  @Nonnull
+  Boolean getNonnull() {
+    return getCustomNonNull();
+  }
 
-  Object foo() { return new Object(); }
-  Object bar() { return new Object(); }
+  @NotNull
+  Boolean getNotNull() {
+    return getCustomNonNull();
+  }
+
+  @CheckForNull
+  Boolean getNullable() {
+    return null;
+  }
+
+  Object foo() {
+    return new Object();
+  }
+
+  Object bar() {
+    return new Object();
+  }
 
   Boolean getSurprizeBoxedBoolean() {
     double random = Math.random();
@@ -357,7 +376,7 @@ class BoxedBooleanExpressionsCheck {
     final Boolean alwaysTrue = Boolean.TRUE;
     Boolean checkedBeforeUse = getSurprizeBoxedBoolean();
     if (checkedBeforeUse != null) {
-      for (; checkedBeforeUse; )  {} // Compliant because the variable is checked before use
+      for (; checkedBeforeUse; ) {} // Compliant because the variable is checked before use
     }
     Boolean checkedBeforeUse2 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse2 == null) {
@@ -405,26 +424,26 @@ class BoxedBooleanExpressionsCheck {
     } else if (Boolean.FALSE.equals(checkedBeforeUse13)) {
       for (; checkedBeforeUse13; ) {} // Noncompliant because the value is not checked against null
     }
-}
+  }
 
   void whileStatementCheckedBeforeUse() {
     final Boolean alwaysTrue = Boolean.TRUE;
     Boolean checkedBeforeUse = getSurprizeBoxedBoolean();
     if (checkedBeforeUse != null) {
-      while (checkedBeforeUse)  {} // Compliant because the variable is checked before use
+      while (checkedBeforeUse) {} // Compliant because the variable is checked before use
     }
     Boolean checkedBeforeUse2 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse2 == null) {
       return;
     }
-    while (checkedBeforeUse2)  {} // Compliant because the variable is checked before use
+    while (checkedBeforeUse2) {} // Compliant because the variable is checked before use
     Boolean checkedBeforeUse3 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse3 == null) {
       while (checkedBeforeUse3) {} // Compliant FN because the value is checked but still used
     }
     Boolean checkedBeforeUse4 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse4 == alwaysTrue) {
-      while (checkedBeforeUse4)  {} // // Noncompliant because the value is not checked against null
+      while (checkedBeforeUse4) {} // // Noncompliant because the value is not checked against null
     }
     Boolean checkedBeforeUse5 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse5 == Boolean.TRUE) {
@@ -465,8 +484,7 @@ class BoxedBooleanExpressionsCheck {
     final Boolean alwaysTrue = Boolean.TRUE;
     Boolean checkedBeforeUse = getSurprizeBoxedBoolean();
     if (checkedBeforeUse != null) {
-      do {}
-      while (checkedBeforeUse); // Compliant because the variable is checked before use
+      do {} while (checkedBeforeUse); // Compliant because the variable is checked before use
     }
     Boolean checkedBeforeUse2 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse2 == null) {
@@ -479,7 +497,8 @@ class BoxedBooleanExpressionsCheck {
     }
     Boolean checkedBeforeUse4 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse4 == alwaysTrue) {
-      do {} while (checkedBeforeUse4); // // Noncompliant because the value is not checked against null
+      do {} while (checkedBeforeUse4); // // Noncompliant because the value is not checked against
+                                       // null
     }
     Boolean checkedBeforeUse5 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse5 == Boolean.TRUE) {
@@ -506,13 +525,17 @@ class BoxedBooleanExpressionsCheck {
     } else if (checkedBeforeUse9 == null) {
       do {} while (checkedBeforeUse9); // Compliant FN because the value is checked but sill used
     } else if (checkedBeforeUse10 == alwaysTrue) {
-      do {} while (checkedBeforeUse10); // Noncompliant because the value is not checked against null
+      do {} while (checkedBeforeUse10); // Noncompliant because the value is not checked against
+                                        // null
     } else if (checkedBeforeUse11 == Boolean.FALSE) {
-      do {} while (checkedBeforeUse11); // Noncompliant because the value is not checked against null
+      do {} while (checkedBeforeUse11); // Noncompliant because the value is not checked against
+                                        // null
     } else if (alwaysTrue.equals(checkedBeforeUse12)) {
-      do {} while (checkedBeforeUse12); // Noncompliant because the value is not checked against null
+      do {} while (checkedBeforeUse12); // Noncompliant because the value is not checked against
+                                        // null
     } else if (Boolean.FALSE.equals(checkedBeforeUse13)) {
-      do {} while (checkedBeforeUse13); // Noncompliant because the value is not checked against null
+      do {} while (checkedBeforeUse13); // Noncompliant because the value is not checked against
+                                        // null
     }
   }
 
@@ -521,14 +544,16 @@ class BoxedBooleanExpressionsCheck {
     Boolean checkedBeforeUse = getSurprizeBoxedBoolean();
     if (checkedBeforeUse != null) {
       if (checkedBeforeUse) { // Compliant because the variable is checked before use
-      } else {}
+      } else {
+      }
     }
     Boolean checkedBeforeUse2 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse2 == null) {
       return;
     }
     if (checkedBeforeUse2) { // Compliant because the variable is checked before use
-    } else {}
+    } else {
+    }
     Boolean checkedBeforeUse3 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse3 == null) {
       if (checkedBeforeUse3) {} // Compliant FN because the value is checked but still used
@@ -577,32 +602,49 @@ class BoxedBooleanExpressionsCheck {
     final Boolean alwaysTrue = Boolean.TRUE;
     Boolean checkedBeforeUse = getSurprizeBoxedBoolean();
     if (checkedBeforeUse != null) {
-      ignored = (checkedBeforeUse ? "a" : "b"); // Compliant because the variable is checked before use
+      ignored =
+          (checkedBeforeUse ? "a" : "b"); // Compliant because the variable is checked before use
     }
     Boolean checkedBeforeUse2 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse2 == null) {
       return;
     }
-    ignored = (checkedBeforeUse2 ? "a" : "b"); // Compliant because the variable is checked before use
+    ignored =
+        (checkedBeforeUse2 ? "a" : "b"); // Compliant because the variable is checked before use
     Boolean checkedBeforeUse3 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse3 == null) {
-      ignored = (checkedBeforeUse3 ? "a" : "b"); // Compliant FN because the value is checked but still used
+      ignored =
+          (checkedBeforeUse3
+              ? "a"
+              : "b"); // Compliant FN because the value is checked but still used
     }
     Boolean checkedBeforeUse4 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse4 == alwaysTrue) {
-      ignored = (checkedBeforeUse4 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse4
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     }
     Boolean checkedBeforeUse5 = getSurprizeBoxedBoolean();
     if (checkedBeforeUse5 == Boolean.TRUE) {
-      ignored = (checkedBeforeUse5 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse5
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     }
     Boolean checkedBeforeUse6 = getSurprizeBoxedBoolean();
     if (alwaysTrue.equals(checkedBeforeUse6)) {
-      ignored = (checkedBeforeUse6 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse6
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     }
     Boolean checkedBeforeUse7 = getSurprizeBoxedBoolean();
     if (Boolean.FALSE.equals(checkedBeforeUse7)) {
-      ignored = (checkedBeforeUse7 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse7
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     }
 
     Boolean checkedBeforeUse8 = getSurprizeBoxedBoolean();
@@ -613,17 +655,33 @@ class BoxedBooleanExpressionsCheck {
     Boolean checkedBeforeUse13 = getSurprizeBoxedBoolean();
     if (1 == 2) {
     } else if (checkedBeforeUse8 != null) {
-      ignored = (checkedBeforeUse8 ? "a" : "b"); // Compliant because the variable is checked before use
+      ignored =
+          (checkedBeforeUse8 ? "a" : "b"); // Compliant because the variable is checked before use
     } else if (checkedBeforeUse9 == null) {
-      ignored = (checkedBeforeUse9 ? "a" : "b"); // Compliant FN because the value is checked but sill used
+      ignored =
+          (checkedBeforeUse9
+              ? "a"
+              : "b"); // Compliant FN because the value is checked but sill used
     } else if (checkedBeforeUse10 == alwaysTrue) {
-      ignored = (checkedBeforeUse10 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse10
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     } else if (checkedBeforeUse11 == Boolean.FALSE) {
-      ignored = (checkedBeforeUse11 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse11
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     } else if (alwaysTrue.equals(checkedBeforeUse12)) {
-      ignored = (checkedBeforeUse12 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse12
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     } else if (Boolean.FALSE.equals(checkedBeforeUse13)) {
-      ignored = (checkedBeforeUse13 ? "a" : "b"); // Noncompliant because the value is not checked against null
+      ignored =
+          (checkedBeforeUse13
+              ? "a"
+              : "b"); // Noncompliant because the value is not checked against null
     }
   }
 
@@ -662,7 +720,8 @@ class BoxedBooleanExpressionsCheck {
     } else if (irrelevant != null) {
       // ... Do something
     } else {
-      ignored = (conditionalDoesNotCoverUse ? "a" : "b"); // false-negative, first usage is a null check
+      ignored =
+          (conditionalDoesNotCoverUse ? "a" : "b"); // false-negative, first usage is a null check
     }
 
     Boolean whileDoesNotCoverUse = getSurprizeBoxedBoolean();
@@ -673,7 +732,8 @@ class BoxedBooleanExpressionsCheck {
     } else if (irrelevant != null) {
       // ... Do something
     } else {
-      ignored = (whileDoesNotCoverUse ? "a" : "b"); // // false-negative, first usage is a null check
+      ignored =
+          (whileDoesNotCoverUse ? "a" : "b"); // // false-negative, first usage is a null check
     }
 
     Boolean forDoesNotCoverUse = getSurprizeBoxedBoolean();
@@ -705,10 +765,9 @@ class BoxedBooleanExpressionsCheck {
 
   void testBoxedValue(Boolean value) {
     if (value == null) {
-      if (value) {
-      }
+      if (value) {}
     } else if (value) {
     }
   }
-
 }
+

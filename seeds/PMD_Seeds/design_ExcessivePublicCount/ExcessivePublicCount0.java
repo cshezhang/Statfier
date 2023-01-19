@@ -1,5 +1,4 @@
-
 public class Foo {
-    public int foo;
+  public int foo;
 }
-        
+

@@ -1,5 +1,4 @@
-
 class Foo {
-    private SimpleDateFormat sdf = new SimpleDateFormat("pattern", Locale.US);
+  private SimpleDateFormat sdf = new SimpleDateFormat("pattern", Locale.US);
 }
-        
+

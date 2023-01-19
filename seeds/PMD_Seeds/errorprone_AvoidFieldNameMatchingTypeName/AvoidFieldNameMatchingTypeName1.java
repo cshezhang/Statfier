@@ -1,5 +1,4 @@
-
 public class Foo {
-    String foo;
+  String foo;
 }
-        
+

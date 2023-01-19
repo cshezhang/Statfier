@@ -1,25 +1,28 @@
 package checks;
 
 import java.util.function.Function;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServlet;
 import org.apache.struts.action.Action;
-import javax.annotation.Resource;
 
-@interface Inject{}
+@interface Inject {}
 
 class HttpServletA {
   private String userName;
 }
 
 class HttpServletB extends HttpServlet {
-  private String userName; // Noncompliant [[sc=18;ec=26]] {{Remove this misleading mutable servlet instance field or make it "static" and/or "final"}}
+  private String
+      userName; // Noncompliant [[sc=18;ec=26]] {{Remove this misleading mutable servlet instance
+                // field or make it "static" and/or "final"}}
   private static String staticVar;
   private final String finalVar;
   private String storageType;
-  private static final Function<Integer, Integer> LAMBDA = lambdaParam -> {
-    Integer lambdaVar = null;
-    return lambdaVar;
-  };
+  private static final Function<Integer, Integer> LAMBDA =
+      lambdaParam -> {
+        Integer lambdaVar = null;
+        return lambdaVar;
+      };
 
   public HttpServletB(String x) {
     String localVar;
@@ -40,7 +43,7 @@ class HttpServletB extends HttpServlet {
 class HttpServletC extends Action {
 
   private String userName; // Noncompliant
-  private static String staticVar; 
+  private static String staticVar;
   private final String finalVar;
 
   public HttpServletC(String x) {
@@ -62,7 +65,9 @@ public class ServletInstanceFieldCheck extends HttpServlet {
 }
 
 class HttpServletE extends HttpServlet {
-  private String userName; // Noncompliant [[sc=18;ec=26]] {{Remove this misleading mutable servlet instance field or make it "static" and/or "final"}}
+  private String
+      userName; // Noncompliant [[sc=18;ec=26]] {{Remove this misleading mutable servlet instance
+                // field or make it "static" and/or "final"}}
   private final String finalVar;
   private String storageType; // Compliant, initialized in init() method
 
@@ -81,3 +86,4 @@ class HttpServletE extends HttpServlet {
     }
   }
 }
+

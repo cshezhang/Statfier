@@ -23,12 +23,10 @@ package com.google.errorprone.bugpatterns;
  */
 public class SuppressWarningsDeprecatedNegativeCases {
   @SuppressWarnings({"deprecation"})
-  public static void negativeCase1() {
-  }
+  public static void negativeCase1() {}
 
   @SuppressWarnings("deprecation")
-  public static void negativeCase2() {
-  }
+  public static void negativeCase2() {}
 
   public static void negativeCase3() {
     @SuppressWarnings({"deprecation"})
@@ -42,13 +40,14 @@ public class SuppressWarningsDeprecatedNegativeCases {
 
   public static void negativeCase5() {
     @SuppressWarnings({"deprecation"})
-    class Foo { }
+    class Foo {}
     Foo a = null;
   }
 
   public static void negativeCase6() {
     @SuppressWarnings("deprecation")
-    class Bar { }
+    class Bar {}
     Bar b = null;
   }
 }
+

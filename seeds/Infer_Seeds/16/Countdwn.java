@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import java.util.concurrent.CountDownLatch;
 
@@ -25,3 +23,4 @@ class Countdwn {
     latch.await();
   }
 }
+

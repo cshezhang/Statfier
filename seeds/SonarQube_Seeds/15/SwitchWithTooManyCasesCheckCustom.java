@@ -2,7 +2,8 @@ package checks;
 
 class SwitchWithTooManyCasesCheckCustom {
   void foo() {
-    switch (1) { // Noncompliant [[sc=5;ec=11]] {{Reduce the number of non-empty switch cases from 35 to at most 5.}}
+    switch (1) { // Noncompliant [[sc=5;ec=11]] {{Reduce the number of non-empty switch cases from
+                 // 35 to at most 5.}}
       case 1:
         System.out.println("");
       case 2:
@@ -97,10 +98,17 @@ class SwitchWithTooManyCasesCheckCustom {
   }
 }
 
-
 class IgnoreEnums {
 
-  enum WEEK_DAYS { MON, TUE, WED, THU, FRI, SAT, SUN }
+  enum WEEK_DAYS {
+    MON,
+    TUE,
+    WED,
+    THU,
+    FRI,
+    SAT,
+    SUN
+  }
 
   void test(WEEK_DAYS days) {
     switch (days) { // Compliant - enums are ignored
@@ -120,5 +128,5 @@ class IgnoreEnums {
         break;
     }
   }
-
 }
+

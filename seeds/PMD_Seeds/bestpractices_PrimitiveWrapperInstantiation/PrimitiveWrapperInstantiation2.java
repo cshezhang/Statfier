@@ -1,5 +1,4 @@
-
 public class Foo {
-    Boolean b = Boolean.TRUE;
+  Boolean b = Boolean.TRUE;
 }
-        
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    public int hashCode() {}
+  public int hashCode() {}
 }
-        
+

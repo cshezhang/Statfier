@@ -1,5 +1,3 @@
-
-
 import android.os.Binder;
 import android.os.Handler;
 import android.os.Looper;
@@ -59,3 +57,4 @@ class ConstructedAttributes {
     mUiHandler.post(mBadRunnable);
   }
 }
+

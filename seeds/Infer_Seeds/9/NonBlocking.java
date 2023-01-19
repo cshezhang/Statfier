@@ -1,7 +1,3 @@
-
-
-
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,3 +12,4 @@ import java.lang.annotation.Target;
 // not only Infer will not warn on any starvation issues in the method, but will also not warn on
 // any of the callers of this method.
 public @interface NonBlocking {}
+

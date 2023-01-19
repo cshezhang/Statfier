@@ -1,7 +1,8 @@
+package foo;
 
-            package foo;
-            import foo.buz.Bar;
-            public class Baz{
-                Bar b;
-            }
-            
+import foo.buz.Bar;
+
+public class Baz {
+  Bar b;
+}
+

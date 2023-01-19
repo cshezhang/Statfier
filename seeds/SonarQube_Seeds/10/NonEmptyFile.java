@@ -1,4 +1,4 @@
 package checks;
 
-class NonEmptyFile {
-}
+class NonEmptyFile {}
+

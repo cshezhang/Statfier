@@ -1,8 +1,7 @@
-
 public class Foo implements Toggleable {
-    @Override
-    public boolean getEnabled() {
-        return true;
-    }
+  @Override
+  public boolean getEnabled() {
+    return true;
+  }
 }
-        
+

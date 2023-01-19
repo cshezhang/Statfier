@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.SomeExternalClass;
 import javax.annotation.Nullable;
 
@@ -201,3 +197,4 @@ class NullableConcreteGetterBAD implements NonNullableInterfaceGetterOK {
     return null;
   }
 }
+

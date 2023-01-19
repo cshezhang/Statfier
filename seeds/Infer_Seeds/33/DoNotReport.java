@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ThreadSafe;
 
 @ThreadSafe
@@ -15,3 +11,4 @@ class DoNotReport {
     mFld = i;
   }
 }
+

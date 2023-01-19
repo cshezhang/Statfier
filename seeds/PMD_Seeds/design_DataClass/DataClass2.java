@@ -1,6 +1,1 @@
 
-            
-public class Foo {
-    ;;
-}
-        

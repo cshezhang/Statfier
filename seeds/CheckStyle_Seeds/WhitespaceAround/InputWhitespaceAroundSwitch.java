@@ -22,14 +22,15 @@ package com.puppycrawl.tools.checkstyle.checks.whitespace.whitespacearound;
 
 public class InputWhitespaceAroundSwitch {
 
-    public void switchTest(int k) {
-        switch(k) { // violation ''switch' is not followed by whitespace'
-        default:
-            break;
-        }
-        switch (k) {
-        case 7:
-            break;
-        }
+  public void switchTest(int k) {
+    switch (k) { // violation ''switch' is not followed by whitespace'
+      default:
+        break;
     }
+    switch (k) {
+      case 7:
+        break;
+    }
+  }
 }
+

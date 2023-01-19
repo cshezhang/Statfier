@@ -1,25 +1,23 @@
-
-/**
- * Comment required test class.
- */
+/** Comment required test class. */
 public class CommentRequired {
 
-    private int foo;
+  private int foo;
 
-    public int getFoo() {
-        Object o = new Object() {
+  public int getFoo() {
+    Object o =
+        new Object() {
 
-            String foox;
+          String foox;
 
-            public String getFoox() {
-                return foox;
-            }
+          public String getFoox() {
+            return foox;
+          }
         };
-        return foo;
-    }
+    return foo;
+  }
 
-    public void setFoo(int x) {
-        foo = x;
-    }
+  public void setFoo(int x) {
+    foo = x;
+  }
 }
-        
+

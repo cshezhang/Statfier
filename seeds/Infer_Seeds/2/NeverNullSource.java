@@ -1,8 +1,4 @@
-
-
 // _AUTOMATICALLY_GENERATED_
-
-
 
 import javax.annotation.Nullable;
 
@@ -14,3 +10,4 @@ public class NeverNullSource {
     return t == null ? null : t;
   }
 }
+

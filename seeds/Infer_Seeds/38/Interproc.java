@@ -1,5 +1,3 @@
-
-
 class Interproc {
   synchronized void lockThisThenParamBad(InterprocA a) {
     lockParamA(a);
@@ -50,3 +48,4 @@ class InterprocB {
 
   synchronized void lockThis(Interproc d) {}
 }
+

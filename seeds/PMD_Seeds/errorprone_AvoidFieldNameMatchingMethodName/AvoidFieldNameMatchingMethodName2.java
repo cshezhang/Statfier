@@ -1,8 +1,8 @@
-
 public class Bar {
-    Foo foo;
-    class Dummy {
-        void foo() {}
-    }
+  Foo foo;
+
+  class Dummy {
+    void foo() {}
+  }
 }
-        
+

@@ -17,15 +17,13 @@ public class SuspiciousListRemove {
   }
 
   void removeFrom(List<String> list, int from) {
-    for (int i = from; i < list.size(); i++)
-      list.remove(i); // Noncompliant
+    for (int i = from; i < list.size(); i++) list.remove(i); // Noncompliant
   }
-
 
   void descending(List<String> list) {
     for (int i = list.size() - 1; i >= 0; i--) {
       if (list.get(i).isEmpty()) {
-        list.remove(i);  // Compliant
+        list.remove(i); // Compliant
       }
     }
   }
@@ -33,7 +31,7 @@ public class SuspiciousListRemove {
   void shiftCounter(List<String> list) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).isEmpty()) {
-        list.remove(i);  // Compliant because counter is assigned
+        list.remove(i); // Compliant because counter is assigned
         i--;
       }
     }
@@ -42,7 +40,7 @@ public class SuspiciousListRemove {
   void shiftCounter2(List<String> list) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).isEmpty()) {
-        list.remove(i);  // Compliant because counter is assigned
+        list.remove(i); // Compliant because counter is assigned
         i -= 1;
       }
     }
@@ -51,7 +49,7 @@ public class SuspiciousListRemove {
   void controlFlow(List<String> list) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).isEmpty()) {
-        list.remove(i);  // Compliant because control flow
+        list.remove(i); // Compliant because control flow
         break;
       }
     }
@@ -60,7 +58,7 @@ public class SuspiciousListRemove {
   void controlFlow2(List<String> list) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).isEmpty()) {
-        list.remove(i);  // Compliant because control flow
+        list.remove(i); // Compliant because control flow
         continue;
       }
     }
@@ -72,13 +70,12 @@ public class SuspiciousListRemove {
   }
 
   void coverage2(List<String> list) {
-    for (int i=0,j = 0; i < list.size(); i++)
+    for (int i = 0, j = 0; i < list.size(); i++)
       list.remove(i); // Consider only simple initialization
   }
 
   void coverage3(List<String> list) {
-    for (int i = 0; i < list.size(); i++, this.x++)
-      list.remove(i); // Invalid update
+    for (int i = 0; i < list.size(); i++, this.x++) list.remove(i); // Invalid update
   }
 
   void noRemove(List<String> list, int from) {
@@ -90,14 +87,12 @@ public class SuspiciousListRemove {
   }
 
   void noUpdate(List<String> list, int from) {
-    for (int i = from; i < list.size(); )
-      list.get(i);
+    for (int i = from; i < list.size(); ) list.get(i);
 
-    for (int i = from; i < list.size(); this.x++)
-      list.get(i);
+    for (int i = from; i < list.size(); this.x++) list.get(i);
 
     int j = 0;
-    for (int i = from; i < list.size(); j++)
-      list.get(i);
+    for (int i = from; i < list.size(); j++) list.get(i);
   }
 }
+

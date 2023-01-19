@@ -1,5 +1,4 @@
-
 public class Foo {
-    Foo() throws IllegalArgumentException {}
+  Foo() throws IllegalArgumentException {}
 }
-        
+

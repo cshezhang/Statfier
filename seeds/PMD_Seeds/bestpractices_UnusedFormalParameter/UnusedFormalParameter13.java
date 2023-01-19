@@ -1,6 +1,4 @@
-
 class Foo {
-    private final void setLang(final String lang[]){
-    }
+  private final void setLang(final String lang[]) {}
 }
-        
+

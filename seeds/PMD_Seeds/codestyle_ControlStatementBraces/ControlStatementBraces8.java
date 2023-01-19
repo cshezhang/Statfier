@@ -1,9 +1,8 @@
-
 public class Foo {
-    void foo() {
-        int x = 0;
-        for (; ; )
-            ;
-    }
+  void foo() {
+    int x = 0;
+    for (; ; )
+      ;
+  }
 }
-        
+

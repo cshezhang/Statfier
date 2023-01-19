@@ -1,5 +1,2 @@
-
-
-
-
 public interface JsonType {}
+

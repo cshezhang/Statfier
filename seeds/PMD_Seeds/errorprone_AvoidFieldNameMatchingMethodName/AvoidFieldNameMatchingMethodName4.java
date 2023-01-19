@@ -1,5 +1,4 @@
-
 public interface Bar {
-    public static final int FOO = 5;
+  public static final int FOO = 5;
 }
-        
+

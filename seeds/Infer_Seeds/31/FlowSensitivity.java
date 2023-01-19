@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 /** making sure the traces we report respect control-flow */
@@ -58,3 +54,4 @@ class FlowSensitivity {
     sourceAndSink(o);
   }
 }
+

@@ -12,24 +12,21 @@ applyToPrivate = (default)true
 
 package com.puppycrawl.tools.checkstyle.checks.naming.methodname;
 
-public class InputMethodNameOverriddenMethods extends SomeClass
-{
-    @Override
-    public void PUBLICfoo() { //Ignored due to impossibility of change by developer
+public class InputMethodNameOverriddenMethods extends SomeClass {
+  @Override
+  public void PUBLICfoo() { // Ignored due to impossibility of change by developer
+  }
 
-    }
-
-    @java.lang.Override
-    protected void PROTECTEDfoo() { //Ignored due to impossibility of change by developer
-
-    }
+  @java.lang.Override
+  protected void PROTECTEDfoo() { // Ignored due to impossibility of change by developer
+  }
 }
 
 class SomeClass {
-    public void PUBLICfoo() {  // violation
+  public void PUBLICfoo() { // violation
+  }
 
-    }
-    protected void PROTECTEDfoo() { // violation
-
-    }
+  protected void PROTECTEDfoo() { // violation
+  }
 }
+

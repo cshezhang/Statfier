@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 public class SwitchCase {
@@ -59,3 +55,4 @@ enum Color {
   BLACK,
   WHITE;
 }
+

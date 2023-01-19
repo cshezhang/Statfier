@@ -1,7 +1,7 @@
-
 public class Foo {
-    void foo () {
-        synchronized(mutex) {}
+  void foo() {
+    synchronized (mutex) {
     }
+  }
 }
-        
+

@@ -24,7 +24,9 @@ class RegexPatternsNeedlesslyCheck {
   }
 
   void foo(String param) {
-    Pattern regex = Pattern.compile("regex1"); // Noncompliant {{Refactor this code to use a "static final" Pattern.}}
+    Pattern regex =
+        Pattern.compile(
+            "regex1"); // Noncompliant {{Refactor this code to use a "static final" Pattern.}}
     Pattern.compile(STRCONST); // Noncompliant
     Pattern.compile(param);
     Pattern.compile(finalField); // Compliant
@@ -88,14 +90,18 @@ class RegexPatternsNeedlesslyCheck {
   }
 
   private static final Pattern COMPILED = Pattern.compile(".*");
-  enum E {
 
-    INSTANCE1(Pattern.compile(".*")), // Noncompliant {{Refactor this code to use a "static final" Pattern.}}
+  enum E {
+    INSTANCE1(
+        Pattern.compile(
+            ".*")), // Noncompliant {{Refactor this code to use a "static final" Pattern.}}
     INSTANCE2(COMPILED);
 
     private final Pattern pattern;
+
     E(Pattern pattern) {
       this.pattern = pattern;
     }
   }
 }
+

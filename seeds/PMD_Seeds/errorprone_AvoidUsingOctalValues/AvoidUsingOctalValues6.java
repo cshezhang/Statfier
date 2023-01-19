@@ -1,5 +1,4 @@
-
 public class Foo {
-    int x = 06;
+  int x = 06;
 }
-        
+

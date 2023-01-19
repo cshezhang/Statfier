@@ -21,31 +21,29 @@ tokens = (default)ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, B
 package com.puppycrawl.tools.checkstyle.checks.whitespace.whitespacearound;
 
 @SuppressWarnings({"this", "that"})
-public class InputWhitespaceAround2
-{
-    protected InputWhitespaceAround2 ( int i )
-    {
-        this (); //whitespace
-        toString ();
-    }
-    protected InputWhitespaceAround2 ()
-    {
-        super ();
-    }
+public class InputWhitespaceAround2 {
+  protected InputWhitespaceAround2(int i) {
+    this(); // whitespace
+    toString();
+  }
 
-    public void enhancedFor ()
-    {
-        int[] i = new int[2];
-        for ( int j: i ) { // violation '':' is not preceded with whitespace'
-            System.identityHashCode ( j );
-        }
+  protected InputWhitespaceAround2() {
+    super();
+  }
+
+  public void enhancedFor() {
+    int[] i = new int[2];
+    for (int j : i) { // violation '':' is not preceded with whitespace'
+      System.identityHashCode(j);
     }
+  }
 }
 
 @interface CronExpression2 {
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 }
 
 @interface CronExpression12 {
-    Class<?>[] groups() default { }; // extra space
+  Class<?>[] groups() default {}; // extra space
 }
+

@@ -12,20 +12,25 @@ class InputStreamReadCheck extends InputStream {
 
   @Override
   public int read() throws IOException {
-    Supplier<Byte> mySupplier1 = () -> { return currentByte; };
-    Supplier<Byte> mySupplier2 = new Supplier<Byte>() {
-      @Override
-      public Byte get() {
-        return currentByte;
-      }
-    };
+    Supplier<Byte> mySupplier1 =
+        () -> {
+          return currentByte;
+        };
+    Supplier<Byte> mySupplier2 =
+        new Supplier<Byte>() {
+          @Override
+          public Byte get() {
+            return currentByte;
+          }
+        };
     if (pos == buffer.length()) {
       return -1;
     }
     if (buffer.isEmpty()) {
       return currentByte; // Noncompliant {{Convert this signed byte into an unsigned byte.}}
     }
-    return buffer.getBytes()[pos++]; // Noncompliant {{Convert this signed byte into an unsigned byte.}}
+    return buffer
+        .getBytes()[pos++]; // Noncompliant {{Convert this signed byte into an unsigned byte.}}
   }
 
   public int read(boolean b) throws IOException {
@@ -49,3 +54,4 @@ abstract class InputStreamReadCheckC extends InputStream {
   @Override
   public abstract int read();
 }
+

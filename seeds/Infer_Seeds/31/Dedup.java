@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -45,3 +43,4 @@ class Dedup {
     anotherWayBad();
   }
 }
+

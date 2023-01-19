@@ -12,14 +12,21 @@ class ConfusingVarargCheck {
     Integer[] arrWrapper = {1, 2, 3};
     Object nullObject = null;
 
-    new A(1, null); // Noncompliant [[sc=14;ec=18]] {{Cast this argument to 'String' to pass a single element to the vararg method.}}
+    new A(
+        1,
+        null); // Noncompliant [[sc=14;ec=18]] {{Cast this argument to 'String' to pass a single
+               // element to the vararg method.}}
     new A(2, (String) null);
     new A(3, args);
     new A(4);
 
-    vararg(null); // Noncompliant [[sc=12;ec=16]] {{Cast this argument to 'Object' to pass a single element to the vararg method.}}
+    vararg(
+        null); // Noncompliant [[sc=12;ec=16]] {{Cast this argument to 'Object' to pass a single
+               // element to the vararg method.}}
     vararg((null)); // Noncompliant
-    vararg(arr); // Noncompliant [[sc=12;ec=15]] {{Use an array of 'Integer' instead of an array of 'int'.}}
+    vararg(
+        arr); // Noncompliant [[sc=12;ec=15]] {{Use an array of 'Integer' instead of an array of
+              // 'int'.}}
 
     vararg((Object) null);
     vararg(arrWrapper);
@@ -27,7 +34,9 @@ class ConfusingVarargCheck {
     vararg(1, 2, 3);
     vararg();
 
-    primitiveVararg(null); // Noncompliant {{Remove this argument or pass an empty 'int' array to the vararg method.}}
+    primitiveVararg(
+        null); // Noncompliant {{Remove this argument or pass an empty 'int' array to the vararg
+               // method.}}
 
     primitiveVararg(new int[] {});
     primitiveVararg(arr);
@@ -63,7 +72,10 @@ class ConfusingVarargCheck {
 
   enum MyEnum {
     A("my little pony", new byte[] {0x00, 0x00, 0xFFFFFFFE, 0xFFFFFFFF}), // Compliant
-    B("armageddon", new byte[] {0xFFFFFFFE, 0xFFFFFFFF, 0x00, 0x00}, new byte[] {0x00, 0x00, 0xFFFFFFFF, 0xFFFFFFFE});
+    B(
+        "armageddon",
+        new byte[] {0xFFFFFFFE, 0xFFFFFFFF, 0x00, 0x00},
+        new byte[] {0x00, 0x00, 0xFFFFFFFF, 0xFFFFFFFE});
 
     MyEnum(String s, byte[]... bees) {}
   }
@@ -81,3 +93,4 @@ class ConfusingVarargCheck {
     Arrays.asList(ints).contains(42); // wrong usage, but not a FP, it simply creates a List<int[]>
   }
 }
+

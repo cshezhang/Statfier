@@ -12,20 +12,19 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.javadocvariable;
 
 public interface InputJavadocVariableInterfaceMemberScopeIsPublic {
 
-    /** First field */
-    public static int field1 = 0;
+  /** First field */
+  public static int field1 = 0;
 
-    public static int field2 = 0; // violation
+  public static int field2 = 0; // violation
 
-    int field3 = 0; // violation
+  int field3 = 0; // violation
 
-    enum Enum {
+  enum Enum {
 
-        /** First constant */
-        A,
+    /** First constant */
+    A,
 
-        B; // violation
-
-    }
-
+    B; // violation
+  }
 }
+

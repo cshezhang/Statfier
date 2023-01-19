@@ -8,14 +8,18 @@ class TwoLocksWaitCheck {
     synchronized (this.mon1) {
       System.out.println("Hello");
       synchronized (this.mon2) {
-        this.mon2.wait(); // Noncompliant [[sc=9;ec=25;secondary=8,10]] {{Don't use "wait()" here; multiple locks are held.}}
+        this.mon2
+            .wait(); // Noncompliant [[sc=9;ec=25;secondary=8,10]] {{Don't use "wait()" here;
+                     // multiple locks are held.}}
       }
     }
   }
 
   public synchronized void method() throws Exception {
     synchronized (this.mon2) {
-      this.mon2.wait(); // Noncompliant [[sc=7;ec=23;secondary=16,17]] {{Don't use "wait()" here; multiple locks are held.}}
+      this.mon2
+          .wait(); // Noncompliant [[sc=7;ec=23;secondary=16,17]] {{Don't use "wait()" here;
+                   // multiple locks are held.}}
     }
   }
 
@@ -36,15 +40,17 @@ class TwoLocksWaitCheck {
 
   static class MyThread {
     MyThread(MyRunnable r) {}
+
     void run() {}
 
     void foo() {
-      MyThread m = new MyThread(null) {
-        @Override
-        void run() {
-          super.run();
-        }
-      };
+      MyThread m =
+          new MyThread(null) {
+            @Override
+            void run() {
+              super.run();
+            }
+          };
     }
   }
 
@@ -52,3 +58,4 @@ class TwoLocksWaitCheck {
     void run() throws Exception;
   }
 }
+

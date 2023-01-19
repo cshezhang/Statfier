@@ -12,11 +12,11 @@ package com.puppycrawl.tools.checkstyle.checks.design.hideutilityclassconstructo
  * @author lkuehne
  */
 public class InputHideUtilityClassConstructorRegression // ok
-{
-    public long constructionTime = System.currentTimeMillis();
+ {
+  public long constructionTime = System.currentTimeMillis();
 
-    public static InputHideUtilityClassConstructorRegression create()
-    {
-        return new InputHideUtilityClassConstructorRegression();
-    }
+  public static InputHideUtilityClassConstructorRegression create() {
+    return new InputHideUtilityClassConstructorRegression();
+  }
 }
+

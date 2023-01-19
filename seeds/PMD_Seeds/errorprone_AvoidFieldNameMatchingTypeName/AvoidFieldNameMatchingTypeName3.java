@@ -1,7 +1,6 @@
-
 public class Foo {
-    class Bar {
-        String bar;
-    }
+  class Bar {
+    String bar;
+  }
 }
-        
+

@@ -10,62 +10,54 @@ tokens = LITERAL_DO, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT, CLA
 package com.puppycrawl.tools.checkstyle.checks.blocks.rightcurly;
 
 public class InputRightCurlyTestSame {
-    static {
-    }
+  static {
+  }
 
-    public InputRightCurlyTestSame() {
-        Thread t = new Thread(new Runnable() {
-            {
-            }
+  public InputRightCurlyTestSame() {
+    Thread t =
+        new Thread(
+            new Runnable() {
+              {
+              }
 
-            @Override
-            public void run() {
-            }
-        }); // ok
-    }
+              @Override
+              public void run() {}
+            }); // ok
+  }
 
-    public void doLoop() {
-        do {
-        } while (true);
-    }
+  public void doLoop() {
+    do {} while (true);
+  }
 
-    public void whileLoop() {
-        while (true) {
-        }
-    }
+  public void whileLoop() {
+    while (true) {}
+  }
 
-    public void forLoop() {
-        for (; ; ) {
-        }
-    }
+  public void forLoop() {
+    for (; ; ) {}
+  }
 
-    public void function() {
-    }
+  public void function() {}
+  ;
 
-    ;
+  public class TestClass {}
+  ;
 
-    public class TestClass {
-    }
+  public void testMethod() {}
+  ;
 
-    ;
+  public @interface TestAnnotation {}
 
-    public void testMethod() {
-    }
+  public @interface TestAnnotation1 {
+    String someValue();
+  }
 
-    ;
+  public @interface TestAnnotation3 {
+    String someValue();
+  }
 
-    public @interface TestAnnotation {
-    }
-
-    public @interface TestAnnotation1 {
-        String someValue();
-    }
-
-    public @interface TestAnnotation3 {
-        String someValue();
-    }
-
-    public @interface TestAnnotation4 {
-        String someValue();
-    }
+  public @interface TestAnnotation4 {
+    String someValue();
+  }
 }
+

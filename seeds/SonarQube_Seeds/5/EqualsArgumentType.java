@@ -16,7 +16,8 @@ class EqualsArgumentType {
 
   public class TestClassInstanceof2 {
     @Override
-    public boolean equals(Object that) { // Noncompliant [[sc=20;ec=26]] {{Add a type test to this method.}}
+    public boolean equals(
+        Object that) { // Noncompliant [[sc=20;ec=26]] {{Add a type test to this method.}}
       if (this instanceof Object) {
         return ((Object) that) == null;
       }
@@ -44,7 +45,9 @@ class EqualsArgumentType {
   public class TestClassConditional2 {
     @Override
     public boolean equals(Object that) { // Compliant
-      return that instanceof Object ? (Object) that == null : false; // explicit type checking of argument
+      return that instanceof Object
+          ? (Object) that == null
+          : false; // explicit type checking of argument
     }
   }
 
@@ -125,8 +128,7 @@ class EqualsArgumentType {
   public class TestClassGetClassEquals6 {
     @Override
     public boolean equals(Object that) { // Compliant
-      if (that.getClass().equals(Object.class)) {
-      }
+      if (that.getClass().equals(Object.class)) {}
       return true;
     }
   }
@@ -134,8 +136,7 @@ class EqualsArgumentType {
   public class TestClassGetClassEquals7 {
     @Override
     public boolean equals(Object that) { // Compliant
-      if (Object.class.equals(that.getClass())) {
-      }
+      if (Object.class.equals(that.getClass())) {}
       return true;
     }
   }
@@ -153,8 +154,7 @@ class EqualsArgumentType {
 
     @Override
     public boolean equals(Object that) { // Compliant
-      if (method(that)) {
-      }
+      if (method(that)) {}
       return ((Object) that) == null; // false negative
     }
   }
@@ -165,7 +165,8 @@ class EqualsArgumentType {
     }
 
     @Override
-    public boolean equals(Object that) { // Compliant, implicit call of a method in this with that as argument
+    public boolean equals(
+        Object that) { // Compliant, implicit call of a method in this with that as argument
       if (method(that)) { // explicit type checking of argument
         return ((Object) that) == null;
       }
@@ -179,7 +180,8 @@ class EqualsArgumentType {
     }
 
     @Override
-    public boolean equals(Object that) { // Compliant, explicit call of a method in super with that as argument
+    public boolean equals(
+        Object that) { // Compliant, explicit call of a method in super with that as argument
       if (super.method(that)) {
         return ((Object) that) == null;
       }
@@ -193,7 +195,8 @@ class EqualsArgumentType {
     }
 
     @Override
-    public boolean equals(Object that) { // Compliant, explicit call of a method in this with that as argument
+    public boolean equals(
+        Object that) { // Compliant, explicit call of a method in this with that as argument
       if (this.method(null, that)) {
         return ((Object) that) == null;
       }
@@ -243,6 +246,7 @@ class EqualsArgumentType {
 
   public class TestClass {
     private Object that;
+
     public boolean method(Object that) { // Compliant, different name
       return ((Object) that) == null;
     }
@@ -261,10 +265,10 @@ class EqualsArgumentType {
       double d = (double) hashCode(); // cast is allowed if the operand is not the argument.
       return false;
     }
-
   }
 
   private static boolean condition() {
     return (new Random()).nextBoolean();
   }
 }
+

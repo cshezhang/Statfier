@@ -1,6 +1,3 @@
-
-
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -207,3 +204,4 @@ class CloneTest {
     for (int i = 0; i < o.i; i++) {}
   }
 }
+

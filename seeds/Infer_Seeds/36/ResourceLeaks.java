@@ -1,7 +1,3 @@
-
-
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -943,3 +939,4 @@ public class ResourceLeaks {
     stream.close();
   }
 }
+

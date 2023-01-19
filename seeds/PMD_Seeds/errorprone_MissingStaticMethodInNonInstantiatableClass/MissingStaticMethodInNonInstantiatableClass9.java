@@ -1,6 +1,6 @@
-
 public class Foo {
-    protected static Foo INSTANCE = new Foo();
-    private Foo() {}
+  protected static Foo INSTANCE = new Foo();
+
+  private Foo() {}
 }
-        
+

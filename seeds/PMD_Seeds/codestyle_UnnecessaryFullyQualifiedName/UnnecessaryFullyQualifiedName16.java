@@ -1,7 +1,6 @@
-
 import java.util.Arrays;
-import static java.util.Arrays.asList;
+
 public class Foo {
-    List list = Arrays.asList("one");
+  List list = Arrays.asList("one");
 }
-        
+

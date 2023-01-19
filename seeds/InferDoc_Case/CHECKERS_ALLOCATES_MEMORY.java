@@ -6,5 +6,5 @@ class CHECKERS_ALLOCATES_MEMORY implements I {
   }
 
   public void foo() {}
-
 }
+

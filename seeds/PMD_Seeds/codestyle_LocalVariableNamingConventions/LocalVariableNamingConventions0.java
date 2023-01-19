@@ -1,14 +1,13 @@
-
 public class Bar {
-    {
-        int Foo;
-        final int Hoo;
+  {
+    int Foo;
+    final int Hoo;
 
-        try {
+    try {
 
-        } catch (Exception E) {
+    } catch (Exception E) {
 
-        }
     }
+  }
 }
-        
+

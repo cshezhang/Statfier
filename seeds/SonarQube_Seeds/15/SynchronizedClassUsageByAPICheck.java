@@ -1,18 +1,12 @@
 package checks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable; // Compliant
-import java.util.List;
-import java.util.Map;
-import java.util.Stack; // Compliant
+// Compliant
+// Compliant
 import java.util.Vector; // Compliant
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class SynchronizedClassUsageByAPICheck {
-
 
   class Foo {
     StringBuffer sb = new StringBuffer();
@@ -22,8 +16,7 @@ class SynchronizedClassUsageByAPICheck {
         this("foo");
       }
 
-      APIrequirement(String s) {
-      }
+      APIrequirement(String s) {}
 
       void plop() {
         String input = "a=123,b=456,c=789";
@@ -38,15 +31,13 @@ class SynchronizedClassUsageByAPICheck {
       }
     }
 
-    static void flabburst() {
-    }
-
-
+    static void flabburst() {}
   }
 
   class Request {
     void foo(javax.servlet.http.HttpServletRequest request) {
-      StringBuffer requestURLBuffer = request.getRequestURL(); // compliant because of return type of getRequestURL
+      StringBuffer requestURLBuffer =
+          request.getRequestURL(); // compliant because of return type of getRequestURL
     }
   }
 
@@ -59,6 +50,6 @@ class SynchronizedClassUsageByAPICheck {
     void fun(Object o) {
       this.addToVector(v, o);
     }
-
   }
 }
+

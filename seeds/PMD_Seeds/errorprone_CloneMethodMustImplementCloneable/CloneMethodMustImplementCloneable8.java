@@ -1,5 +1,4 @@
-
-public class Foo extends Bar implements Cloneable{
-    void clone() {}
+public class Foo extends Bar implements Cloneable {
+  void clone() {}
 }
-        
+

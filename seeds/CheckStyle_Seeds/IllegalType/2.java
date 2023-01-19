@@ -1,5 +1,3 @@
-
-
 public class Test {
   public HashMap<String, String> function() { // OK
     // code
@@ -9,4 +7,4 @@ public class Test {
     // code
   }
 }
-        
+

@@ -9,52 +9,37 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.javadocmissingleadingaste
 
 public class InputJavadocMissingLeadingAsteriskCorrect {
 
-  /**
-   * Java style.
-   **/
+  /** Java style. */
   public int javaStyle; // ok
 
-  /** Single-line. **/
+  /** Single-line. * */
   public int singleLine; // ok
 
-  /** Scala style.
-    */
+  /** Scala style. */
   public int scalaStyle; // ok
 
-  /**
-   ** More than one asterisk.
-   **/
+  /** * More than one asterisk. */
   public int manyAsterisks; // ok
 
-  /**
-   *
-   * Some blank lines.
-   **
-   **/
+  /** Some blank lines. * */
   public int blankLines; // ok
 
-  /** * Asterisk on first line.
-   */
+  /** * Asterisk on first line. */
   public int firstLineAsterisk; // ok
 
   /** * Asterisk on single-line. */
   public int singleLineAsterisk; // ok
 
-  /** ** Multiple asterisks on first line.
-   */
+  /** ** Multiple asterisks on first line. */
   public int firstLineAsterisks; // ok
 
   /** ** Multiple asterisks on single-line. */
   public int singleLineAsterisks; // ok
 
-  /**
-   * Asterisk on last line.
-   **/
+  /** Asterisk on last line. */
   public int lastLineAsterisk; // ok
 
-  /**
-   * Multiple asterisks on last line.
-   ** */
+  /** Multiple asterisks on last line. * */
   public int lastLineAsterisks; // ok
 
   /***/
@@ -63,25 +48,21 @@ public class InputJavadocMissingLeadingAsteriskCorrect {
   /** */
   public int blankComment; // ok
 
-  /**
-   *
-   **
-   */
+  /** * */
   public int multiLineBlankComment; // ok
 
   /**
    * @see #blockTag
-   **/
+   */
   public int blockTag; // ok
-
 }
 
 /**
-*EOF immediately after NEWLINE
-*@deprecated block tag
-*/
+ * EOF immediately after NEWLINE
+ *
+ * @deprecated block tag
+ */
 class NoTextAfterNewLineCorrect { // ok
-
 }
 
 class TokenTypes {
@@ -89,9 +70,7 @@ class TokenTypes {
    * @see #RBRACK
    */
   public int METHOD_REF; // ok
-  /**
-   * {@link TokenTypes#METHOD_REF
-   * METHOD_REF},
-   */
+  /** {@link TokenTypes#METHOD_REF METHOD_REF}, */
   public int RBRACK; // ok
 }
+

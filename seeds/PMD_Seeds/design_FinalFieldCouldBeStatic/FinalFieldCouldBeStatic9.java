@@ -1,14 +1,12 @@
-
 package com.example;
 
-import not.lombok.Builder;
 import lombok.Data;
+import not.lombok.Builder;
 
 @Data
 @Builder
 public class ExampleClass {
 
-    @Builder.Default
-    private final long exampleField = 0L;
+  @Builder.Default private final long exampleField = 0L;
 }
-        
+

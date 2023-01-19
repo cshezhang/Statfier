@@ -3,26 +3,25 @@ package checks;
 import java.sql.SQLException;
 
 /**
- * This check detect hardcoded secrets in multiples cases:
- * - 1. String literal
- * - 2. Variable declaration
- * - 3. Assignment
- * - 4. Method invocations
- * - 4.1 Equals
- * - 4.2 Setting secrets
+ * This check detect hardcoded secrets in multiples cases: - 1. String literal - 2. Variable
+ * declaration - 3. Assignment - 4. Method invocations - 4.1 Equals - 4.2 Setting secrets
  */
 class HardCodedSecretCheck {
 
   String fieldNameWithSecretInIt = retrieveSecret();
 
-  private static final String PASSED = "abcdefghijklmnopqrs"; // compliant nothing to do with secrets
+  private static final String PASSED =
+      "abcdefghijklmnopqrs"; // compliant nothing to do with secrets
   private static final String EMPTY = "";
 
   private void a(char[] secret, String var) throws SQLException {
     // ========== 1. String literal ==========
     // The variable name does not influence the issue, only the string is considered.
     String variable1 = "blabla";
-    String variable2 = "login=a&secret=abcdefghijklmnopqrs"; // Noncompliant [[sc=24;ec=60]] {{'secret' detected in this expression, review this potentially hard-coded secret.}}
+    String variable2 =
+        "login=a&secret=abcdefghijklmnopqrs"; // Noncompliant [[sc=24;ec=60]] {{'secret' detected in
+                                              // this expression, review this potentially hard-coded
+                                              // secret.}}
     String variable3 = "login=a&token=abcdefghijklmnopqrs"; // Noncompliant
     String variable4 = "login=a&api_key=abcdefghijklmnopqrs"; // Noncompliant
     String variable5 = "login=a&api.key=abcdefghijklmnopqrs"; // Noncompliant
@@ -34,11 +33,16 @@ class HardCodedSecretCheck {
     String variableB = "secret=&login=abcdefghijklmnopqrs"; // Compliant
     String variableC = "Okapi-key=42, Okapia Johnstoni, Forest/Zebra Giraffe"; // Compliant
     String variableD = "gran-papi-key=Known by everybody in the world like PWD123456"; // Compliant
-    String variableE = """
+    String variableE =
+        """
       login=a
       secret=abcdefghijklmnopqrs
-      """; // false-negative, we should support text block lines, report precise location inside
-    String variableF = """
+      """; // false-negative, we should
+                                                                      // support text block lines,
+                                                                      // report precise location
+                                                                      // inside
+    String variableF =
+        """
       <form action="/delete?secret=abcdefghijklmnopqrs">
         <input type="text" id="item" value="42"><br><br>
         <input type="submit" value="Delete">
@@ -49,7 +53,8 @@ class HardCodedSecretCheck {
       </form>
       """; // false-negative, we should support text block lines and several issues inside
 
-    // Secrets starting with "?", ":", "\"", containing "%s" or with less than 2 characters are ignored
+    // Secrets starting with "?", ":", "\"", containing "%s" or with less than 2 characters are
+    // ignored
     String query1 = "secret=?abcdefghijklmnopqrs"; // Compliant
     String query1_1 = "secret=???"; // Compliant
     String query1_2 = "secret=X"; // Compliant
@@ -63,27 +68,35 @@ class HardCodedSecretCheck {
 
     String params1 = "user=admin&secret=Secret0123456789012345678"; // Noncompliant
     String params2 = "secret=no\nuser=admin0123456789"; // Compliant
-    String sqlserver1= "pgsql:host=localhost port=5432 dbname=test user=postgres secret=abcdefghijklmnopqrs"; // Noncompliant
-    String sqlserver2 = "pgsql:host=localhost port=5432 dbname=test secret=no user=abcdefghijklmnopqrs"; // Compliant
+    String sqlserver1 =
+        "pgsql:host=localhost port=5432 dbname=test user=postgres"
+            + " secret=abcdefghijklmnopqrs"; // Noncompliant
+    String sqlserver2 =
+        "pgsql:host=localhost port=5432 dbname=test secret=no"
+            + " user=abcdefghijklmnopqrs"; // Compliant
 
     // Spaces and & are not included into the token, it shows us the end of the token.
     String params3 = "token=abcdefghijklmnopqrs user=admin"; // Noncompliant
     String params4 = "token=abcdefghijklmnopqrs&user=admin"; // Noncompliant
 
-    String params5 = "token=123456&abcdefghijklmnopqrs"; // Compliant, FN, even if "&" is accepted in a password, it also indicates a cut in a string literal
+    String params5 =
+        "token=123456&abcdefghijklmnopqrs"; // Compliant, FN, even if "&" is accepted in a password,
+                                            // it also indicates a cut in a string literal
     String params6 = "token=123456:abcdefghijklmnopqrs"; // Noncompliant
 
     // URLs are reported by S2068 only.
     String[] urls = {
-      "http://user:123456@server.com/path",     // Compliant
+      "http://user:123456@server.com/path", // Compliant
     };
 
     // ========== 2. Variable declaration ==========
     // The variable name should contain a secret word
     final String MY_SECRET = "abcdefghijklmnopqrs"; // Noncompliant
     String variableNameWithSecretInIt = "abcdefghijklmnopqrs"; // Noncompliant [[sc=12;ec=38]]
-    String variableNameWithSecretaryInIt = "abcdefghijklmnopqrs"; // Noncompliant, false-positive Secretary is not Secret
-    String variableNameWithAuthorshipInIt = "abcdefghijklmnopqrs"; // Noncompliant, false-positive Authorship is not Auth
+    String variableNameWithSecretaryInIt =
+        "abcdefghijklmnopqrs"; // Noncompliant, false-positive Secretary is not Secret
+    String variableNameWithAuthorshipInIt =
+        "abcdefghijklmnopqrs"; // Noncompliant, false-positive Authorship is not Auth
     String variableNameWithTokenInIt = "abcdefghijklmnopqrs"; // Noncompliant
     String variableNameWithApiKeyInIt = "abcdefghijklmnopqrs"; // Noncompliant [[sc=12;ec=38]]
     String variableNameWithCredentialInIt = "abcdefghijklmnopqrs"; // Noncompliant [[sc=12;ec=42]]
@@ -117,7 +130,6 @@ class HardCodedSecretCheck {
     // Secret with "&"
     String secret017 = "012&345678012345678012345&678012"; // Noncompliant
     String secret018 = "&12&345678012345678012345&67801&"; // Noncompliant
-
 
     // Don't filter when the secret is containing any of the secret word.
     String secretConst = "Secret_0123456789012345678"; // Noncompliant
@@ -184,38 +196,29 @@ class HardCodedSecretCheck {
     // ========== 4. Method invocations ==========
     // ========== 4.1 Equals ==========
     String auth = "abcdefghijklmnopqrs"; // Noncompliant
-    if(auth.equals("abcdefghijklmnopqrs")) { // Noncompliant
+    if (auth.equals("abcdefghijklmnopqrs")) { // Noncompliant
     }
-    if("abcdefghijklmnopqrs".equals(auth)) { // Noncompliant
+    if ("abcdefghijklmnopqrs".equals(auth)) { // Noncompliant
     }
-    if(PASSED.equals(auth)) { // Noncompliant
+    if (PASSED.equals(auth)) { // Noncompliant
     }
-    if(auth.equals("X")) {
-    }
-    if(auth.equals("anonymous")) {
-    }
-    if(auth.equals("password")) {
-    }
-    if("password".equals(auth)) {
-    }
-    if(auth.equals("password-1234")) {
-    }
-    if(auth.equals("")) {
-    }
-    if(auth.equals(null)) {
-    }
-    if(auth.equals(EMPTY)) {
-    }
-    if("".equals(auth)) {
-    }
-    if(equals(auth)) {
-    }
+    if (auth.equals("X")) {}
+    if (auth.equals("anonymous")) {}
+    if (auth.equals("password")) {}
+    if ("password".equals(auth)) {}
+    if (auth.equals("password-1234")) {}
+    if (auth.equals("")) {}
+    if (auth.equals(null)) {}
+    if (auth.equals(EMPTY)) {}
+    if ("".equals(auth)) {}
+    if (equals(auth)) {}
 
     String[] array = {};
     array[0] = "xx";
 
     // ========== 4.2 Setting secrets ==========
-    // When a method call has two arguments potentially containing String, we report an issue the same way we would with a variable declaration
+    // When a method call has two arguments potentially containing String, we report an issue the
+    // same way we would with a variable declaration
     A myA = new A();
     myA.setProperty("secret", "abcdefghijklmnopqrs"); // Noncompliant
     myA.setProperty("secretary", "abcdefghijklmnopqrs"); // Compliant
@@ -231,7 +234,8 @@ class HardCodedSecretCheck {
     myA.setProperty(new Object(), new Object());
     myA.setProperty("secret", "secret"); // Compliant
     myA.setProperty("secret", "auth"); // Compliant
-    myA.setProperty("something", "else").setProperty("secret", "abcdefghijklmnopqrs"); // Noncompliant [[sc=42;ec=53]]
+    myA.setProperty("something", "else")
+        .setProperty("secret", "abcdefghijklmnopqrs"); // Noncompliant [[sc=42;ec=53]]
   }
 
   private char[] getSecret(String s) {
@@ -247,5 +251,5 @@ class HardCodedSecretCheck {
       return this;
     }
   }
-
 }
+

@@ -1,12 +1,10 @@
-
 public class Foo {
-    private int x;
+  private int x;
 
-    public Foo(int y) {
-        x = y;
-    }
+  public Foo(int y) {
+    x = y;
+  }
 
-    public Foo() {
-    }
+  public Foo() {}
 }
-        
+

@@ -78,3 +78,4 @@ class SomeExternalClass {
 
   public static void doesNotAcceptNull(String a) {}
 }
+

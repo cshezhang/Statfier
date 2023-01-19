@@ -1,6 +1,3 @@
-
-
-
 class StringTest {
   void constant_Good() {
     String s = "hello";
@@ -34,3 +31,4 @@ class StringTest {
     char c = t.charAt(5);
   }
 }
+

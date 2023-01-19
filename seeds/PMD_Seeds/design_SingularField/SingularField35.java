@@ -1,14 +1,13 @@
-
 import lombok.Getter;
 
 @Getter
 public enum Foo {
-    BAR(1);
+  BAR(1);
 
-    private final int number;
+  private final int number;
 
-    Foo(final int number) {
-        this.number = number;
-    }
+  Foo(final int number) {
+    this.number = number;
+  }
 }
-        
+

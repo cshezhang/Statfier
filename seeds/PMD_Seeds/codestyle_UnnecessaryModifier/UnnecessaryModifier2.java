@@ -1,5 +1,4 @@
-
 public interface Foo {
-    abstract void bar();
+  abstract void bar();
 }
-        
+

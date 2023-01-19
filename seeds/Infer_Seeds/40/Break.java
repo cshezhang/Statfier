@@ -1,6 +1,3 @@
-
-
-
 public class Break {
   /* t is also in control variables but once we have invariant analysis, it shouldn't be */
   private static int break_loop(int p, int t) {
@@ -37,3 +34,4 @@ public class Break {
     }
   }
 }
+

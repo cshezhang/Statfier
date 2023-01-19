@@ -1,5 +1,4 @@
-
 public class Foo {
-    int Foo(double x) {}
+  int Foo(double x) {}
 }
-        
+

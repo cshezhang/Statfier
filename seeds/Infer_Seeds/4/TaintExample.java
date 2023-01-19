@@ -1,7 +1,3 @@
-
-
-
-
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import codetoanalyze.java.InferTaint;
@@ -241,3 +237,4 @@ public class TaintExample {
     integritySink(s, integritySource()); // should not report
   }
 }
+

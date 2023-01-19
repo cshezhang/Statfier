@@ -1,7 +1,6 @@
+import java.lang.ProcessBuilder.Redirect;
 
-            import java.lang.ProcessBuilder.Redirect;
+public class Foo {
+  Redirect r;
+}
 
-            public class Foo {
-                Redirect r;
-            }
-            

@@ -1,7 +1,6 @@
-
 public class Foo {
-    private callBar() {
-        bar(314_159_265l);
-    }
+  private callBar() {
+    bar(314_159_265l);
+  }
 }
-        
+

@@ -1,13 +1,12 @@
-
 public class MyClass {
-    private int positive;
+  private int positive;
 
-    public MyClass(int value) {
-        if (value > 0) {
-            positive = value;
-        } else {
-            positive = 1;
-        }
+  public MyClass(int value) {
+    if (value > 0) {
+      positive = value;
+    } else {
+      positive = 1;
     }
+  }
 }
-        
+

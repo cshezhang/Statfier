@@ -1,12 +1,11 @@
-
 import lombok.Data;
 
 @Data
 public class Buzz {
-    private String foo;
+  private String foo;
 
-    public Buzz(String s) {
-        foo = s;
-    }
+  public Buzz(String s) {
+    foo = s;
+  }
 }
-        
+

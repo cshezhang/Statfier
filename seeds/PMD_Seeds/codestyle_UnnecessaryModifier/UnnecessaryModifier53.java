@@ -1,11 +1,10 @@
-
 enum Foo {
-    BAR("bar");
+  BAR("bar");
 
-    private String name;
+  private String name;
 
-    private Foo(String s) {
-        name = s;
-    }
+  private Foo(String s) {
+    name = s;
+  }
 }
-        
+

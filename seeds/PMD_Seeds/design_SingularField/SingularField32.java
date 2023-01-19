@@ -1,16 +1,15 @@
-
 import lombok.Data;
 
 @Data
 public class Outer {
-    public class Inner {
-        private String innerField;
-    }
+  public class Inner {
+    private String innerField;
+  }
 
-    private String outerField;
+  private String outerField;
 
-    public Outer(String outerField) {
-        this.outerField = outerField;
-    }
+  public Outer(String outerField) {
+    this.outerField = outerField;
+  }
 }
-        
+

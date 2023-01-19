@@ -13,7 +13,8 @@ public class ReuseRandomCheck {
   }
 
   void func(long seed, Random param) {
-    Random localVar1 = new Random(); // Noncompliant [[sc=28;ec=34]] {{Save and re-use this "Random".}}
+    Random localVar1 =
+        new Random(); // Noncompliant [[sc=28;ec=34]] {{Save and re-use this "Random".}}
     Random localVar2 = new Random(seed); // Compliant for Random(long seed)
     Object localVar3 = new Object();
 
@@ -46,5 +47,5 @@ public class ReuseRandomCheck {
       Random localVar = new Random(); // Noncompliant
     }
   }
-
 }
+

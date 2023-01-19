@@ -6,5 +6,5 @@ abstract class PrimitivesMarkedNullableCheckParent {
 
   @CheckForNull
   abstract int getInt0(); // Noncompliant
-
 }
+

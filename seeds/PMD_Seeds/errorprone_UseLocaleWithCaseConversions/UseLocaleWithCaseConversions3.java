@@ -1,5 +1,4 @@
-
 public class Foo {
-    String x = y.toHexString().toUpperCase();
+  String x = y.toHexString().toUpperCase();
 }
-        
+

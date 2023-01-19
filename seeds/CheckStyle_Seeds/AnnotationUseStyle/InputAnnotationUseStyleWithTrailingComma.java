@@ -8,52 +8,70 @@ trailingArrayComma = ALWAYS
 */
 
 package com.puppycrawl.tools.checkstyle.checks.annotation.annotationusestyle;
-//this file compiles in eclipse 3.4 but not with Sun's JDK 1.6.0.11
+// this file compiles in eclipse 3.4 but not with Sun's JDK 1.6.0.11
 
-public class InputAnnotationUseStyleWithTrailingComma
-{
-    @SuppressWarnings({"common",}) // ok
-    public void foo() {
+public class InputAnnotationUseStyleWithTrailingComma {
+  @SuppressWarnings({
+    "common",
+  }) // ok
+  public void foo() {
 
+    @SuppressWarnings({
+      "common", "foo",
+    }) // ok
+    Object o =
+        new Object() {
 
-        @SuppressWarnings({"common","foo",}) // ok
-        Object o = new Object() {
+          @SuppressWarnings(
+              value = {
+                "common",
+              }) // ok
+          public String toString() {
 
-            @SuppressWarnings(value={"common",}) // ok
-            public String toString() {
+            @SuppressWarnings(
+                value = {
+                  "leo", "herbie",
+                }) // ok
+            final String pooches = "leo.herbie";
 
-                @SuppressWarnings(value={"leo","herbie",}) // ok
-                final String pooches = "leo.herbie";
-
-                return pooches;
-            }
+            return pooches;
+          }
         };
-    }
+  }
 
-    @Test(value={"foo",}, more={"bar",}) // ok
-    /**
+  @Test(
+      value = {
+        "foo",
+      },
+      more = {
+        "bar",
+      }) // ok
+  /** */
+  enum P {
+    @Pooches(
+        tokens = {
+          Pooches.class,
+        },
+        other = {
+          1,
+        }) // ok
+    L,
 
-    */
-    enum P {
-
-        @Pooches(tokens={Pooches.class,},other={1,}) // ok
-        L,
-
-        /**
-
-        */
-        Y;
-    }
-
+    /** */
+    Y;
+  }
 }
 
 @interface Test {
-    String[] value();
-    String[] more() default {};
+  String[] value();
+
+  String[] more() default {};
 }
 
 @interface Pooches {
 
-    Class<?>[] tokens();
-    int[] other();
+  Class<?>[] tokens();
+
+  int[] other();
 }
+

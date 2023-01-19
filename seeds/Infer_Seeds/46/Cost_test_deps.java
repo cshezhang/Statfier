@@ -1,7 +1,3 @@
-
-
-
-
 public class Cost_test_deps {
 
   // Loop's execution count doesn't depend on values of p,t,k
@@ -102,3 +98,4 @@ public class Cost_test_deps {
     return j;
   }
 }
+

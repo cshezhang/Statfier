@@ -1,5 +1,3 @@
-
-
 import codetoanalyze.java.InferBuiltins;
 
 public class Builtins {
@@ -28,3 +26,4 @@ public class Builtins {
     x.toString();
   }
 }
+

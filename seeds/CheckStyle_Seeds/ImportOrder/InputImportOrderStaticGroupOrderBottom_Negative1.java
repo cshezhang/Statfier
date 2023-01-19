@@ -18,12 +18,10 @@ package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
 import org.antlr.v4.runtime.*; // ok
 
-import static java.lang.Math.PI; // ok
-import static org.antlr.v4.runtime.Recognizer.EOF; // ok
+// ok
+// ok
 
-import java.util.Set; // violation
+// violation
 
-public class InputImportOrderStaticGroupOrderBottom_Negative1
-{
+public class InputImportOrderStaticGroupOrderBottom_Negative1 {}
 
-}

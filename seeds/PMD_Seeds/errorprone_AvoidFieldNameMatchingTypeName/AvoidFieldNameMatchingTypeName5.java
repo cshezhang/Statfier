@@ -1,11 +1,13 @@
-
 interface Operation {
-    Object apply();
+  Object apply();
 
-    final Operation OPERATION = () -> { return null; };
+  final Operation OPERATION =
+      () -> {
+        return null;
+      };
 
-    class Inner {
-        int inner;
-    }
+  class Inner {
+    int inner;
+  }
 }
-        
+

@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import java.util.Hashtable;
 import java.util.concurrent.ExecutionException;
@@ -20,3 +18,4 @@ class LegacySync {
     return table.get("blabla");
   }
 }
+

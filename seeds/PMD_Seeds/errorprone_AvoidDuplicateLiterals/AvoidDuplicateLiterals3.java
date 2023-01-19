@@ -1,12 +1,10 @@
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+@SuppressWarnings("foo")
+public class Foo {}
 
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-@SuppressWarnings("foo")
-public class Foo {
-}
-        

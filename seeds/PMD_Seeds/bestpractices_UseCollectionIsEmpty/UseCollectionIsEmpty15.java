@@ -1,18 +1,15 @@
-
 public enum ComponentSize {
+  S("s");
 
-    S("s");
+  private String size;
 
-    private String size;
+  ComponentSize(String size) {
+    this.size = size;
+  }
 
-    ComponentSize(String size) {
-        this.size = size;
-    }
-
-    @Override
-    public String toString() {
-        return size;
-    }
-
+  @Override
+  public String toString() {
+    return size;
+  }
 }
-        
+

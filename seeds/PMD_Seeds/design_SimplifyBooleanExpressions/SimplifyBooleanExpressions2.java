@@ -1,5 +1,4 @@
-
 public class Foo {
-    boolean bar = true;
+  boolean bar = true;
 }
-        
+

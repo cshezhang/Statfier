@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo(int x) {
-        y[x++] = 2;
-    }
+  void foo(int x) {
+    y[x++] = 2;
+  }
 }
-        
+

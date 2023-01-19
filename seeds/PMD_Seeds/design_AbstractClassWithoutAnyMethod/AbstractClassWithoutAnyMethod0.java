@@ -1,3 +1,2 @@
-
 public abstract class Foo {}
-        
+

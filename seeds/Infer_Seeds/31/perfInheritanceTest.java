@@ -1,5 +1,3 @@
-
-
 class InheritanceTest {
   interface MyInterface {
     public void foo(int x);
@@ -58,3 +56,4 @@ class InheritanceTest {
     i4.top_cost(i3);
   }
 }
+

@@ -1,8 +1,6 @@
-
 public final class Foo {
-    private volatile boolean bar = false;
+  private volatile boolean bar = false;
 
-    public Foo() {
-    }
+  public Foo() {}
 }
-        
+

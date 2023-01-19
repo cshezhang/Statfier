@@ -1,6 +1,8 @@
-
 public class Foo {
-    private boolean foo = (isFoo() == true);
-    boolean isFoo() {return foo;}
+  private boolean foo = (isFoo() == true);
+
+  boolean isFoo() {
+    return foo;
+  }
 }
-        
+

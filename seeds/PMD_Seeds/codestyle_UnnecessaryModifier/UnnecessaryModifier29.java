@@ -1,5 +1,4 @@
-
 public @interface TestAnnotation {
-    static String message = "MESSAGE";
+  static String message = "MESSAGE";
 }
-        
+

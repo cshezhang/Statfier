@@ -1,20 +1,22 @@
 abstract class A {
-    int hashCode;
-    abstract Object getValue();
+  int hashCode;
 
-    A() {
-        hashCode = getValue().hashCode();
-    }
+  abstract Object getValue();
+
+  A() {
+    hashCode = getValue().hashCode();
+  }
 }
 
 class B extends A {
-    Object value;
+  Object value;
 
-    B(Object v) {
-        this.value = v;
-    }
+  B(Object v) {
+    this.value = v;
+  }
 
-    Object getValue() {
-        return value;
-    }
+  Object getValue() {
+    return value;
+  }
 }
+

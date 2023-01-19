@@ -1,7 +1,3 @@
-
-
-
-
 import java.io.*;
 import java.security.DigestInputStream;
 import java.util.zip.CheckedInputStream;
@@ -254,3 +250,4 @@ public class FilterInputStreamLeaks {
     in.close();
   }
 }
+

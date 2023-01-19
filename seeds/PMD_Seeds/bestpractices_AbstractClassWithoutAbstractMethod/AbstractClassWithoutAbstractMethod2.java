@@ -1,5 +1,4 @@
-
 public abstract class Foo {
-   int bar() {}
+  int bar() {}
 }
-        
+

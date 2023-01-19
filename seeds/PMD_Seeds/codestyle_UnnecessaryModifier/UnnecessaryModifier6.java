@@ -1,5 +1,4 @@
-
 public interface Foo {
-    final int X = 0;
+  final int X = 0;
 }
-        
+

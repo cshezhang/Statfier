@@ -1,5 +1,3 @@
-
-
 import android.app.Activity;
 import android.os.Binder;
 import android.os.Bundle;
@@ -53,3 +51,4 @@ class starvationMyActivity extends Activity {
     bad();
   }
 }
+

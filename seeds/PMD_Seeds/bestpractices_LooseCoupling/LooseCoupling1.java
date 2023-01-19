@@ -1,9 +1,9 @@
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
 public class Foo {
-    Map getFoo() {
-        return new HashMap();
-    }
+  Map getFoo() {
+    return new HashMap();
+  }
 }
-        
+

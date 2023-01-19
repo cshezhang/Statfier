@@ -1,7 +1,6 @@
-
 public class Foo {
-    private void foo() {
-        System.out.println("debug message");
-    }
+  private void foo() {
+    System.out.println("debug message");
+  }
 }
-        
+

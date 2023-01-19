@@ -1,10 +1,10 @@
-
 public class Foo {
-    public Foo(Object o) {
-        this();
-    }
-    public Foo() {
-        super();
-    }
+  public Foo(Object o) {
+    this();
+  }
+
+  public Foo() {
+    super();
+  }
 }
-        
+

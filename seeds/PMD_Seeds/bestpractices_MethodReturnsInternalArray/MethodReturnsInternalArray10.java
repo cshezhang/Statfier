@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public String[] getArr();
+  public String[] getArr();
 }
-        
+

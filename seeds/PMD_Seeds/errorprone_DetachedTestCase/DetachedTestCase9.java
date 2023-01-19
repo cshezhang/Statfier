@@ -1,10 +1,9 @@
-
 import org.junit.Test;
 
 public class MyTest {
-    @Test
-    public void someTest() {}
+  @Test
+  public void someTest() {}
 
-    static void someOtherTest() {}
+  static void someOtherTest() {}
 }
-        
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    int bar() {
-        return 2;
-    }
+  int bar() {
+    return 2;
+  }
 }
-        
+

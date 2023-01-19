@@ -1,9 +1,8 @@
-
 public enum Foo {
-     CONST;
-    // foo
-    // foo
-    // foo
-    // foo
+  CONST;
+  // foo
+  // foo
+  // foo
+  // foo
 }
-        
+

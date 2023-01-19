@@ -1,7 +1,6 @@
-
-
 import codetoanalyze.java.immutability.Immutable;
 // @generated
+
 class ArrayTest {
   @Immutable final int[] testArray = new int[] {0, 1, 2, 4};
   @Immutable static String[] suitArray = {"spades", "hearts", "diamonds", "clubs"};
@@ -60,3 +59,4 @@ class ArrayTest {
     array[0] = 42;
   }
 }
+

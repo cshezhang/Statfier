@@ -1,4 +1,2 @@
+public class Foo extends java.lang.Throwable {}
 
-public class Foo extends java.lang.Throwable {
-}
-        

@@ -1,5 +1,6 @@
-
 public class Foo {
-    final Object clone() { throw new CloneNotSupportedException(); }
+  final Object clone() {
+    throw new CloneNotSupportedException();
+  }
 }
-        
+

@@ -13,8 +13,7 @@ public class SillyEqualsCheck {
     VALUE;
   }
 
-  public interface Interface {
-  }
+  public interface Interface {}
 
   Object object;
   Object[] arrayOfObjects;
@@ -34,38 +33,68 @@ public class SillyEqualsCheck {
     // class vs array
     object.equals(arrayOfObjects); // Compliant
     arrayOfObjects.equals(object); // Compliant
-    integer.equals(arrayOfObjects); // Noncompliant [[sc=13;ec=19]] {{Remove this call to "equals"; comparisons between a type and an array always return false.}}
-    arrayOfObjects.equals(integer); // Noncompliant {{Remove this call to "equals"; comparisons between an array and a type always return false.}}
-    arrayOfIntegers.equals(arrayOfStrings); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated arrays always return false.}}
+    integer.equals(
+        arrayOfObjects); // Noncompliant [[sc=13;ec=19]] {{Remove this call to "equals"; comparisons
+                         // between a type and an array always return false.}}
+    arrayOfObjects.equals(
+        integer); // Noncompliant {{Remove this call to "equals"; comparisons between an array and a
+                  // type always return false.}}
+    arrayOfIntegers.equals(
+        arrayOfStrings); // Noncompliant {{Remove this call to "equals"; comparisons between
+                         // unrelated arrays always return false.}}
     object.equals(1); // Compliant
     integer.equals(1); // Compliant
-    string.equals(1); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
-    arrayOfObjects.equals(1); // Noncompliant {{Remove this call to "equals"; comparisons between an array and a type always return false.}}
+    string.equals(
+        1); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+            // always return false.}}
+    arrayOfObjects.equals(
+        1); // Noncompliant {{Remove this call to "equals"; comparisons between an array and a type
+            // always return false.}}
 
     // arrays vs arrays
     arrayOfObjects = arrayOfIntegers;
-    arrayOfObjects.equals(arrayOfIntegers); // Noncompliant {{Use "Arrays.equals(array1, array2)" or the "==" operator instead of using the "Object.equals(Object obj)" method.}}
-    arrayOfIntegers.equals(arrayOfObjects); // Noncompliant {{Use "Arrays.equals(array1, array2)" or the "==" operator instead of using the "Object.equals(Object obj)" method.}}
-    arrayOfIntegers.equals(arrayOfStrings); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated arrays always return false.}}
+    arrayOfObjects.equals(
+        arrayOfIntegers); // Noncompliant {{Use "Arrays.equals(array1, array2)" or the "==" operator
+                          // instead of using the "Object.equals(Object obj)" method.}}
+    arrayOfIntegers.equals(
+        arrayOfObjects); // Noncompliant {{Use "Arrays.equals(array1, array2)" or the "==" operator
+                         // instead of using the "Object.equals(Object obj)" method.}}
+    arrayOfIntegers.equals(
+        arrayOfStrings); // Noncompliant {{Remove this call to "equals"; comparisons between
+                         // unrelated arrays always return false.}}
 
     // class vs class
     object.equals(my); // Compliant, related
     my.equals(object); // Compliant, related
-    my.equals(string); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
-    string.equals(my); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
-    my.equals(file); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
-    file.equals(my); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
-    myEnum1.equals(myEnum2); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
+    my.equals(
+        string); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+                 // always return false.}}
+    string.equals(
+        my); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+             // always return false.}}
+    my.equals(
+        file); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+               // always return false.}}
+    file.equals(
+        my); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+             // always return false.}}
+    myEnum1.equals(
+        myEnum2); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated
+                  // types always return false.}}
 
     // class vs interface
     my.equals(serializable); // Compliant, "MyClass" is not final
     integer.equals(serializable); // Compliant, integer is final and implements serializable
-    string.equals(intf); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
+    string.equals(
+        intf); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+               // always return false.}}
 
     // interface vs class
     serializable.equals(my); // Compliant, "MyClass" is not final
     serializable.equals(integer); // Compliant, integer is final and implements serializable
-    intf.equals(string); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types always return false.}}
+    intf.equals(
+        string); // Noncompliant {{Remove this call to "equals"; comparisons between unrelated types
+                 // always return false.}}
 
     // interface vs interface
     comparable.equals(serializable); // Compliant, nothing can be said between two interfaces
@@ -75,21 +104,29 @@ public class SillyEqualsCheck {
     equals(object); // Compliant
     equals(arrayOfObjects); // False negative, method equals is not overriden
 
-    object.equals(null); // Noncompliant {{Remove this call to "equals"; comparisons against null always return false; consider using '== null' to check for nullity.}}
+    object.equals(
+        null); // Noncompliant {{Remove this call to "equals"; comparisons against null always
+               // return false; consider using '== null' to check for nullity.}}
 
     Class<?> that = Object.class;
     ((Class<?>) getClass()).equals(that); // Compliant
 
     Class<Object> that2 = Object.class;
-    getClass().equals(that2); // False negative, if it is a Class<Object> then it cannot be a Class<MyClass>
+    getClass()
+        .equals(
+            that2); // False negative, if it is a Class<Object> then it cannot be a Class<MyClass>
 
     List<String> listOfStrings = getList();
     List<java.io.File> listOfFiles = getList();
     listOfStrings.equals(listOfFiles); // False negative, since String and File are not related
 
     List<Object> listOfObjects = getList();
-    listOfObjects.equals(listOfStrings); // False negative, compliant if listOfObjects only contains strings, but it is not type-safe
-    listOfStrings.equals(listOfObjects); // False negative, compliant if listOfObjects only contains strings, but it is not type-safe
+    listOfObjects.equals(
+        listOfStrings); // False negative, compliant if listOfObjects only contains strings, but it
+                        // is not type-safe
+    listOfStrings.equals(
+        listOfObjects); // False negative, compliant if listOfObjects only contains strings, but it
+                        // is not type-safe
 
     List<?> listOfObjectsExtended = listOfStrings;
     listOfObjectsExtended.equals(listOfStrings); // Compliant
@@ -109,5 +146,5 @@ public class SillyEqualsCheck {
   public <T> List<T> getList() {
     return new ArrayList<>(); // Compliant
   }
-
 }
+

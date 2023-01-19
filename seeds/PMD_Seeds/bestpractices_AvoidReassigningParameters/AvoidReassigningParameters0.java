@@ -1,4 +1,3 @@
-
 public class Hello {
   private void greet(String name) {
     name = name.trim();
@@ -9,4 +8,4 @@ public class Hello {
     System.out.println("Hello " + trimmedName);
   }
 }
-        
+

@@ -16,12 +16,12 @@ tokens = (default)STATIC_IMPORT
 
 package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
-import java.io.File; // ok
-import java.io.InputStream; // ok
-import java.io.IOException; // ok
-import java.io.Reader; // ok
-import static java.io.InputStream.*; // ok
+// ok
+// ok
+// ok
+// ok
 import static java.io.IOException.*; // ok
+import static java.io.InputStream.*; // ok
 
-public class InputImportOrderCaseInsensitive {
-}
+public class InputImportOrderCaseInsensitive {}
+

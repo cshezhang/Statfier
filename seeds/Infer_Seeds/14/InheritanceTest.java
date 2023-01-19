@@ -1,5 +1,3 @@
-
-
 class InheritanceTest {
   interface MyInterface {
     public int foo();
@@ -49,3 +47,4 @@ class InheritanceTest {
     a[x.foo()] = 0;
   }
 }
+

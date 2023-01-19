@@ -1,7 +1,3 @@
-
-
-
-
 import android.content.ClipboardManager;
 
 public class ClassLoading {
@@ -32,3 +28,4 @@ public class ClassLoading {
     }
   }
 }
+

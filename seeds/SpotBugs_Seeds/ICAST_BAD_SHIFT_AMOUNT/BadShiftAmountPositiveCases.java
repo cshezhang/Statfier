@@ -21,18 +21,18 @@ package com.google.errorprone.bugpatterns;
  */
 public class BadShiftAmountPositiveCases {
 
-    public long testEquality(int x) {
+  public long testEquality(int x) {
 
-        long result = 0;
+    long result = 0;
 
-        //BUG: Suggestion includes "(long)x >> 32"
-        result += x >> 32;
-        //BUG: Suggestion includes "(long)x << 32"
-        result += x << 32;
-        //BUG: Suggestion includes "(long)x >>> 32"
-        result += x >>> 32;
+    // BUG: Suggestion includes "(long)x >> 32"
+    result += x >> 32;
+    // BUG: Suggestion includes "(long)x << 32"
+    result += x << 32;
+    // BUG: Suggestion includes "(long)x >>> 32"
+    result += x >>> 32;
 
-          return result;
-      }
-
+    return result;
+  }
 }
+

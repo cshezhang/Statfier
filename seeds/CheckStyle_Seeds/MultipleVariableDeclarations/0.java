@@ -1,5 +1,3 @@
-
-
 public class Test {
   public void myTest() {
     int mid;
@@ -9,11 +7,10 @@ public class Test {
     int lower, higher; // violation
     // ...
 
-    int value,
-        index; // violation
+    int value, index; // violation
     // ...
 
-    int place = mid, number = high;  // violation
+    int place = mid, number = high; // violation
   }
 }
-        
+

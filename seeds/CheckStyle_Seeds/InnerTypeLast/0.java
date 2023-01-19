@@ -1,20 +1,26 @@
-
-
 class Test {
-    private String s; // OK
-    class InnerTest1 {}
-    public void test() {} // violation, method should be declared before inner types.
+  private String s; // OK
+
+  class InnerTest1 {}
+
+  public void test() {} // violation, method should be declared before inner types.
 }
 
 class Test2 {
-    static {}; // OK
-    class InnerTest1 {}
-    public Test2() {} // violation, constructor should be declared before inner types.
+  static {
+  }
+  ; // OK
+
+  class InnerTest1 {}
+
+  public Test2() {} // violation, constructor should be declared before inner types.
 }
 
 class Test3 {
-    private String s; // OK
-    public void test() {} // OK
-    class InnerTest1 {}
+  private String s; // OK
+
+  public void test() {} // OK
+
+  class InnerTest1 {}
 }
-        
+

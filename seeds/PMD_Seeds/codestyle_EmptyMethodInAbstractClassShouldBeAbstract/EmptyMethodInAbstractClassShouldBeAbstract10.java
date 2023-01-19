@@ -1,7 +1,6 @@
-
 public abstract class Foo {
-    public boolean isVisible() {
-        return false;
-    }
+  public boolean isVisible() {
+    return false;
+  }
 }
-        
+

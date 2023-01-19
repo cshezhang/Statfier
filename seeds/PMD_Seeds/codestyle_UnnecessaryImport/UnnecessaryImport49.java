@@ -1,5 +1,5 @@
+package foo.bar;
 
-            package foo.bar;
-            import foo.bar.*;
-            public class Baz{}
-            
+
+public class Baz {}
+

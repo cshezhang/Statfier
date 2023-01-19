@@ -5,7 +5,9 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-class S4349 extends OutputStream { // Noncompliant [[sc=7;ec=12]]{{Provide an override of "write(byte[],int,int)" for this class.}}
+class S4349
+    extends OutputStream { // Noncompliant [[sc=7;ec=12]]{{Provide an override of
+                           // "write(byte[],int,int)" for this class.}}
   private FileOutputStream fout;
 
   public S4349(File file) throws IOException {
@@ -72,9 +74,11 @@ class S4349_3 extends FilterOutputStream { // Noncompliant
 }
 
 class S4349_4 {
-  private OutputStream fout = new OutputStream() {
-    @Override public void write(int b) throws IOException { }
-  };
+  private OutputStream fout =
+      new OutputStream() {
+        @Override
+        public void write(int b) throws IOException {}
+      };
 }
 
 abstract class S4349_5 extends OutputStream { // compliant : abstract class.
@@ -97,12 +101,14 @@ abstract class S4349_5 extends OutputStream { // compliant : abstract class.
   }
 }
 
-class S4349_6 extends OutputStream { // Noncompliant {{Provide an empty override of "write(byte[],int,int)" for this class as well.}}
+class S4349_6
+    extends OutputStream { // Noncompliant {{Provide an empty override of "write(byte[],int,int)"
+                           // for this class as well.}}
   @Override
-  public void write(int b) throws IOException {
-  }
+  public void write(int b) throws IOException {}
 }
 
 abstract class S4349_7 extends OutputStream {
   public abstract void write(int b) throws IOException;
 }
+

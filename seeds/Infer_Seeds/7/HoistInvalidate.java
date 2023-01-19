@@ -1,4 +1,3 @@
-
 import com.sun.source.tree.Tree;
 import com.sun.tools.javac.util.List;
 import java.util.ArrayList;
@@ -57,3 +56,4 @@ class HoistInvalidate<T extends Tree> {
     }
   }
 }
+

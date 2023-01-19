@@ -1,7 +1,3 @@
-
-
-
-
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
@@ -21,8 +17,8 @@ public class LibraryCalls {
     return ref.get().toString();
   }
 
-
   String badAtomicReferenceDereference(AtomicReference ref) {
     return ref.get().toString();
   }
 }
+

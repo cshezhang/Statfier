@@ -1,13 +1,12 @@
-
 public class AttributeTypeAndNameIsInconsistentWithPrefixShould {
-    int shoulder;
-    int shouldClimb; // violation
-    boolean shouldEat;
+  int shoulder;
+  int shouldClimb; // violation
+  boolean shouldEat;
 
-    void myMethod() {
-        int shoulderLocal;
-        int shouldClimbLocal; // violation
-        boolean shouldEatLocal;
-    }
+  void myMethod() {
+    int shoulderLocal;
+    int shouldClimbLocal; // violation
+    boolean shouldEatLocal;
+  }
 }
-        
+

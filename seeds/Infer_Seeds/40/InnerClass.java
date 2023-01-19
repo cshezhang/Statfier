@@ -1,5 +1,3 @@
-
-
 class InnerClass {
   // shouldn't be flagged
   // we don't know that [a.this$0 == this] and even if it were
@@ -53,3 +51,4 @@ class InnerClass {
     }
   }
 }
+

@@ -1,5 +1,3 @@
-
-
 // Tests documenting FPs and FNs due to lack of sensitivity in starvation analysis
 
 import java.util.concurrent.locks.Lock;
@@ -42,3 +40,4 @@ class LockSensitivity {
     OurThreadUtils.assertHoldsLock(monitorA);
   }
 }
+

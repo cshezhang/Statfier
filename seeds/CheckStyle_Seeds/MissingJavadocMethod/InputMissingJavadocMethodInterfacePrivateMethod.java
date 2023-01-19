@@ -17,7 +17,6 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
 
 public interface InputMissingJavadocMethodInterfacePrivateMethod { // ok
 
-    private static void myPrivateMethod() {
-
-    }
+  private static void myPrivateMethod() {}
 }
+

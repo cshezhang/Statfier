@@ -18,7 +18,10 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
     List<Integer> list = new ArrayList<>();
 
     for (int j = 0; j < src.length; ++j) {
-      dst[j] = src[j]; // Noncompliant {{Use "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.}}
+      dst[j] =
+          src[
+              j]; // Noncompliant {{Use "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or
+                  // "System.arraycopy" instead.}}
     }
 
     for (int j = 0; j < src.length; ++j) {
@@ -39,10 +42,9 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       list.add(n); // Noncompliant
     }
 
-    for (Integer n : src)
-      list.add(n); // Noncompliant
+    for (Integer n : src) list.add(n); // Noncompliant
 
-    for (Integer n : new Integer[]{1, 2, 3, 4, 5}) {
+    for (Integer n : new Integer[] {1, 2, 3, 4, 5}) {
       list.add(n); // Noncompliant
     }
 
@@ -119,9 +121,10 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       dst[j] = src[j]; // Noncompliant
     }
 
-    for (;;) break;
+    for (; ; ) break;
 
-    for (int j = 0; j < src.length; ++j);
+    for (int j = 0; j < src.length; ++j)
+      ;
 
     for (int j = 0; j < src.length; ++j) {}
 
@@ -137,7 +140,7 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       dst[j] = src[k];
     }
 
-    for (int j = 0; j < src.length;) {
+    for (int j = 0; j < src.length; ) {
       dst[j] = src[j];
       ++j;
     }
@@ -154,7 +157,7 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       dst[j] = src[j];
     }
 
-    for (int j = 0; j < src.length; c = (char)(c + 1)) {
+    for (int j = 0; j < src.length; c = (char) (c + 1)) {
       dst[j] = src[j];
     }
 
@@ -263,8 +266,7 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       list.add(src[i++]);
     }
 
-    while (i < src.length)
-      list.add(src[i++]);
+    while (i < src.length) list.add(src[i++]);
 
     while (i < src.length) {
       list.add(array()[i]);
@@ -291,7 +293,7 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       list.add(src[i++]);
       System.out.println(i);
     }
-  
+
     while (c < b) {
       list.add(src[from]);
       ++from;
@@ -341,7 +343,8 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
       list.add(1);
     }
 
-    for (int n : src);
+    for (int n : src)
+      ;
 
     for (int n : src) {
       add(n);
@@ -360,12 +363,15 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
     int i = 0, from = 0, to = 0;
     char c = 0;
     byte b = 0;
-    int[] src = new int[]{1, 2, 3, 4, 5};
+    int[] src = new int[] {1, 2, 3, 4, 5};
     int[] dst = new int[src.length];
     List<Integer> list = new ArrayList<>();
 
     for (int j = 0; j < src.length; ++j) {
-      dst[j] = src[j]; // Noncompliant {{Use "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.}}
+      dst[j] =
+          src[
+              j]; // Noncompliant {{Use "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or
+                  // "System.arraycopy" instead.}}
     }
 
     for (int j = 0; j < src.length; ++j) {
@@ -391,11 +397,11 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
     for (int n : src)
       list.add(n); // Compliant, no helper can copy an array of primitive into a collection
 
-    for (int n : new int[]{1, 2, 3, 4, 5}) {
+    for (int n : new int[] {1, 2, 3, 4, 5}) {
       list.add(n); // Compliant, no helper can copy an array of primitive into a collection
     }
 
-    for (int n : new Integer[]{1, 2, 3, 4, 5}) {
+    for (int n : new Integer[] {1, 2, 3, 4, 5}) {
       list.add(n); // Compliant, acceptable FN to avoid noise
     }
 
@@ -490,7 +496,7 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
   }
 
   int[] array() {
-    return new int[]{};
+    return new int[] {};
   }
 
   int one() {
@@ -502,3 +508,4 @@ abstract class ArrayCopyLoopCheck implements Collection<Integer> {
     return true;
   }
 }
+

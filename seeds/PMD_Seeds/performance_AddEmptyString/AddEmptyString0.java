@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        String s = "" + 123;
-    }
+  void bar() {
+    String s = "" + 123;
+  }
 }
-        
+

@@ -18,11 +18,13 @@ package com.google.errorprone.bugpatterns;
 
 /**
  * Test case for fully qualified methodIs call.
+ *
  * @author eaftan@google.com (Eddie Aftandilian)
  */
 public class PreconditionsCheckNotNullPositiveCase2 {
   public void error() {
-    //BUG: Suggestion includes "remove this line"
+    // BUG: Suggestion includes "remove this line"
     com.google.common.base.Preconditions.checkNotNull("string literal");
   }
 }
+

@@ -1,7 +1,7 @@
-
 public enum Bar {
-    ONE, TWO;
+  ONE,
+  TWO;
 
-    Bar() {}
+  Bar() {}
 }
-        
+

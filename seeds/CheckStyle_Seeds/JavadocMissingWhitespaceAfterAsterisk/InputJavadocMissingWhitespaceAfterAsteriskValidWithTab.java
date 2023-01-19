@@ -12,64 +12,59 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.javadocmissingwhitespacea
  *
  *	<p>Some Javadoc with tab. // ok
  ***/
-class InputJavadocMissingWhitespaceAfterAsteriskValidWithTab
-{
-    /**
-     *	Some Javadoc with tab.
-     *
-     *	<p>Some Javadoc with tab.
-     *
-     *	@see	Something with tab
-     **/
-    class InnerInputJavadocMissingWhitespaceAfterAsteriskValid {
+class InputJavadocMissingWhitespaceAfterAsteriskValidWithTab {
+  /**
+   * Some Javadoc with tab.
+   *
+   * <p>Some Javadoc with tab.
+   *
+   * @see Something with tab
+   */
+  class InnerInputJavadocMissingWhitespaceAfterAsteriskValid {
 
-        /**
-         *	Some Javadoc with tab.
-         */
-        public static final byte NUL = 0;
-
-        /**
-         *	Some Javadoc with tab.
-         *
-         *	<p>Some Javadoc with tab.
-         */
-        void bar1() {}
-
-        /********	Some Javadoc with tab. *******/
-        void bar2() {}
-    }
-
-    /****
-     *
-     *	Some	Javadoc with tab.
-     *	@see Something with tab
-     ****/
-    void foo1() {}
-
+    /** Some Javadoc with tab. */
+    public static final byte NUL = 0;
 
     /**
-     *	Some Javadoc with tab.
+     * Some Javadoc with tab.
+     *
+     * <p>Some Javadoc with tab.
      */
-    public static final int foo2 = 0;
+    void bar1() {}
 
-    /**
-     *	Some javadoc with tab.
-     */
-    enum Foo3 {}
+    /********	Some Javadoc with tab. *******/
+    void bar2() {}
+  }
 
-    /**
-     * <pre>
-     *		Some javadoc with tab.
-     * </pre>
-     **/
-    interface Foo4 {}
+  /****
+   *
+   *	Some	Javadoc with tab.
+   *	@see Something with tab
+   ****/
+  void foo1() {}
 
-    /**	*/
-    void foo5() {}
+  /** Some Javadoc with tab. */
+  public static final int foo2 = 0;
 
-    /**	Some	Javadoc with tab. **/
-    void foo6() {}
+  /** Some javadoc with tab. */
+  enum Foo3 {}
 
-    /**	*	Some Javadoc with tab. */
-    void foo7() {}
+  /**
+   *
+   *
+   * <pre>
+   * 	Some javadoc with tab.
+   * </pre>
+   */
+  interface Foo4 {}
+
+  /** */
+  void foo5() {}
+
+  /** Some Javadoc with tab. * */
+  void foo6() {}
+
+  /** * Some Javadoc with tab. */
+  void foo7() {}
 }
+

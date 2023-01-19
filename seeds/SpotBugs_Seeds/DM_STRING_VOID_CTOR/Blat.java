@@ -1,138 +1,136 @@
 import java.io.Serializable;
 
 public class Blat implements Runnable, java.util.Iterator, Serializable {
-    private final int yarg = 2;
+  private final int yarg = 2;
 
-    private final int yarm;
+  private final int yarm;
 
-    private Object lock;
+  private Object lock;
 
-    public Blat(int y) {
-        yarm = y;
+  public Blat(int y) {
+    yarm = y;
+  }
+
+  private static class Y extends Thread {
+    @Override
+    public void run() {}
+  }
+
+  private static class NotThread {
+    public void start() {
+      System.out.println("Don't report this");
     }
+  }
 
-    private static class Y extends Thread {
-        @Override
-        public void run() {
-        }
-    }
+  public Blat() {
+    yarm = 5;
+    System.out.println(lock);
+    new Y().start();
+    new NotThread().start();
+  }
 
-    private static class NotThread {
-        public void start() {
-            System.out.println("Don't report this");
-        }
-    }
+  public void xxx() {
+    Y y = new Y();
+    y.run();
+  }
 
-    public Blat() {
-        yarm = 5;
-        System.out.println(lock);
-        new Y().start();
-        new NotThread().start();
-    }
+  public int greeb() {
+    return yarg;
+  }
 
-    public void xxx() {
-        Y y = new Y();
-        y.run();
-    }
-
-    public int greeb() {
-        return yarg;
-    }
-
-    public class Bleem {
-        public void gnasp() {
-            System.out.println("oog");
-        }
-
-        @Override
-        protected void finalize() {
-        }
-    }
-
-    public Bleem makeBleem() {
-        return new Bleem();
+  public class Bleem {
+    public void gnasp() {
+      System.out.println("oog");
     }
 
     @Override
-    public void finalize() {
-        System.out.println("This is dumb");
+    protected void finalize() {}
+  }
+
+  public Bleem makeBleem() {
+    return new Bleem();
+  }
+
+  @Override
+  public void finalize() {
+    System.out.println("This is dumb");
+  }
+
+  public void other(Blat b) {
+    b.finalize();
+    System.out.println(new Boolean(true));
+    b.run();
+  }
+
+  @Override
+  public void run() {}
+
+  public void badlock() {
+    lock = new Object();
+
+    greeb();
+    synchronized (lock) {
+      makeBleem();
     }
 
-    public void other(Blat b) {
-        b.finalize();
-        System.out.println(new Boolean(true));
-        b.run();
+    System.out.println(new String());
+  }
+
+  private int yoom;
+
+  public int getYoom() throws InterruptedException {
+    Object x = lock;
+    synchronized (x) {
+      x.notify();
     }
 
-    @Override
-    public void run() {
+    synchronized (x) {
+      x.wait();
     }
 
-    public void badlock() {
-        lock = new Object();
+    System.out.println(new String("hello"));
+    return yoom;
+  }
 
-        greeb();
-        synchronized (lock) {
-            makeBleem();
-        }
+  public synchronized void setYoom(int y) {
+    yoom = y;
+  }
 
-        System.out.println(new String());
+  public void gimme(java.io.InputStream in) {
+    try {
+      byte[] buf = new byte[256];
+      in.read(buf);
+      System.out.println(new String(buf));
+    } catch (java.io.IOException e) {
     }
+  }
 
-    private int yoom;
+  public void spin() {
+    while (lock == null)
+      ;
+  }
 
-    public int getYoom() throws InterruptedException {
-        Object x = lock;
-        synchronized (x) {
-            x.notify();
-        }
+  @Override
+  public boolean hasNext() {
+    return false;
+  }
 
-        synchronized (x) {
-            x.wait();
-        }
+  @Override
+  public Object next() {
+    return null;
+  }
 
-        System.out.println(new String("hello"));
-        return yoom;
-    }
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException();
+  }
 
-    public synchronized void setYoom(int y) {
-        yoom = y;
-    }
+  private long serialVersionUID = 11091284L;
 
-    public void gimme(java.io.InputStream in) {
-        try {
-            byte[] buf = new byte[256];
-            in.read(buf);
-            System.out.println(new String(buf));
-        } catch (java.io.IOException e) {
-        }
-    }
+  private static Object[] foobar = new Object[1];
 
-    public void spin() {
-        while (lock == null)
-            ;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return false;
-    }
-
-    @Override
-    public Object next() {
-        return null;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
-    }
-
-    private long serialVersionUID = 11091284L;
-
-    private static Object[] foobar = new Object[1];
-
-    public static Object[] getFoobar() {
-        return foobar;
-    }
+  public static Object[] getFoobar() {
+    return foobar;
+  }
 }
+

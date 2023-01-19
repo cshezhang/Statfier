@@ -21,10 +21,8 @@ import static org.antlr.v4.runtime.CommonToken.*; // ok
 
 import org.antlr.v4.runtime.*; // violation
 
-import java.util.Set; // violation
-import org.junit.Test; // violation
+// violation
+// violation
 
-public class InputImportOrderStaticOnDemandGroupOrder1
-{
+public class InputImportOrderStaticOnDemandGroupOrder1 {}
 
-}

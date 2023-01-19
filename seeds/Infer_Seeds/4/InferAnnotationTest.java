@@ -1,5 +1,3 @@
-
-
 import codetoanalyze.java.annotation.Assertions;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,3 +36,4 @@ public class InferAnnotationTest {
     for (int i = 0; i < Assertions.assertGet(0, m); i++) {}
   }
 }
+

@@ -8,6 +8,7 @@ import java.util.function.LongSupplier;
 enum Level {
   WARN;
 }
+
 interface Log {
   void log(Level level, String s, Throwable e);
 }
@@ -15,63 +16,71 @@ interface Log {
 public class InterruptedExceptionCheck {
   static final Log LOGGER = null;
 
-  public void run1 () {
-    try {
-      while (true) {
-        if (LOGGER != null) throw new IOException("");
-        throw new InterruptedException("");
-
-      }
-    }catch (java.io.IOException e) {
-      LOGGER.log(Level.WARN, "Interrupted!", e);
-    }catch (InterruptedException e) { // Noncompliant [[sc=13;ec=35]] {{Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.}}
-        LOGGER.log(Level.WARN, "Interrupted!", e);
-    }
-  }
-
-  public void runUnknownSymbol () {
+  public void run1() {
     try {
       while (true) {
         if (LOGGER != null) throw new IOException("");
         throw new InterruptedException("");
       }
-    }catch (java.io.IOException e) {
+    } catch (java.io.IOException e) {
       LOGGER.log(Level.WARN, "Interrupted!", e);
-    }catch (InterruptedException e) { // Noncompliant
+    } catch (
+        InterruptedException
+            e) { // Noncompliant [[sc=13;ec=35]] {{Either re-interrupt this method or rethrow the
+                 // "InterruptedException" that can be caught here.}}
       LOGGER.log(Level.WARN, "Interrupted!", e);
     }
   }
 
-  public void catchUnionType () {
+  public void runUnknownSymbol() {
     try {
       while (true) {
         if (LOGGER != null) throw new IOException("");
         throw new InterruptedException("");
       }
-    } catch (InterruptedException | java.io.IOException e) { // Noncompliant [[sc=14;ec=58]] {{Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.}}
+    } catch (java.io.IOException e) {
+      LOGGER.log(Level.WARN, "Interrupted!", e);
+    } catch (InterruptedException e) { // Noncompliant
+      LOGGER.log(Level.WARN, "Interrupted!", e);
+    }
+  }
+
+  public void catchUnionType() {
+    try {
+      while (true) {
+        if (LOGGER != null) throw new IOException("");
+        throw new InterruptedException("");
+      }
+    } catch (InterruptedException
+        | java.io.IOException
+            e) { // Noncompliant [[sc=14;ec=58]] {{Either re-interrupt this method or rethrow the
+                 // "InterruptedException" that can be caught here.}}
       LOGGER.log(Level.WARN, "Interrupted!", e);
     }
   }
 
   public void runInterrupted() {
     try {
-      throw  new InterruptedException();
+      throw new InterruptedException();
     } catch (InterruptedException e) {
-        LOGGER.log(Level.WARN, "Interrupted!", e);
-        // clean up state...
-        Thread.currentThread().interrupt();
-      }
+      LOGGER.log(Level.WARN, "Interrupted!", e);
+      // clean up state...
+      Thread.currentThread().interrupt();
+    }
     try {
       while (true) {
-        throw  new InterruptedException();
+        throw new InterruptedException();
         // do stuff
       }
-    } catch (InterruptedException e) { // Noncompliant {{Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.}}
+    } catch (
+        InterruptedException
+            e) { // Noncompliant {{Either re-interrupt this method or rethrow the
+                 // "InterruptedException" that can be caught here.}}
       LOGGER.log(Level.WARN, "Interrupted!", e);
       // clean up state...
       new Interruptable().interrupt();
     }
-    }
+  }
 
   public Object getNextTask(BlockingQueue<Object> queue) {
     boolean interrupted = false;
@@ -85,40 +94,37 @@ public class InterruptedExceptionCheck {
         }
       }
     } finally {
-      if (interrupted)
-        Thread.currentThread().interrupt();
+      if (interrupted) Thread.currentThread().interrupt();
     }
   }
-
 }
 
 class Interruptable {
   static final Log LOGGER = null;
 
-  void interrupt() {
-    
-  }
+  void interrupt() {}
 
   private static void waitForNextExecution(Set<Runnable> running, LongSupplier waitTimeoutMillis) {
     try {
       Thread.sleep(waitTimeoutMillis.getAsLong());
-    } catch (InterruptedException e) { //Compliant
-      cancelAllSubTasksAndInterrupt(running); 
+    } catch (InterruptedException e) { // Compliant
+      cancelAllSubTasksAndInterrupt(running);
     }
   }
 
   private static void cancelAllSubTasksAndInterrupt(Set<Runnable> subTasks) {
     for (Runnable task : subTasks) {
-      System.out.println("--- waitForNextExecution: Service interrupted. Cancel execution of task {}.");
+      System.out.println(
+          "--- waitForNextExecution: Service interrupted. Cancel execution of task {}.");
     }
     Thread.currentThread().interrupt();
   }
-  
+
   private static void waitForNextExecution1(Set<Runnable> running, LongSupplier waitTimeoutMillis) {
     try {
       Thread.sleep(waitTimeoutMillis.getAsLong());
     } catch (InterruptedException e) { // Noncompliant, too many levels
-      cancelAllSubTasksAndInterrupt1(running); 
+      cancelAllSubTasksAndInterrupt1(running);
     }
   }
 
@@ -126,18 +132,19 @@ class Interruptable {
     cancelAllSubTasksAndInterrupt2(subTasks);
   }
 
-  private static void cancelAllSubTasksAndInterrupt2(Set<Runnable> subTasks) { 
+  private static void cancelAllSubTasksAndInterrupt2(Set<Runnable> subTasks) {
     cancelAllSubTasksAndInterrupt3(subTasks);
   }
 
   private static void cancelAllSubTasksAndInterrupt3(Set<Runnable> subTasks) {
     cancelAllSubTasksAndInterrupt4(subTasks);
-    if (LOGGER != null )throw new RuntimeException();
+    if (LOGGER != null) throw new RuntimeException();
   }
-  
+
   private static void cancelAllSubTasksAndInterrupt4(Set<Runnable> subTasks) {
     for (Runnable task : subTasks) {
-      System.out.println("--- waitForNextExecution: Service interrupted. Cancel execution of task {}.");
+      System.out.println(
+          "--- waitForNextExecution: Service interrupted. Cancel execution of task {}.");
     }
     Thread.currentThread().interrupt();
   }
@@ -145,7 +152,10 @@ class Interruptable {
   public void catchGenericException() throws InterruptedException {
     try {
       throwsInterruptedException();
-    } catch (Exception e) { // Noncompliant [[sc=14;ec=25;secondary=-1]] {{Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.}}
+    } catch (
+        Exception
+            e) { // Noncompliant [[sc=14;ec=25;secondary=-1]] {{Either re-interrupt this method or
+                 // rethrow the "InterruptedException" that can be caught here.}}
       LOGGER.log(Level.WARN, "Interrupted!", e);
     }
 
@@ -158,7 +168,10 @@ class Interruptable {
 
     try {
       throwsInterruptedException();
-    } catch (Throwable e) { // Noncompliant {{Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.}}
+    } catch (
+        Throwable
+            e) { // Noncompliant {{Either re-interrupt this method or rethrow the
+                 // "InterruptedException" that can be caught here.}}
       LOGGER.log(Level.WARN, "Interrupted!", e);
     }
 
@@ -214,5 +227,5 @@ class Interruptable {
   public void throwsInterruptedException() throws InterruptedException {
     throw new InterruptedException();
   }
-
 }
+

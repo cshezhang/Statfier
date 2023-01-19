@@ -8,8 +8,7 @@ class MissingDeprecatedCheck {
   @Deprecated
   public int foo; // Noncompliant [[sc=14;ec=17]] {{Add the missing @deprecated Javadoc tag.}}
 
-  public void foo1() {
-  }
+  public void foo1() {}
 
   @Deprecated
   public void foo2() { // Noncompliant
@@ -19,7 +18,6 @@ class MissingDeprecatedCheck {
    * @deprecated
    */
   public void foo3() { // Noncompliant {{Add the missing @Deprecated annotation.}}
-
   }
 
   /**
@@ -27,8 +25,7 @@ class MissingDeprecatedCheck {
    */
   @Ignore
   @Deprecated
-  public void foo4() {
-  }
+  public void foo4() {}
 
   @Deprecated
   /**
@@ -45,9 +42,7 @@ class MissingDeprecatedCheck {
     return 42;
   }
 
-  /**
-   *
-   */
+  /** */
   @Deprecated
   public void foo8() { // Noncompliant
   }
@@ -55,25 +50,19 @@ class MissingDeprecatedCheck {
   @java.lang.Deprecated
   public void foo9() {
 
-    @Deprecated
-    int local1 = 0;
-
+    @Deprecated int local1 = 0;
   }
 
   /**
    * @deprecated
    */
-  /**
-   * Unrelated javadoc
-   */
+  /** Unrelated javadoc */
   @Deprecated
   public int foo10() { // Noncompliant
     return 42;
   }
 
-  /**
-   * Unrelated javadoc (can be copyright for example)
-   */
+  /** Unrelated javadoc (can be copyright for example) */
   /**
    * @deprecated
    */
@@ -81,20 +70,18 @@ class MissingDeprecatedCheck {
   public int foo11() { // Compliant
     return 42;
   }
-
 }
 
 interface MissingDeprecatedCheck_Bar {
 
   @Deprecated
   int foo(); // Noncompliant
-
 }
 
 /**
-* @deprecated
-*/
-class MissingDeprecatedCheck_Qix  { // Noncompliant
+ * @deprecated
+ */
+class MissingDeprecatedCheck_Qix { // Noncompliant
 
   /**
    * @deprecated
@@ -113,8 +100,8 @@ interface Plop { // Noncompliant
    * @deprecated
    */
   public void foo();
-
 }
+
 interface mockito {
   /**
    * ...
@@ -124,3 +111,4 @@ interface mockito {
   @Deprecated
   <T> T createMock(Class<T> toMock, Method... mockedMethods);
 }
+

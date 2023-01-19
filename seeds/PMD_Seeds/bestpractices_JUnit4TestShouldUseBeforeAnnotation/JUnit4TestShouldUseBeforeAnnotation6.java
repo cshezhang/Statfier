@@ -1,10 +1,9 @@
-
 import org.junit.jupiter.api.BeforeAll;
 
 public class Foo {
-    @BeforeAll
-    public void setUp() {
-      //...
-    }
+  @BeforeAll
+  public void setUp() {
+    // ...
+  }
 }
-        
+

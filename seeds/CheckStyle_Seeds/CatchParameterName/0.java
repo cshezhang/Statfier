@@ -1,5 +1,3 @@
-
-
 public class MyTest {
   public void myTest() {
     try {
@@ -11,15 +9,15 @@ public class MyTest {
     } catch (Throwable t) { // OK
       // ...
     } catch (IndexOutOfBoundsException e123) { // violation, digits
-                                               // not allowed
+      // not allowed
       // ...
     } catch (NullPointerException ab) { // violation, should have at least
-                                        // three characters if not e|t|ex
+      // three characters if not e|t|ex
       // ...
     } catch (ArrayStoreException abc) { // OK
       // ...
     } catch (InterruptedException aBC) { // violation, first two characters
-                                         // should be in lowercase
+      // should be in lowercase
       // ...
     } catch (RuntimeException abC) { // OK
       // ...
@@ -28,4 +26,4 @@ public class MyTest {
     }
   }
 }
-        
+

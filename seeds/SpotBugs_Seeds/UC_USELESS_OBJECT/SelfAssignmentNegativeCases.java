@@ -76,5 +76,5 @@ public class SelfAssignmentNegativeCases {
     Foo foo;
     Bar bar;
   }
-
 }
+

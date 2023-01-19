@@ -1,7 +1,3 @@
-
-
-
-
 import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,3 +29,4 @@ public class LeaksAccessPathsInterprocedural {
     closeOne(new FileInputStream("1.txt"), new FileInputStream("2.txt")); // warning
   }
 }
+

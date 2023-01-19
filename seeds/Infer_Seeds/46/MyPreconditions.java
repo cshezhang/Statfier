@@ -1,6 +1,3 @@
-
-
-
 import javax.annotation.Nullable;
 
 public class MyPreconditions {
@@ -11,3 +8,4 @@ public class MyPreconditions {
 
   public static native void checkArgument(boolean expression);
 }
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        x = ((x && y) ? y : z);
-    }
+  void bar() {
+    x = ((x && y) ? y : z);
+  }
 }
-        
+

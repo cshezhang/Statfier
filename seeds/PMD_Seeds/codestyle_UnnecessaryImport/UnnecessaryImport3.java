@@ -1,8 +1,8 @@
-
 import java.security.AccessController;
+
 public class Foo {
-    public void foo() {
-        AccessController.doPrivileged(null);
-    }
+  public void foo() {
+    AccessController.doPrivileged(null);
+  }
 }
-        
+

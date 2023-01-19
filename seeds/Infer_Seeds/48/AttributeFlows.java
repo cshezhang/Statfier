@@ -1,5 +1,3 @@
-
-
 import android.os.Binder;
 import android.os.RemoteException;
 import java.util.concurrent.Executor;
@@ -122,3 +120,4 @@ class AttributeFlows {
     mUiThreadExecutor.execute(runnableField);
   }
 }
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo () {
-        notify();
-    }
+  void foo() {
+    notify();
+  }
 }
-        
+

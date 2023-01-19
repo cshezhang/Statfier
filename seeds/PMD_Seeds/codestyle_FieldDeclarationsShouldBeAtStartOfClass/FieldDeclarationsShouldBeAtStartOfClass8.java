@@ -1,13 +1,11 @@
-
 public class MyClass {
-    private static final String MY_STRING = "STRING";
+  private static final String MY_STRING = "STRING";
 
-    @Autowired
-    private MyPrivate myPrivate;
+  @Autowired private MyPrivate myPrivate;
 
-    @Bean
-    public void myPublicBean() {}
+  @Bean
+  public void myPublicBean() {}
 
-    private static void myPrivateStatic() {}
+  private static void myPrivateStatic() {}
 }
-        
+

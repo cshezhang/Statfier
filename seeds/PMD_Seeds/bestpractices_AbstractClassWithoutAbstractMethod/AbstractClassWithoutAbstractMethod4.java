@@ -1,4 +1,2 @@
+public abstract class Foo implements Foo {}
 
-public abstract class Foo implements Foo {
-}
-        

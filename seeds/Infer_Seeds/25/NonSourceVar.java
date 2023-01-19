@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.concurrent.ThreadSafe;
 
 // TODO fix FN T38248006
@@ -13,3 +9,4 @@ public class NonSourceVar {
     field = field < v ? field : v;
   }
 }
+

@@ -7,3 +7,4 @@ class ERADICATE_RETURN_OVER_ANNOTATED {
     return s;
   }
 }
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    private boolean isModifier(int mask) {
-        return (modifiers & mask) == mask;
-    }
+  private boolean isModifier(int mask) {
+    return (modifiers & mask) == mask;
+  }
 }
-        
+

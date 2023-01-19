@@ -1,8 +1,8 @@
-
 public class Foo {
-    public void bar() {
-        this.foo();
-    }
-    private void foo() {}
+  public void bar() {
+    this.foo();
+  }
+
+  private void foo() {}
 }
-        
+

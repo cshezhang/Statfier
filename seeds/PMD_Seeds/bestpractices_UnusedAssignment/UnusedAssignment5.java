@@ -1,8 +1,7 @@
-
 public class Foo {
-    void bar() {
-        int i;
-        if (i == 0) {}
-    }
+  void bar() {
+    int i;
+    if (i == 0) {}
+  }
 }
-        
+

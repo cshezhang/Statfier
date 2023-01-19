@@ -1,5 +1,4 @@
-
 public @interface TestAnnotation {
-    public String message();
+  public String message();
 }
-        
+

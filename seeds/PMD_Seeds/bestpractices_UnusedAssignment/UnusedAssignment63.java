@@ -1,12 +1,9 @@
-
-
 abstract class Foo {
 
-    public abstract int foo();
+  public abstract int foo();
 
-    interface Bar {
-        int bar();
-    }
-
+  interface Bar {
+    int bar();
+  }
 }
-        
+

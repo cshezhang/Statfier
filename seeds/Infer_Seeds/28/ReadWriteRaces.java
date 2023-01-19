@@ -1,7 +1,3 @@
-
-
-
-
 import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -102,3 +98,4 @@ class ReadWriteRaces {
     }
   }
 }
+

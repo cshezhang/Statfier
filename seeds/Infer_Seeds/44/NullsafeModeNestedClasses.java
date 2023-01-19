@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.Nullsafe;
 
 /** Test to ensure we correctly evaluate mode for nested classes */
@@ -159,3 +155,4 @@ class TrustSome {
     }
   }
 }
+

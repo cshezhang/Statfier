@@ -1,4 +1,2 @@
+public abstract interface TestInterface {}
 
-public abstract interface TestInterface {
-}
-        

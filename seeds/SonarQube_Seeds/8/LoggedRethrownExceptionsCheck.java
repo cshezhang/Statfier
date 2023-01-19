@@ -6,7 +6,8 @@ import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 
 class LoggedRethrownExceptionsCheck {
-  static final org.slf4j.Logger slf4jLogger = LoggerFactory.getLogger(LoggedRethrownExceptionsCheck.class);
+  static final org.slf4j.Logger slf4jLogger =
+      LoggerFactory.getLogger(LoggedRethrownExceptionsCheck.class);
   Object contextInfo;
   boolean flag;
   int foo;
@@ -15,7 +16,10 @@ class LoggedRethrownExceptionsCheck {
     Logger logger = java.util.logging.Logger.getAnonymousLogger("");
     try {
       doSomething();
-    } catch (SQLException e) { // Noncompliant [[secondary=19,20]] {{Either log this exception and handle it, or rethrow it with some contextual information.}}
+    } catch (
+        SQLException
+            e) { // Noncompliant [[secondary=19,20]] {{Either log this exception and handle it, or
+                 // rethrow it with some contextual information.}}
       logger.log(Level.ALL, "", e);
       throw new MySQLException(contextInfo, e);
     }
@@ -40,7 +44,6 @@ class LoggedRethrownExceptionsCheck {
       logger.log(Level.ALL, e.getMessage());
       throw new MySQLException(contextInfo, e);
     }
-
 
     try {
       doSomething();
@@ -192,12 +195,16 @@ class LoggedRethrownExceptionsCheck {
     throw new MySQLException(contextInfo, e1);
   }
 
-  private static void doSomething() throws SQLException { }
-  private void anotherMethod(Level all, String string, SQLException e) { }
-  private void handleException(Exception e) { }
+  private static void doSomething() throws SQLException {}
+
+  private void anotherMethod(Level all, String string, SQLException e) {}
+
+  private void handleException(Exception e) {}
 
   private static class MySQLException extends SQLException {
-    public MySQLException(Object o, Exception e) { }
-    public MySQLException(Object o) { }
+    public MySQLException(Object o, Exception e) {}
+
+    public MySQLException(Object o) {}
   }
 }
+

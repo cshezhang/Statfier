@@ -3,11 +3,11 @@ import java.io.InputStream;
 
 public class MaskedFieldFalsePositive extends FilterInputStream {
 
-    InputStream in;
+  InputStream in;
 
-    protected MaskedFieldFalsePositive(InputStream in) {
-        super(in);
-        this.in = in;
-    }
-
+  protected MaskedFieldFalsePositive(InputStream in) {
+    super(in);
+    this.in = in;
+  }
 }
+

@@ -1,14 +1,14 @@
 package checks;
 
+import static checks.CatchUsesExceptionWithContextCheck.MyCustomLogger.staticallyImportedMethod;
+import static checks.CatchUsesExceptionWithContextCheck.Provider.staticallyImportedMethodFromProvider;
+import static java.util.logging.Level.WARNING;
+
 import com.github.jknack.handlebars.internal.Files;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import org.apache.xerces.xni.XNIException;
 import org.slf4j.Logger;
-
-import static java.util.logging.Level.WARNING;
-import static checks.CatchUsesExceptionWithContextCheck.MyCustomLogger.staticallyImportedMethod;
-import static checks.CatchUsesExceptionWithContextCheck.Provider.staticallyImportedMethodFromProvider;
 
 class CatchUsesExceptionWithContextCheck {
 
@@ -22,45 +22,46 @@ class CatchUsesExceptionWithContextCheck {
 
   private void f(Exception x) {
     try {
-    } catch (Exception e) {                     // Noncompliant {{Either log or rethrow this exception.}} [[sc=14;ec=25]]
+    } catch (
+        Exception e) { // Noncompliant {{Either log or rethrow this exception.}} [[sc=14;ec=25]]
     }
     try {
-    } catch (Exception e) {                     // Compliant
+    } catch (Exception e) { // Compliant
       System.out.println(e);
     }
     try {
-    }catch (Exception e) {                     // Noncompliant
+    } catch (Exception e) { // Noncompliant
       System.out.println("foo: " + e.getMessage());
     }
     try {
-    } catch (Exception e) {                     // Compliant
+    } catch (Exception e) { // Compliant
       System.out.println("" + e);
     }
     try {
-    } catch (Exception f) {                     // Noncompliant
+    } catch (Exception f) { // Noncompliant
       System.out.println("" + x);
     }
     try {
-    } catch (Exception f) {                     // Compliant
+    } catch (Exception f) { // Compliant
       System.out.println("" + f);
     }
     try {
-    } catch (Exception e) {                     // Compliant
+    } catch (Exception e) { // Compliant
       System.out.println("" + e);
       try {
-      } catch (Exception f) {                   // Noncompliant
+      } catch (Exception f) { // Noncompliant
       }
     }
     try {
     } catch (RuntimeException e) {
       try {
-      } catch (Exception f) {                   // Compliant
+      } catch (Exception f) { // Compliant
         System.out.println("" + f);
       }
       System.out.println("" + e);
     } catch (Exception e) {
       try {
-      } catch (Exception f) {                   // Noncompliant {{Either log or rethrow this exception.}}
+      } catch (Exception f) { // Noncompliant {{Either log or rethrow this exception.}}
         System.out.println("" + e);
       }
     }
@@ -74,55 +75,54 @@ class CatchUsesExceptionWithContextCheck {
     Object someContextVariable = null;
     try {
       /* ... */
-    } catch (Error e) {                     // Compliant
+    } catch (Error e) { // Compliant
       throw com.google.common.base.Throwables.propagate(e);
-    } catch (RuntimeException e) {              // Compliant - propagation
+    } catch (RuntimeException e) { // Compliant - propagation
       throw e;
-    } catch (Exception e) {                     // Noncompliant
+    } catch (Exception e) { // Noncompliant
       throw new RuntimeException("context");
     }
 
     try {
       /* ... */
-    } catch (Exception e) {                      // Compliant
+    } catch (Exception e) { // Compliant
       throw new RuntimeException("context", e);
     }
 
     try {
-    } catch (Exception e) {                      // Compliant
+    } catch (Exception e) { // Compliant
       throw e;
     } finally {
     }
 
     try {
-    } catch (Exception e) {                      // Noncompliant
+    } catch (Exception e) { // Noncompliant
       int a;
-    } catch (Throwable e) {                      // Noncompliant
+    } catch (Throwable e) { // Noncompliant
     }
 
     try {
       Files.read("");
-    } catch (IOException e) {                    // Compliant
+    } catch (IOException e) { // Compliant
       throw com.google.common.base.Throwables.propagate(e);
     }
 
     try {
       Files.read("");
-    } catch (IOException e) {                    // Compliant
+    } catch (IOException e) { // Compliant
       throw new RuntimeException(e);
-    } catch (Exception e) {                      // Noncompliant
+    } catch (Exception e) { // Noncompliant
       throw new RuntimeException(e.getMessage());
-    } catch (Error e) {                      // Compliant
+    } catch (Error e) { // Compliant
       throw com.google.common.base.Throwables.propagate(e);
     }
 
     try {
-    } catch (RuntimeException e) {                      // Compliant
+    } catch (RuntimeException e) { // Compliant
       throw e;
     } catch (Exception ex) {
       throw new XNIException(ex);
     }
-
 
     try {
       Thread.currentThread().join();
@@ -131,13 +131,13 @@ class CatchUsesExceptionWithContextCheck {
       } else {
         throw new MalformedURLException();
       }
-    } catch (NumberFormatException e) {          // Compliant
+    } catch (NumberFormatException e) { // Compliant
       return;
-    } catch (InterruptedException e) {           // Compliant
+    } catch (InterruptedException e) { // Compliant
       /* do nothing */
-    } catch (java.text.ParseException e) {                 // Compliant
-    } catch (MalformedURLException e) {          // Compliant
-    } catch (java.time.format.DateTimeParseException e) {          // Compliant
+    } catch (java.text.ParseException e) { // Compliant
+    } catch (MalformedURLException e) { // Compliant
+    } catch (java.time.format.DateTimeParseException e) { // Compliant
     }
 
     try {
@@ -181,21 +181,23 @@ class CatchUsesExceptionWithContextCheck {
     try {
       /* ... */
     } catch (Exception e) { // Noncompliant
-      MyClassForCatchUses m = new MyClassForCatchUses() {
-        public String doSomething(Exception innerException) {
-          return innerException.getMessage();
-        }
-      };
+      MyClassForCatchUses m =
+          new MyClassForCatchUses() {
+            public String doSomething(Exception innerException) {
+              return innerException.getMessage();
+            }
+          };
       LOGGER.warn("Not a context for exception ", m.toString());
     }
     try {
       /* ... */
     } catch (Exception e) { // Compliant
-      MyClassForCatchUses m = new MyClassForCatchUses() {
-        public String doSomething(Exception innerException) {
-          return innerException.getMessage();
-        }
-      };
+      MyClassForCatchUses m =
+          new MyClassForCatchUses() {
+            public String doSomething(Exception innerException) {
+              return innerException.getMessage();
+            }
+          };
       LOGGER.warn(m.toString(), e.getMessage());
     }
     try {
@@ -360,7 +362,6 @@ class CatchUsesExceptionWithContextCheck {
     }
   }
 
-
   void customLogs() {
     try {
       /* ... */
@@ -374,7 +375,8 @@ class CatchUsesExceptionWithContextCheck {
     }
     try {
       /* ... */
-    } catch (Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
+    } catch (
+        Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
       String message = "Some context for exception" + e.getMessage();
       CUSTOM_LOGGER.log(message);
     }
@@ -396,7 +398,8 @@ class CatchUsesExceptionWithContextCheck {
     }
     try {
       /* ... */
-    } catch (Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
+    } catch (
+        Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
       String message = "Some context for exception" + e.getMessage();
       CUSTOM_LOGGER.doSomethingWithMessage(message);
     }
@@ -407,7 +410,8 @@ class CatchUsesExceptionWithContextCheck {
     }
     try {
       /* ... */
-    } catch (Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
+    } catch (
+        Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
       String message = "Some context for exception" + e.getMessage();
       PROVIDER.getLogger().doSomethingWithMessage(message);
     }
@@ -420,11 +424,13 @@ class CatchUsesExceptionWithContextCheck {
       /* ... */
     } catch (Exception e) { // Noncompliant
       String message = "Some context for exception" + e.getMessage();
-      PROVIDER.doSomethingWithMessage(message); // No clear sign that this call will do something useful
+      PROVIDER.doSomethingWithMessage(
+          message); // No clear sign that this call will do something useful
     }
     try {
       /* ... */
-    } catch (Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
+    } catch (
+        Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
       String message = "Some context for exception" + e.getMessage();
       logSomething(message);
     }
@@ -442,7 +448,8 @@ class CatchUsesExceptionWithContextCheck {
     }
     try {
       /* ... */
-    } catch (Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
+    } catch (
+        Exception e) { // Compliant, heuristic detects "log", assume it will be correctly handled
       String message = "Some context for exception" + e.getMessage();
       CUSTOM_LOGGER.log("a", message);
       PROVIDER.getLogger();
@@ -485,7 +492,9 @@ class CatchUsesExceptionWithContextCheck {
   }
 
   private void doSomething(Object e) {}
+
   private void doSomethingElse(String a, String b, String c, String d) {}
+
   private void logSomething(Object e) {}
 
   interface MyClassForCatchUses {
@@ -523,24 +532,25 @@ class CatchUsesExceptionWithContextCheck {
   }
 
   private enum MyEnum {
-    A, B;
+    A,
+    B;
   }
 
   static class MyCustomLogger {
-    void log(Throwable t) {
-    }
-    void log(String t) {
-    }
-    void log(String s, Throwable t) {
-    }
-    void log(String s1, String s2) {
-    }
-    void doSomethingWithException(Throwable t) {
-    }
-    void doSomethingWithMessage(String t) {
-    }
-    public static void staticallyImportedMethod(String t) {
-    }
+    void log(Throwable t) {}
+
+    void log(String t) {}
+
+    void log(String s, Throwable t) {}
+
+    void log(String s1, String s2) {}
+
+    void doSomethingWithException(Throwable t) {}
+
+    void doSomethingWithMessage(String t) {}
+
+    public static void staticallyImportedMethod(String t) {}
+
     MyCustomLogger setSomething(String s) {
       return this;
     }
@@ -550,20 +560,19 @@ class CatchUsesExceptionWithContextCheck {
     MyCustomLogger getLogger() {
       return new MyCustomLogger();
     }
-    void doSomethingWithException(Throwable t) {
-    }
-    void doSomethingWithMessage(String t) {
-    }
-    public static void staticallyImportedMethodFromProvider(String t) {
-    }
+
+    void doSomethingWithException(Throwable t) {}
+
+    void doSomethingWithMessage(String t) {}
+
+    public static void staticallyImportedMethodFromProvider(String t) {}
   }
 
   private void log_builder() {
     class Builder {
-      Builder(String message) {
-      }
-      void log() {
-      }
+      Builder(String message) {}
+
+      void log() {}
     }
     try {
       /* ... */
@@ -572,5 +581,5 @@ class CatchUsesExceptionWithContextCheck {
       new Builder(message).log();
     }
   }
-
 }
+

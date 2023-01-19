@@ -1,5 +1,4 @@
-
 public class Foo {
-    private void foo() {}
+  private void foo() {}
 }
-        
+

@@ -1,7 +1,3 @@
-
-
-
-
 public class JsonUtils {
 
   private static void escape(StringBuilder builder, String input) {
@@ -81,3 +77,4 @@ public class JsonUtils {
     return false;
   }
 }
+

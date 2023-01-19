@@ -1,5 +1,3 @@
-
-
 class LocalLock {
   Object lock1, lock2;
 
@@ -25,3 +23,4 @@ class LocalLock {
     }
   }
 }
+

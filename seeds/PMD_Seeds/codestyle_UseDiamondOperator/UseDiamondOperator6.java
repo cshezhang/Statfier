@@ -1,7 +1,6 @@
-
 class Foo {
-    {
-        Class<?> c = new Class<?>[0];
-    }
+  {
+    Class<?> c = new Class<?>[0];
+  }
 }
-        
+

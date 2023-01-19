@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 
 class Hoist {
@@ -179,3 +177,4 @@ class Hoist {
     }
   }
 }
+

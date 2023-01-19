@@ -11,13 +11,17 @@ import java.util.TreeSet;
 class ClassWithoutHashCodeInHashStructureCheck {
   class Test<K> {
     Map<A, Object> m1 = new HashMap<>(); // Compliant
-    Map<B, Object> m2 = new Hashtable<>(); // Noncompliant {{Add a "hashCode()" method to "B" or remove it from this hash.}}
+    Map<B, Object> m2 =
+        new Hashtable<>(); // Noncompliant {{Add a "hashCode()" method to "B" or remove it from this
+                           // hash.}}
     Map<C, Object> m3 = new LinkedHashMap<>(); // Compliant
     Map<D, Object> m4 = new LinkedHashMap<>(); // Compliant
 
     Set<A> s1 = new HashSet<>(); // Compliant
     Set<B> s2 = new TreeSet<>(); // Compliant
-    Set<B> s3 = new HashSet<>(); // Noncompliant {{Add a "hashCode()" method to "B" or remove it from this hash.}}
+    Set<B> s3 =
+        new HashSet<>(); // Noncompliant {{Add a "hashCode()" method to "B" or remove it from this
+                         // hash.}}
     Set<C> s4 = new HashSet<>(); // Compliant
     Set<K> s5 = new HashSet<K>(); // Compliant
     Set s6 = new HashSet(); // Compliant
@@ -76,3 +80,4 @@ class ClassWithoutHashCodeInHashStructureCheck {
     boolean equals(Object other); // does not have a default implementation
   }
 }
+

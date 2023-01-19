@@ -14,29 +14,51 @@ public class StringToString {
 
   InnerClass inner;
 
-  String string = "hello".toString(); // Noncompliant [[sc=19;ec=26]] {{there's no need to call "toString()" on a string literal.}}
+  String string =
+      "hello"
+          .toString(); // Noncompliant [[sc=19;ec=26]] {{there's no need to call "toString()" on a
+                       // string literal.}}
   Object object = new Object();
 
   public void method() {
 
     object.toString(); // Compliant
     new Object().toString(); // Compliant
-    ((String) object).toString(); // Noncompliant [[sc=15;ec=21]] {{"object" is already a string, there's no need to call "toString()" on it.}}
-    array[0].toString(); // Noncompliant [[sc=5;ec=10]] {{"array" is an array of strings, there's no need to call "toString()".}}
-    string.toString(); // Noncompliant {{"string" is already a string, there's no need to call "toString()" on it.}}
-    string.toUpperCase().toString(); // Noncompliant {{"toUpperCase" returns a string, there's no need to call "toString()".}}
+    ((String) object)
+        .toString(); // Noncompliant [[sc=15;ec=21]] {{"object" is already a string, there's no need
+                     // to call "toString()" on it.}}
+    array[0]
+        .toString(); // Noncompliant [[sc=5;ec=10]] {{"array" is an array of strings, there's no
+                     // need to call "toString()".}}
+    string
+        .toString(); // Noncompliant {{"string" is already a string, there's no need to call
+                     // "toString()" on it.}}
+    string
+        .toUpperCase()
+        .toString(); // Noncompliant {{"toUpperCase" returns a string, there's no need to call
+                     // "toString()".}}
 
-    this.inner.field.toString(); // Noncompliant {{"field" is already a string, there's no need to call "toString()" on it.}}
+    this.inner.field
+        .toString(); // Noncompliant {{"field" is already a string, there's no need to call
+                     // "toString()" on it.}}
 
     toString(); // Compliant
-    foo()[0].toString(); // Noncompliant [[sc=5;ec=10]] {{There's no need to call "toString()" on an array of String.}}
-    bar()[0][0].toString(); // Noncompliant {{There's no need to call "toString()" on an array of String.}}
+    foo()[0]
+        .toString(); // Noncompliant [[sc=5;ec=10]] {{There's no need to call "toString()" on an
+                     // array of String.}}
+    bar()[0][0]
+        .toString(); // Noncompliant {{There's no need to call "toString()" on an array of String.}}
 
     (object.equals("") ? "a" : "b").toString(); // Compliant, FN, report only clear issues
   }
 
-  String[] foo() {return null;}
-  String[][] bar() {return null;}
+  String[] foo() {
+    return null;
+  }
+
+  String[][] bar() {
+    return null;
+  }
 
   void quickFixes() {
     String string = "hello".toString(); // Noncompliant [[sc=21;ec=28;quickfixes=qf1]]
@@ -63,5 +85,5 @@ public class StringToString {
     // fix@qf6 {{Remove "toString()"}}
     // edit@qf6 [[sc=24;ec=35]] {{}}
   }
-
 }
+

@@ -1,7 +1,3 @@
-
-
-
-
 public class SomeLibrary {
 
   class $$Z {}
@@ -12,3 +8,4 @@ public class SomeLibrary {
     return t == null ? null : t;
   }
 }
+

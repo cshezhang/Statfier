@@ -18,3 +18,4 @@ public class InferTaint {
 
   public static native void inferSensitiveSinkUndefined(Object iMightBeTainted);
 }
+

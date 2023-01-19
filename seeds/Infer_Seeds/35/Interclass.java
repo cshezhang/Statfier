@@ -1,5 +1,3 @@
-
-
 class Interclass {
   synchronized void interclass1Bad(InterclassA a) {
     a.interclass1Bad();
@@ -42,3 +40,4 @@ class InterclassB {
     }
   }
 }
+

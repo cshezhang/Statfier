@@ -22,13 +22,10 @@ class InputJavadocTypeSkipAnnotationsFQN4 { // ok
 class InputJavadocTypeAllowedAnnotationByDefault4 { // ok
 }
 
-/**
- * Annotation for unit tests.
- */
+/** Annotation for unit tests. */
 @interface ThisIsOk4 {} // ok
-/**
- * Annotation for unit tests.
- */
+/** Annotation for unit tests. */
 @interface Generated4 { // ok
-    String[] value();
+  String[] value();
 }
+

@@ -1,4 +1,2 @@
+public class Foo implements Serializable {}
 
-public class Foo implements Serializable {
-}
-        

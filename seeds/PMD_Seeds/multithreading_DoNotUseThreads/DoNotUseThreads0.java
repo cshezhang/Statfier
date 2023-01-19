@@ -1,4 +1,2 @@
+public class UsingThread {}
 
-public class UsingThread  {
-}
-        

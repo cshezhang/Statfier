@@ -22,3 +22,4 @@ abstract class Taint {
     sendToDb(s2);
   }
 }
+

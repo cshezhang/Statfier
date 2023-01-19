@@ -1,6 +1,5 @@
 
-            import java.lang.Thread.UncaughtExceptionHandler;
-            public class Foo {
-                Thread.UncaughtExceptionHandler unused;
-            }
-            
+public class Foo {
+  Thread.UncaughtExceptionHandler unused;
+}
+

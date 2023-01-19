@@ -15,7 +15,8 @@ class StandardCharsetsConstantsCheck_java8 {
   private ReadableByteChannel readableByteChannel;
 
   void myMethod() throws Exception {
-    Charset.forName("UTF-8"); // Noncompliant {{Replace Charset.forName() call with StandardCharsets.UTF_8}}
+    Charset.forName(
+        "UTF-8"); // Noncompliant {{Replace Charset.forName() call with StandardCharsets.UTF_8}}
 
     (new ByteArrayOutputStream()).toString("UTF-8");
 
@@ -25,3 +26,4 @@ class StandardCharsetsConstantsCheck_java8 {
     new Scanner(readableByteChannel, "UTF-8");
   }
 }
+

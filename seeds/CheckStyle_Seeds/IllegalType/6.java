@@ -1,5 +1,3 @@
-
-
 import java.util.Optional;
 
 public class Main {
@@ -13,8 +11,9 @@ public class Main {
   void foo() {
     Optional<String> i; // OK
   }
+
   public <T extends java.util.Optional> void method(T t) { // OK
     Optional<T> i; // OK
   }
 }
-        
+

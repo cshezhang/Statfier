@@ -1,8 +1,7 @@
-
 public class MyActivity extends Activity {
-    @Override
-    protected void onPause() {
-        foo();
-    }
+  @Override
+  protected void onPause() {
+    foo();
+  }
 }
-        
+

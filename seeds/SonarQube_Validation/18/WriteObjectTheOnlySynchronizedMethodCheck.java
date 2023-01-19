@@ -5,10 +5,10 @@ import java.io.ObjectOutputStream;
 
 class RubberBall {
 
-  public void bounce(float angle, float velocity) {
-  }
+  public void bounce(float angle, float velocity) {}
 
-  private synchronized void writeObject(ObjectOutputStream stream) throws IOException { // Noncompliant {{Remove this "synchronized" keyword.}}
+  private synchronized void writeObject(ObjectOutputStream stream)
+      throws IOException { // Noncompliant {{Remove this "synchronized" keyword.}}
   }
 
   static class Color {}
@@ -16,19 +16,19 @@ class RubberBall {
 
 class RubberBall2 {
 
-  public void bounce(float angle, float velocity) {
-  }
+  public void bounce(float angle, float velocity) {}
 
-  private synchronized void writeObject(ObjectOutputStream stream) throws IOException { // Compliant, maybe FN because we include nested classes,
-                                                                                        // which may or may not be synchronizing something relevant
+  private synchronized void writeObject(ObjectOutputStream stream)
+      throws IOException { // Compliant, maybe FN because we include nested classes,
+    // which may or may not be synchronizing something relevant
   }
 
   class Nested {
 
-    public void bounce(float angle, float velocity) {
-    }
+    public void bounce(float angle, float velocity) {}
 
-    private synchronized void writeObject(ObjectOutputStream stream) throws IOException { // Noncompliant {{Remove this "synchronized" keyword.}}
+    private synchronized void writeObject(ObjectOutputStream stream)
+        throws IOException { // Noncompliant {{Remove this "synchronized" keyword.}}
     }
   }
 
@@ -40,7 +40,8 @@ class RubberBall2 {
       }
     }
 
-    private synchronized void writeObject(ObjectOutputStream stream) throws IOException { // Compliant
+    private synchronized void writeObject(ObjectOutputStream stream)
+        throws IOException { // Compliant
     }
   }
 
@@ -70,12 +71,9 @@ class ClassWithSynchronizedStmtIsOK {
 
 class TwoSynchrozniedMethodIsOK {
 
-  public TwoSynchrozniedMethodIsOK(RubberBall.Color color, int diameter) {
-  }
+  public TwoSynchrozniedMethodIsOK(RubberBall.Color color, int diameter) {}
 
-  public synchronized void bounce(float angle, float velocity) {
-
-  }
+  public synchronized void bounce(float angle, float velocity) {}
 
   private synchronized void writeObject(ObjectOutputStream stream) throws IOException { // Compliant
   }
@@ -89,8 +87,8 @@ class Nested3 {
   class Nested {
     Nested() {
       synchronized (this) {
-
       }
     }
   }
 }
+

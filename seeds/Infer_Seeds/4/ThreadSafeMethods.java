@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ThreadSafe;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -118,3 +114,4 @@ class ThreadSafeMethodsSubclass extends ThreadSafeMethods {
     return this.subclassField;
   }
 }
+

@@ -1,5 +1,3 @@
-
-
 class Parameters {
   private static void syncOnParam(Object x) {
     synchronized (x) {
@@ -37,3 +35,4 @@ class Parameters {
     }
   }
 }
+

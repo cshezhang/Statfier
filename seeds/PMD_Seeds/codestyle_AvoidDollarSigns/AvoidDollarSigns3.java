@@ -1,3 +1,2 @@
-
 public interface Foo$oo {}
-        
+

@@ -1,5 +1,4 @@
+public class Foo {
+  Integer i = new Integer(42);
+}
 
-            public class Foo {
-                Integer i = new Integer(42);
-            }
-            

@@ -8,5 +8,5 @@ public class CallToFileDeleteOnExitMethod {
     file.deleteOnExit(); // Noncompliant [[sc=10;ec=22]] {{Remove this call to "deleteOnExit".}}
     file.delete();
   }
-
 }
+

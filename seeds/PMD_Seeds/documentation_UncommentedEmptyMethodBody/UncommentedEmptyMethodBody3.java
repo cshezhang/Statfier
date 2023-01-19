@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo() {
-        /** Comment */
-    }
+  void foo() {
+    /** Comment */
+  }
 }
-        
+

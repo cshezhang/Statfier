@@ -42,5 +42,5 @@ public class InvalidStringEqualityNegativeCases {
 
     return retVal;
   }
-
 }
+

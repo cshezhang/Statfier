@@ -1,4 +1,2 @@
+public class Foo extends Bar {}
 
-public class Foo extends Bar {
-}
-        

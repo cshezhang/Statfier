@@ -1,31 +1,54 @@
 package checks;
 
-class MethodOnlyCallsSuperCheck{
+class MethodOnlyCallsSuperCheck {
   class ParentA {
-    public void f2() { }
-    public int f255() { return 0; }
-    public void f3() { }
-    public int f4() { return 0; }
-    public void f5(int i) { }
-    public void f6(int a) { }
-    public void f7(int a) { }
-    public int f8(int a) { return 0; }
-    public int f9(int a) { return 0; }
-    public void f10(int a, int b) { }
-    public void f11(int... a) { }
-    public void f12() { }
-    public void f13() { }
-    public <T> void f14() {  }
-    public void f15() { }
-    public void f16() { }
-    public <T> void f19() { }
+    public void f2() {}
+
+    public int f255() {
+      return 0;
+    }
+
+    public void f3() {}
+
+    public int f4() {
+      return 0;
+    }
+
+    public void f5(int i) {}
+
+    public void f6(int a) {}
+
+    public void f7(int a) {}
+
+    public int f8(int a) {
+      return 0;
+    }
+
+    public int f9(int a) {
+      return 0;
+    }
+
+    public void f10(int a, int b) {}
+
+    public void f11(int... a) {}
+
+    public void f12() {}
+
+    public void f13() {}
+
+    public <T> void f14() {}
+
+    public void f15() {}
+
+    public void f16() {}
+
+    public <T> void f19() {}
   }
 
   abstract class A extends ParentA {
     abstract void f1();
 
-    public void f2() {
-    }
+    public void f2() {}
 
     public int f255() {
       return 0;
@@ -99,8 +122,7 @@ class MethodOnlyCallsSuperCheck{
       super.f19();
     }
 
-    public void foo() {
-    }
+    public void foo() {}
 
     @Override
     public boolean equals(Object obj) { // Compliant
@@ -128,10 +150,9 @@ class MethodOnlyCallsSuperCheck{
     public void bar5() {}
   }
 
-
   class A2 extends Parent {
     @Override
-    public final boolean equals(Object obj) { //Compliant, equals is final
+    public final boolean equals(Object obj) { // Compliant, equals is final
       return super.equals(obj);
     }
 
@@ -168,8 +189,7 @@ class MethodOnlyCallsSuperCheck{
     }
 
     @Override
-    void f1() {
-    }
+    void f1() {}
   }
 
   class C extends A {
@@ -184,8 +204,7 @@ class MethodOnlyCallsSuperCheck{
     }
 
     @Override
-    void f1() {
-    }
+    void f1() {}
   }
 
   @javax.transaction.Transactional
@@ -216,12 +235,29 @@ class MethodOnlyCallsSuperCheck{
 class MethodOnlyCallsSuperCheckD {
   MethodOnlyCallsSuperCheckD(Object o) {}
 
-  int foo1() { return 0; }
-  int foo2() { return 0; }
-  int foo3() { return 0; }
-  int foo4() { return 0; }
-  int foo5(Object o) { return 0; }
-  static int staticMethod() { return 0; }
+  int foo1() {
+    return 0;
+  }
+
+  int foo2() {
+    return 0;
+  }
+
+  int foo3() {
+    return 0;
+  }
+
+  int foo4() {
+    return 0;
+  }
+
+  int foo5(Object o) {
+    return 0;
+  }
+
+  static int staticMethod() {
+    return 0;
+  }
 }
 
 class MethodOnlyCallsSuperCheckE extends MethodOnlyCallsSuperCheckD {
@@ -257,21 +293,21 @@ class MethodOnlyCallsSuperCheckE extends MethodOnlyCallsSuperCheckD {
 
 class MethodOnlyCallsSuperCheckFinalMethodsExclusion {
   static class BaseClass {
-    public void methodA() { }
-    public void methodB() { }
+    public void methodA() {}
+
+    public void methodB() {}
   }
+
   static class OverrideClass extends BaseClass {
     public final void methodA() { // compliant : override to make the method final.
       super.methodA();
     }
+
     public void methodB() { // Noncompliant
       super.methodB();
     }
   }
 }
 
-@interface SomeCrazyAnnotation {
-}
-
-
+@interface SomeCrazyAnnotation {}
 

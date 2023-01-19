@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public class Bar {}
+  public class Bar {}
 }
-        
+

@@ -1,4 +1,2 @@
+public class Foo extends java.lang.Error {}
 
-public class Foo extends java.lang.Error {
-}
-        

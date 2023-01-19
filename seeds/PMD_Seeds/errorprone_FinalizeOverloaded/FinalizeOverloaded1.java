@@ -1,7 +1,6 @@
-
 public class Foo {
-    public void finalize() {
-        doSomething();
-    }
+  public void finalize() {
+    doSomething();
+  }
 }
-        
+

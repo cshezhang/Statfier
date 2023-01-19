@@ -1,25 +1,24 @@
-
 public enum EnumWithAnonymousInnerClass {
-    A {
-        @Override
-        public void foo() {
-            super.foo();
-        }
-    },
-    B;
-
+  A {
+    @Override
     public void foo() {
+      super.foo();
     }
+  },
+  B;
 
-    interface Inner {
-        int get();
-    }
+  public void foo() {}
 
-    public static final Inner VAL = new Inner() {
+  interface Inner {
+    int get();
+  }
+
+  public static final Inner VAL =
+      new Inner() {
         @Override
         public int get() {
-            return 1;
+          return 1;
         }
-    };
+      };
 }
-        
+

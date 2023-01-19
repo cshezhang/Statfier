@@ -1,5 +1,4 @@
-
 public class Foo {
-    int fo$o;
+  int fo$o;
 }
-        
+

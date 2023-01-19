@@ -1,16 +1,15 @@
-
 public class O {
-    boolean f(String s) {
-        final Matcher matcher = null;
-        if (matcher.matches()) {
+  boolean f(String s) {
+    final Matcher matcher = null;
+    if (matcher.matches()) {
 
-            final String firstString = matcher.group("a");
-            final String secondString = matcher.group("b");
+      final String firstString = matcher.group("a");
+      final String secondString = matcher.group("b");
 
-            if (firstString.isEmpty() != secondString.isEmpty()) { // <- violation
-                // ...
-            }
-        }
+      if (firstString.isEmpty() != secondString.isEmpty()) { // <- violation
+        // ...
+      }
     }
+  }
 }
-        
+

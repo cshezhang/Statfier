@@ -1,5 +1,3 @@
-
-
 class Intraproc {
   void intraBad(IntraprocA o) {
     synchronized (this) {
@@ -42,3 +40,4 @@ class IntraprocB {
     }
   }
 }
+

@@ -1,18 +1,17 @@
 package checks;
 
 import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.cors.CorsConfiguration;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,12 +20,13 @@ class CORSCheck {
   private static final String STAR = "*";
   private static final String NOT_STAR = "http://domain2.com";
 
-
   // === Java Servlet ===
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException {
     resp.setHeader("Content-Type", "text/plain; charset=utf-8");
     resp.setHeader("Access-Control-Allow-Origin", "*"); // Noncompliant [[sc=10;ec=19]]
-    // header names are case insensitive. see https://stackoverflow.com/questions/5258977/are-http-headers-case-sensitive/5259004#5259004
+    // header names are case insensitive. see
+    // https://stackoverflow.com/questions/5258977/are-http-headers-case-sensitive/5259004#5259004
     resp.setHeader("Access-control-allow-Origin", "*"); // Noncompliant [[sc=10;ec=19]]
     resp.setHeader("Access-Control-Allow-Origin", "http://localhost:8080"); // Compliant
 
@@ -47,7 +47,8 @@ class CORSCheck {
     resp.getWriter().write("response");
   }
   // === Spring MVC Controller annotation ===
-  @CrossOrigin(origins = "*") // Noncompliant [[sc=4;ec=15]] {{Make sure that enabling CORS is safe here.}}
+  @CrossOrigin(
+      origins = "*") // Noncompliant [[sc=4;ec=15]] {{Make sure that enabling CORS is safe here.}}
   @RequestMapping("")
   public class TestController {
     public String home(ModelMap model) {
@@ -179,17 +180,15 @@ class CORSCheck {
   class S5122_Insecure implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-      registry.addMapping("/**")
-        .allowedOrigins("*"); // Noncompliant [[sc=10;ec=24]]
+      registry.addMapping("/**").allowedOrigins("*"); // Noncompliant [[sc=10;ec=24]]
     }
   }
 
   class S5122_Safe implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-      registry.addMapping("/**")
-        .allowedOrigins("safe.com"); // Compliant
+      registry.addMapping("/**").allowedOrigins("safe.com"); // Compliant
     }
   }
-
 }
+

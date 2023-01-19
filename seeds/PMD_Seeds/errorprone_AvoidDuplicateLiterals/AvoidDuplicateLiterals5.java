@@ -1,8 +1,7 @@
-
 public class Foo {
-    private void bar() {
-        buz("Howdy");
-        buz("Howdy");
-    }
+  private void bar() {
+    buz("Howdy");
+    buz("Howdy");
+  }
 }
-        
+

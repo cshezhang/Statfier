@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 
 class ThreadCalls {
@@ -61,3 +59,4 @@ class ThreadCalls {
     }
   }
 }
+

@@ -1,9 +1,7 @@
-
 public class Foo {
-    void bar() {
-        String foo = "foo";
-        while (foo.trim().length() == 0) {
-        }
-    }
+  void bar() {
+    String foo = "foo";
+    while (foo.trim().length() == 0) {}
+  }
 }
-        
+

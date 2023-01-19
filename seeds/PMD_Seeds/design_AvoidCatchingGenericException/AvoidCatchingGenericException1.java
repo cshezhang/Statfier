@@ -1,9 +1,8 @@
-
 public class Foo {
-    void bar() {
-        try {
-        } catch (FooException e) {
-        }
+  void bar() {
+    try {
+    } catch (FooException e) {
     }
+  }
 }
-        
+

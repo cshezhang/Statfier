@@ -1,7 +1,6 @@
-
 class Foo {
-    private void bar(int s) {
-        s = 2;
-    }
+  private void bar(int s) {
+    s = 2;
+  }
 }
-        
+

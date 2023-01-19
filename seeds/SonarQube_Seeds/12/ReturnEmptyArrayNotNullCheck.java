@@ -15,84 +15,84 @@ class ReturnEmptyArrayNotNullCheckA {
     return;
   }
 
-  public void f1() {     
+  public void f1() {
     return;
   }
 
   public int[] f2() {
-    return null;        // Noncompliant [[sc=12;ec=16]] {{Return an empty array instead of null.}}
+    return null; // Noncompliant [[sc=12;ec=16]] {{Return an empty array instead of null.}}
   }
 
   public Object f3() {
-    return null;        
+    return null;
   }
 
   public Object f4()[] {
-    return null;        // Noncompliant
+    return null; // Noncompliant
   }
 
   public int[] f5(boolean cond) {
     new ReturnEmptyArrayNotNullCheckB() {
       public Object g1() {
-        return null;    
+        return null;
       }
 
       public int[] g2() {
-        return null;    // Noncompliant
+        return null; // Noncompliant
       }
     };
     if (cond) {
       return new int[0];
     }
-    return null;        // Noncompliant
+    return null; // Noncompliant
   }
 
   public List f6() {
-    return null;        // Noncompliant
+    return null; // Noncompliant
   }
 
   public ArrayList f7() {
-    return null;        // Noncompliant
+    return null; // Noncompliant
   }
 
   public Set<Integer> f8(boolean cond) {
     if (cond) {
       return Collections.EMPTY_SET;
     }
-    return null;        // Noncompliant {{Return an empty collection instead of null.}}
+    return null; // Noncompliant {{Return an empty collection instead of null.}}
   }
 
   public <T> List<Integer>[] f9() {
-    return null;        // Noncompliant {{Return an empty array instead of null.}}
+    return null; // Noncompliant {{Return an empty array instead of null.}}
   }
 
   public java.util.Collection f10() {
-    return null;        // Noncompliant
+    return null; // Noncompliant
   }
 }
 
-interface ReturnEmptyArrayNotNullCheckB{
-  default int[] a(){
+interface ReturnEmptyArrayNotNullCheckB {
+  default int[] a() {
     return null; // Noncompliant
   }
 
-  default int[] b(){
+  default int[] b() {
     return new int[4];
   }
 
-  default List<String> c(){
+  default List<String> c() {
     return null; // Noncompliant
   }
 
-  default List<String> d(){
+  default List<String> d() {
     return new ArrayList<String>();
   }
 
-  default <T> int[] e(){
+  default <T> int[] e() {
     return null; // Noncompliant
   }
 
-  default <T> int[] f(){
+  default <T> int[] f() {
     return new int[4];
   }
 }
@@ -100,37 +100,42 @@ interface ReturnEmptyArrayNotNullCheckB{
 class ReturnEmptyArrayNotNullCheckC {
   @SuppressWarnings("Something")
   public int[] gul() {
-    return null;  // Noncompliant
+    return null; // Noncompliant
   }
 
   @Nullable
   public Object foo() {
-    return null; 
-  }
-  
-  @javax.annotation.CheckForNull
-  public Object bar() {
-    return null; 
-  }
-  
-  @javax.annotation.Nullable
-  public int[] fool() {
-    return null; 
-  }
-  
-  @CheckForNull
-  public int[] bark() {
-    return null; 
+    return null;
   }
 
-  int[] qix(){
-    takeLambda(a -> {
-      return null;
-    });
+  @javax.annotation.CheckForNull
+  public Object bar() {
+    return null;
+  }
+
+  @javax.annotation.Nullable
+  public int[] fool() {
+    return null;
+  }
+
+  @CheckForNull
+  public int[] bark() {
+    return null;
+  }
+
+  int[] qix() {
+    takeLambda(
+        a -> {
+          return null;
+        });
     return new int[1];
   }
 
-  static final Object CONSTANT = takeLambda(a->{return null;});
+  static final Object CONSTANT =
+      takeLambda(
+          a -> {
+            return null;
+          });
 
   private static Object takeLambda(Function<String, Object> o) {
     return o.apply("");
@@ -159,7 +164,8 @@ class ReturnEmptyArrayNotNullCheckF implements ReturnEmptyArrayNotNullCheckE {
   }
 }
 
-class ReturnEmptyArrayNotNullCheckG implements ItemProcessor<Integer, List<String>>, ReturnEmptyArrayNotNullCheckE {
+class ReturnEmptyArrayNotNullCheckG
+    implements ItemProcessor<Integer, List<String>>, ReturnEmptyArrayNotNullCheckE {
   @Override
   public List<String> bar() {
     return null; // Noncompliant
@@ -181,3 +187,4 @@ class ReturnEmptyArrayNotNullCheckH implements ItemProcessor<Integer, Integer[]>
     return null; // Noncompliant
   }
 }
+

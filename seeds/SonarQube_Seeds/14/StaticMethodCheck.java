@@ -3,8 +3,8 @@ package checks;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 class Utilities {
@@ -12,21 +12,23 @@ class Utilities {
   private static String string = magicWord; // coverage
   private String otherWord = "other";
 
-  public Utilities() {
-  }
-  
+  public Utilities() {}
+
   private void register(final Class<?> clazz, final Object converter) {
     otherWord = "";
   }
 
-  private String getMagicWord() { // Noncompliant [[sc=18;ec=30]] {{Make "getMagicWord" a "static" method.}}
+  private String
+      getMagicWord() { // Noncompliant [[sc=18;ec=30]] {{Make "getMagicWord" a "static" method.}}
     return magicWord;
   }
+
   private static String getMagicWordOK() {
     return magicWord;
   }
 
-  public final String magicWord() { // Noncompliant [[sc=23;ec=32]] {{Make "magicWord" a "static" method.}}
+  public final String
+      magicWord() { // Noncompliant [[sc=23;ec=32]] {{Make "magicWord" a "static" method.}}
     return magicWord;
   }
 
@@ -37,9 +39,12 @@ class Utilities {
   public final String getOtherWordFinal() {
     return this.otherWord;
   }
-  private void setMagicWord(String value) { // Noncompliant {{Make "setMagicWord" a "static" method.}}
+
+  private void setMagicWord(
+      String value) { // Noncompliant {{Make "setMagicWord" a "static" method.}}
     magicWord = value;
   }
+
   private static void setMagicWordOK(String value) {
     magicWord = value;
   }
@@ -50,7 +55,7 @@ class Utilities {
 
   private void checkClassLoader() throws IllegalArgumentException {
     if (getClass().getClassLoader() != null) {
-      throw new IllegalArgumentException ("invalid address type");
+      throw new IllegalArgumentException("invalid address type");
     }
   }
 
@@ -61,9 +66,11 @@ class Utilities {
   private int getOtherWordLength() {
     return otherWord.length();
   }
+
   private String getOtherWord2() {
     return this.otherWord;
   }
+
   private String getOtherWord3() {
     return super.toString();
   }
@@ -74,21 +81,20 @@ class Utilities {
     otherWord = value;
   }
 
-  private int useOnlyArguments(int a, int b) {  // Noncompliant
+  private int useOnlyArguments(int a, int b) { // Noncompliant
     return a + b;
   }
 
-  private String methodOnlyOnArgument(Object obj) {  // Noncompliant
+  private String methodOnlyOnArgument(Object obj) { // Noncompliant
     return (obj == null ? null : obj.toString());
   }
 
-  private String attributeOnArgument(Utilities obj) {  // Noncompliant
+  private String attributeOnArgument(Utilities obj) { // Noncompliant
     return obj.otherWord;
   }
 
   class Inner {
-    public Inner(String a, String b) {
-    }
+    public Inner(String a, String b) {}
 
     public final String getMagicWord() {
       return "a";
@@ -105,14 +111,14 @@ class Utilities {
     }
   }
 
-  public void publicMethod() {
-  }
+  public void publicMethod() {}
 
-  public int localAccessViasClass() {  // Compliant
+  public int localAccessViasClass() { // Compliant
     return Integer.valueOf(otherWord);
   }
 
-  private Utilities.Inner createInner() { // Compliant because there is a reference to an inner, non-static class
+  private Utilities.Inner
+      createInner() { // Compliant because there is a reference to an inner, non-static class
     return new Utilities.Inner("", "");
   }
 
@@ -143,8 +149,8 @@ class Utilities {
 }
 
 class UtilitiesExtension extends Utilities {
-  public UtilitiesExtension() {
-  }
+  public UtilitiesExtension() {}
+
   private void method() { // Compliant
     publicMethod();
   }
@@ -153,7 +159,8 @@ class UtilitiesExtension extends Utilities {
 class SerializableExclusions implements Serializable {
   private void writeObject(java.io.ObjectOutputStream out) throws IOException {}
 
-  private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {}
+  private void readObject(java.io.ObjectInputStream in)
+      throws IOException, ClassNotFoundException {}
 
   private void readObjectNoData() throws ObjectStreamException {}
 
@@ -163,23 +170,25 @@ class SerializableExclusions implements Serializable {
     recursive();
   }
 
-  private void delegateOther() {  // Compliant since other() is not static (although it should...)
+  private void delegateOther() { // Compliant since other() is not static (although it should...)
     other();
   }
-
 
   private void readResolve() throws ObjectStreamException {
     System.out.println("foo");
   }
 }
+
 class Inner {
   static class FooBar {
-    enum MyEnum{
+    enum MyEnum {
       FOO;
     }
+
     private void plop() { // Noncompliant enum is static and enum constants are static
       Object o = MyEnum.FOO;
     }
+
     int myHash() {
       return hashCode();
     }
@@ -190,17 +199,19 @@ class Inner {
 
     public void instanceMethod() {}
 
-    private void foo() { // Compliant: foo cannot be static because it references a non-static method
-      new Plopp(){
-        void plop1(){
+    private void
+        foo() { // Compliant: foo cannot be static because it references a non-static method
+      new Plopp() {
+        void plop1() {
           instanceMethod();
         }
       };
     }
 
-    private void init() { // Compliant: foo cannot be static because it references a non-static field
-      new Plopp(){
-        void plop1(){
+    private void
+        init() { // Compliant: foo cannot be static because it references a non-static field
+      new Plopp() {
+        void plop1() {
           instanceVariable = 0;
         }
       };
@@ -209,8 +220,9 @@ class Inner {
 }
 
 class Plopp {
-  Plopp(){}
-  void plop1(){}
+  Plopp() {}
+
+  void plop1() {}
 }
 
 class SuperClass {
@@ -219,7 +231,9 @@ class SuperClass {
 
 class EnclosingInstance extends SuperClass {
 
-  interface I { boolean gul(); }
+  interface I {
+    boolean gul();
+  }
 
   private int foo;
 
@@ -278,7 +292,9 @@ final class ChildClass extends ParentClass {
 final class FinalClass {
   static int magicNumber = 42;
 
-  public int getMagicNumber() { // Noncompliant [[sc=14;ec=28;quickfixes=qf_public_in_final]] {{Make "getMagicNumber" a "static" method.}}
+  public int
+      getMagicNumber() { // Noncompliant [[sc=14;ec=28;quickfixes=qf_public_in_final]] {{Make
+                         // "getMagicNumber" a "static" method.}}
     // fix@qf_public_in_final {{Make static}}
     // edit@qf_public_in_final [[sc=10;ec=10]]{{static }}
     return magicNumber;
@@ -290,7 +306,8 @@ final class FinalClass {
     return magicNumber;
   }
 
-  synchronized int getMagicNumber3() { // Noncompliant [[sc=20;ec=35;quickfixes=qf_public_in_final3]]
+  synchronized int
+      getMagicNumber3() { // Noncompliant [[sc=20;ec=35;quickfixes=qf_public_in_final3]]
     // fix@qf_public_in_final3 {{Make static}}
     // edit@qf_public_in_final3 [[sc=3;ec=3]]{{static }}
     return magicNumber;
@@ -333,22 +350,27 @@ class StaticMethodCheckQuickFix {
     return magicWord;
   }
 
-  private synchronized String magicWordSynchronized() { // Noncompliant [[sc=31;ec=52;quickfixes=qf_private_synchronized]]
+  private synchronized String
+      magicWordSynchronized() { // Noncompliant [[sc=31;ec=52;quickfixes=qf_private_synchronized]]
     // fix@qf_private_synchronized {{Make static}}
     // edit@qf_private_synchronized [[sc=11;ec=11]]{{static }}
     return magicWord;
   }
 
-  // Order is not following the convention: add it before the first modifier that should come after static
-  synchronized private String magicWordSynchronized2() { // Noncompliant [[sc=31;ec=53;quickfixes=qf_private_synchronized2]]
+  // Order is not following the convention: add it before the first modifier that should come after
+  // static
+  private synchronized String
+      magicWordSynchronized2() { // Noncompliant [[sc=31;ec=53;quickfixes=qf_private_synchronized2]]
     // fix@qf_private_synchronized2 {{Make static}}
     // edit@qf_private_synchronized2 [[sc=3;ec=3]]{{static }}
     return magicWord;
   }
 
-  private @Nullable synchronized String magicWordSynchronized3() { // Noncompliant [[sc=41;ec=63;quickfixes=qf_private_synchronized3]]
+  private @Nullable synchronized String
+      magicWordSynchronized3() { // Noncompliant [[sc=41;ec=63;quickfixes=qf_private_synchronized3]]
     // fix@qf_private_synchronized3 {{Make static}}
     // edit@qf_private_synchronized3 [[sc=21;ec=21]]{{static }}
     return magicWord;
   }
 }
+

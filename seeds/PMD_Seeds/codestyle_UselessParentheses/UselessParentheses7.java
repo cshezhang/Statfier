@@ -1,7 +1,6 @@
-
 public class Foo {
-    public String bar(Object o) {
-        return (((Exception) o)).getMessage();
-    }
+  public String bar(Object o) {
+    return (((Exception) o)).getMessage();
+  }
 }
-        
+

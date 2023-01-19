@@ -1,17 +1,10 @@
+// violation, alphabetical case sensitive ASCII order, 'M' < 'S'
+
+// violation, extra separation before import
 
 
-import static java.lang.System.out;
-import static java.lang.Math; // violation, alphabetical case sensitive ASCII order, 'M' < 'S'
-import java.io.IOException;
+// violation, groups should not be separated internally
 
-import java.net.URL; // violation, extra separation before import
-import java.security.KeyManagementException;
 
-import javax.net.ssl.TrustManager;
+public class SomeClass {}
 
-import javax.net.ssl.X509TrustManager; // violation, groups should not be separated internally
-
-import org.apache.http.conn.ClientConnectionManager;
-
-public class SomeClass { }
-        

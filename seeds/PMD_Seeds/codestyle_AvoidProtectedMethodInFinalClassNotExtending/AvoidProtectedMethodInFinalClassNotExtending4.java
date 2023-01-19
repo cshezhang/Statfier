@@ -1,5 +1,4 @@
-
 public final class Foo {
-    private int bar(){}
+  private int bar() {}
 }
-        
+

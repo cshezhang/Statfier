@@ -9,58 +9,55 @@ package com.puppycrawl.tools.checkstyle.checks.blocks.avoidnestedblocks;
 
 /**
  * Test case for finding nested blocks.
+ *
  * @author lkuehne
- **/
-class InputAvoidNestedBlocksDefault
-{
-    static
-    { // ok
+ */
+class InputAvoidNestedBlocksDefault {
+  static { // ok
+  }
+
+  public void method() {
+    int x = 0;
+
+    // if (condition that is not important anymore)
+    { // violation
+      int z = 1;
+      int y = z;
     }
 
-    public void method()
-    {
-        int x = 0;
+    if (x == 1) { // ok
+      x = 2;
+    }
 
-        // if (condition that is not important anymore)
+    // case statements are a bit complicated,
+    // they do not have its own variable scope by default.
+    // Hence, it may be ok in some development teams to allow
+    // nested blocks if they are the complete case body.
+    switch (x) {
+      case 0:
+        // ok
+        x = 3;
+        break;
+      case 1:
+        // Not ok, SLIST is not complete case body
         { // violation
-            int z = 1;
-            int y = z;
+          x = 1;
         }
-
-        if (x == 1)
-        { // ok
-            x = 2;
+        break;
+      case 2:
+        // ok if allowInSwitchCase is true, SLIST is complete case body
+        { // violation
+          x = 1;
+          break;
         }
-
-        // case statements are a bit complicated,
-        // they do not have its own variable scope by default.
-        // Hence, it may be ok in some development teams to allow
-        // nested blocks if they are the complete case body.
-        switch (x)
-        {
-            case 0:
-                // ok
-                x = 3;
-                break;
-            case 1:
-                // Not ok, SLIST is not complete case body
-                { // violation
-                    x = 1;
-                }
-                break;
-            case 2:
-                // ok if allowInSwitchCase is true, SLIST is complete case body
-                { // violation
-                    x = 1;
-                    break;
-                }
-            case 3: // test fallthrough
-            default:
-                // Not ok, SLIST is not complete case body
-                System.identityHashCode("Hello");
-                { // violation
-                    x = 2;
-                }
+      case 3: // test fallthrough
+      default:
+        // Not ok, SLIST is not complete case body
+        System.identityHashCode("Hello");
+        { // violation
+          x = 2;
         }
     }
+  }
 }
+

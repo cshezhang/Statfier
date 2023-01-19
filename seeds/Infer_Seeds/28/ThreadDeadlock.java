@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 
@@ -93,3 +91,4 @@ class ThreadDeadlock {
     }
   }
 }
+

@@ -13,71 +13,55 @@ tokens = (default)METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF
 
 package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
 
-public class InputMissingJavadocMethodScopeInnerInterfaces
-{
-    // inner interfaces with different scopes
+public class InputMissingJavadocMethodScopeInnerInterfaces {
+  // inner interfaces with different scopes
 
-    private interface PrivateInterface
-    {
-        public String CA = "CONST A";
-        String CB = "CONST b";
+  private interface PrivateInterface {
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-        public void ma();
-        void mb();
-    }
+    public void ma();
 
-    interface PackageInnerInterface
-    {
-        public String CA = "CONST A";
-        String CB = "CONST b";
+    void mb();
+  }
 
-        public void ma();
-        void mb();
-    }
+  interface PackageInnerInterface {
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-    protected interface ProtectedInnerInterface
-    {
-        public String CA = "CONST A";
-        String CB = "CONST b";
+    public void ma();
 
-        public void ma();
-        void mb();
-    }
+    void mb();
+  }
 
-    public interface PublicInnerInterface
-    {
-        public String CA = "CONST A";
-        String CB = "CONST b";
+  protected interface ProtectedInnerInterface {
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-        public void ma(); // violation
-        void mb(); // violation
-    }
+    public void ma();
 
-    private
-    class
-    MyClass1 {
-    }
+    void mb();
+  }
 
-    class
-    MyClass2 {
-    }
+  public interface PublicInnerInterface {
+    public String CA = "CONST A";
+    String CB = "CONST b";
 
-    private
-    interface
-    MyInterface1 {
-    }
+    public void ma(); // violation
 
-    interface
-    MyInterface2 {
-    }
+    void mb(); // violation
+  }
 
-    protected
-    enum
-    MyEnum {
-    }
+  private class MyClass1 {}
 
-    private
-    @interface
-    MyAnnotation {
-    }
+  class MyClass2 {}
+
+  private interface MyInterface1 {}
+
+  interface MyInterface2 {}
+
+  protected enum MyEnum {}
+
+  private @interface MyAnnotation {}
 }
+

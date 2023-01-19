@@ -1,7 +1,3 @@
-
-
-
-
 import android.content.Intent;
 import android.os.Parcel;
 import codetoanalyze.java.InferTaint;
@@ -82,3 +78,4 @@ public abstract class UnknownCode {
     InferTaint.inferSensitiveSink(launderedSource);
   }
 }
+

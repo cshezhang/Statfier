@@ -1,4 +1,2 @@
+public class Foo extends Throwable {}
 
-public class Foo extends Throwable {
-}
-        

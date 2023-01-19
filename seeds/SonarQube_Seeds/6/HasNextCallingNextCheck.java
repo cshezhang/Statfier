@@ -8,7 +8,10 @@ class HasNextCallingNextCheck implements Iterator<String> {
 
   public boolean hasNext() {
     boolean b = false;
-    b = next() != null; // Noncompliant [[sc=9;ec=13]] {{Refactor the implementation of this "Iterator.hasNext()" method to not call "Iterator.next()".}}
+    b =
+        next()
+            != null; // Noncompliant [[sc=9;ec=13]] {{Refactor the implementation of this
+                     // "Iterator.hasNext()" method to not call "Iterator.next()".}}
     b = this.next() != null; // Noncompliant
     b = other.next() != null;
     b = next("a") != null;
@@ -21,9 +24,18 @@ class HasNextCallingNextCheck implements Iterator<String> {
   }
 
   public void remove() {}
-  public String next() { return "a"; }
-  public String next(String a) { return "a"; }
-  public String otherMethod() { return ""; }
+
+  public String next() {
+    return "a";
+  }
+
+  public String next(String a) {
+    return "a";
+  }
+
+  public String otherMethod() {
+    return "";
+  }
 }
 
 // Not Iterator
@@ -38,13 +50,22 @@ class HasNextCallingNextCheck_B {
     return true;
   }
 
-  public String next() { return "a"; }
+  public String next() {
+    return "a";
+  }
+
   public void remove() {}
 }
 
 class HasNextCallingNextCheck_C implements Iterator<String> {
-  public boolean hasNext() { return true; }
-  public String next() { return "a"; }
+  public boolean hasNext() {
+    return true;
+  }
+
+  public String next() {
+    return "a";
+  }
+
   public void remove() {}
 }
 
@@ -69,7 +90,11 @@ class HasNextCallingNextCheck_E extends HasNextCallingNextCheck_C {
 
 abstract class HasNextCallingNextCheck_F implements Iterator<String> {
   public abstract boolean hasNext();
-  public String next() { return "a"; }
+
+  public String next() {
+    return "a";
+  }
+
   public void remove() {}
 }
 
@@ -91,3 +116,4 @@ abstract class HasNextCallingNextCheck_OtherIterator implements Iterator<String>
   @Override
   public abstract String next();
 }
+

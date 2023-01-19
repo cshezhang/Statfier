@@ -1,9 +1,8 @@
-
 public class Foo {
-    public void bar() {
-        if (true) {
-            return;
-        }
+  public void bar() {
+    if (true) {
+      return;
     }
+  }
 }
-        
+

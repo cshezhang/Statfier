@@ -1,8 +1,8 @@
-
 public class Foo {
-    private Object x;
-    Object[] getArr() {
-        return new Object[] {x};
-    }
+  private Object x;
+
+  Object[] getArr() {
+    return new Object[] {x};
+  }
 }
-        
+

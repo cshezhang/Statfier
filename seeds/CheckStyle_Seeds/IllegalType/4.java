@@ -1,5 +1,3 @@
-
-
 public class Test {
   public HashMap<String, String> function1() { // violation
     // code
@@ -16,6 +14,5 @@ public class Test {
   public static TreeMap<Integer, String> function4() { // violation
     // code
   }
-
 }
-        
+

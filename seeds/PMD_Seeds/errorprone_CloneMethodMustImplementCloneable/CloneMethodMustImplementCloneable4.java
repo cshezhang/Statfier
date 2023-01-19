@@ -1,7 +1,6 @@
-
 public class Bar {
-    class Foo implements Cloneable {
-        void clone() {}
-    }
+  class Foo implements Cloneable {
+    void clone() {}
+  }
 }
-        
+

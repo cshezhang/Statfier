@@ -17,36 +17,29 @@
 package com.google.errorprone.bugpatterns;
 
 /**
- * @author  Bill Pugh (bill.pugh@gmail.com)
+ * @author Bill Pugh (bill.pugh@gmail.com)
  */
 public class InvalidSignedBytePositiveCases {
 
-    public boolean testEquality(byte[] b, byte x) {
+  public boolean testEquality(byte[] b, byte x) {
 
-        //BUG: Suggestion includes "x == -1"
-        if (x == 255)
-            return true;
-        //BUG: Suggestion includes "x == 1"
-        if (x == -255)
-            return true;
-        //BUG: Suggestion includes "x == -128"
-        if (x == 128)
-            return true;
-        //BUG: Suggestion includes "x != -1"
-        if (x != 255)
-            return true;
+    // BUG: Suggestion includes "x == -1"
+    if (x == 255) return true;
+    // BUG: Suggestion includes "x == 1"
+    if (x == -255) return true;
+    // BUG: Suggestion includes "x == -128"
+    if (x == 128) return true;
+    // BUG: Suggestion includes "x != -1"
+    if (x != 255) return true;
 
-        //BUG: Suggestion includes "b[0] == -1"
-        if (b[0] == 255)
-            return true;
-        //BUG: Suggestion includes "b[0] == -128"
-        if (b[0] == 128)
-            return true;
-        //BUG: Suggestion includes "b[0] == 1"
-        if (b[0] == -255)
-            return true;
+    // BUG: Suggestion includes "b[0] == -1"
+    if (b[0] == 255) return true;
+    // BUG: Suggestion includes "b[0] == -128"
+    if (b[0] == 128) return true;
+    // BUG: Suggestion includes "b[0] == 1"
+    if (b[0] == -255) return true;
 
-        return false;
-    }
-
+    return false;
+  }
 }
+

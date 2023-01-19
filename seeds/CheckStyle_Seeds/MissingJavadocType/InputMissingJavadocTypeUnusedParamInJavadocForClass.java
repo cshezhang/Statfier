@@ -19,3 +19,4 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadoctype;
  */
 public class InputMissingJavadocTypeUnusedParamInJavadocForClass { // ok
 }
+

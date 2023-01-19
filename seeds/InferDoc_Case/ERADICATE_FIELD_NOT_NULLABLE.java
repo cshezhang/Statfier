@@ -7,3 +7,4 @@ class ERADICATE_FIELD_NOT_NULLABLE {
     f = s;
   }
 }
+

@@ -14,12 +14,16 @@ package com.puppycrawl.tools.checkstyle.checks.naming.typename;
 
 class inputHeaderClass2 { // violation
 
-    public interface inputHeaderInterface {}; // violation
-//comment
-    public enum inputHeaderEnum { one, two }; // violation
+  public interface inputHeaderInterface {}
+  ; // violation
+  // comment
+  public enum inputHeaderEnum {
+    one,
+    two
+  }; // violation
 
-    public @interface inputHeaderAnnotation {}; // violation
-
+  public @interface inputHeaderAnnotation {}; // violation
 }
 
 public class InputTypeName2 {}
+

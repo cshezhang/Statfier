@@ -9,7 +9,11 @@ public class RedundantRecordMethodsCheck {
     static Object variable = null;
     static Object someOtherVariable = null;
 
-    RedundantConstructorAndGetters(String name, int age) { // Noncompliant [[sc=5;ec=35]] {{Remove this redundant constructor which is the same as a default one.}}
+    RedundantConstructorAndGetters(
+        String name,
+        int
+            age) { // Noncompliant [[sc=5;ec=35]] {{Remove this redundant constructor which is the
+                   // same as a default one.}}
       System.out.println("Just printing something...");
       this.name = name;
       int x = 42;
@@ -18,26 +22,36 @@ public class RedundantRecordMethodsCheck {
       this.age = age;
     }
 
-    public String name() { // Noncompliant [[sc=19;ec=23]] {{Remove this redundant method which is the same as a default one.}}
+    public String
+        name() { // Noncompliant [[sc=19;ec=23]] {{Remove this redundant method which is the same as
+                 // a default one.}}
       return this.name;
     }
 
-    public int age() { // Noncompliant [[sc=16;ec=19]] {{Remove this redundant method which is the same as a default one.}}
+    public int
+        age() { // Noncompliant [[sc=16;ec=19]] {{Remove this redundant method which is the same as
+                // a default one.}}
       return age;
     }
   }
 
   record ConstructorAssignsWithRedundantCast(String name, int age) {
-    ConstructorAssignsWithRedundantCast(String name, int age) { // Compliant FN as the unnecessary cast should be flagged by other rules
+    ConstructorAssignsWithRedundantCast(
+        String name,
+        int age) { // Compliant FN as the unnecessary cast should be flagged by other rules
       this.name = (String) name;
       this.age = age;
     }
 
-    public String name() { // Noncompliant [[sc=19;ec=23]] {{Remove this redundant method which is the same as a default one.}}
+    public String
+        name() { // Noncompliant [[sc=19;ec=23]] {{Remove this redundant method which is the same as
+                 // a default one.}}
       return this.name;
     }
 
-    public int age() { // Noncompliant [[sc=16;ec=19]] {{Remove this redundant method which is the same as a default one.}}
+    public int
+        age() { // Noncompliant [[sc=16;ec=19]] {{Remove this redundant method which is the same as
+                // a default one.}}
       return age;
     }
   }
@@ -77,10 +91,13 @@ public class RedundantRecordMethodsCheck {
   }
 
   record EmptyConstructorAndRedundantGetter(String name, int age) {
-    EmptyConstructorAndRedundantGetter { // Noncompliant [[sc=5;ec=39]] {{Remove this redundant constructor which is the same as a default one.}}
+    EmptyConstructorAndRedundantGetter { // Noncompliant [[sc=5;ec=39]] {{Remove this redundant
+                                         // constructor which is the same as a default one.}}
     }
 
-    public String name() { // Noncompliant [[sc=19;ec=23]] {{Remove this redundant method which is the same as a default one.}}
+    public String
+        name() { // Noncompliant [[sc=19;ec=23]] {{Remove this redundant method which is the same as
+                 // a default one.}}
       return name;
     }
   }
@@ -110,11 +127,11 @@ public class RedundantRecordMethodsCheck {
   record MisleadingGetters(String name, int age) {
     static final String MESSAGE = "Hello";
 
-    public String name() {// Compliant
+    public String name() { // Compliant
       return MESSAGE;
     }
 
-    public int age() {// Compliant
+    public int age() { // Compliant
       return 42;
     }
   }
@@ -135,3 +152,4 @@ public class RedundantRecordMethodsCheck {
     }
   }
 }
+

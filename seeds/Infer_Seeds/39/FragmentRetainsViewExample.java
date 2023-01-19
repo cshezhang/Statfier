@@ -1,7 +1,3 @@
-
-
-
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,3 +32,4 @@ public class FragmentRetainsViewExample extends Fragment {
     // not nulling out anything
   }
 }
+

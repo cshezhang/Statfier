@@ -1,7 +1,3 @@
-
-
-
-
 // test that we can infer when code needs to be thread-safe even without annotations
 public class Inference {
 
@@ -64,3 +60,4 @@ public class Inference {
     mField5 = 5; // don't report
   }
 }
+

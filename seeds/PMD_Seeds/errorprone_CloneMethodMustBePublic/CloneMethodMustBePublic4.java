@@ -1,7 +1,5 @@
-
 public final class Foo implements Cloneable {
-    @Override
-    protected Object clone() {
-    }
+  @Override
+  protected Object clone() {}
 }
-        
+

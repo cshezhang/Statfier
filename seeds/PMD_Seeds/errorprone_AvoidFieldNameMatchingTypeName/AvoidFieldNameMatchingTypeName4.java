@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public String foo();
+  public String foo();
 }
-        
+

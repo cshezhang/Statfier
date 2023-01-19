@@ -24,3 +24,4 @@ public class InferBuiltins {
 
   public static native String __split_get_nth(String s, String sep, int n);
 }
+

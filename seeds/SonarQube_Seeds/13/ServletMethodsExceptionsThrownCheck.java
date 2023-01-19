@@ -12,38 +12,57 @@ class ServletMethodsExceptionsThrownCheck extends HttpServlet {
 
   private static boolean var = staticMethod();
 
-  private static boolean staticMethod() { return true; }
+  private static boolean staticMethod() {
+    return true;
+  }
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
     String ip = request.getRemoteAddr();
-    InetAddress addr = InetAddress.getByName(ip); // Noncompliant [[sc=36;ec=45]] {{Handle the following exception that could be thrown by "getByName": UnknownHostException.}}
+    InetAddress addr =
+        InetAddress.getByName(
+            ip); // Noncompliant [[sc=36;ec=45]] {{Handle the following exception that could be
+                 // thrown by "getByName": UnknownHostException.}}
     try {
       addr = InetAddress.getByName(ip);
     } catch (IllegalArgumentException e) {
-      throw e; // Noncompliant [[sc=7;ec=15]] {{Handle the "IllegalArgumentException" thrown here in a "try/catch" block.}}
+      throw e; // Noncompliant [[sc=7;ec=15]] {{Handle the "IllegalArgumentException" thrown here in
+               // a "try/catch" block.}}
     } catch (Exception e) {
       throw e; // Noncompliant {{Handle the "Exception" thrown here in a "try/catch" block.}}
     }
     staticMethod();
   }
 
-  public void foo(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, NamingException {
+  public void foo(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException, NamingException {
     String ip = request.getRemoteAddr();
     InetAddress addr = InetAddress.getByName(ip);
   }
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    throw new IllegalStateException("bla"); // Noncompliant {{Handle the "IllegalStateException" thrown here in a "try/catch" block.}}
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    throw new IllegalStateException(
+        "bla"); // Noncompliant {{Handle the "IllegalStateException" thrown here in a "try/catch"
+                // block.}}
   }
-  public void bar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+  public void bar(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
     throw new IllegalStateException("bla");
   }
 
-  protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     try {
-      foo(request, response); // Noncompliant [[sc=7;ec=10]] {{Handle the following exceptions that could be thrown by "foo": IOException, ServletException.}}
+      foo(
+          request,
+          response); // Noncompliant [[sc=7;ec=10]] {{Handle the following exceptions that could be
+                     // thrown by "foo": IOException, ServletException.}}
     } catch (NamingException ne) {
-      throw new ServletException(ne); // Noncompliant {{Handle the "ServletException" thrown here in a "try/catch" block.}}
+      throw new ServletException(
+          ne); // Noncompliant {{Handle the "ServletException" thrown here in a "try/catch" block.}}
     }
   }
 }
+

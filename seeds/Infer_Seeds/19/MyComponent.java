@@ -1,5 +1,3 @@
-
-
 public class MyComponent extends Component {
   @Prop Object prop1; // implicitly non-optional
 
@@ -43,3 +41,4 @@ public class MyComponent extends Component {
     }
   }
 }
+

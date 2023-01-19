@@ -8,14 +8,23 @@ class StaticFieldUpdateInConstructorCheck {
 
   StaticFieldUpdateInConstructorCheck() {
     field = "world"; // Compliant
-    staticField = "hello"; // Noncompliant [[sc=5;ec=16;secondary=5]] {{Remove this assignment of "staticField".}}
-    StaticFieldUpdateInConstructorCheck.staticField = "again"; // Noncompliant [[sc=41;ec=52;secondary=5]] {{Remove this assignment of "staticField".}}
-    words[0] = "noFun"; // Noncompliant [[sc=5;ec=10;secondary=6]] {{Remove this assignment of "words".}}
+    staticField =
+        "hello"; // Noncompliant [[sc=5;ec=16;secondary=5]] {{Remove this assignment of
+                 // "staticField".}}
+    StaticFieldUpdateInConstructorCheck.staticField =
+        "again"; // Noncompliant [[sc=41;ec=52;secondary=5]] {{Remove this assignment of
+                 // "staticField".}}
+    words[0] =
+        "noFun"; // Noncompliant [[sc=5;ec=10;secondary=6]] {{Remove this assignment of "words".}}
     value = 42; // Noncompliant [[sc=5;ec=10;secondary=7]] {{Remove this assignment of "value".}}
     value += 1; // Noncompliant [[sc=5;ec=10;secondary=7]] {{Remove this assignment of "value".}}
 
     String var = "boom";
-    field = staticField = var = "why so mean, java"; // Noncompliant [[sc=13;ec=24;secondary=5]] {{Remove this assignment of "staticField".}}
+    field =
+        staticField =
+            var =
+                "why so mean, java"; // Noncompliant [[sc=13;ec=24;secondary=5]] {{Remove this
+                                     // assignment of "staticField".}}
 
     value++; // Compliant - postfix/prefix increment/decrement not taken into account
 
@@ -39,5 +48,5 @@ class StaticFieldUpdateInConstructorCheck {
   static int[] values() {
     return null;
   }
-
 }
+

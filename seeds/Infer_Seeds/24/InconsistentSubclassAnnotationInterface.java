@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 public interface InconsistentSubclassAnnotationInterface {
@@ -12,3 +8,4 @@ public interface InconsistentSubclassAnnotationInterface {
 
   Object overloadedMethod(Object object);
 }
+

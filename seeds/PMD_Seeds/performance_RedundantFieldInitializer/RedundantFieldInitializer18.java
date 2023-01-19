@@ -1,5 +1,4 @@
-
 public @interface SomeAnnotation {
-    int CONSTANT = 0;
+  int CONSTANT = 0;
 }
-        
+

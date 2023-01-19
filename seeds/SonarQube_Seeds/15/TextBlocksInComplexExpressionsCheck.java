@@ -6,7 +6,9 @@ import java.util.function.Supplier;
 class TextBlocksInComplexExpressionsCheck {
 
   // Compliant
-  Supplier<String> supplier = () -> """
+  Supplier<String> supplier =
+      () ->
+          """
     <project>
       <modelVersion>4.0.0</modelVersion>
       <parent>
@@ -23,9 +25,11 @@ class TextBlocksInComplexExpressionsCheck {
 
   void fun(List<String> listOfStrings) {
     listOfStrings.stream()
-
-      .map(str -> { // Noncompliant@+1 [[sc=18;ec=14;el=+14]]{{Move this text block out of the lambda body and refactor it to a local variable or a static final field.}}
-        var b = !"""
+        .map(
+            str -> { // Noncompliant@+1 [[sc=18;ec=14;el=+14]]{{Move this text block out of the
+                     // lambda body and refactor it to a local variable or a static final field.}}
+              var b =
+                  !"""
           <project>
             <modelVersion>4.0.0</modelVersion>
             <parent>
@@ -38,36 +42,43 @@ class TextBlocksInComplexExpressionsCheck {
             <artifactId>my-module</artifactId>
             <version>1</version>
           </project>
-          """.equals(str);
+          """
+                      .equals(str);
 
-        System.out.println("ABC");
-        System.out.println("ABC");
-        System.out.println("ABC");
+              System.out.println("ABC");
+              System.out.println("ABC");
+              System.out.println("ABC");
 
-        return 0;
-      });
+              return 0;
+            });
 
     listOfStrings.stream()
-      // Noncompliant@+1
-      .map(str -> !"""
+        // Noncompliant@+1
+        .map(
+            str ->
+                !"""
         <project>
           <modelVersion>4.0.0</modelVersion>
           <parent>
             <groupId>com.mycompany.app</groupId>
             <artifactId>my-app</artifactId>
-        """.equals(str));
+        """
+                    .equals(str));
 
     listOfStrings.stream()
-      .map(str -> { // Compliant
-        return !"""
+        .map(
+            str -> { // Compliant
+              return !"""
               <groupId>com.mycompany.app</groupId>
               <artifactId>my-app</artifactId>
-          """.equals(str);
-      });
+          """
+                  .equals(str);
+            });
 
     listOfStrings.stream()
-      .map(str -> { // Noncompliant@+1
-        return !"""
+        .map(
+            str -> { // Noncompliant@+1
+              return !"""
 
 
 
@@ -75,18 +86,23 @@ class TextBlocksInComplexExpressionsCheck {
 
               <groupId>com.mycompany.app</groupId>
               <artifactId>my-app</artifactId>
-          """.equals(str);
-      });
+          """
+                  .equals(str);
+            });
 
     listOfStrings.stream()
-      // Compliant
-      .map(str -> !"""
+        // Compliant
+        .map(
+            str ->
+                !"""
         <project>
           <parent>
             <groupId>com.mycompany.app</groupId>
-        """.equals(str));
+        """
+                    .equals(str));
 
-    String myTextBlock = """
+    String myTextBlock =
+        """
       <project>
         <modelVersion>4.0.0</modelVersion>
         <parent>
@@ -101,11 +117,9 @@ class TextBlocksInComplexExpressionsCheck {
       </project>
       """;
 
-    listOfStrings.stream()
-      .map(str -> !myTextBlock.equals(str)); // Compliant
+    listOfStrings.stream().map(str -> !myTextBlock.equals(str)); // Compliant
 
-    listOfStrings.stream()
-      .map(str -> "ABC\nABC\nABC\nABC\nABC\nABC"); // Compliant
+    listOfStrings.stream().map(str -> "ABC\nABC\nABC\nABC\nABC\nABC"); // Compliant
   }
-
 }
+

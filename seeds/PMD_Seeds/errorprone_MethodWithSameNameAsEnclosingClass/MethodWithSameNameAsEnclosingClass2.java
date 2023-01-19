@@ -1,5 +1,4 @@
-
 public interface Foo {
-    void voo();
+  void voo();
 }
-        
+

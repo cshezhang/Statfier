@@ -1,7 +1,6 @@
-
 public class Foo {
-    class Bar {
-        Foo foo;
-    }
+  class Bar {
+    Foo foo;
+  }
 }
-        
+

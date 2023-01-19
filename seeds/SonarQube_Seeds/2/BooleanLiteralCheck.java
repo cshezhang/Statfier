@@ -4,63 +4,69 @@ class BooleanLiteralCheck {
 
   public void f(boolean var, boolean foo) {
     boolean[] tests = {
-    var == false,       // Noncompliant [[sc=12;ec=17]] {{Remove the unnecessary boolean literal.}}
-    var == true,        // Noncompliant {{Remove the unnecessary boolean literal.}}
-    var != false,       // Noncompliant
-    var != true,        // Noncompliant
-    false == var,       // Noncompliant
-    true == var,        // Noncompliant
-    false != var,       // Noncompliant
-    true != var,        // Noncompliant
-    !true,              // Noncompliant [[sc=6;ec=10;quickfixes=qf_negation_true]]
-    // fix@qf_negation_true {{Simplify the expression}}
-    // edit@qf_negation_true [[sc=5;ec=10]] {{false}}
-    !false,             // Noncompliant [[sc=6;ec=11;quickfixes=qf_negation_false]]
-    // fix@qf_negation_false {{Simplify the expression}}
-    // edit@qf_negation_false [[sc=5;ec=11]] {{true}}
-    false && foo(),     // Noncompliant
-    foo() || true,      // Noncompliant
-    true || false,      // Noncompliant [[sc=5;ec=9;secondary=+0]] {{Remove the unnecessary boolean literals.}}
-
-    var == foo(true),   // Compliant
-    !foo,               // Compliant
-    foo() && bar()      // Compliant
+      var == false, // Noncompliant [[sc=12;ec=17]] {{Remove the unnecessary boolean literal.}}
+      var == true, // Noncompliant {{Remove the unnecessary boolean literal.}}
+      var != false, // Noncompliant
+      var != true, // Noncompliant
+      false == var, // Noncompliant
+      true == var, // Noncompliant
+      false != var, // Noncompliant
+      true != var, // Noncompliant
+      !true, // Noncompliant [[sc=6;ec=10;quickfixes=qf_negation_true]]
+      // fix@qf_negation_true {{Simplify the expression}}
+      // edit@qf_negation_true [[sc=5;ec=10]] {{false}}
+      !false, // Noncompliant [[sc=6;ec=11;quickfixes=qf_negation_false]]
+      // fix@qf_negation_false {{Simplify the expression}}
+      // edit@qf_negation_false [[sc=5;ec=11]] {{true}}
+      false && foo(), // Noncompliant
+      foo() || true, // Noncompliant
+      true
+          || false, // Noncompliant [[sc=5;ec=9;secondary=+0]] {{Remove the unnecessary boolean
+                    // literals.}}
+      var == foo(true), // Compliant
+      !foo, // Compliant
+      foo() && bar() // Compliant
     };
 
     boolean exp = foo();
-    var = foo() ? true : // Noncompliant [[sc=19;ec=23;secondary=+1;quickfixes=qf_cond1]] {{Remove the unnecessary boolean literals.}}
-      false;
+    var =
+        foo()
+            ? true
+            : // Noncompliant [[sc=19;ec=23;secondary=+1;quickfixes=qf_cond1]] {{Remove the
+              // unnecessary boolean literals.}}
+            false;
     // fix@qf_cond1 {{Simplify the expression}}
     // edit@qf_cond1 [[sc=16;el=+1;ec=12]] {{}}
-    var = foo() ? false : true;   // Noncompliant [[sc=19;ec=24;quickfixes=qf_cond2]]
+    var = foo() ? false : true; // Noncompliant [[sc=19;ec=24;quickfixes=qf_cond2]]
     // fix@qf_cond2 {{Simplify the expression}}
     // edit@qf_cond2 [[sc=16;ec=31]] {{}}
     // edit@qf_cond2 [[sc=11;ec=11]] {{!}}
-    var = foo() ? true : exp;   // Noncompliant [[sc=19;ec=23;quickfixes=qf_cond3]]
+    var = foo() ? true : exp; // Noncompliant [[sc=19;ec=23;quickfixes=qf_cond3]]
     // fix@qf_cond3 {{Simplify the expression}}
     // edit@qf_cond3 [[sc=17;ec=25]] {{||}}
-    var = foo() ? false : exp;  // Noncompliant [[sc=19;ec=24;quickfixes=qf_cond4]]
+    var = foo() ? false : exp; // Noncompliant [[sc=19;ec=24;quickfixes=qf_cond4]]
     // fix@qf_cond4 {{Simplify the expression}}
     // edit@qf_cond4 [[sc=11;ec=11]] {{!}}
     // edit@qf_cond4 [[sc=17;ec=26]] {{&&}}
-    var = foo() ? exp : true;   // Noncompliant [[sc=25;ec=29;quickfixes=qf_cond5]]
+    var = foo() ? exp : true; // Noncompliant [[sc=25;ec=29;quickfixes=qf_cond5]]
     // fix@qf_cond5 {{Simplify the expression}}
     // edit@qf_cond5 [[sc=22;ec=29]] {{}}
     // edit@qf_cond5 [[sc=11;ec=11]] {{!}}
     // edit@qf_cond5 [[sc=17;ec=18]] {{||}}
-    var = foo() ? exp : false;  // Noncompliant [[sc=25;ec=30;quickfixes=qf_cond6]]
+    var = foo() ? exp : false; // Noncompliant [[sc=25;ec=30;quickfixes=qf_cond6]]
     // fix@qf_cond6 {{Simplify the expression}}
     // edit@qf_cond6 [[sc=22;ec=30]] {{}}
     // edit@qf_cond6 [[sc=17;ec=18]] {{&&}}
 
-    // The following are reported but we do not suggest a quick fix as it looks more like a bug (see S3923)
-    var = foo() ? true : true;   // Noncompliant [[sc=19;ec=23;quickfixes=!]]
-    var = foo() ? false : false;   // Noncompliant [[sc=19;ec=24;quickfixes=!]]
+    // The following are reported but we do not suggest a quick fix as it looks more like a bug (see
+    // S3923)
+    var = foo() ? true : true; // Noncompliant [[sc=19;ec=23;quickfixes=!]]
+    var = foo() ? false : false; // Noncompliant [[sc=19;ec=24;quickfixes=!]]
 
-    Boolean b1 = foo() ? true : null;  // Compliant
-    Boolean b2 = foo() ? exp : null;   // Compliant
+    Boolean b1 = foo() ? true : null; // Compliant
+    Boolean b2 = foo() ? exp : null; // Compliant
     Boolean b3 = foo() ? null : false; // Compliant
-    Boolean b4 = foo() ? null : exp;   // Compliant
+    Boolean b4 = foo() ? null : exp; // Compliant
 
     var = foo();
     var = foo() || exp;
@@ -71,31 +77,31 @@ class BooleanLiteralCheck {
 
   void quickFixForEquality(boolean var) {
     boolean b;
-    b = var == false;       // Noncompliant [[sc=16;ec=21;quickfixes=qf_equal1]]
+    b = var == false; // Noncompliant [[sc=16;ec=21;quickfixes=qf_equal1]]
     // fix@qf_equal1 {{Simplify the expression}}
     // edit@qf_equal1 [[sc=9;ec=9]] {{!}}
     // edit@qf_equal1 [[sc=12;ec=21]] {{}}
-    b = var == true;        // Noncompliant [[sc=16;ec=20;quickfixes=qf_equal2]]
+    b = var == true; // Noncompliant [[sc=16;ec=20;quickfixes=qf_equal2]]
     // fix@qf_equal2 {{Simplify the expression}}
     // edit@qf_equal2 [[sc=12;ec=20]] {{}}
-    b = var != false;       // Noncompliant [[sc=16;ec=21;quickfixes=qf_equal3]]
+    b = var != false; // Noncompliant [[sc=16;ec=21;quickfixes=qf_equal3]]
     // fix@qf_equal3 {{Simplify the expression}}
     // edit@qf_equal3 [[sc=12;ec=21]] {{}}
-    b = var != true;        // Noncompliant [[sc=16;ec=20;quickfixes=qf_equal4]]
+    b = var != true; // Noncompliant [[sc=16;ec=20;quickfixes=qf_equal4]]
     // fix@qf_equal4 {{Simplify the expression}}
     // edit@qf_equal4 [[sc=9;ec=9]] {{!}}
     // edit@qf_equal4 [[sc=12;ec=20]] {{}}
 
-    b = false == var;       // Noncompliant [[sc=9;ec=14;quickfixes=qf_equal5]]
+    b = false == var; // Noncompliant [[sc=9;ec=14;quickfixes=qf_equal5]]
     // fix@qf_equal5 {{Simplify the expression}}
     // edit@qf_equal5 [[sc=9;ec=18]] {{!}}
-    b = true == var;        // Noncompliant [[sc=9;ec=13;quickfixes=qf_equal6]]
+    b = true == var; // Noncompliant [[sc=9;ec=13;quickfixes=qf_equal6]]
     // fix@qf_equal6 {{Simplify the expression}}
     // edit@qf_equal6 [[sc=9;ec=17]] {{}}
-    b = false != var;       // Noncompliant [[sc=9;ec=14;quickfixes=qf_equal7]]
+    b = false != var; // Noncompliant [[sc=9;ec=14;quickfixes=qf_equal7]]
     // fix@qf_equal7 {{Simplify the expression}}
     // edit@qf_equal7 [[sc=9;ec=18]] {{}}
-    b = true != var;        // Noncompliant [[sc=9;ec=13;quickfixes=qf_equal8]]
+    b = true != var; // Noncompliant [[sc=9;ec=13;quickfixes=qf_equal8]]
     // fix@qf_equal8 {{Simplify the expression}}
     // edit@qf_equal8 [[sc=9;ec=17]] {{!}}
 
@@ -187,15 +193,27 @@ class BooleanLiteralCheck {
     // edit@qf_and_or16 [[sc=9;ec=23]] {{false}}
 
     // Side effect can be nested into a more complex expression
-    b = (b ? var : bar()) || true;  // Noncompliant [[sc=30;ec=34;quickfixes=!]]
-    b = (b ? var : var2) || true;  // Noncompliant [[sc=29;ec=33;quickfixes=qf_side_effect]]
+    b = (b ? var : bar()) || true; // Noncompliant [[sc=30;ec=34;quickfixes=!]]
+    b = (b ? var : var2) || true; // Noncompliant [[sc=29;ec=33;quickfixes=qf_side_effect]]
     // fix@qf_side_effect {{Simplify the expression}}
     // edit@qf_side_effect [[sc=9;ec=29]] {{}}
 
   }
 
-  boolean foo()          { return true; }
-  boolean foo(boolean b) { return b;    }
-  boolean bar()          { return true; }
-  boolean f()          { return true; }
+  boolean foo() {
+    return true;
+  }
+
+  boolean foo(boolean b) {
+    return b;
+  }
+
+  boolean bar() {
+    return true;
+  }
+
+  boolean f() {
+    return true;
+  }
 }
+

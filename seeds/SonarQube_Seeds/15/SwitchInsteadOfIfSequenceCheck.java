@@ -4,11 +4,16 @@ public class SwitchInsteadOfIfSequenceCheck {
   String choice;
   String choice2;
   Object choice3;
-  String myStringMethod(){
+
+  String myStringMethod() {
     return "";
   }
+
   void foo() {
-    if ("red".equals(choice)) {  // Noncompliant [[sc=9;ec=29]] {{Convert this "if/else if" structure into a "switch". (sonar.java.source not set. Assuming 7 or greater.)}}
+    if ("red"
+        .equals(
+            choice)) { // Noncompliant [[sc=9;ec=29]] {{Convert this "if/else if" structure into a
+                       // "switch". (sonar.java.source not set. Assuming 7 or greater.)}}
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -19,20 +24,18 @@ public class SwitchInsteadOfIfSequenceCheck {
     }
   }
 
-  private void promptUser() {
-  }
+  private void promptUser() {}
 
-  private void dispenseYellow() {
-  }
+  private void dispenseYellow() {}
 
-  private void dispenseBlue() {
-  }
+  private void dispenseBlue() {}
 
-  private void dispenseRed() {
-  }
+  private void dispenseRed() {}
 
   void foobis() {
-    if ("red" == choice) {  // Noncompliant [[sc=9;ec=24]] {{Convert this "if/else if" structure into a "switch". (sonar.java.source not set. Assuming 7 or greater.)}}
+    if ("red"
+        == choice) { // Noncompliant [[sc=9;ec=24]] {{Convert this "if/else if" structure into a
+                     // "switch". (sonar.java.source not set. Assuming 7 or greater.)}}
       dispenseRed();
     } else if ("blue" == choice) {
       dispenseBlue();
@@ -43,9 +46,8 @@ public class SwitchInsteadOfIfSequenceCheck {
     }
   }
 
-
   void foo2() {
-    if ("red".equals(choice)) {  // compliant, not enough choices
+    if ("red".equals(choice)) { // compliant, not enough choices
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -55,7 +57,10 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void foo3() {
-    if ("red".equals(choice)) {  // Noncompliant {{Convert this "if/else if" structure into a "switch". (sonar.java.source not set. Assuming 7 or greater.)}}
+    if ("red"
+        .equals(
+            choice)) { // Noncompliant {{Convert this "if/else if" structure into a "switch".
+                       // (sonar.java.source not set. Assuming 7 or greater.)}}
       dispenseRed();
     } else if (choice.equals("blue")) {
       dispenseBlue();
@@ -68,11 +73,10 @@ public class SwitchInsteadOfIfSequenceCheck {
     }
   }
 
-  private void dispenseBrown() {
-  }
+  private void dispenseBrown() {}
 
   void foo4() {
-    if ("red".equals(this.choice)) {  // compliant : operand is not and identifier
+    if ("red".equals(this.choice)) { // compliant : operand is not and identifier
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -84,7 +88,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void foo55() {
-    if ("red".equals(choice)) {  // compliant, last case is not changeable to switch
+    if ("red".equals(choice)) { // compliant, last case is not changeable to switch
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -98,7 +102,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void foo5() {
-    if ("red".equals(choice)) {  // compliant, last case is not comparing same symbol
+    if ("red".equals(choice)) { // compliant, last case is not comparing same symbol
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -110,7 +114,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void foo6() {
-    if (true) {  // compliant, not using equals.
+    if (true) { // compliant, not using equals.
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -122,7 +126,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void no_else_statement() {
-    if ("red".equals(choice)) {  // Noncompliant
+    if ("red".equals(choice)) { // Noncompliant
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -132,7 +136,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void not_member_select_equals() {
-    if (equals(choice)) {  // compliant, not a member select
+    if (equals(choice)) { // compliant, not a member select
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -142,7 +146,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   boolean two_param_method(String a, String b) {
-    if (this.two_param_method(choice, choice2)) {  // compliant, not equal method
+    if (this.two_param_method(choice, choice2)) { // compliant, not equal method
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -153,7 +157,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   boolean not_equal_method(String b) {
-    if (this.not_equal_method(choice)) {  // compliant, not equal method
+    if (this.not_equal_method(choice)) { // compliant, not equal method
       dispenseRed();
     } else if ("blue".equals(choice)) {
       dispenseBlue();
@@ -164,7 +168,7 @@ public class SwitchInsteadOfIfSequenceCheck {
   }
 
   void not_string_arg() {
-    if ("red".startsWith(choice3.toString())) {  // compliant, not comparing string
+    if ("red".startsWith(choice3.toString())) { // compliant, not comparing string
       dispenseRed();
     } else if ("blue".equals(choice3)) {
       dispenseBlue();
@@ -172,18 +176,18 @@ public class SwitchInsteadOfIfSequenceCheck {
       dispenseYellow();
     }
   }
+
   void nestedIFs() {
-    if (choice.equals(choice))   // compliant, don't count nesting
-      if ("blue".equals(choice)) { // Noncompliant
+    if (choice.equals(choice)) // compliant, don't count nesting
+    if ("blue".equals(choice)) { // Noncompliant
         dispenseBlue();
       } else if ("yellow".equals(choice)) {
         dispenseYellow();
       } else if ("blue".equals(choice)) {
         dispenseBlue();
+      } else if ("blue".equals(choice)) {
+        dispenseBlue();
       }
-    else if ("blue".equals(choice)) {
-      dispenseBlue();
-    }
   }
-
 }
+

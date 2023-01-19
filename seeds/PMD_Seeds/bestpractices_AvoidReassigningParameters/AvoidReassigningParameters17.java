@@ -1,7 +1,6 @@
-
 public class AvoidReassigningParameters {
-    public void a(String... s) {
-        s[0] =  "";
-    }
+  public void a(String... s) {
+    s[0] = "";
+  }
 }
-        
+

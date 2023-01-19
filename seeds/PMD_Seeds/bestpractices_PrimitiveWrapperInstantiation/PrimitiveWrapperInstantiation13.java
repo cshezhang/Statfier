@@ -1,5 +1,4 @@
-
 public class Foo {
-    Boolean[] a = new Boolean[]{};
+  Boolean[] a = new Boolean[] {};
 }
-        
+

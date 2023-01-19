@@ -1,6 +1,3 @@
-
-
-
 public class FieldAccess {
 
   public class Test {
@@ -11,3 +8,4 @@ public class FieldAccess {
     for (int ci = 0; ci < test.a; ++ci) {}
   }
 }
+

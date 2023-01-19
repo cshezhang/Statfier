@@ -1,7 +1,6 @@
-
 public class Foo {
-    void clone() {
-        super.clone();
-    }
+  void clone() {
+    super.clone();
+  }
 }
-        
+

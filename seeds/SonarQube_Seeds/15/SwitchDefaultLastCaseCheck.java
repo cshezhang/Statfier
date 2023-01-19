@@ -46,16 +46,18 @@ class SwitchDefaultLastCaseCheck {
       case 1:
         break;
     }
-    
+
     switch (0) {
       case 0:
         break;
       case 1:
         break;
       case 2:
-      default:  // Compliant default does not affect the normal execution of the switch, as it requires to match 3
+      default: // Compliant default does not affect the normal execution of the switch, as it
+               // requires to match 3
       case 3:
         break;
     }
   }
 }
+

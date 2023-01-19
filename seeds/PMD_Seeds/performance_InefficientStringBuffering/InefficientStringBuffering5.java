@@ -1,7 +1,6 @@
-
 public class Foo {
-    public Foo() {
-        super("CauseMsg:" + ex.getMessage(), ex);
-    }
+  public Foo() {
+    super("CauseMsg:" + ex.getMessage(), ex);
+  }
 }
-        
+

@@ -1,7 +1,5 @@
-
 public class Foo {
-    @Deprecated
-    public Foo() {
-    }
+  @Deprecated
+  public Foo() {}
 }
-        
+

@@ -1,12 +1,11 @@
-
 public class OuterClass {
 
-    public void foo() {
-        InnerClass.doSomething();
-    }
+  public void foo() {
+    InnerClass.doSomething();
+  }
 
-    static class InnerClass {
-        private static void doSomething() {}
-    }
+  static class InnerClass {
+    private static void doSomething() {}
+  }
 }
-        
+

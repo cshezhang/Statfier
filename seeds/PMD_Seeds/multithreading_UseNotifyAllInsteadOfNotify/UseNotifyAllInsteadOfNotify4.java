@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo () {
-        new Object().notify();
-    }
+  void foo() {
+    new Object().notify();
+  }
 }
-        
+

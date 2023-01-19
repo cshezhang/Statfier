@@ -1,7 +1,7 @@
-
 public class Foo {
-    void foo() {
-        synchronized (this) {}
+  void foo() {
+    synchronized (this) {
     }
+  }
 }
-        
+

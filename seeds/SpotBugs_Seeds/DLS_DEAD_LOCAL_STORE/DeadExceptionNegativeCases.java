@@ -27,3 +27,4 @@ public class DeadExceptionNegativeCases {
     return new RuntimeException("returned");
   }
 }
+

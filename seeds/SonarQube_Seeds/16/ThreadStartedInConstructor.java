@@ -1,8 +1,7 @@
 package checks;
 
 class ThreadStartedInConstructor {
-  public static class ExtendsThread extends Thread {
-  }
+  public static class ExtendsThread extends Thread {}
 
   enum Enum {
     ;
@@ -26,7 +25,8 @@ class ThreadStartedInConstructor {
 
     TestClass1() {
       toString(); // Compliant
-      new Thread((Runnable) null).start(); // Noncompliant [[sc=35;ec=40]] {{Move this "start" call to another method.}}
+      new Thread((Runnable) null)
+          .start(); // Noncompliant [[sc=35;ec=40]] {{Move this "start" call to another method.}}
       new ExtendsThread().start(); // Noncompliant {{Move this "start" call to another method.}}
     }
 
@@ -48,7 +48,8 @@ class ThreadStartedInConstructor {
 
   record MyRecord() {
     MyRecord {
-      new Thread((Runnable) null).start(); // Compliant - records can not be extended, they are implicitly final
+      new Thread((Runnable) null)
+          .start(); // Compliant - records can not be extended, they are implicitly final
     }
   }
 }

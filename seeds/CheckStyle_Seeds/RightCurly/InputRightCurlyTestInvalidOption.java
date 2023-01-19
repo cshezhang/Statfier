@@ -8,22 +8,19 @@ tokens = (default)LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITER
 
 package com.puppycrawl.tools.checkstyle.checks.blocks.rightcurly;
 
-class InputRightCurlyTestInvalidOption
-{
-    void foo() throws InterruptedException
-    {
+class InputRightCurlyTestInvalidOption {
+  void foo() throws InterruptedException {
 
-            try
-            {
+    try {
 
-            } // ok
-            catch (Exception e)
-            {
-                return;
-            }
-
-        }
-
+    } // ok
+    catch (Exception e) {
+      return;
     }
+  }
+}
 
-class UniqEmptyClassTestInvalidOption {private int a;} // ok
+class UniqEmptyClassTestInvalidOption {
+  private int a;
+} // ok
+

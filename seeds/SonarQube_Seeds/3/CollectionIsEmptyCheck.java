@@ -8,11 +8,18 @@ import java.util.Collection;
 class CollectionIsEmptyCheck {
   int[] size = new int[4];
 
-  private void foo(Collection myCollection, Collection myCollection2, CollectionIsEmptyCheck foo, ByteArrayOutputStream baot) {
+  private void foo(
+      Collection myCollection,
+      Collection myCollection2,
+      CollectionIsEmptyCheck foo,
+      ByteArrayOutputStream baot) {
     boolean b;
     int i;
 
-    b = myCollection.size() == 0; // Noncompliant [[sc=9;ec=33;quickfixes=qf1]] {{Use isEmpty() to check whether the collection is empty or not.}}
+    b =
+        myCollection.size()
+            == 0; // Noncompliant [[sc=9;ec=33;quickfixes=qf1]] {{Use isEmpty() to check whether the
+                  // collection is empty or not.}}
     // fix@qf1 {{Use "isEmpty()"}}
     // edit@qf1 [[sc=22;ec=33]] {{isEmpty()}}
     b = myCollection.size() != 0; // Noncompliant [[sc=9;ec=33;quickfixes=qf2]]
@@ -79,12 +86,12 @@ class CollectionIsEmptyCheck {
     b = myCollection.size() < 3; // Compliant
     b = myCollection.size() > 3; // Compliant
 
-    b =  3 <= myCollection.size(); // Compliant
-    b =  3 >= myCollection.size(); // Compliant
-    b =  3 > myCollection.size(); // Compliant
-    b =  3 < myCollection.size(); // Compliant
-    b =  3 == myCollection.size(); // Compliant
-    b =  3 != myCollection.size(); // Compliant
+    b = 3 <= myCollection.size(); // Compliant
+    b = 3 >= myCollection.size(); // Compliant
+    b = 3 > myCollection.size(); // Compliant
+    b = 3 < myCollection.size(); // Compliant
+    b = 3 == myCollection.size(); // Compliant
+    b = 3 != myCollection.size(); // Compliant
 
     b = 0 < 3; // Compliant
     b = 1 + 1 < 3; // Compliant
@@ -147,3 +154,4 @@ class MyCollection<E> extends ArrayList<E> {
     }
   }
 }
+

@@ -14,34 +14,30 @@ tokens = (default)METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF
 package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
 
 public class InputMissingJavadocMethodsNotSkipWritten { // ok
-    /**
-     * Description.
-     *
-     * @param BAD
-     *            This param doesn't exist.
-     */
-    @MyAnnotation
-    public void InputMissingJavadocMethodsNotSkipWritten() {
-    }
+  /**
+   * Description.
+   *
+   * @param BAD This param doesn't exist.
+   */
+  @MyAnnotation
+  public void InputMissingJavadocMethodsNotSkipWritten() {}
 
-    /**
-     * Description.
-     *
-     * @param BAD
-     *            This param doesn't exist.
-     */
-    @MyAnnotation
-    public void test() {
-    }
+  /**
+   * Description.
+   *
+   * @param BAD This param doesn't exist.
+   */
+  @MyAnnotation
+  public void test() {}
 
-    /** Description. */
-    @MyAnnotation
-    public void test2() {
-    }
+  /** Description. */
+  @MyAnnotation
+  public void test2() {}
 
-    /** Description. */
-    @MyAnnotation
-    public String test3(int a) throws Exception {
-        return "";
-    }
+  /** Description. */
+  @MyAnnotation
+  public String test3(int a) throws Exception {
+    return "";
+  }
 }
+

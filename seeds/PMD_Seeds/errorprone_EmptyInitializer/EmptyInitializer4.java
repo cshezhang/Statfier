@@ -1,7 +1,6 @@
-
 public class Foo {
-    static {
-        x++;
-    }
+  static {
+    x++;
+  }
 }
-        
+

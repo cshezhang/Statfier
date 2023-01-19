@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,4 +9,4 @@ public record Reproducer(List<String> smsIds) {
     return new Reproducer(newList);
   }
 }
-        
+

@@ -15,12 +15,12 @@ tokens = (default)ANNOTATION_FIELD_DEF, CLASS_DEF, INTERFACE_DEF, METHOD_CALL, M
 
 package com.puppycrawl.tools.checkstyle.checks.coding.illegaltype;
 
+import com.puppycrawl.tools.checkstyle.*;
 import java.net.*;
 import java.util.*;
 import org.antlr.v4.runtime.*;
-import com.puppycrawl.tools.checkstyle.*;
 
-public class InputIllegalTypeTestStarImports
-{
-    List<Integer> l = new LinkedList<>(); // violation
+public class InputIllegalTypeTestStarImports {
+  List<Integer> l = new LinkedList<>(); // violation
 }
+

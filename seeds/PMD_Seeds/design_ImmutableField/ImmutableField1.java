@@ -1,5 +1,4 @@
-
 public class Foo {
-    private int x = 42;
+  private int x = 42;
 }
-        
+

@@ -1,8 +1,8 @@
-
 public class Foo {
-    static final int x;
-    Foo(int y) {
-        x = y;
-    }
+  static final int x;
+
+  Foo(int y) {
+    x = y;
+  }
 }
-        
+

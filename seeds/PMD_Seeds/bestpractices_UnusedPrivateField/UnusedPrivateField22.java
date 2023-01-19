@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        super.x++;
-    }
+  void bar() {
+    super.x++;
+  }
 }
-        
+

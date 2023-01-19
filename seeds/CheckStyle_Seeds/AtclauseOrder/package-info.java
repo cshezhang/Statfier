@@ -9,7 +9,6 @@ tagOrder = (default)@author, @deprecated, @exception, @param, @return, \
 
 */
 
-/**
- * Test.
- */
+/** Test. */
 package com.puppycrawl.tools.checkstyle.checks.javadoc.atclauseorder;
+

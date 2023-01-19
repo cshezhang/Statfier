@@ -9,59 +9,46 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.javadocmissingleadingaste
 
 public class InputJavadocMissingLeadingAsteriskIncorrect {
 
-  /**
-   Java style. // violation
-   **/
+  /** Java style. // violation */
   public int missingAsterisk;
 
-  /**
- // violation
-   *
-   */
+  /** // violation */
   public int blankComment;
 
   /**
-   *
-     @deprecated block tag // violation
+   * @deprecated block tag // violation
    */
   public int blockTag;
 
-  /**
-   *
-     Last line */ // violation
+  /** Last line */
+  // violation
   public int lastLine;
 
-  /**
-   Line one. // violation
-   Line two. // violation
-   */
+  /** Line one. // violation Line two. // violation */
   public int twoViolations;
 
-  /** Wrapped
-      single-line comment */ // violation
+  /** Wrapped single-line comment */
+  // violation
   public int wrapped;
 
   /**
+   *
+   *
    * <pre>
-      int foo = 0; // violation
+   * int foo = 0; // violation
    * </pre>
-   **/
+   */
   public int pre;
 
-  /**
-   * {@code
-      int foo = 0; // violation
-   * }
-   **/
+  /** {@code int foo = 0; // violation } */
   public int code;
-
 }
 
 /**
-* EOF immediately after NEWLINE.
- // violation
-@deprecated block tag // violation
-Not blank text*/ // violation
-class NoTextAfterNewLineIncorrect {
+ * EOF immediately after NEWLINE. // violation
+ *
+ * @deprecated block tag // violation Not blank text
+ */
+// violation
+class NoTextAfterNewLineIncorrect {}
 
-}

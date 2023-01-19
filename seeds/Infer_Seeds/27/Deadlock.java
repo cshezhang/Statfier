@@ -1,5 +1,3 @@
-
-
 import java.util.concurrent.Executor;
 
 class Deadlock {
@@ -88,3 +86,4 @@ class Deadlock {
         });
   }
 }
+

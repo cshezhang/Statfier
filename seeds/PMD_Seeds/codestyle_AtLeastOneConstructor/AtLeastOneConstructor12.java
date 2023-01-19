@@ -1,7 +1,5 @@
-
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class TestAtLeastOneConstructor {
-}
-        
+public class TestAtLeastOneConstructor {}
+

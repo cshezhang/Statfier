@@ -27,3 +27,4 @@ public class AlternativeRecommendations {
 
   static void acceptsNonnullView(View view) {}
 }
+

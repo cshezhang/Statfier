@@ -1,8 +1,8 @@
-
 import junit.framework.TestCase;
+
 public class Foo extends TestCase {
-    public void test1() {
-        assertTrue("foo".equals("foo"));
-    }
+  public void test1() {
+    assertTrue("foo".equals("foo"));
+  }
 }
-        
+

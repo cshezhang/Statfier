@@ -1,7 +1,5 @@
-
 import lombok.Value;
 
 @Value
-public class TestAtLeastOneConstructor {
-}
-        
+public class TestAtLeastOneConstructor {}
+

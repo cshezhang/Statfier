@@ -13,9 +13,12 @@ package com.puppycrawl.tools.checkstyle.checks.blocks.rightcurly;
  * @author <a href="mailto:piotr.listkiewicz@gmail.com">liscju</a>
  */
 public class InputRightCurlyTestSameOmitOneLiners {
-    public static void main(String[] args) {
-        boolean after = false;
-        try {
-        } finally { after = true; } // ok
-    }
+  public static void main(String[] args) {
+    boolean after = false;
+    try {
+    } finally {
+      after = true;
+    } // ok
+  }
 }
+

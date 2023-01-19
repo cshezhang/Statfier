@@ -1,6 +1,4 @@
-
 public @interface TestAnnotation {
-    public interface Inner {
-    }
+  public interface Inner {}
 }
-        
+

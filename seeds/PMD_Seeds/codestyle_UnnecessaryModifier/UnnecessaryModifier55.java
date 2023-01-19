@@ -1,7 +1,6 @@
-
 public interface Bar {
-    void method() {
-    }
-    static class Foo {}
+  void method() {}
+
+  static class Foo {}
 }
-        
+

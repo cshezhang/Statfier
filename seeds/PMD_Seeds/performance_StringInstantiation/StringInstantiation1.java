@@ -1,5 +1,4 @@
-
 public class Foo {
-    private String[] bar = new String[5];
+  private String[] bar = new String[5];
 }
-        
+

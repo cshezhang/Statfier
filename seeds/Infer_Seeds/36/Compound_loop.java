@@ -1,6 +1,3 @@
-
-
-
 public class Compound_loop {
 
   /* while loop that contains && in the guard. It gives the correct bound  */
@@ -43,3 +40,4 @@ public class Compound_loop {
     return j;
   }
 }
+

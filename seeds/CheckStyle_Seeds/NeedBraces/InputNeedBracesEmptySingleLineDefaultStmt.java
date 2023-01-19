@@ -10,23 +10,26 @@ tokens = LITERAL_DEFAULT
 package com.puppycrawl.tools.checkstyle.checks.blocks.needbraces;
 
 public class InputNeedBracesEmptySingleLineDefaultStmt {
-    int value;
-    private void main() {
-        switch (value) {
-            default:
-        }
+  int value;
+
+  private void main() {
+    switch (value) {
+      default:
     }
-    private void main1() {
-        switch (value) {
-            case 1:
-        }
+  }
+
+  private void main1() {
+    switch (value) {
+      case 1:
     }
+  }
 }
 
 @interface ExampleEmptySingleLineDefaultStmt {
-    String priority() default "value"; // ok
+  String priority() default "value"; // ok
 }
 
 interface IntefaceWithDefaultMethodEmptySingleLineDefaultStmt {
-    default void doIt(){}
+  default void doIt() {}
 }
+

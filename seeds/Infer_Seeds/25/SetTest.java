@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,3 +30,4 @@ class SetTest {
   //   for (int i = 0; i <= StaticSet.size(); i++) {}
   // }
 }
+

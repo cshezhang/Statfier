@@ -1,9 +1,8 @@
-
 public class Bar {
-    class Foo {
-        void clone() {
-            Foo f = new Foo();
-        }
+  class Foo {
+    void clone() {
+      Foo f = new Foo();
     }
+  }
 }
-        
+

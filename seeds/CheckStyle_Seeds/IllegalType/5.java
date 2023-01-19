@@ -1,5 +1,3 @@
-
-
 public class Test {
 
   public Set<Boolean> set; // violation
@@ -19,6 +17,5 @@ public class Test {
   public Set<? extends Foo> typeArgument() { // violation
     return new TreeSet<Foo<Boolean>>();
   }
-
 }
-        
+

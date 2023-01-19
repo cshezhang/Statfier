@@ -1,5 +1,4 @@
-
 public final class Foo {
-    protected int bar(){}
+  protected int bar() {}
 }
-        
+

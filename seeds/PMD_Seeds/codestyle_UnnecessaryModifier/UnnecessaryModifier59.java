@@ -1,5 +1,4 @@
-
 public interface FooInterface {
-    record BarRecord() {}
+  record BarRecord() {}
 }
-        
+

@@ -13,11 +13,7 @@ class TooManyLinesOfCode {
   int field5;
   int field6;
 
-
-
-
-
-
   int field7;
   // This line does not count
 }
+

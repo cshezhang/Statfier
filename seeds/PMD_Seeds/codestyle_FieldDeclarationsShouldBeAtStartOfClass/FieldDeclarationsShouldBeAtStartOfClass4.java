@@ -1,15 +1,17 @@
-
 public class Foo {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Foo.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Foo.class);
 
-    public static enum MyType {
-        ABC, DEF, GHI, JHK
-    };
+  public static enum MyType {
+    ABC,
+    DEF,
+    GHI,
+    JHK
+  };
 
-    private int id;
-    private MyType myType;
-    private String name;
+  private int id;
+  private MyType myType;
+  private String name;
 
-    // OK, now constructors, getters, setters, etc.
+  // OK, now constructors, getters, setters, etc.
 }
-        
+

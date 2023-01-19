@@ -1,7 +1,3 @@
-
-
-
-
 import android.app.Activity;
 import android.content.Intent;
 import codetoanalyze.java.InferTaint;
@@ -52,3 +48,4 @@ public class TaintedFormals {
     taintedContextBad(null, null, new Integer(1));
   }
 }
+

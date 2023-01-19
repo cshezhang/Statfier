@@ -1,6 +1,7 @@
 package org.detector.analysis;
 
 import org.detector.transform.Transform;
+import org.detector.util.Invoker;
 import org.detector.util.TriTuple;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jdt.core.JavaCore;
@@ -54,6 +55,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.noReport;
@@ -259,6 +261,17 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
+            String[] invokeCommands = new String[5];
+            invokeCommands[0] = "java";
+            invokeCommands[1] = "-jar";
+            invokeCommands[2] = GOOGLE_FORMAT_PATH;
+            invokeCommands[3] = "--replace";
+            invokeCommands[4] = this.filePath;
+            boolean isFormatted = Invoker.invokeCommandsByZT(invokeCommands);
+            if(!isFormatted) {
+                FileUtils.delete(file);
+                return false;
+            }
         } catch (IOException e) {
             System.err.println("Fail to Write to Java File!");
             e.printStackTrace();

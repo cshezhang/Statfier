@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 public class Recursion {
@@ -36,3 +32,4 @@ public class Recursion {
     FN_recursionBad(i - 1, InferTaint.inferSecretSource());
   }
 }
+

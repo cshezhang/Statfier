@@ -1,6 +1,5 @@
 package codetoanalyze.java.impurity;
 
-
 class TrickyExamples {
 
   int x;
@@ -14,3 +13,4 @@ class TrickyExamples {
     for (int i = 0; i < 10; i++) {}
   }
 }
+

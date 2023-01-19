@@ -5,17 +5,17 @@ violateExecutionOnNonTightHtml = (default)false
 
 */
 
-/**
- * Wrong header
- */
+/** Wrong header */
 // test
 
-/** @deprecated */
+/**
+ * @deprecated
+ */
 package com.puppycrawl.tools.checkstyle.checks.annotation.missingdeprecated; // violation
 
 /**
  * @deprecated do not use
  */
 @Deprecated
-class InputMissingDeprecatedAbovePackage {
-}
+class InputMissingDeprecatedAbovePackage {}
+

@@ -1,6 +1,3 @@
-
-
-
 class EvilCfg {
   public void foo_FP(int i, int j, boolean b) {
     int k, l, m, n;
@@ -30,3 +27,4 @@ class EvilCfg {
     for (; n < 10; n++) {}
   }
 }
+

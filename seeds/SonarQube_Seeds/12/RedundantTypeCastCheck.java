@@ -1,31 +1,42 @@
 package checks;
 
-import java.util.function.Predicate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Comparator;
 import java.util.Set;
+import java.util.function.Predicate;
 
 class Outer {
-  class Nested {
-  }
-  class ExtendedNested extends Nested { }
+  class Nested {}
+
+  class ExtendedNested extends Nested {}
+
   List list;
+
   List<String> foo() {
     Object obj = null;
-    Object o1 = (List<String>) foo(); // Noncompliant [[sc=17;ec=31;quickfixes=qf1]] {{Remove this unnecessary cast to "List".}}
-                                      // fix@qf1 {{Remove the cast to "List"}}
-                                      // edit@qf1 [[sc=17;ec=32]] {{}}
-    Object o2 = (List<? extends String>) foo(); // Noncompliant {{Remove this unnecessary cast to "List".}}
-    Object o3 = (List<? super String>) foo(); // Noncompliant {{Remove this unnecessary cast to "List".}}
+    Object o1 =
+        (List<String>)
+            foo(); // Noncompliant [[sc=17;ec=31;quickfixes=qf1]] {{Remove this unnecessary cast to
+                   // "List".}}
+    // fix@qf1 {{Remove the cast to "List"}}
+    // edit@qf1 [[sc=17;ec=32]] {{}}
+    Object o2 =
+        (List<? extends String>) foo(); // Noncompliant {{Remove this unnecessary cast to "List".}}
+    Object o3 =
+        (List<? super String>) foo(); // Noncompliant {{Remove this unnecessary cast to "List".}}
     String s1 = (String) obj; // Compliant
     String s2 = (String) s1; // Noncompliant {{Remove this unnecessary cast to "String".}}
-    Nested a = (Nested) new ExtendedNested(); // Noncompliant {{Remove this unnecessary cast to "Nested".}}
-    Nested[][] as = (Nested[][]) new ExtendedNested[1][1]; // Noncompliant {{Remove this unnecessary cast to "Nested[][]".}}
+    Nested a =
+        (Nested) new ExtendedNested(); // Noncompliant {{Remove this unnecessary cast to "Nested".}}
+    Nested[][] as =
+        (Nested[][])
+            new ExtendedNested[1]
+                [1]; // Noncompliant {{Remove this unnecessary cast to "Nested[][]".}}
     ExtendedNested b = null;
     fun(b);
 
@@ -48,7 +59,7 @@ class Outer {
     int a = 1;
     int b = 2;
     double d = (double) a / (double) b;
-    int c = (int)a; // Noncompliant {{Remove this unnecessary cast to "int".}}
+    int c = (int) a; // Noncompliant {{Remove this unnecessary cast to "int".}}
     int e = (int) d;
     return null;
   }
@@ -69,30 +80,36 @@ class Outer {
   List<List<ExtendedNested>> foo3() {
     return null;
   }
-  void fun(Nested a) {
-  }
 
-  void fun(Nested a, ExtendedNested b) {
-  }
+  void fun(Nested a) {}
 
-  void fun(ExtendedNested b) {
-  }
+  void fun(Nested a, ExtendedNested b) {}
 
-  void funBParameter(ExtendedNested b) {
-  }
+  void fun(ExtendedNested b) {}
+
+  void funBParameter(ExtendedNested b) {}
 
   class C {
     C(Nested a) {}
+
     C(ExtendedNested a) throws Exception {
-      Object o = (Object) fun().newInstance(); // Noncompliant {{Remove this unnecessary cast to "Object".}}
+      Object o =
+          (Object)
+              fun().newInstance(); // Noncompliant {{Remove this unnecessary cast to "Object".}}
     }
-    Class fun() { return null;}
+
+    Class fun() {
+      return null;
+    }
+
     public <T> T[] toArray(T[] a) {
       Object[] elementData = new Object[0];
       // Make a new array of a's runtime type, but my contents:
-      return (T[]) Arrays.copyOf(elementData, 12, a.getClass()); // Compliant - The cast is mandatory!
+      return (T[])
+          Arrays.copyOf(elementData, 12, a.getClass()); // Compliant - The cast is mandatory!
     }
-    String[] fun2(){
+
+    String[] fun2() {
       return (String[]) null; // Noncompliant {{Remove this unnecessary cast to "String[]".}}
     }
   }
@@ -109,22 +126,28 @@ class RedundantTypeCastCheck_E<T> {
   <K, V> Map<K, Set<V>> secondTypeChangeCast(Map<K, V> multimap) {
     return (Map<K, Set<V>>) (Map<K, ?>) multimap; // Compliant
   }
-  RedundantTypeCastCheck_E<List<Object>> typeChangeCast(RedundantTypeCastCheck_E<List<String>> list) {
+
+  RedundantTypeCastCheck_E<List<Object>> typeChangeCast(
+      RedundantTypeCastCheck_E<List<String>> list) {
     return (RedundantTypeCastCheck_E<List<Object>>) (RedundantTypeCastCheck_E<?>) list; // Compliant
   }
 }
+
 interface Dto<T> {}
+
 interface Index<DOMAIN, DTO extends Dto<KEY>, KEY extends java.io.Serializable> {}
+
 class CastToRawType {
   void fun() {
-    Object o1  = (Object) Object[].class; // Noncompliant
-    Class o2  = (Class) Object[].class; // Noncompliant
-  }
-  private final Map<Class<?>, Index<?,?,?>> indexComponents = null;
-  public <K extends Index> K get(Class<K> clazz){
-    return (K) this.indexComponents.get(clazz);
+    Object o1 = (Object) Object[].class; // Noncompliant
+    Class o2 = (Class) Object[].class; // Noncompliant
   }
 
+  private final Map<Class<?>, Index<?, ?, ?>> indexComponents = null;
+
+  public <K extends Index> K get(Class<K> clazz) {
+    return (K) this.indexComponents.get(clazz);
+  }
 }
 
 class RedundantTypeCastCheck_F<T, K, V> {
@@ -133,25 +156,27 @@ class RedundantTypeCastCheck_F<T, K, V> {
       return (J) t;
     }
   }
+
   public <T> T[] toArray(T[] a) {
     int size = size();
     if (a.length < size)
-      a = (T[])java.lang.reflect.Array
-        .newInstance(a.getClass().getComponentType(), size);
-    java.util.Iterator<Map.Entry<K,V>> it = iterator();
+      a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
+    java.util.Iterator<Map.Entry<K, V>> it = iterator();
     for (int i = 0; i < size; i++)
-      a[i] = (T) new java.util.AbstractMap.SimpleEntry<K,V>(it.next());
-    if (a.length > size)
-      a[size] = null;
+      a[i] = (T) new java.util.AbstractMap.SimpleEntry<K, V>(it.next());
+    if (a.length > size) a[size] = null;
     return a;
   }
+
   public int size() {
     return 42;
   }
-  public java.util.Iterator<Map.Entry<K,V>> iterator() {
+
+  public java.util.Iterator<Map.Entry<K, V>> iterator() {
     return null;
   }
 }
+
 class RedundantTypeCastCheck_G<T> {
 
   private RedundantTypeCastCheck_G<?> resolveSupertype() {
@@ -159,7 +184,11 @@ class RedundantTypeCastCheck_G<T> {
   }
 
   void foo() {
-    RedundantTypeCastCheck_G<? super T> plop = (RedundantTypeCastCheck_G<? super T>) resolveSupertype(); // this works but there is an issue in the returned type of resolveSupertype which returns raw type RedundantTypeCastCheck_G instead of RedundantTypeCastCheck_G<?>
+    RedundantTypeCastCheck_G<? super T> plop =
+        (RedundantTypeCastCheck_G<? super T>)
+            resolveSupertype(); // this works but there is an issue in the returned type of
+                                // resolveSupertype which returns raw type RedundantTypeCastCheck_G
+                                // instead of RedundantTypeCastCheck_G<?>
   }
 
   private int unsafeCompare(Object k1, Object k2) {
@@ -176,9 +205,10 @@ class RedundantTypeCastCheck_G<T> {
   }
 
   static class H {
-    java.util.concurrent.Callable<H> c0 = () -> {
-      return (H) getValue();
-    };
+    java.util.concurrent.Callable<H> c0 =
+        () -> {
+          return (H) getValue();
+        };
 
     private Object getValue() {
       return null;
@@ -189,6 +219,7 @@ class RedundantTypeCastCheck_G<T> {
       Class<T> c = (Class<T>) Class.forName(name, true, o.getClass().getClassLoader());
       return null;
     }
+
     public static Number choose(Integer i, Float f, boolean takeFirst) {
       return takeFirst ? (Number) i : f;
     }
@@ -198,7 +229,7 @@ class RedundantTypeCastCheck_G<T> {
     }
 
     public static float choose3(int i, double f, boolean takeFirst) {
-      return takeFirst ? i : (float)f;
+      return takeFirst ? i : (float) f;
     }
   }
 
@@ -206,24 +237,26 @@ class RedundantTypeCastCheck_G<T> {
     <K> K getValue(K s) {
       return s;
     }
+
     String foo() {
       return (String) getValue(""); // Noncompliant
     }
   }
 
   void fun() {
-    Object test = new Object[]{"1"};
-    String[] test2 = new String[]{"1"};
-    Object[] test3 = new String[]{"1"};
-    System.out.println(((Object[])test)[0]); // compliant : target type is array access
-    System.out.println(((Object[])test2)[0]); // Noncompliant
-    System.out.println(((String[])test3)[0]); // compliant
+    Object test = new Object[] {"1"};
+    String[] test2 = new String[] {"1"};
+    Object[] test3 = new String[] {"1"};
+    System.out.println(((Object[]) test)[0]); // compliant : target type is array access
+    System.out.println(((Object[]) test2)[0]); // Noncompliant
+    System.out.println(((String[]) test3)[0]); // compliant
   }
 }
 
 interface RedundantTypeCastCheck_J {
-  default void foo() { }
-  default void bar() { }
+  default void foo() {}
+
+  default void bar() {}
 
   interface K extends RedundantTypeCastCheck_J {
     void foo();
@@ -234,59 +267,73 @@ interface RedundantTypeCastCheck_J {
   }
 
   static void test() {
-    RedundantTypeCastCheck_J j1 = (K) () -> { }; // compliant : cast is needed for it to be used as a lambda expression
-    RedundantTypeCastCheck_J j2 = (L) () -> { }; // compliant : cast is needed for it to be used as a lambda expression
+    RedundantTypeCastCheck_J j1 =
+        (K) () -> {}; // compliant : cast is needed for it to be used as a lambda expression
+    RedundantTypeCastCheck_J j2 =
+        (L) () -> {}; // compliant : cast is needed for it to be used as a lambda expression
   }
 }
 
 interface RedundantTypeCastCheck_M {
-  default void foo() { }
-  default void bar() { }
+  default void foo() {}
+
+  default void bar() {}
+
   void foobar();
 
   interface N extends RedundantTypeCastCheck_M {
-    default void foobar() { }
+    default void foobar() {}
+
     void foo();
   }
 
-  interface O extends RedundantTypeCastCheck_M { }
+  interface O extends RedundantTypeCastCheck_M {}
 
   interface P extends RedundantTypeCastCheck_M {
     void foobar();
   }
 
   interface Q extends RedundantTypeCastCheck_M {
-    default void foo() { }
+    default void foo() {}
   }
 
   static void test() {
-    RedundantTypeCastCheck_M m1 = () -> { };
-    RedundantTypeCastCheck_M m2 = (RedundantTypeCastCheck_M) () -> { }; // FN because we now allow all casts on lambdas to avoid FPs
-    RedundantTypeCastCheck_M m3 = (N) () -> { }; // compliant : cast changes method associated to lambda expression
-    RedundantTypeCastCheck_M m6 = (Q) () -> { }; // compliant : cast changes default definition of method foo
+    RedundantTypeCastCheck_M m1 = () -> {};
+    RedundantTypeCastCheck_M m2 =
+        (RedundantTypeCastCheck_M)
+            () -> {}; // FN because we now allow all casts on lambdas to avoid FPs
+    RedundantTypeCastCheck_M m3 =
+        (N) () -> {}; // compliant : cast changes method associated to lambda expression
+    RedundantTypeCastCheck_M m6 =
+        (Q) () -> {}; // compliant : cast changes default definition of method foo
   }
 }
 
 class RedundantTypeCastCheck_T {
   Predicate<Object> methodReferenceCastNeeded() {
-    return ((Predicate<Object>) Objects::nonNull).negate(); // Compliant : cannot call Predicate#negate() without casting it first
+    return ((Predicate<Object>) Objects::nonNull)
+        .negate(); // Compliant : cannot call Predicate#negate() without casting it first
   }
 
   Comparator<Integer> methodReferenceCastNeeded2() {
-    return (((Comparator<Integer>) Integer::compare)).reversed();   // Compliant : cannot call Comparator#reversed() without casting it first
+    return (((Comparator<Integer>) Integer::compare))
+        .reversed(); // Compliant : cannot call Comparator#reversed() without casting it first
   }
 
   Predicate<Object> methodReferenceCastNotNeeded() {
-    return (((Predicate<Object>) Objects::nonNull)); // FN because we now allow all casts on method references to avoid FPs
+    return (((Predicate<Object>)
+        Objects::nonNull)); // FN because we now allow all casts on method references to avoid FPs
   }
 
   Comparator<Integer> methodReferenceCastNotNeeded2() {
-    return (Comparator<Integer>) Integer::compare; // FN because we now allow all casts on method references to avoid FPs
+    return (Comparator<Integer>)
+        Integer::compare; // FN because we now allow all casts on method references to avoid FPs
   }
 }
 
 abstract class MyClass {
   public String field;
+
   abstract <U extends MyClass> U foo();
 
   String qix() {
@@ -305,21 +352,25 @@ abstract class MyClass {
     return ((MyOtherClass) foo()); // Noncompliant
   }
 }
+
 abstract class MyOtherClass extends MyClass {
   public String otherField;
+
   abstract String bar();
 }
 
 class AWT {
-  private static java.awt.event.AWTEventListener deProxyAWTEventListener(java.awt.event.AWTEventListener l) {
+  private static java.awt.event.AWTEventListener deProxyAWTEventListener(
+      java.awt.event.AWTEventListener l) {
     java.awt.event.AWTEventListener localL = l;
 
     if (localL == null) {
       return null;
     }
     if (l instanceof java.awt.event.AWTEventListenerProxy) {
-      localL = (java.awt.event.AWTEventListener) // Noncompliant
-        ((java.awt.event.AWTEventListenerProxy) l).getListener(); // Compliant
+      localL =
+          (java.awt.event.AWTEventListener) // Noncompliant
+              ((java.awt.event.AWTEventListenerProxy) l).getListener(); // Compliant
     }
     return localL;
   }
@@ -331,7 +382,9 @@ class AWT {
 }
 
 class CastIntersectionType {
-  public static final Comparator<Object> UNIQUE_ID_COMPARATOR =  (Comparator<Object> & java.io.Serializable) (o1, o2) -> o1.toString().compareTo(o2.toString());
+  public static final Comparator<Object> UNIQUE_ID_COMPARATOR =
+      (Comparator<Object> & java.io.Serializable)
+          (o1, o2) -> o1.toString().compareTo(o2.toString());
 }
 
 abstract class Discuss {
@@ -339,7 +392,7 @@ abstract class Discuss {
   abstract <M> M getMeta();
 
   void foo() {
-    int  i = ((String) getMeta()).length(); // Compliant - generic method correctly handled
+    int i = ((String) getMeta()).length(); // Compliant - generic method correctly handled
   }
 }
 
@@ -353,11 +406,10 @@ class ClassWithAnnotation {
 }
 
 class ClassWithVariadicFunction {
-  public ClassWithVariadicFunction(int i) {
+  public ClassWithVariadicFunction(int i) {}
 
-  }
+  void variadicFunction(int... p) {}
 
-  void variadicFunction(int ... p) {}
   void fun() {
     variadicFunction(1, 2, (int) 3.4);
     variadicFunction(1, 2, ((int) 3.4));
@@ -375,12 +427,15 @@ class GenericClass<T> {
   }
 
   void foo() {
-    GenericClass<? super T> g = (GenericClass<? super T>) type(); // type of the method invocation is well-handled
+    GenericClass<? super T> g =
+        (GenericClass<? super T>) type(); // type of the method invocation is well-handled
   }
 }
 
 class CastRawType {
   public static void paramsErrorMessage(Class clazz) {
-    Outer.Nested r = (Outer.Nested) clazz.getAnnotation(Outer.Nested.class); // Handle cast of raw types
+    Outer.Nested r =
+        (Outer.Nested) clazz.getAnnotation(Outer.Nested.class); // Handle cast of raw types
   }
 }
+

@@ -27,7 +27,8 @@ class AnonymousClassShouldBeLambdaCheck_no_version {
 
   class A {
     void toto() {
-      new Handler() { // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source not set. Assuming 8 or greater.)}}
+      new Handler() { // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source
+                      // not set. Assuming 8 or greater.)}}
         @Override
         public String handle() {
           return "handled";
@@ -53,7 +54,8 @@ class AnonymousClassShouldBeLambdaCheck_no_version {
         }
       }.handle();
 
-      new Handler() { // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source not set. Assuming 8 or greater.)}}
+      new Handler() { // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source
+                      // not set. Assuming 8 or greater.)}}
         @Override
         public String handle() {
           class C {
@@ -78,14 +80,16 @@ class AnonymousClassShouldBeLambdaCheck_no_version {
         }
       };
 
-      new Handler() { // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source not set. Assuming 8 or greater.)}}
+      new Handler() { // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source
+                      // not set. Assuming 8 or greater.)}}
         @Override
         public String handle() {
           return "";
         } // this empty statement should not be counted!
       };
 
-      new Handler // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source not set. Assuming 8 or greater.)}}
+      new Handler // Noncompliant {{Make this anonymous inner class a lambda (sonar.java.source not
+                  // set. Assuming 8 or greater.)}}
       () {
         @Override
         public String handle() {
@@ -97,6 +101,6 @@ class AnonymousClassShouldBeLambdaCheck_no_version {
     String toStr() {
       return "";
     }
-
   }
 }
+

@@ -1,11 +1,9 @@
-
 public class Source {
-    @Deprecated
-    private Object o; //violation!
+  @Deprecated private Object o; // violation!
 
-    Object m() {
-        o = new Object();
-        return o;
-    }
+  Object m() {
+    o = new Object();
+    return o;
+  }
 }
-        
+

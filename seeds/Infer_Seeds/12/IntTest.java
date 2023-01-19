@@ -1,6 +1,3 @@
-
-
-
 class IntTest {
   void intValue_linear(Integer mKBytesToSend) {
     for (int count = 0; count < mKBytesToSend; count++) {}
@@ -47,3 +44,4 @@ class IntTest {
     }
   }
 }
+

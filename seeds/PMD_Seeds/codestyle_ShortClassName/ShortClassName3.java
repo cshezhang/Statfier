@@ -1,4 +1,2 @@
+public class Timer {}
 
-public class Timer {
-}
-        

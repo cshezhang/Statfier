@@ -11,7 +11,9 @@ public class DoubleCheckedLockingAssignment {
     if (strings == null) {
       synchronized (this) {
         if (strings == null) {
-          strings = new ArrayList<>();  // Noncompliant [[sc=11;ec=38;secondary=15,16]] {{Fully initialize "strings" before assigning it.}}
+          strings =
+              new ArrayList<>(); // Noncompliant [[sc=11;ec=38;secondary=15,16]] {{Fully initialize
+                                 // "strings" before assigning it.}}
           strings.add("Hello");
           strings.add("World");
         }
@@ -24,7 +26,9 @@ public class DoubleCheckedLockingAssignment {
     if (null == strings) {
       synchronized (this) {
         if (null == this.strings) {
-          strings = new ArrayList<>();  // Noncompliant [[sc=11;ec=38;secondary=28,30]] {{Fully initialize "strings" before assigning it.}}
+          strings =
+              new ArrayList<>(); // Noncompliant [[sc=11;ec=38;secondary=28,30]] {{Fully initialize
+                                 // "strings" before assigning it.}}
           strings.add("Hello");
           System.out.println();
           strings.add("World");
@@ -38,13 +42,14 @@ public class DoubleCheckedLockingAssignment {
     if (strings == null) {
       synchronized (this) {
         if (strings == null) {
-          strings = new ArrayList<>();  // Compliant
+          strings = new ArrayList<>(); // Compliant
           Runnable run = () -> System.out.println(strings);
-          run = new Runnable() {
-            public void run() {
-              System.out.println(strings);
-            }
-          };
+          run =
+              new Runnable() {
+                public void run() {
+                  System.out.println(strings);
+                }
+              };
         }
       }
     }
@@ -69,33 +74,27 @@ public class DoubleCheckedLockingAssignment {
 
   public List<String> coverage(List<String> param) {
     if (strings == null) {
-      strings = new ArrayList<>();  // Compliant
+      strings = new ArrayList<>(); // Compliant
       strings.add("Hello");
       strings.add("World");
     }
-    if (strings == null) {
+    if (strings == null) {}
 
-    }
     if (strings == null) {
       System.out.printf("");
     }
     if (strings == null) {
       synchronized (this) {
-
       }
     }
     if (param == null) {
       synchronized (this) {
-        if (param == null) {
-
-        }
+        if (param == null) {}
       }
     }
     if (param != null) {
       synchronized (this) {
-        if (param == null) {
-
-        }
+        if (param == null) {}
       }
     }
     if (strings == null) {
@@ -105,9 +104,7 @@ public class DoubleCheckedLockingAssignment {
     }
     if (strings == null) {
       synchronized (this) {
-        if (strings2 == null) {
-
-        }
+        if (strings2 == null) {}
       }
     }
     if (strings == null) {
@@ -126,19 +123,23 @@ public class DoubleCheckedLockingAssignment {
     }
     if (strings == null) {
       synchronized (this) {
-        if (strings == null) while (true) {};
+        if (strings == null) while (true) {}
+        ;
       }
     }
     if (strings == null) {
       synchronized (this) {
-        if (strings == strings2) while (true) {};
+        if (strings == strings2) while (true) {}
+        ;
       }
     }
     if (null == null) {
       synchronized (this) {
-        if (strings == strings2) while (true) {};
+        if (strings == strings2) while (true) {}
+        ;
       }
     }
     return param;
   }
 }
+

@@ -1,9 +1,8 @@
-
 public class Foo {
-    private int x = 0;
+  private int x = 0;
 
-    private void bar() {
-        x++;
-    }
+  private void bar() {
+    x++;
+  }
 }
-        
+

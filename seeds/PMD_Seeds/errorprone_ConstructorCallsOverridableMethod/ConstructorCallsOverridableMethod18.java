@@ -1,12 +1,11 @@
+record HelloMsg(String msg) {
 
-            record HelloMsg(String msg) {
+  HelloMsg toTheWorld() {
+    return new HelloMsg("World");
+  }
 
-                    HelloMsg toTheWorld() {
-                       return new HelloMsg("World");
-                    }
+  String hello() {
+    return "Hello " + msg;
+  }
+}
 
-                    String hello() {
-                    return "Hello " + msg;
-                    }
-            }
-            

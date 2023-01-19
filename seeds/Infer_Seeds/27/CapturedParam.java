@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 /** Nullability checks for captured params */
@@ -22,3 +18,4 @@ public class CapturedParam {
         };
   }
 }
+

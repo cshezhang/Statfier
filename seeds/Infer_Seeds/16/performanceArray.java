@@ -1,6 +1,3 @@
-
-
-
 import java.util.Arrays;
 
 public class Array {
@@ -101,3 +98,4 @@ public class Array {
     for (int i = 0; i < static_final_field.length; i++) {}
   }
 }
+

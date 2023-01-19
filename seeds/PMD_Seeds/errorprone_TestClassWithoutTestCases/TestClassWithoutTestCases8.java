@@ -1,4 +1,2 @@
+public class FooTest {}
 
-public class FooTest {
-}
-        

@@ -13,52 +13,48 @@ tokens = (default)ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, \
 
 package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
-public class InputLeftCurlyTestNlSwitch
-{
+public class InputLeftCurlyTestNlSwitch {
 
-    public void doStuff()
-    {
-        int x = 1;
-        switch (x)
-        {
-            case 0: { // violation ''{' at column 21 should be on a new line'
-                break;
-            }
-            case (1
-                + 0):
-            {
-                break;
-            }
-            case 2:
-            {
-                break;
-            }
-            default
-                :
-            {
-                break;
-            }
-            case 3:
-            case 4:
-                x++; { // OK, standalone block
-                }
-                break;
-            case 5:
-                {
-                    x++;
-                }
-                x++;
-                break;
+  public void doStuff() {
+    int x = 1;
+    switch (x) {
+      case 0:
+        { // violation ''{' at column 21 should be on a new line'
+          break;
         }
-        switch (x)
+      case (1 + 0):
         {
-            case 0
-            :{ // violation ''{' at column 14 should be on a new line'
-                break;
-            }
-            default:
-                // do nothing
+          break;
         }
+      case 2:
+        {
+          break;
+        }
+      default:
+        {
+          break;
+        }
+      case 3:
+      case 4:
+        x++;
+        { // OK, standalone block
+        }
+        break;
+      case 5:
+        {
+          x++;
+        }
+        x++;
+        break;
     }
-
+    switch (x) {
+      case 0:
+        { // violation ''{' at column 14 should be on a new line'
+          break;
+        }
+      default:
+        // do nothing
+    }
+  }
 }
+

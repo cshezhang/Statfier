@@ -69,3 +69,4 @@ class BaosTest {
     return x.toByteArray();
   }
 }
+

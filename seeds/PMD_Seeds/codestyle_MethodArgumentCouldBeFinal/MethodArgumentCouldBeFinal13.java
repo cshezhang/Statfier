@@ -1,12 +1,12 @@
-
 public interface DefaultMethodInInterface {
-    default String toString(Object one) {
-        return toString(one, one);
-    }
-    String toString(Object one, Object two);
+  default String toString(Object one) {
+    return toString(one, one);
+  }
 
-    default Object justReturn(Object o) {
-        return o;
-    }
+  String toString(Object one, Object two);
+
+  default Object justReturn(Object o) {
+    return o;
+  }
 }
-        
+

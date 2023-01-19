@@ -1,9 +1,7 @@
-
 public class Foo {
-    public void setUp() {
-    }
-    @Test
-    public void foo() {
-    }
+  public void setUp() {}
+
+  @Test
+  public void foo() {}
 }
-        
+

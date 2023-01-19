@@ -18,8 +18,7 @@ class MissingCurlyBraces {
     } else {
     }
 
-    if (condition) {
-    }
+    if (condition) {}
 
     if (condition) {
     } else if (condition) {
@@ -27,25 +26,25 @@ class MissingCurlyBraces {
 
     for (int i = 0; i < 10; i++) doSomething(); // Noncompliant [[sc=5;ec=8]]
 
-    for (int i = 0; i < 10; i++) {
-    }
+    for (int i = 0; i < 10; i++) {}
 
     List<String> list = new ArrayList<>();
-    for (String s: list) doSomething(); // Noncompliant [[sc=5;ec=8]]
+    for (String s : list) doSomething(); // Noncompliant [[sc=5;ec=8]]
 
     while (condition) doSomething(); // Noncompliant
 
-    while (condition) {
-    }
+    while (condition) {}
 
-    do something(); while (condition); // Noncompliant
+    do something();
+    while (condition); // Noncompliant
 
     do {
       something();
     } while (condition);
-    if (condition) { doSomething(); }
-    else // Noncompliant
-      doSomethingElse();
+    if (condition) {
+      doSomething();
+    } else // Noncompliant
+    doSomethingElse();
   }
 
   int exceptions(boolean condition) {
@@ -55,37 +54,42 @@ class MissingCurlyBraces {
       if (condition) break; // Compliant
       if (condition) continue; // Compliant
 
-      if (condition) something();continue; // Noncompliant
+      if (condition) something();
+      continue; // Noncompliant
     }
 
     if (condition) something(); // Noncompliant
 
     if (condition) // Noncompliant
-      return 1;
+    return 1;
 
-    if (condition) return 1;something(); // Compliant, S2681 raises an issue here
+    if (condition) return 1;
+    something(); // Compliant, S2681 raises an issue here
 
-    if (condition) return 1; else { doSomethingElse(); }// Noncompliant [[sc=5;ec=7]]
-    if (condition) return 1; else if (condition) { doSomethingElse(); } // Noncompliant [[sc=5;ec=7]]
+    if (condition) return 1;
+    else {
+      doSomethingElse();
+    } // Noncompliant [[sc=5;ec=7]]
+    if (condition) return 1;
+    else if (condition) {
+      doSomethingElse();
+    } // Noncompliant [[sc=5;ec=7]]
 
     if (condition) return 1; // Noncompliant
     else doSomethingElse(); // Noncompliant
 
-    while(condition) return 1; // Noncompliant
-    while(condition) break; // Noncompliant
-    while(condition) continue; // Noncompliant
+    while (condition) return 1; // Noncompliant
+    while (condition) break; // Noncompliant
+    while (condition) continue; // Noncompliant
 
     if (condition) return 1; // Noncompliant
     else return 2; // Noncompliant
   }
 
-  private void something() {
-  }
+  private void something() {}
 
-  private void doSomething() {
-  }
+  private void doSomething() {}
 
-  private void doSomethingElse() {
-  }
-
+  private void doSomethingElse() {}
 }
+

@@ -1,8 +1,8 @@
-
 public class Foo {
-    void bar(boolean buz) {
-        buz();
-    }
-    private void buz() {}
+  void bar(boolean buz) {
+    buz();
+  }
+
+  private void buz() {}
 }
-        
+

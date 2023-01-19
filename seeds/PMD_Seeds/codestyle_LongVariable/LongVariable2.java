@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo() {
-        int abcdefghijklmnopqrstuvwxyz = -1;
-    }
+  void foo() {
+    int abcdefghijklmnopqrstuvwxyz = -1;
+  }
 }
-        
+

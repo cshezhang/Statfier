@@ -1,7 +1,6 @@
-
 public interface A {
-    interface B {
-        default void b() {}
-    }
+  interface B {
+    default void b() {}
+  }
 }
-        
+

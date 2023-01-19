@@ -15,7 +15,8 @@ class SwitchLastCaseIsDefaultCheck {
       default:
     }
 
-    switch (myEnum) { // Noncompliant {{Complete cases by adding the missing enum constants or add a default case to this switch.}}
+    switch (myEnum) { // Noncompliant {{Complete cases by adding the missing enum constants or add a
+                      // default case to this switch.}}
       case A:
         break;
       case B:
@@ -37,7 +38,8 @@ class SwitchLastCaseIsDefaultCheck {
         break;
     }
 
-    switch (dow) { // Noncompliant {{Complete cases by adding the missing enum constants or add a default case to this switch.}}
+    switch (dow) { // Noncompliant {{Complete cases by adding the missing enum constants or add a
+                   // default case to this switch.}}
       case FRIDAY:
         break;
       case MONDAY:
@@ -47,7 +49,10 @@ class SwitchLastCaseIsDefaultCheck {
 }
 
 enum MyEnum {
-  A, B, C;
+  A,
+  B,
+  C;
 
   MyEnum field;
 }
+

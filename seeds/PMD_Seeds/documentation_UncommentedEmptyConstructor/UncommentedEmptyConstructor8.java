@@ -1,8 +1,7 @@
-
 public class Foo {
-    Foo() {
-        this();
-        bar();
-    }
+  Foo() {
+    this();
+    bar();
+  }
 }
-        
+

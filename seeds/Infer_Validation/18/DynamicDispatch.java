@@ -1,7 +1,3 @@
-
-
-
-
 public class DynamicDispatch {
 
   static interface Interface {
@@ -150,3 +146,4 @@ public class DynamicDispatch {
     variadicMethod(subtype, null, null).toString();
   }
 }
+

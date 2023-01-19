@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        Vector v = new Vector();
-    }
+  void bar() {
+    Vector v = new Vector();
+  }
 }
-        
+

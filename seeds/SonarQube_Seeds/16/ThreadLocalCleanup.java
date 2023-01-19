@@ -2,8 +2,10 @@ package checks;
 
 class UserSession {
 
-  private static final ThreadLocal<UserSession> DELEGATE = new ThreadLocal<>(); // Noncompliant {{Call "remove()" on "DELEGATE".}}
-  static final ThreadLocal<UserSession> NOT_PRIVATE = new ThreadLocal<>(); // Compliant, because not private
+  private static final ThreadLocal<UserSession> DELEGATE =
+      new ThreadLocal<>(); // Noncompliant {{Call "remove()" on "DELEGATE".}}
+  static final ThreadLocal<UserSession> NOT_PRIVATE =
+      new ThreadLocal<>(); // Compliant, because not private
 
   public UserSession get() throws Exception {
     UserSession session = DELEGATE.get();
@@ -18,7 +20,9 @@ class UserSession {
   }
 
   public void incorrectCleanup() {
-    DELEGATE.set(null); // Noncompliant [[sc=5;ec=23;quickfixes=qf1]] {{Use "remove()" instead of "set(null)".}}
+    DELEGATE.set(
+        null); // Noncompliant [[sc=5;ec=23;quickfixes=qf1]] {{Use "remove()" instead of
+               // "set(null)".}}
     // fix@qf1 {{Replace with "remove()"}}
     // edit@qf1 [[sc=14;ec=23]] {{remove()}}
 
@@ -26,9 +30,7 @@ class UserSession {
     // fix@qf2 {{Replace with "remove()"}}
     // edit@qf2 [[sc=19;ec=28]] {{remove()}}
   }
-
 }
-
 
 class UserSessionOk {
 
@@ -69,18 +71,20 @@ class UserSessionClosed2 {
 
 class AnonymousSubclass {
 
-  private static ThreadLocal<char[]> DEST_TL = new ThreadLocal<char[]>() {  // Noncompliant
-    private final ThreadLocal<String> delegate = new ThreadLocal<>(); // Compliant, inside a class subtype of ThreadLocal
-    @Override
-    protected char[] initialValue() {
-      return new char[1024];
-    }
+  private static ThreadLocal<char[]> DEST_TL = new ThreadLocal<char[]>() { // Noncompliant
+        private final ThreadLocal<String> delegate =
+            new ThreadLocal<>(); // Compliant, inside a class subtype of ThreadLocal
 
-    void foo() {
-      delegate.set("1");
-      set(new char[] {'1'});
-    }
-  };
+        @Override
+        protected char[] initialValue() {
+          return new char[1024];
+        }
+
+        void foo() {
+          delegate.set("1");
+          set(new char[] {'1'});
+        }
+      };
 
   void bar() {
     DEST_TL = null;
@@ -89,13 +93,13 @@ class AnonymousSubclass {
 }
 
 class ThreadLocalCleanupExtends extends ThreadLocal {
-  private static final ThreadLocal<UserSession> DELEGATE = new ThreadLocal<>(); // Compliant, extends ThreadLocal
+  private static final ThreadLocal<UserSession> DELEGATE =
+      new ThreadLocal<>(); // Compliant, extends ThreadLocal
 
   public void quickFixInThreadLocal() {
     set(null); // Noncompliant [[sc=5;ec=14;quickfixes=qf3]]
     // fix@qf3 {{Replace with "remove()"}}
     // edit@qf3 [[sc=5;ec=14]] {{remove()}}
   }
-
 }
 

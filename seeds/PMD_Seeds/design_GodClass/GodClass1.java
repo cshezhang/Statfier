@@ -1,10 +1,9 @@
-
 public enum Color {
-    BLUE,
-    RED;
+  BLUE,
+  RED;
 
-    public int toHex() {
-        return 0;
-    }
+  public int toHex() {
+    return 0;
+  }
 }
-        
+

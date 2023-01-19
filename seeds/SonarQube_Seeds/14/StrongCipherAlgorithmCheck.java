@@ -1,10 +1,10 @@
 package checks;
 
-import javax.crypto.Cipher;
-import javax.crypto.NullCipher;
-import javax.crypto.NoSuchPaddingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.NullCipher;
 
 class MyCipher extends Cipher {
   public MyCipher() {
@@ -13,13 +13,15 @@ class MyCipher extends Cipher {
 }
 
 class StrongCipherAlgorithmCheck {
-  private final static String DES = "DES";
+  private static final String DES = "DES";
 
   void foo() throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException {
-    Cipher.getInstance("DESede/ECB/PKCS5Padding"); // Noncompliant [[sc=24;ec=49]] {{Use a strong cipher algorithm.}}
-    Cipher.getInstance("DES/ECB/PKCS5Padding");// Noncompliant
+    Cipher.getInstance(
+        "DESede/ECB/PKCS5Padding"); // Noncompliant [[sc=24;ec=49]] {{Use a strong cipher
+                                    // algorithm.}}
+    Cipher.getInstance("DES/ECB/PKCS5Padding"); // Noncompliant
     Cipher.getInstance("RC2/ECB/PKCS5Padding"); // Noncompliant
-    Cipher.getInstance("AES/GCM/NoPadding");//Compliant
+    Cipher.getInstance("AES/GCM/NoPadding"); // Compliant
     new NullCipher(); // Noncompliant [[sc=9;ec=19]] {{Use a strong cipher algorithm.}}
     new javax.crypto.NullCipher(); // Noncompliant
     new MyCipher();
@@ -84,7 +86,8 @@ class StrongCipherAlgorithmCheck {
     Cipher.getInstance("AES/GCM/NoPadding"); // Compliant
   }
 
-  void usingJavaUtilProperties(java.util.Properties props, String otherAlgo) throws NoSuchAlgorithmException, NoSuchPaddingException {
+  void usingJavaUtilProperties(java.util.Properties props, String otherAlgo)
+      throws NoSuchAlgorithmException, NoSuchPaddingException {
     String algo = props.getProperty("myAlgo", "DES/ECB/PKCS5Padding");
     Cipher.getInstance(algo); // Noncompliant
     Cipher.getInstance(props.getProperty("myAlgo", "DES/ECB/PKCS5Padding")); // Noncompliant
@@ -114,3 +117,4 @@ class StrongCipherAlgorithmCheck {
     return null;
   }
 }
+

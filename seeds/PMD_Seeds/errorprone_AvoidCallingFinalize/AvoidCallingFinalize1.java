@@ -1,8 +1,7 @@
-
 public class Foo {
-    void foo () {
-        Foo f;
-        f.finalize();
-    }
+  void foo() {
+    Foo f;
+    f.finalize();
+  }
 }
-        
+

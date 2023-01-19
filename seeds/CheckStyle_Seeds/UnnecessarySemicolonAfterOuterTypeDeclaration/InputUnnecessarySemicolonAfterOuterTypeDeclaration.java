@@ -9,36 +9,24 @@ package com.puppycrawl.tools.checkstyle.checks.coding.unnecessarysemicolonaftero
 
 public class InputUnnecessarySemicolonAfterOuterTypeDeclaration {
 
-    enum innerEnum {
+  enum innerEnum {}; // OK, nested enum
 
-    }; // OK, nested enum
+  @interface innerAnnotation {}; // OK, nested annotation
 
-    @interface innerAnnotation {
+  interface innerInterface {}
+  ; // OK, nested interface
 
-    }; // OK, nested annotation
+  class innerClass {}
+  ; // OK, nested class
+}
+; // violation
 
-    interface innerInterface {
+enum e {}; // violation
 
-    }; // OK, nested interface
+@interface an {}; // violation
 
-    class innerClass {
-
-    };  // OK, nested class
-
-}; // violation
-
-enum e {
-
-}; // violation
-
-@interface an {
-
-}; // violation
-
-interface i {
-
-}; // violation
-
+interface i {}
+; // violation
 
 enum okEnum {}
 
@@ -47,3 +35,4 @@ enum okEnum {}
 interface okInterface {}
 
 class okClass {}
+

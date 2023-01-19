@@ -1,18 +1,13 @@
-
-
 class Test { // violation, class only has a static method and a constructor
 
-  public Test() {
-  }
+  public Test() {}
 
-  public static void fun() {
-  }
+  public static void fun() {}
 }
 
 class Foo { // OK
 
-  private Foo() {
-  }
+  private Foo() {}
 
   static int n;
 }
@@ -29,4 +24,4 @@ class UtilityClass { // violation, class only has a static field
 
   static float f;
 }
-        
+

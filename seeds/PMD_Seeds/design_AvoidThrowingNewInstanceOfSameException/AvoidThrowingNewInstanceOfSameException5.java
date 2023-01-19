@@ -1,10 +1,9 @@
-
 public class Foo {
-    void bar() {
-        try {
-        } catch (SomeException se) {
-            throw new SomeException();
-        }
+  void bar() {
+    try {
+    } catch (SomeException se) {
+      throw new SomeException();
     }
+  }
 }
-        
+

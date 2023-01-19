@@ -9,7 +9,8 @@ public class SwitchCasesShouldBeCommaSeparatedCheck {
         doSomething();
         break;
       case "b":
-      case "c": // Noncompliant [[sc=7;ec=16;secondary=-1]] {{Merge the previous cases into this one using comma-separated label.}}
+      case "c": // Noncompliant [[sc=7;ec=16;secondary=-1]] {{Merge the previous cases into this one
+                // using comma-separated label.}}
         doSomething();
         doSomethingElse();
         break;
@@ -21,11 +22,13 @@ public class SwitchCasesShouldBeCommaSeparatedCheck {
     switch (mode) {
       case "a":
       case "b":
-      case "c": // Noncompliant [[sc=7;ec=16;secondary=-1,-2]] {{Merge the previous cases into this one using comma-separated label.}}
+      case "c": // Noncompliant [[sc=7;ec=16;secondary=-1,-2]] {{Merge the previous cases into this
+                // one using comma-separated label.}}
         doSomething();
         break;
       case "d":
-      case "e": // Noncompliant [[sc=7;ec=16;secondary=-1]] {{Merge the previous cases into this one using comma-separated label.}}
+      case "e": // Noncompliant [[sc=7;ec=16;secondary=-1]] {{Merge the previous cases into this one
+                // using comma-separated label.}}
       default:
         doSomethingElse();
     }
@@ -58,9 +61,8 @@ public class SwitchCasesShouldBeCommaSeparatedCheck {
     }
   }
 
-  private void doSomething() {
-  }
+  private void doSomething() {}
 
-  private void doSomethingElse() {
-  }
+  private void doSomethingElse() {}
 }
+

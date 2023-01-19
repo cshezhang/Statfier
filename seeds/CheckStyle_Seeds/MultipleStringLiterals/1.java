@@ -1,8 +1,7 @@
-
-
 public class MyClass {
   String a = "StringContents";
   String a1 = "unchecked";
+
   @SuppressWarnings("unchecked") // OK, duplicate strings are ignored in annotations
   public void myTest() {
     String a2 = "StringContents"; // OK, two occurrences are allowed
@@ -11,4 +10,4 @@ public class MyClass {
     String a5 = ", " + ", " + ", "; // violation, three occurrences are NOT allowed
   }
 }
-        
+

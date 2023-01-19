@@ -1,5 +1,4 @@
-
 public class Foo {
-    abstract void bar();
+  abstract void bar();
 }
-        
+

@@ -6,16 +6,9 @@ import java.sql.SQLException;
 import javax.naming.Context;
 
 /**
- * This check detect hardcoded password in multiples cases:
- * - 1. String literal
- * - 1.1 Urls
- * - 2. Variable declaration
- * - 3. Assignment
- * - 4. Method invocations
- * - 4.1 Equals
- * - 4.2 API setting password
- * - 4.3 Setting password
- * - 5. Constructors
+ * This check detect hardcoded password in multiples cases: - 1. String literal - 1.1 Urls - 2.
+ * Variable declaration - 3. Assignment - 4. Method invocations - 4.1 Equals - 4.2 API setting
+ * password - 4.3 Setting password - 5. Constructors
  */
 class HardCodedPasswordCheck {
 
@@ -28,13 +21,17 @@ class HardCodedPasswordCheck {
     // ========== 1. String literal ==========
     // The variable name does not influence the issue, only the string is considered.
     String variable1 = "blabla";
-    String variable2 = "login=a&password=xxx"; // Noncompliant [[sc=24;ec=46]] {{'password' detected in this expression, review this potentially hard-coded password.}}
+    String variable2 =
+        "login=a&password=xxx"; // Noncompliant [[sc=24;ec=46]] {{'password' detected in this
+                                // expression, review this potentially hard-coded password.}}
     String variable3 = "login=a&passwd=xxx"; // Noncompliant
     String variable4 = "login=a&pwd=xxx"; // Noncompliant
     String variable5 = "login=a&password=";
     String variable6 = "login=a&password= ";
     String params = "user=admin&password=Password123"; // Noncompliant
-    String sqlserver = "pgsql:host=localhost port=5432 dbname=test user=postgres password=postgres"; // Noncompliant
+    String sqlserver =
+        "pgsql:host=localhost port=5432 dbname=test user=postgres"
+            + " password=postgres"; // Noncompliant
 
     // Password starting with "?" are ignored
     String query1 = "password=?hard-to-find"; // Compliant
@@ -54,12 +51,15 @@ class HardCodedPasswordCheck {
     // Not hardcoded
     String query4 = "password='" + pwd + "'"; // Compliant
 
-    // When the string is in a variable with a name containing password, we let the logic about variable declaration (2.) determine if we should raise an issue.
+    // When the string is in a variable with a name containing password, we let the logic about
+    // variable declaration (2.) determine if we should raise an issue.
     String inPasswordConstant = "user=admin&password=Password123"; // Compliant
 
     // Password are correctly extracted
     String query10 = "password=something&user=user"; // Noncompliant
-    String query11 = "password=anonymous&user=user"; // Compliant, the password is the excluded "anonymous" and not "anonymous&user=user"
+    String query11 =
+        "password=anonymous&user=user"; // Compliant, the password is the excluded "anonymous" and
+                                        // not "anonymous&user=user"
     String query17 = "password=anonymous,user=user"; // Compliant
     String query18 = "password=anonymous|user=user"; // Compliant
     String query12 = "password=anonymous user=user"; // Compliant
@@ -68,21 +68,24 @@ class HardCodedPasswordCheck {
     String query13 = "password=anonymous\tuser=user"; // Compliant
     String query14 = "password=anonymous\nuser=user"; // Compliant
     String query15 = "password=something&user=user%s"; // Noncompliant
-    String query16 = "passwordProtected password=:notAPassword"; // Compliant, the password is starting with ":" and therefore excluded
+    String query16 =
+        "passwordProtected password=:notAPassword"; // Compliant, the password is starting with ":"
+                                                    // and therefore excluded
 
     // ========== 1.2 Urls ==========
     // No exclusion is made when the password if found in an url
     String[] urls = {
-      "http://user:123456@server.com/path",     // Noncompliant [[sc=7;ec=43]] {{Review this hard-coded URL, which may contain a password.}}
-      "ftp://anonymous:anonymous@wustl.edu",    // OK, user == password
-      "ftp://:anonymous@wustl.edu",             // Noncompliant
-      "http://admin:admin@server.com/path",     // OK, user == password
-      "http://user:@server.com/path",           // OK, password is empty
-      "http://user@server.com/path",            // OK, no password
-      "https://server:80/path",                 // OK, no user and password
-      "http://server.com/path",                 // OK, no user and password
-      "http://:123456@server.com/path",         // Noncompliant
-      "HTTPS://:token0932448209@server.com",    // Noncompliant
+      "http://user:123456@server.com/path", // Noncompliant [[sc=7;ec=43]] {{Review this hard-coded
+                                            // URL, which may contain a password.}}
+      "ftp://anonymous:anonymous@wustl.edu", // OK, user == password
+      "ftp://:anonymous@wustl.edu", // Noncompliant
+      "http://admin:admin@server.com/path", // OK, user == password
+      "http://user:@server.com/path", // OK, password is empty
+      "http://user@server.com/path", // OK, no password
+      "https://server:80/path", // OK, no user and password
+      "http://server.com/path", // OK, no user and password
+      "http://:123456@server.com/path", // Noncompliant
+      "HTTPS://:token0932448209@server.com", // Noncompliant
       "https://invalid::url::format",
       "too-long-url-scheme://user:123456@server.com",
     };
@@ -90,11 +93,20 @@ class HardCodedPasswordCheck {
     // ========== 2. Variable declaration ==========
     // The variable name should contain a password word
     final String MY_PASSWORD = "1234"; // Noncompliant
-    String variableNameWithPasswordInIt = "xxx"; // Noncompliant [[sc=12;ec=40]] {{'Password' detected in this expression, review this potentially hard-coded password.}}
-    String variableNameWithPassphraseInIt = "xxx"; // Noncompliant [[sc=12;ec=42]] {{'Passphrase' detected in this expression, review this potentially hard-coded password.}}
-    String variableNameWithPasswdInIt = "xxx"; // Noncompliant [[sc=12;ec=38]] {{'Passwd' detected in this expression, review this potentially hard-coded password.}}
-    String variableNameWithPwdInIt = "xxx"; // Noncompliant [[sc=12;ec=35]] {{'Pwd' detected in this expression, review this potentially hard-coded password.}}
-    String passwordToString = "SuperSecure".toString(); // Compliant, FN, but will be reported when we remove "toString()"
+    String variableNameWithPasswordInIt =
+        "xxx"; // Noncompliant [[sc=12;ec=40]] {{'Password' detected in this expression, review this
+               // potentially hard-coded password.}}
+    String variableNameWithPassphraseInIt =
+        "xxx"; // Noncompliant [[sc=12;ec=42]] {{'Passphrase' detected in this expression, review
+               // this potentially hard-coded password.}}
+    String variableNameWithPasswdInIt =
+        "xxx"; // Noncompliant [[sc=12;ec=38]] {{'Passwd' detected in this expression, review this
+               // potentially hard-coded password.}}
+    String variableNameWithPwdInIt =
+        "xxx"; // Noncompliant [[sc=12;ec=35]] {{'Pwd' detected in this expression, review this
+               // potentially hard-coded password.}}
+    String passwordToString =
+        "SuperSecure".toString(); // Compliant, FN, but will be reported when we remove "toString()"
     // Same constraints when "toCharArray" is called on the password
     char[] passwordToChar = "SuperSecure".toCharArray(); // Noncompliant [[sc=12;ec=26]]
     // Password with less than 2 characters are ignored
@@ -103,7 +115,8 @@ class HardCodedPasswordCheck {
     char[] smallPasswordToChar = "x".toCharArray(); // Compliant
     // "anonymous" is explicitly ignored
     String variableNameWithPasswordInItAnonymous = "anonymous";
-    // When the password contains a password word, we consider it as constant used to avoid duplicated string
+    // When the password contains a password word, we consider it as constant used to avoid
+    // duplicated string
     String passwordConst = "Password"; // Compliant
     String pwds = "pwd"; // Compliant
     final String PASSWORD = "Password"; // Compliant
@@ -124,7 +137,9 @@ class HardCodedPasswordCheck {
 
     // ========== 3. Assignment ==========
     // The variable name should contain a password word
-    fieldNameWithPasswordInIt = "xx"; // Noncompliant [[sc=5;ec=30]] {{'Password' detected in this expression, review this potentially hard-coded password.}}
+    fieldNameWithPasswordInIt =
+        "xx"; // Noncompliant [[sc=5;ec=30]] {{'Password' detected in this expression, review this
+              // potentially hard-coded password.}}
     this.fieldNameWithPasswordInIt = "xx"; // Noncompliant
     // Password with less than 2 characters are ignored
     fieldNameWithPasswordInIt = "X";
@@ -142,55 +157,55 @@ class HardCodedPasswordCheck {
     passphrase = "".toCharArray();
     passphrase = "X".toCharArray();
     passphrase = "anonymous".toCharArray();
-    // Unlike variable declaration, when the password contains a password word, it is not a constant, we still report an issue.
+    // Unlike variable declaration, when the password contains a password word, it is not a
+    // constant, we still report an issue.
     fieldNameWithPasswordInIt = "password"; // Noncompliant
 
     // ========== 4. Method invocations ==========
     // ========== 4.1 Equals ==========
     // When one side of the equals contains a password word, report an issue
     String password = "123"; // Noncompliant
-    if(password.equals("whatever")) { // Noncompliant [[sc=8;ec=16]]
+    if (password.equals("whatever")) { // Noncompliant [[sc=8;ec=16]]
     }
-    if("whatever".equals(password)) { // Noncompliant [[sc=26;ec=34]]
+    if ("whatever".equals(password)) { // Noncompliant [[sc=26;ec=34]]
     }
-    if(PASSED.equals(password)) { // Noncompliant
+    if (PASSED.equals(password)) { // Noncompliant
     }
     // Password with less than 2 characters are ignored
-    if(password.equals("X")) {
-    }
-    if(password.equals("")) {
-    }
-    if("".equals(password)) {
-    }
+    if (password.equals("X")) {}
+    if (password.equals("")) {}
+    if ("".equals(password)) {}
     // "anonymous" is explicitly ignored
-    if(password.equals("anonymous")) {
-    }
+    if (password.equals("anonymous")) {}
     // When the actual password contains a password word, we don't report an issue
-    if(password.equals("password")) {
-    }
-    if("password".equals(password)) {
-    }
-    if(password.equals("password-1234")) {
-    }
+    if (password.equals("password")) {}
+    if ("password".equals(password)) {}
+    if (password.equals("password-1234")) {}
     // Corner cases
-    if(password.equals(null)) {
-    }
-    if(password.equals(EMPTY)) {
-    }
-    if(equals(password)) {
-    }
+    if (password.equals(null)) {}
+    if (password.equals(EMPTY)) {}
+    if (equals(password)) {}
 
     // ========== 4.2 API setting password ==========
-    // The second argument of "getConnection" contains a password: report an issue if it is hardcoded
+    // The second argument of "getConnection" contains a password: report an issue if it is
+    // hardcoded
     java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://xxx/", "root", var);
-    conn = DriverManager.getConnection("jdbc:mysql://xxx/", "root", "whateverpassword"); // Noncompliant [[sc=69;ec=87]]
-    conn = DriverManager.getConnection("jdbc:mysql://xxx/", "root", PASSED); // Noncompliant  [[sc=69;ec=75]]
+    conn =
+        DriverManager.getConnection(
+            "jdbc:mysql://xxx/", "root", "whateverpassword"); // Noncompliant [[sc=69;ec=87]]
+    conn =
+        DriverManager.getConnection(
+            "jdbc:mysql://xxx/", "root", PASSED); // Noncompliant  [[sc=69;ec=75]]
     conn = DriverManager.getConnection("jdbc:mysql://xxx/");
-    // Password not set as argument, but it is still detected in the string itself is detected thanks to (1.)
-    conn = DriverManager.getConnection("jdbc:db2://myhost:5021/mydb:user=dbadm;password=foo"); // Noncompliant [[sc=40;ec=93]]
+    // Password not set as argument, but it is still detected in the string itself is detected
+    // thanks to (1.)
+    conn =
+        DriverManager.getConnection(
+            "jdbc:db2://myhost:5021/mydb:user=dbadm;password=foo"); // Noncompliant [[sc=40;ec=93]]
 
     // ========== 4.3 Setting password ==========
-    // When a method call has two arguments potentially containing String, we report an issue the same way we would with a variable declaration
+    // When a method call has two arguments potentially containing String, we report an issue the
+    // same way we would with a variable declaration
     A myA = new A();
     myA.setProperty("password", "xxxxx"); // Noncompliant
     myA.setProperty("passwd", "xxxxx"); // Noncompliant
@@ -209,7 +224,8 @@ class HardCodedPasswordCheck {
     // Other test cases
     myA.setProperty(12, "xxxxx");
     myA.setProperty(new Object(), new Object());
-    myA.setProperty("something", "else").setProperty("password", "xxxxx"); // Noncompliant [[sc=42;ec=53]]
+    myA.setProperty("something", "else")
+        .setProperty("password", "xxxxx"); // Noncompliant [[sc=42;ec=53]]
 
     // Same for code not user defined
     java.util.Properties props = new java.util.Properties();
@@ -229,7 +245,9 @@ class HardCodedPasswordCheck {
     // ========== 5. Constructors ==========
     // Second argument of "PasswordAuthentication" is setting explicitly a password
     PasswordAuthentication pa;
-    pa = new PasswordAuthentication("userName", "1234".toCharArray());  // Noncompliant {{Remove this hard-coded password.}}
+    pa =
+        new PasswordAuthentication(
+            "userName", "1234".toCharArray()); // Noncompliant {{Remove this hard-coded password.}}
     // Not hardcoded
     pa = new PasswordAuthentication("userName", var.toCharArray());
     pa = new PasswordAuthentication("userName", pwd); // Compliant
@@ -256,7 +274,6 @@ class HardCodedPasswordCheck {
     }
   }
 
-
   private static class OtherPasswordAuthentication {
     OtherPasswordAuthentication(String username, char[] pwd) {}
 
@@ -265,3 +282,4 @@ class HardCodedPasswordCheck {
     }
   }
 }
+

@@ -4,9 +4,7 @@ import edu.umd.cs.findbugs.annotations.NoWarning;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.Nullable;
 
-/**
- * Reproducer for https://github.com/spotbugs/spotbugs/issues/772
- */
+/** Reproducer for https://github.com/spotbugs/spotbugs/issues/772 */
 public class NonNullParameterOfInnerClassConstructor {
 
   private class Inner {
@@ -18,6 +16,6 @@ public class NonNullParameterOfInnerClassConstructor {
       this.a = a.toLowerCase();
       this.b = b;
     }
-
   }
 }
+

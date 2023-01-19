@@ -1,5 +1,3 @@
-
-
 import android.os.Binder;
 import android.os.RemoteException;
 import android.support.annotation.UiThread;
@@ -38,3 +36,4 @@ class IndirectInterproc {
     binder.transact(0, null, null, 0);
   }
 }
+

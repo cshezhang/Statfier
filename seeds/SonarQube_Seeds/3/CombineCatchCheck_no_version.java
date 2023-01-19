@@ -12,12 +12,13 @@ class CombineCatchCheck {
     } catch (IOException e) {
       doCleanup();
       logger.log(e);
-    }
-    catch (SQLException e) {  // Noncompliant {{Combine this catch with the one at line 12, which has the same body. (sonar.java.source not set. Assuming 7 or greater.)}}
+    } catch (
+        SQLException
+            e) { // Noncompliant {{Combine this catch with the one at line 12, which has the same
+                 // body. (sonar.java.source not set. Assuming 7 or greater.)}}
       doCleanup();
       logger.log(e);
-    }
-    catch (IllegalArgumentException  e) {  // Compliant; block contents are different
+    } catch (IllegalArgumentException e) { // Compliant; block contents are different
       doCleanup();
       throw e;
     }
@@ -27,12 +28,13 @@ class CombineCatchCheck {
     } catch (IOException | IllegalArgumentException e) {
       doCleanup();
       logger.log(e);
-    }
-    catch (SQLException e) {  // Noncompliant {{Combine this catch with the one at line 27, which has the same body. (sonar.java.source not set. Assuming 7 or greater.)}}
+    } catch (
+        SQLException
+            e) { // Noncompliant {{Combine this catch with the one at line 27, which has the same
+                 // body. (sonar.java.source not set. Assuming 7 or greater.)}}
       doCleanup();
       logger.log(e);
-    }
-    catch (ArrayStoreException  e) {  // Compliant; block contents are different
+    } catch (ArrayStoreException e) { // Compliant; block contents are different
       doCleanup();
       throw e;
     }
@@ -54,26 +56,26 @@ class CombineCatchCheck {
     try {
       canThrow();
     } catch (IOException e) {
-      for (int i = 0; i < 1; i++) {};
+      for (int i = 0; i < 1; i++) {}
+      ;
     } catch (Exception e) { // Update part is not the same.
-      for (int i = 0; i < 1; foo()) {};
+      for (int i = 0; i < 1; foo()) {}
+      ;
     }
   }
 
-  void canThrow() throws IOException, SQLException, IllegalArgumentException {
-  }
+  void canThrow() throws IOException, SQLException, IllegalArgumentException {}
 
-  private void doCleanup() {
-  }
+  private void doCleanup() {}
 
-  void handleException(IOException io) { }
+  void handleException(IOException io) {}
 
-  void handleException(IllegalArgumentException io) { }
+  void handleException(IllegalArgumentException io) {}
 
-  void handleException(SQLException io, String s) { }
+  void handleException(SQLException io, String s) {}
 }
 
 class CombineCatchCheckLogger {
-  void log(Exception e) {
-  }
+  void log(Exception e) {}
 }
+

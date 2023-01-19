@@ -10,28 +10,29 @@ package com.puppycrawl.tools.checkstyle.checks.annotation.annotationonsameline;
 
 public class InputAnnotationOnSameLineCheck {
 
-    @Annotation int x;      // ok
+  @Annotation int x; // ok
 
-    int y;
+  int y;
 
-    @Annotation             // violation
-    @SomeClass.Annotation   // violation
-    @java.lang.Deprecated   // violation
-    public int getX() {
-        return (int) x;
-    }
+  @Annotation // violation
+  @SomeClass.Annotation // violation
+  @java.lang.Deprecated // violation
+  public int getX() {
+    return (int) x;
+  }
 
-    @Annotation2 @Annotation    // violation
-    public int field;
+  @Annotation2 @Annotation // violation
+  public int field;
 
-    public
-    @Annotation int field2; // ok
+  public @Annotation int field2; // ok
 }
 
 class SomeClass {
 
-    @interface Annotation {}
+  @interface Annotation {}
 }
 
 @interface Annotation {}
+
 @interface Annotation2 {}
+

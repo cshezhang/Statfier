@@ -1,4 +1,3 @@
 
-import java.util.Vector;
-public class Foo{}
-        
+public class Foo {}
+

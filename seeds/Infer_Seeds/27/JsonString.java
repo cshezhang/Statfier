@@ -1,7 +1,3 @@
-
-
-
-
 public class JsonString implements JsonType {
 
   public String array;
@@ -26,3 +22,4 @@ public class JsonString implements JsonType {
     return array;
   }
 }
+

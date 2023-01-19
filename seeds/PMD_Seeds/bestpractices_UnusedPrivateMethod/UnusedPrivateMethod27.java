@@ -1,23 +1,18 @@
-
 public class Foo {
-    private String s;
+  private String s;
 
-    public Foo() {
-        s = "Foobar";
-    }
+  public Foo() {
+    s = "Foobar";
+  }
 
-    //This method isn't flagged
-    private void bar(int... n)
-    {
-    }
+  // This method isn't flagged
+  private void bar(int... n) {}
 
-    //This method is flagged
-    private void bar(String s)
-    {
-    }
+  // This method is flagged
+  private void bar(String s) {}
 
-    public void dummyMethod() {
-        bar(s);
-    }
+  public void dummyMethod() {
+    bar(s);
+  }
 }
-        
+

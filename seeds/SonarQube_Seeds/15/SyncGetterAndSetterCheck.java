@@ -12,11 +12,11 @@ public abstract class SyncGetterAndSetterCheck {
     this.name = name;
   }
 
-  public String getName() {  // Noncompliant
+  public String getName() { // Noncompliant
     return this.name;
   }
 
-  public void setAge(int age) {  // Noncompliant
+  public void setAge(int age) { // Noncompliant
     this.age = age;
   }
 
@@ -30,13 +30,17 @@ public abstract class SyncGetterAndSetterCheck {
     return address;
   }
 
-  public void setAddress(String address) { // Noncompliant {{Synchronize this method to match the synchronization on "getAddress".}}
+  public void setAddress(
+      String
+          address) { // Noncompliant {{Synchronize this method to match the synchronization on
+                     // "getAddress".}}
     this.age = age;
   }
 
   public String getAddress2() {
     return address;
   }
+
   public abstract void setAddress2(String address);
 
   public String getAddress3() {
@@ -44,20 +48,26 @@ public abstract class SyncGetterAndSetterCheck {
       return address3;
     }
   }
+
   public void setAddress3(String address) {
     this.address3 = address;
   }
 
   public void getNo() {}
-  public Object setNo(int a) { return null;}
+
+  public Object setNo(int a) {
+    return null;
+  }
+
   public void setNo() {}
 
   public String getAddress4() {
-    address4+="";
+    address4 += "";
     synchronized (this) {
       return address4;
     }
   }
+
   public void setAddress4(String address) {
     this.address4 = address;
   }
@@ -91,6 +101,7 @@ class SyncGetterAndSetterCheck2 {
       this.age = age;
     }
   }
+
   public int getAge() {
     synchronized (this) {
       return this.age;
@@ -130,3 +141,4 @@ class SyncGetterAndSetterCheck2 {
     this.young = young;
   }
 }
+

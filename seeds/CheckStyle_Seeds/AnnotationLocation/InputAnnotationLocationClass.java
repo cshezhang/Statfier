@@ -15,31 +15,32 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Target;
 
 @ClassAnnotation(value = "foo")
+@ClassAnnotation // violation
+@ClassAnnotation("bar")
+class InputAnnotationLocationClass { // violation
+
+  @ClassAnnotation(value = "foo")
   @ClassAnnotation // violation
-@ClassAnnotation("bar") class InputAnnotationLocationClass { // violation
+  @ClassAnnotation("bar")
+  Object field; // violation
 
-    @ClassAnnotation(value = "foo")
-      @ClassAnnotation // violation
-    @ClassAnnotation("bar") Object field; // violation
-
-    @ClassAnnotation(value = "foo")
-      @ClassAnnotation // violation
-    @ClassAnnotation("bar") InputAnnotationLocationClass() { // violation
-    }
-
+  @ClassAnnotation(value = "foo")
+  @ClassAnnotation // violation
+  @ClassAnnotation("bar")
+  InputAnnotationLocationClass() { // violation
+  }
 }
 
 @Repeatable(ClassAnnotations.class)
 @Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.TYPE})
 @interface ClassAnnotation {
 
-    String value() default "";
-
+  String value() default "";
 }
 
 @Target({ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.TYPE})
 @interface ClassAnnotations {
 
-    ClassAnnotation[] value();
-
+  ClassAnnotation[] value();
 }
+

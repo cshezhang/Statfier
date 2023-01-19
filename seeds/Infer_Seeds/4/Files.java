@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 import java.io.File;
 import java.nio.file.FileSystems;
@@ -37,3 +33,4 @@ public class Files {
     return Paths.get("", taintedString);
   }
 }
+

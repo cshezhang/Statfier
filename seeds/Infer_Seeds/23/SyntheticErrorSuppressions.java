@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import javax.annotation.Nullable;
 
@@ -64,3 +60,4 @@ public class SyntheticErrorSuppressions {
     }
   }
 }
+

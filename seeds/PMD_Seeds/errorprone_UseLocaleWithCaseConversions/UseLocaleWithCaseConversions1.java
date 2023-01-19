@@ -1,5 +1,4 @@
-
 public class Foo {
-    String x = y.toUpperCase();
+  String x = y.toUpperCase();
 }
-        
+

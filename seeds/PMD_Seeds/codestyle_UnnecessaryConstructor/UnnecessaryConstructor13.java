@@ -1,8 +1,7 @@
-
 public class Foo {
-    @Inject
-    public Foo() {
-        super();
-    }
+  @Inject
+  public Foo() {
+    super();
+  }
 }
-        
+

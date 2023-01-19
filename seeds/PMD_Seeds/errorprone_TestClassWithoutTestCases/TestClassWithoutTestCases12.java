@@ -1,13 +1,11 @@
-
 import org.junit.Test;
 
 public class MyTest {
-    @Test
-    public void myTest() {
-    }
+  @Test
+  public void myTest() {}
 
-    class NestedHelper { }
+  class NestedHelper {}
 }
 
-class Helper { }
-        
+class Helper {}
+

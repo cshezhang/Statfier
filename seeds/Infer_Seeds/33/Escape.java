@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
@@ -135,3 +131,4 @@ class Leaky {
     l.mField = 1; // bad
   }
 }
+

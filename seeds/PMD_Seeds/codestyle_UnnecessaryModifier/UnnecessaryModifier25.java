@@ -1,7 +1,6 @@
-
 public enum TestEnum {
-    ;
-    public interface EnumInnerInterface {
-    }
+  ;
+
+  public interface EnumInnerInterface {}
 }
-        
+

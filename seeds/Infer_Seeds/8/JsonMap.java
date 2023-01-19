@@ -1,7 +1,3 @@
-
-
-
-
 public class JsonMap implements JsonType {
 
   public StringBuilder map = new StringBuilder("{");
@@ -49,3 +45,4 @@ public class JsonMap implements JsonType {
     map.append(":");
   }
 }
+

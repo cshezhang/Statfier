@@ -1,7 +1,6 @@
-
 public class Foo {
-    {
-        System.out.print("something interesting");
-    }
+  {
+    System.out.print("something interesting");
+  }
 }
-        
+

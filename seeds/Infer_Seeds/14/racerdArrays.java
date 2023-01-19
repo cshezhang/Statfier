@@ -1,5 +1,3 @@
-
-
 import javax.annotation.concurrent.ThreadSafe;
 
 // Test may_alias treatment of arrays
@@ -71,3 +69,4 @@ public class Arrays {
     return type2Arr[3];
   }
 }
+

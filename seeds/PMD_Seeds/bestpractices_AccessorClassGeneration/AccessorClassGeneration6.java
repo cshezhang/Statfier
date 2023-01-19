@@ -1,3 +1,5 @@
+public @interface Something {
+  public interface SomthingElse {}
+  ;
+}
 
-public @interface Something { public interface SomthingElse{}; }
-        

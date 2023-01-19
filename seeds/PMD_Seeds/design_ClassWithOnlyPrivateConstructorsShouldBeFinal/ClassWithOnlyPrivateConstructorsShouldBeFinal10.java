@@ -1,7 +1,6 @@
-
 public class Outer {
-    private abstract class Base {
-        private void run() {}
-    }
+  private abstract class Base {
+    private void run() {}
+  }
 }
-        
+

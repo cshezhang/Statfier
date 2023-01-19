@@ -1,9 +1,7 @@
-
-
 /**
- * <p> 'p' tag is unclosed. Line with violation, this html tag needs closing tag.
- * <p> 'p' tag is closed</p>. OK
+ * 'p' tag is unclosed. Line with violation, this html tag needs closing tag.
+ *
+ * <p>'p' tag is closed. OK
  */
-public class Test {
-}
-        
+public class Test {}
+

@@ -1,30 +1,29 @@
-
-
 public class Test {
 
   public void test() {
 
     if (foo) {
       bar();
-    } else {        // violation, right curly must be alone on line
+    } else { // violation, right curly must be alone on line
       bar();
     }
 
     if (foo) {
       bar();
-    }               // OK
+    } // OK
     else {
       bar();
     }
 
     try {
       bar();
-    } catch (Exception e) {        // OK because config did not set token LITERAL_TRY
+    } catch (Exception e) { // OK because config did not set token LITERAL_TRY
       bar();
     }
+  } // OK
 
-  }                                // OK
-
-  public void violate() { bar(); } // OK , because singleline
+  public void violate() {
+    bar();
+  } // OK , because singleline
 }
-        
+

@@ -1,7 +1,3 @@
-
-
-
-
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -50,3 +46,4 @@ public class InvokeDynamic {
     return f.apply(null);
   }
 }
+

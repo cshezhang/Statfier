@@ -1,8 +1,7 @@
-
 public class Foo {
-    Foo() {
-        super();
-        /** Comment */
-    }
+  Foo() {
+    super();
+    /** Comment */
+  }
 }
-        
+

@@ -11,14 +11,14 @@ sortImportsInGroupAlphabetically = true
 */
 
 package com.puppycrawl.tools.checkstyle.checks.imports.customimportorder;
-import static java.awt.Button.ABORT;
+
 import static javax.swing.WindowConstants.*;
-import static java.io.File.createTempFile; // violation
-import java.util.*;
-import java.util.StringTokenizer;
-import com.puppycrawl.tools.checkstyle.checks.*;
+// violation
+
 import com.puppycrawl.tools.checkstyle.*; // violation
+import com.puppycrawl.tools.checkstyle.checks.*;
+import java.util.*;
 import org.apache.commons.beanutils.*;
 
-public class InputCustomImportOrder_NoSeparator {
-}
+public class InputCustomImportOrder_NoSeparator {}
+

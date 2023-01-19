@@ -5,7 +5,10 @@ import static org.junit.Assert.assertEquals;
 public class AssertionsInProductionCodeCheck {
 
   void method_with_forbidden_assertions() {
-    assertEquals(0, 0); // Noncompliant [[sc=5;ec=23;secondary=9,10,11,12,13,14,15]] {{Remove this assertion from production code.}}
+    assertEquals(
+        0,
+        0); // Noncompliant [[sc=5;ec=23;secondary=9,10,11,12,13,14,15]] {{Remove this assertion
+            // from production code.}}
     org.junit.Assert.fail("message");
     org.junit.jupiter.api.Assertions.assertFalse(false);
     org.junit.jupiter.api.Assertions.fail("message");
@@ -19,5 +22,5 @@ public class AssertionsInProductionCodeCheck {
     assert param == 3;
     return System.currentTimeMillis() - param;
   }
-
 }
+

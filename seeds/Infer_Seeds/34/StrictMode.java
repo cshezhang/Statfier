@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.NullsafeStrict;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -288,3 +284,4 @@ enum SomeEnum {
   // This should not occur in practice often, hopefully :)
   public static SomeEnum FAKE_VALUE;
 }
+

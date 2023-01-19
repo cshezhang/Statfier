@@ -1,9 +1,7 @@
-
 public class Foo {
 
-    static {
-        // ugly side effects
-    }
-
+  static {
+    // ugly side effects
+  }
 }
-        
+

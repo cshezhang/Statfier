@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ReturnsOwnership;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -52,3 +48,4 @@ class Column extends Component {
     }
   }
 }
+

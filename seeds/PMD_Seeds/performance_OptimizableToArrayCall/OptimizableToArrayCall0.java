@@ -1,7 +1,6 @@
-
 public class Foo {
-    {
-        x.toArray(new Foo[0]);
-    }
+  {
+    x.toArray(new Foo[0]);
+  }
 }
-        
+

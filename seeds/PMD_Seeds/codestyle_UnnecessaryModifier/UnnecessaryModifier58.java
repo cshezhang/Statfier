@@ -1,5 +1,4 @@
-
 public interface FooInterface {
-    static record BarRecord() {}
+  static record BarRecord() {}
 }
-        
+

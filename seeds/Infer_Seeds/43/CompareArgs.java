@@ -1,4 +1,3 @@
-
 class CompareArgs {
   static int max(int[] a, int i, int k) {
     int m = a[i];
@@ -23,3 +22,4 @@ class CompareArgs {
     int x = max(a, 2, 1);
   }
 }
+

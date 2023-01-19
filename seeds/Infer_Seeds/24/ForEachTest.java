@@ -1,4 +1,3 @@
-
 import java.util.List;
 import java.util.Map;
 
@@ -29,3 +28,4 @@ class ForEachTest {
     myList.forEach(el -> loop_linear(el, myList));
   }
 }
+

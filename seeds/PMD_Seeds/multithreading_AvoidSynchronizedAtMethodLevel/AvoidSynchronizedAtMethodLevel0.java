@@ -1,5 +1,4 @@
-
 public class Foo {
-    synchronized void foo () {}
+  synchronized void foo() {}
 }
-        
+

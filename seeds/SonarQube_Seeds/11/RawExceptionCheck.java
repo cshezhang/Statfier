@@ -13,14 +13,18 @@ public class RawExceptionCheck {
   private void throwingExceptionMethod1() throws Throwable { // Noncompliant [[sc=50;ec=59]]
   }
 
-  private void throwingExceptionMethod2() throws java.lang.Throwable { // Noncompliant [[sc=50;ec=69]]
+  private void throwingExceptionMethod2()
+      throws java.lang.Throwable { // Noncompliant [[sc=50;ec=69]]
   }
 
   public void throws_Error() {
     throw new Error(); // Noncompliant [[sc=15;ec=20]]
   }
 
-  public void throws_Exception() throws Exception { // Noncompliant {{Define and throw a dedicated exception instead of using a generic one.}}
+  public void throws_Exception()
+      throws
+          Exception { // Noncompliant {{Define and throw a dedicated exception instead of using a
+                      // generic one.}}
     throw new Exception(); // Noncompliant
   }
 
@@ -56,14 +60,13 @@ public class RawExceptionCheck {
     }
   }
 
-  public RawExceptionCheck() throws
-     Throwable,               // Noncompliant
-     Error,                   // Noncompliant
-     Exception {              // Noncompliant {{Define and throw a dedicated exception instead of using a generic one.}}
-     throw new
-         Throwable();         // Noncompliant
-
-     }
+  public RawExceptionCheck()
+      throws Throwable, // Noncompliant
+          Error, // Noncompliant
+          Exception { // Noncompliant {{Define and throw a dedicated exception instead of using a
+                      // generic one.}}
+    throw new Throwable(); // Noncompliant
+  }
 
   @Deprecated
   public void throws_Exception2() throws Exception { // Noncompliant
@@ -79,11 +82,10 @@ public class RawExceptionCheck {
     new Nested();
   }
 }
+
 class SubClass extends RawExceptionCheck {
 
-  public SubClass() throws Error,
-    Throwable,
-    Exception {
+  public SubClass() throws Error, Throwable, Exception {
     super();
   }
 
@@ -97,6 +99,7 @@ class SubClass extends RawExceptionCheck {
   public void throws_Exception2() throws Exception { // Compliant because overrides.
   }
 
-  public static void main(String[] args) throws Exception { //should not raise issue SONARJAVA-671
+  public static void main(String[] args) throws Exception { // should not raise issue SONARJAVA-671
   }
 }
+

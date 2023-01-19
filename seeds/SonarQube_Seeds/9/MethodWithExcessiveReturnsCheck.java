@@ -4,23 +4,29 @@ import java.util.Objects;
 
 class MethodWithExcessiveReturnsCheck {
   boolean foo1() { // Compliant
-   if (false) return true;
-   return false;
+    if (false) return true;
+    return false;
   }
 
-  boolean foo2() { // Noncompliant [[sc=11;ec=15]] {{Reduce the number of returns of this method 4, down to the maximum allowed 3.}}
+  boolean
+      foo2() { // Noncompliant [[sc=11;ec=15]] {{Reduce the number of returns of this method 4, down
+               // to the maximum allowed 3.}}
     if (false) return true;
     if (false) return false;
     if (false) return true;
     return false;
   }
 
-  void foo3() { // Noncompliant {{Reduce the number of returns of this method 4, down to the maximum allowed 3.}}
+  void
+      foo3() { // Noncompliant {{Reduce the number of returns of this method 4, down to the maximum
+               // allowed 3.}}
     if (false) return;
     if (false) return;
 
     new MethodWithExcessiveReturnsCheck() {
-      public void f() { // Noncompliant {{Reduce the number of returns of this method 5, down to the maximum allowed 3.}}
+      public void
+          f() { // Noncompliant {{Reduce the number of returns of this method 5, down to the maximum
+                // allowed 3.}}
         if (false) return;
         if (false) return;
         if (false) return;
@@ -57,7 +63,9 @@ class MethodWithExcessiveReturnsCheck {
     return intMember == other.intMember && Objects.equals(stringMember, other.stringMember);
   }
 
-  public boolean equals(MethodWithExcessiveReturnsCheck obj) { // Noncompliant because this is not a proper equals method
+  public boolean equals(
+      MethodWithExcessiveReturnsCheck
+          obj) { // Noncompliant because this is not a proper equals method
     if (this == obj) {
       return true;
     }
@@ -71,7 +79,9 @@ class MethodWithExcessiveReturnsCheck {
   }
 
   interface I {
-    default void method() { // Noncompliant {{Reduce the number of returns of this method 5, down to the maximum allowed 3.}}
+    default void
+        method() { // Noncompliant {{Reduce the number of returns of this method 5, down to the
+                   // maximum allowed 3.}}
       if (false) return;
       if (false) return;
       if (false) return;
@@ -80,3 +90,4 @@ class MethodWithExcessiveReturnsCheck {
     }
   }
 }
+

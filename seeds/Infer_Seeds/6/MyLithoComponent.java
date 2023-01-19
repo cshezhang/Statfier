@@ -1,5 +1,3 @@
-
-
 public class MyLithoComponent extends Component {
   @Prop Object prop1; // implicitly non-optional
 
@@ -33,3 +31,4 @@ public class MyLithoComponent extends Component {
     }
   }
 }
+

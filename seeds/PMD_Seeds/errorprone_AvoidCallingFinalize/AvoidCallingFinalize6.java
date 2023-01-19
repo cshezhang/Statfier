@@ -1,7 +1,6 @@
-
 public class InputFinalize {
-    {
-        super.finalize();
-    }
+  {
+    super.finalize();
+  }
 }
-        
+

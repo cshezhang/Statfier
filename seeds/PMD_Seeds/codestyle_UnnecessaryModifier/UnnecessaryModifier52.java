@@ -1,6 +1,5 @@
-
 class Foo {
-    @Bar
-    final void method() { }
+  @Bar
+  final void method() {}
 }
-        
+

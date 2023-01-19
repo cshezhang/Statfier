@@ -1,6 +1,4 @@
-
-
-// 
+//
 
 import codetoanalyze.java.InferTaint;
 import java.util.Formatter;
@@ -71,3 +69,4 @@ public class Strings {
     viaStringFormatVarArgsIndirect(InferTaint.inferSecretSource());
   }
 }
+

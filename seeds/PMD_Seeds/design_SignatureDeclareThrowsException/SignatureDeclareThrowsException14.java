@@ -1,5 +1,4 @@
-
 public class FooTest {
-    void testFoo() throws Exception {}
+  void testFoo() throws Exception {}
 }
-        
+

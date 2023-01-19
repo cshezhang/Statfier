@@ -1,11 +1,10 @@
-
 public enum Foo {
-    BAR("bar");
+  BAR("bar");
 
-    private String bar;
+  private String bar;
 
-    public String getBar() {
-        return bar;
-    }
+  public String getBar() {
+    return bar;
+  }
 }
-        
+

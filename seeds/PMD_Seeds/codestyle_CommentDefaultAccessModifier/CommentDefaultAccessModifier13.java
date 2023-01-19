@@ -1,5 +1,5 @@
-
 public class CommentDefaultAccessModifier {
-    @VisibleForTesting void method() {}
+  @VisibleForTesting
+  void method() {}
 }
-        
+

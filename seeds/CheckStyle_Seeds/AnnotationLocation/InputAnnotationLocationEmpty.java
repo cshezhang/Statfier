@@ -12,5 +12,5 @@ tokens = (default)CLASS_DEF, INTERFACE_DEF, PACKAGE_DEF, ENUM_CONSTANT_DEF, \
 package com.puppycrawl.tools.checkstyle.checks.annotation.annotationlocation;
 
 public class InputAnnotationLocationEmpty { // ok
-
 }
+

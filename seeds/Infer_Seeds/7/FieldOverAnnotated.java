@@ -1,6 +1,3 @@
-
-
-
 import javax.annotation.Nullable;
 
 /**
@@ -48,3 +45,4 @@ public class FieldOverAnnotated {
     FP_initializedInAllConstructorsButSetToNullInAPublicMethodShouldBeOK = null;
   }
 }
+

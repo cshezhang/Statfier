@@ -1,4 +1,2 @@
+public class FooBar {}
 
-public class FooBar {
-}
-        

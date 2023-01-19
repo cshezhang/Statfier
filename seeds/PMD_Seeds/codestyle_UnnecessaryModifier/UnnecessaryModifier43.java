@@ -1,6 +1,6 @@
-
 public final class Foo {
-    public final void foo() { }
-    public void foo2() { }
+  public final void foo() {}
+
+  public void foo2() {}
 }
-        
+

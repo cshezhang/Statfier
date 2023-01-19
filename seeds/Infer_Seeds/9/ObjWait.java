@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 
 class ObjWait {
@@ -64,3 +62,4 @@ class ObjWait {
     }
   }
 }
+

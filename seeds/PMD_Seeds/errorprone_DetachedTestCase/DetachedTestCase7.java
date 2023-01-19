@@ -1,10 +1,9 @@
-
 import org.junit.jupiter.params.ParameterizedTest;
 
 public class MyTest {
-    @ParameterizedTest
-    public void someTest() {}
+  @ParameterizedTest
+  public void someTest() {}
 
-    public void someOtherTest() {}
+  public void someOtherTest() {}
 }
-        
+

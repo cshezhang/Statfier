@@ -1,26 +1,24 @@
-
-
 class A {
 
- public Object clone() { // OK
-  return super.clone();
- }
+  public Object clone() { // OK
+    return super.clone();
+  }
 }
 
 class B {
-private int b;
+  private int b;
 
- public B clone() { // violation, does not call super.clone()
-  B other = new B();
-  other.b = this.b;
-  return other;
- }
+  public B clone() { // violation, does not call super.clone()
+    B other = new B();
+    other.b = this.b;
+    return other;
+  }
 }
 
 class C {
 
- public C clone() { // OK
-  return (C) super.clone();
- }
+  public C clone() { // OK
+    return (C) super.clone();
+  }
 }
-        
+

@@ -16,21 +16,21 @@ tokens = (default)STATIC_IMPORT
 
 package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
-import java.awt.Button; // ok
-import java.awt.Frame; // ok
-import java.awt.Dialog; // violation
-import java.awt.event.ActionEvent; // ok
-import javax.swing.JComponent; // ok
-import javax.swing.JTable; // ok
-import static java.awt.Button.ABORT; // ok
+// ok
+// ok
+// violation
+// ok
+// ok
+// ok
+// ok
 import static javax.swing.WindowConstants.*; // ok
-import static java.awt.Button.ABORT; // violation
+// violation
 
-import static java.io.File.createTempFile; // violation
-import java.io.File; // violation
-import java.io.IOException; // ok
-import java.io.InputStream; // ok
-import java.io.Reader; // ok
+// violation
+// violation
+// ok
+// ok
+// ok
 
-public class InputImportOrder_Under {
-}
+public class InputImportOrder_Under {}
+

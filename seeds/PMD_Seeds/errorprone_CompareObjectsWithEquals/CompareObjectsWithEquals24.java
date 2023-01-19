@@ -1,7 +1,6 @@
+class MyClass {
+  public static void isMissing(String obj, Object ts) {
+    return obj == ts;
+  }
+}
 
-            class MyClass {
-                public static void isMissing(String obj, Object ts) {
-                    return obj == ts;
-                }
-            }
-        

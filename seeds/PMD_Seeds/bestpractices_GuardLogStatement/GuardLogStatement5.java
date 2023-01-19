@@ -1,21 +1,21 @@
-
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class Test {
-    private static final Log __log = LogFactory.getLog(Test.class);
-    public void test() {
+  private static final Log __log = LogFactory.getLog(Test.class);
 
-        // bad:
-        __log.debug("log something" + this + " and " + "concat strings");
+  public void test() {
 
-        // bad:
-        __log.debug("log something" + this + " and " + "concat strings", e);
+    // bad:
+    __log.debug("log something" + this + " and " + "concat strings");
 
-        // good:
-        if (__log.isDebugEnabled()) {
-        __log.debug("bla" + this, e);
-        }
+    // bad:
+    __log.debug("log something" + this + " and " + "concat strings", e);
+
+    // good:
+    if (__log.isDebugEnabled()) {
+      __log.debug("bla" + this, e);
     }
+  }
 }
-        
+

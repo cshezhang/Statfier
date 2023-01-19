@@ -1,5 +1,3 @@
-
-
 import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
@@ -42,3 +40,4 @@ class IntentServiceNotOnUIThread extends IntentService {
     }
   }
 }
+

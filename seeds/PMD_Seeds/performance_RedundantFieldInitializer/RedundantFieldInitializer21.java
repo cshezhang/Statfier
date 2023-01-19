@@ -1,5 +1,4 @@
-
 public class Foo {
-    char c = '\0';
+  char c = '\0';
 }
-        
+

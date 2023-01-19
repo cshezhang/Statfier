@@ -6,12 +6,15 @@ import java.util.Optional;
 
 class IteratorNextExceptionCheckA implements Iterator<String> {
 
-  public String next() { // Noncompliant [[sc=17;ec=21]] {{Add a "NoSuchElementException" for iteration beyond the end of the collection.}}
-    if (!hasNext()){
+  public String
+      next() { // Noncompliant [[sc=17;ec=21]] {{Add a "NoSuchElementException" for iteration beyond
+               // the end of the collection.}}
+    if (!hasNext()) {
       return null;
     }
     return "x";
   }
+
   @Override
   public boolean hasNext() {
     return false;
@@ -21,11 +24,12 @@ class IteratorNextExceptionCheckA implements Iterator<String> {
 class IteratorNextExceptionCheckB implements Iterator<String> {
 
   public String next() { // Noncompliant
-    if (!hasNext()){
+    if (!hasNext()) {
       throw new IllegalStateException();
     }
     return "x";
   }
+
   @Override
   public boolean hasNext() {
     return false;
@@ -35,7 +39,7 @@ class IteratorNextExceptionCheckB implements Iterator<String> {
 class IteratorNextExceptionCheckC implements Iterator<String> {
 
   public String next() {
-    if (!hasNext()){
+    if (!hasNext()) {
       throw new NoSuchElementException();
     }
     return "x";
@@ -53,13 +57,12 @@ class IteratorNextExceptionCheckC implements Iterator<String> {
   public boolean hasNext() {
     return false;
   }
-
 }
 
 class IteratorNextExceptionCheckD implements Iterator<String> {
 
   public String next() { // Noncompliant
-    if (!hasNext()){
+    if (!hasNext()) {
       RuntimeException e = new RuntimeException();
       throw e;
     }
@@ -70,13 +73,12 @@ class IteratorNextExceptionCheckD implements Iterator<String> {
   public boolean hasNext() {
     return false;
   }
-
 }
 
 class IteratorNextExceptionCheckE { // Not an iterator
 
   public String next() {
-    if (!hasNext()){
+    if (!hasNext()) {
       return null;
     }
     return "x";
@@ -85,10 +87,9 @@ class IteratorNextExceptionCheckE { // Not an iterator
   public boolean hasNext() {
     return false;
   }
-
 }
 
-abstract class IteratorNextExceptionCheckF implements Iterator<String>{
+abstract class IteratorNextExceptionCheckF implements Iterator<String> {
   public abstract String next();
 }
 
@@ -104,7 +105,6 @@ class IteratorNextExceptionCheckG implements Iterator<String> {
   public boolean hasNext() {
     return false;
   }
-
 }
 
 class IteratorNextExceptionCheckI implements Iterator<String> {
@@ -121,26 +121,29 @@ class IteratorNextExceptionCheckI implements Iterator<String> {
   public boolean hasNext() {
     return false;
   }
-
 }
 
 class IteratorNextExceptionCheckJ implements Iterator<String> {
   public String next() {
-    if (!hasNext()){
+    if (!hasNext()) {
       throw new NoSuchElementException();
     }
     return "x";
   }
+
   @Override
   public boolean hasNext() {
     return false;
   }
 }
+
 class IteratorNextExceptionCheckK implements Iterator<String> {
   IteratorNextExceptionCheckJ a;
+
   public String next() {
     return a.next(); // Compliant
   }
+
   @Override
   public boolean hasNext() {
     return false;
@@ -157,3 +160,4 @@ abstract class IteratorNextExceptionCheckL implements Iterator<String> {
     return Optional.empty();
   }
 }
+

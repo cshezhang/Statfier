@@ -1,13 +1,9 @@
-
 class Foo {
-    native void foo() {
-    }
+  native void foo() {}
 
-    native void nt_whatever() {
-    }
+  native void nt_whatever() {}
 
-    // not reported
-    void bar() {
-    }
+  // not reported
+  void bar() {}
 }
-        
+

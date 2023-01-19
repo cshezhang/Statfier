@@ -19,10 +19,10 @@ package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 // com.puppycrawl,*,java
 // the trailing javax.crypto.Cipher; should be flagged as a violation.
 
-import com.puppycrawl.tools.checkstyle.checks.imports.importorder.InputImportOrder_Above; // ok
-import javax.crypto.BadPaddingException; // ok
-import java.util.List; //comment test // ok
-import javax.crypto.Cipher; // violation
+// ok
+// ok
+// comment test // ok
+// violation
 
-public class InputImportOrder_Wildcard {
-}
+public class InputImportOrder_Wildcard {}
+

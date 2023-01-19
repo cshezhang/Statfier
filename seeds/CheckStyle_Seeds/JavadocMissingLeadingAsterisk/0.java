@@ -1,5 +1,3 @@
-
-
 /**
  * Valid Java-style comment.
  *
@@ -9,32 +7,28 @@
  */
 class JavaStyle {} // ok
 
-/** Valid Scala-style comment.
-  * Some description here.
-  **/
+/** Valid Scala-style comment. Some description here. */
 class ScalaStyle {} // ok
 
-/** **
-  * Asterisks on first and last lines are optional.
-  * */
+/** ** Asterisks on first and last lines are optional. */
 class Asterisks {} // ok
 
 /** No asterisks are required for single-line comments. */
 class SingleLine {} // ok
 
-/** // violation on next blank line, javadoc has lines without leading asterisk.
-
- */
+/** // violation on next blank line, javadoc has lines without leading asterisk. */
 class BlankLine {}
 
-/** Wrapped
-    single-line comment */ // violation, javadoc has lines without leading asterisk.
+/** Wrapped single-line comment */
+// violation, javadoc has lines without leading asterisk.
 class Wrapped {}
 
 /**
-  * <pre>
-    int value; // violation, javadoc has lines without leading asterisk.
-  * </pre>
-  */
+ *
+ *
+ * <pre>
+ * int value; // violation, javadoc has lines without leading asterisk.
+ * </pre>
+ */
 class Code {}
-        
+

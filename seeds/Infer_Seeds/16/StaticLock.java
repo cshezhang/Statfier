@@ -1,5 +1,3 @@
-
-
 class StaticLock {
   static synchronized void staticSynced() {}
 
@@ -25,3 +23,4 @@ class StaticLock {
     staticSynced();
   }
 }
+

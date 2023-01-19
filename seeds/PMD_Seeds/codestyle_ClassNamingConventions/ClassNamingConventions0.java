@@ -1,11 +1,10 @@
-
 public class foo {
-    public @interface Foo_Bar { }
+  public @interface Foo_Bar {}
 
-    public enum $Enum$ { }
+  public enum $Enum$ {}
 
-    interface café { }
+  interface café {}
 
-    public abstract class tehehe { }
+  public abstract class tehehe {}
 }
-        
+

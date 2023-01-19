@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 /** testing basic intraprocedural functionality: assignment, ifs, loops, casts */
@@ -229,3 +225,4 @@ public class Basics {
     InferTaint.inferSensitiveSink(src);
   }
 }
+

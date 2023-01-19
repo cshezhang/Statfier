@@ -1,7 +1,3 @@
-
-
-
-
 import android.support.v4.app.Fragment;
 import codetoanalyze.java.annotation.Cleanup;
 import javax.annotation.Nullable;
@@ -94,3 +90,4 @@ class SomeExternalClass {
   public String externalNotNull;
   public @Nullable String externalNullable;
 }
+

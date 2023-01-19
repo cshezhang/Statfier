@@ -1,6 +1,5 @@
 package checks;
 
-
 import java.time.ZoneId;
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -8,7 +7,7 @@ import java.util.OptionalInt;
 import java.util.OptionalLong;
 
 public class SynchronizationOnStringOrBoxedCheck {
-  
+
   private final Boolean bLock = Boolean.FALSE;
   private final Integer iLock = Integer.valueOf(0);
   private final String sLock = "LOCK";
@@ -19,36 +18,37 @@ public class SynchronizationOnStringOrBoxedCheck {
   private final ZoneId zoneId = ZoneId.systemDefault();
 
   private final Object oLock = new Object();
-  
+
   void method1() {
-    
-    synchronized(bLock) {  // Noncompliant [[sc=18;ec=23]] {{Synchronize on a new "Object" instead.}}
+
+    synchronized (
+        bLock) { // Noncompliant [[sc=18;ec=23]] {{Synchronize on a new "Object" instead.}}
       // ...
     }
-    synchronized(iLock) {  // Noncompliant
+    synchronized (iLock) { // Noncompliant
       // ...
     }
-    synchronized(sLock) {  // Noncompliant
+    synchronized (sLock) { // Noncompliant
       // ...
     }
-    synchronized(opLock) {  // Noncompliant
+    synchronized (opLock) { // Noncompliant
       // ...
     }
-    synchronized(opIntLock) {  // Noncompliant
+    synchronized (opIntLock) { // Noncompliant
       // ...
     }
-    synchronized(opLongLock) {  // Noncompliant
+    synchronized (opLongLock) { // Noncompliant
       // ...
     }
-    synchronized(opDoubleLock) {  // Noncompliant
+    synchronized (opDoubleLock) { // Noncompliant
       // ...
     }
-    synchronized(zoneId) {  // Noncompliant
+    synchronized (zoneId) { // Noncompliant
       // ...
     }
-    synchronized(oLock) {
+    synchronized (oLock) {
       // ...
     }
   }
-  
 }
+

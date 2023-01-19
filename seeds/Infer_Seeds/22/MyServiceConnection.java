@@ -1,5 +1,3 @@
-
-
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.Binder;
@@ -37,3 +35,4 @@ class MyServiceConnection implements ServiceConnection {
     bad();
   }
 }
+

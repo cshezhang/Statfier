@@ -1,7 +1,5 @@
-
 private final class Dummy {
-    @Override
-    protected void finalize() {
-    }
+  @Override
+  protected void finalize() {}
 }
-        
+

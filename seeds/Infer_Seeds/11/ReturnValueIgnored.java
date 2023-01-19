@@ -1,7 +1,3 @@
-
-
-
-
 public class ReturnValueIgnored {
 
   private int m() {
@@ -12,3 +8,4 @@ public class ReturnValueIgnored {
     m();
   }
 }
+

@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import codetoanalyze.java.annotation.NonBlocking;
 import java.util.concurrent.ExecutionException;
@@ -48,3 +46,4 @@ class NonBlk {
     privateDoGetOk();
   }
 }
+

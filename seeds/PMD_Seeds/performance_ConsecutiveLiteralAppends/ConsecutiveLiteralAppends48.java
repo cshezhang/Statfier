@@ -1,5 +1,4 @@
-
 public class ConsecutiveLiteralAppendsRuleTest {
-private StringBuilder cdata;
+  private StringBuilder cdata;
 }
-        
+

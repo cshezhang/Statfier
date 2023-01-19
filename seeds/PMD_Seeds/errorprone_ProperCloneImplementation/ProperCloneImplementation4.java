@@ -1,8 +1,7 @@
-
 public class Foo {
-    void clone() {
-        super.clone();
-        byte[] array = new byte[6];
-    }
+  void clone() {
+    super.clone();
+    byte[] array = new byte[6];
+  }
 }
-        
+

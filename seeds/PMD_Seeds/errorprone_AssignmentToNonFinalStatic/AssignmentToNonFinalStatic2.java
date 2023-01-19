@@ -1,9 +1,9 @@
-
 public class Foo {
-    static int x;
-    Foo(int y) {
-        x = y;
-        x = y;
-    }
+  static int x;
+
+  Foo(int y) {
+    x = y;
+    x = y;
+  }
 }
-        
+

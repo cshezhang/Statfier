@@ -1,6 +1,4 @@
-
 public class Foo {
-    String name,
-           lastname;
+  String name, lastname;
 }
-        
+

@@ -1,10 +1,9 @@
-
 import org.junit.jupiter.api.Test;
 
 public class MyTest {
-    @Test
-    public void someTest() {}
+  @Test
+  public void someTest() {}
 
-    public void someOtherTest() {}
+  public void someOtherTest() {}
 }
-        
+

@@ -1,7 +1,3 @@
-
-
-
-
 import android.support.v4.util.Pools;
 import android.support.v4.util.Pools.SimplePool;
 import android.support.v4.util.Pools.SynchronizedPool;
@@ -388,3 +384,4 @@ class Containers {
     staticSyncSet.add(s);
   }
 }
+

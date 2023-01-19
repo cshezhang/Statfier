@@ -21,8 +21,8 @@ tokens = (default)ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, B
 package com.puppycrawl.tools.checkstyle.checks.whitespace.whitespacearound;
 
 public class InputWhitespaceAroundStartOfTheLine {
- public void checkSmth(
-){ // violation ''{' is not preceded with whitespace'
-  final int SOMETHING = 1;
- }
+  public void checkSmth() { // violation ''{' is not preceded with whitespace'
+    final int SOMETHING = 1;
+  }
 }
+

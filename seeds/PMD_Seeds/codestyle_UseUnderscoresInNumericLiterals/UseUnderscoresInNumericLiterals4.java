@@ -1,5 +1,4 @@
-
 public class Foo {
-    double number = 314159265.359;
+  double number = 314159265.359;
 }
-        
+

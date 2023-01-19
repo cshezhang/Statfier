@@ -1,7 +1,7 @@
-
 public class Foo {
-    void bar() {
-        class Y {};
-    }
+  void bar() {
+    class Y {}
+    ;
+  }
 }
-        
+

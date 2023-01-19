@@ -1,6 +1,4 @@
-
 public class Foo {
-    void finalize () {
-    }
+  void finalize() {}
 }
-        
+

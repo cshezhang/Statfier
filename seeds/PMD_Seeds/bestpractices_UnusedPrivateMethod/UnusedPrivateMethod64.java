@@ -1,17 +1,21 @@
-
 public class Outer {
-    private void outerUnusedMethod() {}
-    public class Inner {
-        private void innerUnusedMethod() {} // false negative
-        private void innerUsedByInnerMethod() {}
-        public void publicInnerMethod() {
-            innerUsedByInnerMethod();
-        }
-        private void innerUsedByOuterMethod() {}
+  private void outerUnusedMethod() {}
+
+  public class Inner {
+    private void innerUnusedMethod() {} // false negative
+
+    private void innerUsedByInnerMethod() {}
+
+    public void publicInnerMethod() {
+      innerUsedByInnerMethod();
     }
-    public void publicOuterMethod() {
-        Inner inner = new Inner();
-        inner.innerUsedByOuterMethod();
-    }
+
+    private void innerUsedByOuterMethod() {}
+  }
+
+  public void publicOuterMethod() {
+    Inner inner = new Inner();
+    inner.innerUsedByOuterMethod();
+  }
 }
-        
+

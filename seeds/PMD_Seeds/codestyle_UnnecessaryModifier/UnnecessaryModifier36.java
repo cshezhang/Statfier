@@ -1,6 +1,4 @@
-
 public interface TestInterface {
-    public static enum Inner {
-    }
+  public static enum Inner {}
 }
-        
+

@@ -16,9 +16,7 @@
 
 package com.google.errorprone.bugpatterns;
 
-/**
- * Positive cases for {@code LongLiteralLowerCaseSuffix}.
- */
+/** Positive cases for {@code LongLiteralLowerCaseSuffix}. */
 public class LongLiteralLowerCaseSuffixPositiveCase1 {
 
   // This constant string includes non-ASCII characters to make sure that we're not confusing
@@ -27,69 +25,69 @@ public class LongLiteralLowerCaseSuffixPositiveCase1 {
   private static final String TEST_STRING = "Îñţérñåţîöñåļîžåţîờñ";
 
   public void positiveLowerCase() {
-    //BUG: Suggestion includes "value = 123432L"
+    // BUG: Suggestion includes "value = 123432L"
     long value = 123432l;
   }
 
   public void zeroLowerCase() {
-    //BUG: Suggestion includes "value = 0L"
+    // BUG: Suggestion includes "value = 0L"
     long value = 0l;
   }
 
   public void negativeLowerCase() {
-    //BUG: Suggestion includes "value = -123432L"
+    // BUG: Suggestion includes "value = -123432L"
     long value = -123432l;
   }
 
   public void negativeExtraSpacesLowerCase() {
-    //BUG: Suggestion includes "value = -  123432L"
-    long value = -  123432l;
+    // BUG: Suggestion includes "value = -  123432L"
+    long value = -123432l;
   }
 
   public void positiveHexLowerCase() {
-    //BUG: Suggestion includes "value = 0x8abcDEF0L"
+    // BUG: Suggestion includes "value = 0x8abcDEF0L"
     long value = 0x8abcDEF0l;
-    //BUG: Suggestion includes "value = 0X80L"
+    // BUG: Suggestion includes "value = 0X80L"
     value = 0X80l;
   }
 
   public void zeroHexLowerCase() {
-    //BUG: Suggestion includes "value = 0x0L"
+    // BUG: Suggestion includes "value = 0x0L"
     long value = 0x0l;
-    //BUG: Suggestion includes "value = 0X0L"
+    // BUG: Suggestion includes "value = 0X0L"
     value = 0X0l;
   }
 
   public void negativeHexLowerCase() {
-    //BUG: Suggestion includes "value = -0x8abcDEF0L"
+    // BUG: Suggestion includes "value = -0x8abcDEF0L"
     long value = -0x8abcDEF0l;
-    //BUG: Suggestion includes "value = -0X80L"
+    // BUG: Suggestion includes "value = -0X80L"
     value = -0X80l;
   }
 
   public void negativeHexExtraSpacesLowerCase() {
-    //BUG: Suggestion includes "value = -  0x8abcDEF0L"
-    long value = -  0x8abcDEF0l;
+    // BUG: Suggestion includes "value = -  0x8abcDEF0L"
+    long value = -0x8abcDEF0l;
   }
 
   public void positiveOctalLowerCase() {
-    //BUG: Suggestion includes "value = 06543L"
+    // BUG: Suggestion includes "value = 06543L"
     long value = 06543l;
   }
 
   public void zeroOctalLowerCase() {
-    //BUG: Suggestion includes "value = 00L"
+    // BUG: Suggestion includes "value = 00L"
     long value = 00l;
   }
 
   public void negativeOctalLowerCase() {
-    //BUG: Suggestion includes "value = -06543L"
+    // BUG: Suggestion includes "value = -06543L"
     long value = -06543l;
   }
 
   public void negativeOctalExtraSpacesLowerCase() {
-    //BUG: Suggestion includes "value = -  06543L"
-    long value = -  06543l;
+    // BUG: Suggestion includes "value = -  06543L"
+    long value = -06543l;
   }
-
 }
+

@@ -14,16 +14,15 @@ tokens = (default)METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF
 package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
 
 public enum InputMissingJavadocMethodEnumCtorScopeIsPrivate {
+  CONSTANT(0);
 
-    CONSTANT(0);
+  private final int value;
 
-    private final int value;
+  InputMissingJavadocMethodEnumCtorScopeIsPrivate(int value) { // ok
+    this.value = value;
+  }
 
-    InputMissingJavadocMethodEnumCtorScopeIsPrivate(int value) { // ok
-        this.value = value;
-    }
-
-    void packagePrivateMethod() { // violation
-    }
-
+  void packagePrivateMethod() { // violation
+  }
 }
+

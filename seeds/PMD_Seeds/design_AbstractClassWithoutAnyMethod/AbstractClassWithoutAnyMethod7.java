@@ -1,11 +1,9 @@
-
 class Foo {
 
-    abstract class Pos {}
+  abstract class Pos {}
 
-    class Sibling {
-        void ohio() {}
-    }
-
+  class Sibling {
+    void ohio() {}
+  }
 }
-        
+

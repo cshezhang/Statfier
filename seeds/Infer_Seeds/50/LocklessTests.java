@@ -1,5 +1,3 @@
-
-
 import codetoanalyze.java.annotation.Lockless;
 
 class LocklessTests {}
@@ -51,3 +49,4 @@ class LocklessTestsC implements Listener {
   @Override
   public synchronized void normalMethod() {}
 }
+

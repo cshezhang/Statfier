@@ -8,35 +8,33 @@ violateExecutionOnNonTightHtml = (default)false
 package com.puppycrawl.tools.checkstyle.checks.annotation.missingdeprecated;
 
 /**
- * @deprecated
- *  stuff
+ * @deprecated stuff
  */
 public class InputMissingDeprecatedBadDeprecated // violation
-{
-    /**
-     * @deprecated        stuff
-     */
-    protected InputMissingDeprecatedBadDeprecated() { // violation
+ {
+  /**
+   * @deprecated stuff
+   */
+  protected InputMissingDeprecatedBadDeprecated() { // violation
+  }
 
-    }
+  /**
+   * @deprecated stuff
+   */
+  public String toString() { // violation
+    return "";
+  }
+
+  /**
+   * @deprecated stuff
+   */
+  enum Rock { // violation
 
     /**
      * @deprecated stuff
      */
-    public String toString() { // violation
-        return "";
-    }
-
-    /**
-     * @deprecated stuff
-     */
-    enum Rock { // violation
-
-        /**
-         * @deprecated stuff
-         */
-        Metallica // violation
-    }
+    Metallica // violation
+  }
 }
 
 /**
@@ -44,12 +42,11 @@ public class InputMissingDeprecatedBadDeprecated // violation
  */
 interface Foo1 { // violation
 
-    /**
-     * @deprecated stuff
-     */
-    interface Bar { // violation
-
-    }
+  /**
+   * @deprecated stuff
+   */
+  interface Bar { // violation
+  }
 }
 
 /**
@@ -57,8 +54,9 @@ interface Foo1 { // violation
  */
 @interface Bleh { // violation
 
-    /**
-     * @deprecated stuff
-     */
-    int bleh(); // violation
+  /**
+   * @deprecated stuff
+   */
+  int bleh(); // violation
 }
+

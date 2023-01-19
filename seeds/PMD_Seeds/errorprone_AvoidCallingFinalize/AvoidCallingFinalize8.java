@@ -1,10 +1,9 @@
-
 public class Foo {
-    private int finalize;
+  private int finalize;
 
-    public void bar() {
-        finalize++;
-        return finalize;
-    }
+  public void bar() {
+    finalize++;
+    return finalize;
+  }
 }
-        
+

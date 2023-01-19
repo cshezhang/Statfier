@@ -17,3 +17,4 @@ abstract class ScannerFail {
     return new Scanner(System.in);
   }
 }
+

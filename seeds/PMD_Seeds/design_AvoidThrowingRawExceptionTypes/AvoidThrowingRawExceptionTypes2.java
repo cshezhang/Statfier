@@ -1,9 +1,8 @@
-
 public class PmdTest {
-    private Throwable cause;
+  private Throwable cause;
 
-    public void setUp() {
-        cause = new Throwable();
-    }
+  public void setUp() {
+    cause = new Throwable();
+  }
 }
-        
+

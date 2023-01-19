@@ -1,5 +1,4 @@
-
 public class Foo {
-    public Foo(String[] args) { }
+  public Foo(String[] args) {}
 }
-        
+

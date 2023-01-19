@@ -11,82 +11,69 @@ tokens = (default)LITERAL_WHILE, LITERAL_TRY, LITERAL_FINALLY, LITERAL_DO, \
 package com.puppycrawl.tools.checkstyle.checks.blocks.emptyblock;
 
 import java.io.*; // star import for instantiation tests
-import java.awt.Dimension; // explicit import for instantiation tests
-import java.awt.Color;
+// explicit import for instantiation tests
 
-/**
- * Test case for detecting empty block statements.
- **/
-class InputEmptyBlockSemanticInvalid
-{
-    static {
-        Boolean x = new Boolean(true);
+/** Test case for detecting empty block statements. */
+class InputEmptyBlockSemanticInvalid {
+  static {
+    Boolean x = new Boolean(true);
+  }
+
+  {
+    Boolean x = new Boolean(true);
+    Boolean[] y = new Boolean[] {Boolean.TRUE, Boolean.FALSE};
+  }
+
+  Boolean getBoolean() {
+    return new java.lang.Boolean(true);
+  }
+
+  void exHandlerTest() {
+    try {
+    } finally {
     }
-
-    {
-        Boolean x = new Boolean(true);
-        Boolean[] y = new Boolean[]{Boolean.TRUE, Boolean.FALSE};
+    try {
+      // something
+    } finally {
+      // something
     }
-
-    Boolean getBoolean()
-    {
-        return new java.lang.Boolean(true);
+    try { // ok
+      ; // something
+    } finally { // ok
+      ; // statement
     }
+  }
 
-    void exHandlerTest()
-    {
-        try {
-        }
-        finally {
-        }
-        try {
-            // something
-        }
-        finally {
-            // something
-        }
-        try {   // ok
-            ; // something
-        }
-        finally {   // ok
-            ; // statement
-        }
+  /** test * */
+  private static final long IGNORE = 666l + 666L;
+
+  public class EqualsVsHashCode1 {
+    public boolean equals(int a) {
+      return a == 1;
     }
+  }
 
-    /** test **/
-    private static final long IGNORE = 666l + 666L;
+  // empty instance initializer
+  {
+  }
 
-    public class EqualsVsHashCode1
-    {
-        public boolean equals(int a)
-        {
-            return a == 1;
-        }
+  private class InputBraces {}
+
+  synchronized void foo() {
+    synchronized (this) {
     }
-
-    // empty instance initializer
-    {
+    synchronized (Class.class) { // ok
+      synchronized (new Object()) {
+        // text
+      }
     }
+  }
 
-    private class InputBraces {
+  static {
+    int a = 0;
+  }
 
-    }
-
-    synchronized void foo() {
-        synchronized (this) {}
-        synchronized (Class.class) { // ok
-            synchronized (new Object()) {
-                // text
-            }
-        }
-    }
-
-
-    static {
-
-        int a = 0;}
-
-    static {
-
-    }
+  static {
+  }
 }
+

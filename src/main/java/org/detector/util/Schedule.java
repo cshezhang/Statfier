@@ -1,5 +1,6 @@
 package org.detector.util;
 
+import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.transform.Transform.cnt1;
 import static org.detector.transform.Transform.cnt2;
 import static org.detector.transform.Transform.singleLevelExplorer;
@@ -11,6 +12,7 @@ import static org.detector.util.Invoker.invokeCommandsByZT;
 import static org.detector.util.Invoker.invokeCommandsByZTWithOutput;
 import static org.detector.util.Invoker.invokePMD;
 import static org.detector.util.Invoker.invokeSonarQube;
+import static org.detector.util.Invoker.invokeSpotBugs;
 import static org.detector.util.Invoker.writeSettingFile;
 import static org.detector.util.Utility.EVALUATION_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
@@ -34,8 +36,6 @@ import static org.detector.util.Utility.initThreadPool;
 import static org.detector.util.Utility.listAveragePartition;
 import static org.detector.util.Utility.mutantFolder;
 import static org.detector.util.Utility.noReport;
-import static org.detector.util.Utility.readSonarQubeResultFile;
-import static org.detector.util.Utility.readSpotBugsResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
 import static org.detector.util.Utility.sep;
@@ -123,7 +123,7 @@ public class Schedule {
 
     public void executeSpotBugsTransform(String initSeedFolderPath) {
         System.out.println("Invoke Analyzer for " + initSeedFolderPath + " and Analysis Output Folder is: " + Path2Last(initSeedFolderPath) + ", Depth=0");
-        Invoker.invokeSpotBugs(initSeedFolderPath);
+        invokeSpotBugs(initSeedFolderPath);
         List<String> seedFilePaths = getFilenamesFromFolder(initSeedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
@@ -199,19 +199,19 @@ public class Schedule {
                             continue;
                         }
                         String reportPath = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
-                        String[] invokeCmds = new String[3];
+                        String[] invokeCommands = new String[3];
                         if (OSUtil.isWindows()) {
-                            invokeCmds[0] = "cmd.exe";
-                            invokeCmds[1] = "/c";
+                            invokeCommands[0] = "cmd.exe";
+                            invokeCommands[1] = "/c";
                         } else {
-                            invokeCmds[0] = "/bin/bash";
-                            invokeCmds[1] = "-c";
+                            invokeCommands[0] = "/bin/bash";
+                            invokeCommands[1] = "-c";
                         }
-                        invokeCmds[2] = SPOTBUGS_PATH + " -textui"
+                        invokeCommands[2] = SPOTBUGS_PATH + " -textui"
 //                            + " -include " + configPath
                                 + " -xml:withMessages" + " -output " + reportPath + " "
                                 + classFolder.getAbsolutePath();
-                        boolean hasExec = Invoker.invokeCommandsByZT(invokeCmds);
+                        boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                         if (hasExec) {
                             String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                             readSpotBugsResultFile(wrapper.getFolderPath(), report_path);

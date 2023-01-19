@@ -1,7 +1,9 @@
-
 public class Foo {
-    static {
-        class Local {{}}
+  static {
+    class Local {
+      {
+      }
     }
+  }
 }
-        
+

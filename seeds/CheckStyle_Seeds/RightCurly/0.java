@@ -1,31 +1,34 @@
-
-
 public class Test {
 
   public void test() {
 
     if (foo) {
       bar();
-    }           // violation, right curly must be in the same line as the 'else' keyword
+    } // violation, right curly must be in the same line as the 'else' keyword
     else {
       bar();
     }
 
     if (foo) {
       bar();
-    } else {     // OK
+    } else { // OK
       bar();
     }
 
-    if (foo) { bar(); } int i = 0;  // violation
-                  // ^^^ statement is not allowed on same line after curly right brace
+    if (foo) {
+      bar();
+    }
+    int i = 0; // violation
+    // ^^^ statement is not allowed on same line after curly right brace
 
-    if (foo) { bar(); }            // OK
+    if (foo) {
+      bar();
+    } // OK
     int i = 0;
 
     try {
       bar();
-    }           // violation, rightCurly must be in the same line as 'catch' keyword
+    } // violation, rightCurly must be in the same line as 'catch' keyword
     catch (Exception e) {
       bar();
     }
@@ -35,9 +38,10 @@ public class Test {
     } catch (Exception e) { // OK
       bar();
     }
+  } // OK
 
-  }                         // OK
-
-  public void testSingleLine() { bar(); } // OK, because singleline is allowed
+  public void testSingleLine() {
+    bar();
+  } // OK, because singleline is allowed
 }
-        
+

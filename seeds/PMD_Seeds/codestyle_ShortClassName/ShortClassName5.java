@@ -1,4 +1,4 @@
+public class ThisIsALongName {}
 
-public class ThisIsALongName { }
-class Bar { }
-        
+class Bar {}
+

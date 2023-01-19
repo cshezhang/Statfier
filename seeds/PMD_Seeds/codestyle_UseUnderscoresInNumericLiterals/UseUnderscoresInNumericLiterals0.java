@@ -1,5 +1,4 @@
-
 public class Foo {
-    private int num = 1_000_000;
+  private int num = 1_000_000;
 }
-        
+

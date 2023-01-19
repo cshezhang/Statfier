@@ -1,11 +1,10 @@
-
 public class Foo {
-    @TestMemberAnnotation(value = "TEST")
-    private String y;
+  @TestMemberAnnotation(value = "TEST")
+  private String y;
 
-    public void bar() {
-        int x = 42;
-        return;
-    }
+  public void bar() {
+    int x = 42;
+    return;
+  }
 }
-        
+

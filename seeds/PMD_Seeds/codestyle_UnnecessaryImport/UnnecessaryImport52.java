@@ -1,4 +1,3 @@
 
-            import java.lang.*;
-            public class Foo {}
-            
+public class Foo {}
+

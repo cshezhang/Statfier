@@ -6,13 +6,16 @@ abstract class RedundantCloseCheck {
   void foo(MyCloseable mc2) throws Exception {
     MyCloseable mc4 = new MyCloseable();
 
-    try(
-      // java 7
-      MyCloseable mc1 = new MyCloseable();
-      // java 9
-      mc2; this.mc3) {
+    try (
+    // java 7
+    MyCloseable mc1 = new MyCloseable();
+        // java 9
+        mc2;
+        this.mc3) {
 
-      mc1.close(); // Noncompliant [[sc=11;ec=18]] {{Remove this "close" call; closing the resource is handled automatically by the try-with-resources.}}
+      mc1
+          .close(); // Noncompliant [[sc=11;ec=18]] {{Remove this "close" call; closing the resource
+                    // is handled automatically by the try-with-resources.}}
       mc2.close(); // Noncompliant
       mc3.close(); // Noncompliant
 
@@ -48,7 +51,7 @@ abstract class RedundantCloseCheck {
     }
 
     void foo() {
-      try(MyCloseable mc = new MyCloseable()) {
+      try (MyCloseable mc = new MyCloseable()) {
         close(); // Compliant
       } catch (Exception e) {
         // do something
@@ -56,3 +59,4 @@ abstract class RedundantCloseCheck {
     }
   }
 }
+

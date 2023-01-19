@@ -1,16 +1,14 @@
 
-            import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-            import junit.framework.TestCase;
+import junit.framework.TestCase;
 
-            import static org.junit.Assert.assertEquals;
+public class MyTestCase extends TestCase {
 
-            public class MyTestCase extends TestCase {
+  public void testMyCaseWithAssertEqualsOnBoolean() {
+    Object myVar = true;
+    assertEquals(true, myVar);
+    assertNotEquals(true, myVar);
+  }
+}
 
-                public void testMyCaseWithAssertEqualsOnBoolean() {
-                    Object myVar = true;
-                    assertEquals(true, myVar);
-                    assertNotEquals(true, myVar);
-                }
-            }
-            

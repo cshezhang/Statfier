@@ -1,10 +1,8 @@
 package checks;
 
-import java.util.Arrays;
 
 public class MissingOverridesInRecordWithArrayComponentCheck {
   record IrrelevantRecord(int value) { // Compliant
-
   }
 
   record Compliant(Object[] objects) { // Compliant
@@ -24,33 +22,48 @@ public class MissingOverridesInRecordWithArrayComponentCheck {
     }
   }
 
-  record MissingEverything(Object[] objects) { // Noncompliant {{Override equals, hashCode and toString to consider array's content in the method}}
+  record MissingEverything(
+      Object[]
+          objects) { // Noncompliant {{Override equals, hashCode and toString to consider array's
+                     // content in the method}}
     static Object defaultValue = null;
-    void doNothing(){}
+
+    void doNothing() {}
   }
 
-  record MissingHashCodeAndToString(Object[] objects) { // Noncompliant {{Override hashCode and toString to consider array's content in the method}}
+  record MissingHashCodeAndToString(
+      Object[]
+          objects) { // Noncompliant {{Override hashCode and toString to consider array's content in
+                     // the method}}
     @Override
     public boolean equals(Object o) {
       return false;
     }
   }
 
-  record MissingEqualsAndToString(Object[] objects) { // Noncompliant {{Override equals and toString to consider array's content in the method}}
+  record MissingEqualsAndToString(
+      Object[]
+          objects) { // Noncompliant {{Override equals and toString to consider array's content in
+                     // the method}}
     @Override
     public int hashCode() {
       return 42;
     }
   }
 
-  record MissingEqualsAndHashCode(Object[] objects) { // Noncompliant {{Override equals and hashCode to consider array's content in the method}}
+  record MissingEqualsAndHashCode(
+      Object[]
+          objects) { // Noncompliant {{Override equals and hashCode to consider array's content in
+                     // the method}}
     @Override
     public String toString() {
       return "Nothing to see here";
     }
   }
 
-  record MissingEquals(Object[] objects) { // Noncompliant {{Override equals to consider array's content in the method}}
+  record MissingEquals(
+      Object[]
+          objects) { // Noncompliant {{Override equals to consider array's content in the method}}
     @Override
     public int hashCode() {
       return 42;
@@ -62,7 +75,9 @@ public class MissingOverridesInRecordWithArrayComponentCheck {
     }
   }
 
-  record MissingHashCode(Object[] objects) { // Noncompliant {{Override hashCode to consider array's content in the method}}
+  record MissingHashCode(
+      Object[]
+          objects) { // Noncompliant {{Override hashCode to consider array's content in the method}}
     @Override
     public boolean equals(Object o) {
       return false;
@@ -74,7 +89,9 @@ public class MissingOverridesInRecordWithArrayComponentCheck {
     }
   }
 
-  record MissingToString(Object[] objects) { // Noncompliant {{Override toString to consider array's content in the method}}
+  record MissingToString(
+      Object[]
+          objects) { // Noncompliant {{Override toString to consider array's content in the method}}
     @Override
     public boolean equals(Object o) {
       return false;
@@ -86,3 +103,4 @@ public class MissingOverridesInRecordWithArrayComponentCheck {
     }
   }
 }
+

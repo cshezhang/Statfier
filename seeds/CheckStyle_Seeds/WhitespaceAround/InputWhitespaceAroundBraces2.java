@@ -20,117 +20,99 @@ tokens = (default)ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, B
 
 package com.puppycrawl.tools.checkstyle.checks.whitespace.whitespacearound;
 
-class InputWhitespaceAroundBraces2
-{
-    /** @return helper func **/
-    boolean condition()
-    {
-        return false;
+class InputWhitespaceAroundBraces2 {
+  /**
+   * @return helper func *
+   */
+  boolean condition() {
+    return false;
+  }
+
+  /** Test do/while loops * */
+  void testDoWhile() {
+    // Valid
+    do {
+      testDoWhile();
+    } while (condition());
+
+    // Invalid
+    do testDoWhile();
+    while (condition());
+  }
+
+  /** Test while loops * */
+  void testWhile() {
+    // Valid
+    while (condition()) {
+      testWhile();
     }
 
-    /** Test do/while loops **/
-    void testDoWhile()
-    {
-        // Valid
-        do {
-            testDoWhile();
-        }
-        while (condition());
+    // Invalid
+    while (condition())
+      ; // violation ''while' is not followed by whitespace'
+    while (condition()) testWhile();
+    while (condition()) if (condition()) testWhile();
+  }
 
-        // Invalid
-        do testDoWhile(); while (condition());
+  /** Test for loops * */
+  void testFor() {
+    // Valid
+    for (int i = 1; i < 5; i++) {
+      testFor();
     }
 
-    /** Test while loops **/
-    void testWhile()
-    {
-        // Valid
-        while (condition()) {
-            testWhile();
-        }
+    // Invalid
+    for (int i = 1; i < 5; i++)
+      ; // violation ''for' is not followed by whitespace'
+    for (int i = 1; i < 5; i++) testFor();
+    for (int i = 1; i < 5; i++) if (i > 2) testFor();
+  }
 
-        // Invalid
-        while(condition()); // violation ''while' is not followed by whitespace'
-        while (condition())
-            testWhile();
-        while (condition())
-            if (condition())
-                testWhile();
+  /** Test if constructs * */
+  public void testIf() {
+    // Valid
+    if (condition()) {
+      testIf();
+    } else if (condition()) {
+      testIf();
+    } else {
+      testIf();
     }
 
-    /** Test for loops **/
-    void testFor()
-    {
-        // Valid
-        for (int i = 1; i < 5; i++) {
-            testFor();
-        }
-
-        // Invalid
-        for(int i = 1;i < 5;i++); // violation ''for' is not followed by whitespace'
-        for (int i = 1; i < 5; i++)
-            testFor();
-        for (int i = 1; i < 5;
-             i++)
-            if (i > 2)
-                testFor();
+    // Invalid
+    if (condition())
+      ;
+    if (condition()) testIf();
+    if (condition()) testIf();
+    else testIf();
+    if (condition()) testIf();
+    else {
+      testIf();
     }
+    if (condition()) {
+      testIf();
+    } else testIf();
+    if (condition()) if (condition()) testIf();
+  }
 
-    /** Test if constructs **/
-    public void testIf()
-    {
-        // Valid
-        if (condition()) {
-            testIf();
-        }
-        else if (condition()) {
-            testIf();
-        }
-        else {
-            testIf();
-        }
+  void whitespaceAfterSemi() {
+    // reject
+    int i = 1;
+    int j = 2;
 
-        // Invalid
-        if (condition());
-        if (condition())
-            testIf();
-        if (condition())
-            testIf();
-        else
-            testIf();
-        if (condition())
-            testIf();
-        else {
-            testIf();
-        }
-        if (condition()) {
-            testIf();
-        }
-        else
-            testIf();
-        if (condition())
-            if (condition())
-                testIf();
-    }
+    // accept
+    for (; ; ) {}
+  }
 
-    void whitespaceAfterSemi()
-    {
-        //reject
-        int i = 1;int j = 2;
+  /** Empty constructor block. * */
+  public InputWhitespaceAroundBraces2() {}
 
-        //accept
-        for (;;) {
-        }
-    }
+  /** Empty method block. * */
+  public void emptyImplementation() {}
 
-    /** Empty constructor block. **/
-    public InputWhitespaceAroundBraces2() {}
-
-    /** Empty method block. **/
-    public void emptyImplementation() {}
-
-    public void foo() {
-        boolean flag = true;
-        if(flag){} // 4 violations
-    }
+  public void foo() {
+    boolean flag = true;
+    if (flag) {} // 4 violations
+  }
 }
+

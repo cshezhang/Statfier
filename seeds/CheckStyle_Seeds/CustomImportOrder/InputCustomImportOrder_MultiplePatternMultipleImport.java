@@ -12,8 +12,7 @@ sortImportsInGroupAlphabetically = (default)false
 
 package com.puppycrawl.tools.checkstyle.checks.imports.customimportorder;
 
-import java.util.Scanner;
-import org.junit.Test; // violation
+// violation
 
-public class InputCustomImportOrder_MultiplePatternMultipleImport {
-}
+public class InputCustomImportOrder_MultiplePatternMultipleImport {}
+

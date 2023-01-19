@@ -1,6 +1,6 @@
-
 public class Foo {
-    int bar;
-    void bar() {}
+  int bar;
+
+  void bar() {}
 }
-        
+

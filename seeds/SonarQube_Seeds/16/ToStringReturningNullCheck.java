@@ -4,9 +4,11 @@ class ToStringReturningNullCheck {
   public String toString() {
     return "";
   }
+
   public String toString(int x) {
     return null;
   }
+
   public String notToString() {
     return null;
   }
@@ -15,7 +17,7 @@ class ToStringReturningNullCheck {
 class ToStringReturningNullCheckB {
   public String toString() {
     return null; // Noncompliant {{Return empty string instead.}}
-  }  
+  }
 }
 
 class ToStringReturningNullCheckC {
@@ -29,3 +31,4 @@ class ToStringReturningNullCheckD {
     return null; // Noncompliant [[sc=12;ec=16]] {{Return a non null object.}}
   }
 }
+

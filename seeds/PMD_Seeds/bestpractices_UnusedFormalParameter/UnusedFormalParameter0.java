@@ -1,5 +1,4 @@
-
 class Foo {
-    private void bar(String x) {}
+  private void bar(String x) {}
 }
-        
+

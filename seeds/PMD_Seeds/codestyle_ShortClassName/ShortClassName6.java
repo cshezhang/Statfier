@@ -1,4 +1,4 @@
+public class Isbn {}
 
-public class Isbn { }
-class Card { }
-        
+class Card {}
+

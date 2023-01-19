@@ -1,5 +1,4 @@
-
 public class Foo {
-    void bar_foo() {}
+  void bar_foo() {}
 }
-        
+

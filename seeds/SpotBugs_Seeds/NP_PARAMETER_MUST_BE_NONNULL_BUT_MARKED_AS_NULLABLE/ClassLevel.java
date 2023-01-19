@@ -5,15 +5,16 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class ClassLevel {
-    public String method() {
-        return methodNullable(null);
-    }
+  public String method() {
+    return methodNullable(null);
+  }
 
-    private String methodNullable(@Nullable final String test) {
-        return methodNonNull(test);
-    }
+  private String methodNullable(@Nullable final String test) {
+    return methodNonNull(test);
+  }
 
-    private String methodNonNull(final String test) {
-        return test;
-    }
+  private String methodNonNull(final String test) {
+    return test;
+  }
 }
+

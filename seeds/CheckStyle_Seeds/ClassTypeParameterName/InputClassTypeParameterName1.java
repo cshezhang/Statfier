@@ -11,59 +11,55 @@ import java.io.Serializable;
 
 public class InputClassTypeParameterName1<t> // violation
 {
-    public <TT> void foo() { }
+  public <TT> void foo() {}
 
-    <e_e> void foo(int i) {
-    }
+  <e_e> void foo(int i) {}
 }
 
-class Other1 <foo extends Serializable & Cloneable> {
+class Other1<foo extends Serializable & Cloneable> {
 
-    foo getOne() {
-        return null;//comment
-    }
+  foo getOne() {
+    return null; // comment
+  }
 
-    <Tfo$o2T extends foo> /*comment*/Tfo$o2T getTwo(Tfo$o2T a) {
-        return null;
-    }
+  <Tfo$o2T extends foo> /*comment*/ Tfo$o2T getTwo(Tfo$o2T a) {
+    return null;
+  }
 
-    <foo extends Runnable> foo getShadow() {
-        return null;
-    }
+  <foo extends Runnable> foo getShadow() {
+    return null;
+  }
 
-    static class Junk <foo> {
-        <_fo extends foo> void getMoreFoo() {
-        }
-    }
+  static class Junk<foo> {
+    <_fo extends foo> void getMoreFoo() {}
+  }
 }
 
-class MoreOther1 <T extends Cloneable> { // violation
+class MoreOther1<T extends Cloneable> { // violation
 
-    <E extends T> void getMore() {
-        new Other() {
-            <T> void getMoreFoo() {
-            }
-        };
+  <E extends T> void getMore() {
+    new Other() {
+      <T> void getMoreFoo() {}
+    };
 
-//        Other o = new Other() {
-//            <EE> void getMoreFoo() {
-//            }
-//        };
-    }
+    //        Other o = new Other() {
+    //            <EE> void getMoreFoo() {
+    //            }
+    //        };
+  }
 }
 
 interface Boo1<Input> {
-    Input boo();
+  Input boo();
 }
 
 interface FooInterface1<T> {
-    T foo();
+  T foo();
 }
 
 interface FooInterface3 {
-    Input foo();
+  Input foo();
 }
 
-class Input1 {
+class Input1 {}
 
-}

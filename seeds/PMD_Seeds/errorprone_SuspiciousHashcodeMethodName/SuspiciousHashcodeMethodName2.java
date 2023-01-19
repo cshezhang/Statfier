@@ -1,5 +1,6 @@
-
 public class Foo {
-    public int HashCode() {return 42;}
+  public int HashCode() {
+    return 42;
+  }
 }
-        
+

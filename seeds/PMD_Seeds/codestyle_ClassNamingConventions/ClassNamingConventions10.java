@@ -1,8 +1,5 @@
-
 public class Foo {
 
-    private Foo() {
-    }
-
+  private Foo() {}
 }
-        
+

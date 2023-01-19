@@ -34,16 +34,10 @@ import org.detector.report.PMD_Violation;
 import org.detector.report.Report;
 import org.detector.report.SonarQube_Report;
 import org.detector.report.SonarQube_Violation;
-import org.detector.report.SpotBugs_Report;
-import org.detector.report.SpotBugs_Violation;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -156,6 +150,8 @@ public class Utility {
     public final static File resultFolder = new File(EVALUATION_PATH + sep + "results");
 
     // tools
+    public final static String TOOL_PATH = getProperty("TOOL_PATH");
+    public final static String GOOGLE_FORMAT_PATH = TOOL_PATH + sep + "GoogleFormatter.jar";
     public final static String SPOTBUGS_PATH = getProperty("SPOTBUGS_PATH");
     public final static String CHECKSTYLE_PATH = getProperty("CHECKSTYLE_PATH");
     public final static String CheckStyleConfigPath = toolPath + sep + "CheckStyle_Configs";
@@ -686,50 +682,6 @@ public class Utility {
                 file2bugs.put(report.getFilepath(), new HashMap<>());
             }
             for (Infer_Violation violation : report.getViolations()) {
-                file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                if (!bug2cnt.containsKey(violation.getBugType())) {
-                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
-                }
-                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-            }
-        }
-    }
-
-    // Variable seedFolderPath contains sub seed folder name
-    public static void readSpotBugsResultFile(String seedFolderPath, String reportPath) {
-        if (DEBUG) {
-            System.out.println("SpotBugs Detection Result FileName: " + reportPath);
-        }
-        HashMap<String, SpotBugs_Report> filepath2report = new HashMap<>();
-        SAXReader saxReader = new SAXReader();
-        try {
-            Document report = saxReader.read(new File(reportPath));
-            Element root = report.getRootElement();
-            List<Element> bugInstances = root.elements("BugInstance");
-            for (Element bugInstance : bugInstances) {
-                List<Element> sourceLines = bugInstance.elements("SourceLine");
-                for (Element sourceLine : sourceLines) {
-                    SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath, sourceLine, bugInstance.attribute("type").getText());
-                    String filepath = violation.getFilepath();
-                    if (filepath2report.containsKey(filepath)) {
-                        filepath2report.get(filepath).addViolation(violation);
-                    } else {
-                        SpotBugs_Report spotBugs_report = new SpotBugs_Report(filepath);
-                        spotBugs_report.addViolation(violation);
-                        filepath2report.put(filepath, spotBugs_report);
-                    }
-                }
-            }
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
-        for (SpotBugs_Report report : filepath2report.values()) {
-            if (!file2row.containsKey(report.getFilepath())) {
-                file2row.put(report.getFilepath(), new ArrayList<>());
-                file2bugs.put(report.getFilepath(), new HashMap<>());
-            }
-            for (SpotBugs_Violation violation : report.getViolations()) {
                 file2row.get(report.getFilepath()).add(violation.getBeginLine());
                 HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
                 if (!bug2cnt.containsKey(violation.getBugType())) {

@@ -1,8 +1,7 @@
-
 public class Foo {
-    public int foo;
-    public int bif;
-    public int baz;
-    public int bof;
+  public int foo;
+  public int bif;
+  public int baz;
+  public int bof;
 }
-        
+

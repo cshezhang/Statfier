@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        System.out.println("foo = \4008");
-    }
+  void bar() {
+    System.out.println("foo = \4008");
+  }
 }
-        
+

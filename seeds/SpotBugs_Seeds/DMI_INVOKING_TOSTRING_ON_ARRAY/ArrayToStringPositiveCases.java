@@ -16,7 +16,6 @@
 
 package com.google.errorprone.bugpatterns;
 
-
 /**
  * @author adgar@google.com (Mike Edgar)
  */
@@ -25,7 +24,7 @@ public class ArrayToStringPositiveCases {
   public void intArray() {
     int[] a = {1, 2, 3};
 
-    //BUG: Suggestion includes "Arrays.toString(a)"
+    // BUG: Suggestion includes "Arrays.toString(a)"
     if (a.toString().isEmpty()) {
       System.out.println("int array string is empty!");
     } else {
@@ -36,7 +35,7 @@ public class ArrayToStringPositiveCases {
   public void objectArray() {
     Object[] a = new Object[3];
 
-    //BUG: Suggestion includes "Arrays.toString(a)"
+    // BUG: Suggestion includes "Arrays.toString(a)"
     if (a.toString().isEmpty()) {
       System.out.println("object array string is empty!");
     } else {
@@ -47,7 +46,7 @@ public class ArrayToStringPositiveCases {
   public void firstMethodCall() {
     String s = "hello";
 
-    //BUG: Suggestion includes "Arrays.toString(s.toCharArray())"
+    // BUG: Suggestion includes "Arrays.toString(s.toCharArray())"
     if (s.toCharArray().toString().isEmpty()) {
       System.out.println("char array string is empty!");
     } else {
@@ -58,7 +57,7 @@ public class ArrayToStringPositiveCases {
   public void secondMethodCall() {
     char[] a = new char[3];
 
-    //BUG: Suggestion includes "Arrays.toString(a)"
+    // BUG: Suggestion includes "Arrays.toString(a)"
     if (a.toString().isEmpty()) {
       System.out.println("array string is empty!");
     } else {
@@ -66,3 +65,4 @@ public class ArrayToStringPositiveCases {
     }
   }
 }
+

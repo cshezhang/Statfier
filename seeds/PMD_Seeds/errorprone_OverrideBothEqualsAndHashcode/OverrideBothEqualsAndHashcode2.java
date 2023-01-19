@@ -1,6 +1,6 @@
-
 public class Foo {
-    public boolean equals(Object other) {}
-    public int hashCode() {}
+  public boolean equals(Object other) {}
+
+  public int hashCode() {}
 }
-        
+

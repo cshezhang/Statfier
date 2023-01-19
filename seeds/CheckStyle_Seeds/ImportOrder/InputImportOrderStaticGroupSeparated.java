@@ -16,14 +16,14 @@ tokens = (default)STATIC_IMPORT
 
 package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
-import static java.lang.Math.abs; // ok
+// ok
 
-import static java.lang.Math.cos; // violation
+// violation
 
-import static org.junit.Assert.assertEquals; // violation
-import static org.junit.Assert.fail; // ok
+// violation
+// ok
 
 public class InputImportOrderStaticGroupSeparated {
-    void method() {
-    }
+  void method() {}
 }
+

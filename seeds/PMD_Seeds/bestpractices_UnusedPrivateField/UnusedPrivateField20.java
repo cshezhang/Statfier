@@ -1,8 +1,8 @@
-
 public class Foo {
-    private Foo x = new Foo();
-    void bar() {
-        this.x.y = 42;
-    }
+  private Foo x = new Foo();
+
+  void bar() {
+    this.x.y = 42;
+  }
 }
-        
+

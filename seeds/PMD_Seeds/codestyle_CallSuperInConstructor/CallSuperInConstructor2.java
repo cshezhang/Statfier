@@ -1,7 +1,6 @@
-
 public class Foo {
-    public Foo() {
-        int x = 2;
-    }
+  public Foo() {
+    int x = 2;
+  }
 }
-        
+

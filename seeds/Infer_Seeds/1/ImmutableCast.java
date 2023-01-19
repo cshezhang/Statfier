@@ -1,7 +1,3 @@
-
-
-
-
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,3 +18,4 @@ public class ImmutableCast {
     return new ArrayList<String>(list);
   }
 }
+

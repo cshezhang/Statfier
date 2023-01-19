@@ -7,7 +7,7 @@ class StringMethodsWithLocaleCheck {
   private static final String MY_TEMPLATE = "%t";
 
   void foo(java.util.Date date) {
-    String myString ="";
+    String myString = "";
     myString.toLowerCase(); // Noncompliant [[sc=14;ec=25]]
     myString.toUpperCase(); // Noncompliant
     myString.toLowerCase(java.util.Locale.US);
@@ -32,8 +32,11 @@ class StringMethodsWithLocaleCheck {
 
     // any floating point format
     format("this will display my value in dollar: %f$" + " (dollars)", 42.01234f); // Noncompliant
-    format("this will display my value in dollar: %0+,(15.25f$" + " (dollars)", 12345.01234f); // Noncompliant
+    format(
+        "this will display my value in dollar: %0+,(15.25f$" + " (dollars)",
+        12345.01234f); // Noncompliant
 
     format(MY_TEMPLATE, date); // Compliant - FN - non-trivial case
   }
 }
+

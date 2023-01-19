@@ -1,5 +1,3 @@
-
-
 public class MyClass {
   int[] nums; // violation
   String strings[]; // OK
@@ -12,4 +10,4 @@ public class MyClass {
     return null;
   }
 }
-        
+

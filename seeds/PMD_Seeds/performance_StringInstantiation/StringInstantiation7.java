@@ -1,7 +1,6 @@
-
 public class Foo {
-    String foo(String str) {
-        return new String(str);
-    }
+  String foo(String str) {
+    return new String(str);
+  }
 }
-        
+

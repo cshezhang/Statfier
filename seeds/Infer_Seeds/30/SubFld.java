@@ -1,4 +1,3 @@
-
 import javax.annotation.concurrent.ThreadSafe;
 
 // Fields must encapsulate the class they are declared in, not
@@ -33,3 +32,4 @@ public class SubFld extends SuperFld {
     g = 5; // must report
   }
 }
+

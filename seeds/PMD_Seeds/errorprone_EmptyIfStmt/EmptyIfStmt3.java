@@ -1,9 +1,8 @@
-
 public class Foo {
-    void bar(int x) {
-        if (x == 0) {
-            // empty!
-        }
+  void bar(int x) {
+    if (x == 0) {
+      // empty!
     }
+  }
 }
-        
+

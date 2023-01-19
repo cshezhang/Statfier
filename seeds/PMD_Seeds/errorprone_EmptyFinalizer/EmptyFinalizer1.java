@@ -1,7 +1,6 @@
-
 public class Foo {
-    void finalize() {
-        int x = 2;
-    }
+  void finalize() {
+    int x = 2;
+  }
 }
-        
+

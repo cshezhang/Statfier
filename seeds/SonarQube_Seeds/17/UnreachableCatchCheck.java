@@ -13,7 +13,10 @@ public class UnreachableCatchCheck {
       throwExtendsCustomException();
     } catch (ExtendsCustomException e) {
       // ...
-    } catch (CustomException e) { // Noncompliant [[sc=7;ec=12;secondary=14]] {{Remove or refactor this catch clause because it is unreachable, hidden by previous catch block(s).}}
+    } catch (
+        CustomException
+            e) { // Noncompliant [[sc=7;ec=12;secondary=14]] {{Remove or refactor this catch clause
+                 // because it is unreachable, hidden by previous catch block(s).}}
       // ...
     }
 
@@ -21,7 +24,10 @@ public class UnreachableCatchCheck {
       throw new ExtendsCustomException();
     } catch (ExtendsCustomException e) {
       // ...
-    } catch (CustomException|IllegalStateException e) { // Noncompliant [[sc=14;ec=29;secondary=22]] {{Remove this type because it is unreachable, hidden by previous catch block(s).}}
+    } catch (CustomException
+        | IllegalStateException
+            e) { // Noncompliant [[sc=14;ec=29;secondary=22]] {{Remove this type because it is
+                 // unreachable, hidden by previous catch block(s).}}
       // ...
     }
 
@@ -32,7 +38,10 @@ public class UnreachableCatchCheck {
       // ...
     } catch (ExtendsOtherExtendsCustomException e) {
       // ...
-    } catch (ExtendsCustomException | OtherExtendsCustomException e) { // Noncompliant [[sc=7;ec=12;secondary=31,33]] {{Remove or refactor this catch clause because it is unreachable, hidden by previous catch block(s).}}
+    } catch (ExtendsCustomException
+        | OtherExtendsCustomException
+            e) { // Noncompliant [[sc=7;ec=12;secondary=31,33]] {{Remove or refactor this catch
+                 // clause because it is unreachable, hidden by previous catch block(s).}}
       // ...
     }
 
@@ -64,7 +73,9 @@ public class UnreachableCatchCheck {
 
     try {
       throwExtendsCustomException();
-    } catch (ExtendsExtendsCustomException e) { // reported as secondary, even if it can not be raised from code
+    } catch (
+        ExtendsExtendsCustomException
+            e) { // reported as secondary, even if it can not be raised from code
       // ...
     } catch (ExtendsCustomException e) {
       // ...
@@ -100,7 +111,7 @@ public class UnreachableCatchCheck {
           throwCustomException(); // not in the same scope
         }
       }
-      takeObject((Executable)(this::throwCustomException)); // not in the same scope
+      takeObject((Executable) (this::throwCustomException)); // not in the same scope
     } catch (ExtendsCustomException e) {
       // ...
     } catch (CustomException e) { // Noncompliant
@@ -127,7 +138,8 @@ public class UnreachableCatchCheck {
       throwCustomException();
     } catch (ExtendsExtendsCustomException e) {
       // ...
-    } catch (ExtendsCustomException e) { // Compliant, throwCustomException can throw one of his subtype
+    } catch (
+        ExtendsCustomException e) { // Compliant, throwCustomException can throw one of his subtype
       // ...
     } catch (CustomException e) {
       // ...
@@ -137,7 +149,9 @@ public class UnreachableCatchCheck {
       throw new Exception();
     } catch (ExtendsExtendsCustomException e) {
       // ...
-    } catch (ExtendsCustomException e) { // Compliant, FN in this case, but Exception could be one of his subtype
+    } catch (
+        ExtendsCustomException
+            e) { // Compliant, FN in this case, but Exception could be one of his subtype
       // ...
     } catch (Exception e) {
       // ...
@@ -192,7 +206,7 @@ public class UnreachableCatchCheck {
       // ...
     }
 
-    try(InputStream input = new FileInputStream("reportFileName")) {
+    try (InputStream input = new FileInputStream("reportFileName")) {
       throwExtendsCustomException();
     } catch (FileNotFoundException e) {
     } catch (IOException e) { // Compliant, close throws an IOException
@@ -212,7 +226,10 @@ public class UnreachableCatchCheck {
     try (B a = new B()) {
     } catch (FileNotFoundException e) {
       e.printStackTrace();
-    } catch (IOException e) { // Noncompliant - this can happen only if the class implementing Closable specify a subtype of IOException in the declaration.
+    } catch (
+        IOException
+            e) { // Noncompliant - this can happen only if the class implementing Closable specify a
+                 // subtype of IOException in the declaration.
       e.printStackTrace();
     }
 
@@ -242,7 +259,6 @@ public class UnreachableCatchCheck {
     } catch (CustomException e) { // Compliant
       // ...
     }
-
   }
 
   void throwCustomException() throws CustomException {
@@ -253,8 +269,7 @@ public class UnreachableCatchCheck {
     throw new ExtendsCustomException();
   }
 
-  void throwBoth() throws ExtendsCustomException, OtherExtendsCustomException {
-  }
+  void throwBoth() throws ExtendsCustomException, OtherExtendsCustomException {}
 
   void throwOtherExtendsCustomException() throws OtherExtendsCustomException {
     throw new OtherExtendsCustomException();
@@ -272,29 +287,20 @@ public class UnreachableCatchCheck {
     throw new IllegalArgumentException();
   }
 
-  void takeObject(Object o) {
+  void takeObject(Object o) {}
 
-  }
+  public static class CustomException extends Exception {}
 
-  public static class CustomException extends Exception {
-  }
+  public static class ExtendsCustomException extends CustomException {}
 
-  public static class ExtendsCustomException extends CustomException {
-  }
+  public static class OtherExtendsCustomException extends CustomException {}
 
-  public static class OtherExtendsCustomException extends CustomException {
-  }
+  public static class ExtendsExtendsCustomException extends ExtendsCustomException {}
 
-  public static class ExtendsExtendsCustomException extends ExtendsCustomException {
-  }
-
-  public static class ExtendsOtherExtendsCustomException extends OtherExtendsCustomException {
-  }
+  public static class ExtendsOtherExtendsCustomException extends OtherExtendsCustomException {}
 
   class ThrowingExtendsCustomException {
-    ThrowingExtendsCustomException() throws ExtendsCustomException {
-
-    }
+    ThrowingExtendsCustomException() throws ExtendsCustomException {}
   }
-
 }
+

@@ -1,6 +1,5 @@
-
 public class MyClass {
-    @javax.inject.Inject MyClass() {
-    }
+  @javax.inject.Inject
+  MyClass() {}
 }
-        
+

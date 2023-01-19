@@ -5,12 +5,18 @@ class UseSwitchExpressionCheck_java11 {
   int field;
 
   enum DoW {
-    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
   }
 
   void foo(DoW day) {
     int numLetters;
-    switch (day) {  // Compliant
+    switch (day) { // Compliant
       case MONDAY:
       case FRIDAY:
       case SUNDAY:
@@ -30,5 +36,5 @@ class UseSwitchExpressionCheck_java11 {
         throw new IllegalStateException("Wat: " + day);
     }
   }
-
 }
+

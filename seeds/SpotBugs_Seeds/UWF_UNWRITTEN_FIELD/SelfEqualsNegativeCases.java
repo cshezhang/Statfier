@@ -55,3 +55,4 @@ public class SelfEqualsNegativeCases {
     return Boolean.TRUE.toString().equals(Boolean.FALSE.toString());
   }
 }
+

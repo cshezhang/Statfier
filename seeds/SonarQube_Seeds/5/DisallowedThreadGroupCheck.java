@@ -1,20 +1,21 @@
 package checks;
 
-abstract class DisallowedThreadGroupCheck
-  extends ThreadGroup { // Noncompliant
+abstract class DisallowedThreadGroupCheck extends ThreadGroup { // Noncompliant
 
-  DisallowedThreadGroupCheck (ThreadGroup tg) { // Noncompliant
+  DisallowedThreadGroupCheck(ThreadGroup tg) { // Noncompliant
     super("DisallowedThreadGroupCheck");
   }
 
-  void foo(
-    Object o,
-    ThreadGroup threadGroup) {  // Noncompliant
+  void foo(Object o, ThreadGroup threadGroup) { // Noncompliant
 
-    ThreadGroup tg = // Noncompliant [[sc=5;ec=16]] {{Remove this use of "ThreadGroup". Prefer the use of "ThreadPoolExecutor".}}
-      new ThreadGroup("DisallowedThreadGroupCheck"); // Compliant
+    ThreadGroup
+        tg = // Noncompliant [[sc=5;ec=16]] {{Remove this use of "ThreadGroup". Prefer the use of
+             // "ThreadPoolExecutor".}}
+        new ThreadGroup("DisallowedThreadGroupCheck"); // Compliant
 
-    tg.activeCount(); // Compliant - not following method invocation, only declarations of ThreadGroup
+    tg
+        .activeCount(); // Compliant - not following method invocation, only declarations of
+                        // ThreadGroup
     tg.activeGroupCount(); // Compliant
     tg.allowThreadSuspension(true); // Compliant
     getThreadGroup().checkAccess(); // Compliant
@@ -38,11 +39,10 @@ abstract class DisallowedThreadGroupCheck
     tg.suspend(); // Compliant
     tg.uncaughtException(new Thread(), new Exception()); // Compliant
     tg.toString(); // Compliant
-    tg.equals(o);  // Compliant - not overriden in ThreadGroup
+    tg.equals(o); // Compliant - not overriden in ThreadGroup
   }
 
-  void qix(Object o, boolean b) {
-  }
+  void qix(Object o, boolean b) {}
 
   abstract ThreadGroup getThreadGroup(); // Noncompliant
 }
@@ -59,7 +59,7 @@ class DisallowedThreadGroupCheckB extends DisallowedThreadGroupCheck { // Compli
   }
 
   @Override
-  void foo(Object o, ThreadGroup threadGroup) { } // Compliant
+  void foo(Object o, ThreadGroup threadGroup) {} // Compliant
 
   @Override
   void qix(Object o, boolean b) {
@@ -73,3 +73,4 @@ class DisallowedThreadGroupCheckC {
     return o;
   }
 }
+

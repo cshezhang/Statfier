@@ -1,16 +1,17 @@
 public class InitializeInSetupMethod {
-    String x;
+  String x;
 
-    @Override
-    public int hashCode() {
-        return x.hashCode();
-    }
+  @Override
+  public int hashCode() {
+    return x.hashCode();
+  }
 
-    InitializeInSetupMethod() {
-        setUp();
-    }
+  InitializeInSetupMethod() {
+    setUp();
+  }
 
-    private void setUp() {
-        x = "foo";
-    }
+  private void setUp() {
+    x = "foo";
+  }
 }
+

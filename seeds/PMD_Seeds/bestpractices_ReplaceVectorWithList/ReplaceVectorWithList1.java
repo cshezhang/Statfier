@@ -1,6 +1,4 @@
-
 public class Foo {
-    void bar(Vector v) {
-    }
+  void bar(Vector v) {}
 }
-        
+

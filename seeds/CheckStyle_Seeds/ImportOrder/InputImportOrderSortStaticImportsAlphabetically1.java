@@ -16,10 +16,10 @@ tokens = (default)STATIC_IMPORT
 
 package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
-import static org.junit.Assert.fail; // ok
-import static javax.xml.transform.TransformerFactory.newInstance; // ok
-import static java.lang.Math.cos; // ok
-import static java.lang.Math.abs; // ok
+// ok
+// ok
+// ok
+// ok
 
-public class InputImportOrderSortStaticImportsAlphabetically1 {
-}
+public class InputImportOrderSortStaticImportsAlphabetically1 {}
+

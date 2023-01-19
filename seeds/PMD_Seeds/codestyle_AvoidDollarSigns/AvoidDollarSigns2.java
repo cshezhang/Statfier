@@ -1,5 +1,4 @@
-
 public class Foo {
-    void fo$o() {}
+  void fo$o() {}
 }
-        
+

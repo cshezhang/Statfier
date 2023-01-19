@@ -1,7 +1,3 @@
-
-
-
-
 public class IntegerExample {
 
   private static void testIntegerEqualsMethodGood() {
@@ -85,3 +81,4 @@ public class IntegerExample {
     }
   }
 }
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    int binary = -0b100111;
+  int binary = -0b100111;
 }
-        
+

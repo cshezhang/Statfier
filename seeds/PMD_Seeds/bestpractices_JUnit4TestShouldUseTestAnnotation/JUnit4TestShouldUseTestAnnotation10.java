@@ -1,5 +1,4 @@
-
 public class MyTests {
-    public void testBad() { }
+  public void testBad() {}
 }
-        
+

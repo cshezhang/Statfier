@@ -2,7 +2,8 @@ package checks;
 
 public class ReadObjectSynchronized {
 
-  private synchronized void readObject(java.io.ObjectInputStream is) { // Compliant, not in a Serializable class
+  private synchronized void readObject(
+      java.io.ObjectInputStream is) { // Compliant, not in a Serializable class
   }
 }
 
@@ -25,6 +26,9 @@ class ReadObjectSynchronized3 implements java.io.Serializable {
   private synchronized void read(java.io.ObjectInputStream is) { // Compliant, wrong signature
   }
 
-  private synchronized void readObject(java.io.ObjectInputStream is) { // Noncompliant {{Remove the "synchronized" keyword from this method.}}
+  private synchronized void readObject(
+      java.io.ObjectInputStream
+          is) { // Noncompliant {{Remove the "synchronized" keyword from this method.}}
   }
 }
+

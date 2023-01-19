@@ -16,7 +16,6 @@
 
 package com.google.errorprone.bugpatterns;
 
-
 /**
  * Defining an equals method with no body.
  *
@@ -24,6 +23,7 @@ package com.google.errorprone.bugpatterns;
  */
 public class CovariantEqualsPositiveCase5 {
 
-  //BUG: Suggestion includes "@Override"
+  // BUG: Suggestion includes "@Override"
   public native boolean equals(CovariantEqualsPositiveCase5 other);
 }
+

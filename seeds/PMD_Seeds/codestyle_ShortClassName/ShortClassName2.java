@@ -1,6 +1,4 @@
-
 public class YetAnotherFoo {
-    private class bar {
-    }
+  private class bar {}
 }
-        
+

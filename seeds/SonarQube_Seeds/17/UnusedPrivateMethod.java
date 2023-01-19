@@ -1,5 +1,7 @@
 package checks;
 
+import static java.util.Collections.emptySet;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,12 +14,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.Collections.emptySet;
-
 class UnusedPrivateMethodCheck {
 
   private UnusedPrivateMethodCheck() {}
-  private UnusedPrivateMethodCheck(int a) {} // Noncompliant [[sc=11;ec=35;quickfixes=qf_constructor]]
+
+  private UnusedPrivateMethodCheck(
+      int a) {} // Noncompliant [[sc=11;ec=35;quickfixes=qf_constructor]]
   // fix@qf_constructor {{Remove the unused constructor}}
   // edit@qf_constructor [[sl=-1;sc=40;el=+0;ec=45]] {{}}
 
@@ -25,14 +27,14 @@ class UnusedPrivateMethodCheck {
     init();
   }
 
-  private void init() {
-  }
+  private void init() {}
 
   private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
     // this method should not be considered as dead code, see Serializable contract
   }
 
-  private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+  private void readObject(java.io.ObjectInputStream in)
+      throws java.io.IOException, ClassNotFoundException {
     // this method should not be considered as dead code, see Serializable contract
   }
 
@@ -54,15 +56,16 @@ class UnusedPrivateMethodCheck {
   private int unusedPrivateMethod() {
     return 1;
   }
-  private int unusedPrivateMethod(int a, String s) { // Noncompliant {{Remove this unused private "unusedPrivateMethod" method.}}
+
+  private int unusedPrivateMethod(
+      int a,
+      String s) { // Noncompliant {{Remove this unused private "unusedPrivateMethod" method.}}
     return 1;
   }
 
-  private void varargs(String first, String second, Object... objects) {
-  }
+  private void varargs(String first, String second, Object... objects) {}
 
-  private void varargs(String... strings) {
-  }
+  private void varargs(String... strings) {}
 
   public void usage() {
     varargs("", "", new Object());
@@ -72,18 +75,22 @@ class UnusedPrivateMethodCheck {
   public enum Attribute {
     ID("plop", "foo", true);
 
-    Attribute(String prettyName, String type, boolean hidden) { }
+    Attribute(String prettyName, String type, boolean hidden) {}
 
-    private Attribute(String name) { } // Noncompliant
+    private Attribute(String name) {} // Noncompliant
 
-    Attribute(String prettyName, String[][] martrix, int i) { // Noncompliant {{Remove this unused private "Attribute" constructor.}}
+    Attribute(
+        String prettyName,
+        String[][] martrix,
+        int i) { // Noncompliant {{Remove this unused private "Attribute" constructor.}}
     }
-
   }
 
   private class A {
     A(int a) {}
-    private A(){}
+
+    private A() {}
+
     private <T> T foo(T t) {
       return null;
     }
@@ -98,14 +105,14 @@ class UnusedPrivateMethodCheck {
     // fix@qf1 {{Remove the unused method}}
     // edit@qf1 [[sl=-3;sc=4;el=+4;ec=7]] {{}}
     int i = 12;
-     }
+  }
+
   private void testQuickFix2() { // Noncompliant [[sc=16;ec=29;quickfixes=qf2]]
     // fix@qf2 {{Remove the unused method}}
     // edit@qf2 [[sl=-1;sc=7;el=+5;ec=4]] {{}}
     int i = 12;
     int j = 12;
   }
-
 }
 
 class OuterClass {
@@ -117,8 +124,7 @@ class OuterClass {
     };
   }
 
-  private static <T extends java.util.List<String>> void complexGenericMethod(T argument) {
-  }
+  private static <T extends java.util.List<String>> void complexGenericMethod(T argument) {}
 
   class NestedGenericClass<T> {
     private NestedGenericClass(T argument) { // Compliant
@@ -129,40 +135,36 @@ class OuterClass {
   }
 
   class ComplexNestedGenericClass<T extends java.util.Collection<Object>> {
-    private ComplexNestedGenericClass(T argument) {
-    }
+    private ComplexNestedGenericClass(T argument) {}
 
-    private void genericMethod(T argument) {
-    }
+    private void genericMethod(T argument) {}
   }
 
   public void test() {
     genericMethod("string");
     complexGenericMethod(new java.util.ArrayList<String>());
-    new NestedGenericClass<java.util.List<Object>>(new java.util.ArrayList<Object>()).genericMethod(new java.util.LinkedList<Object>());
-    new ComplexNestedGenericClass<java.util.List<Object>>(new java.util.ArrayList<Object>()).genericMethod(new java.util.LinkedList<Object>());
+    new NestedGenericClass<java.util.List<Object>>(new java.util.ArrayList<Object>())
+        .genericMethod(new java.util.LinkedList<Object>());
+    new ComplexNestedGenericClass<java.util.List<Object>>(new java.util.ArrayList<Object>())
+        .genericMethod(new java.util.LinkedList<Object>());
   }
-
 }
 
 class UnusedPrivateMethodCheckLambdas {
-  void method(){
-    IntStream.range(1, 5)
-      .map((x)-> x*x )
-      .map(x -> x * x)
-      .map((int x) -> x * x)
-      .map((x)-> x*x )
-    ;
+  void method() {
+    IntStream.range(1, 5).map((x) -> x * x).map(x -> x * x).map((int x) -> x * x).map((x) -> x * x);
   }
 }
 
 class UnusedPrivateMethodCheckReturnTypeInference {
   private void foo(java.util.List<String> l) {}
+
   void test() {
     java.util.List<String> l = new ArrayList<>();
     foo(l.stream().sorted().collect(Collectors.toList()));
   }
 }
+
 class UnusedPrivateMethodCheckBar {
   public void print() {
     java.util.List<String> list = java.util.Arrays.asList("x", "y", "z");
@@ -172,6 +174,7 @@ class UnusedPrivateMethodCheckBar {
 
   public class Foo {
     private String foo;
+
     private Foo(String foo) {
       this.foo = foo;
     }
@@ -218,13 +221,16 @@ class UnusedPrivateMethodCheckNestedTypeInference2 {
 
 class UnusedPrivateMethodCheckMyClass<A extends Serializable> {
 
-  private UnusedPrivateMethodCheckMyClass(MyClassBuilder<A> builder) { // Compliant: used in MyClassBuilder
+  private UnusedPrivateMethodCheckMyClass(
+      MyClassBuilder<A> builder) { // Compliant: used in MyClassBuilder
     builder.build();
   }
 
   public static final class MyClassBuilder<B extends Serializable> {
     public UnusedPrivateMethodCheckMyClass<B> build() {
-      return new UnusedPrivateMethodCheckMyClass<>(this); // constructor is correctly resolved when using diamond
+      return new UnusedPrivateMethodCheckMyClass<>(
+          this); // constructor is correctly resolved when using diamond
     }
   }
 }
+

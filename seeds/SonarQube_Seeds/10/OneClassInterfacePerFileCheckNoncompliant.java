@@ -1,13 +1,10 @@
 package checks;
 
-class OneClassInterfacePerFileCheckNoncompliantA {
-}
+class OneClassInterfacePerFileCheckNoncompliantA {}
 
-interface OneClassInterfacePerFileCheckNoncompliantB {
-}
+interface OneClassInterfacePerFileCheckNoncompliantB {}
 
-enum OneClassInterfacePerFileCheckNoncompliantC {
-}
+enum OneClassInterfacePerFileCheckNoncompliantC {}
 
-@interface OneClassInterfacePerFileCheckNoncompliantD {
-}
+@interface OneClassInterfacePerFileCheckNoncompliantD {}
+

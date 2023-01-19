@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 /**
@@ -82,3 +78,4 @@ public class FieldNullabilityMemoization {
     nullable = null;
   }
 }
+

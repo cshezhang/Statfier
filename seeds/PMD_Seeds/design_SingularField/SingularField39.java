@@ -1,12 +1,11 @@
+package oo;
 
-            package oo;
+public class IPA {
 
-            public class IPA {
+  private final LocalModel model;
 
-                private final LocalModel model;
+  public InternalAggregation reduce(String s) {
+    try (model) {}
+  }
+}
 
-                public InternalAggregation reduce(String s) {
-                    try (model) { }
-                }
-            }
-            

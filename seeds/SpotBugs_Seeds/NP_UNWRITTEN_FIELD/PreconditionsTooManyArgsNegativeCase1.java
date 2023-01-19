@@ -31,11 +31,10 @@ public class PreconditionsTooManyArgsNegativeCase1 {
     Preconditions.checkState(foo.intValue() == 0, "foo must be equal to 0 but was %s", foo);
   }
 
-  public static void checkNotNull(Object foo, String bar, Object baz) {
-
-  }
+  public static void checkNotNull(Object foo, String bar, Object baz) {}
 
   public void checkSelf() {
     checkNotNull(foo, "Foo", this);
   }
 }
+

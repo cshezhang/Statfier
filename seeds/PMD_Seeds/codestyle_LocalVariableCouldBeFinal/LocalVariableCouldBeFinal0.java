@@ -1,7 +1,6 @@
-
 public class Foo {
-    public void test1() {
-        int a = 0;
-    }
+  public void test1() {
+    int a = 0;
+  }
 }
-        
+

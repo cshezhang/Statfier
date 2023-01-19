@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import java.io.File;
 import java.io.IOException;
@@ -34,3 +32,4 @@ class StrictModeViolation {
     f.setWritable(true);
   }
 }
+

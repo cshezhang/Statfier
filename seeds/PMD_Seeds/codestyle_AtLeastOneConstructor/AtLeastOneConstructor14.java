@@ -1,7 +1,5 @@
-
 import lombok.Builder;
 
 @Builder
-public class TestAtLeastOneConstructor {
-}
-        
+public class TestAtLeastOneConstructor {}
+

@@ -1,7 +1,7 @@
-
 class Foo {
-    void bar() {
-        if (a && b || c);
-    }
+  void bar() {
+    if (a && b || c)
+      ;
+  }
 }
-        
+

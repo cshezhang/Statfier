@@ -1,19 +1,16 @@
+class Foo {
 
-            class Foo {
+  void main(int[] bufline, int start, int bufsize) {
 
-              void main(int[] bufline, int start, int bufsize) {
+    int i = 0, j, k = 0;
 
-                int i = 0, j, k = 0;
+    if ((i = 2) < (j = i) && (j = k) == i) {
 
-                if (  (i = 2) < (j = i)
-                   && (j = k) == i       ) {
+      // reaching: i = 2, j = k  (not j = i)
+    } else {
+      // reaching: i = 2, j = k, j = i
+      log(j);
+    }
+  }
+}
 
-                    // reaching: i = 2, j = k  (not j = i)
-                } else {
-                    // reaching: i = 2, j = k, j = i
-                    log(j);
-                }
-              }
-            }
-
-        

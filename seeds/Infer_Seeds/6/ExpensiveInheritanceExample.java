@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import codetoanalyze.java.annotation.Expensive;
 import codetoanalyze.java.annotation.PerformanceCritical;
@@ -64,3 +60,4 @@ public class ExpensiveInheritanceExample {
     }
   }
 }
+

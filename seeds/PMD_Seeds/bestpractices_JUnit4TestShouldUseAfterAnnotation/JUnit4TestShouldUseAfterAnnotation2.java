@@ -1,10 +1,8 @@
-
 public class Foo {
-    @After
-    public void clean() {
-    }
-    @Test
-    public void foo() {
-    }
+  @After
+  public void clean() {}
+
+  @Test
+  public void foo() {}
 }
-        
+

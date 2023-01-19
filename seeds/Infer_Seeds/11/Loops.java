@@ -1,6 +1,3 @@
-
-
-
 import android.app.Activity;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -178,3 +175,4 @@ public class Loops {
     return k;
   }
 }
+

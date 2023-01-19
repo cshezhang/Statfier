@@ -1,6 +1,6 @@
-
 public class Bar {
-    List v = new Vector();
-    void x() {}
+  List v = new Vector();
+
+  void x() {}
 }
-        
+

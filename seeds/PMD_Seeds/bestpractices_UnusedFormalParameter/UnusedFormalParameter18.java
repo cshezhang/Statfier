@@ -1,5 +1,4 @@
-
 abstract class Foo {
-    protected abstract void foo(Long s);
+  protected abstract void foo(Long s);
 }
-        
+

@@ -1,43 +1,47 @@
+class Worker {
+  private final Worker.Listener listener;
 
+  Worker(Listener listener) {
+    this.listener = listener;
+    work();
+  }
 
-            class Worker {
-                private final Worker.Listener listener;
+  void work() {
+    listener.onWork();
+  }
 
-                Worker(Listener listener) {
-                    this.listener = listener;
-                    work();
-                }
+  interface Listener {
+    void onWork();
+  }
+}
 
-                void work() {listener.onWork();}
+class A implements Worker.Listener {
+  private boolean ignore;
+  private Worker worker;
 
-                interface Listener { void onWork(); }
-            }
+  A() {
+    ignore = false; // actually unused
+    ignore = true; // may be observed by the leak
+    worker = new Worker(this); // leak
 
-            class A implements Worker.Listener {
-                private boolean ignore;
-                private Worker worker;
+    // This could technically be observed by another thread (not sure, maybe the field needs to be
+    // volatile too)
+    // This looks like a very rare circumstance though.
+    // So we say it's unused
+    ignore = false;
 
-                A() {
-                    ignore = false; // actually unused
-                    ignore = true;  // may be observed by the leak
-                    worker = new Worker(this); // leak
+    ignore = false; // this exits the ctor so may be used later
+  }
 
-                    // This could technically be observed by another thread (not sure, maybe the field needs to be volatile too)
-                    // This looks like a very rare circumstance though.
-                    // So we say it's unused
-                    ignore = false;
+  void doWork() {
+    worker.work();
+  }
 
-                    ignore = false; // this exits the ctor so may be used later
-                }
+  public void onWork() {
+    if (ignore) {
+      return;
+    }
+    System.out.println("onWork");
+  }
+}
 
-                void doWork() { worker.work(); }
-
-                public void onWork() {
-                    if (ignore) {
-                        return;
-                    }
-                    System.out.println("onWork");
-                }
-            }
-
-            

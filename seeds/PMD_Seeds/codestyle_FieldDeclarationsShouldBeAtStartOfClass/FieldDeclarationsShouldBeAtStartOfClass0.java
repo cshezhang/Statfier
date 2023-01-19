@@ -1,9 +1,8 @@
-
 public class HelloWorldBean {
-    private String _thing;
+  private String _thing;
 
-    public String getMessage() {
-        return "Hello World!";
-    }
+  public String getMessage() {
+    return "Hello World!";
+  }
 }
-        
+

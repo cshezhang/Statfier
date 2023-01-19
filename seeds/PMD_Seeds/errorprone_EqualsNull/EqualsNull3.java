@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        if (foo.equals(null, other)) {}
-    }
+  void bar() {
+    if (foo.equals(null, other)) {}
+  }
 }
-        
+

@@ -1,5 +1,3 @@
-
-
 import android.os.AsyncTask;
 import android.support.annotation.UiThread;
 import java.util.concurrent.ExecutionException;
@@ -48,3 +46,4 @@ class CountTask extends AsyncTask<Integer, Void, Long> {
     return totalSize;
   }
 }
+

@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.SuppressLint;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,3 +38,4 @@ public class SuppressLintExample {
     object.toString();
   }
 }
+

@@ -8,9 +8,10 @@ class EqualsNotOverriddenInSubclassCheck {
 
   class A {
     void foo() {
-      Object o = new A() {
-        int inner;
-      };
+      Object o =
+          new A() {
+            int inner;
+          };
     }
 
     public boolean equals(Object obj) {
@@ -18,7 +19,8 @@ class EqualsNotOverriddenInSubclassCheck {
     }
   }
 
-  class B extends A { // Noncompliant [[sc=9;ec=10]]  {{Override the "equals" method in this class.}}
+  class B
+      extends A { // Noncompliant [[sc=9;ec=10]]  {{Override the "equals" method in this class.}}
     String s2;
   }
 
@@ -94,16 +96,20 @@ class EqualsNotOverriddenInSubclassCheck {
 
   class Q extends A {
     private String name;
+
     @Override
-    public final boolean equals(Object o) { return false; }
+    public final boolean equals(Object o) {
+      return false;
+    }
   }
 
   abstract class AbstractEquals {
     @Override
-    abstract public boolean equals(Object obj);
+    public abstract boolean equals(Object obj);
   }
 
-  abstract class BAbstractEquals extends AbstractEquals { // Compliant, parent is not overriding the content of equals.
+  abstract class BAbstractEquals
+      extends AbstractEquals { // Compliant, parent is not overriding the content of equals.
     String field = "";
   }
 
@@ -141,7 +147,5 @@ class EqualsNotOverriddenInSubclassCheck {
   abstract class CAbstractClass2 extends BAbstractClass2 { // Noncompliant
     private String field2 = "";
   }
-
 }
-
 

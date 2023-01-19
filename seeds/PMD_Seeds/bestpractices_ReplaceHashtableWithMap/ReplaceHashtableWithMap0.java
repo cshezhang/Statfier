@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        Hashtable h = new Hashtable();
-    }
+  void bar() {
+    Hashtable h = new Hashtable();
+  }
 }
-        
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        if (getFoo() == false && isBar() == true) {}
-    }
+  void bar() {
+    if (getFoo() == false && isBar() == true) {}
+  }
 }
-        
+

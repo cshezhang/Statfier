@@ -1,7 +1,8 @@
-
 public enum TestEnum {
-    FOO;
+  FOO;
 
-    public String getName() { return "foo"; }
+  public String getName() {
+    return "foo";
+  }
 }
-        
+

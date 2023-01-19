@@ -1,8 +1,8 @@
-
 public class Foo {
-    public Foo() {
-        bar();
-    }
-    abstract void bar() {}
+  public Foo() {
+    bar();
+  }
+
+  abstract void bar() {}
 }
-        
+

@@ -1,5 +1,3 @@
-
-
 import android.os.Binder;
 import android.os.RemoteException;
 import java.util.concurrent.Callable;
@@ -128,7 +126,6 @@ class ModeledExecutors {
         });
   }
 
-
   public void scheduleBlockingCallToUIThreadBad() {
     ScheduledExecutorService uiExecutor = (ScheduledExecutorService) mUiThreadExecutor;
 
@@ -166,3 +163,4 @@ class ModeledExecutors {
         });
   }
 }
+

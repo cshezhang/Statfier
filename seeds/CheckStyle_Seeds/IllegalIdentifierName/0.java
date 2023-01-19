@@ -1,19 +1,1 @@
 
-
-public class TestClass {
-    public static void main(String... args) {
-        var var = 4; // violation, "var" should not be used as an identifier.
-        int record = 15; // violation, "record" should not be used as an identifier.
-        String yield = "yield"; // violation, "yield" should not be used as an identifier.
-
-        record Record // violation, "Record" should not be used as an identifier.
-        (Record record) { // violation, "record" should not be used as an identifier.
-        }
-
-        String yieldString = "yieldString"; // ok, part of another word
-        record MyRecord(){} // ok, part of another word
-        var variable = 2; // ok, part of another word
-        String _; // violation, underscore should not be used as an identifier.
-    }
-}
-        

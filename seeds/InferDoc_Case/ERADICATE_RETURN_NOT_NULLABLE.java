@@ -3,3 +3,4 @@ class ERADICATE_RETURN_NOT_NULLABLE {
     return null;
   }
 }
+

@@ -1,6 +1,7 @@
-
 public enum Foo {
-    MON, TUE;
-    private Foo() {}
+  MON,
+  TUE;
+
+  private Foo() {}
 }
-        
+

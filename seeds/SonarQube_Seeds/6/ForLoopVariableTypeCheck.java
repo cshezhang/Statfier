@@ -2,7 +2,6 @@ package checks;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -12,11 +11,9 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 
 class ForLoopVariableTypeCheck {
-  static class A {
-  }
+  static class A {}
 
-  static class B extends A {
-  }
+  static class B extends A {}
 
   class C {
     static java.util.Collection<B> getBs() {
@@ -33,8 +30,7 @@ class ForLoopVariableTypeCheck {
   }
 
   class D {
-    static class E {
-    }
+    static class E {}
 
     static java.util.Collection<E> getEs() {
       return java.util.Collections.singleton(new E());
@@ -44,72 +40,61 @@ class ForLoopVariableTypeCheck {
   public class CheckForLoop {
     void doStuff() {
       java.util.Collection unparameterized = java.util.Collections.emptySet();
-      for (Object o : unparameterized) {
-      }
+      for (Object o : unparameterized) {}
 
       java.util.List<B> listOfB = java.util.Collections.singletonList(new B());
-      for (B b : listOfB) {
-      }
-      for (A a : listOfB) {
-      }
-      for (A a : listOfB) { // Noncompliant [[sc=12;ec=13;secondary=+0]] {{Change "A" to the type handled by the Collection.}}
+      for (B b : listOfB) {}
+      for (A a : listOfB) {}
+      for (A a :
+          listOfB) { // Noncompliant [[sc=12;ec=13;secondary=+0]] {{Change "A" to the type handled
+                     // by the Collection.}}
         B b = (B) a;
       }
-      for (Object o : listOfB) {
-      }
-      for (Object o : listOfB) { // Noncompliant {{Change "Object" to the type handled by the Collection.}}
+      for (Object o : listOfB) {}
+      for (Object o :
+          listOfB) { // Noncompliant {{Change "Object" to the type handled by the Collection.}}
         B b = (B) o;
       }
 
-      for (B b : C.getBs()) {
-      }
-      for (A b : C.getBs()) {
-      }
+      for (B b : C.getBs()) {}
+      for (A b : C.getBs()) {}
       for (A a : C.getBs()) { // Noncompliant {{Change "A" to the type handled by the Collection.}}
         B b = (B) a;
       }
 
-      for (B b : C.getExtendedBs()) {
-      }
-      for (A a : C.getExtendedBs()) {
-      }
-      for (A a : C.getExtendedBs()) { // Noncompliant {{Change "A" to the type handled by the Collection.}}
+      for (B b : C.getExtendedBs()) {}
+      for (A a : C.getExtendedBs()) {}
+      for (A a :
+          C.getExtendedBs()) { // Noncompliant {{Change "A" to the type handled by the Collection.}}
         B b = (B) a;
       }
-      for (A a : C.getExtendedAs()) {
-      }
+      for (A a : C.getExtendedAs()) {}
 
-      for (B b : java.util.Collections.singletonList(new B())) {
-      }
-      for (A a : java.util.Collections.singletonList(new B())) {
-      }
-      for (A a : java.util.Collections.singletonList(new B())) { // Noncompliant {{Change "A" to the type handled by the Collection.}}
+      for (B b : java.util.Collections.singletonList(new B())) {}
+      for (A a : java.util.Collections.singletonList(new B())) {}
+      for (A a :
+          java.util.Collections.singletonList(
+              new B())) { // Noncompliant {{Change "A" to the type handled by the Collection.}}
         B b = (B) a;
       }
 
-      for (D.E e : D.getEs()) {
-      }
-      for (Iterator<B> iterator = listOfB.iterator(); iterator.hasNext(); iterator.next()) {
-      }
+      for (D.E e : D.getEs()) {}
+      for (Iterator<B> iterator = listOfB.iterator(); iterator.hasNext(); iterator.next()) {}
       Iterator<B> iterator = listOfB.iterator();
       while (iterator.hasNext()) {
         iterator.next();
       }
 
       java.util.Set<java.util.Set<B>> setOfSetOfB = java.util.Collections.emptySet();
-      for (java.util.Set<B> s : setOfSetOfB) {
-      }
-      for (java.util.Set s : setOfSetOfB) {
-      }
-      for (Object s : setOfSetOfB) {
-      }
+      for (java.util.Set<B> s : setOfSetOfB) {}
+      for (java.util.Set s : setOfSetOfB) {}
+      for (Object s : setOfSetOfB) {}
       for (Object s : setOfSetOfB) { // Noncompliant
         B b = (B) s;
       }
 
       java.util.Map t = new java.util.HashMap();
-      for (java.util.Map.Entry e : ((java.util.Map<?, ?>) t).entrySet()) {
-      }
+      for (java.util.Map.Entry e : ((java.util.Map<?, ?>) t).entrySet()) {}
 
       java.util.List l = null;
       for (Object o : l) {
@@ -196,9 +181,7 @@ class ForLoopVariableTypeCheck {
         }
 
         @Override
-        public void clear() {
-
-        }
+        public void clear() {}
 
         @Override
         public Spliterator<String> spliterator() {
@@ -223,10 +206,8 @@ class ForLoopVariableTypeCheck {
       for (Object e : arrayOfInt) { // Noncompliant
         int i = (int) e;
       }
-      for (Object o : arrayOfInt) {
-      }
-      for (int i : arrayOfInt) {
-      }
+      for (Object o : arrayOfInt) {}
+      for (int i : arrayOfInt) {}
     }
   }
 
@@ -253,17 +234,13 @@ class ForLoopVariableTypeCheck {
     }
   }
 
-  class I {
-  }
+  class I {}
 
-  class J extends I {
-  }
+  class J extends I {}
 
-  class K extends J {
-  }
+  class K extends J {}
 
-  class L extends I {
-  }
+  class L extends I {}
 
   class Test {
     java.util.Collection<K> collectionOfK;
@@ -273,12 +250,9 @@ class ForLoopVariableTypeCheck {
     Object other;
 
     void doStuff() {
-      for (K k : collectionOfK) {
-      }
-      for (J k : collectionOfK) {
-      }
-      for (I i : collectionOfK) {
-      }
+      for (K k : collectionOfK) {}
+      for (J k : collectionOfK) {}
+      for (I i : collectionOfK) {}
       for (J j : collectionOfK) { // Noncompliant
         K k = (K) j;
       }
@@ -321,3 +295,4 @@ class ForLoopVariableTypeCheck {
     return null;
   }
 }
+

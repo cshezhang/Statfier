@@ -1,8 +1,7 @@
-
 package pmdtests;
 
-import java.util.Random;
 import java.math.BigInteger;
+import java.util.Random;
 
 public class TestFinal {
   private BigInteger e;
@@ -11,8 +10,7 @@ public class TestFinal {
     Random random = new Random();
     e = BigInteger.probablePrime(Integer.MAX_VALUE / 2, random);
 
-    while (random.nextBoolean())
-      e = e.add(BigInteger.ONE);
+    while (random.nextBoolean()) e = e.add(BigInteger.ONE);
   }
 }
-        
+

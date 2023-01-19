@@ -14,7 +14,7 @@ class StringConcatenationInLoopCheck {
     int i = 0;
     for (; i < 10; i++) {
       s = i + " : " + s; // Noncompliant {{Use a StringBuilder instead.}}
-      s += i;// Noncompliant {{Use a StringBuilder instead.}}
+      s += i; // Noncompliant {{Use a StringBuilder instead.}}
       inner.s1 = i + " : " + inner.s1; // Noncompliant {{Use a StringBuilder instead.}}
     }
     for (Object j : list) {
@@ -29,22 +29,25 @@ class StringConcatenationInLoopCheck {
       s = ((s + " : ")); // Noncompliant {{Use a StringBuilder instead.}}
       inner = new Inner();
       i = i + 1;
-      s = i + ":"; //Compliant
+      s = i + ":"; // Compliant
       inner.s1 = i + ":";
     }
     s += "a" + "b";
     s = s + "a" + "b";
     for (int j = 0; j < 10; j++) {
       MyObject myObject = new MyObject();
-      myObject.stringProperty = "a" + "b";  //Compliant, var is local in the loop
-      myObject.stringProperty += "a";//Compliant, var is local in the loop
-      MyObject.newInstance().stringProperty = "a" + "b"; //Compliant
+      myObject.stringProperty = "a" + "b"; // Compliant, var is local in the loop
+      myObject.stringProperty += "a"; // Compliant, var is local in the loop
+      MyObject.newInstance().stringProperty = "a" + "b"; // Compliant
       MyObject.newInstance().stringProperty += "b"; // Noncompliant {{Use a StringBuilder instead.}}
-      MyObject.newInstance().stringProperty = "b" + MyObject.newInstance().stringProperty; // Noncompliant {{Use a StringBuilder instead.}}
+      MyObject.newInstance().stringProperty =
+          "b"
+              + MyObject.newInstance()
+                  .stringProperty; // Noncompliant {{Use a StringBuilder instead.}}
     }
-    for (int j=0; j < array.length; j++) {
+    for (int j = 0; j < array.length; j++) {
       array[i] = "a" + array[i]; // Compliant, it is an array access
-      foo()[i].field = "a" + array[j];// Compliant
+      foo()[i].field = "a" + array[j]; // Compliant
     }
   }
 
@@ -65,7 +68,9 @@ class StringConcatenationInLoopCheck {
       (this).field += "abc"; // Noncompliant
 
       (p = this).field += "abc"; // not supported... unclear how to handle it
-      ((StringConcatenationInLoopCheck) o).field += "abc"; // not supported... unclear how to handle it
+      ((StringConcatenationInLoopCheck) o).field +=
+          "abc"; // not supported... unclear how to handle it
     }
   }
 }
+

@@ -15,7 +15,9 @@ class CompareToResultTestCheck {
     int field;
 
     public void aMethod(MyComparable other, NotComparable notComparable) {
-      if (compareTo(other) == -1) {} // Noncompliant [[sc=28;ec=30]] {{Only the sign of the result should be examined.}}
+      if (compareTo(other)
+          == -1) {} // Noncompliant [[sc=28;ec=30]] {{Only the sign of the result should be
+                    // examined.}}
       if (compareTo(other) == (-1)) {} // Noncompliant
       if (compareTo(other) == -5) {} // Noncompliant
       if (compareTo(other) == 0) {}
@@ -37,9 +39,9 @@ class CompareToResultTestCheck {
       boolean result = compareTo(other) == -1; // Noncompliant
       if (notComparable.compareTo(other) == 1) {}
       if (compareTo(other) == hashCode()) {}
-      if (compareTo(other) == - hashCode()) {}
+      if (compareTo(other) == -hashCode()) {}
       if (compareTo(other, other) == 1) {}
-      //false positive:
+      // false positive:
       if (1 == compareTo(notComparable)) {} // Noncompliant
       if (0 == compareTo(other)) {}
 
@@ -116,13 +118,13 @@ class CompareToResultTestCheck {
       // fix@qf8 {{Replace with "> 0"}}
       // edit@qf8 [[sc=28;ec=36]] {{> 0}}
 
-      // For !=, even if we could in theory replace by <=/>= 0, we do not suggest quick fixes and let the user figure out what was his intent
+      // For !=, even if we could in theory replace by <=/>= 0, we do not suggest quick fixes and
+      // let the user figure out what was his intent
       if (1 != compareTo(notComparable)) {} // Noncompliant [[sc=13;ec=15;quickfixes=!]]
       if (-1 != compareTo(notComparable)) {} // Noncompliant [[sc=14;ec=16;quickfixes=!]]
       if (compareTo(other) != 1) {} // Noncompliant [[sc=28;ec=30;quickfixes=!]]
       if (compareTo(other) != -1) {} // Noncompliant [[sc=28;ec=30;quickfixes=!]]
     }
-
   }
 
   class NotComparable {
@@ -134,6 +136,6 @@ class CompareToResultTestCheck {
     public void aMethod(MyComparable other) {
       if (compareTo(other) == -1) {}
     }
-
   }
 }
+

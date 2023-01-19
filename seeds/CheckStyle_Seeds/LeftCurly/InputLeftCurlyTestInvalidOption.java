@@ -13,60 +13,47 @@ tokens = (default)ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, \
 
 package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
-public class InputLeftCurlyTestInvalidOption
-{ // ok
-    private interface PrivateInterface
-    { // ok
-    }
+public class InputLeftCurlyTestInvalidOption { // ok
+  private interface PrivateInterface { // ok
+  }
 
-    interface PackageInnerInterface
-    { // ok
-    }
+  interface PackageInnerInterface { // ok
+  }
 
-    protected interface ProtectedInnerInterface
-    { // ok
-    }
+  protected interface ProtectedInnerInterface { // ok
+  }
 
-    public interface PublicInnerInterface
-    { // ok
-    }
+  public interface PublicInnerInterface { // ok
+  }
 
-    private
-    class
-    MyClass1 { // ok
-    }
+  private class MyClass1 { // ok
+  }
 
-    class
-    MyClass2 { // ok
-    }
+  class MyClass2 { // ok
+  }
 
-    private
-    interface
-    MyInterface1 { // ok
-    }
+  private interface MyInterface1 { // ok
+  }
 
-    interface
-    MyInterface2 { // ok
-    }
+  interface MyInterface2 { // ok
+  }
 
-    protected
-    enum
-    MyEnum { // ok
-    }
+  protected enum MyEnum { // ok
+  }
 
-    private
-    @interface
-    MyAnnotation { // ok
-    }
+  private @interface MyAnnotation { // ok
+  }
 
-    @Deprecated
-    public
-    class MyClass3 { // ok
-    }
+  @Deprecated
+  public class MyClass3 { // ok
+  }
 
-    public class MyClass4 { // ok
-        void method() { // ok
-            while(true) {/*foo*/} // ok
-        }
+  public class MyClass4 { // ok
+    void method() { // ok
+      while (true) {
+        /*foo*/
+      } // ok
     }
+  }
 }
+

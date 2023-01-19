@@ -1,6 +1,4 @@
-
 public class TestClass {
-    public static enum Inner {
-    }
+  public static enum Inner {}
 }
-        
+

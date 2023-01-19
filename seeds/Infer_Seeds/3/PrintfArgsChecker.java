@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import java.io.PrintStream;
 
@@ -57,3 +53,4 @@ class SuppressedPrintfArgsChecker {
     out.printf("Hello %d", "world");
   }
 }
+

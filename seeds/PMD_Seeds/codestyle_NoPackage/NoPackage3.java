@@ -1,5 +1,4 @@
-
 public enum Foo {
-    BAR;
+  BAR;
 }
-        
+

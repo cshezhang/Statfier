@@ -1,4 +1,3 @@
-
 class Foo {
 
   void main(int[] bufline, int start, int bufsize) {
@@ -15,4 +14,3 @@ class Foo {
   }
 }
 
-        

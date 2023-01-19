@@ -14,3 +14,4 @@ public final class InferCloseables {
     close(closeable);
   }
 }
+

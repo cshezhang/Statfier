@@ -1,6 +1,6 @@
-
 public class TestAtLeastOneConstructor {
-    public static void foo() { }
-    public void bar () { }
+  public static void foo() {}
+
+  public void bar() {}
 }
-        
+

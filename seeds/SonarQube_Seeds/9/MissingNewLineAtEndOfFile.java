@@ -1,4 +1,4 @@
 package checks;
 
-class MissingNewlineAtEndOfFile {
-}
+class MissingNewlineAtEndOfFile {}
+

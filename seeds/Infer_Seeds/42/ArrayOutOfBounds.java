@@ -1,7 +1,3 @@
-
-
-
-
 public class ArrayOutOfBounds {
 
   public int arrayOutOfBoundsBad() {
@@ -85,3 +81,4 @@ public class ArrayOutOfBounds {
     safeNestedLoopOk(new int[11], new int[10]);
   }
 }
+

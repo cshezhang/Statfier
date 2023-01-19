@@ -8,16 +8,15 @@ max = 2
 package com.puppycrawl.tools.checkstyle.checks.coding.nestedfordepth;
 
 /**
- * This Class contains no logic, but serves as test-input for the unit tests for the
- * <code>NestedForDepthCheck</code>-checkstyle enhancement.
+ * This Class contains no logic, but serves as test-input for the unit tests for the <code>
+ * NestedForDepthCheck</code>-checkstyle enhancement.
+ *
  * @author Alexander Jesse
  * @see com.puppycrawl.tools.checkstyle.checks.coding.NestedForDepthCheck
  */
 public class InputNestedForDepth {
 
-  /**
-   * Dummy method containing 5 layers of for-statements.
-   */
+  /** Dummy method containing 5 layers of for-statements. */
   public void nestedForFiveLevel() {
     int i = 0;
     int i1 = 0;
@@ -34,11 +33,12 @@ public class InputNestedForDepth {
               i += 1;
             }
             for (int i5a = 0; i5a < 10; i5a++) { // violation
-                i += 1;
-              }
+              i += 1;
+            }
           }
         }
       }
     }
   }
 }
+

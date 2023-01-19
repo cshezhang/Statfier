@@ -1,4 +1,3 @@
-
 package threads;
 
 public class FQNTest {
@@ -7,4 +6,4 @@ public class FQNTest {
     int i = threads.length;
   }
 }
-        
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar() {
-        if (false) return;
-    }
+  void bar() {
+    if (false) return;
+  }
 }
-        
+

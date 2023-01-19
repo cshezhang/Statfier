@@ -18,11 +18,10 @@ package com.puppycrawl.tools.checkstyle.checks.imports.importorder;
 
 import static java.lang.Math.*; // ok
 import static org.antlr.v4.runtime.CommonToken.*; // violation
-import static org.antlr.v4.runtime.CommonToken.*;  // ok
 
-import java.util.Set; // violation
+// violation
 
-import org.junit.Test; // ok
+// ok
 
-public class InputImportOrderStaticRepetition2 {
-}
+public class InputImportOrderStaticRepetition2 {}
+

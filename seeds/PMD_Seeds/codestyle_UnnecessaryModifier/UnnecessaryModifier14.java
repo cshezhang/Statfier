@@ -1,5 +1,4 @@
-
 public interface Foo {
-    interface Baz {}
+  interface Baz {}
 }
-        
+

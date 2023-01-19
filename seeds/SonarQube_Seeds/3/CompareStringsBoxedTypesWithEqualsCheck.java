@@ -12,7 +12,9 @@ class CompareStringsBoxedTypesWithEqualsCheck {
     int myInt2 = 2;
 
     void offerQuickFixes() {
-      if (str1 == str2) {} // Noncompliant [[sc=16;ec=18;quickfixes=qf0]] {{Strings and Boxed types should be compared using "equals()".}}
+      if (str1
+          == str2) {} // Noncompliant [[sc=16;ec=18;quickfixes=qf0]] {{Strings and Boxed types
+                      // should be compared using "equals()".}}
       // fix@qf0 {{Replace with boxed comparison}}
       // edit@qf0 [[sc=23;ec=23]]{{)}}
       // edit@qf0 [[sc=15;ec=19]]{{, }}
@@ -55,13 +57,15 @@ class CompareStringsBoxedTypesWithEqualsCheck {
       // edit@qf102 [[sc=25;ec=25]]{{)}}
       // edit@qf102 [[sc=17;ec=21]]{{.equals(}}
       // edit@qf102 [[sc=11;ec=11]]{{!}}
-      if (str1 != "BLUE".toLowerCase(Locale.ROOT)) {} // Noncompliant [[sc=16;ec=18;quickfixes=qf103]]
+      if (str1
+          != "BLUE".toLowerCase(Locale.ROOT)) {} // Noncompliant [[sc=16;ec=18;quickfixes=qf103]]
       // fix@qf103 {{Replace with boxed comparison}}
       // edit@qf103 [[sc=50;ec=50]]{{)}}
       // edit@qf103 [[sc=15;ec=19]]{{, }}
       // edit@qf103 [[sc=11;ec=11]]{{!Objects.equals(}}
       // edit@qf103 [[sl=3;sc=25;el=3;ec=25]]{{\nimport java.util.Objects;}}
-      if ("BLUE".toLowerCase(Locale.ROOT) != str1) {} // Noncompliant [[sc=43;ec=45;quickfixes=qf104]]
+      if ("BLUE".toLowerCase(Locale.ROOT)
+          != str1) {} // Noncompliant [[sc=43;ec=45;quickfixes=qf104]]
       // fix@qf104 {{Replace with boxed comparison}}
       // edit@qf104 [[sc=50;ec=50]]{{)}}
       // edit@qf104 [[sc=42;ec=46]]{{, }}
@@ -110,10 +114,11 @@ class CompareStringsBoxedTypesWithEqualsCheck {
 
     class Boxed2 {
       String[][] strArray2 = {{"blue"}};
+
       private void method() {
-        if(strArray2 == strArray2){}
-        if(strArray2[0] == strArray2[1]){}
-        if(strArray2[0][0] == strArray2[1][1]){} // Noncompliant
+        if (strArray2 == strArray2) {}
+        if (strArray2[0] == strArray2[1]) {}
+        if (strArray2[0][0] == strArray2[1][1]) {} // Noncompliant
       }
     }
   }

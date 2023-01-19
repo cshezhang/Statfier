@@ -16,7 +16,6 @@
 
 package com.google.errorprone.bugpatterns;
 
-
 /**
  * Defining an equals method on an enum. Maybe this should be a separate kind of error?
  *
@@ -31,10 +30,11 @@ public enum CovariantEqualsPositiveCase4 {
   SATURN,
   URANUS,
   NEPTUNE,
-  PLUTO;   // I don't care what they say, Pluto *is* a planet.
+  PLUTO; // I don't care what they say, Pluto *is* a planet.
 
-  //BUG: Suggestion includes "remove this line"
+  // BUG: Suggestion includes "remove this line"
   public boolean equals(CovariantEqualsPositiveCase4 other) {
     return this == other;
   }
 }
+

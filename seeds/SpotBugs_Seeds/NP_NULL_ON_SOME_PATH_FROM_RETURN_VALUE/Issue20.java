@@ -17,14 +17,15 @@ public class Issue20 {
   }
 
   public void testNPLambda() {
-    Runnable lambda = () -> {
-      String maybeNull = methodThatMightReturnNull();
+    Runnable lambda =
+        () -> {
+          String maybeNull = methodThatMightReturnNull();
 
-      // would expect findbugs warning about possible null dereferencing here
-      boolean empty = maybeNull.isEmpty();
-      System.out.println(empty);
-    };
+          // would expect findbugs warning about possible null dereferencing here
+          boolean empty = maybeNull.isEmpty();
+          System.out.println(empty);
+        };
     lambda.run();
   }
-
 }
+

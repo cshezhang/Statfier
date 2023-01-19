@@ -1,5 +1,4 @@
-
 public class MyTestCase {
-    public void testBad() { }
+  public void testBad() {}
 }
-        
+

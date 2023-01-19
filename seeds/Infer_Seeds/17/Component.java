@@ -1,5 +1,3 @@
-
-
 public class Component {
 
   public abstract static class Builder<T extends Builder<T>> {
@@ -13,3 +11,4 @@ public class Component {
     }
   }
 }
+

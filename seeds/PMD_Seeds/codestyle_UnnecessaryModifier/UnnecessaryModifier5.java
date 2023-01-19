@@ -1,5 +1,4 @@
-
 public interface Foo {
-    static int X = 0;
+  static int X = 0;
 }
-        
+

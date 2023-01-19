@@ -3,17 +3,22 @@ package checks;
 class ImmediatelyReturnedVariableCheck {
 
   public long computeDurationInMilliseconds(long hours, long minutes, long seconds) {
-    long duration = (((hours * 60) + minutes) * 60 + seconds ) * 1000 ; // Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "duration".}}
+    long duration =
+        (((hours * 60) + minutes) * 60 + seconds)
+            * 1000; // Noncompliant {{Immediately return this expression instead of assigning it to
+                    // the temporary variable "duration".}}
     return duration;
   }
 
   public void doSomething() {
-    RuntimeException myException = new RuntimeException(); // Noncompliant {{Immediately throw this expression instead of assigning it to the temporary variable "myException".}}
+    RuntimeException myException =
+        new RuntimeException(); // Noncompliant {{Immediately throw this expression instead of
+                                // assigning it to the temporary variable "myException".}}
     throw myException;
   }
 
   public long computeDurationInMilliseconds2(long hours, long minutes, long seconds) {
-    return (((hours * 60) + minutes) * 60 + seconds ) * 1000 ;
+    return (((hours * 60) + minutes) * 60 + seconds) * 1000;
   }
 
   public void doSomething2() {
@@ -21,7 +26,7 @@ class ImmediatelyReturnedVariableCheck {
   }
 
   public long computeDurationInMilliseconds3(long hours, long minutes, long seconds) {
-    long duration = (((hours * 60) + minutes) * 60 + seconds ) * 1000 ;
+    long duration = (((hours * 60) + minutes) * 60 + seconds) * 1000;
     duration = duration - 12;
     return duration;
   }
@@ -33,29 +38,30 @@ class ImmediatelyReturnedVariableCheck {
   }
 
   private String toto;
-  public String getToto(){
+
+  public String getToto() {
     return toto;
   }
 
   long foo() {
-    long duration = computeDurationInMilliseconds(1,2,3);
-    return computeDurationInMilliseconds(1,2,3);
+    long duration = computeDurationInMilliseconds(1, 2, 3);
+    return computeDurationInMilliseconds(1, 2, 3);
   }
 
   long bar() {
-    long start = computeDurationInMilliseconds(1,2,3);
-    long duration = computeDurationInMilliseconds(1,2,3);
+    long start = computeDurationInMilliseconds(1, 2, 3);
+    long duration = computeDurationInMilliseconds(1, 2, 3);
     return start;
   }
 
   void voidMethod() {
-    long duration = computeDurationInMilliseconds(1,2,3);
+    long duration = computeDurationInMilliseconds(1, 2, 3);
     return;
   }
 
   void voidMethod2() {
-    long duration = computeDurationInMilliseconds(1,2,3);
-    long duration2 = computeDurationInMilliseconds(1,2,3);
+    long duration = computeDurationInMilliseconds(1, 2, 3);
+    long duration2 = computeDurationInMilliseconds(1, 2, 3);
   }
 
   Object SuppressWarnings() {
@@ -65,7 +71,9 @@ class ImmediatelyReturnedVariableCheck {
   }
 
   public long testQuickFixes(long hours, long minutes, long seconds) {
-    long duration = (((hours * 60) + minutes) * 60 + seconds ) * 1000; // Noncompliant [[sc=21;ec=70;quickfixes=qf1]]
+    long duration =
+        (((hours * 60) + minutes) * 60 + seconds)
+            * 1000; // Noncompliant [[sc=21;ec=70;quickfixes=qf1]]
     return duration;
     // fix@qf1 {{Inline expression}}
     // edit@qf1 [[sc=5;ec=21]] {{return }}
@@ -73,8 +81,9 @@ class ImmediatelyReturnedVariableCheck {
   }
 
   public long testQuickFixesWithSpaces(long hours, long minutes, long seconds) {
-    long duration = (((hours * 60) + minutes) * 60 + seconds ) * 1000; // Noncompliant [[sc=21;ec=70;quickfixes=qf2]]
-
+    long duration =
+        (((hours * 60) + minutes) * 60 + seconds)
+            * 1000; // Noncompliant [[sc=21;ec=70;quickfixes=qf2]]
 
     return duration;
     // fix@qf2 {{Inline expression}}
@@ -83,7 +92,8 @@ class ImmediatelyReturnedVariableCheck {
   }
 
   public long testQuickFixesThrow() {
-    RuntimeException myException = new RuntimeException(); // Noncompliant [[sc=36;ec=58;quickfixes=qf3]]
+    RuntimeException myException =
+        new RuntimeException(); // Noncompliant [[sc=36;ec=58;quickfixes=qf3]]
     throw myException;
     // fix@qf3 {{Inline expression}}
     // edit@qf3 [[sc=5;ec=36]] {{throw }}
@@ -99,8 +109,7 @@ class ImmediatelyReturnedVariableCheck {
   }
 
   public long testQuickFixesInitOnNextLine(long hours) {
-    final long duration =
-      hours * 60; // Noncompliant [[sc=7;ec=17;quickfixes=qf5]]
+    final long duration = hours * 60; // Noncompliant [[sc=7;ec=17;quickfixes=qf5]]
     return duration;
     // fix@qf5 {{Inline expression}}
     // edit@qf5 [[sl=-1;sc=5;ec=7]] {{return }}
@@ -110,5 +119,5 @@ class ImmediatelyReturnedVariableCheck {
   private Object myMethod() {
     return null;
   }
-
 }
+

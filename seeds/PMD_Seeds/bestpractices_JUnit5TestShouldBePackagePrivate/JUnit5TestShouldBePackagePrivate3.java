@@ -1,4 +1,3 @@
-
 import org.junit.jupiter.api.Test;
 
 class MyTests {
@@ -8,4 +7,4 @@ class MyTests {
     void testFoo() {}
   }
 }
-        
+

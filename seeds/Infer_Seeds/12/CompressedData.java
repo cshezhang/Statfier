@@ -1,6 +1,3 @@
-
-
-
 /* Mimics https://fburl.com/f61h6rbl */
 class CompressedData {
   class C {
@@ -33,3 +30,4 @@ class CompressedData {
     return output;
   }
 }
+

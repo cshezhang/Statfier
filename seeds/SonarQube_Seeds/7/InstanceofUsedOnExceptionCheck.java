@@ -17,7 +17,8 @@ class InstanceofUsedOnExceptionCheck {
     } catch (Exception e) {
       if (e instanceof IOException) { // Compliant
 
-      } else if (e instanceof IllegalArgumentException && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
+      } else if (e instanceof IllegalArgumentException
+          && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
 
       }
     }
@@ -26,7 +27,10 @@ class InstanceofUsedOnExceptionCheck {
   private void f(MyException foo) {
     try {
     } catch (Exception e) {
-      if (e instanceof IOException) {} // Noncompliant [[sc=13;ec=23]] {{Replace the usage of the "instanceof" operator by a catch block.}}
+      if (e
+          instanceof
+          IOException) {} // Noncompliant [[sc=13;ec=23]] {{Replace the usage of the "instanceof"
+                          // operator by a catch block.}}
     }
     try {
     } catch (Exception e) {
@@ -46,8 +50,7 @@ class InstanceofUsedOnExceptionCheck {
     }
     try {
     } catch (Exception e) {
-      if (e
-        instanceof IOException) {} // Noncompliant
+      if (e instanceof IOException) {} // Noncompliant
     }
     Object e = 0;
     if (e instanceof Integer) {}
@@ -56,20 +59,20 @@ class InstanceofUsedOnExceptionCheck {
   private void withMoreCode() {
     try {
     } catch (Exception e) {
-      if (e instanceof IOException) { } // Compliant, refactoring results in duplication
+      if (e instanceof IOException) {} // Compliant, refactoring results in duplication
       doSomething();
     }
 
     try {
     } catch (Exception e) {
       doSomething();
-      if (e instanceof IOException) { } // Compliant
+      if (e instanceof IOException) {} // Compliant
     }
 
     try {
     } catch (Exception e) {
       doSomething();
-      if (e instanceof IOException) { } // Compliant
+      if (e instanceof IOException) {} // Compliant
       doSomethingElse();
     }
   }
@@ -77,10 +80,14 @@ class InstanceofUsedOnExceptionCheck {
   private void withoutTrivialInstanceOf() {
     try {
     } catch (Exception e) {
-      if (e instanceof IOException) { // Compliant, all or nothing, if one block can not be created, we do not report an issue.
+      if (e
+          instanceof
+          IOException) { // Compliant, all or nothing, if one block can not be created, we do not
+                         // report an issue.
         doSomething();
       }
-      if (e instanceof IllegalArgumentException && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
+      if (e instanceof IllegalArgumentException
+          && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
         doSomethingElse();
       }
     }
@@ -109,7 +116,9 @@ class InstanceofUsedOnExceptionCheck {
       if (anotherCondition()) {
         doSomething();
       }
-      if (e instanceof IllegalArgumentException) { // Compliant, can not refactor without code duplication
+      if (e
+          instanceof
+          IllegalArgumentException) { // Compliant, can not refactor without code duplication
         doSomethingElse();
       }
     }
@@ -129,7 +138,8 @@ class InstanceofUsedOnExceptionCheck {
     } catch (Exception e) {
       if (e instanceof IOException) { // Compliant
         doSomething();
-      } else if (e instanceof IllegalArgumentException && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
+      } else if (e instanceof IllegalArgumentException
+          && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
         doSomethingElse();
       } else if (e instanceof MyException) { // Compliant
         doSomething();
@@ -140,7 +150,7 @@ class InstanceofUsedOnExceptionCheck {
   private void withThrow() throws IllegalAccessException {
     try {
     } catch (Exception e) {
-      if (e instanceof IOException) {// Noncompliant
+      if (e instanceof IOException) { // Noncompliant
         throw new IllegalAccessException("");
       }
       throw e;
@@ -156,7 +166,8 @@ class InstanceofUsedOnExceptionCheck {
 
     try {
     } catch (Exception e) {
-      if (e instanceof IOException && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
+      if (e instanceof IOException
+          && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
         throw new IllegalAccessException("");
       }
       throw e;
@@ -166,7 +177,7 @@ class InstanceofUsedOnExceptionCheck {
   private int withReturn() {
     try {
     } catch (Exception e) {
-      if (e instanceof IOException) {// Noncompliant
+      if (e instanceof IOException) { // Noncompliant
         return 1;
       }
       return 2;
@@ -174,7 +185,8 @@ class InstanceofUsedOnExceptionCheck {
 
     try {
     } catch (Exception e) {
-      if (e instanceof IOException && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
+      if (e instanceof IOException
+          && anotherCondition()) { // Compliant, not possible to refactor in a nicer way
         return 1;
       }
       return 2;
@@ -186,16 +198,16 @@ class InstanceofUsedOnExceptionCheck {
     return true;
   }
 
-  private void doSomething() {
-  }
+  private void doSomething() {}
 
-  private void doSomethingElse() {
-  }
+  private void doSomethingElse() {}
 
   private static class MyException extends IOException implements MyInterface {
     Exception foo;
   }
 
   interface e {}
+
   interface MyInterface {}
 }
+

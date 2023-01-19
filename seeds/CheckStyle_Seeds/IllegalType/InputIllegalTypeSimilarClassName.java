@@ -16,8 +16,9 @@ tokens = (default)ANNOTATION_FIELD_DEF, CLASS_DEF, INTERFACE_DEF, METHOD_CALL, M
 package com.puppycrawl.tools.checkstyle.checks.coding.illegaltype;
 
 public class InputIllegalTypeSimilarClassName {
-        private TreeSet example;
+  private TreeSet example;
 
-        private static class TreeSet { // ok
-        }
+  private static class TreeSet { // ok
+  }
 }
+

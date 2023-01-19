@@ -1,5 +1,4 @@
-
 public class Foo {
-    public final Thread BAR = new Thread();
+  public final Thread BAR = new Thread();
 }
-        
+

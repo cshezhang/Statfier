@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public static final int X = 0;
+  public static final int X = 0;
 }
-        
+

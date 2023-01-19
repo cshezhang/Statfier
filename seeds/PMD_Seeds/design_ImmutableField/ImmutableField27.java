@@ -1,10 +1,8 @@
-
 public class Foo {
-    @Deprecated
-    private int x;
+  @Deprecated private int x;
 
-    public Foo() {
-        x = 2;
-    }
+  public Foo() {
+    x = 2;
+  }
 }
-        
+

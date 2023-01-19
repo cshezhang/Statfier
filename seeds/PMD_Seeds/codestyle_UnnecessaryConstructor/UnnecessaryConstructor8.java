@@ -1,6 +1,4 @@
-
 public class Foo {
-    public class Inner {
-    }
+  public class Inner {}
 }
-        
+

@@ -1,5 +1,3 @@
-
-
 class MasterLock {
   Object a, b;
 
@@ -42,3 +40,4 @@ class MasterLock {
     }
   }
 }
+

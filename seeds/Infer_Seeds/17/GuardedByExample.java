@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.Closeable;
@@ -569,3 +565,4 @@ public class GuardedByExample {
     guardedByLock2 = true;
   }
 }
+

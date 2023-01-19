@@ -1,7 +1,6 @@
-
 public class Foo {
-    protected class Inner {
-        protected Inner(){}
-    }
+  protected class Inner {
+    protected Inner() {}
+  }
 }
-        
+

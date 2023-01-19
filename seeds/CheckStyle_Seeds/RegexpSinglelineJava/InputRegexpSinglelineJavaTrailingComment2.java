@@ -13,30 +13,33 @@ ignoreComments = (default)false
 package com.puppycrawl.tools.checkstyle.checks.regexp.regexpsinglelinejava;
 
 public class InputRegexpSinglelineJavaTrailingComment2 { // violation below
-    int i; // don't use trailing comments :)
-    // it fine to have comment w/o any statement
-    /* good c-style comment. */
-    int j; /* bad c-style comment. */
-    void method1() { /* some c-style multi-line
-                        comment*/
-        Runnable r = (new Runnable() {
-                public void run() {
-                }
-            }); /* we should allow this */
-    } // we should allow this
-    /*
-      Let's check multi-line comments.
-    */
-    /* c-style */ // cpp-style
-    /* c-style 1 */ /*c-style 2 */
+  int i; // don't use trailing comments :)
+  // it fine to have comment w/o any statement
+  /* good c-style comment. */
+  int j; /* bad c-style comment. */
 
-    void method2(long ms /* we should ignore this */) {
-        /* comment before text */int z;
-        /* int y */int y/**/;
-    }
+  void method1() {
+    /* some c-style multi-line
+    comment*/
+    Runnable r =
+        (new Runnable() {
+          public void run() {}
+        }); /* we should allow this */
+  } // we should allow this
+  /*
+    Let's check multi-line comments.
+  */
+  /* c-style */
+  // cpp-style
+  /* c-style 1 */
+  /*c-style 2 */
 
-    /**
-     * comment with trailing space
-     */
-    final static public String NAME="Some Name"; // NOI18N
+  void method2(long ms /* we should ignore this */) {
+    /* comment before text */ int z;
+    /* int y */ int y /**/;
+  }
+
+  /** comment with trailing space */
+  public static final String NAME = "Some Name"; // NOI18N
 }
+

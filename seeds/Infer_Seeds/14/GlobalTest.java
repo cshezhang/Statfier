@@ -1,6 +1,5 @@
 package codetoanalyze.java.impurity;
 
-
 class GlobalTest {
   public static int s = 0;
   public static Foo foo;
@@ -40,3 +39,4 @@ class GlobalTest {
     }
   }
 }
+

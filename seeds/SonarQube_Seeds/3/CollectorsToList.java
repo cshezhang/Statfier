@@ -15,65 +15,100 @@ public class CollectorsToList {
   ListWrapper listWrapper = new ListWrapper();
 
   void noncompliant() {
-    List<String> list1 = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Noncompliant [[sc=16;ec=35]] {{Replace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'}}
+    List<String> list1 =
+        Stream.of("A", "B", "C")
+            .collect(
+                Collectors
+                    .toList()); // Noncompliant [[sc=16;ec=35]] {{Replace this usage of
+                                // 'Stream.collect(Collectors.toList())' with 'Stream.toList()'}}
 
     // Not modifying the list
     list1.contains("B");
 
-    List<String> list2 = Stream.of("A", "B", "C")
-      .collect(Collectors.toUnmodifiableList()); // Noncompliant [[sc=16;ec=47]] {{Replace this usage of 'Stream.collect(Collectors.toUnmodifiableList())' with 'Stream.toList()'}}
+    List<String> list2 =
+        Stream.of("A", "B", "C")
+            .collect(
+                Collectors
+                    .toUnmodifiableList()); // Noncompliant [[sc=16;ec=47]] {{Replace this usage of
+                                            // 'Stream.collect(Collectors.toUnmodifiableList())'
+                                            // with 'Stream.toList()'}}
 
     Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Noncompliant [[sc=16;ec=35]] {{Replace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'}}
+        .collect(
+            Collectors
+                .toList()); // Noncompliant [[sc=16;ec=35]] {{Replace this usage of
+                            // 'Stream.collect(Collectors.toList())' with 'Stream.toList()'}}
 
     Stream.of("A", "B", "C")
-      .collect(Collectors.toUnmodifiableList()); // Noncompliant [[sc=16;ec=47]] {{Replace this usage of 'Stream.collect(Collectors.toUnmodifiableList())' with 'Stream.toList()'}}
+        .collect(
+            Collectors
+                .toUnmodifiableList()); // Noncompliant [[sc=16;ec=47]] {{Replace this usage of
+                                        // 'Stream.collect(Collectors.toUnmodifiableList())' with
+                                        // 'Stream.toList()'}}
 
     List<List<String>> listOfLists = new ArrayList<>();
-    // list1 appears in a call to List.add, but it is not the receiver, so it should not be interpreted as mutable:
+    // list1 appears in a call to List.add, but it is not the receiver, so it should not be
+    // interpreted as mutable:
     listOfLists.add(list1);
 
     listWrapper.strings = Stream.of("A", "B", "C").collect(Collectors.toList());
-    // listWrapper.strings appears in a call to List.add, but it is not the receiver, so it should not be interpreted as mutable:
+    // listWrapper.strings appears in a call to List.add, but it is not the receiver, so it should
+    // not be interpreted as mutable:
     listOfLists.add(listWrapper.strings);
   }
-
 
   private List<String> memberList;
   private List<String> memberListAccessedWithThis;
   List<String>[] arr;
   ListWrapper listWrapper2 = new ListWrapper();
 
-
   void compliant() {
     List<String> list1 = Stream.of("A", "B", "C").toList(); // Compliant
 
-    List<String> list2 = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Compliant, list2 needs to be mutable
+    List<String> list2 =
+        Stream.of("A", "B", "C")
+            .collect(Collectors.toList()); // Compliant, list2 needs to be mutable
 
     list2.add("X");
 
-    List<String> list3 = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Compliant, list3 needs to be mutable
+    List<String> list3 =
+        Stream.of("A", "B", "C")
+            .collect(Collectors.toList()); // Compliant, list3 needs to be mutable
 
     list3.retainAll(Arrays.asList("C", "D"));
 
-    memberList = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Compliant, memberList needs to be mutable as its modified in addX
+    memberList =
+        Stream.of("A", "B", "C")
+            .collect(
+                Collectors
+                    .toList()); // Compliant, memberList needs to be mutable as its modified in addX
 
-    this.memberListAccessedWithThis = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Compliant, memberListAccessedWithThis needs to be mutable as its modified in addX
+    this.memberListAccessedWithThis =
+        Stream.of("A", "B", "C")
+            .collect(
+                Collectors
+                    .toList()); // Compliant, memberListAccessedWithThis needs to be mutable as its
+                                // modified in addX
 
-    arr[0] = Stream.of("A", "B", "C").collect(Collectors.toList()); // Compliant, list is modified in addX
+    arr[0] =
+        Stream.of("A", "B", "C")
+            .collect(Collectors.toList()); // Compliant, list is modified in addX
 
-    listWrapper2.strings = Stream.of("A", "B", "C").collect(Collectors.toList()); // Compliant, list is modified in addX
+    listWrapper2.strings =
+        Stream.of("A", "B", "C")
+            .collect(Collectors.toList()); // Compliant, list is modified in addX
 
-    List<String> list4 = Stream.of("A", "B", "C")
-      .collect(Collectors.toCollection(ArrayList::new)); // Compliant because it's creating a specific list type instead of using toList
+    List<String> list4 =
+        Stream.of("A", "B", "C")
+            .collect(
+                Collectors.toCollection(
+                    ArrayList
+                        ::new)); // Compliant because it's creating a specific list type instead of
+                                 // using toList
 
-    List<String> list5 = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Compliant, list5 needs to be mutable
+    List<String> list5 =
+        Stream.of("A", "B", "C")
+            .collect(Collectors.toList()); // Compliant, list5 needs to be mutable
 
     list5.removeIf(s -> true);
   }
@@ -87,21 +122,30 @@ public class CollectorsToList {
 
   void FNs() {
     Collector<String, ?, List<String>> collector = Collectors.toUnmodifiableList();
-    List<String> list1 = Stream.of("A", "B", "C").collect(collector); // FN because we don't track the collector through variables
+    List<String> list1 =
+        Stream.of("A", "B", "C")
+            .collect(collector); // FN because we don't track the collector through variables
   }
 
   private List<String> memberList2;
 
   List<String> FPs() {
-    List<String> list1 = Stream.of("A", "B", "C")
-      .collect(Collectors.toList()); // Noncompliant - FP because we don't track lists across methods
+    List<String> list1 =
+        Stream.of("A", "B", "C")
+            .collect(
+                Collectors
+                    .toList()); // Noncompliant - FP because we don't track lists across methods
     addX(list1);
 
     addX(Stream.of("A", "B", "C").collect(Collectors.toList())); // Noncompliant - same reason
 
-    memberList2 = Stream.of("A", "B", "C").collect(Collectors.toList()); // Noncompliant - FP, see addX2
+    memberList2 =
+        Stream.of("A", "B", "C").collect(Collectors.toList()); // Noncompliant - FP, see addX2
 
-    return Stream.of("A", "B", "C").collect(Collectors.toList()); // Noncompliant - FP because we don't check how the return value is used
+    return Stream.of("A", "B", "C")
+        .collect(
+            Collectors
+                .toList()); // Noncompliant - FP because we don't check how the return value is used
   }
 
   void useFPs() {
@@ -113,7 +157,10 @@ public class CollectorsToList {
   }
 
   void addX2() {
-    getMemberList2().add("X"); // We don't detect this modification on memberList2 because we don't follow through the getter
+    getMemberList2()
+        .add(
+            "X"); // We don't detect this modification on memberList2 because we don't follow
+                  // through the getter
   }
 
   List<String> getMemberList2() {
@@ -127,3 +174,4 @@ public class CollectorsToList {
     }
   }
 }
+

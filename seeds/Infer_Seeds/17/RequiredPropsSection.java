@@ -1,5 +1,3 @@
-
-
 public class RequiredPropsSection {
 
   public MySection mMySection;
@@ -18,3 +16,4 @@ public class RequiredPropsSection {
     return mMySection.create().prop2(new Object()).build();
   }
 }
+

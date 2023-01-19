@@ -1,7 +1,6 @@
-
 final class Foo {
-    Foo clone() {
-        return new Foo();
-    }
+  Foo clone() {
+    return new Foo();
+  }
 }
-        
+

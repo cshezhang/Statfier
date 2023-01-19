@@ -78,13 +78,12 @@ class FinalizeFieldsSetCheck {
       return false;
     }
 
-    public void finalize(boolean param) {
-    }
+    public void finalize(boolean param) {}
   }
 
   class E extends D {
     @Override
-    public void finalize(boolean param) {
-    }
+    public void finalize(boolean param) {}
   }
 }
+

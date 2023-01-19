@@ -1,8 +1,8 @@
-
 public class EmptyFinallyBlock2 {
-    public void foo() {
-       try {
-       } finally {}
+  public void foo() {
+    try {
+    } finally {
     }
+  }
 }
-        
+

@@ -1,5 +1,3 @@
-
-
 public class MyTest {
   public void myTest() {
     try {
@@ -11,9 +9,9 @@ public class MyTest {
     } catch (IOException thirdException) { // OK
       // ...
     } catch (Exception FourthException) { // violation, the initial letter
-                                          // should be lowercase
+      // should be lowercase
       // ...
     }
   }
 }
-        
+

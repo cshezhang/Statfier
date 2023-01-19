@@ -1,5 +1,4 @@
-
 public class Foo {
-    final Foo otherFoo = Foo.this;
+  final Foo otherFoo = Foo.this;
 }
-        
+

@@ -1,8 +1,6 @@
 package checks;
 
 import com.google.common.collect.Lists;
-
-import java.lang.Exception;
 import java.io.*;
 import java.util.function.IntFunction;
 
@@ -11,10 +9,13 @@ class DeadStoreCheck {
   int var;
 
   int foo(int u) {
-    int x = 0;// Compliant - default value
+    int x = 0; // Compliant - default value
     x = 3; // Noncompliant
     x = 4;
-    int y = x + 1; // Noncompliant {{Remove this useless assignment to local variable "y".}} [[sc=11;ec=18]]
+    int y =
+        x
+            + 1; // Noncompliant {{Remove this useless assignment to local variable "y".}}
+                 // [[sc=11;ec=18]]
     x = 2; // Noncompliant {{Remove this useless assignment to local variable "x".}} [[sc=7;ec=10]]
     x = 3;
     y = 2;
@@ -46,36 +47,34 @@ class DeadStoreCheck {
 
   void ignore_try_finally() {
     int a;
-    a = 12; //false negative excluded by try finally
+    a = 12; // false negative excluded by try finally
     try {
 
-    }finally {
-      a = a + 1 ;
+    } finally {
+      a = a + 1;
     }
   }
 
   void ignore_multiple_try_finally() {
     int a;
-    a = 12; //false negative excluded by try finally
+    a = 12; // false negative excluded by try finally
     try {
 
-    }finally {
-      a = a + 1 ;
+    } finally {
+      a = a + 1;
     }
     try {
 
-    }finally {
+    } finally {
     }
   }
 
-
-
   public boolean try_finally_return(boolean satisfied) {
     try {
-      return satisfied = true; // compliant but by exclusion of try catch - CFG of try finally should be fixed.
+      return satisfied =
+          true; // compliant but by exclusion of try catch - CFG of try finally should be fixed.
     } finally {
-      if (!satisfied) {
-      }
+      if (!satisfied) {}
     }
   }
 
@@ -86,15 +85,16 @@ class DeadStoreCheck {
       void foo() {
         try {
 
-        }finally {
+        } finally {
 
         }
       }
     }
   }
+
   void for_each_statement() {
     int a = 0;
-    for (String elem: Lists.newArrayList(" ", "")) {
+    for (String elem : Lists.newArrayList(" ", "")) {
       System.out.println(a);
       a = 2;
     }
@@ -108,7 +108,7 @@ class DeadStoreCheck {
       a = 2;
       b = raisingExceptionMethod();
       System.out.println(a);
-    }catch (Exception e) {
+    } catch (Exception e) {
       System.out.println(a);
     }
     return b;
@@ -134,7 +134,7 @@ class DeadStoreCheck {
     while ((j = foo(++j)) != -1) {
       System.out.println("");
     }
-    if(i != 0) {
+    if (i != 0) {
       return i++; // Noncompliant
     } else {
       return ++i;
@@ -146,12 +146,15 @@ class DeadStoreCheck {
     System.out.println(i);
     (i) = 12; // Noncompliant [[sc=9;ec=13]]
   }
+
   int parenthesis_identifier_in_postfix_increment() {
     int j = 0;
-    for (int i = 0; i < 10; ++j, ++i) ;
+    for (int i = 0; i < 10; ++j, ++i)
+      ;
     int b = 0;
     return (b)++; // Noncompliant [[sc=12;ec=17]]
   }
+
   void foo() {
     int i = 0;
     ++i; // Noncompliant
@@ -163,12 +166,12 @@ class DeadStoreCheck {
     Object foo = null; // compliant variable should be initialized
     try {
       foo = raisingExceptionMethod();
-    } catch (Exception e){
+    } catch (Exception e) {
     }
     return foo;
   }
 
-  private static int raisingExceptionMethod() throws Exception { 
+  private static int raisingExceptionMethod() throws Exception {
     return 0;
   }
 
@@ -178,25 +181,26 @@ class DeadStoreCheck {
       br.readLine();
     }
 
-    try ( FileInputStream in = new FileInputStream( storageFile );
-          java.nio.channels.FileLock lock = in.getChannel().lock(0, Long.MAX_VALUE, true) ) // compliant, this will be closed in the implicit finally
+    try (FileInputStream in = new FileInputStream(storageFile);
+        java.nio.channels.FileLock lock =
+            in.getChannel()
+                .lock(
+                    0,
+                    Long.MAX_VALUE,
+                    true)) // compliant, this will be closed in the implicit finally
     {
       in.read();
     }
-
   }
 
   void try_with_resource_java9() throws Exception {
     final FileInputStream fis = new FileInputStream("..."); // compliant
-    try (fis) {
-
-    }
+    try (fis) {}
   }
 
   public static class MyClass {
     private static class Foo {
-      void bar(int p){
-      }
+      void bar(int p) {}
     }
 
     public static void main(String... args) {
@@ -204,6 +208,7 @@ class DeadStoreCheck {
       java.util.List<Integer> list = new java.util.ArrayList<>();
       list.forEach(x::bar);
     }
+
     int foo() {
       int i = 0;
       int j = 0;
@@ -233,16 +238,15 @@ class DeadStoreCheck {
 
 class DeadStoreCheckStuff {
   void foo(boolean b1, boolean b2) {
-    boolean x = false;  // Compliant
-    x = b1 && b2;       // Noncompliant
-    ((x)) = b1 && b2;   // Noncompliant
+    boolean x = false; // Compliant
+    x = b1 && b2; // Noncompliant
+    ((x)) = b1 && b2; // Noncompliant
   }
 
   void assertStatement(boolean x) {
     boolean y = !x; // compliant, y is used in assert statement.
     assert y;
   }
-
 }
 
 class DeadStoreCheckNoIssueOnInitializers {
@@ -250,14 +254,14 @@ class DeadStoreCheckNoIssueOnInitializers {
   // no issue if variable initializer is 'true' or 'false'
   boolean testBoolean(boolean arg0) {
     boolean b1 = true; // Compliant
-    b1 = false;        // Noncompliant
+    b1 = false; // Noncompliant
     b1 = arg0;
 
     boolean b2 = false; // Compliant
-    b2 = true;          // Noncompliant
+    b2 = true; // Noncompliant
     b2 = arg0;
 
-    boolean b3 = arg0;  // Noncompliant
+    boolean b3 = arg0; // Noncompliant
     b3 = arg0;
 
     return b1 && b2 && b3;
@@ -265,9 +269,9 @@ class DeadStoreCheckNoIssueOnInitializers {
 
   // no issue if initializer is 'null'
   Object testNull(boolean b, Object o) {
-    Object o1 = null;  // Compliant
+    Object o1 = null; // Compliant
     o1 = new Object(); // Noncompliant
-    o1 = null;         // Noncompliant
+    o1 = null; // Noncompliant
     o1 = o;
 
     Object o2 = o; // Noncompliant
@@ -276,10 +280,10 @@ class DeadStoreCheckNoIssueOnInitializers {
     return b ? o1 : o2;
   }
 
-  //no issue if initializer is the empty String
+  // no issue if initializer is the empty String
   String testNull(String s) {
     String s1 = ""; // Compliant
-    s1 = "yolo";    // Noncompliant
+    s1 = "yolo"; // Noncompliant
     s1 = "hello";
 
     String s2 = "world"; // Noncompliant
@@ -291,27 +295,28 @@ class DeadStoreCheckNoIssueOnInitializers {
   // no issue if variable initializer is '-1', '0', or '1'
   int testIntLiterals() {
 
-    int a = +42;  // Noncompliant
+    int a = +42; // Noncompliant
 
-    int b = (0);  // Compliant
-    b = -1;       // Noncompliant - Only taken into consideration when used in initializer
-    b = 0;        // Noncompliant
-    b = 1;        // Noncompliant
-    int c = +1;   // Compliant
+    int b = (0); // Compliant
+    b = -1; // Noncompliant - Only taken into consideration when used in initializer
+    b = 0; // Noncompliant
+    b = 1; // Noncompliant
+    int c = +1; // Compliant
     int d = (-1); // Compliant
-    int e = -1;   // Compliant
+    int e = -1; // Compliant
 
     // Only int literals are excluded
-    long myLong = -1L;       // Noncompliant
+    long myLong = -1L; // Noncompliant
     double myDouble = -1.0d; // Noncompliant
-    float myFloat = -1.0f;   // Noncompliant
+    float myFloat = -1.0f; // Noncompliant
 
     short myShort = -1; // Compliant
-    byte myByte = 1; //Compliant
+    byte myByte = 1; // Compliant
 
     return 0;
   }
 }
+
 class DeadStoreCheckB {
   void foo() {
     int attemptNumber = 0;
@@ -326,14 +331,15 @@ class DeadStoreCheckB {
       }
     }
   }
-  static class MyException extends Exception {  }
+
+  static class MyException extends Exception {}
 }
 
 abstract class DeadStoreCheckC {
 
   public void testCodeWithForLoop2() {
     RuntimeException e = null;
-    for (;;) {
+    for (; ; ) {
       try {
         e = new RuntimeException();
         break;
@@ -359,7 +365,7 @@ abstract class DeadStoreCheckC {
 
   public void testCodeWithWhileLoop() {
     RuntimeException e = null;
-    while(true) {
+    while (true) {
       try {
         e = new RuntimeException();
         break;
@@ -372,5 +378,6 @@ abstract class DeadStoreCheckC {
 
   abstract void doSomething();
 
-  public class FooException extends Exception { }
+  public class FooException extends Exception {}
 }
+

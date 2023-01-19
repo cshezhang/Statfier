@@ -1,7 +1,6 @@
-
 public interface Foo {
-    public @interface Bar {
-        public static final int X = 0;
-    }
+  public @interface Bar {
+    public static final int X = 0;
+  }
 }
-        
+

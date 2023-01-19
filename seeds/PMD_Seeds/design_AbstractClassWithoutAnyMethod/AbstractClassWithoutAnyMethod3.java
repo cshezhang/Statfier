@@ -1,8 +1,7 @@
-
 public abstract class Foo {
-    private String field;
-    public int otherField;
+  private String field;
+  public int otherField;
 
-    public abstract void m();
+  public abstract void m();
 }
-        
+

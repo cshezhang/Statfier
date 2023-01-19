@@ -1,5 +1,3 @@
-
-
 import android.annotation.SuppressLint;
 import android.support.annotation.UiThread;
 import java.util.concurrent.ExecutionException;
@@ -30,3 +28,4 @@ class SuppLintClass {
     future.get();
   }
 }
+

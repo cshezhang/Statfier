@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.Expensive;
 import codetoanalyze.java.annotation.PerformanceCritical;
 
@@ -41,3 +37,4 @@ public interface ExpensiveInterfaceExample {
     }
   }
 }
+

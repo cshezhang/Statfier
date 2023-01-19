@@ -1,6 +1,3 @@
-
-
-
 import java.util.ArrayList;
 
 class Array {
@@ -131,3 +128,4 @@ class Array {
     }
   }
 }
+

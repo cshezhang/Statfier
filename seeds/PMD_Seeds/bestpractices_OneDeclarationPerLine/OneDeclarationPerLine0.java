@@ -1,9 +1,6 @@
-
-public class Foo
-{
-    public void bar()
-    {
-        String name, lastname, adress;
-    }
+public class Foo {
+  public void bar() {
+    String name, lastname, adress;
+  }
 }
-        
+

@@ -1,33 +1,54 @@
-
-
 enum Foo1 {
   FOO,
-  BAR; //OK
+  BAR; // OK
 }
+
 enum Foo2 {
   FOO,
-  BAR //OK
+  BAR // OK
 }
+
 enum Foo3 {
   FOO,
-  BAR, //violation
+  BAR, // violation
 }
+
 enum Foo4 {
   FOO,
   BAR, // violation
   ;
 }
+
 enum Foo5 {
   FOO,
-  BAR,; // violation
+  BAR,
+  ; // violation
 }
-enum Foo6 { FOO, BAR,; } // violation
-enum Foo7 { FOO, BAR, } // violation
+
+enum Foo6 {
+  FOO,
+  BAR,
+  ;
+} // violation
+
+enum Foo7 {
+  FOO,
+  BAR,
+} // violation
+
 enum Foo8 {
   FOO,
   BAR // OK
-  ;
+;
 }
-enum Foo9 { FOO, BAR; } // OK
-enum Foo10 { FOO, BAR } // OK
-        
+
+enum Foo9 {
+  FOO,
+  BAR;
+} // OK
+
+enum Foo10 {
+  FOO,
+  BAR
+} // OK
+

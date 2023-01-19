@@ -1,7 +1,3 @@
-
-
-
-
 import java.util.Iterator;
 
 public class AnalysisStops {
@@ -263,3 +259,4 @@ public class AnalysisStops {
     int i = 1 / 0;
   }
 }
+

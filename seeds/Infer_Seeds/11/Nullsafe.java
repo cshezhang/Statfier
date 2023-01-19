@@ -1,7 +1,3 @@
-
-
-
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -39,8 +35,8 @@ import kotlin.annotations.jvm.UnderMigration;
  *     An internal class is checked if it's annotated as @Nullsafe or @NullsafeStrict.
  *   </ol>
  *   <ol>
- *     An external method is checked when it's annotated or has nullability signature
- *     defined in third-party signatures repo.
+ *     An external method is checked when it's annotated or has nullability signature defined in
+ *     third-party signatures repo.
  *   </ol>
  *   <ol>
  *     The code that has built-in models in nullsafe is considered checked (both internal and
@@ -103,17 +99,16 @@ public @interface Nullsafe {
   enum Mode {
     LOCAL,
     /**
-    * @deprecated STRICT mode is deprecated and soon will have no effect on the
-    * behaviour of NullsafeX.
-    */
+     * @deprecated STRICT mode is deprecated and soon will have no effect on the behaviour of
+     *     NullsafeX.
+     */
     @Deprecated
     STRICT
   }
 
   /**
-   * @deprecated Explicit TrustList is deprecated and soon will have no effect on the
-   * behaviour of Nullsafe. The code will be checked as if the mode is {@code
-   * trustAll = true}.
+   * @deprecated Explicit TrustList is deprecated and soon will have no effect on the behaviour of
+   *     Nullsafe. The code will be checked as if the mode is {@code trustAll = true}.
    */
   @Deprecated
   @interface TrustList {
@@ -146,3 +141,4 @@ public @interface Nullsafe {
           value = {},
           trustAll = true);
 }
+

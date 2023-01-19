@@ -17,3 +17,4 @@ public class InferUtils {
         || charsetName == "utf-16";
   }
 }
+

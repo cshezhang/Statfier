@@ -1,6 +1,3 @@
-
-
-
 class HoistUnmodeled {
 
   // Any unmodeled (e.g. timing) call is assumed to be modifying global
@@ -24,3 +21,4 @@ class HoistUnmodeled {
     }
   }
 }
+

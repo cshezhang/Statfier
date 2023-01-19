@@ -1,6 +1,3 @@
-
-
-
 import javax.annotation.concurrent.ThreadSafe;
 
 @ThreadSafe
@@ -24,3 +21,4 @@ class IgnoredSub {
     return i;
   }
 }
+

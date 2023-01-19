@@ -11,12 +11,11 @@ applyToPrivate = (default)true
 
 package com.puppycrawl.tools.checkstyle.checks.naming.constantname;
 
-
 public interface InputConstantNameStaticModifierInInterface // ok
-{
-    static int f()
-    {
-        int someName = 5;
-        return someName;
-    }
+ {
+  static int f() {
+    int someName = 5;
+    return someName;
+  }
 }
+

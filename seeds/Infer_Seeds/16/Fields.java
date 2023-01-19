@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 public class Fields {
@@ -113,3 +109,4 @@ public class Fields {
     InferTaint.inferSensitiveSink(obj.g.g.f);
   }
 }
+

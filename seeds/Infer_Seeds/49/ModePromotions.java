@@ -1,12 +1,8 @@
-
-
 /**
  * A test ensuring that we correctly analyze mode promotions possibility. All classes in this file
  * should be free of nullability issues (w.r.t to their mode). The goal of the test is to ensure
  * that mode to promote to is correct for each class.
  */
-
-
 import codetoanalyze.java.annotation.Nullsafe;
 
 // Zero issues and no dependencies - can strictify
@@ -109,3 +105,4 @@ class TrustNone_CanBePromotedToStrict {
     return Strict_NoDeps_NoPromos.f();
   }
 }
+

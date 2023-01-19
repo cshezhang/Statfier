@@ -1,5 +1,3 @@
-
-
 import android.support.annotation.UiThread;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -61,3 +59,4 @@ class JavaIO {
     inputStream.close();
   }
 }
+

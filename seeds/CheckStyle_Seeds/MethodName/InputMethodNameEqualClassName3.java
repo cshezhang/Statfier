@@ -13,56 +13,55 @@ applyToPrivate = false
 package com.puppycrawl.tools.checkstyle.checks.naming.methodname;
 
 /**
- * Test input for MethodNameCheck specifically
- * whether the method name equals the class name.
+ * Test input for MethodNameCheck specifically whether the method name equals the class name.
  *
  * @author Travis Schneeberger
  */
 public class InputMethodNameEqualClassName3 {
 
-        //illegal name
+  // illegal name
+  public int InputMethodNameEqualClassName3() { // violation
+    return 0;
+  }
+
+  // illegal name
+  private int PRIVATEInputMethodNameEqualClassName() {
+    return 0;
+  }
+
+  class Inner {
+    // illegal name
+    public int Inner() { // violation
+      return 0;
+    }
+
+    // OK name - name of the outter class's ctor
     public int InputMethodNameEqualClassName3() { // violation
-        return 0;
+      return 0;
     }
+  }
 
-    //illegal name
-    private int PRIVATEInputMethodNameEqualClassName() {
-        return 0;
-    }
+  public void anotherMethod() {
+    new InputMethodNameEqualClassName() {
 
-    class Inner {
-                //illegal name
-        public int Inner() { // violation
-                        return 0;
-                }
-
-                //OK name - name of the outter class's ctor
-        public int InputMethodNameEqualClassName3() { // violation
-                        return 0;
-                }
-        }
-
-        public void anotherMethod() {
-                new InputMethodNameEqualClassName() {
-
-                        //illegal name
-            public int InputMethodNameEqualClassName3() { // violation
-                                return 1;
-                        }
-                };
-        }
+      // illegal name
+      public int InputMethodNameEqualClassName3() { // violation
+        return 1;
+      }
+    };
+  }
 }
 
 interface SweetInterface3 {
 
-        //illegal name
-    int SweetInterface(); // violation
+  // illegal name
+  int SweetInterface(); // violation
 }
 
 class Outer3 {
 
-        //illegal name
-    public void Outer() { // violation
-
-        }
+  // illegal name
+  public void Outer() { // violation
+  }
 }
+

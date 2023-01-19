@@ -1,5 +1,3 @@
-
-
 interface LambdaTestI {
   void abstractFun(int x);
 }
@@ -21,3 +19,4 @@ class LambdaTest {
     fobj.abstractFun(x);
   }
 }
+

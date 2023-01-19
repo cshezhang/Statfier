@@ -1,9 +1,8 @@
-
 public class MyException {
-    private static final String foo = "FOOO";
+  private static final String foo = "FOOO";
 
-    public static void main(String[] args) {
-        // whitelisted
-    }
+  public static void main(String[] args) {
+    // whitelisted
+  }
 }
-        
+

@@ -1,4 +1,2 @@
+public class Foo implements java.io.Serializable {}
 
-public class Foo implements java.io.Serializable {
-}
-        

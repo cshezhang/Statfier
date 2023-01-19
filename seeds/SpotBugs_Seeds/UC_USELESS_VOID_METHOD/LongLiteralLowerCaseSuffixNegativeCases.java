@@ -62,5 +62,5 @@ public class LongLiteralLowerCaseSuffixNegativeCases {
   public void negativeHexUpperCase() {
     long value = -0x80L;
   }
-
 }
+

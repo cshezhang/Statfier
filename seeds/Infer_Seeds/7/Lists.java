@@ -1,7 +1,3 @@
-
-
-
-
 import java.util.List;
 
 class Lists {
@@ -68,3 +64,4 @@ class Lists {
     }
   }
 }
+

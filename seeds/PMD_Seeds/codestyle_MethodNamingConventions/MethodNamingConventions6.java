@@ -1,13 +1,9 @@
-
 class Foo {
-    static void foo() {
-    }
+  static void foo() {}
 
-    static void st_whatever() {
-    }
+  static void st_whatever() {}
 
-    // not reported
-    void bar() {
-    }
+  // not reported
+  void bar() {}
 }
-        
+

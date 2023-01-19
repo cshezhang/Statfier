@@ -1,7 +1,3 @@
-
-
-
-
 import android.location.Location;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -52,3 +48,4 @@ public class LoggingPrivateData {
     Log.wtf(TAG, source); // 10 sources * 4 sinks = 40 expected reports
   }
 }
+

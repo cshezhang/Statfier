@@ -1,6 +1,3 @@
-
-
-
 public class Switch {
   // Cost 51
   private static void vanilla_switch(int i) {
@@ -38,3 +35,4 @@ public class Switch {
     return 0;
   }
 }
+

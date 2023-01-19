@@ -1,5 +1,4 @@
-
 public class Foo {
-    float number = 3.14f;
+  float number = 3.14f;
 }
-        
+

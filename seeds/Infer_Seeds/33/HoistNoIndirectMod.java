@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class HoistNoIndirectMod {
@@ -73,3 +72,4 @@ class HoistNoIndirectMod {
     }
   }
 }
+

@@ -16,19 +16,21 @@ abstract class AssignmentInSubExpressionCheck {
   }
 
   AssignmentInSubExpressionCheck foo() {
-    int a = 0;                   // Compliant
-    a = 0;                       // Compliant
-    System.out.println(a);       // Compliant
-    System.out.println(a = 0);   // Noncompliant [[sc=26;ec=27]] {{Extract the assignment out of this expression.}}
-    System.out.println(a += 0);  // Noncompliant [[sc=26;ec=28]] {{Extract the assignment out of this expression.}}
-    System.out.println(a == 0);  // Compliant
+    int a = 0; // Compliant
+    a = 0; // Compliant
+    System.out.println(a); // Compliant
+    System.out.println(
+        a = 0); // Noncompliant [[sc=26;ec=27]] {{Extract the assignment out of this expression.}}
+    System.out.println(
+        a += 0); // Noncompliant [[sc=26;ec=28]] {{Extract the assignment out of this expression.}}
+    System.out.println(a == 0); // Compliant
 
-    a = b = 0;                   // Compliant
-    a += foo[i];                 // Compliant
+    a = b = 0; // Compliant
+    a += foo[i]; // Compliant
 
-    _stack[
-           index = 0             // Noncompliant
-           ] = node;
+    _stack[index = 0 // Noncompliant
+            ] =
+        node;
 
     while ((foo = bar()) != null) { // Compliant
     }
@@ -78,8 +80,14 @@ abstract class AssignmentInSubExpressionCheck {
   @MyAnnotation(value = "toto") // Compliant
   int[] bar() {
     eventBus.register(event -> field = !field);
-    eventBus.register(event -> { field = !field; });
-    eventBus.register(event -> { if(field = !field) return; }); // Noncompliant
+    eventBus.register(
+        event -> {
+          field = !field;
+        });
+    eventBus.register(
+        event -> {
+          if (field = !field) return;
+        }); // Noncompliant
     return null;
   }
 
@@ -124,8 +132,10 @@ abstract class AssignmentInSubExpressionCheck {
 
     void fun(List<Integer> list) {
       list.forEach(e -> field += e); // Compliant : ignore assignment expression in lambda
-      list.forEach(e -> SonarJava2821.this.field &= e); // Compliant : ignore assignment expression in lambda
+      list.forEach(
+          e -> SonarJava2821.this.field &= e); // Compliant : ignore assignment expression in lambda
       list.forEach(e -> field = field + e); // Compliant : ignore assignment expression in lambda
     }
   }
 }
+

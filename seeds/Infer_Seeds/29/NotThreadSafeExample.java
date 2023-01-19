@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.concurrent.NotThreadSafe;
 
 @NotThreadSafe
@@ -14,3 +10,4 @@ public class NotThreadSafeExample {
     f = 24;
   }
 }
+

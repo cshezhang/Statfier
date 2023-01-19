@@ -1,4 +1,3 @@
-
 class ImmutableArray {
 
   final int[] testArray = new int[] {0, 1, 2, 4};
@@ -35,3 +34,4 @@ class ImmutableArray {
     array[2] = 7;
   }
 }
+

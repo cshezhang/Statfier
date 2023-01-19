@@ -10,23 +10,22 @@ applyToPrivate = false
 
 */
 
-
 package com.puppycrawl.tools.checkstyle.checks.naming.methodname;
 
 public interface InputMethodNamePrivateMethodsInInterfaces {
 
-    private void PrivateMethod() {} // ok
+  private void PrivateMethod() {} // ok
 
-    private static void PrivateMethod2() {} // ok
+  private static void PrivateMethod2() {} // ok
 
-    default void DefaultMethod() { // violation
-    }
+  default void DefaultMethod() { // violation
+  }
 
-    public default void DefaultMethod2() { // violation
-    }
+  public default void DefaultMethod2() { // violation
+  }
 
-    void PublicMethod(); // violation
+  void PublicMethod(); // violation
 
-    public void PublicMethod2(); // violation
-
+  public void PublicMethod2(); // violation
 }
+

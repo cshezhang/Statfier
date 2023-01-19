@@ -1,15 +1,14 @@
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-            import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 
-            import static org.junit.jupiter.api.Assertions.assertTrue;
+public class Foo {
 
-            public class Foo {
+  Object a, b;
 
-                Object a, b;
+  @Test
+  public void test1() {
+    assertTrue(a.equals(b));
+  }
+}
 
-                @Test
-                public void test1() {
-                    assertTrue(a.equals(b));
-                }
-            }
-            

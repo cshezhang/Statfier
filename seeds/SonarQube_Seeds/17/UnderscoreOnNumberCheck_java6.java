@@ -8,3 +8,4 @@ class UnderscoreOnNumberCheck_java6 {
 
   long octal1 = 012354435242; // Compliant
 }
+

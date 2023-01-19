@@ -1,4 +1,2 @@
+public abstract @interface TestAnnotation {}
 
-public abstract @interface TestAnnotation {
-}
-        

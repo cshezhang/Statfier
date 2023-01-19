@@ -1,16 +1,14 @@
 public class Equality {
 
-    public boolean equals(Equality e) {
-        return true;
-    }
+  public boolean equals(Equality e) {
+    return true;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        return false;
-    }
+  @Override
+  public boolean equals(Object o) {
+    return false;
+  }
 
-    public static void main(String[] args) {
-
-    }
-
+  public static void main(String[] args) {}
 }
+

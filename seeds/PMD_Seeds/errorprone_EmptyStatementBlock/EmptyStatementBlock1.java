@@ -1,7 +1,8 @@
-
 public class Foo {
-    public void bar() {
-        { return; }
+  public void bar() {
+    {
+      return;
     }
+  }
 }
-        
+

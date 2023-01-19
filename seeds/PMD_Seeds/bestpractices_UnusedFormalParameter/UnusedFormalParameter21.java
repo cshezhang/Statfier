@@ -1,6 +1,5 @@
-
-abstract class Base{
-  abstract public int badMethod(int arg1, String arg2);
+abstract class Base {
+  public abstract int badMethod(int arg1, String arg2);
 }
 
 class Imp1 extends Base {
@@ -16,4 +15,4 @@ class Imp2 extends Base {
     return arg2.length() + arg1;
   }
 }
-        
+

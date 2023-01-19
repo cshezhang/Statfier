@@ -60,27 +60,37 @@ class KeySetInsteadOfEntrySetCheckExtendedClass extends KeySetInsteadOfEntrySetC
       Object value = map.get(key6);
     }
 
-    for (String key3 : keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
+    for (String key3 :
+        keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
       Object value = get(key3);
     }
-    for (String key4 : this.keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
+    for (String key4 :
+        this.keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
       Object value = this.get(key4);
     }
-    for (String key5 : super.keySet()) { // Noncompliant [[sc=5;ec=8]] {{Iterate over the "entrySet" instead of the "keySet".}}
+    for (String key5 :
+        super
+            .keySet()) { // Noncompliant [[sc=5;ec=8]] {{Iterate over the "entrySet" instead of the
+                         // "keySet".}}
       Object value = super.get(key5);
     }
-    for (String key5 : map.keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
+    for (String key5 :
+        map.keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
       Object value = map.get(key5);
     }
-    for (String key5 : super.map.keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
+    for (String key5 :
+        super.map
+            .keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
       Object value = super.map.get(key5);
     }
     for (String key5 : super.map.keySet()) { // Compliant
       Object value = this.map.get(key5);
     }
-    for (String key5 : this.map.keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
+    for (String key5 :
+        this.map
+            .keySet()) { // Noncompliant {{Iterate over the "entrySet" instead of the "keySet".}}
       Object value = this.map.get(key5);
     }
   }
-
 }
+

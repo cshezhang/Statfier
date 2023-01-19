@@ -17,19 +17,22 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.javadocstyle;
 
 public enum InputJavadocStyleEnumCtorScopeIsPrivate {
 
-    /** */ // violation
-    CONSTANT(0);
+  /** */
+  // violation
+  CONSTANT(0);
 
-    /** */ // violation
-    final int value;
+  /** */
+  // violation
+  final int value;
 
-    /** */ // ok
-    InputJavadocStyleEnumCtorScopeIsPrivate(int value) {
-        this.value = value;
-    }
+  /** */
+  // ok
+  InputJavadocStyleEnumCtorScopeIsPrivate(int value) {
+    this.value = value;
+  }
 
-    /** */ // violation
-    void method() {
-    }
-
+  /** */
+  // violation
+  void method() {}
 }
+

@@ -26,3 +26,4 @@ public class ArrayCost {
     return ones == 1;
   }
 }
+

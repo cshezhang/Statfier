@@ -31,7 +31,7 @@ public class SelfAssignmentPositiveCases2 {
   public void test6() {
     Foo foo = new Foo();
     foo.a = 2;
-    //BUG: Suggestion includes "remove this line"
+    // BUG: Suggestion includes "remove this line"
     foo.a = foo.a;
   }
 
@@ -39,23 +39,23 @@ public class SelfAssignmentPositiveCases2 {
     Foobar f = new Foobar();
     f.foo = new Foo();
     f.foo.a = 10;
-    //BUG: Suggestion includes "remove this line"
+    // BUG: Suggestion includes "remove this line"
     f.foo.a = f.foo.a;
   }
 
   public void test8() {
     foo = new Foo();
-    //BUG: Suggestion includes "remove this line"
+    // BUG: Suggestion includes "remove this line"
     this.foo.a = foo.a;
   }
 
   public void test9(Foo fao, Foo bar) {
-    //BUG: Suggestion includes "this.foo = fao"
+    // BUG: Suggestion includes "this.foo = fao"
     this.foo = foo;
   }
 
   public void test10(Foo foo) {
-    //BUG: Suggestion includes "this.foo = foo"
+    // BUG: Suggestion includes "this.foo = foo"
     foo = foo;
   }
 
@@ -72,3 +72,4 @@ public class SelfAssignmentPositiveCases2 {
     Bar bar;
   }
 }
+

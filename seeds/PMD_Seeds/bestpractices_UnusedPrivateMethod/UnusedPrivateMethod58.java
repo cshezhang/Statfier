@@ -1,10 +1,8 @@
-
 class Foo {
-    public void bar() {
-        test();
-    }
+  public void bar() {
+    test();
+  }
 
-    private void test(@AnnotatedUsage Foo this) {
-    }
+  private void test(@AnnotatedUsage Foo this) {}
 }
-        
+

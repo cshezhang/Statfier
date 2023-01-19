@@ -1,7 +1,3 @@
-
-
-
-
 import android.support.annotation.UiThread;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -91,3 +87,4 @@ class UIAnnotationTest {
     }
   }
 }
+

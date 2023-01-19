@@ -1,8 +1,4 @@
-
-
 // _SHOULD_BE_SKIPPED_
-
-
 
 public class SkippedClass {
 
@@ -12,3 +8,4 @@ public class SkippedClass {
     return new SkippedClass();
   }
 }
+

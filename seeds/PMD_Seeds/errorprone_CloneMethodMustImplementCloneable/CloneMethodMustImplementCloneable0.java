@@ -1,5 +1,4 @@
-
 public class Foo implements Cloneable {
-    void clone() {}
+  void clone() {}
 }
-        
+

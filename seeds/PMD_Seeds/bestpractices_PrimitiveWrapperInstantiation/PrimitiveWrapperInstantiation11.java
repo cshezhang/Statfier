@@ -1,5 +1,4 @@
-
 public class Foo {
-    Boolean b = Boolean.valueOf("true");
+  Boolean b = Boolean.valueOf("true");
 }
-        
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    final Log LOG = LogFactory.getLog(Foo.class);
+  final Log LOG = LogFactory.getLog(Foo.class);
 }
-        
+

@@ -1,6 +1,3 @@
-
-
-
 public class Continue {
   /* Expected 1000 * 1000 / 2 */
   int continue_outer_loop_constant() {
@@ -13,3 +10,4 @@ public class Continue {
     return 0;
   }
 }
+

@@ -1,6 +1,3 @@
-
-
-
 class OuterTest {
 
   ArrayTest[] arrays;
@@ -11,3 +8,4 @@ class OuterTest {
     atest.mutate_param_ok(array); // ERROR!
   }
 }
+

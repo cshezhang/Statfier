@@ -1,7 +1,6 @@
-
 public final class Foo {
-    public static class Bar {
-        public final void buz() {}
-    }
+  public static class Bar {
+    public final void buz() {}
+  }
 }
-        
+

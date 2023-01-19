@@ -1,10 +1,9 @@
-
 public class Foo {
-    public void finalize() {
-        try {
-        } finally {
-            super.finalize();
-        }
+  public void finalize() {
+    try {
+    } finally {
+      super.finalize();
     }
+  }
 }
-        
+

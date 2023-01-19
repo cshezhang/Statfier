@@ -13,7 +13,9 @@ class ThreadRunCheck {
     Runnable runnable = null;
 
     Thread myThread = new Thread(runnable);
-    myThread.run(); // Noncompliant [[sc=14;ec=17]] {{Call the method Thread.start() to execute the content of the run() method in a dedicated thread.}}
+    myThread
+        .run(); // Noncompliant [[sc=14;ec=17]] {{Call the method Thread.start() to execute the
+                // content of the run() method in a dedicated thread.}}
 
     Thread myThread2 = new Thread(runnable);
     myThread2.start();
@@ -40,18 +42,14 @@ class ThreadRunCheck {
     runnable.run(); // Compliant
   }
 
-  public static void run() {
-  }
+  public static void run() {}
 
-  static class B extends Thread {
-  }
+  static class B extends Thread {}
 
   static class C implements Runnable {
 
     @Override
-    public void run() {
-    }
-
+    public void run() {}
   }
 
   static class D extends B {
@@ -65,12 +63,9 @@ class ThreadRunCheck {
 
   static class E implements Serializable {
 
-    public void run() {
-    }
-
+    public void run() {}
   }
 
-  static class F extends E {
-  }
+  static class F extends E {}
 }
 

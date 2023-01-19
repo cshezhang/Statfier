@@ -1,6 +1,5 @@
 package checks;
 
-import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -12,6 +11,7 @@ import java.net.Inet6Address;
 import java.net.URL;
 import java.time.Clock;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,24 +20,31 @@ import java.time.Month;
 import java.time.MonthDay;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
+import java.time.Period;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.Duration;
-import java.time.Period;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 class VolatileNonPrimitiveFieldCheck {
   private volatile int vInts0;
-  private volatile int [] vInts;  // Noncompliant [[sc=11;ec=26]] {{Use an "AtomicIntegerArray" instead.}}
-  private volatile long [] vLongs;  // Noncompliant [[sc=11;ec=27]] {{Use an "AtomicLongArray" instead.}}
-  private volatile Object [] vObjects;  // Noncompliant [[sc=11;ec=29]] {{Use an "AtomicReferenceArray" instead.}}
-  private volatile VolatileNonPrimitiveFieldCheckObj myObj;  // Noncompliant [[sc=11;ec=53]] {{Use a thread-safe type; adding "volatile" is not enough to make this field thread-safe.}}
-  private volatile Date myDate;  // Noncompliant [[sc=11;ec=24]] {{Use a thread-safe type; adding "volatile" is not enough to make this field thread-safe.}}
+  private volatile int[]
+      vInts; // Noncompliant [[sc=11;ec=26]] {{Use an "AtomicIntegerArray" instead.}}
+  private volatile long[]
+      vLongs; // Noncompliant [[sc=11;ec=27]] {{Use an "AtomicLongArray" instead.}}
+  private volatile Object[]
+      vObjects; // Noncompliant [[sc=11;ec=29]] {{Use an "AtomicReferenceArray" instead.}}
+  private volatile VolatileNonPrimitiveFieldCheckObj
+      myObj; // Noncompliant [[sc=11;ec=53]] {{Use a thread-safe type; adding "volatile" is not
+             // enough to make this field thread-safe.}}
+  private volatile Date
+      myDate; // Noncompliant [[sc=11;ec=24]] {{Use a thread-safe type; adding "volatile" is not
+              // enough to make this field thread-safe.}}
   private AtomicIntegerArray vInts2;
   private VolatileNonPrimitiveFieldCheckObj myObj2;
   // enums are considered as immutable
@@ -88,31 +95,31 @@ class VolatileNonPrimitiveFieldCheck {
   // Not thread safe
   private volatile VolatileNonPrimitiveFieldCheckNotThreadSafe notThreadSafe; // Noncompliant
 
-  void foo(){}
+  void foo() {}
 }
+
 enum VolatileNonPrimitiveFieldCheckEnum {
   FOO;
   private volatile int vInts0;
-  private volatile int [] vInts;  // Noncompliant [[sc=11;ec=26]] {{Use an "AtomicIntegerArray" instead.}}
-  private volatile VolatileNonPrimitiveFieldCheckObj myObj;  // Noncompliant [[sc=11;ec=53]] {{Use a thread-safe type; adding "volatile" is not enough to make this field thread-safe.}}
+  private volatile int[]
+      vInts; // Noncompliant [[sc=11;ec=26]] {{Use an "AtomicIntegerArray" instead.}}
+  private volatile VolatileNonPrimitiveFieldCheckObj
+      myObj; // Noncompliant [[sc=11;ec=53]] {{Use a thread-safe type; adding "volatile" is not
+             // enough to make this field thread-safe.}}
   private AtomicIntegerArray vInts2;
   private VolatileNonPrimitiveFieldCheckObj myObj2;
 
-  void foo(){}
+  void foo() {}
 }
 
-class VolatileNonPrimitiveFieldCheckObj {
-
-}
+class VolatileNonPrimitiveFieldCheckObj {}
 
 @javax.annotation.concurrent.Immutable
-class VolatileNonPrimitiveFieldCheckImmutable {
-}
+class VolatileNonPrimitiveFieldCheckImmutable {}
 
 @javax.annotation.concurrent.ThreadSafe
-class VolatileNonPrimitiveFieldCheckThreadSafe {
-}
+class VolatileNonPrimitiveFieldCheckThreadSafe {}
 
 @javax.annotation.concurrent.NotThreadSafe
-class VolatileNonPrimitiveFieldCheckNotThreadSafe {
-}
+class VolatileNonPrimitiveFieldCheckNotThreadSafe {}
+

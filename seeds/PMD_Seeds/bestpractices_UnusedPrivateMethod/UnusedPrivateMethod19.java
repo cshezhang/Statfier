@@ -1,6 +1,5 @@
-
 public class Foo {
-    @SuppressWarnings("unused")
-    private void foo() {}
+  @SuppressWarnings("unused")
+  private void foo() {}
 }
-        
+

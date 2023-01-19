@@ -1,5 +1,4 @@
-
 public class Foo {
-    String[] FOO = {"foo", "foo", "foo", "foo", "foo", "foo", "foo", "foo", "foo"};
+  String[] FOO = {"foo", "foo", "foo", "foo", "foo", "foo", "foo", "foo", "foo"};
 }
-        
+

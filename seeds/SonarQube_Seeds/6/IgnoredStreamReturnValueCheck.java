@@ -11,7 +11,9 @@ class IgnoredStreamReturnValueCheck {
       byte[] buffer = new byte[1000];
       long skipValue = 12L;
 
-      is.read(buffer); // Noncompliant [[sc=10;ec=14]] {{Check the return value of the "read" call to see how many bytes were read.}}
+      is.read(
+          buffer); // Noncompliant [[sc=10;ec=14]] {{Check the return value of the "read" call to
+                   // see how many bytes were read.}}
       is.skip(skipValue); // Noncompliant
       getInputStream().read(buffer); // Noncompliant
       getInputStream().skip(skipValue); // Noncompliant
@@ -95,3 +97,4 @@ class IgnoredStreamReturnValueCheck {
     }
   }
 }
+

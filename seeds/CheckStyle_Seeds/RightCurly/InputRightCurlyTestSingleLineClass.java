@@ -8,22 +8,19 @@ tokens = CLASS_DEF
 
 package com.puppycrawl.tools.checkstyle.checks.blocks.rightcurly;
 
-class InputRightCurlyTestSingleLineClass
-{
-    void foo() throws InterruptedException
-    {
+class InputRightCurlyTestSingleLineClass {
+  void foo() throws InterruptedException {
 
-            try
-            {
+    try {
 
-            } // ok
-            catch (Exception e)
-            {
-                return;
-            }
-
-        }
-
+    } // ok
+    catch (Exception e) {
+      return;
     }
+  }
+}
 
-class UniqEmptyClassTestSingleLineClass {private int a;} // violation
+class UniqEmptyClassTestSingleLineClass {
+  private int a;
+} // violation
+

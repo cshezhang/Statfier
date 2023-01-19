@@ -15,14 +15,17 @@ import java.nio.file.FileAlreadyExistsException;
 import java.sql.SQLException;
 
 public class InputThrowsCountMethodWithAnnotation extends ParentClass {
-    @Override
-    public void method() throws AWTException, SQLException, FileNotFoundException,
-            EOFException, FileAlreadyExistsException {
-        super.method();
-    }
+  @Override
+  public void method()
+      throws AWTException, SQLException, FileNotFoundException, EOFException,
+          FileAlreadyExistsException {
+    super.method();
+  }
 }
 
 class ParentClass {
-    public void method() throws AWTException, SQLException, // violation
-    FileNotFoundException, EOFException, FileAlreadyExistsException {}
+  public void method()
+      throws AWTException, SQLException, // violation
+          FileNotFoundException, EOFException, FileAlreadyExistsException {}
 }
+

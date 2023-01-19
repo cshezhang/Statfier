@@ -1,7 +1,6 @@
-
 public class Foo {
-    void bar(String[] buf) {
-        x = buf[0];
-    }
+  void bar(String[] buf) {
+    x = buf[0];
+  }
 }
-        
+

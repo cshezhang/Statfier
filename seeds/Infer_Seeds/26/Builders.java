@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ThreadSafe;
 import com.google.common.collect.ImmutableList;
 
@@ -111,3 +107,4 @@ class MyBuilder {
     MyBuilder.create().setNestedPath(1);
   }
 }
+

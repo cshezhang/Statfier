@@ -1,5 +1,3 @@
-
-
 import codetoanalyze.java.annotation.NullsafeStrict;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -109,3 +107,4 @@ public class StrictModeForThirdParty {
     return obj.varargGeneric(s, s, s, "Hello");
   }
 }
+

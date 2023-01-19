@@ -1,4 +1,5 @@
 package codetoanalyze.java.impurity;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -232,3 +233,4 @@ class PurityModeled {
     return file.getCanonicalPath();
   }
 }
+

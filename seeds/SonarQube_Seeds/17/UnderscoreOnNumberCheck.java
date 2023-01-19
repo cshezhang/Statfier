@@ -24,3 +24,4 @@ class UnderscoreOnNumberCheck {
     if (x < -8778479691651900590L) {} // Noncompliant
   }
 }
+

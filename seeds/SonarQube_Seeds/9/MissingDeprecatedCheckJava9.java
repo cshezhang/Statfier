@@ -28,5 +28,5 @@ class MissingDeprecatedCheckJava9 {
    */
   @Deprecated(since = "4.2", forRemoval = true) // Compliant: even for S6355
   public int qix;
-
 }
+

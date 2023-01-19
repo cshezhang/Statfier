@@ -15,74 +15,74 @@ package com.puppycrawl.tools.checkstyle.checks.coding.unnecessaryparentheses;
 
 public class InputUnnecessaryParenthesesIfStatement2 {
 
-    void testShortCircuitOrIfStatement() {
-        boolean a = false;
-        boolean x = false, y = true, z = false;
-        boolean v = true, w = true, u = true;
-        boolean vy = x && y || (x || y || z) && v; // ok
-        if (a && !(v && w || (x || y) && z || u && x)) { // ok
-        }
-        if (a && !(v && w || x || y && z || u && x)) { // ok
-        }
-        if (v ||
-                (u || x || y)) { // violation 'Unnecessary parentheses around expression'
-        }
-        if ((v || x) == // ok
-                (w || y)) {
-        }
-        if ((v || x) & // ok
-                (w || y)) {
-        }
-        if (a && v || (w || z) && u || y) { // ok
-        }
-        if (a && x ||
-                (y || z) // violation 'Unnecessary parentheses around expression'
-                || vy && u) {
-        }
+  void testShortCircuitOrIfStatement() {
+    boolean a = false;
+    boolean x = false, y = true, z = false;
+    boolean v = true, w = true, u = true;
+    boolean vy = x && y || (x || y || z) && v; // ok
+    if (a && !(v && w || (x || y) && z || u && x)) { // ok
+    }
+    if (a && !(v && w || x || y && z || u && x)) { // ok
+    }
+    if (v || (u || x || y)) { // violation 'Unnecessary parentheses around expression'
+    }
+    if ((v || x) == // ok
+        (w || y)) {}
+    if ((v || x) & // ok
+        (w || y)) {}
+    if (a && v || (w || z) && u || y) { // ok
+    }
+    if (a && x
+        || (y || z) // violation 'Unnecessary parentheses around expression'
+        || vy && u) {}
+  }
+
+  public void checkBooleanStatements() {
+    boolean a = true;
+    int b = 42;
+    int c = 42;
+    int d = 32;
+    if ((b == c) == a
+        && (( // violation 'Unnecessary parentheses around expression'
+            (b == c) == (d >= b) == a != (c == d))
+            || (b <= c) != a == (c >= d))) {
+      return;
     }
 
-    public void checkBooleanStatements() {
-        boolean a = true;
-        int b = 42;
-        int c = 42;
-        int d = 32;
-        if ((b == c) == a
-                && (
-                        ( // violation 'Unnecessary parentheses around expression'
-                            (b==c)==(d>=b)==a!=(c==d))
-                    || (b<=c)!=a==(c>=d))) {
-            return;
-        }
-
-        if (( // violation 'Unnecessary parentheses around expression'
-                a!=(b==c)
-                        && (a // violation 'Unnecessary parentheses around expression'
-                        && (b==c))) // violation 'Unnecessary parentheses around expression'
-                || (a // violation 'Unnecessary parentheses around expression'
-                || a!=(b<=c)) // ok
-                || (a==(b!=d==(c==b) && a!=(b<=c)))) { // violation 'parentheses around expression'
-                                                       // after '||'
-            return;
-        }
-
-        if (a==(b>=c && a==(c==d && d!=b)) // ok
-                && a==(c<=d)) { // ok
-            return;
-        }
-
-        if (a && a==(b<=c)==(a
-                && (b<=c))) { // violation 'Unnecessary parentheses around expression'
-            return;
-        }
-
-        if (a==(b==c) // ok
-                || a!=(b<=c)) { // ok
-            return;
-        }
-
-        if ((b==0) == (c==d) // ok
-                && (Integer.valueOf(d) instanceof Integer) == true) { // ok
-            return;
-        }
+    if (( // violation 'Unnecessary parentheses around expression'
+        a != (b == c)
+            && (a // violation 'Unnecessary parentheses around expression'
+                && (b == c))) // violation 'Unnecessary parentheses around expression'
+        || (a // violation 'Unnecessary parentheses around expression'
+            || a != (b <= c)) // ok
+        || (a
+            == (b != d == (c == b)
+                && a != (b <= c)))) { // violation 'parentheses around expression'
+      // after '||'
+      return;
     }
+
+    if (a == (b >= c && a == (c == d && d != b)) // ok
+        && a == (c <= d)) { // ok
+      return;
+    }
+
+    if (a
+        && a
+            == (b <= c)
+            == (a && (b <= c))) { // violation 'Unnecessary parentheses around expression'
+      return;
+    }
+
+    if (a == (b == c) // ok
+        || a != (b <= c)) { // ok
+      return;
+    }
+
+    if ((b == 0) == (c == d) // ok
+        && (Integer.valueOf(d) instanceof Integer) == true) { // ok
+      return;
+    }
+  }
 }
+

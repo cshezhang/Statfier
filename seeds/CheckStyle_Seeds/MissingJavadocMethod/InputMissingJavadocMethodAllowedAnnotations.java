@@ -17,40 +17,31 @@ package com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod;
  * allowedAnnotations = "Override, ThisIsOk, \t\n\t ThisIsOkToo"
  * scope = "private"
  */
-/**
- * Some javadoc.
- */
+/** Some javadoc. */
 public class InputMissingJavadocMethodAllowedAnnotations implements SomeInterface { // ok
 
-    @ThisIsOk
-    public void allowed1() {}
+  @ThisIsOk
+  public void allowed1() {}
 
-    @ThisIsOkToo
-    public void allowed2() {}
+  @ThisIsOkToo
+  public void allowed2() {}
 
-    @com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod.ThisIsOk
-    public void allowed3() {}
+  @com.puppycrawl.tools.checkstyle.checks.javadoc.missingjavadocmethod.ThisIsOk
+  public void allowed3() {}
 
-    @Override
-    public void method() {}
+  @Override
+  public void method() {}
 }
 
-/**
- * Documented.
- */
+/** Documented. */
 interface SomeInterface {
-    /**
-     * Documented.
-     */
-    void method();
+  /** Documented. */
+  void method();
 }
 
-/**
- * Some javadoc.
- */
+/** Some javadoc. */
 @interface ThisIsOk {}
 
-/**
- * Some javadoc.
- */
+/** Some javadoc. */
 @interface ThisIsOkToo {}
+

@@ -1,12 +1,7 @@
-
-
-
-
 import android.text.TextUtils;
 import codetoanalyze.java.annotation.FalseOnNull;
 import codetoanalyze.java.annotation.TrueOnNull;
 import com.google.common.base.Strings;
-
 import javax.annotation.Nullable;
 
 /** Testing functionality related to @TrueOnNull and @FalseOnNull methods */
@@ -278,3 +273,4 @@ public class TrueFalseOnNull {
     }
   }
 }
+

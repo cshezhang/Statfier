@@ -1,7 +1,6 @@
-
 public class Foo {
-    public class Inner {
-        public Inner() {}
-    }
+  public class Inner {
+    public Inner() {}
+  }
 }
-        
+

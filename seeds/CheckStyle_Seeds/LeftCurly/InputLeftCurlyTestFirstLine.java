@@ -13,11 +13,7 @@ tokens = (default)ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, \
 
 package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.List;
 
 class InputLeftCurlyTestFirstLine { // ok
-
 }
+

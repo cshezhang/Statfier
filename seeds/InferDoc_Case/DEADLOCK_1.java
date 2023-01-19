@@ -4,19 +4,19 @@ public class DEADLOCK_1 {
   Object lockB = new Object();
 
   public void lockAThenB() {
-    synchronized(lockA) {
-      synchronized(lockB) {
-       // do something with both resources
+    synchronized (lockA) {
+      synchronized (lockB) {
+        // do something with both resources
       }
     }
   }
 
   public void lockBThenA() {
-    synchronized(lockB) {
-      synchronized(lockA) {
-       // do something with both resources
+    synchronized (lockB) {
+      synchronized (lockA) {
+        // do something with both resources
       }
     }
   }
-
 }
+

@@ -1,8 +1,4 @@
-
-
 // _SHOULD_BE_SKIPPED_
-
-
 
 public class SkippedSourceFile {
 
@@ -10,3 +6,4 @@ public class SkippedSourceFile {
     return null;
   }
 }
+

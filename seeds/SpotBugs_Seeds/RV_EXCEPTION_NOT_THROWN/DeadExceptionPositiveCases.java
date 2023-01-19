@@ -18,12 +18,12 @@ package com.google.errorprone.bugpatterns;
 
 public class DeadExceptionPositiveCases {
   public void error() {
-    //BUG: Suggestion includes "throw new RuntimeException"
+    // BUG: Suggestion includes "throw new RuntimeException"
     new RuntimeException("Not thrown, and reference lost");
   }
 
   public void fixIsToDeleteTheFirstStatement() {
-    //BUG: Suggestion includes "remove this line"
+    // BUG: Suggestion includes "remove this line"
     new IllegalArgumentException("why is this here?");
     int i = 1;
     System.out.println("i = " + i);
@@ -31,13 +31,13 @@ public class DeadExceptionPositiveCases {
 
   public void firstStatementWithNoSurroundingBlock() {
     if (true)
-      //BUG: Suggestion includes "throw new InterruptedException"
+      // BUG: Suggestion includes "throw new InterruptedException"
       new InterruptedException("this should be thrown");
 
-    if (true)
-      return;
+    if (true) return;
     else
-      //BUG: Suggestion includes "throw new ArithmeticException"
+      // BUG: Suggestion includes "throw new ArithmeticException"
       new ArithmeticException("should also be thrown");
   }
 }
+

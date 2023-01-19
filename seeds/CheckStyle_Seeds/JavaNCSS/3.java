@@ -1,5 +1,3 @@
-
-
 public class Test1 {
   public void test() {
     System.out.println("Line 1");
@@ -23,4 +21,4 @@ class Test2 {
     System.out.println("Line 200"); // violation
   }
 }
-        
+

@@ -1,5 +1,6 @@
-
-public class Foo  {
-    public int hashCode(Object o1) { return false; }
+public class Foo {
+  public int hashCode(Object o1) {
+    return false;
+  }
 }
-        
+

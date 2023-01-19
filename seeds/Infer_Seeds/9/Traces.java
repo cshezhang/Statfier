@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 class Traces {
@@ -25,3 +21,4 @@ class Traces {
     InferTaint.inferSensitiveSink(o);
   }
 }
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    public void finalize() {}
+  public void finalize() {}
 }
-        
+

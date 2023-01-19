@@ -1,6 +1,5 @@
 package checks;
 
-
 import java.util.function.Consumer;
 
 class StaticFieldUpateCheck {
@@ -10,15 +9,20 @@ class StaticFieldUpateCheck {
   private static int[] staticArray;
 
   public void nonCompliantAssignments() {
-    staticValue = value + 1; // Noncompliant [[sc=5;ec=16]] {{Make the enclosing method "static" or remove this set.}}
+    staticValue =
+        value
+            + 1; // Noncompliant [[sc=5;ec=16]] {{Make the enclosing method "static" or remove this
+                 // set.}}
     staticValue += value; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
     staticValue++; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
     ++staticValue; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
-    StaticFieldUpateCheck.staticValue++; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
+    StaticFieldUpateCheck
+        .staticValue++; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
     this.staticValue--; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
     StaticFieldUpateCheck myA = new StaticFieldUpateCheck();
     myA.staticValue = 1; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
-    myA.staticArray[0] = 1; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
+    myA.staticArray[0] =
+        1; // Noncompliant {{Make the enclosing method "static" or remove this set.}}
     myA.toString();
 
     class InnerClass {
@@ -64,14 +68,15 @@ class StaticFieldUpateCheckB {
   private static Comparable<Object> myComparator;
 
   static {
-    myComparator = new Comparable<Object>() { // Compliant
+    myComparator =
+        new Comparable<Object>() { // Compliant
 
-      @Override
-      public int compareTo(Object o) {
-        value = 0; // Compliant
-        return 0;
-      }
-    };
+          @Override
+          public int compareTo(Object o) {
+            value = 0; // Compliant
+            return 0;
+          }
+        };
   }
 
   private synchronized Comparable<Object> foo1() {
@@ -86,21 +91,24 @@ class StaticFieldUpateCheckB {
 
   private static synchronized Consumer<Object> foo2() {
     return s -> {
-      value = 0; // FN: we are not guaranteed to be inside a static method; the rule check if any parent is synchronized.
+      value =
+          0; // FN: we are not guaranteed to be inside a static method; the rule check if any parent
+             // is synchronized.
     };
   }
 
   private void foo() {
     synchronized (new Object()) {
-      Comparable<Object> cmp = new Comparable<Object>() {
+      Comparable<Object> cmp =
+          new Comparable<Object>() {
 
-        @Override
-        public int compareTo(Object o) {
-          value = 0; // Compliant
-          return 0;
-        }
-      };
+            @Override
+            public int compareTo(Object o) {
+              value = 0; // Compliant
+              return 0;
+            }
+          };
     }
-
   }
 }
+

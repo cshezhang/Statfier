@@ -1,8 +1,4 @@
-
-public abstract class ShouldBeAbstract
-{
-    public void couldBeAbstract()
-    {
-    }
+public abstract class ShouldBeAbstract {
+  public void couldBeAbstract() {}
 }
-        
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    public boolean equals(Object other) {}
+  public boolean equals(Object other) {}
 }
-        
+

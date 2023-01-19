@@ -1,5 +1,3 @@
-
-
 public class Column extends Component {
 
   static native Builder acquire();
@@ -41,3 +39,4 @@ public class Column extends Component {
     }
   }
 }
+

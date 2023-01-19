@@ -1,5 +1,5 @@
-
 public enum FooTest {
-    ONE, TWO;
+  ONE,
+  TWO;
 }
-        
+

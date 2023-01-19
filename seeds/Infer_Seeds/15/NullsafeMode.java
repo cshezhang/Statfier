@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.Nullsafe;
 import codetoanalyze.java.annotation.NullsafeStrict;
 import java.util.concurrent.TimeUnit;
@@ -221,3 +217,4 @@ public class NullsafeMode {
     }
   }
 }
+

@@ -1,18 +1,17 @@
-
 class Foo {
-    private Bar bar;
+  private Bar bar;
 
-    public Foo() {
-        someMethod(() -> {
-            bar = new Bar();
+  public Foo() {
+    someMethod(
+        () -> {
+          bar = new Bar();
         });
-    }
+  }
 
-    private void someMethod(Runnable action) {
-        action.run();
-    }
+  private void someMethod(Runnable action) {
+    action.run();
+  }
 
-    static class Bar {
-    }
+  static class Bar {}
 }
-        
+

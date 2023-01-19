@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -188,3 +184,4 @@ interface SomeInterface {
 }
 
 abstract class SomeClass implements SomeInterface {}
+

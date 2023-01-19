@@ -42,3 +42,4 @@ public class InvalidPatternSyntaxNegativeCases {
     "".split(x, 0);
   }
 }
+

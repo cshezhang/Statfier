@@ -1,4 +1,3 @@
-
 import com.special.ResultSet;
 
 public class Foo {
@@ -8,4 +7,4 @@ public class Foo {
     result = rs.getInt("baz");
   }
 }
-        
+

@@ -8,47 +8,46 @@ import java.io.Serializable;
 
 public class Bug1994945 implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    transient Object x;
+  transient Object x;
 
-    Object y;
+  Object y;
 
-    Bug1994945(Object x, Object y) {
-        this.x = x;
-        this.y = y;
+  Bug1994945(Object x, Object y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  int f() {
+    return x.hashCode() + y.hashCode();
+  }
+
+  static class InnerClass extends Bug1994945 implements Externalizable {
+
+    public InnerClass() {
+      super(null, null);
     }
 
-    int f() {
-        return x.hashCode() + y.hashCode();
+    InnerClass(Object x, Object y, Object z) {
+      super(x, y);
+      this.z = z;
     }
 
-    static class InnerClass extends Bug1994945 implements Externalizable {
+    transient Object z;
 
-        public InnerClass() {
-            super(null, null);
-        }
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+      x = in.readInt();
+      y = in.readInt();
+      z = in.readInt();
+    }
 
-        InnerClass(Object x, Object y, Object z) {
-            super(x, y);
-            this.z = z;
-        }
-
-        transient Object z;
-
-        @Override
-        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-            x = in.readInt();
-            y = in.readInt();
-            z = in.readInt();
-
-        }
-
-        @Override
-        public void writeExternal(ObjectOutput out) throws IOException {
-            // TODO Auto-generated method stub
-
-        }
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+      // TODO Auto-generated method stub
 
     }
+  }
 }
+

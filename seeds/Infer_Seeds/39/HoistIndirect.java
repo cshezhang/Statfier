@@ -1,5 +1,3 @@
-
-
 class HoistIndirect {
 
   public static int svar = 0;
@@ -254,3 +252,4 @@ class HoistIndirect {
     return d;
   }
 }
+

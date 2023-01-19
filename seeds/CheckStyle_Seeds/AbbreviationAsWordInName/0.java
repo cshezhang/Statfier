@@ -1,5 +1,3 @@
-
-
 public class MyClass extends SuperClass { // OK, camel case
   int CURRENT_COUNTER; // violation, at most 4 consecutive capital letters allowed
   static int GLOBAL_COUNTER; // OK, static is ignored
@@ -17,6 +15,5 @@ public class MyClass extends SuperClass { // OK, camel case
   static void incrementGLOBAL() { // violation, static method is not ignored
     GLOBAL_COUNTER++; // OK, only definitions are checked
   }
-
 }
-        
+

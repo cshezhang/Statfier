@@ -1,6 +1,3 @@
-
-
-
 class MathTest {
 
   void min_constant(int arr[]) {
@@ -31,3 +28,4 @@ class MathTest {
     linear(Math.max(1, x));
   }
 }
+

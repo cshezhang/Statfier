@@ -1,6 +1,3 @@
-
-
-
 public class ArrayMember {
   public int[] buf;
 
@@ -20,3 +17,4 @@ public class ArrayMember {
     }
   }
 }
+

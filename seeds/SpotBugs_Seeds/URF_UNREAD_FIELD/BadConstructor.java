@@ -1,10 +1,11 @@
 import edu.umd.cs.findbugs.annotations.ExpectWarning;
 
 public class BadConstructor {
-    int x;
+  int x;
 
-    @ExpectWarning("Nm")
-    public void BadConstructor() {
-        x = 17;
-    }
+  @ExpectWarning("Nm")
+  public void BadConstructor() {
+    x = 17;
+  }
 }
+

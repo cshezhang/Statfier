@@ -1,5 +1,4 @@
-
 public class FooClass {
-    record BarRecord() {}
+  record BarRecord() {}
 }
-        
+

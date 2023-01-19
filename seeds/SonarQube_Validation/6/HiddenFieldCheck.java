@@ -6,7 +6,10 @@ public class HiddenFieldCheck extends MyBaseClass {
   public int bar;
 
   {
-    int foo = this.foo; // Noncompliant [[sc=9;ec=12]] {{Rename "foo" which hides the field declared at line 5.}}
+    int foo =
+        this
+            .foo; // Noncompliant [[sc=9;ec=12]] {{Rename "foo" which hides the field declared at
+                  // line 5.}}
     int ok = 0; // Compliant
     System.out.println(foo + ok);
   }
@@ -37,19 +40,18 @@ public class HiddenFieldCheck extends MyBaseClass {
 
   @Override
   public void method2() {
-    MyOtherBaseClass instance = new MyOtherBaseClass() {
+    MyOtherBaseClass instance =
+        new MyOtherBaseClass() {
 
-      @Override
-      public void foo() {
-        int bar = 0; // Noncompliant {{Rename "bar" which hides the field declared at line 6.}}
-        int otherBase1 = 0; // Compliant - limitation
-        System.out.println(bar + otherBase1);
-      }
-
-    };
+          @Override
+          public void foo() {
+            int bar = 0; // Noncompliant {{Rename "bar" which hides the field declared at line 6.}}
+            int otherBase1 = 0; // Compliant - limitation
+            System.out.println(bar + otherBase1);
+          }
+        };
 
     instance.foo();
-
   }
 
   public static class MyInnerClass {
@@ -69,9 +71,7 @@ public class HiddenFieldCheck extends MyBaseClass {
         int myInnerClass1 = 0; // Noncompliant
         System.out.println(foo + myInnerClass1);
       }
-
     }
-
   }
 
   public @interface AnnotationType {
@@ -93,7 +93,6 @@ class MyBaseClass {
     int base2 = 0; // Noncompliant
     System.out.println(base1 + base2);
   }
-
 }
 
 abstract class MyOtherBaseClass {
@@ -101,11 +100,11 @@ abstract class MyOtherBaseClass {
   public int otherBase1;
 
   public abstract void foo();
-
 }
 
 enum MyEnumHiddenField {
-  A, B;
+  A,
+  B;
 
   public void foo() {
     int a = 0;
@@ -124,9 +123,7 @@ final class DataUtils {
     void swap(int foo, int j); // Compliant - parameter
 
     boolean isLess(int i, int j);
-
   }
-
 }
 
 class FooHiddenField {
@@ -134,9 +131,7 @@ class FooHiddenField {
   int i;
 
   {
-    for (i = 0; i < 42; i++) {
-    }
-
+    for (i = 0; i < 42; i++) {}
   }
 
   static {
@@ -150,5 +145,7 @@ class FooHiddenField {
 
 class FieldWithLambda {
   Object p;
-  java.util.function.Consumer<String> f = p -> { }; // Noncompliant {{Rename "p" which hides the field declared at line 152.}}
+  java.util.function.Consumer<String> f =
+      p -> {}; // Noncompliant {{Rename "p" which hides the field declared at line 152.}}
 }
+

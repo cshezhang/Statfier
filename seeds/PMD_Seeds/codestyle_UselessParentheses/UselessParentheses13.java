@@ -1,7 +1,6 @@
-
 public class Test {
-    public void foo() {
-        xCoord = e.getX() - (MainFrame.TILESIZE >> 1);
-    }
+  public void foo() {
+    xCoord = e.getX() - (MainFrame.TILESIZE >> 1);
+  }
 }
-        
+

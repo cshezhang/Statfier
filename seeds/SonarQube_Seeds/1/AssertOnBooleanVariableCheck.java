@@ -5,8 +5,14 @@ import java.util.List;
 
 public class AssertOnBooleanVariableCheck {
   void foo(AssertOnBooleanVariableCheck a, boolean b, List<Object> myList) {
-    assert myList.remove(myList.get(0)); // Noncompliant [[sc=19;ec=25]] {{Move this "assert" side effect to another statement.}}
-    assert myList.remove(myList.remove(1)); // Noncompliant [[sc=19;ec=25]] {{Move this "assert" side effect to another statement.}}
+    assert myList.remove(
+        myList.get(
+            0)); // Noncompliant [[sc=19;ec=25]] {{Move this "assert" side effect to another
+                 // statement.}}
+    assert myList.remove(
+        myList.remove(
+            1)); // Noncompliant [[sc=19;ec=25]] {{Move this "assert" side effect to another
+                 // statement.}}
 
     assert myList.add(new Object()); // Noncompliant
     assert myList.retainAll(Collections.singleton(new Object())); // Noncompliant
@@ -19,12 +25,13 @@ public class AssertOnBooleanVariableCheck {
 
     assert bar() == 0; // Compliant
     assert new AssertOnBooleanVariableCheck() { // Compliant
-      @Override
-      boolean deleteStuff() {
-        // do nothing
-        return false;
-      }
-    }.bar() != 14;
+          @Override
+          boolean deleteStuff() {
+            // do nothing
+            return false;
+          }
+        }.bar()
+        != 14;
 
     boolean removed = myList.remove(myList.get(0));
     assert removed;
@@ -38,9 +45,24 @@ public class AssertOnBooleanVariableCheck {
     return 1;
   }
 
-  boolean setValue() { return false; }
-  boolean doNothing() { return false; }
-  boolean deleteStuff() { return false; }
-  boolean stuffToRemove() { return false; }
-  boolean updateIfValid(boolean b) { return false; }
+  boolean setValue() {
+    return false;
+  }
+
+  boolean doNothing() {
+    return false;
+  }
+
+  boolean deleteStuff() {
+    return false;
+  }
+
+  boolean stuffToRemove() {
+    return false;
+  }
+
+  boolean updateIfValid(boolean b) {
+    return false;
+  }
 }
+

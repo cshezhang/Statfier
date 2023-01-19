@@ -1,5 +1,4 @@
+class Test {
+  public record NestedRecord(int x, int y) {}
+}
 
-            class Test {
-                public record NestedRecord(int x, int y) { }
-            }
-            

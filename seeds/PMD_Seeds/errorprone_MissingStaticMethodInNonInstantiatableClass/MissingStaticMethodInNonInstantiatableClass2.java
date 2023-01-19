@@ -1,6 +1,6 @@
-
 public class Foo {
-    private Foo() {}
-    public void bar() {}
+  private Foo() {}
+
+  public void bar() {}
 }
-        
+

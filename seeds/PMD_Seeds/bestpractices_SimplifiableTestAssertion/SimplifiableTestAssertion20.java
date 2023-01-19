@@ -1,8 +1,7 @@
+public class Foo {
+  void testBar() {
+    boolean bar;
+    assertFalse(!bar);
+  }
+}
 
-            public class Foo {
-                void testBar() {
-                    boolean bar;
-                    assertFalse(!bar);
-                }
-            }
-            

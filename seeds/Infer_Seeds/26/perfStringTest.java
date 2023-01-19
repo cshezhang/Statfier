@@ -1,6 +1,3 @@
-
-
-
 class StringTest {
 
   String mId;
@@ -121,3 +118,4 @@ class StringTest {
     for (int i = 0; i < s.length(); i++) {}
   }
 }
+

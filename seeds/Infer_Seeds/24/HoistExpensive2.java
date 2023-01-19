@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -65,3 +64,4 @@ class HoistExpensive {
     return leakedObjectSB.toString();
   }
 }
+

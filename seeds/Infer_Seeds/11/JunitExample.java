@@ -1,4 +1,3 @@
-
 import junit.framework.TestCase;
 
 public class JunitExample extends TestCase {
@@ -15,3 +14,4 @@ public class JunitExample extends TestCase {
     mField.toString();
   }
 }
+

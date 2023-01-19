@@ -1,4 +1,3 @@
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -73,3 +72,4 @@ class CollectionsTest {
     for (int i = 0; i < java.util.Collections.EMPTY_LIST.size(); i++) {}
   }
 }
+

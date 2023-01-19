@@ -1,5 +1,3 @@
-
-
 class MainMethod {
 
   static Object monitorA, monitorB;
@@ -24,3 +22,4 @@ class MainMethod {
     }
   }
 }
+

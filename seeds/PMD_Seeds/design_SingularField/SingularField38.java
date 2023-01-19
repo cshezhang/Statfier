@@ -1,12 +1,11 @@
-
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class Foo {
-    private String bar;
+  private String bar;
 
-    public void set(String s) {
-        bar = s;
-    }
+  public void set(String s) {
+    bar = s;
+  }
 }
-        
+

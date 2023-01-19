@@ -1,5 +1,3 @@
-
-
 class MyClass {
 
   void foo() {
@@ -9,7 +7,8 @@ class MyClass {
 
     a = 5; // OK
     b = 5; // OK
-    a = 5; b = 5; // OK
+    a = 5;
+    b = 5; // OK
 
     double myDouble;
     double[] doubleArray = new double[] {myDouble = 4.5, 15.5}; // violation
@@ -40,4 +39,4 @@ class MyClass {
     return val = true; // violation
   }
 }
-        
+

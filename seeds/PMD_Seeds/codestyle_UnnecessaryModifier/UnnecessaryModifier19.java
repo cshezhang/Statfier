@@ -1,7 +1,6 @@
-
 interface Foo {
-    interface Bar {
-        int X = 0;
-    }
+  interface Bar {
+    int X = 0;
+  }
 }
-        
+

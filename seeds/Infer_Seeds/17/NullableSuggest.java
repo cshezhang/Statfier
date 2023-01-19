@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.SomeExternalClass;
 import javax.annotation.Nullable;
 
@@ -130,3 +126,4 @@ public class NullableSuggest {
     return false;
   }
 }
+

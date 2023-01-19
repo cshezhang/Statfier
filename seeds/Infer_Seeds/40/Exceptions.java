@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 class Exceptions {
@@ -123,3 +119,4 @@ class Exceptions {
     }
   }
 }
+

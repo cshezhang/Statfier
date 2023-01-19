@@ -1,6 +1,4 @@
-
 public class Foo {
-    @Deprecated
-    private String bar;
+  @Deprecated private String bar;
 }
-        
+

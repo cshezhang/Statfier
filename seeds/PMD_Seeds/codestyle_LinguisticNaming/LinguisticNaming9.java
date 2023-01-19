@@ -1,15 +1,14 @@
-
 public class MethodTypeAndNameIsInconsistentWithPrefixAs {
-    void aspect() {
-        // do something
-    }
+  void aspect() {
+    // do something
+  }
 
-    void asDataType() { // violation
-        // do something
-    }
+  void asDataType() { // violation
+    // do something
+  }
 
-    int asNumber() {
-        return 1;
-    }
+  int asNumber() {
+    return 1;
+  }
 }
-        
+

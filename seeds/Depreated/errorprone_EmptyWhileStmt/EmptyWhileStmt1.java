@@ -1,8 +1,7 @@
-
 public class Foo {
-    public void bar() {
-        while (true)
-            ;
-    }
+  public void bar() {
+    while (true)
+      ;
+  }
 }
-        
+

@@ -4,15 +4,15 @@ import java.util.HashSet;
 
 public class DefaultEquals {
 
-    @Override
-    public boolean equals(Object o) {
-        return this == o;
-    }
+  @Override
+  public boolean equals(Object o) {
+    return this == o;
+  }
 
-    public static HashSet<DefaultEquals> set = new HashSet<DefaultEquals>();
+  public static HashSet<DefaultEquals> set = new HashSet<DefaultEquals>();
 
-    public static boolean foo(DefaultEquals bar) {
-        return set.add(bar);
-    }
-
+  public static boolean foo(DefaultEquals bar) {
+    return set.add(bar);
+  }
 }
+

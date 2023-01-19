@@ -21,8 +21,9 @@ package com.google.errorprone.bugpatterns;
  */
 public class CovariantEqualsPositiveCase1 {
 
-  //BUG: Suggestion includes "Did you mean '@Override'"
+  // BUG: Suggestion includes "Did you mean '@Override'"
   public boolean equals(CovariantEqualsPositiveCase1 other) {
     return false;
   }
 }
+

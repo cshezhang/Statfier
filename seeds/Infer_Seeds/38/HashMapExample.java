@@ -1,7 +1,3 @@
-
-
-
-
 import java.util.HashMap;
 
 public class HashMapExample {
@@ -103,3 +99,4 @@ public class HashMapExample {
     }
   }
 }
+

@@ -1,11 +1,6 @@
-
-public class NotAbstract
-{
-    public abstract class ShouldBeAbstract
-    {
-        public void couldBeAbstract()
-        {
-        }
-    }
+public class NotAbstract {
+  public abstract class ShouldBeAbstract {
+    public void couldBeAbstract() {}
+  }
 }
-        
+

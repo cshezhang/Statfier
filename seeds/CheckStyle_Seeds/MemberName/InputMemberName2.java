@@ -11,15 +11,15 @@ applyToPrivate = (default)true
 
 package com.puppycrawl.tools.checkstyle.checks.naming.membername;
 
-public class InputMemberName2
-{
-    public int mPublic; // violation
-    protected int mProtected; // violation
-    int mPackage; // violation
-    private int mPrivate; // violation
+public class InputMemberName2 {
+  public int mPublic; // violation
+  protected int mProtected; // violation
+  int mPackage; // violation
+  private int mPrivate; // violation
 
-    public int _public;
-    protected int _protected;
-    int _package;
-    private int _private;
+  public int _public;
+  protected int _protected;
+  int _package;
+  private int _private;
 }
+

@@ -24,16 +24,19 @@ public class EmptyIfStatementPositiveCases {
 
   public static void positiveCase1() {
     int i = 10;
-    //BUG: Suggestion includes "if (i == 10) {"
-    if (i == 10); {
+    // BUG: Suggestion includes "if (i == 10) {"
+    if (i == 10)
+      ;
+    {
       i++;
     }
   }
 
   public static void positiveCase2() {
     int i = 10;
-    //BUG: Suggestion includes "if (i == 10)"
-    if (i == 10);
+    // BUG: Suggestion includes "if (i == 10)"
+    if (i == 10)
+      ;
     i++;
     System.out.println("foo");
   }
@@ -41,7 +44,7 @@ public class EmptyIfStatementPositiveCases {
   public static void positiveCase3() {
     int i = 10;
     if (i == 10)
-      //BUG: Suggestion includes "remove this line"
+      // BUG: Suggestion includes "remove this line"
       ;
     i++;
     System.out.println("foo");
@@ -49,17 +52,19 @@ public class EmptyIfStatementPositiveCases {
 
   public static void positiveCase4() {
     int i = 10;
-    //BUG: Suggestion includes "remove this line"
-    if (i == 10)            ;
+    // BUG: Suggestion includes "remove this line"
+    if (i == 10)
+      ;
   }
 
   public static void positiveCase5() {
     int i = 10;
     if (i == 10)
-      //BUG: Suggestion includes "remove this line"
+      // BUG: Suggestion includes "remove this line"
       ;
     {
       System.out.println("foo");
     }
   }
 }
+

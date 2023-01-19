@@ -1,5 +1,4 @@
-
 public class Foo {
-    String pi = "3639";
+  String pi = "3639";
 }
-        
+

@@ -1,7 +1,3 @@
-
-
-
-
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -89,3 +85,4 @@ class Service1 implements GeneratedServiceInterface {
     Runtime.getRuntime().exec(s);
   }
 }
+

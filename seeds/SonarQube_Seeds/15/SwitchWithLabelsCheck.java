@@ -5,19 +5,20 @@ class Switch {
     switch (str) {
       case "NEW":
       case "ABC":
-      case "NEW_WITH_AT_LEAST_ONE_WORD": {
-        newSwitch: // Noncompliant
-        switch (ch) {
-          // Empty word
-          case ',':
-            for (int i = 0; i < 10; ++i) {
-              if (i > 5) {
-                break newSwitch;
+      case "NEW_WITH_AT_LEAST_ONE_WORD":
+        {
+          newSwitch: // Noncompliant
+          switch (ch) {
+              // Empty word
+            case ',':
+              for (int i = 0; i < 10; ++i) {
+                if (i > 5) {
+                  break newSwitch;
+                }
               }
-            }
+          }
+          break;
         }
-        break;
-      }
       case "AAAA":
         System.out.println("AAA");
         break;
@@ -26,3 +27,4 @@ class Switch {
     }
   }
 }
+

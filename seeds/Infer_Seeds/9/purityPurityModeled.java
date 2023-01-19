@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class PurityModeled {
@@ -29,3 +28,4 @@ class PurityModeled {
     cloned.add(""); // no change the list
   }
 }
+

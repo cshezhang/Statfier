@@ -1,16 +1,15 @@
-
 public class Foo {
-    volatile Object baz;
+  volatile Object baz;
 
-    Object bar() {
-        if (baz == null) { // baz may be non-null yet not fully created
-            synchronized (this) {
-                if (baz == null) {
-                    baz = new Object();
-                }
-            }
+  Object bar() {
+    if (baz == null) { // baz may be non-null yet not fully created
+      synchronized (this) {
+        if (baz == null) {
+          baz = new Object();
         }
-        return baz;
+      }
     }
+    return baz;
+  }
 }
-        
+

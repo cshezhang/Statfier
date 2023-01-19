@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 import javax.inject.*;
 
@@ -68,3 +67,4 @@ class HoistModeled {
     }
   }
 }
+

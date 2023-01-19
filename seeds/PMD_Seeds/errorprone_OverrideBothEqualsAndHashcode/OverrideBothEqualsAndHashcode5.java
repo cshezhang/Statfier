@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public boolean equals(Object o);
+  public boolean equals(Object o);
 }
-        
+

@@ -73,3 +73,4 @@ public class ButterKnife {
     String notInitializedNormalIsBAD;
   }
 }
+

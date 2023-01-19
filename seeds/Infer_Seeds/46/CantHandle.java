@@ -1,6 +1,3 @@
-
-
-
 class CantHandle {
 
   // Let's collect examples that we know we can't handle
@@ -23,5 +20,5 @@ class CantHandle {
       i++;
     }
   }
-
 }
+

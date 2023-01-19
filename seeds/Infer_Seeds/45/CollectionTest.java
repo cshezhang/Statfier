@@ -1,5 +1,3 @@
-
-
 import android.util.SparseArray;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
@@ -108,3 +106,4 @@ public class CollectionTest {
     keyMap.values().contains(null);
   }
 }
+

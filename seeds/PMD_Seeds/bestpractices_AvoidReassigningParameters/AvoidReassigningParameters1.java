@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo(int bar) {
-        bar = 2;
-    }
+  void foo(int bar) {
+    bar = 2;
+  }
 }
-        
+

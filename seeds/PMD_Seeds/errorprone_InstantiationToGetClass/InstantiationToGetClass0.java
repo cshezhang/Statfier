@@ -1,5 +1,4 @@
-
 public class Foo {
-    Class clazz = new String().getClass();
+  Class clazz = new String().getClass();
 }
-        
+

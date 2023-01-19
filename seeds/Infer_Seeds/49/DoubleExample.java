@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 public class DoubleExample {
@@ -17,3 +13,4 @@ public class DoubleExample {
     return x + 1.0;
   }
 }
+

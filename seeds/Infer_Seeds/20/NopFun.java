@@ -1,6 +1,3 @@
-
-
-
 // Command: infer -g --biabduction-only
 class NopFun {
   static int q;
@@ -9,7 +6,8 @@ class NopFun {
     if (q == 0) {
       q = 1;
     } else if (q == 1) {
-      while (true) ;
+      while (true)
+        ;
     }
   }
 
@@ -27,3 +25,4 @@ class NopFun {
     f(); // should warn of PRECONDITION_NOT_MET here
   }
 }
+

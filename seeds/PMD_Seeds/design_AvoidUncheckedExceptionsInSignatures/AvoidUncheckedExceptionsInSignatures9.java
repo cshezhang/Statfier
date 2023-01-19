@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public void foo() throws IllegalArgumentException;
+  public void foo() throws IllegalArgumentException;
 }
-        
+

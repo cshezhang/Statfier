@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.IgnoreAllocations;
 import codetoanalyze.java.annotation.NoAllocation;
 
@@ -59,3 +55,4 @@ public class NoAllocationExample {
     acceptableAllocation();
   }
 }
+

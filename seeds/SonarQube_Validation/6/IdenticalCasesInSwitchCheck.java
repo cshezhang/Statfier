@@ -1,21 +1,23 @@
 package checks;
 
 class IdenticalCasesInSwitchCheck {
-  void foo(){
+  void foo() {
     switch (1) {
       case 1:
         System.out.println("plop");
         System.out.println("plop");
         break;
       case 2:
-        System.out.println("bar"); //Compliant
+        System.out.println("bar"); // Compliant
         break;
-      case 3: // Noncompliant [[sc=7;el=+4;ec=15;secondary=-7]] {{This case's code block is the same as the block for the case on line 6.}}
+      case 3: // Noncompliant [[sc=7;el=+4;ec=15;secondary=-7]] {{This case's code block is the same
+              // as the block for the case on line 6.}}
       case 4:
         System.out.println("plop");
         System.out.println("plop");
         break;
-      case 5: // Noncompliant [[sc=7;el=+3;ec=15;secondary=-12]] {{This case's code block is the same as the block for the case on line 6.}}
+      case 5: // Noncompliant [[sc=7;el=+3;ec=15;secondary=-12]] {{This case's code block is the
+              // same as the block for the case on line 6.}}
         System.out.println("plop");
         System.out.println("plop");
         break;
@@ -146,10 +148,12 @@ class IdenticalCasesInSwitchCheck {
       // skip empty blocks
     } else if (true) {
       System.out.println("bar");
-    } else if (true) { // Noncompliant [[sc=22;el=+3;ec=6;secondary=-9]] {{This branch's code block is the same as the block for the branch on line 140.}}
+    } else if (true) { // Noncompliant [[sc=22;el=+3;ec=6;secondary=-9]] {{This branch's code block
+                       // is the same as the block for the branch on line 140.}}
       System.out.println("foo");
       System.out.println("foo");
-    } else { // Noncompliant [[sc=12;el=+3;ec=6;secondary=-12]] {{This branch's code block is the same as the block for the branch on line 140.}}
+    } else { // Noncompliant [[sc=12;el=+3;ec=6;secondary=-12]] {{This branch's code block is the
+             // same as the block for the branch on line 140.}}
       System.out.println("foo");
       System.out.println("foo");
     }
@@ -170,35 +174,27 @@ class IdenticalCasesInSwitchCheck {
     if (true) {
       f();
       f();
-    }
-    else if (true) { // Noncompliant [[secondary=-4]]
+    } else if (true) { // Noncompliant [[secondary=-4]]
       f();
       f();
-    }
-    else if (true) {
+    } else if (true) {
       g();
       g();
-    }
-    else if (true) {  // Noncompliant [[secondary=-4]]
+    } else if (true) { // Noncompliant [[secondary=-4]]
       g();
       g();
-    }
-    else ;
+    } else
+      ;
   }
 
-  private void g() {
-  }
+  private void g() {}
 
-  private void nonTrivial() {
-  }
+  private void nonTrivial() {}
 
-  private void trivial() {
-  }
+  private void trivial() {}
 
-  private void f() {
-  }
+  private void f() {}
 
-  private void f(int i) {
-  }
-
+  private void f(int i) {}
 }
+

@@ -1,8 +1,8 @@
-
 public class Foo {
-    private int x;
-    void bar() {
-        x = 4;
-    }
+  private int x;
+
+  void bar() {
+    x = 4;
+  }
 }
-        
+

@@ -10,7 +10,7 @@ class NestedTryCatchCheck {
     }
 
     try {
-      try {             // Compliant
+      try { // Compliant
       } finally {
       }
     } catch (Exception e) {
@@ -18,37 +18,37 @@ class NestedTryCatchCheck {
 
     try {
     } catch (Exception e) {
-      try {             // Compliant
+      try { // Compliant
       } catch (Exception e1) {
       }
     }
 
     try {
     } catch (Exception e) {
-      try {             // Compliant
+      try { // Compliant
       } finally {
       }
     }
 
     try {
     } catch (Exception e) {
-      try {             // Compliant
+      try { // Compliant
       } catch (Exception e1) {
       }
     } finally {
-      try {             // Compliant
+      try { // Compliant
       } catch (Exception e) {
       }
     }
 
     try {
-      try {             // Noncompliant {{Extract this nested try block into a separate method.}}
+      try { // Noncompliant {{Extract this nested try block into a separate method.}}
       } catch (Exception e) {
       }
 
-      try {             // Noncompliant
+      try { // Noncompliant
       } catch (Exception e) {
-        try {           // Noncompliant [[sc=9;ec=12;secondary=44]]
+        try { // Noncompliant [[sc=9;ec=12;secondary=44]]
 
         } catch (Exception e1) {
         }
@@ -56,31 +56,33 @@ class NestedTryCatchCheck {
     } catch (Exception e) {
     }
 
-    try (Resource r = new Resource()) {    // Compliant
+    try (Resource r = new Resource()) { // Compliant
       try (Resource r2 = new Resource()) { // Compliant
-        try {                              // Compliant
+        try { // Compliant
         } finally {
         }
       }
     }
 
     try {
-      try {                                // Compliant
+      try { // Compliant
       } catch (Exception e) {
       }
     } finally {
     }
 
     try {
-      try{ // Noncompliant
-        try (Resource r = new Resource()){
-        }
-      }catch (Exception e){}
-    } catch (Exception e) {}
+      try { // Noncompliant
+        try (Resource r = new Resource()) {}
+      } catch (Exception e) {
+      }
+    } catch (Exception e) {
+    }
   }
 
   private static class Resource implements Closeable {
-    @Override public void close() throws IOException { }
+    @Override
+    public void close() throws IOException {}
   }
 }
 
@@ -135,38 +137,45 @@ class AnonymousClass {
     }
   }
 
-  void bar() { }
+  void bar() {}
 }
 
 abstract class Lambda {
 
   String foo(java.util.Map<String, String> myMap, String key) throws MyException {
     try {
-      return myMap.computeIfAbsent(key, k -> {
-        try { // Compliant - within body of lambda
-          return getValue(key);
-        } catch (Exception e) {
-          throw new MyRuntimeException();
-        }
-      });
+      return myMap.computeIfAbsent(
+          key,
+          k -> {
+            try { // Compliant - within body of lambda
+              return getValue(key);
+            } catch (Exception e) {
+              throw new MyRuntimeException();
+            }
+          });
     } catch (MyRuntimeException e) {
       throw new MyException();
     }
   }
 
   String bar(java.util.Map<String, String> myMap, String key) {
-    return myMap.computeIfAbsent(key, k -> {
-      try {
-        try { // Noncompliant {{Extract this nested try block into a separate method.}}
-        } catch (Exception e) {
-        }
-      } catch (Exception e) {
-      }
-      return k;
-    });
+    return myMap.computeIfAbsent(
+        key,
+        k -> {
+          try {
+            try { // Noncompliant {{Extract this nested try block into a separate method.}}
+            } catch (Exception e) {
+            }
+          } catch (Exception e) {
+          }
+          return k;
+        });
   }
 
   abstract String getValue(String s) throws Exception;
-  private static class MyRuntimeException extends RuntimeException { }
-  private static class MyException extends Exception { }
+
+  private static class MyRuntimeException extends RuntimeException {}
+
+  private static class MyException extends Exception {}
 }
+

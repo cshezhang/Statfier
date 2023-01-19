@@ -13,112 +13,95 @@ tokens = (default)ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, \
 
 package com.puppycrawl.tools.checkstyle.checks.blocks.leftcurly;
 
-class InputLeftCurlyTestMissingBraces
-{ // violation ''{' at column 1 should be on the previous line'
-    /** @return helper func **/
-    boolean condition()
-    { // violation ''{' at column 5 should be on the previous line'
-        return false;
+class InputLeftCurlyTestMissingBraces { // violation ''{' at column 1 should be on the previous
+                                        // line'
+  /**
+   * @return helper func *
+   */
+  boolean condition() { // violation ''{' at column 5 should be on the previous line'
+    return false;
+  }
+
+  /** Test do/while loops * */
+  void testDoWhile() { // violation ''{' at column 5 should be on the previous line'
+    // Valid
+    do {
+      testDoWhile();
+    } while (condition());
+
+    // Invalid
+    do testDoWhile();
+    while (condition());
+  }
+
+  /** Test while loops * */
+  void testWhile() { // violation ''{' at column 5 should be on the previous line'
+    // Valid
+    while (condition()) {
+      testWhile();
     }
 
-    /** Test do/while loops **/
-    void testDoWhile()
-    { // violation ''{' at column 5 should be on the previous line'
-        // Valid
-        do {
-            testDoWhile();
-        }
-        while (condition());
+    // Invalid
+    while (condition())
+      ;
+    while (condition()) testWhile();
+    while (condition()) if (condition()) testWhile();
+  }
 
-        // Invalid
-        do testDoWhile(); while (condition());
+  /** Test for loops * */
+  void testFor() { // violation ''{' at column 5 should be on the previous line'
+    // Valid
+    for (int i = 1; i < 5; i++) {
+      testFor();
     }
 
-    /** Test while loops **/
-    void testWhile()
-    { // violation ''{' at column 5 should be on the previous line'
-        // Valid
-        while (condition()) {
-            testWhile();
-        }
+    // Invalid
+    for (int i = 1; i < 5; i++)
+      ;
+    for (int i = 1; i < 5; i++) testFor();
+    for (int i = 1; i < 5; i++) if (i > 2) testFor();
+  }
 
-        // Invalid
-        while(condition());
-        while (condition())
-            testWhile();
-        while (condition())
-            if (condition())
-                testWhile();
+  /** Test if constructs * */
+  public void testIf() { // violation ''{' at column 5 should be on the previous line'
+    // Valid
+    if (condition()) {
+      testIf();
+    } else if (condition()) {
+      testIf();
+    } else {
+      testIf();
     }
 
-    /** Test for loops **/
-    void testFor()
-    { // violation ''{' at column 5 should be on the previous line'
-        // Valid
-        for (int i = 1; i < 5; i++) {
-            testFor();
-        }
-
-        // Invalid
-        for(int i = 1;i < 5;i++);
-        for (int i = 1; i < 5; i++)
-            testFor();
-        for (int i = 1; i < 5;
-             i++)
-            if (i > 2)
-                testFor();
+    // Invalid
+    if (condition())
+      ;
+    if (condition()) testIf();
+    if (condition()) testIf();
+    else testIf();
+    if (condition()) testIf();
+    else {
+      testIf();
     }
+    if (condition()) {
+      testIf();
+    } else testIf();
+    if (condition()) if (condition()) testIf();
+  }
 
-    /** Test if constructs **/
-    public void testIf()
-    { // violation ''{' at column 5 should be on the previous line'
-        // Valid
-        if (condition()) {
-            testIf();
-        }
-        else if (condition()) {
-            testIf();
-        }
-        else {
-            testIf();
-        }
+  void whitespaceAfterSemi() { // violation ''{' at column 5 should be on the previous line'
+    // reject
+    int i = 1;
+    int j = 2;
 
-        // Invalid
-        if (condition());
-        if (condition())
-            testIf();
-        if (condition())
-            testIf();
-        else
-            testIf();
-        if (condition())
-            testIf();
-        else {
-            testIf();
-        }
-        if (condition()) {
-            testIf();
-        }
-        else
-            testIf();
-        if (condition())
-            if (condition())
-                testIf();
-    }
+    // accept
+    for (; ; ) {}
+  }
 
-    void whitespaceAfterSemi()
-    { // violation ''{' at column 5 should be on the previous line'
-        //reject
-        int i = 1;int j = 2;
+  /** Empty constructor block. * */
+  public InputLeftCurlyTestMissingBraces() {}
 
-        //accept
-        for (;;) {
-        }
-    }
-
-    /** Empty constructor block. **/
-    public InputLeftCurlyTestMissingBraces() {}
-
-    /** Empty method block. **/
-    public void emptyImplementation() {}
+  /** Empty method block. * */
+  public void emptyImplementation() {}
 }
+

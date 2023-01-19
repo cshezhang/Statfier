@@ -1,7 +1,8 @@
+import java.util.*;
+import java.util.logging.*;
 
-            import java.util.*;
-            import java.util.logging.*;
-            public class Foo {
-                List c; Logger f;
-            }
-            
+public class Foo {
+  List c;
+  Logger f;
+}
+

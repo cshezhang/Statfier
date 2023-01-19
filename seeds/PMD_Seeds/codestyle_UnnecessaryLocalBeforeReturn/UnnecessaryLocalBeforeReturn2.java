@@ -1,8 +1,7 @@
-
 public class Foo {
-    public int bar() {
-        int x = doSomething();
-        return x;
-    }
+  public int bar() {
+    int x = doSomething();
+    return x;
+  }
 }
-        
+

@@ -1,10 +1,18 @@
 package checks;
 
 class HardcodedIpCheck {
-  String ip = "10.0.0.0"; // Noncompliant [[sc=15;ec=25]] {{Make sure using this hardcoded IP address is safe here.}}
-  String ipAndPort = "10.0.0.0:0"; // Noncompliant [[sc=22;ec=34]] {{Make sure using this hardcoded IP address is safe here.}}
-  String url = "http://192.168.0.1/admin.html"; // Noncompliant {{Make sure using this hardcoded IP address is safe here.}}
-  String urlWithPort = "http://192.168.0.1:8000/admin.html"; // Noncompliant {{Make sure using this hardcoded IP address is safe here.}}
+  String ip =
+      "10.0.0.0"; // Noncompliant [[sc=15;ec=25]] {{Make sure using this hardcoded IP address is
+                  // safe here.}}
+  String ipAndPort =
+      "10.0.0.0:0"; // Noncompliant [[sc=22;ec=34]] {{Make sure using this hardcoded IP address is
+                    // safe here.}}
+  String url =
+      "http://192.168.0.1/admin.html"; // Noncompliant {{Make sure using this hardcoded IP address
+                                       // is safe here.}}
+  String urlWithPort =
+      "http://192.168.0.1:8000/admin.html"; // Noncompliant {{Make sure using this hardcoded IP
+                                            // address is safe here.}}
   String url2 = "http://www.example.org";
   int a = 42;
 
@@ -76,3 +84,4 @@ class HardcodedIpCheck {
   String fileName = "v0.0.1.200__do_something.sql"; // Compliant - suffixed and prefixed
   String version = "1.0.0.0-1"; // Compliant - suffixed
 }
+

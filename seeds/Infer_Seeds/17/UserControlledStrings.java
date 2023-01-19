@@ -1,13 +1,8 @@
-
-
-
-
 import android.content.ClipboardManager;
 import android.text.Html;
 import android.text.Spanned;
 import android.widget.EditText;
 import codetoanalyze.java.InferTaint;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,3 +56,4 @@ public class UserControlledStrings {
     return builder.command(cmds);
   }
 }
+

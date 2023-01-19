@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.Expensive;
 import codetoanalyze.java.annotation.PerformanceCritical;
 
@@ -43,3 +39,4 @@ public class AnnotationReachabilityDuplicatesExample {
     callsEitherExpensive(); // should report here only once
   }
 }
+

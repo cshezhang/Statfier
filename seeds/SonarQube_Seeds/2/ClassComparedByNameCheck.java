@@ -6,9 +6,17 @@ class ClassComparedByNameCheck {
   Class valueClass;
 
   String foo(String s) {
-    A.class.getSimpleName().equals("A"); // Noncompliant [[sc=5;ec=40]] {{Use an "instanceof" comparison instead.}}
-    new A().getClass().getSimpleName().equals("A"); // Noncompliant {{Use an "instanceof" comparison instead.}}
-    new A().getClass().getName().equals("A"); // Noncompliant {{Use an "instanceof" comparison instead.}}
+    A.class
+        .getSimpleName()
+        .equals("A"); // Noncompliant [[sc=5;ec=40]] {{Use an "instanceof" comparison instead.}}
+    new A()
+        .getClass()
+        .getSimpleName()
+        .equals("A"); // Noncompliant {{Use an "instanceof" comparison instead.}}
+    new A()
+        .getClass()
+        .getName()
+        .equals("A"); // Noncompliant {{Use an "instanceof" comparison instead.}}
     String name = new A().getClass().getName();
     name.equals("A"); // False negative ?
     A.class.getSimpleName().substring(0).equals(name); // Compliant - ref: SONARJAVA-2603
@@ -18,7 +26,10 @@ class ClassComparedByNameCheck {
 
     StackTraceElement element = getElement();
     A.class.getSimpleName().equals(element.getClassName()); // Compliant
-    boolean b = (List.class.getName().equals(valueClass.getName())); // Noncompliant {{Use "isAssignableFrom" instead.}}
+    boolean b =
+        (List.class
+            .getName()
+            .equals(valueClass.getName())); // Noncompliant {{Use "isAssignableFrom" instead.}}
     A.class.getSimpleName().equals(foo("A")); // Compliant
 
     return "";
@@ -28,7 +39,7 @@ class ClassComparedByNameCheck {
     return null;
   }
 
-    public static class A {
+  public static class A {
     Object foo(String realType) {
       if (Integer.class.getName().equals(realType)) { // compliant
         return null;
@@ -50,9 +61,9 @@ class ClassComparedByNameCheck {
     boolean bar() {
       String argType = getParameterTypeFromName("MY_PARAM");
       return Object.class.getName().equals(argType);
-
     }
 
     abstract String getParameterTypeFromName(String s);
   }
 }
+

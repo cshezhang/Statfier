@@ -1,32 +1,31 @@
 package bugIdeas;
 
-import java.util.Date;
-
 import edu.umd.cs.findbugs.annotations.ExpectWarning;
+import java.util.Date;
 
 public class Ideas_2008_11_21 {
 
-    void whatDoIDo(String reason) {
-        throw new RuntimeException(reason);
-    }
+  void whatDoIDo(String reason) {
+    throw new RuntimeException(reason);
+  }
 
-    static final int FOO = 17;
+  static final int FOO = 17;
 
-    int flags;
+  int flags;
 
-    boolean isFoo() {
-        return (flags & FOO) != 0;
-    }
+  boolean isFoo() {
+    return (flags & FOO) != 0;
+  }
 
-    @ExpectWarning("BSHIFT")
-    boolean testShift(int x) {
-        return x == x >>> 32;
-    }
+  @ExpectWarning("BSHIFT")
+  boolean testShift(int x) {
+    return x == x >>> 32;
+  }
 
-    String testDeadStorePastUnconditionalThrower() {
-        String foo = new Date().toString();
-        whatDoIDo("huh");
-        return foo;
-    }
-
+  String testDeadStorePastUnconditionalThrower() {
+    String foo = new Date().toString();
+    whatDoIDo("huh");
+    return foo;
+  }
 }
+

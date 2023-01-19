@@ -2,8 +2,7 @@ package checks;
 
 class S1874_CallToDeprecatedMethod_java9 {
 
-  @Deprecated
-  String a;
+  @Deprecated String a;
 
   @Deprecated(forRemoval = true)
   String b;
@@ -23,11 +22,12 @@ class S1874_CallToDeprecatedMethod_java9 {
     qix(); // Noncompliant {{Remove this use of "qix"; it is deprecated.}}
 
     new DeprecatedForRemoval();
-    new DeprecatedDefault(); // Noncompliant {{Remove this use of "DeprecatedDefault", it has been marked for removal.}
+    new DeprecatedDefault(); // Noncompliant {{Remove this use of "DeprecatedDefault", it has been
+                             // marked for removal.}
 
     String s =
-      a // Noncompliant {{Remove this use of a "a"; it is deprecated.}
-      + b;
+        a // Noncompliant {{Remove this use of a "a"; it is deprecated.}
+            + b;
   }
 
   @Deprecated(forRemoval = true)
@@ -41,6 +41,9 @@ class S1874_CallToDeprecatedMethod_java9 {
     void foo() {}
 
     @Override
-    void bar() {}  // Noncompliant {{Don't override a deprecated method or explicitly mark it as "@Deprecated".}}
+    void
+        bar() {} // Noncompliant {{Don't override a deprecated method or explicitly mark it as
+                 // "@Deprecated".}}
   }
 }
+

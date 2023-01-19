@@ -30,8 +30,7 @@ class BooleanMethodReturnCheckA {
 }
 
 class BooleanMethodReturnCheckB {
-  private class Boolean {
-  }
+  private class Boolean {}
 
   public Boolean myMethod() {
     return null; // Compliant
@@ -42,6 +41,7 @@ class BooleanMethodReturnCheckB {
       private java.lang.Boolean myInnerMethod() {
         return null; // Noncompliant {{Null is returned but a "Boolean" is expected.}}
       }
+
       private BooleanMethodReturnCheckC foo() {
         return null; // Compliant
       }
@@ -62,9 +62,12 @@ class BooleanMethodReturnCheckD {
         return;
       }
     }
-    Stream.of("A").forEach(a -> {
-      return; // Compliant
-    });
+    Stream.of("A")
+        .forEach(
+            a -> {
+              return; // Compliant
+            });
     return true;
   }
 }
+

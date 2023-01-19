@@ -1,6 +1,5 @@
-
 public class Foo {
-    @SuppressWarnings("unused")
-    private String foo;
+  @SuppressWarnings("unused")
+  private String foo;
 }
-        
+

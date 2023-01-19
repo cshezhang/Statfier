@@ -1,5 +1,3 @@
-
-
 import codetoanalyze.java.annotation.ThreadSafe;
 
 @ThreadSafe
@@ -61,3 +59,4 @@ class DeepOwnership {
     x.next.next = null; // doesn't warn here
   }
 }
+

@@ -3,53 +3,59 @@ package checks;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.PreparedStatement;
-import org.hibernate.Session;
-import javax.persistence.EntityManager;
-
 import javax.jdo.PersistenceManager;
-
-import org.springframework.jdbc.core.JdbcTemplate;
+import javax.persistence.EntityManager;
+import org.hibernate.Session;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 
 class SQLInjection {
   private static final String CONSTANT = "SELECT * FROM TABLE";
+
   public void method(String param, String param2, EntityManager entityManager) {
     try {
       Connection conn = DriverManager.getConnection("url", "user1", "password");
       Statement stmt = conn.createStatement();
       ResultSet rs = stmt.executeQuery("SELECT Lname FROM Customers WHERE Snum = 2001");
-      rs = stmt.executeQuery("SELECT Lname FROM Customers WHERE Snum = "+param); // Noncompliant [[sc=30;ec=79]] {{Make sure using a dynamically formatted SQL query is safe here.}}
-      String query = "SELECT Lname FROM Customers WHERE Snum = "+param;
+      rs =
+          stmt.executeQuery(
+              "SELECT Lname FROM Customers WHERE Snum = "
+                  + param); // Noncompliant [[sc=30;ec=79]] {{Make sure using a dynamically
+                            // formatted SQL query is safe here.}}
+      String query = "SELECT Lname FROM Customers WHERE Snum = " + param;
       rs = stmt.executeQuery(query); // Noncompliant
 
       boolean bool = false;
       String query2 = "Select Lname ";
-      if(bool) {
+      if (bool) {
         query2 += "FROM Customers";
-      }else {
+      } else {
         query2 += "FROM Providers";
       }
       query2 = query2 + " WHERE Snum =2001";
       rs = stmt.executeQuery(query2);
 
-      //Prepared statement
-      PreparedStatement ps = conn.prepareStatement("SELECT Lname FROM Customers"+" WHERE Snum = 2001");
-      ps.executeQuery("SELECT Lname FROM Customers WHERE Snum = "+param); // Noncompliant
-      ps  = conn.prepareStatement("SELECT Lname FROM Customers WHERE Snum = "+param); // Noncompliant
+      // Prepared statement
+      PreparedStatement ps =
+          conn.prepareStatement("SELECT Lname FROM Customers" + " WHERE Snum = 2001");
+      ps.executeQuery("SELECT Lname FROM Customers WHERE Snum = " + param); // Noncompliant
+      ps =
+          conn.prepareStatement(
+              "SELECT Lname FROM Customers WHERE Snum = " + param); // Noncompliant
       ps = conn.prepareStatement(query2);
 
       final String queryNoConcatenation = bool ? param : param2;
       conn.prepareStatement(queryNoConcatenation);
 
-      //Callable Statement
+      // Callable Statement
       CallableStatement cs = conn.prepareCall("SELECT Lname FROM Customers WHERE Snum = 2001");
       cs.executeQuery(query); // Noncompliant
-      cs  = conn.prepareCall("SELECT Lname FROM Customers WHERE Snum = "+param2); // Noncompliant
+      cs = conn.prepareCall("SELECT Lname FROM Customers WHERE Snum = " + param2); // Noncompliant
       cs = conn.prepareCall(query2);
       cs = conn.prepareCall(CONSTANT);
       cs = conn.prepareCall(foo());
@@ -60,10 +66,10 @@ class SQLInjection {
       String tableName = "TableName";
       String column = " column ";
       String FROM = " FROM ";
-      if(true) {
-        s = "SELECT" +column+FROM +tableName;
+      if (true) {
+        s = "SELECT" + column + FROM + tableName;
       } else {
-        s = "SELECT" +column+"FROM" +tableName;
+        s = "SELECT" + column + "FROM" + tableName;
       }
       cs = conn.prepareCall(s);
       String request = foo() + " FROM table";
@@ -72,7 +78,6 @@ class SQLInjection {
       A a = new A();
       a.prepareStatement(query);
       ps.executeQuery();
-
 
       Session session = null;
       session.createQuery("From Customer where id > ?");
@@ -128,10 +133,9 @@ class SQLInjection {
     query1 += param; // secondary location
     conn.prepareStatement(query1); // Noncompliant [[secondary=128,127]]]
 
-
     boolean bool = false;
     String query2 = "Select Lname ";
-    if(bool) {
+    if (bool) {
       query2 += "FROM Customers";
     } else {
       query2 += param;
@@ -157,10 +161,9 @@ class SQLInjection {
   }
 
   private String sqlQuery;
-  class A {
-    void prepareStatement(String s) {
 
-    }
+  class A {
+    void prepareStatement(String s) {}
   }
 
   private static void makeQuery(Connection p_con) {
@@ -187,7 +190,6 @@ class SQLInjection {
   }
 }
 
-
 class Spring {
 
   private JdbcTemplate jdbcTemplate;
@@ -197,17 +199,19 @@ class Spring {
   void test(String parameter) {
     java.lang.String sqlInjection = "select count(*) from t_actor where column =  " + parameter;
     jdbcTemplate.queryForObject(sqlInjection, Integer.class); // Noncompliant
-    jdbcOperations.queryForObject(sqlInjection, Integer.class);  // Noncompliant
+    jdbcOperations.queryForObject(sqlInjection, Integer.class); // Noncompliant
 
-    new PreparedStatementCreatorFactory(sqlInjection);  // Noncompliant
-    preparedStatementCreatorFactory.newPreparedStatementCreator(sqlInjection, new Object[] {});  // Noncompliant
+    new PreparedStatementCreatorFactory(sqlInjection); // Noncompliant
+    preparedStatementCreatorFactory.newPreparedStatementCreator(
+        sqlInjection, new Object[] {}); // Noncompliant
   }
 }
 
-
 class Test {
   public void foo(String page, String projectUuid) {
-    String from = "from ResourceDBO r, ProjectDBO p where p.id = r.entityId and r.type = :entityType and r.mimeType in :mimeTypes";
+    String from =
+        "from ResourceDBO r, ProjectDBO p where p.id = r.entityId and r.type = :entityType and"
+            + " r.mimeType in :mimeTypes";
     if (projectUuid != null) {
       from += " and p.uuid = :projectUuid";
     }
@@ -217,7 +221,6 @@ class Test {
       String countJql = "select count(*) " + from;
       Session session = null;
       session.createQuery(countJql); // Noncompliant
-
     }
   }
 }
@@ -237,3 +240,4 @@ class SQLInjectionB {
     tmpl.queryForObject(user, String.class); // compliant
   }
 }
+

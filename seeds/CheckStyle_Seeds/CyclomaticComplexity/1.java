@@ -1,11 +1,10 @@
-
-
 class CyclomaticComplexity {
   // Cyclomatic Complexity = 5
   int a, b, c, d;
+
   public void foo() { // 1, function declaration
     while (a < b // 2, while
-      && a > c) {
+        && a > c) {
       fun();
     }
     if (a == b) {
@@ -22,4 +21,4 @@ class CyclomaticComplexity {
     }
   }
 }
-        
+

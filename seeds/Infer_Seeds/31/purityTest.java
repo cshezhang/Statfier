@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 class Test {
@@ -84,3 +83,4 @@ class Test {
     return System.nanoTime();
   }
 }
+

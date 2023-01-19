@@ -31,8 +31,7 @@ public class CovariantEqualsNegativeCases {
     return false;
   }
 
-  public void equals(CovariantEqualsNegativeCases other) {
-  }
+  public void equals(CovariantEqualsNegativeCases other) {}
 
   public List<Integer> equals(Integer other) {
     return null;
@@ -57,14 +56,14 @@ class AnotherClass {
 }
 
 /**
- * Don't issue error when a class already overrides the real
- * equals. In this case covariant equals is probably a helper.
+ * Don't issue error when a class already overrides the real equals. In this case covariant equals
+ * is probably a helper.
  */
 class ClassWithEqualsOverridden {
   @Override
-public boolean equals(Object other) {
+  public boolean equals(Object other) {
     if (other instanceof ClassWithEqualsOverridden) {
-      return equals((ClassWithEqualsOverridden)other);
+      return equals((ClassWithEqualsOverridden) other);
     } else {
       return false;
     }
@@ -76,11 +75,12 @@ public boolean equals(Object other) {
 }
 
 /**
- * Don't issue error when the covariant equals method is not public.
- * In that case it wasn't intended to override equals.
+ * Don't issue error when the covariant equals method is not public. In that case it wasn't intended
+ * to override equals.
  */
 class ClassWithNonPublicCovariantEquals {
   boolean equals(ClassWithNonPublicCovariantEquals other) {
     return true;
   }
 }
+

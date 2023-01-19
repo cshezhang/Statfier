@@ -23,6 +23,7 @@ import org.detector.thread.PMD_InvokeThread;
 import org.detector.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
+import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.JAVAC_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
@@ -40,10 +41,8 @@ import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.initThreadPool;
 import static org.detector.util.Utility.readCheckStyleResultFile;
-import static org.detector.util.Utility.readFileByLine;
 import static org.detector.util.Utility.readInferResultFile;
 import static org.detector.util.Utility.readPMDResultFile;
-import static org.detector.util.Utility.readSpotBugsResultFile;
 import static org.detector.util.Utility.reportFolder;
 import static org.detector.util.Utility.sep;
 import static org.detector.util.Utility.spotBugsJarStr;
@@ -73,7 +72,7 @@ public class Invoker {
             output = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).readOutput(true).execute().outputUTF8();
         } catch (Exception e) {
             e.printStackTrace();
-            return output;
+            return "";
         }
         return output;
     }

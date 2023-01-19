@@ -8,30 +8,29 @@ option = SPACE
 package com.puppycrawl.tools.checkstyle.checks.whitespace.typecastparenpad;
 
 class InputTypecastParenPadWhitespaceAround // ok
-{
-    protected InputTypecastParenPadWhitespaceAround ( int i )
-    {
-        this ();
-        toString ();
-    }
-    protected InputTypecastParenPadWhitespaceAround ()
-    {
-        super ();
-    }
+ {
+  protected InputTypecastParenPadWhitespaceAround(int i) {
+    this();
+    toString();
+  }
 
-    public void enhancedFor ()
-    {
-        int[] i = new int[2];
-        for ( int j: i ) {
-            System.identityHashCode ( j );
-        }
+  protected InputTypecastParenPadWhitespaceAround() {
+    super();
+  }
+
+  public void enhancedFor() {
+    int[] i = new int[2];
+    for (int j : i) {
+      System.identityHashCode(j);
     }
+  }
 }
 
 @interface CronExpression_TypecastParenPad {
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 }
 
 @interface CronExpression1_TypecastParenPad {
-    Class<?>[] groups() default { }; // extra space
+  Class<?>[] groups() default {}; // extra space
 }
+

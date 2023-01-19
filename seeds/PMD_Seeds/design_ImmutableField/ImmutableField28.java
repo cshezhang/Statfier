@@ -1,12 +1,10 @@
-
 import lombok.experimental.Delegate;
 
 public class Foo {
-    @Delegate
-    private String x;
+  @Delegate private String x;
 
-    public Foo() {
-        x = "bar";
-    }
+  public Foo() {
+    x = "bar";
+  }
 }
-        
+

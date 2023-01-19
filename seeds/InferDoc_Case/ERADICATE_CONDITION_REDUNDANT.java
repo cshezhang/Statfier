@@ -6,3 +6,4 @@ class ERADICATE_CONDITION_REDUNDANT {
     }
   }
 }
+

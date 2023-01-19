@@ -1,7 +1,3 @@
-
-
-
-
 import android.support.annotation.MainThread;
 import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
@@ -107,3 +103,4 @@ public class UiThreads {
     unannotated();
   }
 }
+

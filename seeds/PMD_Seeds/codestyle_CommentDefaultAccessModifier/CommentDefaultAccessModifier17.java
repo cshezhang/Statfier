@@ -1,9 +1,9 @@
-
 public class Foo {
-    enum Bar {
-        ONE, TWO;
+  enum Bar {
+    ONE,
+    TWO;
 
-        Bar() {}
-    }
+    Bar() {}
+  }
 }
-        
+

@@ -1,7 +1,3 @@
-
-
-
-
 import javax.annotation.Nullable;
 
 public class NullFieldAccess {
@@ -58,5 +54,5 @@ public class NullFieldAccess {
     int i2 = notNullArray.length; // OK: arrays is not null
     Object o2 = notNullArray[0]; // OK: array is not null
   }
-
 }
+

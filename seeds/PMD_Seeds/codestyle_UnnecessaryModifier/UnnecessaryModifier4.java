@@ -1,5 +1,4 @@
-
 public interface Foo {
-    public int X = 0;
+  public int X = 0;
 }
-        
+

@@ -1,7 +1,8 @@
-
 public class Foo {
-    private void bar() {
-     try {} catch (Exception e) {}
+  private void bar() {
+    try {
+    } catch (Exception e) {
     }
+  }
 }
-        
+

@@ -1,7 +1,6 @@
-
 public class Foo {
-    void foo(Bar bar) {
-        bar.buz = 2;
-    }
+  void foo(Bar bar) {
+    bar.buz = 2;
+  }
 }
-        
+

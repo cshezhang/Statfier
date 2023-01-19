@@ -1,9 +1,9 @@
-
 public class Foo implements Serializable {
 
-    List next;
+  List next;
 
-    private static final ObjectStreamField[] serialPersistentFields = {new ObjectStreamField("next", List.class)};
-
+  private static final ObjectStreamField[] serialPersistentFields = {
+    new ObjectStreamField("next", List.class)
+  };
 }
-        
+

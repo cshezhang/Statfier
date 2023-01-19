@@ -1,7 +1,6 @@
-
 public class Foo {
-    public void bar(Object o) {
-        return ((String) "doo");
-    }
+  public void bar(Object o) {
+    return ((String) "doo");
+  }
 }
-        
+

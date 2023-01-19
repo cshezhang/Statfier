@@ -1,5 +1,3 @@
-
-
 import android.os.Binder;
 import android.os.RemoteException;
 import android.support.annotation.UiThread;
@@ -16,3 +14,4 @@ class SkipAnalysis {
     doTransact();
   }
 }
+

@@ -7,9 +7,13 @@ import java.util.concurrent.locks.Lock;
 class SynchronizedLockCheck {
   void foo() {
     Lock lock = new MyLockImpl();
-    synchronized (lock) { // Noncompliant [[sc=19;ec=23]] {{Synchronize on this "Lock" object using "acquire/release".}}
+    synchronized (
+        lock) { // Noncompliant [[sc=19;ec=23]] {{Synchronize on this "Lock" object using
+                // "acquire/release".}}
     }
-    synchronized (new MyLockImpl()) { // Noncompliant {{Synchronize on this "Lock" object using "acquire/release".}}
+    synchronized (
+        new MyLockImpl()) { // Noncompliant {{Synchronize on this "Lock" object using
+                            // "acquire/release".}}
     }
     synchronized (new UselessIncrementCheck()) { // Compliant
     }
@@ -18,24 +22,27 @@ class SynchronizedLockCheck {
 
 class MyLockImpl implements Lock {
   @Override
-  public void lock() {
-  }
+  public void lock() {}
+
   @Override
-  public void lockInterruptibly() throws InterruptedException {
-  }
+  public void lockInterruptibly() throws InterruptedException {}
+
   @Override
   public boolean tryLock() {
     return false;
   }
+
   @Override
   public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
     return false;
   }
+
   @Override
-  public void unlock() {
-  }
+  public void unlock() {}
+
   @Override
   public Condition newCondition() {
     return null;
   }
 }
+

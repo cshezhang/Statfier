@@ -19,6 +19,8 @@ public class InputAbbreviationAsWordInNameReceiver { // ok
   public void foo4(InputAbbreviationAsWordInNameReceiver this) {}
 
   private class Inner {
-   public Inner(InputAbbreviationAsWordInNameReceiver InputAbbreviationAsWordInNameReceiver.this) {}
+    public Inner(
+        InputAbbreviationAsWordInNameReceiver InputAbbreviationAsWordInNameReceiver.this) {}
   }
 }
+

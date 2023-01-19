@@ -1,5 +1,5 @@
-
 public class Foo {
-    static {}
+  static {
+  }
 }
-        
+

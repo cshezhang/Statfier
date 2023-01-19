@@ -1,5 +1,4 @@
-
 public class Foo {
-    public boolean getEnabled();
+  public boolean getEnabled();
 }
-        
+

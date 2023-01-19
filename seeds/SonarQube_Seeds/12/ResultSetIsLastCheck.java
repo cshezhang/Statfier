@@ -9,5 +9,6 @@ class ResultSetIsLastCheck {
     this.isLast(); // Compliant
   }
 
-  void isLast() { }
+  void isLast() {}
 }
+

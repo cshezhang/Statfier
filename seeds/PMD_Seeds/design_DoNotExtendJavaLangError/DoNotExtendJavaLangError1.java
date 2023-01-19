@@ -1,4 +1,2 @@
+public class Foo extends Error {}
 
-public class Foo extends Error {
-}
-        

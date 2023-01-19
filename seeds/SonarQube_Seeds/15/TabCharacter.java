@@ -1,6 +1,6 @@
 package checks;
 
 class TabCharacter {
-	void method() {
-	}
+  void method() {}
 }
+

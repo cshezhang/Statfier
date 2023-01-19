@@ -1,7 +1,6 @@
-
 public class Foo {
-    boolean bar(String x) {
-        return contentEquals("2");
-    }
+  boolean bar(String x) {
+    return contentEquals("2");
+  }
 }
-        
+

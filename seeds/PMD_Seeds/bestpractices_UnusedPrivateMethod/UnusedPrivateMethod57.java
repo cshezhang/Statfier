@@ -1,7 +1,5 @@
-
 public class Foo {
-    @Deprecated
-    private bar() {
-    }
+  @Deprecated
+  private bar() {}
 }
-        
+

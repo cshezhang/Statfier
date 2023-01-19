@@ -1,23 +1,21 @@
-
 public class VaragsFalsePositive {
 
-    enum Sizes
-    {
-        TINY,
-        MEDIUM
-    }
+  enum Sizes {
+    TINY,
+    MEDIUM
+  }
 
-    public boolean containsTiny(){
-        return hasTiny(Sizes.MEDIUM, Sizes.TINY);
-    }
+  public boolean containsTiny() {
+    return hasTiny(Sizes.MEDIUM, Sizes.TINY);
+  }
 
-    private boolean hasTiny(Sizes... sizes) {
-        for (Sizes size : sizes) {
-            if (size==Sizes.TINY) {
-                return true;
-            }
-        }
-        return false;
+  private boolean hasTiny(Sizes... sizes) {
+    for (Sizes size : sizes) {
+      if (size == Sizes.TINY) {
+        return true;
+      }
     }
+    return false;
+  }
 }
-        
+

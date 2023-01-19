@@ -1,5 +1,4 @@
-
 public class Foo {
-    void foo(String argsWithExtraMustard) {}
+  void foo(String argsWithExtraMustard) {}
 }
-        
+

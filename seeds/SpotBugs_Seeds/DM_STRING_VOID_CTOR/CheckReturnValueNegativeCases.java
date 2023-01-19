@@ -27,8 +27,7 @@ public class CheckReturnValueNegativeCases {
     obj.toString();
   }
 
-  @SuppressWarnings("foo")  // wrong annotation
-  public void test2() {
-  }
-
+  @SuppressWarnings("foo") // wrong annotation
+  public void test2() {}
 }
+

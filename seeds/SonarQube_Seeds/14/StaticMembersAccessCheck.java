@@ -8,19 +8,24 @@ class StaticMembersAccessCheckA {
   public int nonStaticCounter = 0;
   public StaticMembersAccessCheckC c = new StaticMembersAccessCheckC();
   public StaticMembersAccessCheckD d = new StaticMembersAccessCheckD();
+
   public class StaticMembersAccessCheckC {
     public int counter = 0;
     public StaticMembersAccessCheckD d = new StaticMembersAccessCheckD();
   }
+
   public static class StaticMembersAccessCheckD {
     public static int counter = 0;
+
     public static class StaticMembersAccessCheckE {
       public static int counter = 0;
     }
   }
+
   public static int method() {
     return 0;
   }
+
   public StaticMembersAccessCheckD d() {
     return d;
   }
@@ -29,21 +34,24 @@ class StaticMembersAccessCheckA {
 class StaticMembersAccessCheckB {
   private StaticMembersAccessCheckA first = new StaticMembersAccessCheckA();
   private StaticMembersAccessCheckA second = new StaticMembersAccessCheckA();
-  private StaticMembersAccessCheckA.StaticMembersAccessCheckD third = new StaticMembersAccessCheckA.StaticMembersAccessCheckD();
+  private StaticMembersAccessCheckA.StaticMembersAccessCheckD third =
+      new StaticMembersAccessCheckA.StaticMembersAccessCheckD();
 
   public StaticMembersAccessCheckA.StaticMembersAccessCheckD d() {
     return third;
   }
 
   public void noncompliant() {
-    first.counter ++; // Noncompliant [[sc=5;ec=10;quickfixes=qf1]] {{Change this instance-reference to a static reference.}}
+    first
+        .counter++; // Noncompliant [[sc=5;ec=10;quickfixes=qf1]] {{Change this instance-reference
+                    // to a static reference.}}
     // fix@qf1 {{Replace "first" by "StaticMembersAccessCheckA"}}
     // edit@qf1 [[sc=5;ec=10]] {{StaticMembersAccessCheckA}}
-    second.counter ++; // Noncompliant
+    second.counter++; // Noncompliant
     second.method(); // Noncompliant [[sc=5;ec=11;quickfixes=qf2]]
     // fix@qf2 {{Replace "second" by "StaticMembersAccessCheckA"}}
     // edit@qf2 [[sc=5;ec=11]] {{StaticMembersAccessCheckA}}
-    third.counter ++; // Noncompliant
+    third.counter++; // Noncompliant
     first.d.counter++; // Noncompliant
     first.c.d.counter++; // Noncompliant [[sc=5;ec=14;quickfixes=qf3]]
     // fix@qf3 {{Replace the expression by "StaticMembersAccessCheckD"}}
@@ -53,13 +61,12 @@ class StaticMembersAccessCheckB {
     // edit@qf4 [[sc=5;ec=14]] {{StaticMembersAccessCheckD}}
     d().counter++; // Noncompliant
     // Noncompliant@+1 [[sc=5;el=+3;ec=6;quickfixes=qf5]]
-    (
-      (StaticMembersAccessCheckA.StaticMembersAccessCheckD) d()
-    ).counter++;
+    ((StaticMembersAccessCheckA.StaticMembersAccessCheckD) d()).counter++;
     // fix@qf5 {{Replace the expression by "StaticMembersAccessCheckD"}}
     // edit@qf5 [[sc=5;el=+2;ec=6]] {{StaticMembersAccessCheckD}}
     (d()).counter++; // Noncompliant
-    StaticMembersAccessCheckA.StaticMembersAccessCheckD[] darray = new StaticMembersAccessCheckA.StaticMembersAccessCheckD[1];
+    StaticMembersAccessCheckA.StaticMembersAccessCheckD[] darray =
+        new StaticMembersAccessCheckA.StaticMembersAccessCheckD[1];
     darray[0].counter++; // Noncompliant [[sc=5;ec=14;quickfixes=qf6]]
     // fix@qf6 {{Replace the expression by "StaticMembersAccessCheckD"}}
     // edit@qf6 [[sc=5;ec=14]] {{StaticMembersAccessCheckD}}
@@ -71,13 +78,14 @@ class StaticMembersAccessCheckB {
   }
 
   public void compliant() {
-    StaticMembersAccessCheckA.counter ++;
-    StaticMembersAccessCheckA.StaticMembersAccessCheckD.counter ++;
-    StaticMembersAccessCheckA.StaticMembersAccessCheckD.StaticMembersAccessCheckE.counter ++;
-    first.nonStaticCounter ++;
-    first.c.counter ++;
+    StaticMembersAccessCheckA.counter++;
+    StaticMembersAccessCheckA.StaticMembersAccessCheckD.counter++;
+    StaticMembersAccessCheckA.StaticMembersAccessCheckD.StaticMembersAccessCheckE.counter++;
+    first.nonStaticCounter++;
+    first.c.counter++;
   }
 }
+
 abstract class StaticMembersAccessCheckTest {
 
   void test(java.util.function.Supplier<?> s) {
@@ -90,3 +98,4 @@ abstract class StaticMembersAccessCheckTest {
 
   abstract void call(java.util.function.Supplier<?> supplier);
 }
+

@@ -1,5 +1,3 @@
-
-
 class Interproc2 {
   synchronized void interproc1Bad(InterprocA a) {
     interproc2(a);
@@ -50,3 +48,4 @@ class InterprocB {
 
   synchronized void interproc2Ok(Interproc d) {}
 }
+

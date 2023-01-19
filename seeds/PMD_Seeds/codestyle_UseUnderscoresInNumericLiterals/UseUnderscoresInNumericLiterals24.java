@@ -1,7 +1,6 @@
-
 public class Foo {
-    private callBar() {
-        bar(1000);
-    }
+  private callBar() {
+    bar(1000);
+  }
 }
-        
+

@@ -1,5 +1,4 @@
-
 public class Foo {
-    void clone(int x) {}
+  void clone(int x) {}
 }
-        
+

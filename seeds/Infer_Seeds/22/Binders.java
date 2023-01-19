@@ -1,5 +1,3 @@
-
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -93,3 +91,4 @@ class Binders {
     d.getRealSize(null);
   }
 }
+

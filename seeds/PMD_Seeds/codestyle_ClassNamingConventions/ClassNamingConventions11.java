@@ -1,4 +1,2 @@
+public class Md5Checksum {}
 
-public class Md5Checksum {
-}
-        

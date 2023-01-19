@@ -11,6 +11,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.reportFolder;
 
@@ -63,7 +64,7 @@ public class SpotBugs_TransformThread implements Runnable {
                 boolean hasExec = Invoker.invokeCommandsByZT(invokeCmds);
                 if (hasExec) {
                     String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
-                    Utility.readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
+                    readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
                 }
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();

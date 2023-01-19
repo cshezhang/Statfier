@@ -26,7 +26,8 @@ class ThrowsFromFinallyCheck {
     } catch (Exception e) {
       throw new IllegalAccessError();
     } finally {
-      throw new IllegalAccessError(); // Noncompliant {{Refactor this code to not throw exceptions in finally blocks.}} [[sc=7;ec=38]]
+      throw new IllegalAccessError(); // Noncompliant {{Refactor this code to not throw exceptions
+                                      // in finally blocks.}} [[sc=7;ec=38]]
     }
   }
 
@@ -45,7 +46,9 @@ class ThrowsFromFinallyCheck {
           throw new IllegalAccessError();
         }
       };
-      try { } catch (Exception e){ }
+      try {
+      } catch (Exception e) {
+      }
       throw new IllegalAccessError(); // Noncompliant
     }
   }
@@ -56,3 +59,4 @@ class ThrowsFromFinallyCheck {
     }
   }
 }
+

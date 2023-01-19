@@ -1,12 +1,13 @@
-
 class Foo {
-    List<String> bar() {
-        return new ArrayList<String>(){
+  List<String> bar() {
+    return new ArrayList<String>() {
 
-            {addAll("a","b","c");}
+      {
+        addAll("a", "b", "c");
+      }
 
-            int field;
-        };
-    }
+      int field;
+    };
+  }
 }
-        
+

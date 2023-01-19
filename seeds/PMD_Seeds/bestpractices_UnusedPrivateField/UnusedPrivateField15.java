@@ -1,5 +1,4 @@
-
 public class Foo {
-    public static final int FOO = 1;
+  public static final int FOO = 1;
 }
-        
+

@@ -4,57 +4,59 @@ import java.util.ArrayList;
 
 public class ArrayListContains0<T> {
 
-    static class Dummy {
+  static class Dummy {}
 
-    }
+  static class DummyChild extends Dummy {}
 
-    static class DummyChild extends Dummy {
+  private ArrayList<?> wildcardF;
 
-    }
+  private ArrayList<Dummy> dummyF;
 
-    private ArrayList<?> wildcardF;
+  private ArrayList<? extends Dummy> dummyEF;
 
-    private ArrayList<Dummy> dummyF;
+  private ArrayList<? super Dummy> dummySF;
 
-    private ArrayList<? extends Dummy> dummyEF;
+  private ArrayList<DummyChild> childF;
 
-    private ArrayList<? super Dummy> dummySF;
+  private ArrayList<? extends DummyChild> childEF;
 
-    private ArrayList<DummyChild> childF;
+  private ArrayList<? super DummyChild> childSF;
 
-    private ArrayList<? extends DummyChild> childEF;
+  private ArrayList<T> genericF;
 
-    private ArrayList<? super DummyChild> childSF;
+  private ArrayList<? extends T> genericEF;
 
-    private ArrayList<T> genericF;
+  private ArrayList<? super T> genericSF;
 
-    private ArrayList<? extends T> genericEF;
+  public ArrayListContains0(
+      ArrayList<?> wildcardF,
+      ArrayList<Dummy> dummyF,
+      ArrayList<? extends Dummy> dummyEF,
+      ArrayList<? super Dummy> dummySF,
+      ArrayList<DummyChild> childF,
+      ArrayList<? extends DummyChild> childEF,
+      ArrayList<? super DummyChild> childSF,
+      ArrayList<T> genericF,
+      ArrayList<? extends T> genericEF,
+      ArrayList<? super T> genericSF) {
 
-    private ArrayList<? super T> genericSF;
+    Dummy dummy = new Dummy();
+    DummyChild dummyChild = new DummyChild();
+    String s = "Mismatched Type";
 
-    public ArrayListContains0(ArrayList<?> wildcardF, ArrayList<Dummy> dummyF, ArrayList<? extends Dummy> dummyEF,
-            ArrayList<? super Dummy> dummySF, ArrayList<DummyChild> childF, ArrayList<? extends DummyChild> childEF,
-            ArrayList<? super DummyChild> childSF, ArrayList<T> genericF, ArrayList<? extends T> genericEF,
-            ArrayList<? super T> genericSF) {
+    wildcardF.contains(s); // No warning
 
-        Dummy dummy = new Dummy();
-        DummyChild dummyChild = new DummyChild();
-        String s = "Mismatched Type";
+    dummyF.contains(s); // HIGH
 
-        wildcardF.contains(s); // No warning
+    dummyEF.contains(s); // HIGH
 
-        dummyF.contains(s); // HIGH
+    dummySF.contains(s); // HIGH
 
-        dummyEF.contains(s); // HIGH
+    childF.contains(s); // HIGH
 
-        dummySF.contains(s); // HIGH
+    childEF.contains(s); // HIGH
 
-        childF.contains(s); // HIGH
-
-        childEF.contains(s); // HIGH
-
-        childSF.contains(s); // HIGH
-
-    }
-
+    childSF.contains(s); // HIGH
+  }
 }
+

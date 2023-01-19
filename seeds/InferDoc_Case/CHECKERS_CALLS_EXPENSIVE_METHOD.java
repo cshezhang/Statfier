@@ -9,3 +9,4 @@ class CHECKERS_CALLS_EXPENSIVE_METHOD {
   @Expensive
   void expensive() {}
 }
+

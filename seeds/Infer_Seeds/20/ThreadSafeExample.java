@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.annotation.ThreadSafe;
 import com.google.common.annotations.VisibleForTesting;
 import javax.annotation.concurrent.NotThreadSafe;
@@ -172,3 +168,4 @@ class Unannotated {
     this.mField = 1;
   }
 }
+

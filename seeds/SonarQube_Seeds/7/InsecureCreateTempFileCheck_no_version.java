@@ -37,7 +37,9 @@ class InsecureCreateTempFileCheck_no_version {
     File tempDir;
     tempDir = (File.createTempFile("", "."));
     tempDir.delete();
-    tempDir.mkdir();  // Noncompliant [[sc=13;ec=18]] {{Use "Files.createTempDirectory" to create this directory instead. (sonar.java.source not set. Assuming 7 or greater.)}}
+    tempDir
+        .mkdir(); // Noncompliant [[sc=13;ec=18]] {{Use "Files.createTempDirectory" to create this
+                  // directory instead. (sonar.java.source not set. Assuming 7 or greater.)}}
     File tempDir2 = File.createTempFile("", ".");
     tempDir2.delete();
     tempDir2.mkdir(); // Noncompliant
@@ -46,13 +48,14 @@ class InsecureCreateTempFileCheck_no_version {
     b = File.createTempFile("", ".");
     b.delete();
 
-    A a = new A() {
-      private void noncompliant() throws IOException {
-        b = File.createTempFile("", ".");
-        b.delete();
-        b.mkdir();  // Noncompliant
-      }
-    };
+    A a =
+        new A() {
+          private void noncompliant() throws IOException {
+            b = File.createTempFile("", ".");
+            b.delete();
+            b.mkdir(); // Noncompliant
+          }
+        };
 
     b.mkdir(); // Noncompliant
     b.mkdir(); // issue already raised
@@ -69,3 +72,4 @@ class InsecureCreateTempFileCheck_no_version {
     b().mkdir();
   }
 }
+

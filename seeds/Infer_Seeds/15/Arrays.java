@@ -1,7 +1,3 @@
-
-
-
-
 import codetoanalyze.java.InferTaint;
 
 public class Arrays {
@@ -60,3 +56,4 @@ public class Arrays {
     InferTaint.inferSensitiveSink(arr[0]);
   }
 }
+

@@ -16,7 +16,6 @@
 
 package com.google.errorprone.bugpatterns;
 /**
- *
  * @author eaftan@google.com (Eddie Aftandilian)
  */
 public class EmptyIfStatementNegativeCases {
@@ -35,8 +34,7 @@ public class EmptyIfStatementNegativeCases {
     int i = 0;
     if (i == 10)
       ;
-    else
-      System.out.println("not 10");
+    else System.out.println("not 10");
   }
 
   // multipart if with non-empty else
@@ -48,9 +46,7 @@ public class EmptyIfStatementNegativeCases {
       ;
     else if (i == 12)
       ;
-    else
-      System.out.println("not 10, 11, or 12");
+    else System.out.println("not 10, 11, or 12");
   }
-
-
 }
+

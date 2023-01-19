@@ -1,4 +1,3 @@
-
 /* 1
  * 2
  * 3
@@ -9,10 +8,8 @@
  * 8
  */
 public class Foo {
-    public Foo() {
-    }
+  public Foo() {}
 
-    public void doNothing() {
-    }
+  public void doNothing() {}
 }
-        
+

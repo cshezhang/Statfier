@@ -1,8 +1,8 @@
-
 import junit.framework.TestCase;
+
 public class Foo extends TestCase {
-    void bar() {
-        assertTrue(!foo);
-    }
+  void bar() {
+    assertTrue(!foo);
+  }
 }
-        
+

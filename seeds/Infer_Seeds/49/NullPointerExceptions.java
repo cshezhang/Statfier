@@ -1,7 +1,3 @@
-
-
-
-
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -630,3 +626,4 @@ public class NullPointerExceptions {
     listBuilder.add(getObject());
   }
 }
+

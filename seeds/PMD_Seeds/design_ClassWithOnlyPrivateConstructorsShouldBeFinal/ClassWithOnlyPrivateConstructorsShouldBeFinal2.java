@@ -1,6 +1,6 @@
-
 public class Foo {
-    private Foo() { }
-    public Foo(String param) { }
+  private Foo() {}
+
+  public Foo(String param) {}
 }
-        
+

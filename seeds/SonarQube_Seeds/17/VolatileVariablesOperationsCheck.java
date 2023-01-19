@@ -16,9 +16,13 @@ class VolatileVariablesOperationsCheck {
 
   public void incrementCounts() {
     count1++; // Noncompliant {{Use an "AtomicInteger" for this field; its operations are atomic.}}
-    ++this.count1; // Noncompliant {{Use an "AtomicInteger" for this field; its operations are atomic.}}
+    ++this
+        .count1; // Noncompliant {{Use an "AtomicInteger" for this field; its operations are
+                 // atomic.}}
     (count2)++; // Noncompliant {{Use an "AtomicLong" for this field; its operations are atomic.}}
-    count2 = (++count2); // Noncompliant {{Use an "AtomicLong" for this field; its operations are atomic.}}
+    count2 =
+        (++count2); // Noncompliant {{Use an "AtomicLong" for this field; its operations are
+                    // atomic.}}
     count3++; // Noncompliant {{Use an "AtomicInteger" for this field; its operations are atomic.}}
     ++count3; // Noncompliant
     count4++; // Noncompliant {{Use an "AtomicLong" for this field; its operations are atomic.}}
@@ -48,11 +52,12 @@ class VolatileVariablesOperationsCheck {
     --noAtomicCounterPart;
   }
 
-  public boolean toggleBooleans(){
-    boo1 = !boo1;  // Noncompliant {{Use an "AtomicBoolean" for this field; its operations are atomic.}}
-    boo1 = (!boo1);  // Noncompliant
-    boo1 = !(boo1);  // Noncompliant
-    this.boo1 = (!this.boo1);  // Noncompliant
+  public boolean toggleBooleans() {
+    boo1 =
+        !boo1; // Noncompliant {{Use an "AtomicBoolean" for this field; its operations are atomic.}}
+    boo1 = (!boo1); // Noncompliant
+    boo1 = !(boo1); // Noncompliant
+    this.boo1 = (!this.boo1); // Noncompliant
     boo2 = !boo2;
     boo2 = !boo1;
     this.boo2 = (!this.boo1);
@@ -79,24 +84,28 @@ class VolatileVariablesOperationsCheck {
     boo1 = !boo1;
     count1++;
   }
+
   void synchronizedBlock() {
     synchronized (this) {
       boo1 = !boo1;
       count1++;
     }
   }
+
   void exclusions() {
-    ObjIntConsumer<Integer> consumer = new ObjIntConsumer<Integer>() {
-      @Override
-      public void accept(Integer integer, int value) {
-        boo1 = !boo1;
-        count1++;
-      }
-    };
-    ObjIntConsumer<Integer> consumer2 = (integer, value) -> {
-      boo1 = !boo1;
-      count1++;
-    };
+    ObjIntConsumer<Integer> consumer =
+        new ObjIntConsumer<Integer>() {
+          @Override
+          public void accept(Integer integer, int value) {
+            boo1 = !boo1;
+            count1++;
+          }
+        };
+    ObjIntConsumer<Integer> consumer2 =
+        (integer, value) -> {
+          boo1 = !boo1;
+          count1++;
+        };
   }
 }
 
@@ -109,3 +118,4 @@ enum anEnum {
     value++; // Noncompliant
   }
 }
+

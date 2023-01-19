@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.*;
 
 public class SpotBugsChecker {

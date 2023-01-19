@@ -1,26 +1,20 @@
-
-
 class Test extends SuperClass {
 
-    /** {@inheritDoc} */
-    @Override
-    public void test1() { // OK
+  /** {@inheritDoc} */
+  @Override
+  public void test1() { // OK
+  }
 
-    }
+  /** {@inheritDoc} */
+  public void test2() { // violation, should be annotated with @Override
+  }
 
-    /** {@inheritDoc} */
-    public void test2() { // violation, should be annotated with @Override
+  /** {@inheritDoc} */
+  private void test3() { // violation, using the @inheritDoc tag on private method
+  }
 
-    }
-
-    /** {@inheritDoc} */
-    private void test3() { // violation, using the @inheritDoc tag on private method
-
-    }
-
-    /** {@inheritDoc} */
-    public static void test4() { // violation, using the @inheritDoc tag on static method
-
-    }
+  /** {@inheritDoc} */
+  public static void test4() { // violation, using the @inheritDoc tag on static method
+  }
 }
-        
+

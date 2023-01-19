@@ -1,10 +1,10 @@
-
 import com.google.common.base.Preconditions;
 
 class UnreachableAtExitTest {
 
   // cost: 1
-  void unit_cost() {};
+  void unit_cost() {}
+  ;
 
   public void infeasible_path_unreachable() {
     Preconditions.checkState(false); // pruned to bottom
@@ -15,3 +15,4 @@ class UnreachableAtExitTest {
     Preconditions.checkArgument(fpp > 0.0 && fpp < 0.0);
   }
 }
+

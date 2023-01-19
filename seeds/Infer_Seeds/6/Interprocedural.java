@@ -1,5 +1,3 @@
-
-
 import codetoanalyze.java.InferTaint;
 
 class Interprocedural {
@@ -292,7 +290,8 @@ class Interprocedural {
   }
 
   void diverge() {
-    for (; ; ) ;
+    for (; ; )
+      ;
   }
 
   // we don't propagate divergence in callees to callers
@@ -304,7 +303,8 @@ class Interprocedural {
 
   public static void callSinkThenDiverge(Object param) {
     InferTaint.inferSensitiveSink(param);
-    for (; ; ) ;
+    for (; ; )
+      ;
   }
 
   public void callSinkThenDivergeBad() {
@@ -413,3 +413,4 @@ class Interprocedural {
     InferTaint.inferSensitiveSink(o);
   }
 }
+

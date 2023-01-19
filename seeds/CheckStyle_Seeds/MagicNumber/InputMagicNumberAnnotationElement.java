@@ -15,6 +15,8 @@ tokens = (default)NUM_DOUBLE, NUM_FLOAT, NUM_INT, NUM_LONG
 package com.puppycrawl.tools.checkstyle.checks.coding.magicnumber;
 
 @interface InputMagicNumberAnnotationElement {
-	int value() default 10; // violation
-	int[] value2() default {11}; // violation
+  int value() default 10; // violation
+
+  int[] value2() default {11}; // violation
 }
+

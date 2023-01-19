@@ -4,7 +4,8 @@ class LongBitsToDoubleOnIntCheck {
   void foo() {
     byte b = 1;
     short s = 1;
-    Double.longBitsToDouble('c'); // Noncompliant [[sc=12;ec=28]] {{Remove this "Double.longBitsToDouble" call.}}
+    Double.longBitsToDouble(
+        'c'); // Noncompliant [[sc=12;ec=28]] {{Remove this "Double.longBitsToDouble" call.}}
     Double.longBitsToDouble(s); // Noncompliant
     Double.longBitsToDouble(b); // Noncompliant
     Double.longBitsToDouble(1); // Noncompliant
@@ -16,6 +17,7 @@ class LongBitsToDoubleOnIntCheck {
     public static double getDouble() {
       return Double.longBitsToDouble(Other.getLong()); // Compliant
     }
+
     public static double getByte() {
       return Double.longBitsToDouble(Other.getByte()); // Noncompliant
     }
@@ -31,3 +33,4 @@ class LongBitsToDoubleOnIntCheck {
     }
   }
 }
+

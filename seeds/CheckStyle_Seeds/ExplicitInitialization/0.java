@@ -1,5 +1,3 @@
-
-
 public class Test {
   private int intField1 = 0; // violation
   private int intField2 = 1;
@@ -21,4 +19,4 @@ public class Test {
   private int arrField2[] = new int[10];
   private int arrField3[];
 }
-        
+

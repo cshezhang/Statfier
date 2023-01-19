@@ -1,8 +1,8 @@
-
 public class Foo {
-    private Foo() { }
+  private Foo() {}
 }
+
 public class Bar extends Foo {
-    public Bar() { }
+  public Bar() {}
 }
-        
+

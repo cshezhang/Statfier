@@ -1,5 +1,3 @@
-
-
 import android.os.Binder;
 import android.support.annotation.MainThread;
 
@@ -25,3 +23,4 @@ class AnnotatedClass {
     m.doTransact();
   }
 }
+

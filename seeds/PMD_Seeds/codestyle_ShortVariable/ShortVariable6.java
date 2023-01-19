@@ -1,8 +1,6 @@
-
 public class Foo {
-    public void bar() {
-        for (Integer i : ints) {
-        }
-    }
+  public void bar() {
+    for (Integer i : ints) {}
+  }
 }
-        
+
