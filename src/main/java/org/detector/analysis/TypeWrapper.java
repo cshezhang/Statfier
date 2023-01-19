@@ -59,9 +59,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
+import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.noReport;
 import static org.detector.util.Utility.random;
 import static org.detector.util.Utility.failedT;
@@ -268,17 +270,19 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-//            String[] invokeCommands = new String[5];
-//            invokeCommands[0] = "java";
-//            invokeCommands[1] = "-jar";
-//            invokeCommands[2] = GOOGLE_FORMAT_PATH;
-//            invokeCommands[3] = "--replace";
-//            invokeCommands[4] = this.filePath;
-//            boolean isFormatted = Invoker.invokeCommandsByZT(invokeCommands);
-//            if(!isFormatted) {
-//                FileUtils.delete(file);
-//                return false;
-//            }
+            if(PMD_MUTATION || SPOTBUGS_MUTATION || CHECKSTYLE_MUTATION) {
+                String[] invokeCommands = new String[5];
+                invokeCommands[0] = "java";
+                invokeCommands[1] = "-jar";
+                invokeCommands[2] = GOOGLE_FORMAT_PATH;
+                invokeCommands[3] = "--replace";
+                invokeCommands[4] = this.filePath;
+                boolean isFormatted = Invoker.invokeCommandsByZT(invokeCommands);
+                if (!isFormatted) {
+                    FileUtils.delete(file);
+                    return false;
+                }
+            }
         } catch (IOException e) {
             System.err.println("Fail to Write to Java File!");
             e.printStackTrace();
@@ -514,7 +518,7 @@ public class TypeWrapper {
                     long seconds = (execTime / 1000) % 60;
                     if(!bugExistence.containsKey(entry.getKey())) {
                         bugExistence.put(entry.getKey(), true);
-                        System.out.println(bugExistence.size() + " bug is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                        System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                     }
                 } else {
                     List<Integer> source_bugs = source_bug2lines.get(entry.getKey());
