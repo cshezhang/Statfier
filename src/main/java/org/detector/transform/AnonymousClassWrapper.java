@@ -42,7 +42,7 @@ public class AnonymousClassWrapper extends Transform {
     public boolean run(ASTNode targetNode, TypeWrapper wrapper, ASTNode brother, ASTNode srcNode) {
         AST ast = wrapper.getAst();
         ASTRewrite astRewrite = wrapper.getAstRewrite();
-//        List<ASTNode> classModifiers = clazz.modifiers();
+        TypeDeclaration oldClass = TypeWrapper.getClassOfNode(srcNode);
         MethodDeclaration oldMethod = TypeWrapper.getDirectMethodOfNode(srcNode);
         AnonymousClassDeclaration anonymousClassDeclaration = ast.newAnonymousClassDeclaration();
         ClassInstanceCreation instanceCreation = ast.newClassInstanceCreation();
@@ -51,8 +51,7 @@ public class AnonymousClassWrapper extends Transform {
             if(oldMethod.isConstructor()) {
                 return false;
             }
-            TypeDeclaration type = TypeWrapper.getClassOfNode(srcNode);
-            String methodKey = type.getName().toString() + ":" + TypeWrapper.createMethodSignature(oldMethod);
+            String methodKey = oldClass.getName().toString() + ":" + TypeWrapper.createMethodSignature(oldMethod);
             for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
                 if(!entry.getKey().equals(methodKey) && entry.getValue().contains(oldMethod.getName().getIdentifier())) {
                     return false;
@@ -74,6 +73,7 @@ public class AnonymousClassWrapper extends Transform {
             fragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
             // insert new FieldStatement containing Anonymous class
             FieldDeclaration newFieldDeclaration = ast.newFieldDeclaration(fragment);
+            newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
             newFieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
 //            for(ASTNode modifier : classModifiers) {
 //                if(modifier instanceof Modifier) {
@@ -99,6 +99,7 @@ public class AnonymousClassWrapper extends Transform {
                 fragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
                 // insert new FieldStatement containing Anonymous class
                 FieldDeclaration newNode = ast.newFieldDeclaration(fragment);
+                newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
                 newNode.setType(ast.newSimpleType(ast.newSimpleName("Object")));
 //                for(ASTNode modifier : classModifiers) {
 //                    if(modifier instanceof Modifier) {
@@ -152,10 +153,14 @@ public class AnonymousClassWrapper extends Transform {
             }
             return nodes;
         }
-        if(!method.isConstructor() && method.getName().getIdentifier().equals(clazz.getName().getIdentifier())) {
+        String methodName = method.getName().getIdentifier();
+        if(!method.isConstructor() && methodName.equals(clazz.getName().getIdentifier())) {
             return nodes;
         }
-        if(method.getName().getIdentifier().toLowerCase().startsWith("test")) {
+        if(methodName.equals("equals") || methodName.equals("hashCode") || methodName.equals("toString") || methodName.equals("clone") || methodName.equals("compareTo")) {
+            return nodes;
+        }
+        if(methodName.toLowerCase().startsWith("test")) {
             return nodes;
         }
         List<ASTNode> modifiers = (List<ASTNode>) method.modifiers();
@@ -197,27 +202,31 @@ public class AnonymousClassWrapper extends Transform {
                 }
             }
         }
-        if (isOverride) {
-            if (clazz.superInterfaceTypes().size() > 0) {
-                return nodes;
-            }
-            Type superClazzType = clazz.getSuperclassType();
-            if (superClazzType == null) {
-                nodes.add(node);
-                return nodes;
-            }
-            if (superClazzType instanceof SimpleType) {
-                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-                if (name.contains("Object")) {
-                    nodes.add(node);
-                    return nodes;
-                }
-            }
-            return nodes;
-        } else {
+        if(!isOverride) {
             nodes.add(node);
-            return nodes;
         }
+        return nodes;
+//        if (isOverride) {
+//            if (clazz.superInterfaceTypes().size() > 0) {
+//                return nodes;
+//            }
+//            Type superClazzType = clazz.getSuperclassType();
+//            if (superClazzType == null) {
+//                nodes.add(node);
+//                return nodes;
+//            }
+//            if (superClazzType instanceof SimpleType) {
+//                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
+//                if (name.contains("Object")) {
+//                    nodes.add(node);
+//                    return nodes;
+//                }
+//            }
+//            return nodes;
+//        } else {
+//            nodes.add(node);
+//            return nodes;
+//        }
     }
 
 }

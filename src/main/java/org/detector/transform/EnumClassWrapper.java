@@ -154,10 +154,14 @@ public class EnumClassWrapper extends Transform {
             }
             return nodes;
         }
-        if(!method.isConstructor() && method.getName().getIdentifier().equals(clazz.getName().getIdentifier())) {
+        String methodName = method.getName().getIdentifier();
+        if(!method.isConstructor() && methodName.equals(clazz.getName().getIdentifier())) {
             return nodes;
         }
-        if(method.getName().getIdentifier().toLowerCase().startsWith("test")) {
+        if(methodName.equals("equals") || methodName.equals("hashCode") || methodName.equals("toString") || methodName.equals("clone") || methodName.equals("compareTo")) {
+            return nodes;
+        }
+        if(methodName.toLowerCase().startsWith("test")) {
             return nodes;
         }
         List<ASTNode> classModifiers = clazz.modifiers();
@@ -206,27 +210,31 @@ public class EnumClassWrapper extends Transform {
                 }
             }
         }
-        if (isOverride) {
-            if (clazz.superInterfaceTypes().size() > 0) {
-                return nodes;
-            }
-            Type superClazzType = clazz.getSuperclassType();
-            if (superClazzType == null) {
-                nodes.add(node);
-                return nodes;
-            }
-            if (superClazzType instanceof SimpleType) {
-                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-                if (name.contains("Object")) {
-                    nodes.add(node);
-                    return nodes;
-                }
-            }
-            return nodes;
-        } else {
+        if(!isOverride) {
             nodes.add(node);
-            return nodes;
         }
+        return nodes;
+//        if (isOverride) {
+//            if (clazz.superInterfaceTypes().size() > 0) {
+//                return nodes;
+//            }
+//            Type superClazzType = clazz.getSuperclassType();
+//            if (superClazzType == null) {
+//                nodes.add(node);
+//                return nodes;
+//            }
+//            if (superClazzType instanceof SimpleType) {
+//                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
+//                if (name.contains("Object")) {
+//                    nodes.add(node);
+//                    return nodes;
+//                }
+//            }
+//            return nodes;
+//        } else {
+//            nodes.add(node);
+//            return nodes;
+//        }
     }
 
     public List<ASTNode> classCheck(TypeWrapper wrapper, ASTNode node) {
