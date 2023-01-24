@@ -41,7 +41,7 @@ public class NestedClassWrapper extends Transform {
         ASTRewrite astRewrite = wrapper.getAstRewrite();
         MethodDeclaration oldMethod = TypeWrapper.getDirectMethodOfNode(srcNode);
         TypeDeclaration nestedClass = ast.newTypeDeclaration();
-        nestedClass.setName(ast.newSimpleName("subClass" + nestedClassCounter++));
+        nestedClass.setName(ast.newSimpleName("SubClass" + nestedClassCounter++));
         TypeDeclaration type = TypeWrapper.getClassOfNode(srcNode);
         for(ASTNode classModifier : (List<ASTNode>) type.modifiers()) {
             if(classModifier instanceof Modifier) {
