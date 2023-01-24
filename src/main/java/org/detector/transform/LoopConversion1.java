@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * @Description: Transfer a Loop to Lambda Expression Loop
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2022-02-26 15:42
  */
 public class LoopConversion1 extends Transform {

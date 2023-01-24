@@ -19,7 +19,7 @@ import static org.detector.transform.Transform.singleLevelExplorer;
 
 /**
  * Description: Infer Transformation Thread
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/2/4 1:23 PM
  */
 public class Infer_TransformThread extends Thread {

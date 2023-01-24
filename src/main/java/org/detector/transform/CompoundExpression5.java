@@ -14,7 +14,7 @@ import static org.detector.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/9/2 17:09
  */
 public class CompoundExpression5 extends Transform {

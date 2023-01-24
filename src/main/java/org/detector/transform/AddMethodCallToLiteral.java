@@ -30,7 +30,7 @@ import static org.detector.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021-12-29 16:10
  */
 public class AddMethodCallToLiteral extends Transform {

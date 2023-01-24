@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021/9/23 7:30 PM
  */
 public class PMD_Violation implements Violation {

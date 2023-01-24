@@ -23,9 +23,9 @@ public class CheckStyle_TransformThread implements Runnable {
     private int currentDepth;
     private String seedFolderName; // equal to rule type
     private ArrayDeque<TypeWrapper> wrappers;
-    private int configIndex;
+    private String configPath;
 
-    public CheckStyle_TransformThread(TypeWrapper initWrapper, String seedFolderName, int configIndex) {
+    public CheckStyle_TransformThread(TypeWrapper initWrapper, String seedFolderName, String configPath) {
         this.currentDepth = 0;
         this.seedFolderName = seedFolderName;
         this.wrappers = new ArrayDeque<>() {
@@ -33,7 +33,7 @@ public class CheckStyle_TransformThread implements Runnable {
                 add(initWrapper);
             }
         };
-        this.configIndex = configIndex;
+        this.configPath = configPath;
     }
 
     // iter 1 -> SEARCH_DEPTH: 1. transformation to generate mutant; 2. invoke PMD to detect bugs
@@ -48,17 +48,15 @@ public class CheckStyle_TransformThread implements Runnable {
             String mutantFolderPath = Utility.mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
             List<String> mutantFilePaths = Utility.getFilenamesFromFolder(mutantFolderPath, true);
 //            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
-            String configPath = CheckStyleConfigPath + File.separator + seedFolderName + configIndex + ".xml";
             File configFile = new File(configPath);
             if (configFile.exists()) {
                 configPath = CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
             }
-            List<CheckStyle_Report> reports = new ArrayList<>();
             // 这里还可以做一个configIndex是否match seedFolderName里边的index
             for (int i = 0; i < mutantFilePaths.size(); i++) {
                 String mutantFilePath = mutantFilePaths.get(i);
                 String mutantFileName = Path2Last(mutantFilePath);
-                String reportFilePath = reportFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".xml";
+                String reportFilePath = reportFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".txt";
                 String[] invokeCmds = new String[3];
                 if (OSUtil.isWindows()) {
                     invokeCmds[0] = "cmd.exe";

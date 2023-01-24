@@ -19,7 +19,7 @@ import static org.detector.util.Utility.readFileByLine;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/11/24 17:31
  */
 public class CleanSeeds {

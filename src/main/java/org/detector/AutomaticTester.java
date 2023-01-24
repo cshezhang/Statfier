@@ -13,7 +13,7 @@ import static org.detector.util.Utility.sourceSeedPath;
 
 /**
  * Description: Main process for automatic testing
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021-08-08 16:20
  */
 public class AutomaticTester {

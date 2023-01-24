@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Description: static int a = XX; -> static int a; static { a = 10; }
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022-01-04 16:20
  */
 public class AddStaticAssignment extends Transform {

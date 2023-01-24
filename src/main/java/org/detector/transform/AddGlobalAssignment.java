@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * @Description: static int a = b; -> static int a; static {a = b;}
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-12-15 12:49
  */
 public class AddGlobalAssignment extends Transform {

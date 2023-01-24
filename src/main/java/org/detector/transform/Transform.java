@@ -24,7 +24,7 @@ import static org.detector.util.Utility.SONARQUBE_MUTATION;
 
 /*
  * @Description: The General Class for Mutants.
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-10-14 09:25:07
  */
 public abstract class Transform {

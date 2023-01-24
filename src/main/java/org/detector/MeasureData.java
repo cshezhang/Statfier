@@ -13,7 +13,7 @@ import static org.detector.util.Utility.readFileByLine;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/11/15 22:14
  */
 public class MeasureData {

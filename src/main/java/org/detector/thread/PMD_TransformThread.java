@@ -17,7 +17,7 @@ import static org.detector.util.Utility.reportFolder;
 
 /**
  * Description: This file is the MAIN class for testing PMD with multi threads
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021/11/30 10:03
  */
 public class PMD_TransformThread implements Runnable {

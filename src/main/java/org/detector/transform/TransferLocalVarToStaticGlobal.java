@@ -22,7 +22,7 @@ import static org.detector.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * @Description: transfer local variable declaration to global scope in class, and this mutator contains static modifier
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-10-05 12:49
  */
 public class TransferLocalVarToStaticGlobal extends Transform {

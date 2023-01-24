@@ -16,7 +16,7 @@ import static org.detector.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * @Description: The mutant to add redundant literal
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-08-20 21:15
  */
 public class AddRedundantLiteral extends Transform {

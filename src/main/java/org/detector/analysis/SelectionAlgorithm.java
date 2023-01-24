@@ -11,7 +11,7 @@ import static org.detector.util.Utility.random;
 
 /**
  * @Description: This class is to save different algorithms.
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2022-03-16 21:34
  */
 public class SelectionAlgorithm {

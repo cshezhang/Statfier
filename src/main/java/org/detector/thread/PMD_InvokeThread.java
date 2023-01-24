@@ -8,7 +8,7 @@ import static org.detector.util.Utility.reportFolder;
 
 /**
  * Description: Previous main process for testing PMD with multi thread
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021/11/30 10:03
  */
 

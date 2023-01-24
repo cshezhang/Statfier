@@ -15,7 +15,7 @@ import static org.detector.util.Utility.readFileByLine;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2023/1/19 10:17
  */
 public class CodeFormatter {

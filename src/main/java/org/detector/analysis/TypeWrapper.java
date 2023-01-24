@@ -80,7 +80,7 @@ import static org.detector.util.Utility.isInvalidModifier;
 
 /**
  * Description: ASTWrapper is 1-to-1 a mutant or seed, it also contains some methods to perform different transformation schedule.
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021-08-10 16:10
  */
 public class TypeWrapper {
@@ -139,7 +139,7 @@ public class TypeWrapper {
         this.folderPath = targetFile.getParentFile().getAbsolutePath();
         this.folderName = folderName; // folderName -> subSeedFolderName
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
-        this.parentPath = null;
+        this.parentPath = "initSeed";
 //        this.parentWrapper = null;
 //        this.parViolations = 0;
         this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
@@ -483,6 +483,9 @@ public class TypeWrapper {
 
     public boolean isBuggy() {
         boolean buggy = false;
+        if(this.parentPath == "initSeed") {
+            return false;
+        }
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);

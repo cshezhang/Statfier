@@ -7,18 +7,22 @@ import org.detector.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static org.detector.util.Schedule.file2config;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
+import static org.detector.util.Utility.CheckStyleConfigPath;
 import static org.detector.util.Utility.DEBUG;
+import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.sep;
 
 public class CheckStyle_InvokeThread implements Runnable {
-    private int iterDepth;
+//    private int iterDepth;
     private String seedFolderPath;
     private String seedFolderName; // equal to rule type
 
 
     public CheckStyle_InvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
-        this.iterDepth = iterDepth;
+//        this.iterDepth = iterDepth;
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;
     }
@@ -26,31 +30,33 @@ public class CheckStyle_InvokeThread implements Runnable {
     // seedFolderPath can be java source file or a folder contains source files
     @Override
     public void run() {
-        List<String> filepaths = Utility.getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
-        for(int i = 0; i < filepaths.size(); i++) {
-            String filepath = filepaths.get(i);
-//            System.out.println(filepath);
-//            int i = Integer.parseInt(Path2Last(filepath));
-//            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
-            String configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + i + ".xml";
-            File configFile = new File(configPath);
+        List<String> filePaths = Utility.getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
+        for(int i = 0; i < filePaths.size(); i++) {
+            String filePath = filePaths.get(i);
+            String[] tokens = filePath.split(reg_sep);
+            int configIndex = Character.getNumericValue(tokens[tokens.length - 1].charAt(tokens[tokens.length - 1].indexOf(".") - 1));
+            File configFile = new File(CheckStyleConfigPath + sep + seedFolderName + configIndex + ".xml");
+            String configPath;
             if(configFile.exists()) {
-                configPath = Utility.CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
-            }
-            String reportPath = reportFolder + File.separator + "iter" + iterDepth + "_" + seedFolderName + i + "_Result.xml";
-            String[] invokeCmds = new String[3];
-            if(OSUtil.isWindows()) {
-                invokeCmds[0] = "cmd.exe";
-                invokeCmds[1] = "/c";
+                configPath = configFile.getAbsolutePath();
             } else {
-                invokeCmds[0] = "/bin/bash";
-                invokeCmds[1] = "-c";
+                configPath = CheckStyleConfigPath + sep + seedFolderName + 0 + ".xml";
             }
-            invokeCmds[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filepath;
+            file2config.put(filePath, configPath);
+            String reportPath = reportFolder + File.separator + "iter0" + "_" + seedFolderName + i + "_Result.txt";
+            String[] invokeCommands = new String[3];
+            if(OSUtil.isWindows()) {
+                invokeCommands[0] = "cmd.exe";
+                invokeCommands[1] = "/c";
+            } else {
+                invokeCommands[0] = "/bin/bash";
+                invokeCommands[1] = "-c";
+            }
+            invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + configPath +  " " + filePath;
             if(DEBUG) {
-                System.out.println(invokeCmds[2]);
+                System.out.println(invokeCommands[2]);
             }
-            Invoker.invokeCommandsByZT(invokeCmds);
+            Invoker.invokeCommandsByZT(invokeCommands);
         }
     }
 

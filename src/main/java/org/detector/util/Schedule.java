@@ -9,12 +9,15 @@ import static org.detector.util.Invoker.compileJavaSourceFile;
 import static org.detector.util.Invoker.createSonarQubeProject;
 import static org.detector.util.Invoker.deleteSonarQubeProject;
 import static org.detector.util.Invoker.failedCommands;
+import static org.detector.util.Invoker.invokeCheckStyle;
 import static org.detector.util.Invoker.invokeCommandsByZT;
 import static org.detector.util.Invoker.invokeCommandsByZTWithOutput;
 import static org.detector.util.Invoker.invokePMD;
 import static org.detector.util.Invoker.invokeSonarQube;
 import static org.detector.util.Invoker.invokeSpotBugs;
 import static org.detector.util.Invoker.writeSettingFile;
+import static org.detector.util.Utility.CHECKSTYLE_PATH;
+import static org.detector.util.Utility.CheckStyleConfigPath;
 import static org.detector.util.Utility.EVALUATION_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.Path2Last;
@@ -57,6 +60,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -77,7 +81,7 @@ import org.json.JSONObject;
 
 /**
  * Description: This file is the main class for our framework
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2021/8/25 10:03
  */
 public class Schedule {
@@ -85,22 +89,21 @@ public class Schedule {
     // Implement singleton pattern
     private static final Schedule tester = new Schedule();
 
-    private Schedule() {
-    }
+    private Schedule() {}
 
     public static Schedule getInstance() {
         return tester;
     }
 
+    public static Map<String, String> file2config = new HashMap<>();  // source file -> config index
     public void executeCheckStyleTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
-        Invoker.invokeCheckStyle(seedFolderPath);
+        invokeCheckStyle(seedFolderPath);
         ExecutorService threadPool = initThreadPool();
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
         List<TypeWrapper> initWrappers = new ArrayList<>();
-        Map<String, Integer> file2index = new HashMap<>();  // source file -> config index
         for (int i = 0; i < seedFilePaths.size(); i++) {
             String seedFilePath = seedFilePaths.get(i);  // Absolute Path
             String[] tokens = seedFilePath.split(reg_sep);
@@ -111,15 +114,77 @@ public class Schedule {
             initValidSeedWrapperSize++;
             TypeWrapper seedWrapper = new TypeWrapper(seedFilePath, seedFolderName);
             initWrappers.add(seedWrapper);
-            int configIndex = Character.getNumericValue(tokens[tokens.length - 1].charAt(tokens[tokens.length - 1].indexOf(".") - 1));
-            file2index.put(seedFilePath, configIndex);
+//            int configIndex = Character.getNumericValue(tokens[tokens.length - 1].charAt(tokens[tokens.length - 1].indexOf(".") - 1));
+//            File configFile = new File(CheckStyleConfigPath + sep + seedFolderName + configIndex + ".xml");
+//            if(configFile.exists()) {
+//                file2config.put(seedFilePath, configFile.getAbsolutePath());
+//            } else {
+//                file2config.put(seedFilePath, CheckStyleConfigPath + sep + seedFolderName + 0 + ".xml");
+//            }
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        for (TypeWrapper wrapper : initWrappers) {
-            CheckStyle_TransformThread mutationThread = new CheckStyle_TransformThread(wrapper, wrapper.getFolderName(), file2index.get(wrapper.getFilePath()));
-            threadPool.submit(mutationThread);
+        if(THREAD_COUNT > 1) {
+            for (TypeWrapper wrapper : initWrappers) {
+                CheckStyle_TransformThread mutationThread = new CheckStyle_TransformThread(wrapper, wrapper.getFolderName(), file2config.get(wrapper.getFilePath()));
+                threadPool.submit(mutationThread);
+            }
+            waitThreadPoolEnding(threadPool);
+        } else {
+            Set<String> visitedPaths = new HashSet<>();
+            for(int wrapperIndex = 0; wrapperIndex < initWrappers.size(); wrapperIndex++) {
+                TypeWrapper wrapper = initWrappers.get(wrapperIndex);
+                // 设置一次config path，后边每一层都用这个
+                String configPath = file2config.get(wrapper.getFilePath());
+                int currentDepth = 0;
+                String seedFolderName = wrapper.getFolderName();
+                ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
+                    {
+                        add(wrapper);
+                    }
+                };
+                for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+                    if (DEBUG) {
+                        System.out.println("Transform Thread Depth: " + depth + " Folder: " + seedFolderName);
+                    }
+                    singleLevelExplorer(wrappers, currentDepth++);
+                    // detect mutants of iter i
+                    String mutantFolderPath = mutantFolder + sep + "iter" + depth + sep + seedFolderName;
+                    List<String> mutantFilePaths = getFilenamesFromFolder(mutantFolderPath, true);
+                    for (int i = 0; i < mutantFilePaths.size(); i++) {
+                        String mutantFilePath = mutantFilePaths.get(i);
+                        if(visitedPaths.contains(mutantFilePath)) {
+                            continue;
+                        }
+                        visitedPaths.add(mutantFilePath);
+                        String mutantFileName = Path2Last(mutantFilePath);
+                        String reportFilePath = reportFolder + sep + "iter" + depth + "_" + mutantFileName + ".txt";
+                        String[] invokeCommands = new String[3];
+                        if (OSUtil.isWindows()) {
+                            invokeCommands[0] = "cmd.exe";
+                            invokeCommands[1] = "/c";
+                        } else {
+                            invokeCommands[0] = "/bin/bash";
+                            invokeCommands[1] = "-c";
+                        }
+                        invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c "
+                                + configPath + " " + mutantFilePath;
+                        if (DEBUG) {
+                            System.out.println(invokeCommands[2]);
+                        }
+                        Invoker.invokeCommandsByZT(invokeCommands);
+                        Utility.readCheckStyleResultFile(reportFilePath);
+                    }
+                    List<TypeWrapper> validWrappers = new ArrayList<>();
+                    while (!wrappers.isEmpty()) {
+                        TypeWrapper head = wrappers.pollFirst();
+                        if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
+                            validWrappers.add(head);
+                        }
+                    }
+                    wrappers.addAll(validWrappers);
+                }
+            }
         }
-        waitThreadPoolEnding(threadPool);
     }
 
     public void executeSpotBugsTransform(String initSeedFolderPath) {

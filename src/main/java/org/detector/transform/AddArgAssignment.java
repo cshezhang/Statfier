@@ -30,7 +30,7 @@ import static org.detector.analysis.TypeWrapper.getChildrenNodes;
 
 /**
  * @Description: Add assignment mutatant
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-10-05 12:49
  */
 public class AddArgAssignment extends Transform {

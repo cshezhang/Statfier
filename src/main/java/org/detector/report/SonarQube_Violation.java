@@ -2,7 +2,7 @@ package org.detector.report;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/8/29 15:22
  */
 public class SonarQube_Violation implements Violation {

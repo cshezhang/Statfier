@@ -2,7 +2,7 @@ package org.detector.util;
 
 /**
  * @Description: OS Version
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2022-04-17 21:52
  */
 public class OSUtil {

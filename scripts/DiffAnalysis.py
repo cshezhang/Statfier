@@ -1,6 +1,6 @@
 '''
 Description: This is used to compare to result files of Java.
-Author: Vanguard
+Author: RainyD4y
 Date: 2021-11-11 10:21:16
 '''
 import os

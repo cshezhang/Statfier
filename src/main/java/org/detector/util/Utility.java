@@ -72,7 +72,7 @@ import static org.detector.util.Invoker.invokeCommandsByZTWithOutput;
 
 /**
  * @Description: Utility Class for SAMutator
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-08-11 11:06
  */
 public class Utility {
@@ -580,8 +580,8 @@ public class Utility {
 
     public static void readCheckStyleResultFile(String reportPath) { // one report -> one file
         HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
-        File checkFile = new File(reportPath);
-        if (!checkFile.exists()) {
+        File reportFile = new File(reportPath);
+        if (!reportFile.exists()) {
             return;
         }
         List<String> errorInstances = new ArrayList<>();

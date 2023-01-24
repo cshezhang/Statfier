@@ -6,7 +6,7 @@ import java.io.File;
 
 /**
  * @Intro: Save a bug instance in report.
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-10-18 11:21:56
  */
 public class SpotBugs_Violation implements Violation {

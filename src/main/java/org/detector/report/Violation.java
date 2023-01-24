@@ -2,7 +2,7 @@ package org.detector.report;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/7/28 21:25
  */
 public interface Violation {

@@ -54,7 +54,7 @@ import static org.detector.util.Utility.writeLinesToFile;
 
 /**
  * @Description: This class is used for different invocation functions.
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-10-27 14:20:55
  */
 public class Invoker {

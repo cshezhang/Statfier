@@ -2,7 +2,7 @@ package org.detector.util;
 
 /**
  * @Description: Pair Class
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-12-29 19:14
  */
 public class Pair {

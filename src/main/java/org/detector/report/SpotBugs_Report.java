@@ -16,7 +16,7 @@ import static org.detector.util.Utility.file2row;
 
 /**
  * @Description: 
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2021-10-18 11:21:22
  */
 public class SpotBugs_Report implements Report {

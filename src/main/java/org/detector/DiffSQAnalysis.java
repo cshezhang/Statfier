@@ -13,7 +13,7 @@ import static org.detector.util.Utility.readFileByLine;
 
 /**
  * Description:
- * Author: Vanguard
+ * Author: RainyD4y
  * Date: 2022/8/29 15:18
  */
 public class DiffSQAnalysis {

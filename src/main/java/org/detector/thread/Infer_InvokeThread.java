@@ -14,7 +14,7 @@ import static org.detector.util.Utility.reportFolder;
 
 /**
  * @Description:
- * @Author: Vanguard
+ * @Author: RainyD4y
  * @Date: 2022-04-13 13:09
  */
 public class Infer_InvokeThread implements Runnable {
