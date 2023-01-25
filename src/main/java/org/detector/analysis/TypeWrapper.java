@@ -57,14 +57,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
-import static org.detector.util.Utility.noReport;
 import static org.detector.util.Utility.random;
 import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2bugs;
@@ -101,7 +99,6 @@ public class TypeWrapper {
     private String folderPath;
     private String folderName; // For PMD and CheckStyle, folderName equals to rule name
     private String parentPath;
-//    private TypeWrapper parentWrapper;
     private String mutantFolder;
     private List<ASTNode> nodeIndex;
     private List<String> transSeq;
@@ -140,8 +137,6 @@ public class TypeWrapper {
         this.folderName = folderName; // folderName -> subSeedFolderName
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
         this.parentPath = "initSeed";
-//        this.parentWrapper = null;
-//        this.parViolations = 0;
         this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();

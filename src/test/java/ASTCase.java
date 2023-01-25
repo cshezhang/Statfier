@@ -6,3 +6,10 @@ public class ASTCase {
         }
     }
 }
+class Foo {
+    public Foo() {
+        final boolean var196 = true;
+        bar(var196);
+    }
+    public void bar(boolean b) {}
+}

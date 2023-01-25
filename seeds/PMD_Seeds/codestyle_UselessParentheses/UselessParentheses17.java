@@ -1,34 +1,10 @@
-class ExampleClass {
-  void exampleExpressions() {
-    eUseless = (a++) + b;
-    eUseless = (a--) + b;
-    eUseless = (++a) + b;
-    eUseless = (--a) + b;
-    eUseless = (+a) + b;
-    eUseless = (-a) + b;
-    eUseless = (~a) + b;
-    eUseless = (!a) + b;
-    eUseless = (a * b) + c;
-    eUseless = (a / b) + c;
-    eUseless = (a % b) + c;
-    eUseless = (a + b) + c;
-    eGood = (a - b) + c;
-    eGood = (a << b) + c;
-    eGood = (a >> b) + c;
-    eGood = (a >>> b) + c;
-    eGood = (a < b) + c;
-    eGood = (a > b) + c;
-    eGood = (a <= b) + c;
-    eGood = (a >= b) + c;
-    eGood = (a instanceof b) + c;
-    eGood = (a == b) + c;
-    eGood = (a != b) + c;
-    eGood = (a & b) + c;
-    eGood = (a ^ b) + c;
-    eGood = (a | b) + c;
-    eGood = (a && b) + c;
-    eGood = (a || b) + c;
-    eGood = (a ? b : c) + d;
+public class Test {
+  public void test() {
+    Pattern p;
+    Matcher m;
+    if ((m = p.matcher("hello world")).matches()) {
+      System.out.println("Hello world");
+    }
   }
 }
 

@@ -1,8 +1,11 @@
-public class Foo {
-  public Foo() {
-    bar(true);
+record HelloMsg(String msg) {
+
+  HelloMsg toTheWorld() {
+    return new HelloMsg("World");
   }
 
-  public void bar(boolean b) {}
+  String hello() {
+    return "Hello " + msg;
+  }
 }
 

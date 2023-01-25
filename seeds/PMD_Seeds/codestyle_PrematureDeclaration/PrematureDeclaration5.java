@@ -1,15 +1,12 @@
 public class PrematureDeclarationLambda {
-  public int lengthSumOf(String[] foo) {
+  public boolean lengthSumOf() {
+    String signingInput =
+        Stream.of(a, b)
+            .filter(Objects::nonNull)
+            .map(String::valueOf)
+            .collect(Collectors.joining(EMPTY));
 
-    int snafoo = 0;
-
-    if (foo == null || foo.length == 0) return 0;
-
-    for (String aFoo : foo) {
-      snafoo += aFoo.length();
-    }
-
-    return snafoo;
+    return Try.of(() -> sign(signingInput)).getOrElse(() -> null);
   }
 }
 

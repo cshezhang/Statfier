@@ -107,27 +107,24 @@ public class AddArgAssignment extends Transform {
     @Override
     public List<ASTNode> check(TypeWrapper wrapper, ASTNode node) {
         List<ASTNode> nodes = new ArrayList<>();
-        if(node instanceof VariableDeclarationStatement || node instanceof ExpressionStatement || node instanceof ReturnStatement) {
-            List<ASTNode> subNodes = getChildrenNodes(node);
+        List<ASTNode> subNodes = getChildrenNodes(node);
+        if(node instanceof VariableDeclarationStatement || node instanceof ExpressionStatement) {
             for(ASTNode subNode : subNodes) {
                 if(isLiteral(subNode)) {
                     nodes.add(subNode);
                 }
             }
         }
-//        if (node instanceof VariableDeclarationStatement) {
-//            VariableDeclarationFragment vdFragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) node).fragments().get(0);
-//            Expression rightExpression = vdFragment.getInitializer();
-//            if (rightExpression instanceof MethodInvocation || rightExpression instanceof ClassInstanceCreation) {
-//                nodes.add(node);
-//            }
-//        }
-//        if (node instanceof ExpressionStatement) {
-//            Expression expression = ((ExpressionStatement) node).getExpression();
-//            if (expression instanceof MethodInvocation || expression instanceof Assignment) {
-//                nodes.add(node);
-//            }
-//        }
+        if(node instanceof ReturnStatement) {
+            if(isLiteral(((ReturnStatement) node).getExpression())) {
+                return nodes;
+            }
+            for(ASTNode subNode : subNodes) {
+                if(isLiteral(subNode)) {
+                    nodes.add(subNode);
+                }
+            }
+        }
         return nodes;
     }
 

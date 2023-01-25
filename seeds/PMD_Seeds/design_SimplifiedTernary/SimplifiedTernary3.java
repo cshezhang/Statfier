@@ -1,6 +1,6 @@
-public class Foo {
-  public void test() {
-    final boolean otherValue = condition ? something() : false;
+public class SimplifiedTernary {
+  public Boolean getHasCustomName() {
+    return mHasCustomName ? true : null;
   }
 }
 
