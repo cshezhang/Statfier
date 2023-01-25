@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: Add assignment mutatant
+ * @Description: Split a variable declaration statement
  * @Author: RainyD4y
  * @Date: 2021-08-20 21:08
  */
@@ -23,7 +23,7 @@ public class AddLocalAssignment extends Transform {
         return instance;
     }
 
-    /*
+    /**
     * Source: Var A = B; => Var A; A = B; VD_Statement => VD + Assignment
     * Including final Var A = B; Attention: Final variable assignment cannot be applied to Array Type.
     * */
@@ -67,7 +67,6 @@ public class AddLocalAssignment extends Transform {
         List<ASTNode> nodes = new ArrayList<>();
         if(statement instanceof VariableDeclarationStatement) {
             VariableDeclarationStatement vdStatement = (VariableDeclarationStatement) statement;
-            // System.out.println(vdStatement.getType());
             if(vdStatement.getType() instanceof ArrayType) {
                 if(vdStatement.modifiers().size() > 0) {
                     Modifier modifier = (Modifier) vdStatement.modifiers().get(0);

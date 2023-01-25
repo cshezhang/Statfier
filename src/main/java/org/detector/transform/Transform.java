@@ -73,6 +73,7 @@ public abstract class Transform {
             transforms.add(LoopConversion1.getInstance());
             transforms.add(LoopConversion2.getInstance());
             if(INFER_MUTATION || SONARQUBE_MUTATION) {
+                // related to inter-procedural analysis
                 transforms.add(AddMethodCallToLiteral.getInstance());
                 transforms.add(TransferLocalVarToGlobal.getInstance());
                 transforms.add(TransferLocalVarToStaticGlobal.getInstance());
