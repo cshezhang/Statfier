@@ -1,10 +1,7 @@
 import net.jcip.annotations.Immutable;
+import java.util.logging.Logger;
 
 @Immutable
-public class Test {
-    final Object anonWrap125 =
-            new Object() {
-                final int x = 0;
-            };
-    int y;
+public class Test implements Serializable, TestCase {
+    public static final Logger log = Logger.getAnonymousLogger();
 }

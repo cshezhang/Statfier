@@ -57,7 +57,7 @@ public class SpotBugs_Report implements Report {
             System.out.println("SpotBugs Detection Result FileName: " + reportPath);
         }
         File reportFile = new File(reportPath);
-        if(!reportFile.exists()) {
+        if(!reportFile.exists() || reportFile.length() == 0) {
             return;
         }
         HashMap<String, SpotBugs_Report> filepath2report = new HashMap<>();

@@ -486,9 +486,13 @@ public class TypeWrapper {
         if(this.parentPath == "initSeed") {
             return false;
         }
+        if(this.filePath.contains("118.java")) {
+            int a = 10;
+        }
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
-            Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
+            Map<String, List<Integer>> mutant_bug2lines = file2bugs.
+                    get(this.filePath);
             Map<String, List<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
             if (mutant_bug2lines == null && source_bug2lines == null) {
@@ -1204,6 +1208,13 @@ public class TypeWrapper {
         }
         if(clazz.getSuperclassType() != null && clazz.getSuperclassType().toString().contains("TestCase")) {
             return false;
+        }
+        if(clazz.superInterfaceTypes() != null) {
+            for(ASTNode node : (List<ASTNode>) clazz.superInterfaceTypes()) {
+                if(node.toString().contains("Serializable")) {
+                    return false;
+                }
+            }
         }
         if(clazz.getParent() instanceof CompilationUnit) {
             CompilationUnit cu = (CompilationUnit) clazz.getParent();

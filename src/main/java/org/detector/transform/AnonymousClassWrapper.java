@@ -133,6 +133,9 @@ public class AnonymousClassWrapper extends Transform {
         if (method == null) {
             ASTNode statement = getStatementOfNode(node);
             if(statement instanceof FieldDeclaration) {
+                if(((FieldDeclaration) statement).getType().toString().toLowerCase().contains("logger")) {
+                    return nodes;
+                }
                 VariableDeclarationFragment fragment = (VariableDeclarationFragment) ((FieldDeclaration) statement).fragments().get(0);
                 String varName = fragment.getName().getIdentifier();
                 if(varName.equals("serialVersionUID")) {
@@ -160,7 +163,7 @@ public class AnonymousClassWrapper extends Transform {
         if(methodName.equals("equals") || methodName.equals("hashCode") || methodName.equals("toString") || methodName.equals("clone") || methodName.equals("compareTo")) {
             return nodes;
         }
-        if(methodName.toLowerCase().startsWith("test")) {
+        if(methodName.toLowerCase().startsWith("test") || methodName.startsWith("get") || methodName.startsWith("set")) {
             return nodes;
         }
         List<ASTNode> modifiers = (List<ASTNode>) method.modifiers();
@@ -189,15 +192,14 @@ public class AnonymousClassWrapper extends Transform {
                 String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
                 if (name.contains("Override")) {
                     isOverride = true;
-                    break;
                 }
-                if(name.contains("Test")) {
+                if(name.contains("Test") || name.contains("UiThread")) {
                     return nodes;
                 }
             }
             if(modifier instanceof Modifier) {
                 String modifierName = ((Modifier) modifier).getKeyword().toString();
-                if(modifierName.contains("abstract")) {
+                if(modifierName.contains("abstract") || modifierName.contains("synchronized")) {
                     return nodes;
                 }
             }
