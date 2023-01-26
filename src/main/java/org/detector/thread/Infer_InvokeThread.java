@@ -32,12 +32,12 @@ public class Infer_InvokeThread implements Runnable {
     // seedFolderPath can be java source file or a folder contains source files
     @Override
     public void run() {
-        List<String> filepaths = Utility.getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
+        List<String> filePaths = Utility.getFilenamesFromFolder(seedFolderPath + File.separator + seedFolderName, true);
         if(DEBUG) {
-            System.out.println("InvokeT Path:" + seedFolderPath + " Name:" + seedFolderName + " Size:" + filepaths.size());
+            System.out.println("InvokeT Path:" + seedFolderPath + " Name:" + seedFolderName + " Size:" + filePaths.size());
         }
-        for(int i = 0; i < filepaths.size(); i++) {
-            String srcJavaPath = filepaths.get(i);
+        for(int i = 0; i < filePaths.size(); i++) {
+            String srcJavaPath = filePaths.get(i);
             String filename = Utility.Path2Last(srcJavaPath);
             String reportFolderPath = reportFolder + File.separator + "iter" + iterDepth + "_" + filename;
             String cmd = "\"" + Utility.INFER_PATH + " run -o " + reportFolderPath + " -- " + Utility.JAVAC_PATH +

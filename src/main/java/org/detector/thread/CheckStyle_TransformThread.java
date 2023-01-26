@@ -57,20 +57,20 @@ public class CheckStyle_TransformThread implements Runnable {
                 String mutantFilePath = mutantFilePaths.get(i);
                 String mutantFileName = Path2Last(mutantFilePath);
                 String reportFilePath = reportFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".txt";
-                String[] invokeCmds = new String[3];
+                String[] invokeCommands = new String[3];
                 if (OSUtil.isWindows()) {
-                    invokeCmds[0] = "cmd.exe";
-                    invokeCmds[1] = "/c";
+                    invokeCommands[0] = "cmd.exe";
+                    invokeCommands[1] = "/c";
                 } else {
-                    invokeCmds[0] = "/bin/bash";
-                    invokeCmds[1] = "-c";
+                    invokeCommands[0] = "/bin/bash";
+                    invokeCommands[1] = "-c";
                 }
-                invokeCmds[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c "
+                invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c "
                         + configPath + " " + mutantFilePath;
                 if (DEBUG) {
-                    System.out.println(invokeCmds[2]);
+                    System.out.println(invokeCommands[2]);
                 }
-                Invoker.invokeCommandsByZT(invokeCmds);
+                Invoker.invokeCommandsByZT(invokeCommands);
                 Utility.readCheckStyleResultFile(reportFilePath);
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();

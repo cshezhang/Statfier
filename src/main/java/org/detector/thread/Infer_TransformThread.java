@@ -47,31 +47,32 @@ public class Infer_TransformThread extends Thread {
         for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
             singleLevelExplorer(this.wrappers, this.currentDepth++);
             String mutantFolderPath = Utility.mutantFolder + File.separator + "iter" + depth;
-            List<String> filepaths = Utility.getFilenamesFromFolder(mutantFolderPath, true);
+            List<String> filePaths = Utility.getFilenamesFromFolder(mutantFolderPath, true);
             if(DEBUG) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
-                System.out.println(this.getName() + "-" + "Begin to Read Reports and File Size: " + filepaths.size());
+                System.out.println(this.getName() + "-" + "Begin to Read Reports and File Size: " + filePaths.size());
                 System.out.println("Mutant Folder: " + mutantFolderPath);
             }
-            List<Infer_Report> reports = new ArrayList<>();
-            for(int i = 0; i < filepaths.size(); i++) {
-                String srcJavaPath = filepaths.get(i);
+            for(int i = 0; i < filePaths.size(); i++) {
+                String srcJavaPath = filePaths.get(i);
                 String filename = Utility.Path2Last(srcJavaPath);
                 String reportFolderPath = reportFolder + File.separator + "iter" + depth + "_" + filename;
                 String cmd = Utility.INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + Utility.JAVAC_PATH +
                         " -d " + classFolder.getAbsolutePath() + File.separator + filename +
                         " -cp " + inferJarStr + " " + srcJavaPath;
-                System.out.println(this.getName() + "-" + cmd);
-                String[] invokeCmds = new String[3];
-                if(OSUtil.isWindows()) {
-                    invokeCmds[0] = "cmd.exe";
-                    invokeCmds[1] = "/c";
-                } else {
-                    invokeCmds[0] = "/bin/bash";
-                    invokeCmds[1] = "-c";
+                if(DEBUG) {
+                    System.out.println(this.getName() + "-" + cmd);
                 }
-                invokeCmds[2] = "python3 cmd.py " + cmd;
-                Invoker.invokeCommandsByZT(invokeCmds);
+                String[] invokeCommands = new String[3];
+                if(OSUtil.isWindows()) {
+                    invokeCommands[0] = "cmd.exe";
+                    invokeCommands[1] = "/c";
+                } else {
+                    invokeCommands[0] = "/bin/bash";
+                    invokeCommands[1] = "-c";
+                }
+                invokeCommands[2] = "python3 cmd.py " + cmd;
+                Invoker.invokeCommandsByZT(invokeCommands);
                 String resultFilePath = reportFolderPath + File.separator + "report.json";
                 Utility.readInferResultFile(srcJavaPath, resultFilePath);
             }
