@@ -193,52 +193,39 @@ public class Schedule {
         List<String> seedFilePaths = getFilenamesFromFolder(initSeedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
-        List<String> failSeedPaths = new ArrayList<>();
-        List<TypeWrapper> initWrappers = new ArrayList<>();
+        HashMap<String, List<TypeWrapper>> folder2wrappers = new HashMap<>();
         for (int index = 0; index < seedFilePaths.size(); index++) {
             String seedFilePath = seedFilePaths.get(index);
             String[] tokens = seedFilePath.split(reg_sep);
             String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedFilePath)) {
-                failSeedPaths.add(seedFilePath);
                 continue;
             }
             initValidSeedWrapperSize++;
             TypeWrapper seedWrapper = new TypeWrapper(seedFilePath, seedFolderName);
-            initWrappers.add(seedWrapper);
+            if(!folder2wrappers.containsKey(seedWrapper.getFolderName())) {
+                folder2wrappers.put(seedWrapper.getFolderName(), new ArrayList<>());
+            }
+            folder2wrappers.get(seedWrapper.getFolderName()).add(seedWrapper);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        if (DEBUG) {
-            for (TypeWrapper wrapper : initWrappers) {
-                System.out.println("Init Path: " + wrapper.getFilePath());
-            }
-            System.out.println("Fail Seed Size: " + failSeedPaths.size());
-            for (String path : failSeedPaths) {
-                System.out.println("Fail Seed Path: " + path);
-            }
+        List<List<TypeWrapper>> lists = new ArrayList<>();
+        for(List<TypeWrapper> wrappers : folder2wrappers.values()) {
+            lists.add(wrappers);
         }
-        List<List<TypeWrapper>> lists = listAveragePartition(initWrappers, THREAD_COUNT);
         if(THREAD_COUNT > 1) {
             ExecutorService threadPool = initThreadPool();
-            if (threadPool == null) {
-                System.out.println("No Thread!");
-                SpotBugs_Exec.run(initWrappers);
-            } else {
-                for (int i = 0; i < lists.size(); i++) {
-                    SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
-                    threadPool.submit(thread);
-                }
-                waitThreadPoolEnding(threadPool);
+            for (int i = 0; i < lists.size(); i++) {
+                SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
+                threadPool.submit(thread);
             }
+            waitThreadPoolEnding(threadPool);
         } else {
             for (int i = 0; i < lists.size(); i++) {
                 int currentDepth = 0;
-                List<TypeWrapper> wrappers = new ArrayList<>() {
-                    {
-                        addAll(initWrappers);
-                    }
-                };
-                for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
+                List<TypeWrapper> wrappers = new ArrayList<>();
+                wrappers.addAll(lists.get(i));
+                for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
                     Transform.singleLevelExplorer(wrappers, currentDepth++);
                     for (int j = wrappers.size() - 1; j >= 0; j--) {
                         TypeWrapper wrapper = wrappers.get(j);
@@ -249,22 +236,21 @@ public class Schedule {
                         String subSeedFolderName = tokens[tokens.length - 2];
                         String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                         // Filename is used to specify class folder name
-                        File classFolder = new File(Utility.classFolder.getAbsolutePath() + File.separator + seedFileName);
+                        File classFolder = new File(Utility.classFolder.getAbsolutePath() + sep + seedFileName);
                         if (!classFolder.exists()) {
                             classFolder.mkdirs();
                         }
                         boolean isCompiled = compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
                         if(!isCompiled) { // Failed compilation point
-                            noReport.put(wrapper.getFilePath(), true);
-                            wrappers.remove(j);
-                            try {
-                                FileUtils.deleteDirectory(classFolder);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            noReport.add(wrapper.getFilePath());
+//                            try {
+//                                FileUtils.deleteDirectory(classFolder);
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
                             continue;
                         }
-                        String reportPath = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                        String reportPath = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
                         String[] invokeCommands = new String[3];
                         if (OSUtil.isWindows()) {
                             invokeCommands[0] = "cmd.exe";
@@ -279,7 +265,7 @@ public class Schedule {
                                 + classFolder.getAbsolutePath();
                         boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                         if (hasExec) {
-                            String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                            String report_path = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
                             readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
                         }
                     }
@@ -287,6 +273,10 @@ public class Schedule {
                     while (!wrappers.isEmpty()) {
                         TypeWrapper head = wrappers.get(0);
                         wrappers.remove(0);
+                        System.out.println("Head Path: " + head.getFilePath());
+                        if(noReport.contains(head.getFilePath())) {
+                            continue;
+                        }
                         if (!head.isBuggy()) {
                             validWrappers.add(head);
                         }
