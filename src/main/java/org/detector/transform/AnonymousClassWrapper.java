@@ -68,29 +68,24 @@ public class AnonymousClassWrapper extends Transform {
             anonymousClassDeclaration.bodyDeclarations().add(newMethod);
             instanceCreation.setAnonymousClassDeclaration(anonymousClassDeclaration);
             // Init value of new FieldDeclaration
-            VariableDeclarationFragment fragment = ast.newVariableDeclarationFragment();
-            fragment.setInitializer(instanceCreation);
-            fragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
+            VariableDeclarationFragment newFragment = ast.newVariableDeclarationFragment();
+            newFragment.setInitializer(instanceCreation);
+            newFragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
             // insert new FieldStatement containing Anonymous class
-            FieldDeclaration newFieldDeclaration = ast.newFieldDeclaration(fragment);
-            newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
-            newFieldDeclaration.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-//            for(ASTNode modifier : classModifiers) {
-//                if(modifier instanceof Modifier) {
-//                    newFieldDeclaration.modifiers().add(ASTNode.copySubtree(ast, modifier));
-//                }
-//            }
-            astRewrite.replace(oldMethod, newFieldDeclaration, null);
+            FieldDeclaration newClass = ast.newFieldDeclaration(newFragment);
+            newClass.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+            astRewrite.replace(oldMethod, newClass, null);
             return true;
         } else {
             if(srcNode instanceof FieldDeclaration) {
+                FieldDeclaration oldFieldDeclaration = (FieldDeclaration) srcNode;
                 String varName = ((VariableDeclarationFragment) (((FieldDeclaration) srcNode).fragments().get(0))).getName().getIdentifier();
                 for(Map.Entry<String, HashSet<String>> entry : wrapper.getMethod2identifiers().entrySet()) {
                     if(entry.getValue().contains(varName)) {
                         return false;
                     }
                 }
-                FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
+                FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, oldFieldDeclaration);
                 anonymousClassDeclaration.bodyDeclarations().add(newFieldDeclaration);
                 instanceCreation.setAnonymousClassDeclaration(anonymousClassDeclaration);
                 // Init value of new FieldDeclaration
@@ -98,15 +93,10 @@ public class AnonymousClassWrapper extends Transform {
                 fragment.setInitializer(instanceCreation);
                 fragment.setName(ast.newSimpleName("anonWrap" + varCounter++));
                 // insert new FieldStatement containing Anonymous class
-                FieldDeclaration newNode = ast.newFieldDeclaration(fragment);
-                newFieldDeclaration.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
-                newNode.setType(ast.newSimpleType(ast.newSimpleName("Object")));
-//                for(ASTNode modifier : classModifiers) {
-//                    if(modifier instanceof Modifier) {
-//                        newNode.modifiers().add(ASTNode.copySubtree(ast, modifier));
-//                    }
-//                }
-                astRewrite.replace(srcNode, newNode, null);
+                FieldDeclaration newClass = ast.newFieldDeclaration(fragment);
+                newClass.modifiers().add(ast.newModifier(Modifier.ModifierKeyword.FINAL_KEYWORD));
+                newClass.setType(ast.newSimpleType(ast.newSimpleName("Object")));
+                astRewrite.replace(oldFieldDeclaration, newClass, null);
                 return true;
             } else {
                 return false;

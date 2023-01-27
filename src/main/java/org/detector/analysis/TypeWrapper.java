@@ -97,7 +97,7 @@ public class TypeWrapper {
     private ASTParser parser;
     private String filePath; // This variable saves the absolute path.
     private String folderPath;
-    private String folderName; // For PMD and CheckStyle, folderName equals to rule name
+    private String folderName;
     private String parentPath;
     private String mutantFolder;
     private List<ASTNode> nodeIndex;
@@ -156,7 +156,6 @@ public class TypeWrapper {
         this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
-//        this.parentWrapper = parentWrapper;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
         this.transNodes = new ArrayList<>();
@@ -481,9 +480,6 @@ public class TypeWrapper {
         if(this.parentPath == "initSeed") {
             return false;
         }
-        if(this.filePath.contains("118.java")) {
-            int a = 10;
-        }
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.
@@ -491,7 +487,7 @@ public class TypeWrapper {
             Map<String, List<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
             if (mutant_bug2lines == null && source_bug2lines == null) {
-                System.err.println("What the fuck? Both reports don't have bugs?");
+                System.err.println("Both reports don't have bugs!");
                 System.exit(-1);
             }
             if (mutant_bug2lines == null) {
@@ -508,20 +504,6 @@ public class TypeWrapper {
                     return false;
                 }
             }
-//            if (mutant_bug2lines == null) {
-//                if(noReport.containsKey(this.filePath)) {
-//                    return false;
-//                } else {
-//                    mutant_bug2lines = new HashMap<>();
-//                }
-//            }
-//            if (source_bug2lines == null) {
-//                if(noReport.containsKey(this.filePath)) {
-//                    source_bug2lines = new HashMap<>();
-//                } else {
-//                    return false;
-//                }
-//            }
             List<Map.Entry<String, List<Integer>>> potentialFPs = new ArrayList<>();
             List<Map.Entry<String, List<Integer>>> potentialFNs = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -535,6 +517,7 @@ public class TypeWrapper {
                     if(!bugExistence.containsKey(entry.getKey())) {
                         bugExistence.put(entry.getKey(), true);
                         System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                        System.out.println("Bug type: " + entry.getKey());
                     }
                 } else {
                     List<Integer> source_bugs = source_bug2lines.get(entry.getKey());
@@ -551,6 +534,7 @@ public class TypeWrapper {
                         if(!bugExistence.containsKey(entry.getKey())) {
                             bugExistence.put(entry.getKey(), true);
                             System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                            System.out.println("Bug type: " + entry.getKey());
                         }
                     } else {
                         if (this.transSeq.get(this.transSeq.size() - 1).equals("AddControlBranch")) {
@@ -563,6 +547,7 @@ public class TypeWrapper {
                                 if(!bugExistence.containsKey(entry.getKey())) {
                                     bugExistence.put(entry.getKey(), true);
                                     System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                                    System.out.println("Bug type: " + entry.getKey());
                                 }
                             }
                         } else {
@@ -574,6 +559,7 @@ public class TypeWrapper {
                             if(!bugExistence.containsKey(entry.getKey())) {
                                 bugExistence.put(entry.getKey(), true);
                                 System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                                System.out.println("Bug type: " + entry.getKey());
                             }
                         }
                     }

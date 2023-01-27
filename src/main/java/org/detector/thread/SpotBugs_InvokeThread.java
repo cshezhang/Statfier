@@ -34,7 +34,6 @@ public class SpotBugs_InvokeThread implements Runnable {
                 classFolder.mkdirs();
             }
             Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-//            String configPath = BASE_SEED_PATH  + File.separator + "SpotBugs_Rule_Config"  + File.separator + this.seedFolderName + ".xml";
             String reportPath = reportFolder.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
             if(DEBUG) {
                 System.out.println("Report: " + reportPath);

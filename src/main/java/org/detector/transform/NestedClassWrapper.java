@@ -67,9 +67,6 @@ public class NestedClassWrapper extends Transform {
             }
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
             nestedClass.bodyDeclarations().add(newMethod);
-//            astRewrite.remove(oldMethod, null);
-//            ListRewrite listRewrite = astRewrite.getListRewrite(type, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
-//            listRewrite.insertFirst(nestedClass, null);
             astRewrite.replace(oldMethod, nestedClass, null);
             return true;
         } else {
@@ -82,9 +79,6 @@ public class NestedClassWrapper extends Transform {
                 }
                 FieldDeclaration newFieldDeclaration = (FieldDeclaration) ASTNode.copySubtree(ast, srcNode);
                 nestedClass.bodyDeclarations().add(newFieldDeclaration);
-//                astRewrite.remove(srcNode, null);
-//                ListRewrite listRewrite = astRewrite.getListRewrite(type, TypeDeclaration.BODY_DECLARATIONS_PROPERTY);
-//                listRewrite.insertFirst(nestedClass, null);
                 astRewrite.replace(srcNode, nestedClass, null);
                 return true;
             } else {

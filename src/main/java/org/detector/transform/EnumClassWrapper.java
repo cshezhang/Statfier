@@ -91,14 +91,14 @@ public class EnumClassWrapper extends Transform {
                 }
             }
             // Here, we think oldNote is located in a method
-            List<VariableDeclarationStatement> validVDStatemnets = new ArrayList<>();
+            List<VariableDeclarationStatement> validVDStatements = new ArrayList<>();
             for (ASTNode node : (List<ASTNode>) clazz.bodyDeclarations()) {
                 if (node instanceof VariableDeclarationStatement) {
-                    validVDStatemnets.add((VariableDeclarationStatement) node);  // copy all vd statements to enum class
+                    validVDStatements.add((VariableDeclarationStatement) node);  // copy all vd statements to enum class
                 }
             }
             MethodDeclaration newMethod = (MethodDeclaration) ASTNode.copySubtree(ast, oldMethod);
-            for (VariableDeclarationStatement vdStatement : validVDStatemnets) {
+            for (VariableDeclarationStatement vdStatement : validVDStatements) {
                 listRewrite.insertLast(vdStatement, null);
             }
             listRewrite.insertLast(newMethod, null);
