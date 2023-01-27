@@ -210,6 +210,7 @@ public class Schedule {
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
         List<List<TypeWrapper>> lists = new ArrayList<>();
+
         for(List<TypeWrapper> wrappers : folder2wrappers.values()) {
             lists.add(wrappers);
         }
@@ -273,7 +274,6 @@ public class Schedule {
                     while (!wrappers.isEmpty()) {
                         TypeWrapper head = wrappers.get(0);
                         wrappers.remove(0);
-                        System.out.println("Head Path: " + head.getFilePath());
                         if(noReport.contains(head.getFilePath())) {
                             continue;
                         }
