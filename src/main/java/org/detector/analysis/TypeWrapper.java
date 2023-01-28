@@ -264,7 +264,7 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-            if(CHECKSTYLE_MUTATION) {
+            if(SPOTBUGS_MUTATION || CHECKSTYLE_MUTATION) {
                 String[] invokeCommands = new String[5];
                 invokeCommands[0] = "java";
                 invokeCommands[1] = "-jar";

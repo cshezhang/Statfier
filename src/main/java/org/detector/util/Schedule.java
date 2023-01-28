@@ -292,19 +292,18 @@ public class Schedule {
         invokePMD(seedFolderPath);
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
-        HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
+        HashMap<String, List<TypeWrapper>> bug2wrappers = new HashMap<>();
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
-            String[] tokens = seedPath.split(reg_sep);
-            String seedFolderName = tokens[tokens.length - 2];
             if (!file2row.containsKey(seedPath)) {
                 continue;
             }
-            String key = tokens[tokens.length - 2];
-            String category = key.split("_")[0];
-            String bugType = key.split("_")[1];
+            String[] tokens = seedPath.split(reg_sep);
+            String seedFolderName = tokens[tokens.length - 2];
+            String category = seedFolderName.split("_")[0];
+            String bugType = seedFolderName.split("_")[1];
             if (category2bugTypes.containsKey(category)) {
                 category2bugTypes.get(category).add(bugType);
             } else {
@@ -314,71 +313,52 @@ public class Schedule {
             }
             initSeedWrapperSize++;
             TypeWrapper seedWrapper = new TypeWrapper(seedPath, seedFolderName);
-            if (bug2wrapper.containsKey(key)) {
-                bug2wrapper.get(key).add(seedWrapper);
+            if (bug2wrappers.containsKey(seedFolderName)) {
+                bug2wrappers.get(seedFolderName).add(seedWrapper);
             } else {
                 List<TypeWrapper> wrappers = new ArrayList<>();
                 wrappers.add(seedWrapper);
-                bug2wrapper.put(key, wrappers);
+                bug2wrappers.put(seedFolderName, wrappers);
             }
         }
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
-        if (THREAD_COUNT > 1) {
-            List<PMD_TransformThread> transformThreads = new ArrayList<>();
-            ExecutorService threadPool = initThreadPool();
-            for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
-                String category = entry.getKey();
-                HashSet<String> bugTypes = entry.getValue();
-                for (String bugType : bugTypes) {
-                    String seedFolderName = category + "_" + bugType;
-                    List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
-                    PMD_TransformThread mutationThread = new PMD_TransformThread(wrappers, seedFolderName);
-                    transformThreads.add(mutationThread);
-                }
-            }
-            for (int i = 0; i < transformThreads.size(); i++) {
-                threadPool.submit(transformThreads.get(i));
-            }
-            waitThreadPoolEnding(threadPool);
-        } else {
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
                 String category = entry.getKey();
                 HashSet<String> bugTypes = entry.getValue();
                 for (String bugType : bugTypes) {
                     int currentDepth = 0;
                     String seedFolderName = category + "_" + bugType;
-                    if(DEBUG) {
-                        System.out.println("Detection: " + seedFolderName);
-                    }
                     ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
                         {
-                            addAll(bug2wrapper.get(seedFolderName));  // init by the wrappers in level 0
+                            addAll(bug2wrappers.get(seedFolderName));  // init by the wrappers in level 0
                         }
                     };
-                    for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-                        if (DEBUG) {
-                            System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
-                        }
-                        singleLevelExplorer(wrappers, currentDepth++);
-                        String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-                        String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
-                        String[] pmdConfig = {
-                                "-d", mutantFolderPath,
-                                "-R", "category/java/" + category + ".xml/" + bugType,
-                                "-f", "json",
-                                "-r", resultFilePath
-                        };
-                        PMD.runPmd(pmdConfig); // detect mutants of level i
-                        Utility.readPMDResultFile(resultFilePath);
-                        List<TypeWrapper> validWrappers = new ArrayList<>();
-                        while (!wrappers.isEmpty()) {
-                            TypeWrapper head = wrappers.pollFirst();
-                            if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
-                                validWrappers.add(head);
-                            }
-                        }
-                        wrappers.addAll(validWrappers);
+                    bug2wrappers.get(seedFolderName).clear();
+                    if(DEBUG) {
+                        System.out.println("Detection: " + seedFolderName);
+                        System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
                     }
+                    singleLevelExplorer(wrappers, currentDepth++);
+                    String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
+                    String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+                    String[] pmdConfig = {
+                            "-d", mutantFolderPath,
+                            "-R", "category/java/" + category + ".xml/" + bugType,
+                            "-f", "json",
+                            "-r", resultFilePath
+                    };
+                    PMD.runPmd(pmdConfig); // detect mutants of level i
+                    Utility.readPMDResultFile(resultFilePath);
+                    List<TypeWrapper> validWrappers = new ArrayList<>();
+                    while (!wrappers.isEmpty()) {
+                        TypeWrapper head = wrappers.pollFirst();
+                        if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
+                            validWrappers.add(head);
+                        }
+                    }
+                    bug2wrappers.put(seedFolderName, validWrappers);
+//                    wrappers.addAll(validWrappers);
                 }
             }
         }
