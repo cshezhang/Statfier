@@ -1,7 +1,6 @@
 package org.detector.thread;
 
 import org.detector.analysis.TypeWrapper;
-import org.detector.report.Infer_Report;
 import org.detector.util.OSUtil;
 import org.detector.util.Invoker;
 import org.detector.util.Utility;

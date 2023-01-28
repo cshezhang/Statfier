@@ -473,8 +473,7 @@ public class TypeWrapper {
         return resNodes;
     }
 
-    public static ConcurrentHashMap<String, Boolean> bugExistence = new ConcurrentHashMap<>();
-
+    public static Set<String> existedBugs = new HashSet<>();
     public boolean isBuggy() {
         boolean buggy = false;
         if(this.parentPath == "initSeed") {
@@ -482,8 +481,7 @@ public class TypeWrapper {
         }
         if (this.depth != 0 && this.violations != this.parViolations) { // Checking depth is to mutate initial seeds
             // bug type -> line numbers
-            Map<String, List<Integer>> mutant_bug2lines = file2bugs.
-                    get(this.filePath);
+            Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(this.filePath);
             Map<String, List<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
             if (mutant_bug2lines == null && source_bug2lines == null) {
@@ -514,9 +512,9 @@ public class TypeWrapper {
                     long execTime = System.currentTimeMillis() - startTimeStamp;
                     long minutes = (execTime / 1000) / 60;
                     long seconds = (execTime / 1000) % 60;
-                    if(!bugExistence.containsKey(entry.getKey())) {
-                        bugExistence.put(entry.getKey(), true);
-                        System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                    if(!existedBugs.contains(entry.getKey())) {
+                        existedBugs.add(entry.getKey());
+                        System.out.println(existedBugs.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                         System.out.println("Bug type: " + entry.getKey());
                     }
                 } else {
@@ -531,9 +529,9 @@ public class TypeWrapper {
                         long execTime = System.currentTimeMillis() - startTimeStamp;
                         long minutes = (execTime / 1000) / 60;
                         long seconds = (execTime / 1000) % 60;
-                        if(!bugExistence.containsKey(entry.getKey())) {
-                            bugExistence.put(entry.getKey(), true);
-                            System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                        if(!existedBugs.contains(entry.getKey())) {
+                            existedBugs.add(entry.getKey());
+                            System.out.println(existedBugs.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                             System.out.println("Bug type: " + entry.getKey());
                         }
                     } else {
@@ -544,9 +542,9 @@ public class TypeWrapper {
                                 long execTime = System.currentTimeMillis() - startTimeStamp;
                                 long minutes = (execTime / 1000) / 60;
                                 long seconds = (execTime / 1000) % 60;
-                                if(!bugExistence.containsKey(entry.getKey())) {
-                                    bugExistence.put(entry.getKey(), true);
-                                    System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                                if(!existedBugs.contains(entry.getKey())) {
+                                    existedBugs.add(entry.getKey());
+                                    System.out.println(existedBugs.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                                     System.out.println("Bug type: " + entry.getKey());
                                 }
                             }
@@ -556,9 +554,9 @@ public class TypeWrapper {
                             long execTime = System.currentTimeMillis() - startTimeStamp;
                             long minutes = (execTime / 1000) / 60;
                             long seconds = (execTime / 1000) % 60;
-                            if(!bugExistence.containsKey(entry.getKey())) {
-                                bugExistence.put(entry.getKey(), true);
-                                System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                            if(!existedBugs.contains(entry.getKey())) {
+                                existedBugs.add(entry.getKey());
+                                System.out.println(existedBugs.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
                                 System.out.println("Bug type: " + entry.getKey());
                             }
                         }
@@ -572,9 +570,10 @@ public class TypeWrapper {
                     long execTime = System.currentTimeMillis() - startTimeStamp;
                     long minutes = (execTime / 1000) / 60;
                     long seconds = (execTime / 1000) % 60;
-                    if(!bugExistence.containsKey(entry.getKey())) {
-                        bugExistence.put(entry.getKey(), true);
-                        System.out.println(bugExistence.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                    if(!existedBugs.add(entry.getKey())) {
+                        existedBugs.add(entry.getKey());
+                        System.out.println(existedBugs.size() + " bug(s) is found at " + sd + ", " + String.format("%d min(s) %d sec(s) since execution.", minutes, seconds) );
+                        System.out.println("Bug type: " + entry.getKey());
                     }
                 }
             }

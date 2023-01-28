@@ -35,7 +35,6 @@ import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2row;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
-import static org.detector.util.Utility.initThreadPool;
 import static org.detector.util.Utility.mutantFolder;
 import static org.detector.util.Utility.readCheckStyleResultFile;
 import static org.detector.util.Utility.readInferResultFile;
@@ -45,7 +44,6 @@ import static org.detector.util.Utility.sep;
 import static org.detector.util.Utility.subSeedFolderNameList;
 import static org.detector.util.Utility.successfulT;
 import static org.detector.util.Utility.waitTaskEnd;
-import static org.detector.util.Utility.waitThreadPoolEnding;
 import static org.detector.util.Utility.writeLinesToFile;
 import static org.detector.analysis.TypeWrapper.transformedSeed;
 
@@ -53,8 +51,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.sql.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,7 +58,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,8 +66,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.sourceforge.pmd.PMD;
 import org.detector.analysis.TypeWrapper;
 import org.detector.report.SonarQube_Report;
-import org.detector.thread.CheckStyle_TransformThread;
-import org.detector.thread.Infer_TransformThread;
 import org.json.JSONObject;
 
 /**
@@ -170,10 +163,10 @@ public class Schedule {
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
-                List<TypeWrapper> wrappers = new ArrayList<>();
-                wrappers.addAll(entry.getValue());
+                List<TypeWrapper> seedWrappers = new ArrayList<>();
+                seedWrappers.addAll(entry.getValue());
                 entry.getValue().clear();
-                List<TypeWrapper> mutantWrappers = singleLevelExplorer(wrappers);
+                List<TypeWrapper> mutantWrappers = singleLevelExplorer(seedWrappers);
                 for (int wrapperIndex = 0; wrapperIndex < mutantWrappers.size(); wrapperIndex++) {
                     TypeWrapper mutantWrapper = mutantWrappers.get(wrapperIndex);
                     String[] tokens = mutantWrapper.getFilePath().split(reg_sep);
@@ -396,19 +389,19 @@ public class Schedule {
             bug2wrappers.get(seedFolderName).add(seedWrapper);
         }
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
-        for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
-            List<TypeWrapper> wrappers = new ArrayList<>();
-            wrappers.addAll(entry.getValue());
-            entry.getValue().clear();
-            for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
+                List<TypeWrapper> wrappers = new ArrayList<>();
+                wrappers.addAll(entry.getValue());
+                entry.getValue().clear();
                 List<TypeWrapper> mutantWrappers = singleLevelExplorer(wrappers);
                 for(int i = 0; i < mutantWrappers.size(); i++) {
                     TypeWrapper mutantWrapper = mutantWrappers.get(i);
                     String mutantPath = mutantWrapper.getFilePath();
-                    String fileName = mutantWrapper.getFileName();
-                    String reportFolderPath = reportFolder + sep + "iter" + depth + "_" + fileName;
+                    String mutantFileName = mutantWrapper.getFileName();
+                    String reportFolderPath = reportFolder + sep + "iter" + depth + "_" + mutantFileName;
                     String cmd = INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
-                            " -d " + classFolder.getAbsolutePath() + sep + fileName +
+                            " -d " + classFolder.getAbsolutePath() + sep + mutantFileName +
                             " -cp " + inferJarStr + " " + mutantPath;
                     String[] invokeCommands = new String[3];
                     invokeCommands[0] = "/bin/bash";
