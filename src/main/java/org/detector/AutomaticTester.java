@@ -1,13 +1,17 @@
 package org.detector;
 
 import org.detector.util.Schedule;
-import org.detector.util.Utility;
 
 import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.detector.util.Schedule.writeEvaluationResult;
+import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
+import static org.detector.util.Utility.INFER_MUTATION;
+import static org.detector.util.Utility.PMD_MUTATION;
+import static org.detector.util.Utility.SONARQUBE_MUTATION;
+import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.initEnv;
 import static org.detector.util.Utility.sourceSeedPath;
 
@@ -28,19 +32,19 @@ public class AutomaticTester {
         System.out.println("Java Program PID: " + pid);
         initEnv();
         Schedule schedule = Schedule.getInstance();
-        if (Utility.PMD_MUTATION) {
+        if (PMD_MUTATION) {
             schedule.executePMDTransform(sourceSeedPath);
         }
-        if (Utility.SPOTBUGS_MUTATION) {
+        if (SPOTBUGS_MUTATION) {
             schedule.executeSpotBugsTransform(sourceSeedPath);
         }
-        if (Utility.CHECKSTYLE_MUTATION) {
+        if (CHECKSTYLE_MUTATION) {
             schedule.executeCheckStyleTransform(sourceSeedPath);
         }
-        if (Utility.INFER_MUTATION) {
+        if (INFER_MUTATION) {
             schedule.executeInferTransform(sourceSeedPath);
         }
-        if (Utility.SONARQUBE_MUTATION) {
+        if (SONARQUBE_MUTATION) {
             schedule.executeSonarQubeTransform(sourceSeedPath);
         }
         writeEvaluationResult();
