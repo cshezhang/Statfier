@@ -95,6 +95,8 @@ public class Schedule {
         return tester;
     }
 
+    private HashMap<String, List<TypeWrapper>> bug2wrappers = new HashMap<>();
+
     public static Map<String, String> file2config = new HashMap<>();  // source file -> config index
     public void executeCheckStyleTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
@@ -193,7 +195,6 @@ public class Schedule {
         List<String> seedFilePaths = getFilenamesFromFolder(initSeedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
-        HashMap<String, List<TypeWrapper>> folder2wrappers = new HashMap<>();
         for (int index = 0; index < seedFilePaths.size(); index++) {
             String seedFilePath = seedFilePaths.get(index);
             String[] tokens = seedFilePath.split(reg_sep);
@@ -203,86 +204,67 @@ public class Schedule {
             }
             initValidSeedWrapperSize++;
             TypeWrapper seedWrapper = new TypeWrapper(seedFilePath, seedFolderName);
-            if(!folder2wrappers.containsKey(seedWrapper.getFolderName())) {
-                folder2wrappers.put(seedWrapper.getFolderName(), new ArrayList<>());
+            if(!bug2wrappers.containsKey(seedWrapper.getFolderName())) {
+                bug2wrappers.put(seedWrapper.getFolderName(), new ArrayList<>());
             }
-            folder2wrappers.get(seedWrapper.getFolderName()).add(seedWrapper);
+            bug2wrappers.get(seedWrapper.getFolderName()).add(seedWrapper);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        List<List<TypeWrapper>> lists = new ArrayList<>();
-
-        for(List<TypeWrapper> wrappers : folder2wrappers.values()) {
-            lists.add(wrappers);
-        }
-        if(THREAD_COUNT > 1) {
-            ExecutorService threadPool = initThreadPool();
-            for (int i = 0; i < lists.size(); i++) {
-                SpotBugs_TransformThread thread = new SpotBugs_TransformThread(lists.get(i));
-                threadPool.submit(thread);
-            }
-            waitThreadPoolEnding(threadPool);
-        } else {
-            for (int i = 0; i < lists.size(); i++) {
-                int currentDepth = 0;
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
                 List<TypeWrapper> wrappers = new ArrayList<>();
-                wrappers.addAll(lists.get(i));
-                for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-                    Transform.singleLevelExplorer(wrappers, currentDepth++);
-                    for (int j = wrappers.size() - 1; j >= 0; j--) {
-                        TypeWrapper wrapper = wrappers.get(j);
-                        String seedFilePath = wrapper.getFilePath();
-                        String seedFolderPath = wrapper.getFolderPath();
-                        String[] tokens = seedFilePath.split(Utility.sep);
-                        String seedFileNameWithSuffix = tokens[tokens.length - 1];
-                        String subSeedFolderName = tokens[tokens.length - 2];
-                        String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
-                        // Filename is used to specify class folder name
-                        File classFolder = new File(Utility.classFolder.getAbsolutePath() + sep + seedFileName);
-                        if (!classFolder.exists()) {
-                            classFolder.mkdirs();
-                        }
-                        boolean isCompiled = compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                        if(!isCompiled) { // Failed compilation point
-                            noReport.add(wrapper.getFilePath());
-//                            try {
-//                                FileUtils.deleteDirectory(classFolder);
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-                            continue;
-                        }
-                        String reportPath = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
-                        String[] invokeCommands = new String[3];
-                        if (OSUtil.isWindows()) {
-                            invokeCommands[0] = "cmd.exe";
-                            invokeCommands[1] = "/c";
-                        } else {
-                            invokeCommands[0] = "/bin/bash";
-                            invokeCommands[1] = "-c";
-                        }
-                        invokeCommands[2] = SPOTBUGS_PATH + " -textui"
+                wrappers.addAll(entry.getValue());
+                entry.getValue().clear();
+                List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
+                for (int j = newWrappers.size() - 1; j >= 0; j--) {
+                    TypeWrapper wrapper = newWrappers.get(j);
+                    String seedFilePath = wrapper.getFilePath();
+                    String seedFolderPath = wrapper.getFolderPath();
+                    String[] tokens = seedFilePath.split(reg_sep);
+                    String seedFileNameWithSuffix = tokens[tokens.length - 1];
+                    String subSeedFolderName = tokens[tokens.length - 2];
+                    String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
+                    // Filename is used to specify class folder name
+                    File classFolder = new File(Utility.classFolder.getAbsolutePath() + sep + seedFileName);
+                    if (!classFolder.exists()) {
+                        classFolder.mkdirs();
+                    }
+                    boolean isCompiled = compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
+                    if(!isCompiled) { // Failed compilation point
+                        noReport.add(wrapper.getFilePath());
+                        continue;
+                    }
+                    String reportPath = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
+                    String[] invokeCommands = new String[3];
+                    if (OSUtil.isWindows()) {
+                        invokeCommands[0] = "cmd.exe";
+                        invokeCommands[1] = "/c";
+                    } else {
+                        invokeCommands[0] = "/bin/bash";
+                        invokeCommands[1] = "-c";
+                    }
+                    invokeCommands[2] = SPOTBUGS_PATH + " -textui"
 //                            + " -include " + configPath
-                                + " -xml:withMessages" + " -output " + reportPath + " "
-                                + classFolder.getAbsolutePath();
-                        boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
-                        if (hasExec) {
-                            String report_path = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
-                            readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
-                        }
+                            + " -xml:withMessages" + " -output " + reportPath + " "
+                            + classFolder.getAbsolutePath();
+                    boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
+                    if (hasExec) {
+                        String report_path = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
+                        readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
                     }
-                    List<TypeWrapper> validWrappers = new ArrayList<>();
-                    while (!wrappers.isEmpty()) {
-                        TypeWrapper head = wrappers.get(0);
-                        wrappers.remove(0);
-                        if(noReport.contains(head.getFilePath())) {
-                            continue;
-                        }
-                        if (!head.isBuggy()) {
-                            validWrappers.add(head);
-                        }
-                    }
-                    wrappers.addAll(validWrappers);
                 }
+                List<TypeWrapper> validWrappers = new ArrayList<>();
+                while (!newWrappers.isEmpty()) {
+                    TypeWrapper head = newWrappers.get(0);
+                    newWrappers.remove(0);
+                    if(noReport.contains(head.getFilePath())) {
+                        continue;
+                    }
+                    if (!head.isBuggy()) {
+                        validWrappers.add(head);
+                    }
+                }
+                entry.getValue().addAll(validWrappers);
             }
         }
     }
@@ -292,7 +274,7 @@ public class Schedule {
         invokePMD(seedFolderPath);
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
-        HashMap<String, List<TypeWrapper>> bug2wrappers = new HashMap<>();
+
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
@@ -327,9 +309,8 @@ public class Schedule {
                 String category = entry.getKey();
                 HashSet<String> bugTypes = entry.getValue();
                 for (String bugType : bugTypes) {
-                    int currentDepth = 0;
                     String seedFolderName = category + "_" + bugType;
-                    ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
+                    List<TypeWrapper> wrappers = new ArrayList<>() {
                         {
                             addAll(bug2wrappers.get(seedFolderName));  // init by the wrappers in level 0
                         }
@@ -339,7 +320,7 @@ public class Schedule {
                         System.out.println("Detection: " + seedFolderName);
                         System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
                     }
-                    singleLevelExplorer(wrappers, currentDepth++);
+                    List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
                     String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
                     String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
                     String[] pmdConfig = {
@@ -351,14 +332,17 @@ public class Schedule {
                     PMD.runPmd(pmdConfig); // detect mutants of level i
                     Utility.readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();
-                    while (!wrappers.isEmpty()) {
-                        TypeWrapper head = wrappers.pollFirst();
-                        if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
-                            validWrappers.add(head);
+                    for(int i = 0; i < newWrappers.size(); i++) {
+                        TypeWrapper newWrapper = newWrappers.get(i);
+                        if(!newWrapper.isBuggy()) {
+                            validWrappers.add(newWrapper);
                         }
                     }
-                    bug2wrappers.put(seedFolderName, validWrappers);
-//                    wrappers.addAll(validWrappers);
+                    if(bug2wrappers.get(seedFolderName).size() > 0) {
+                        System.err.println("Exception in Seed Size.");
+                        System.exit(-1);
+                    }
+                    bug2wrappers.get(seedFolderName).addAll(validWrappers);
                 }
             }
         }

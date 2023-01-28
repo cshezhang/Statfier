@@ -831,6 +831,11 @@ public class TypeWrapper {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return this.filePath;
+    }
+
     public String getFolderPath() {
         return this.folderPath;
     }
