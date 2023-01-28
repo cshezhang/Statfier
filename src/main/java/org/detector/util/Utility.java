@@ -171,6 +171,7 @@ public class Utility {
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
     public static List<String> failedReport = new ArrayList<>();
+    public static List<String> failedExecuteSpotBugs = new ArrayList<>();
     public static Set<String> SonarQubeRuleNames;
 
     public static void initEnv() {

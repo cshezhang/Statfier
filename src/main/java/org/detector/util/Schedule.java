@@ -31,6 +31,7 @@ import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.classFolder;
 import static org.detector.util.Utility.compactIssues;
+import static org.detector.util.Utility.failedExecuteSpotBugs;
 import static org.detector.util.Utility.failedReport;
 import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2row;
@@ -198,6 +199,8 @@ public class Schedule {
                         if(!mutantWrapper.isBuggy()) {
                             entry.getValue().add(mutantWrapper);
                         }
+                    } else {
+                        failedExecuteSpotBugs.add(invokeCommands[2]);
                     }
                 }
             }
@@ -475,6 +478,7 @@ public class Schedule {
         }
         if (SPOTBUGS_MUTATION) {
             writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
+            writeLinesToFile(EVALUATION_PATH + sep + "FailedSpotBugsExecution.log", failedExecuteSpotBugs);
         }
         long executionTime = System.currentTimeMillis() - Utility.startTimeStamp;
         output.add(String.format(
@@ -482,7 +486,7 @@ public class Schedule {
                         TimeUnit.MILLISECONDS.toMinutes(executionTime),
                         TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
         );
-        writeLinesToFile(EVALUATION_PATH + File.separator + "Output.log", output);
+        writeLinesToFile(EVALUATION_PATH + sep + "Output.log", output);
         writeLinesToFile(EVALUATION_PATH + sep + "FailedParse.log", failedParse);
     }
 
