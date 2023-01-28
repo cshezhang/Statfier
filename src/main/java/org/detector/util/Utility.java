@@ -167,7 +167,6 @@ public class Utility {
     //    public static HashMap<String, List<Integer>> file2col = new HashMap<>(); // filename -> List: buggy column numbers
     public static HashMap<String, Report> file2report = new HashMap<>();
     public static HashMap<String, HashMap<String, List<Integer>>> file2bugs = new HashMap<>(); // filename -> (bug type -> lines)
-    public static HashSet<String> noReport = new HashSet<>(); // Save wrapper paths
 
     // (rule -> (transSeq -> Mutant_List))
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();

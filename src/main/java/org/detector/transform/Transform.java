@@ -168,6 +168,7 @@ public abstract class Transform {
         }
     }
 
+    // Return value:
     public static List<TypeWrapper> singleLevelExplorer(List<TypeWrapper> wrappers) {  // Current depth means the depth of variants in wrappers, not the iteration level
         List<TypeWrapper> newWrappers = new ArrayList<>();
         while (!wrappers.isEmpty()) {

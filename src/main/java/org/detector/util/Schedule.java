@@ -12,34 +12,33 @@ import static org.detector.util.Invoker.failedCommands;
 import static org.detector.util.Invoker.invokeCheckStyle;
 import static org.detector.util.Invoker.invokeCommandsByZT;
 import static org.detector.util.Invoker.invokeCommandsByZTWithOutput;
+import static org.detector.util.Invoker.invokeInfer;
 import static org.detector.util.Invoker.invokePMD;
 import static org.detector.util.Invoker.invokeSonarQube;
 import static org.detector.util.Invoker.invokeSpotBugs;
 import static org.detector.util.Invoker.writeSettingFile;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
-import static org.detector.util.Utility.CheckStyleConfigPath;
 import static org.detector.util.Utility.EVALUATION_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
+import static org.detector.util.Utility.INFER_PATH;
+import static org.detector.util.Utility.JAVAC_PATH;
 import static org.detector.util.Utility.Path2Last;
 import static org.detector.util.Utility.SEARCH_DEPTH;
 import static org.detector.util.Utility.DEBUG;
-import static org.detector.util.Utility.SONARQUBE_LOGIN;
-import static org.detector.util.Utility.SONARQUBE_PROJECT_KEY;
 import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.SonarQubeRuleNames;
-import static org.detector.util.Utility.THREAD_COUNT;
+import static org.detector.util.Utility.classFolder;
 import static org.detector.util.Utility.failedReport;
 import static org.detector.util.Utility.failedT;
-import static org.detector.util.Utility.file2bugs;
-import static org.detector.util.Utility.file2report;
 import static org.detector.util.Utility.file2row;
 import static org.detector.util.Utility.getFilenamesFromFolder;
+import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.initThreadPool;
-import static org.detector.util.Utility.listAveragePartition;
 import static org.detector.util.Utility.mutantFolder;
-import static org.detector.util.Utility.noReport;
+import static org.detector.util.Utility.readCheckStyleResultFile;
+import static org.detector.util.Utility.readInferResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
 import static org.detector.util.Utility.sep;
@@ -54,6 +53,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.sql.Array;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,15 +69,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.sourceforge.pmd.PMD;
-import org.apache.commons.io.FileUtils;
 import org.detector.analysis.TypeWrapper;
 import org.detector.report.SonarQube_Report;
 import org.detector.thread.CheckStyle_TransformThread;
 import org.detector.thread.Infer_TransformThread;
-import org.detector.thread.PMD_TransformThread;
-import org.detector.thread.SpotBugs_Exec;
-import org.detector.thread.SpotBugs_TransformThread;
-import org.detector.transform.Transform;
 import org.json.JSONObject;
 
 /**
@@ -101,11 +97,10 @@ public class Schedule {
     public void executeCheckStyleTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
         invokeCheckStyle(seedFolderPath);
-        ExecutorService threadPool = initThreadPool();
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
-        List<TypeWrapper> initWrappers = new ArrayList<>();
+//        List<TypeWrapper> initWrappers = new ArrayList<>();
         for (int i = 0; i < seedFilePaths.size(); i++) {
             String seedFilePath = seedFilePaths.get(i);  // Absolute Path
             String[] tokens = seedFilePath.split(reg_sep);
@@ -115,75 +110,38 @@ public class Schedule {
             }
             initValidSeedWrapperSize++;
             TypeWrapper seedWrapper = new TypeWrapper(seedFilePath, seedFolderName);
-            initWrappers.add(seedWrapper);
-//            int configIndex = Character.getNumericValue(tokens[tokens.length - 1].charAt(tokens[tokens.length - 1].indexOf(".") - 1));
-//            File configFile = new File(CheckStyleConfigPath + sep + seedFolderName + configIndex + ".xml");
-//            if(configFile.exists()) {
-//                file2config.put(seedFilePath, configFile.getAbsolutePath());
-//            } else {
-//                file2config.put(seedFilePath, CheckStyleConfigPath + sep + seedFolderName + 0 + ".xml");
-//            }
+            if(!bug2wrappers.containsKey(seedWrapper.getFolderName())) {
+                bug2wrappers.put(seedWrapper.getFolderName(), new ArrayList<>());
+            }
+            bug2wrappers.get(seedWrapper.getFolderName()).add(seedWrapper);
         }
         System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
-        if(THREAD_COUNT > 1) {
-            for (TypeWrapper wrapper : initWrappers) {
-                CheckStyle_TransformThread mutationThread = new CheckStyle_TransformThread(wrapper, wrapper.getFolderName(), file2config.get(wrapper.getFilePath()));
-                threadPool.submit(mutationThread);
-            }
-            waitThreadPoolEnding(threadPool);
-        } else {
-            Set<String> visitedPaths = new HashSet<>();
-            for(int wrapperIndex = 0; wrapperIndex < initWrappers.size(); wrapperIndex++) {
-                TypeWrapper wrapper = initWrappers.get(wrapperIndex);
-                // 设置一次config path，后边每一层都用这个
-                String configPath = file2config.get(wrapper.getFilePath());
-                int currentDepth = 0;
-                String seedFolderName = wrapper.getFolderName();
-                ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>() {
-                    {
-                        add(wrapper);
+        Set<String> visitedPaths = new HashSet<>();
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
+            for(Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
+                List<TypeWrapper> wrappers = new ArrayList<>();
+                wrappers.addAll(entry.getValue());
+                entry.getValue().clear();
+                List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
+                for (int wrapperIndex = 0; wrapperIndex < newWrappers.size(); wrapperIndex++) {
+                    TypeWrapper wrapper = newWrappers.get(wrapperIndex);
+                    String mutantFilePath = wrapper.getFilePath();
+                    if (visitedPaths.contains(mutantFilePath)) {
+                        System.err.println("Error in visiting...");
+                        System.exit(-1);
                     }
-                };
-                for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
-                    if (DEBUG) {
-                        System.out.println("Transform Thread Depth: " + depth + " Folder: " + seedFolderName);
+                    visitedPaths.add(mutantFilePath);
+                    String reportFilePath = reportFolder + sep + "iter" + depth + "_" + wrapper.getFileName() + ".txt";
+                    String[] invokeCommands = new String[3];
+                    invokeCommands[0] = "/bin/bash";
+                    invokeCommands[1] = "-c";
+                    String configPath = file2config.get(wrapper.getInitSeedPath());
+                    invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c " + configPath + " " + mutantFilePath;
+                    invokeCommandsByZT(invokeCommands);
+                    readCheckStyleResultFile(reportFilePath);
+                    if(!wrapper.isBuggy()) {
+                        bug2wrappers.get(entry.getKey()).add(wrapper);
                     }
-                    singleLevelExplorer(wrappers, currentDepth++);
-                    // detect mutants of iter i
-                    String mutantFolderPath = mutantFolder + sep + "iter" + depth + sep + seedFolderName;
-                    List<String> mutantFilePaths = getFilenamesFromFolder(mutantFolderPath, true);
-                    for (int i = 0; i < mutantFilePaths.size(); i++) {
-                        String mutantFilePath = mutantFilePaths.get(i);
-                        if(visitedPaths.contains(mutantFilePath)) {
-                            continue;
-                        }
-                        visitedPaths.add(mutantFilePath);
-                        String mutantFileName = Path2Last(mutantFilePath);
-                        String reportFilePath = reportFolder + sep + "iter" + depth + "_" + mutantFileName + ".txt";
-                        String[] invokeCommands = new String[3];
-                        if (OSUtil.isWindows()) {
-                            invokeCommands[0] = "cmd.exe";
-                            invokeCommands[1] = "/c";
-                        } else {
-                            invokeCommands[0] = "/bin/bash";
-                            invokeCommands[1] = "-c";
-                        }
-                        invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c "
-                                + configPath + " " + mutantFilePath;
-                        if (DEBUG) {
-                            System.out.println(invokeCommands[2]);
-                        }
-                        Invoker.invokeCommandsByZT(invokeCommands);
-                        Utility.readCheckStyleResultFile(reportFilePath);
-                    }
-                    List<TypeWrapper> validWrappers = new ArrayList<>();
-                    while (!wrappers.isEmpty()) {
-                        TypeWrapper head = wrappers.pollFirst();
-                        if (!head.isBuggy()) { // if this mutant is buggy, then we should switch to next mutant
-                            validWrappers.add(head);
-                        }
-                    }
-                    wrappers.addAll(validWrappers);
                 }
             }
         }
@@ -193,7 +151,7 @@ public class Schedule {
         System.out.println("Invoke Analyzer for " + initSeedFolderPath + " and Analysis Output Folder is: " + Path2Last(initSeedFolderPath) + ", Depth=0");
         invokeSpotBugs(initSeedFolderPath);
         List<String> seedFilePaths = getFilenamesFromFolder(initSeedFolderPath, true);
-        System.out.println("All Initial Seed Count: " + seedFilePaths.size());
+        System.out.println("All Initial Seed Summary Number: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
         for (int index = 0; index < seedFilePaths.size(); index++) {
             String seedFilePath = seedFilePaths.get(index);
@@ -215,56 +173,39 @@ public class Schedule {
                 List<TypeWrapper> wrappers = new ArrayList<>();
                 wrappers.addAll(entry.getValue());
                 entry.getValue().clear();
-                List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
-                for (int j = newWrappers.size() - 1; j >= 0; j--) {
-                    TypeWrapper wrapper = newWrappers.get(j);
-                    String seedFilePath = wrapper.getFilePath();
-                    String seedFolderPath = wrapper.getFolderPath();
-                    String[] tokens = seedFilePath.split(reg_sep);
+                List<TypeWrapper> mutantWrappers = singleLevelExplorer(wrappers);
+                for (int wrapperIndex = 0; wrapperIndex < mutantWrappers.size(); wrapperIndex++) {
+                    TypeWrapper mutantWrapper = mutantWrappers.get(wrapperIndex);
+                    String[] tokens = mutantWrapper.getFilePath().split(reg_sep);
                     String seedFileNameWithSuffix = tokens[tokens.length - 1];
                     String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
-                    File classFolder = new File(Utility.classFolder.getAbsolutePath() + sep + seedFileName);
-                    if (!classFolder.exists()) {
-                        classFolder.mkdirs();
+                    File mutantClassFolder = new File(classFolder.getAbsolutePath() + sep + seedFileName);
+                    if (!mutantClassFolder.exists()) {
+                        mutantClassFolder.mkdirs();
                     }
-                    boolean isCompiled = compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                    if(!isCompiled) { // Failed compilation point
-                        noReport.add(wrapper.getFilePath());
+                    boolean isCompiled = compileJavaSourceFile(mutantWrapper.getFolderPath(), seedFileNameWithSuffix, mutantClassFolder.getAbsolutePath());
+                    if(!isCompiled) {
                         continue;
                     }
                     String reportPath = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
                     String[] invokeCommands = new String[3];
-                    if (OSUtil.isWindows()) {
-                        invokeCommands[0] = "cmd.exe";
-                        invokeCommands[1] = "/c";
-                    } else {
-                        invokeCommands[0] = "/bin/bash";
-                        invokeCommands[1] = "-c";
-                    }
+                    invokeCommands[0] = "/bin/bash";
+                    invokeCommands[1] = "-c";
                     invokeCommands[2] = SPOTBUGS_PATH + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
-                            + classFolder.getAbsolutePath();
+                            + mutantClassFolder.getAbsolutePath();
                     boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
                         String report_path = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
-                        readSpotBugsResultFile(wrapper.getFolderPath(), report_path);
+                        readSpotBugsResultFile(mutantWrapper.getFolderPath(), report_path);
+                        if(!mutantWrapper.isBuggy()) {
+                            entry.getValue().add(mutantWrapper);
+                        }
                     }
                 }
-                List<TypeWrapper> validWrappers = new ArrayList<>();
-                while (!newWrappers.isEmpty()) {
-                    TypeWrapper head = newWrappers.get(0);
-                    newWrappers.remove(0);
-                    if(noReport.contains(head.getFilePath())) {
-                        continue;
-                    }
-                    if (!head.isBuggy()) {
-                        validWrappers.add(head);
-                    }
-                }
-                entry.getValue().addAll(validWrappers);
             }
         }
     }
@@ -436,12 +377,9 @@ public class Schedule {
 
     public void executeInferTransform(String seedFolderPath) {
         System.out.println("Invoke Analyzer for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
-        Invoker.invokeInfer(seedFolderPath);
-        ExecutorService threadPool = initThreadPool();
+        invokeInfer(seedFolderPath);
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
-        HashMap<String, List<TypeWrapper>> bug2wrapper = new HashMap<>();
-        List<Infer_TransformThread> mutationThreads = new ArrayList<>();
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
             String seedPath = seedPaths.get(index);
@@ -452,25 +390,39 @@ public class Schedule {
             }
             initSeedWrapperSize++;
             TypeWrapper seedWrapper = new TypeWrapper(seedPath, seedFolderName);
-            if (bug2wrapper.containsKey(seedFolderName)) {
-                bug2wrapper.get(seedFolderName).add(seedWrapper);
-            } else {
-                List<TypeWrapper> wrappers = new ArrayList<>();
-                wrappers.add(seedWrapper);
-                bug2wrapper.put(seedFolderName, wrappers);
+            if (!bug2wrappers.containsKey(seedFolderName)) {
+                bug2wrappers.put(seedFolderName, new ArrayList<>());
             }
+            bug2wrappers.get(seedFolderName).add(seedWrapper);
         }
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
-        for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrapper.entrySet()) {
-            String seedFolderName = entry.getKey();
-            List<TypeWrapper> wrappers = bug2wrapper.get(seedFolderName);
-            Infer_TransformThread mutationThread = new Infer_TransformThread(wrappers, seedFolderName);
-            mutationThreads.add(mutationThread);
+        for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
+            List<TypeWrapper> wrappers = new ArrayList<>();
+            wrappers.addAll(entry.getValue());
+            entry.getValue().clear();
+            for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
+                List<TypeWrapper> mutantWrappers = singleLevelExplorer(wrappers);
+                for(int i = 0; i < mutantWrappers.size(); i++) {
+                    TypeWrapper mutantWrapper = mutantWrappers.get(i);
+                    String mutantPath = mutantWrapper.getFilePath();
+                    String fileName = mutantWrapper.getFileName();
+                    String reportFolderPath = reportFolder + sep + "iter" + depth + "_" + fileName;
+                    String cmd = INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
+                            " -d " + classFolder.getAbsolutePath() + sep + fileName +
+                            " -cp " + inferJarStr + " " + mutantPath;
+                    String[] invokeCommands = new String[3];
+                    invokeCommands[0] = "/bin/bash";
+                    invokeCommands[1] = "-c";
+                    invokeCommands[2] = "python3 cmd.py " + cmd;
+                    Invoker.invokeCommandsByZT(invokeCommands);
+                    String resultFilePath = reportFolderPath + sep + "report.json";
+                    readInferResultFile(mutantPath, resultFilePath);
+                    if(!mutantWrapper.isBuggy()) {
+                        entry.getValue().add(mutantWrapper);
+                    }
+                }
+            }
         }
-        for (int i = 0; i < mutationThreads.size(); i++) {
-            threadPool.submit(mutationThreads.get(i));
-        }
-        waitThreadPoolEnding(threadPool);
     }
 
     public static void writeEvaluationResult() {
