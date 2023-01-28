@@ -30,6 +30,7 @@ import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.classFolder;
+import static org.detector.util.Utility.compactIssues;
 import static org.detector.util.Utility.failedReport;
 import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2row;
@@ -208,7 +209,6 @@ public class Schedule {
         invokePMD(seedFolderPath);
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedPaths.size());
-
         HashMap<String, HashSet<String>> category2bugTypes = new HashMap<>(); // Here, we used HashSet to avoid duplicated bug types.
         int initSeedWrapperSize = 0;
         for (int index = 0; index < seedPaths.size(); index++) {
@@ -282,18 +282,28 @@ public class Schedule {
         }
     }
 
-    public void singleThreadWorker(ArrayDeque<TypeWrapper> wrappers) {
+    public void executeSonarQubeTransform(String seedFolderPath) {
+        System.out.println("Invoke SonarQube for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
+        invokeSonarQube(seedFolderPath);
+        ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
+        for (String filepath : file2row.keySet()) {
+            String[] tokens = filepath.split(reg_sep);
+            String folderName = tokens[tokens.length - 2];
+            TypeWrapper wrapper = new TypeWrapper(filepath, folderName);
+            wrappers.add(wrapper);
+        }
+        System.out.println("All Initial Wrappers Size: " + wrappers.size());
         int currentDepth = 0;
         for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
             // Before invocation: wrappers includes type wrappers in iter
             // After invocation: wrappers includes type wrappers in iter + 1
             singleLevelExplorer(wrappers, currentDepth++);
             for (String subSeedFolderName : subSeedFolderNameList) {
-                String subSeedFolderPath = mutantFolder + File.separator + "iter" + iter + File.separator + subSeedFolderName;
+                String subSeedFolderPath = mutantFolder + sep + "iter" + iter + sep + subSeedFolderName;
                 if(DEBUG) {
                     System.out.println("Seed path: " + subSeedFolderPath);
                 }
-                String settingPath = subSeedFolderPath + File.separator + "settings";
+                String settingPath = subSeedFolderPath + sep + "settings";
                 String newProjectName = "iter" + iter + "_" + subSeedFolderName;
                 deleteSonarQubeProject(newProjectName);
                 boolean isCreated = createSonarQubeProject(newProjectName);
@@ -303,13 +313,8 @@ public class Schedule {
                 }
                 writeSettingFile(subSeedFolderPath, settingPath, newProjectName);
                 String[] invokeCommands = new String[3];
-                if (OSUtil.isWindows()) {
-                    invokeCommands[0] = "cmd.exe";
-                    invokeCommands[1] = "/c";
-                } else {
-                    invokeCommands[0] = "/bin/bash";
-                    invokeCommands[1] = "-c";
-                }
+                invokeCommands[0] = "/bin/bash";
+                invokeCommands[1] = "-c";
                 invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + " -Dproject.settings=" + settingPath;
                 boolean hasExec = invokeCommandsByZT(invokeCommands);
                 if(hasExec) {
@@ -352,20 +357,6 @@ public class Schedule {
             }
             wrappers.addAll(validWrappers);
         }
-    }
-
-    public void executeSonarQubeTransform(String seedFolderPath) {
-        System.out.println("Invoke SonarQube for " + seedFolderPath + " and Analysis Output Folder is: " + Path2Last(seedFolderPath) + ", Depth=0");
-        invokeSonarQube(seedFolderPath);
-        ArrayDeque<TypeWrapper> wrappers = new ArrayDeque<>();
-        for (String filepath : file2row.keySet()) {
-            String[] tokens = filepath.split(reg_sep);
-            String folderName = tokens[tokens.length - 2];
-            TypeWrapper wrapper = new TypeWrapper(filepath, folderName);
-            wrappers.add(wrapper);
-        }
-        System.out.println("All Initial Wrapper Size: " + wrappers.size());
-        singleThreadWorker(wrappers);
     }
 
     public void executeInferTransform(String seedFolderPath) {
@@ -419,10 +410,10 @@ public class Schedule {
     }
 
     public static void writeEvaluationResult() {
-        int rules = Utility.compactIssues.keySet().size();
+        int rules = compactIssues.keySet().size();
         int seqCount = 0;
         int allValidVariantNumber = 0;
-        for (Map.Entry<String, HashMap<String, List<TriTuple>>> entry : Utility.compactIssues.entrySet()) {
+        for (Map.Entry<String, HashMap<String, List<TriTuple>>> entry : compactIssues.entrySet()) {
             String rule = entry.getKey();
             HashMap<String, List<TriTuple>> seq2mutants = entry.getValue();
             seqCount += seq2mutants.size();
@@ -470,7 +461,7 @@ public class Schedule {
         output.add("Failed Transform Size: " + failedT);
         output.add("Successful Transform Ratio: " + (successfulT) / (double) (successfulT + failedT));
         output.add("Rule Size: " + rules + "\n");
-        output.add("Detected Rules: " + Utility.compactIssues.keySet());
+        output.add("Detected Rules: " + compactIssues.keySet());
         output.add("Unique Sequence: " + seqCount);
         output.add("Valid Mutant Size (Potential Bug): " + allValidVariantNumber);
         List<String> mutant2seed = new ArrayList<>();
