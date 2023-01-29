@@ -158,7 +158,7 @@ public class NestedClassWrapper extends Transform {
                 if (name.contains("Override")) {
                     isOverride = true;
                 }
-                if(name.contains("Test") || name.contains("UiThread") || name.contains("MainThread")) {
+                if(name.contains("Test") || name.contains("UiThread")) {
                     return nodes;
                 }
             }
@@ -173,27 +173,6 @@ public class NestedClassWrapper extends Transform {
             nodes.add(node);
         }
         return nodes;
-//        if (isOverride) {
-//            if (clazz.superInterfaceTypes().size() > 0) {
-//                return nodes;
-//            }
-//            Type superClazzType = clazz.getSuperclassType();
-//            if (superClazzType == null) {
-//                nodes.add(node);
-//                return nodes;
-//            }
-//            if (superClazzType instanceof SimpleType) {
-//                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-//                if (name.contains("Object")) {
-//                    nodes.add(node);
-//                    return nodes;
-//                }
-//            }
-//            return nodes;
-//        } else {
-//            nodes.add(node);
-//            return nodes;
-//        }
     }
 
 }

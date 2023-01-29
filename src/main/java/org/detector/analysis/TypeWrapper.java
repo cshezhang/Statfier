@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.NumberLiteral;
@@ -1162,6 +1163,14 @@ public class TypeWrapper {
     public static boolean checkClassProperty(TypeDeclaration clazz) {
         if(clazz == null || clazz.isInterface()) {
             return false;
+        }
+        for(ASTNode modifier : (List<ASTNode>) clazz.modifiers()) {
+            if(modifier instanceof MarkerAnnotation) {
+                String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
+                if(name.contains("MainThread")) {
+                    return false;
+                }
+            }
         }
         if(clazz.getSuperclassType() != null && clazz.getSuperclassType().toString().contains("TestCase")) {
             return false;
