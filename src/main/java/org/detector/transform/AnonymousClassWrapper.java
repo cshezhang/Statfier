@@ -183,7 +183,7 @@ public class AnonymousClassWrapper extends Transform {
                 if (name.contains("Override")) {
                     isOverride = true;
                 }
-                if(name.contains("Test") || name.contains("UiThread")) {
+                if(name.contains("Test") || name.contains("UiThread") || name.contains("MainThread")) {
                     return nodes;
                 }
             }

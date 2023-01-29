@@ -1,7 +1,13 @@
-import net.jcip.annotations.Immutable;
-import java.util.logging.Logger;
-
-@Immutable
-public class Test implements Serializable, TestCase {
-    public static final Logger log = Logger.getAnonymousLogger();
+public class Foo {
+    public void method() {
+        String[] sa = {"a", "b"};
+        for (String s : sa) {}
+        for (String s : sa) {
+            s = "new string"; // violation
+        }
+        for(int i = 0; i < sa.size(); i++) {
+            s = "123";
+        }
+    }
 }
+

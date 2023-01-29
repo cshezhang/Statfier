@@ -4,6 +4,7 @@ import org.detector.analysis.TypeWrapper;
 import org.detector.analysis.LoopStatement;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
@@ -24,6 +25,8 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.detector.util.Utility.compareNode;
 
 /**
  * @Description: Transfer a Loop to Lambda Expression Loop
@@ -151,7 +154,49 @@ public class LoopConversion1 extends Transform {
                 break;
             }
             if (LoopStatement.isLoopStatement(node)) {
-                nodes.add(node);
+                if(node instanceof EnhancedForStatement) {
+                    boolean isOk = true, find = false;
+                    if(((EnhancedForStatement) node).getExpression() instanceof SimpleName) {
+                        SimpleName name = (SimpleName) ((EnhancedForStatement) node).getExpression();
+                        MethodDeclaration method = TypeWrapper.getDirectMethodOfNode(node);
+                        for(int i = 0; i < method.getBody().statements().size(); i++) {
+                            ASTNode statement = (ASTNode) method.getBody().statements().get(i);
+                            if(statement instanceof VariableDeclarationStatement) {
+                                VariableDeclarationFragment fragment = (VariableDeclarationFragment) ((VariableDeclarationStatement) statement).fragments().get(0);
+                                if(fragment.getName().getIdentifier().equals(name.getIdentifier())) {
+                                    find = true;
+                                    if(((VariableDeclarationStatement) statement).getType() instanceof ArrayType) {
+                                        isOk = false;
+                                    }
+                                    break;
+                                }
+                            }
+                            if(statement instanceof EnhancedForStatement) {
+                                if(compareNode(statement, node)) {
+                                    break;
+                                }
+                            }
+                        }
+                        if(!find) {
+                            TypeDeclaration clazz = TypeWrapper.getClassOfNode(node);
+                            for(FieldDeclaration fieldDeclaration : clazz.getFields()) {
+                                VariableDeclarationFragment fragment = (VariableDeclarationFragment) fieldDeclaration.fragments().get(0);
+                                if(fragment.getName().getIdentifier().equals(name.getIdentifier())) {
+                                    find = true;
+                                    if(fieldDeclaration.getType() instanceof ArrayType) {
+                                        isOk = false;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if(find && isOk) {
+                        nodes.add(node);
+                    }
+                } else {
+                    nodes.add(node);
+                }
             }
             node = node.getParent();
         }

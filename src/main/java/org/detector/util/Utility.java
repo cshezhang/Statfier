@@ -172,6 +172,7 @@ public class Utility {
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
     public static List<String> failedReport = new ArrayList<>();
     public static List<String> failedExecuteSpotBugs = new ArrayList<>();
+    public static List<String> failedCheckStyleExecution = new ArrayList<>();
     public static Set<String> SonarQubeRuleNames;
 
     public static void initEnv() {
@@ -320,35 +321,6 @@ public class Utility {
         }
     }
 
-    public static <T> List<List<T>> listAveragePartition(List<T> source, int n) {
-        List<List<T>> result = new ArrayList<List<T>>();
-        int remaider = source.size() % n;
-        int number = source.size() / n;
-        int offset = 0;
-        for (int i = 0; i < n; i++) {
-            List<T> value;
-            if (remaider > 0) {
-                value = source.subList(i * number + offset, (i + 1) * number + offset + 1);
-                remaider--;
-                offset++;
-            } else {
-                value = source.subList(i * number + offset, (i + 1) * number + offset);
-            }
-            result.add(value);
-        }
-        return result;
-    }
-
-//    public static void checkExecutionTime() {
-//        long executionTime = System.currentTimeMillis() - startTimeStamp - compileTime;
-//        if (executionTime >= MAX_EXECUTION_TIME) {
-//            System.out.println("Execution time is: " + (executionTime / 1000.0) / 60.0 + " mins");
-//            System.out.println("Compile time is: " + (compileTime / 1000.0) / 60.0 + " mins");
-//            System.out.println("Whole execution time is: " + ((executionTime + compileTime) / 1000.0) / 60.0 + " mins");
-//            System.exit(0);
-//        }
-//    }
-
     public static int calculatePMDResultFile(final String jsonPath) {
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(jsonPath);
@@ -387,6 +359,11 @@ public class Utility {
                     newReport.addViolation(violation);
                 }
                 pmd_reports.add(newReport);
+            }
+            JsonNode processErrorNodes = rootNode.get("processingErrors");
+            JsonNode configErrorNodes = rootNode.get("configurationErrors");
+            if(processErrorNodes.size() > 0) {
+                int a = 10;
             }
         } catch (JsonProcessingException e) {
             System.err.println("Exceptional Json Path:" + reportPath);

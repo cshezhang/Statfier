@@ -52,7 +52,7 @@ public class AutomaticTester {
         long execTime = endTimeStamp - startTimeStamp;
         long minutes = (execTime / 1000) / 60;
         long seconds = (execTime / 1000) % 60;
-        System.out.format("%d min(s) %d sec(s).\n", minutes, seconds);
+        System.out.format("Overall execution time: %d min(s) %d sec(s).\n", minutes, seconds);
         sd = sdf.format(new Date(Long.parseLong(String.valueOf(endTimeStamp))));
         System.out.println("End Time: " + sd);
     }

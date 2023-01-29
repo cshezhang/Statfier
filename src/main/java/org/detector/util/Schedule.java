@@ -31,6 +31,7 @@ import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.classFolder;
 import static org.detector.util.Utility.compactIssues;
+import static org.detector.util.Utility.failedCheckStyleExecution;
 import static org.detector.util.Utility.failedExecuteSpotBugs;
 import static org.detector.util.Utility.failedReport;
 import static org.detector.util.Utility.failedT;
@@ -40,6 +41,7 @@ import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.mutantFolder;
 import static org.detector.util.Utility.readCheckStyleResultFile;
 import static org.detector.util.Utility.readInferResultFile;
+import static org.detector.util.Utility.readPMDResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
 import static org.detector.util.Utility.sep;
@@ -95,7 +97,6 @@ public class Schedule {
         List<String> seedFilePaths = getFilenamesFromFolder(seedFolderPath, true);
         System.out.println("All Initial Seed Count: " + seedFilePaths.size());
         int initValidSeedWrapperSize = 0;
-//        List<TypeWrapper> initWrappers = new ArrayList<>();
         for (int i = 0; i < seedFilePaths.size(); i++) {
             String seedFilePath = seedFilePaths.get(i);  // Absolute Path
             String[] tokens = seedFilePath.split(reg_sep);
@@ -126,14 +127,17 @@ public class Schedule {
                         System.exit(-1);
                     }
                     visitedPaths.add(mutantFilePath);
-                    String reportFilePath = reportFolder + sep + "iter" + depth + "_" + wrapper.getFileName() + ".txt";
+                    File reportFile = new File(reportFolder + sep + "iter" + depth + "_" + wrapper.getFileName() + ".txt");
                     String[] invokeCommands = new String[3];
                     invokeCommands[0] = "/bin/bash";
                     invokeCommands[1] = "-c";
                     String configPath = file2config.get(wrapper.getInitSeedPath());
-                    invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFilePath + " -c " + configPath + " " + mutantFilePath;
+                    invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFile.getAbsolutePath() + " -c " + configPath + " " + mutantFilePath;
                     invokeCommandsByZT(invokeCommands);
-                    readCheckStyleResultFile(reportFilePath);
+                    if(!reportFile.exists() || reportFile.length() == 0) {
+                        failedCheckStyleExecution.add(invokeCommands[2]);
+                    }
+                    readCheckStyleResultFile(reportFile.getAbsolutePath());
                     if(!wrapper.isBuggy()) {
                         bug2wrappers.get(entry.getKey()).add(wrapper);
                     }
@@ -267,7 +271,7 @@ public class Schedule {
                             "-r", resultFilePath
                     };
                     PMD.runPmd(pmdConfig); // detect mutants of level i
-                    Utility.readPMDResultFile(resultFilePath);
+                    readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();
                     for(int i = 0; i < newWrappers.size(); i++) {
                         TypeWrapper newWrapper = newWrappers.get(i);

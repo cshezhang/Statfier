@@ -12,15 +12,11 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.PostfixExpression;
-import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
-import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
@@ -30,17 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Control flow wrapper based on for-loop
-public class CFWrapperWithForTrue extends Transform {
+public class CFWrapperWithForTrue1 extends Transform {
 
-    private static final CFWrapperWithForTrue instance = new CFWrapperWithForTrue();
+    private static final CFWrapperWithForTrue1 instance = new CFWrapperWithForTrue1();
 
     private static int varCounter;
 
-    private CFWrapperWithForTrue() {
+    private CFWrapperWithForTrue1() {
         varCounter = 0;
     }
 
-    public static CFWrapperWithForTrue getInstance() {
+    public static CFWrapperWithForTrue1 getInstance() {
         return instance;
     }
 

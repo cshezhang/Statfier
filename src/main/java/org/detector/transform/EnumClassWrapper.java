@@ -202,7 +202,7 @@ public class EnumClassWrapper extends Transform {
                 if (name.contains("Override")) {
                     isOverride = true;
                 }
-                if(name.contains("Test") || name.contains("UiThread")) {
+                if(name.contains("Test") || name.contains("UiThread") || name.contains("MainThread")) {
                     return nodes;
                 }
             }
@@ -217,89 +217,6 @@ public class EnumClassWrapper extends Transform {
             nodes.add(node);
         }
         return nodes;
-//        if (isOverride) {
-//            if (clazz.superInterfaceTypes().size() > 0) {
-//                return nodes;
-//            }
-//            Type superClazzType = clazz.getSuperclassType();
-//            if (superClazzType == null) {
-//                nodes.add(node);
-//                return nodes;
-//            }
-//            if (superClazzType instanceof SimpleType) {
-//                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-//                if (name.contains("Object")) {
-//                    nodes.add(node);
-//                    return nodes;
-//                }
-//            }
-//            return nodes;
-//        } else {
-//            nodes.add(node);
-//            return nodes;
-//        }
-    }
-
-    public List<ASTNode> classCheck(TypeWrapper wrapper, ASTNode node) {
-        List<ASTNode> nodes = new ArrayList<>();
-        TypeDeclaration clazz = TypeWrapper.getClassOfNode(node);
-        MethodDeclaration method = TypeWrapper.getDirectMethodOfNode(node);
-        for (ASTNode component : (List<ASTNode>) clazz.bodyDeclarations()) {
-            if(component instanceof TypeDeclaration) {
-                Type parentType = ((TypeDeclaration) component).getSuperclassType();
-                if(parentType instanceof SimpleType && ((SimpleType) parentType).getName().toString().equals(clazz.getName().getIdentifier())) {
-                    return nodes;
-                }
-            }
-        }
-        if(method == null) {  // means FieldDeclaration
-            if(TypeWrapper.getStatementOfNode(node) instanceof FieldDeclaration) {
-                nodes.add(node);
-            }
-            return nodes;
-        }
-        List<ASTNode> subNodes = TypeWrapper.getChildrenNodes(method);
-        boolean hasThis = false;
-        for(ASTNode subNode : subNodes) {
-            if(subNode instanceof ThisExpression) {
-                hasThis = true;
-                break;
-            }
-        }
-        if(hasThis) {
-            return nodes;
-        }
-        boolean isOverride = false;
-        for(ASTNode modifier : (List<ASTNode>) method.modifiers()) {
-            if(modifier instanceof MarkerAnnotation) {
-                String name = ((MarkerAnnotation) modifier).getTypeName().getFullyQualifiedName();
-                if(name.contains("Override")) {
-                    isOverride = true;
-                    break;
-                }
-            }
-        }
-        if(isOverride) {
-            if(clazz.superInterfaceTypes().size() > 0) {
-                return nodes;
-            }
-            Type superClazzType = clazz.getSuperclassType();
-            if(superClazzType == null) {
-                nodes.add(node);
-                return nodes;
-            }
-            if (superClazzType instanceof SimpleType) {
-                String name = ((SimpleType) superClazzType).getName().getFullyQualifiedName();
-                if(name.contains("Object")) {
-                    nodes.add(node);
-                    return nodes;
-                }
-            }
-            return nodes;
-        } else {
-            nodes.add(node);
-            return nodes;
-        }
     }
 
 }

@@ -3,7 +3,6 @@ package org.detector.transform;
 import org.detector.analysis.TypeWrapper;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.detector.analysis.SelectionAlgorithm;
-import org.detector.util.Utility;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -80,7 +79,8 @@ public abstract class Transform {
             }
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
-            transforms.add(CFWrapperWithForTrue.getInstance());
+            transforms.add(CFWrapperWithForTrue1.getInstance());
+            transforms.add(CFWrapperWithForTrue2.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
             transforms.add(EnumClassWrapper.getInstance());
