@@ -21,6 +21,7 @@ import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.RANDOM_LOCATION;
 import static org.detector.util.Utility.RANDOM_SELECTION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
+import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 
 /*
  * @Description: The General Class for Mutants.
@@ -89,7 +90,9 @@ public abstract class Transform {
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
             transforms.add(CFWrapperWithForTrue1.getInstance());
-            transforms.add(CFWrapperWithForTrue2.getInstance());
+            if(!SPOTBUGS_MUTATION) {
+                transforms.add(CFWrapperWithForTrue2.getInstance());
+            }
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
             transforms.add(EnumClassWrapper.getInstance());
