@@ -44,30 +44,39 @@ public abstract class Transform {
         transforms = new ArrayList<>();
         name2transform = new HashMap<>();
         if (DEBUG) {
-//            transforms.add(AddArgAssignment.getInstance());
-//            transforms.add(AddBrackets.getInstance());
-//            transforms.add(AddControlBranch.getInstance());
-//            transforms.add(AddGlobalAssignment.getInstance());
-//            transforms.add(AddLocalAssignment.getInstance());
-//            transforms.add(AddMethodCallToLiteral.getInstance());
-//            transforms.add(AddRedundantLiteral.getInstance());
-//            transforms.add(AnonymousClassWrapper.getInstance());
-//            transforms.add(CFWrapperWithDoWhile.getInstance());
-////            transforms.add(CFWrapperWithForFalse.getInstance());
-//            transforms.add(CFWrapperWithForTrue.getInstance());
-////            transforms.add(CFWrapperWithIfFalse.getInstance());
-//            transforms.add(CFWrapperWithIfTrue.getInstance());
-//            transforms.add(CFWrapperWithWhileTrue.getInstance());
-////            transforms.add(CompoundExpression1.getInstance());
-////            transforms.add(CompoundExpression2.getInstance());
-//            transforms.add(CompoundExpression3.getInstance());
-//            transforms.add(CompoundExpression4.getInstance());
-//            transforms.add(EnumClassWrapper.getInstance());
-//            transforms.add(NestedClassWrapper.getInstance());
-//            transforms.add(TransferLocalVarToGlobal.getInstance());
-//            transforms.add(TransferLocalVarToStaticGlobal.getInstance());
-//            transforms.add(AddStaticAssignment.getInstance());
-//            transforms.add(AddStaticModifier.getInstance());
+            transforms.add(LoopConversion1.getInstance());
+            transforms.add(LoopConversion2.getInstance());
+            if(INFER_MUTATION || SONARQUBE_MUTATION) {
+                // related to inter-procedural analysis
+                transforms.add(AddMethodCallToLiteral.getInstance());
+                transforms.add(TransferLocalVarToGlobal.getInstance());
+                transforms.add(TransferLocalVarToStaticGlobal.getInstance());
+            }
+            transforms.add(AnonymousClassWrapper.getInstance());
+            transforms.add(CFWrapperWithDoWhile.getInstance());
+            transforms.add(CFWrapperWithForTrue1.getInstance());
+            transforms.add(CFWrapperWithForTrue2.getInstance());
+            transforms.add(CFWrapperWithIfTrue.getInstance());
+            transforms.add(CFWrapperWithWhileTrue.getInstance());
+            transforms.add(EnumClassWrapper.getInstance());
+            transforms.add(NestedClassWrapper.getInstance());
+            if(!PMD_MUTATION && !CHECKSTYLE_MUTATION) {
+                transforms.add(CFWrapperWithIfFalse.getInstance());
+                transforms.add(CompoundExpression1.getInstance());
+                transforms.add(CompoundExpression2.getInstance());
+                transforms.add(CompoundExpression3.getInstance());
+                transforms.add(CompoundExpression4.getInstance());
+                transforms.add(AddRedundantLiteral.getInstance());
+            }
+            if(!CHECKSTYLE_MUTATION) {
+                transforms.add(AddBrackets.getInstance());
+                transforms.add(AddArgAssignment.getInstance());
+                transforms.add(AddControlBranch.getInstance());
+                transforms.add(AddStaticModifier.getInstance());
+                transforms.add(AddLocalAssignment.getInstance());
+                transforms.add(AddStaticAssignment.getInstance());
+                transforms.add(AddGlobalAssignment.getInstance());
+            }
         } else {
             transforms.add(LoopConversion1.getInstance());
             transforms.add(LoopConversion2.getInstance());

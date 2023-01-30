@@ -134,6 +134,9 @@ public class Schedule {
                     String configPath = file2config.get(wrapper.getInitSeedPath());
                     invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportFile.getAbsolutePath() + " -c " + configPath + " " + mutantFilePath;
                     invokeCommandsByZT(invokeCommands);
+                    if(DEBUG) {
+                        System.out.println(invokeCommands[2]);
+                    }
                     if(!reportFile.exists() || reportFile.length() == 0) {
                         failedCheckStyleExecution.add(invokeCommands[2]);
                     }
