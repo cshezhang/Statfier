@@ -6,13 +6,13 @@ import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.detector.util.Utility.initEnv;
 import static org.detector.util.Schedule.writeEvaluationResult;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
-import static org.detector.util.Utility.initEnv;
 import static org.detector.util.Utility.sourceSeedPath;
 
 /**
