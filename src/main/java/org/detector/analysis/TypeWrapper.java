@@ -57,7 +57,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;

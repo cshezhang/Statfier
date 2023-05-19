@@ -12,8 +12,15 @@ import java.util.ArrayList;
 public class BasicBlock {
 
     private ArrayList<Statement> statements;
-    private ArrayList<BasicBlock> succBlocks;
     private ArrayList<BasicBlock> prevBlocks;
+    private ArrayList<BasicBlock> succBlocks;
+
+    public BasicBlock(Statement leadingStatement) {
+        this.statements = new ArrayList<>();
+        this.statements.add(leadingStatement);
+        this.prevBlocks = new ArrayList<>();
+        this.succBlocks = new ArrayList<>();
+    }
 
     public BasicBlock(ArrayList<Statement> statements) {
         this.statements = statements;

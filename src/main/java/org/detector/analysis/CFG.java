@@ -7,6 +7,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
+import javax.swing.plaf.nimbus.State;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,22 +23,28 @@ public class CFG {
 
     private BasicBlock entry;
     private BasicBlock exit;
-    private Set<BasicBlock> blocks;
+    private Set<BasicBlock> nodes;
     private Set<CFGEdge> edges;
 
     public CFG() {
-        this.blocks = new HashSet<>();
+        this.nodes = new HashSet<>();
         this.edges=  new HashSet<>();
+    }
+
+    public CFG(Set<BasicBlock> nodes, Set<CFGEdge> edges) {
+        this.nodes = nodes;
+        this.edges = edges;
     }
 
     public void addEdge(CFGEdge edge) {
         this.edges.add(edge);
-        this.blocks.add(edge.getStartNode());
-        this.blocks.add(edge.getEndNode());
+        this.nodes.add(edge.getStartNode());
+        this.nodes.add(edge.getEndNode());
     }
 
-    public static List<BasicBlock> splitBasicBlocks(MethodDeclaration method) {
-        List<BasicBlock> blocks = new ArrayList<>();
+    public static CFG constructCFG(MethodDeclaration method) {
+        Set<BasicBlock> blocks = new HashSet<>();
+        Set<CFGEdge> edges = new HashSet<>();
         Set<Statement> leadingStatements = new HashSet<>();
         leadingStatements.add((Statement) method.getBody().statements().get(0));
         for(int i = 1; i < method.getBody().statements().size(); i++) {
@@ -75,10 +83,22 @@ public class CFG {
                 }
             }
         }
-        for(int i = 0; i < method.getBody().statements().size(); i++) {
-            
+        for(int i = 0; i < method.getBody().statements().size();) {
+            Statement currentStatement = (Statement) method.getBody().statements().get(i);
+            if(leadingStatements.contains(currentStatement)) {
+                BasicBlock newBlock = new BasicBlock(currentStatement);
+                for(int j = i + 1; j < method.getBody().statements().size(); j++) {
+                    Statement newStatement = (Statement) method.getBody().statements().get(j);
+                    if(leadingStatements.contains(newStatement)) {
+                        break;
+                    }
+                    newBlock.addStatement(newStatement);
+                }
+                blocks.add(newBlock);
+            }
         }
-        return blocks;
+        CFG cfg = new CFG(blocks, edges);
+        return cfg;
     }
 
 }
