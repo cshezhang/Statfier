@@ -42,7 +42,7 @@ public class CFG {
         this.nodes.add(edge.getEndNode());
     }
 
-    public static CFG constructCFG(MethodDeclaration method) {
+    public static CFG buildCFG(MethodDeclaration method) {
         Set<BasicBlock> blocks = new HashSet<>();
         Set<CFGEdge> edges = new HashSet<>();
         Set<Statement> leadingStatements = new HashSet<>();
