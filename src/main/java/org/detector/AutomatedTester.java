@@ -16,11 +16,11 @@ import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.sourceSeedPath;
 
 /**
- * Description: Main process for automatic testing
+ * Description: Main entry for automated testing
  * Author: RainyD4y
  * Date: 2021-08-08 16:20
  */
-public class AutomaticTester {
+public class AutomatedTester {
 
     public static void main(String[] args) {
         long startTimeStamp = System.currentTimeMillis();

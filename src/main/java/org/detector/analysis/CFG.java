@@ -7,11 +7,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
-import javax.swing.plaf.nimbus.State;
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,8 +17,6 @@ import java.util.Set;
  */
 public class CFG {
 
-    private BasicBlock entry;
-    private BasicBlock exit;
     private Set<BasicBlock> nodes;
     private Set<CFGEdge> edges;
 
@@ -99,6 +93,10 @@ public class CFG {
         }
         CFG cfg = new CFG(blocks, edges);
         return cfg;
+    }
+
+    public static void backwardAnalysis() {
+
     }
 
 }
