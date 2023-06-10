@@ -154,7 +154,7 @@ public class Utility {
     public final static String GOOGLE_FORMAT_PATH = TOOL_PATH + sep + "GoogleFormatter.jar";
     public final static String SPOTBUGS_PATH = getProperty("SPOTBUGS_PATH");
     public final static String CHECKSTYLE_PATH = getProperty("CHECKSTYLE_PATH");
-    public final static String CheckStyleConfigPath = toolPath + sep + "CheckStyle_Configs";
+    public final static String CHECKSTYLE_CONFIG_PATH = toolPath + sep + "CheckStyle_Configs";
     public final static String INFER_PATH = getProperty("INFER_PATH");
     public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + sep + "SpotBugs_Dependency", true);

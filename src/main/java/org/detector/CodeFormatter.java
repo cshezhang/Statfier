@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.detector.util.Utility.GOOGLE_FORMAT_PATH;
-import static org.detector.util.Utility.readFile;
-import static org.detector.util.Utility.readFileByLine;
 
 /**
  * Description:

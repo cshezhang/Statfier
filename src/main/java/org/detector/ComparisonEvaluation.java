@@ -2,12 +2,15 @@ package org.detector;
 
 import net.sourceforge.pmd.PMD;
 import org.detector.util.Invoker;
+import org.detector.util.OSUtil;
 import org.detector.util.Utility;
 
 import java.io.File;
 import java.util.List;
 
+import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
+import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.PMD_SEED_PATH;
@@ -15,7 +18,6 @@ import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.classFolder;
-import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.getDirectFilenamesFromFolder;
 import static org.detector.util.Utility.mutantFolder;
 import static org.detector.util.Utility.readPMDResultFile;
@@ -90,9 +92,17 @@ public class ComparisonEvaluation {
     }
 
     public static void invokeCheckStyle(String seedPath, String mutantFolderPath) {
+        // Add a map: seed report -> mutant report -> Diff analysis
+        String reportPath = "";
+        String[] invokeCommands = new String[3];
+        invokeCommands[0] = "/bin/bash";
+        invokeCommands[1] = "-c";
+        invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + seedPath;
+        Invoker.invokeCommandsByZT(invokeCommands);
         List<String> mutantPaths = getDirectFilenamesFromFolder(mutantFolderPath, true);
         for(String mutantPath : mutantPaths) {
-
+            reportPath = "";
+            invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + mutantPath;
         }
     }
 
