@@ -342,6 +342,7 @@ public class Utility {
         return count;
     }
 
+    public static List<String> errorList = new ArrayList<>();
     public static void readPMDResultFile(final String reportPath) {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -362,8 +363,8 @@ public class Utility {
             }
             JsonNode processErrorNodes = rootNode.get("processingErrors");
             JsonNode configErrorNodes = rootNode.get("configurationErrors");
-            if(processErrorNodes.size() > 0) {
-                int a = 10;
+            if(processErrorNodes.size() > 0 || configErrorNodes.size() > 0) {
+                errorList.add(reportPath);
             }
         } catch (JsonProcessingException e) {
             System.err.println("Exceptional Json Path:" + reportPath);
