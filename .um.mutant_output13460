@@ -1,0 +1,5 @@
+Picked up JAVA_TOOL_OPTIONS: -Duser.language=en
+/Users/rainyd4y/projects/SAMutator/seeds/PMD_Validation/bestpractices_PrimitiveWrapperInstantiation/PrimitiveWrapperInstantiation21.java:6: error: class, interface, enum, or record expected
+continue;
+^
+1 error

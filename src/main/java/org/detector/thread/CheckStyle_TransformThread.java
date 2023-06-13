@@ -11,8 +11,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
-import static org.detector.util.Utility.CheckStyleConfigPath;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.Path2Last;
 import static org.detector.util.Utility.reportFolder;
@@ -50,7 +50,7 @@ public class CheckStyle_TransformThread implements Runnable {
 //            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
             File configFile = new File(configPath);
             if (configFile.exists()) {
-                configPath = CheckStyleConfigPath + File.separator + seedFolderName + 0 + ".xml";
+                configPath = CHECKSTYLE_CONFIG_PATH + File.separator + seedFolderName + 0 + ".xml";
             }
             // 这里还可以做一个configIndex是否match seedFolderName里边的index
             for (int i = 0; i < mutantFilePaths.size(); i++) {

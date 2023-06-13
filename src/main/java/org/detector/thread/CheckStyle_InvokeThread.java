@@ -8,8 +8,8 @@ import java.io.File;
 import java.util.List;
 
 import static org.detector.util.Schedule.file2config;
+import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
-import static org.detector.util.Utility.CheckStyleConfigPath;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.reportFolder;
@@ -35,12 +35,12 @@ public class CheckStyle_InvokeThread implements Runnable {
             String filePath = filePaths.get(i);
             String[] tokens = filePath.split(reg_sep);
             int configIndex = Character.getNumericValue(tokens[tokens.length - 1].charAt(tokens[tokens.length - 1].indexOf(".") - 1));
-            File configFile = new File(CheckStyleConfigPath + sep + seedFolderName + configIndex + ".xml");
+            File configFile = new File(CHECKSTYLE_CONFIG_PATH + sep + seedFolderName + configIndex + ".xml");
             String configPath;
             if(configFile.exists()) {
                 configPath = configFile.getAbsolutePath();
             } else {
-                configPath = CheckStyleConfigPath + sep + seedFolderName + 0 + ".xml";
+                configPath = CHECKSTYLE_CONFIG_PATH + sep + seedFolderName + 0 + ".xml";
             }
             file2config.put(filePath, configPath);
             String reportPath = reportFolder + File.separator + "iter0" + "_" + seedFolderName + i + "_Result.txt";

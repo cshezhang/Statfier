@@ -39,13 +39,8 @@ public class SpotBugs_InvokeThread implements Runnable {
                 System.out.println("Report: " + reportPath);
             }
             String[] invokeCommands = new String[3];
-            if(OSUtil.isWindows()) {
-                invokeCommands[0] = "cmd.exe";
-                invokeCommands[1] = "/c";
-            } else {
-                invokeCommands[0] = "/bin/bash";
-                invokeCommands[1] = "-c";
-            }
+            invokeCommands[0] = "/bin/bash";
+            invokeCommands[1] = "-c";
             invokeCommands[2] = SPOTBUGS_PATH + " -textui"
                             + " -xml:withMessages" + " -output " + reportPath + " "
                             + classFolder.getAbsolutePath();

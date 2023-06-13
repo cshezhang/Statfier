@@ -3,6 +3,7 @@ package org.detector.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.sourceforge.pmd.PMD;
 import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -113,8 +114,8 @@ public class Utility {
     public final static boolean SONARQUBE_MUTATION = Boolean.parseBoolean(getProperty("SONARQUBE_MUTATION"));
     public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION) ? true : false;
 
-    public final static String SONARQUBE_PROJECT_KEY = getProperty("SONAR_QUBE_PROJECT_KEY");
-    public final static String SONARQUBE_LOGIN = getProperty("SONAR_QUBE_LOGIN");
+    public final static String SONARQUBE_PROJECT_KEY = getProperty("SONARQUBE_PROJECT_KEY");
+    public final static String SONARQUBE_LOGIN = getProperty("SONARQUBE_LOGIN");
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
@@ -237,6 +238,7 @@ public class Utility {
             if (ud.exists()) {
                 FileUtils.deleteDirectory(new File(EVALUATION_PATH));
             }
+            System.out.println("Making Dir: " + ud.getAbsolutePath());
             ud.mkdir();
             if (!ud.exists()) {
                 System.err.println("Fail to create EVALUATION_PATH!\n");
@@ -343,6 +345,64 @@ public class Utility {
     }
 
     public static List<String> errorList = new ArrayList<>();
+
+    // Read PMD result file which includes only one seed file.
+    public static void readSinglePMDResultFile(final String reportPath, String seedPath) {
+        ObjectMapper mapper = new ObjectMapper();
+        File reportFile = new File(reportPath);
+        if(!reportFile.exists()) {
+            System.err.println("Report not existed: " + reportPath);
+            return;
+        }
+        if(file2report.containsKey(seedPath)) {
+            System.err.println("Repeat Process ReportPath: " + reportPath);
+            return;
+        }
+        PMD_Report report = new PMD_Report(seedPath);
+        file2report.put(report.getFilepath(), report);
+        try {
+            JsonNode rootNode = mapper.readTree(reportFile);
+            JsonNode reportNodes = rootNode.get("files");
+            for (int i = 0; i < reportNodes.size(); i++) {
+                JsonNode reportNode = reportNodes.get(i);
+                String filePath = reportNode.get("filename").asText();
+                if(!filePath.equals(seedPath)) {
+                    System.err.println("Error ReportPath: " + reportPath);
+                    System.err.println("Error SeedPath: " + seedPath);
+                    System.exit(-1);
+                }
+                JsonNode violationNodes = reportNode.get("violations");
+                for (int j = 0; j < violationNodes.size(); j++) {
+                    JsonNode violationNode = violationNodes.get(j);
+                    PMD_Violation violation = new PMD_Violation(violationNode);
+                    report.addViolation(violation);
+                }
+            }
+            JsonNode processErrorNodes = rootNode.get("processingErrors");
+            JsonNode configErrorNodes = rootNode.get("configurationErrors");
+            if(processErrorNodes.size() > 0 || configErrorNodes.size() > 0) {
+                errorList.add(reportPath);
+            }
+        } catch (JsonProcessingException e) {
+            System.err.println("Exceptional Json Path:" + reportPath);
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!file2row.containsKey(seedPath)) {
+            file2row.put(seedPath, new ArrayList<>());
+            file2bugs.put(seedPath, new HashMap<>());
+        }
+        for (PMD_Violation violation : report.getViolations()) {
+            file2row.get(seedPath).add(violation.beginLine);
+            HashMap<String, List<Integer>> bug2cnt = file2bugs.get(seedPath);
+            if (!bug2cnt.containsKey(violation.getBugType())) {
+                bug2cnt.put(violation.getBugType(), new ArrayList<>());
+            }
+            bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+        }
+    }
+
     public static void readPMDResultFile(final String reportPath) {
         List<PMD_Report> pmd_reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
@@ -690,7 +750,7 @@ public class Utility {
         String[] tokens = path.split(reg_sep);
         String target = tokens[tokens.length - 1];
         if (target.contains(".")) {
-            return target.substring(0, target.indexOf('.'));
+            return target.substring(0, target.lastIndexOf('.'));
         } else {
             return target;
         }
