@@ -12,8 +12,8 @@ import java.util.List;
 import static org.detector.transform.Transform.singleLevelExplorer;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.SEARCH_DEPTH;
-import static org.detector.util.Utility.mutantFolder;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.MUTANT_FOLDER;
+import static org.detector.util.Utility.REPORT_FOLDER;
 
 /**
  * Description: This file is the MAIN class for testing PMD with multi threads
@@ -48,10 +48,10 @@ public class PMD_TransformThread implements Runnable {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
-            String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-            String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+            String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
+            String MUTANT_FOLDERPath = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
             String[] pmdConfig = {
-                    "-d", mutantFolderPath,
+                    "-d", MUTANT_FOLDERPath,
                     "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
                     "-f", "json",
                     "-r", resultFilePath

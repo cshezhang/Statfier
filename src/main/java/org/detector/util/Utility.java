@@ -119,7 +119,6 @@ public class Utility {
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
-    public static String sourceSeedPath = null;
     public static final long startTimeStamp = System.currentTimeMillis();
 
     public static final String reg_sep = "/|\\\\";
@@ -143,12 +142,13 @@ public class Utility {
     public final static String INFER_SEED_PATH = getProperty("INFER_SEED_PATH");
     public final static String CHECKSTYLE_SEED_PATH = getProperty("CHECKSTYLE_SEED_PATH");
     public final static String SONARQUBE_SEED_PATH = getProperty("SONARQUBE_SEED_PATH");
+    public static String SEED_PATH = null;
 
     // mutants and results
-    public final static File mutantFolder = new File(EVALUATION_PATH + sep + "mutants");
-    public final static File reportFolder = new File(EVALUATION_PATH + sep + "reports");
-    public final static File classFolder = new File(EVALUATION_PATH + sep + "classes");
-    public final static File resultFolder = new File(EVALUATION_PATH + sep + "results");
+    public final static File MUTANT_FOLDER = new File(EVALUATION_PATH + sep + "mutants");
+    public final static File REPORT_FOLDER = new File(EVALUATION_PATH + sep + "reports");
+    public final static File CLASS_FOLDER = new File(EVALUATION_PATH + sep + "classes");
+    public final static File RESULT_FOLDER = new File(EVALUATION_PATH + sep + "results");
 
     // tools
     public final static String TOOL_PATH = getProperty("TOOL_PATH");
@@ -209,19 +209,34 @@ public class Utility {
             random.setSeed(RANDOM_SEED5);
         }
         if (PMD_MUTATION) {
-            sourceSeedPath = PMD_SEED_PATH;
+            SEED_PATH = PMD_SEED_PATH;
         }
         if (SPOTBUGS_MUTATION) {
-            sourceSeedPath = SPOTBUGS_SEED_PATH;
+            SEED_PATH = SPOTBUGS_SEED_PATH;
         }
         if (SONARQUBE_MUTATION) {
-            sourceSeedPath = SONARQUBE_SEED_PATH;
+            SEED_PATH = SONARQUBE_SEED_PATH;
         }
         if (CHECKSTYLE_MUTATION) {
-            sourceSeedPath = CHECKSTYLE_SEED_PATH;
+            SEED_PATH = CHECKSTYLE_SEED_PATH;
         }
         if (INFER_MUTATION) {
-            sourceSeedPath = INFER_SEED_PATH;
+            SEED_PATH = INFER_SEED_PATH;
+        }
+        if(SEED_PATH == null) {
+            System.err.println("SEED_PATH is not initialized correctly!");
+            System.exit(-1);
+        }
+        List<String> seedPaths = getFilenamesFromFolder(SEED_PATH, true);
+        for(String seedPath : seedPaths) {
+            if(seedPath.endsWith(".class")) {
+                System.out.println("Delete Class in Seed Folder: " + seedPath);
+                try {
+                    FileUtils.delete(new File(seedPath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         try {
             File file = new File(CHECKSTYLE_PATH);
@@ -244,21 +259,21 @@ public class Utility {
                 System.err.println("Fail to create EVALUATION_PATH!\n");
                 System.exit(-1);
             }
-            if (!reportFolder.mkdir()) {
+            if (!REPORT_FOLDER.mkdir()) {
                 System.err.println("Fail to create result folder!\n");
                 System.exit(-1);
             }
-            if (!mutantFolder.mkdir()) {
+            if (!MUTANT_FOLDER.mkdir()) {
                 System.err.println("Fail to create mutant folder!\n");
                 System.exit(-1);
             }
-            if (SPOTBUGS_MUTATION || INFER_MUTATION) {
-                if (!classFolder.mkdir()) {
+            if (COMPILE) {
+                if (!CLASS_FOLDER.mkdir()) {
                     System.err.println("Fail to create class folder!\n");
                     System.exit(-1);
                 }
             }
-            if (!resultFolder.mkdir()) {
+            if (!RESULT_FOLDER.mkdir()) {
                 System.err.println("Fail to create result folder!\n");
                 System.exit(-1);
             }
@@ -266,16 +281,16 @@ public class Utility {
             e.printStackTrace();
         }
         // subSeedFolder, like security_hardcodedCryptoKey
-        subSeedFolderNameList = getDirectFilenamesFromFolder(sourceSeedPath, false);
+        subSeedFolderNameList = getDirectFilenamesFromFolder(SEED_PATH, false);
         // Generate mutant folder from iter1 -> iter8
-        if(!PMD_MUTATION) {
-            for (String subSeedFolderName : subSeedFolderNameList) {
-                File subSeedFolder = new File(reportFolder.getAbsolutePath() + sep + subSeedFolderName);
-                subSeedFolder.mkdir();
-            }
+        for (String subSeedFolderName : subSeedFolderNameList) {
+            File subSeedFolder = new File(REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName);
+            subSeedFolder.mkdir();
+            subSeedFolder = new File(CLASS_FOLDER.getAbsolutePath() + sep + subSeedFolderName);
+            subSeedFolder.mkdir();
         }
         for (int i = 1; i <= 8; i++) {
-            File iter = new File(mutantFolder.getAbsolutePath() + sep + "iter" + i);
+            File iter = new File(MUTANT_FOLDER.getAbsolutePath() + sep + "iter" + i);
             iter.mkdir();
             for (String subSeedFolderName : subSeedFolderNameList) {
                 File subSeedFolder = new File(iter.getAbsolutePath() + sep + subSeedFolderName);
@@ -447,21 +462,6 @@ public class Utility {
                 bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
             }
         }
-    }
-
-    public static String readFile(String filepath) {
-        StringBuilder builder = new StringBuilder();
-        try {
-            FileInputStream fis = new FileInputStream(filepath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String str;
-            while ((str = br.readLine()) != null) {
-                builder.append(str);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return builder.toString();
     }
 
     public static List<String> readFileByLine(String filepath) {

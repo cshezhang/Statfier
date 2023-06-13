@@ -29,7 +29,7 @@ import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.SonarQubeRuleNames;
-import static org.detector.util.Utility.classFolder;
+import static org.detector.util.Utility.CLASS_FOLDER;
 import static org.detector.util.Utility.compactIssues;
 import static org.detector.util.Utility.failedCheckStyleExecution;
 import static org.detector.util.Utility.failedExecuteSpotBugs;
@@ -38,12 +38,12 @@ import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2row;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
-import static org.detector.util.Utility.mutantFolder;
+import static org.detector.util.Utility.MUTANT_FOLDER;
 import static org.detector.util.Utility.readCheckStyleResultFile;
 import static org.detector.util.Utility.readInferResultFile;
 import static org.detector.util.Utility.readPMDResultFile;
 import static org.detector.util.Utility.reg_sep;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
 import static org.detector.util.Utility.subSeedFolderNameList;
 import static org.detector.util.Utility.successfulT;
@@ -127,7 +127,7 @@ public class Schedule {
                         System.exit(-1);
                     }
                     visitedPaths.add(mutantFilePath);
-                    File reportFile = new File(reportFolder + sep + "iter" + depth + "_" + wrapper.getFileName() + ".txt");
+                    File reportFile = new File(REPORT_FOLDER + sep + "iter" + depth + "_" + wrapper.getFileName() + ".txt");
                     String[] invokeCommands = new String[3];
                     invokeCommands[0] = "/bin/bash";
                     invokeCommands[1] = "-c";
@@ -183,7 +183,7 @@ public class Schedule {
                     String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
-                    File mutantClassFolder = new File(classFolder.getAbsolutePath() + sep + seedFileName);
+                    File mutantClassFolder = new File(CLASS_FOLDER.getAbsolutePath() + sep + seedFileName);
                     if (!mutantClassFolder.exists()) {
                         mutantClassFolder.mkdirs();
                     }
@@ -191,7 +191,7 @@ public class Schedule {
                     if(!isCompiled) {
                         continue;
                     }
-                    String reportPath = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
+                    String reportPath = REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
                     String[] invokeCommands = new String[3];
                     invokeCommands[0] = "/bin/bash";
                     invokeCommands[1] = "-c";
@@ -201,7 +201,7 @@ public class Schedule {
                             + mutantClassFolder.getAbsolutePath();
                     boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
-                        String report_path = reportFolder.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
+                        String report_path = REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
                         readSpotBugsResultFile(mutantWrapper.getFolderPath(), report_path);
                         if(!mutantWrapper.isBuggy()) {
                             entry.getValue().add(mutantWrapper);
@@ -265,10 +265,10 @@ public class Schedule {
                         System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
                     }
                     List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
-                    String resultFilePath = reportFolder.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-                    String mutantFolderPath = mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
+                    String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
+                    String MUTANT_FOLDERPath = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
                     String[] pmdConfig = {
-                            "-d", mutantFolderPath,
+                            "-d", MUTANT_FOLDERPath,
                             "-R", "category/java/" + category + ".xml/" + bugType,
                             "-f", "json",
                             "-r", resultFilePath
@@ -309,7 +309,7 @@ public class Schedule {
             // After invocation: wrappers includes type wrappers in iter + 1
             singleLevelExplorer(wrappers, currentDepth++);
             for (String subSeedFolderName : subSeedFolderNameList) {
-                String subSeedFolderPath = mutantFolder + sep + "iter" + iter + sep + subSeedFolderName;
+                String subSeedFolderPath = MUTANT_FOLDER + sep + "iter" + iter + sep + subSeedFolderName;
                 if(DEBUG) {
                     System.out.println("Seed path: " + subSeedFolderPath);
                 }
@@ -400,16 +400,16 @@ public class Schedule {
                     TypeWrapper mutantWrapper = mutantWrappers.get(i);
                     String mutantPath = mutantWrapper.getFilePath();
                     String mutantFileName = mutantWrapper.getFileName();
-                    String reportFolderPath = reportFolder + sep + "iter" + depth + "_" + mutantFileName;
-                    String cmd = INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
-                            " -d " + classFolder.getAbsolutePath() + sep + mutantFileName +
+                    String REPORT_FOLDERPath = REPORT_FOLDER + sep + "iter" + depth + "_" + mutantFileName;
+                    String cmd = INFER_PATH + " run -o " + "" + REPORT_FOLDERPath + " -- " + JAVAC_PATH +
+                            " -d " + CLASS_FOLDER.getAbsolutePath() + sep + mutantFileName +
                             " -cp " + inferJarStr + " " + mutantPath;
                     String[] invokeCommands = new String[3];
                     invokeCommands[0] = "/bin/bash";
                     invokeCommands[1] = "-c";
                     invokeCommands[2] = "python3 cmd.py " + cmd;
                     Invoker.invokeCommandsByZT(invokeCommands);
-                    String resultFilePath = reportFolderPath + sep + "report.json";
+                    String resultFilePath = REPORT_FOLDERPath + sep + "report.json";
                     readInferResultFile(mutantPath, resultFilePath);
                     if(!mutantWrapper.isBuggy()) {
                         entry.getValue().add(mutantWrapper);

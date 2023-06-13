@@ -20,7 +20,7 @@ import static org.detector.util.Utility.RANDOM_SELECTION;
 import static org.detector.util.Utility.SEARCH_DEPTH;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.reg_sep;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 
 public class SpotBugs_Exec {
 
@@ -65,12 +65,12 @@ public class SpotBugs_Exec {
                     String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
                     // Filename is used to specify class folder name
-                    File classFolder = new File(Utility.classFolder.getAbsolutePath()  + File.separator + seedFileName);
-                    if (!classFolder.exists()) {
-                        classFolder.mkdirs();
+                    File CLASS_FOLDER = new File(Utility.CLASS_FOLDER.getAbsolutePath()  + File.separator + seedFileName);
+                    if (!CLASS_FOLDER.exists()) {
+                        CLASS_FOLDER.mkdirs();
                     }
-                    Invoker.compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
-                    String reportPath = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                    Invoker.compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, CLASS_FOLDER.getAbsolutePath());
+                    String reportPath = REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     String[] invokeCmds = new String[3];
                     if(OSUtil.isWindows()) {
                         invokeCmds[0] = "cmd.exe";
@@ -82,9 +82,9 @@ public class SpotBugs_Exec {
                     invokeCmds[2] = SPOTBUGS_PATH + " -textui"
 //                            + " -include " + configPath
                             + " -xml:withMessages" + " -output " + reportPath + " "
-                            + classFolder.getAbsolutePath();
+                            + CLASS_FOLDER.getAbsolutePath();
                     Invoker.invokeCommandsByZT(invokeCmds);
-                    String report_path = reportFolder.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
+                    String report_path = REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     readSpotBugsResultFile(tmpWrapper.getFolderPath(), report_path);
                 }
                 List<TypeWrapper> validWrappers = new ArrayList<>();

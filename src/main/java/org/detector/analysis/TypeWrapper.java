@@ -99,7 +99,7 @@ public class TypeWrapper {
     private String folderPath;
     private String folderName;
     private String parentPath;
-    private String mutantFolder;
+    private String MUTANT_FOLDER;
     private List<ASTNode> nodeIndex;
     private List<String> transSeq;
     private List<ASTNode> transNodes;
@@ -137,7 +137,7 @@ public class TypeWrapper {
         this.folderName = folderName; // folderName -> subSeedFolderName
         this.filename = targetFile.getName().substring(0, targetFile.getName().length() - 5); // remove .java suffix
         this.parentPath = "initSeed";
-        this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
+        this.MUTANT_FOLDER = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.nodeIndex = new ArrayList<>();
         this.transSeq = new ArrayList<>();
         this.transNodes = new ArrayList<>();
@@ -153,7 +153,7 @@ public class TypeWrapper {
         this.folderName = parentWrapper.folderName; // PMD needs this to specify bug type
         this.filename = filename;
         this.document = new Document(content);
-        this.mutantFolder = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
+        this.MUTANT_FOLDER = EVALUATION_PATH + File.separator + "mutants" + File.separator + "iter" + (this.depth + 1) + File.separator + folderName;
         this.parViolations = parentWrapper.violations;
         this.parentPath = parentWrapper.filePath;
         this.nodeIndex = new ArrayList<>();
@@ -627,7 +627,7 @@ public class TypeWrapper {
                 List<ASTNode> targetNodes = transform.check(this, candidateNode);
                 for (ASTNode targetNode : targetNodes) {
                     String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
-                    String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
+                    String mutantPath = MUTANT_FOLDER + File.separator + mutantFilename + ".java";
                     String content = this.document.get();
                     TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
                     int oldLineNumber1 = this.cu.getLineNumber(targetNode.getStartPosition());
@@ -681,7 +681,7 @@ public class TypeWrapper {
                     List<ASTNode> targetNodes = transform.check(this, candidateNode);
                     for (ASTNode targetNode : targetNodes) {
                         String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
-                        String mutantPath = mutantFolder + File.separator + mutantFilename + ".java";
+                        String mutantPath = MUTANT_FOLDER + File.separator + mutantFilename + ".java";
                         String content = this.document.get();
                         TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
                         // Node to be transformed

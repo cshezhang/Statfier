@@ -36,7 +36,7 @@ import static org.detector.util.Utility.initThreadPool;
 import static org.detector.util.Utility.readCheckStyleResultFile;
 import static org.detector.util.Utility.readInferResultFile;
 import static org.detector.util.Utility.readPMDResultFile;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
 import static org.detector.util.Utility.spotBugsJarStr;
 import static org.detector.util.Utility.subSeedFolderNameList;
@@ -159,7 +159,7 @@ public class Invoker {
         }
         if(!fileName.endsWith(".java")) {
             System.err.println("File: " + fileName + " is not ended by .java");
-            System.exit(0);
+            System.exit(-1);
         }
         fileName = fileName.substring(0, fileName.length() - 5);
         List<String> cmd_list = new ArrayList<>();
@@ -179,7 +179,7 @@ public class Invoker {
     }
 
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
-    // Generated class files are saved in classFolder
+    // Generated class files are saved in CLASS_FOLDER
     public static void invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
         if(seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
@@ -198,7 +198,7 @@ public class Invoker {
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         for(String subSeedFolderName : subSeedFolderNameList) {
-            List<String> reportPaths = getFilenamesFromFolder(reportFolder.getAbsolutePath() + File.separator + subSeedFolderName, true);
+            List<String> reportPaths = getFilenamesFromFolder(REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
             for(String reportPath : reportPaths) {
                 readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
@@ -325,10 +325,10 @@ public class Invoker {
             threadPool.submit(new Infer_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
-        System.out.println("Infer Result Folder: " + reportFolder.getAbsolutePath());
+        System.out.println("Infer Result Folder: " + REPORT_FOLDER.getAbsolutePath());
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         for(String seedPath : seedPaths) {
-            String reportPath = reportFolder.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
+            String reportPath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
             readInferResultFile(seedPath, reportPath);
         }
     }
@@ -339,7 +339,7 @@ public class Invoker {
             threadPool.submit(new CheckStyle_InvokeThread(0, seedFolderPath, subSeedFolderNameList.get(i)));
         }
         waitThreadPoolEnding(threadPool);
-        List<String> reportPaths = getFilenamesFromFolder(reportFolder.getAbsolutePath(), true);
+        List<String> reportPaths = getFilenamesFromFolder(REPORT_FOLDER.getAbsolutePath(), true);
         for(int i = 0; i < reportPaths.size(); i++) {
             readCheckStyleResultFile(reportPaths.get(i));
         }
@@ -353,7 +353,7 @@ public class Invoker {
             }
             waitThreadPoolEnding(threadPool);
             for (int i = 0; i < subSeedFolderNameList.size(); i++) {
-                readPMDResultFile(reportFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
+                readPMDResultFile(REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
             }
         } else {
             for(int i = 0; i < subSeedFolderNameList.size(); i++) {
@@ -365,13 +365,13 @@ public class Invoker {
                         "-d", seedFolderPath  + File.separator + seedFolderName,
                         "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
                         "-f", "json",
-                        "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"
+                        "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"
 //                        "--no-cache"
                 };
                 PMD.runPmd(pmdConfig);
             }
             for (int i = 0; i < subSeedFolderNameList.size(); i++) {
-                readPMDResultFile(reportFolder.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
+                readPMDResultFile(REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + subSeedFolderNameList.get(i) + "_Result.json");
             }
         }
     }

@@ -12,6 +12,9 @@ config.properties
 .classpath
 *.prefs
 
+# Universal Mutation
+.um.mutant_output*
+
 # Compiled class file
 *.class
 

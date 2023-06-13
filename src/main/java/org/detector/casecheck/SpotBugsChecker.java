@@ -20,15 +20,15 @@ public class SpotBugsChecker {
     private static final String spotBugsPath = toolPath  + File.separator + "SpotBugs"  + File.separator + "bin"  + File.separator + "spotbugs";
 
     public static void compileFirstIterJavaFiles(List<String> filePaths) {
-        File classFolder = new File("/home/vanguard/evaluation/InitClasses");
-        if(!classFolder.exists()) {
-            classFolder.mkdir();
+        File CLASS_FOLDER = new File("/home/vanguard/evaluation/InitClasses");
+        if(!CLASS_FOLDER.exists()) {
+            CLASS_FOLDER.mkdir();
         }
         for(String filePath : filePaths) {
             int lastSepIndex = filePath.lastIndexOf(sep);
             String folderPath = filePath.substring(0, lastSepIndex);
             String fileName = filePath.substring(lastSepIndex + 1);
-            Invoker.compileJavaSourceFile(folderPath, fileName, classFolder.getAbsolutePath());
+            Invoker.compileJavaSourceFile(folderPath, fileName, CLASS_FOLDER.getAbsolutePath());
         }
     }
 

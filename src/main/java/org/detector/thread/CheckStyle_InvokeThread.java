@@ -12,7 +12,7 @@ import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.reg_sep;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
 
 public class CheckStyle_InvokeThread implements Runnable {
@@ -43,7 +43,7 @@ public class CheckStyle_InvokeThread implements Runnable {
                 configPath = CHECKSTYLE_CONFIG_PATH + sep + seedFolderName + 0 + ".xml";
             }
             file2config.put(filePath, configPath);
-            String reportPath = reportFolder + File.separator + "iter0" + "_" + seedFolderName + i + "_Result.txt";
+            String reportPath = REPORT_FOLDER + File.separator + "iter0" + "_" + seedFolderName + i + "_Result.txt";
             String[] invokeCommands = new String[3];
             if(OSUtil.isWindows()) {
                 invokeCommands[0] = "cmd.exe";

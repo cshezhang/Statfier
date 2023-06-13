@@ -4,7 +4,7 @@ import net.sourceforge.pmd.PMD;
 
 import java.io.File;
 
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 
 /**
  * Description: Previous main process for testing PMD with multi thread
@@ -36,7 +36,7 @@ public class PMD_InvokeThread implements Runnable {
             "-d", seedFolderPath  + File.separator + seedFolderName,
             "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
             "-f", "json",
-            "-r", reportFolder.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
+            "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
         };
         PMD.runPmd(pmdConfig);
     }

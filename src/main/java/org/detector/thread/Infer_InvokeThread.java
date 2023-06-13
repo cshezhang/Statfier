@@ -7,9 +7,9 @@ import java.io.File;
 import java.util.List;
 
 import static org.detector.util.Utility.DEBUG;
-import static org.detector.util.Utility.classFolder;
+import static org.detector.util.Utility.CLASS_FOLDER;
 import static org.detector.util.Utility.inferJarStr;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 
 /**
  * @Description:
@@ -38,15 +38,15 @@ public class Infer_InvokeThread implements Runnable {
         for(int i = 0; i < filePaths.size(); i++) {
             String srcJavaPath = filePaths.get(i);
             String filename = Utility.Path2Last(srcJavaPath);
-            String reportFolderPath = reportFolder + File.separator + "iter" + iterDepth + "_" + filename;
-            String cmd = "\"" + Utility.INFER_PATH + " run -o " + reportFolderPath + " -- " + Utility.JAVAC_PATH +
-                    " -d " + classFolder.getAbsolutePath() + File.separator + filename +
+            String REPORT_FOLDERPath = REPORT_FOLDER + File.separator + "iter" + iterDepth + "_" + filename;
+            String cmd = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDERPath + " -- " + Utility.JAVAC_PATH +
+                    " -d " + CLASS_FOLDER.getAbsolutePath() + File.separator + filename +
                     " -cp " + inferJarStr + " " + srcJavaPath + "\"";
             String[] invokeCmds = new String[3];
             invokeCmds[0] = "/bin/bash";
             invokeCmds[1] = "-c";
             invokeCmds[2] = "python3 cmd.py " + cmd;
-            File file = new File(reportFolderPath);
+            File file = new File(REPORT_FOLDERPath);
             file.mkdir();
             Invoker.invokeCommandsByZT(invokeCmds);
         }

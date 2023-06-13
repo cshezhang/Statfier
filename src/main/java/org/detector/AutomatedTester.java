@@ -6,6 +6,7 @@ import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static org.detector.util.Utility.SEED_PATH;
 import static org.detector.util.Utility.initEnv;
 import static org.detector.util.Schedule.writeEvaluationResult;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
@@ -13,7 +14,6 @@ import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
-import static org.detector.util.Utility.sourceSeedPath;
 
 /**
  * Description: Main entry for automated testing
@@ -33,19 +33,19 @@ public class AutomatedTester {
         initEnv();
         Schedule schedule = Schedule.getInstance();
         if (PMD_MUTATION) {
-            schedule.executePMDTransform(sourceSeedPath);
+            schedule.executePMDTransform(SEED_PATH);
         }
         if (SPOTBUGS_MUTATION) {
-            schedule.executeSpotBugsTransform(sourceSeedPath);
+            schedule.executeSpotBugsTransform(SEED_PATH);
         }
         if (CHECKSTYLE_MUTATION) {
-            schedule.executeCheckStyleTransform(sourceSeedPath);
+            schedule.executeCheckStyleTransform(SEED_PATH);
         }
         if (INFER_MUTATION) {
-            schedule.executeInferTransform(sourceSeedPath);
+            schedule.executeInferTransform(SEED_PATH);
         }
         if (SONARQUBE_MUTATION) {
-            schedule.executeSonarQubeTransform(sourceSeedPath);
+            schedule.executeSonarQubeTransform(SEED_PATH);
         }
         writeEvaluationResult();
         long endTimeStamp = System.currentTimeMillis();

@@ -15,7 +15,7 @@ import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.Path2Last;
-import static org.detector.util.Utility.reportFolder;
+import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.transform.Transform.singleLevelExplorer;
 
 public class CheckStyle_TransformThread implements Runnable {
@@ -45,8 +45,8 @@ public class CheckStyle_TransformThread implements Runnable {
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
             // detect mutants of iter i
-            String mutantFolderPath = Utility.mutantFolder + File.separator + "iter" + depth + File.separator + seedFolderName;
-            List<String> mutantFilePaths = Utility.getFilenamesFromFolder(mutantFolderPath, true);
+            String MUTANT_FOLDERPath = Utility.MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
+            List<String> mutantFilePaths = Utility.getFilenamesFromFolder(MUTANT_FOLDERPath, true);
 //            String configPath = CheckStyleConfigPath + File.separator + "google_checks.xml";
             File configFile = new File(configPath);
             if (configFile.exists()) {
@@ -56,7 +56,7 @@ public class CheckStyle_TransformThread implements Runnable {
             for (int i = 0; i < mutantFilePaths.size(); i++) {
                 String mutantFilePath = mutantFilePaths.get(i);
                 String mutantFileName = Path2Last(mutantFilePath);
-                String reportFilePath = reportFolder + File.separator + "iter" + depth + "_" + mutantFileName + ".txt";
+                String reportFilePath = REPORT_FOLDER + File.separator + "iter" + depth + "_" + mutantFileName + ".txt";
                 String[] invokeCommands = new String[3];
                 if (OSUtil.isWindows()) {
                     invokeCommands[0] = "cmd.exe";
