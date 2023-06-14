@@ -110,10 +110,9 @@ public class Invoker {
                 return false;
             }
             if(INFER_MUTATION && exitValue != 0) {
-                System.err.println("Invoke Infer Error Value: " + exitValue);
-                System.err.println("Execute Infer Error!");
-                System.err.println(argStr);
-                System.err.println("Error Msg: " + new String(errorStream.toByteArray()));
+                System.out.println("Invoke Infer Error Value: " + exitValue);
+                System.out.println(argStr);
+                System.out.println("Error Msg: " + new String(errorStream.toByteArray()));
                 System.exit(-1);
                 return false;
             }

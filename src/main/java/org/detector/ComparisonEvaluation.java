@@ -263,7 +263,7 @@ public class ComparisonEvaluation {
         String[] commands = new String[3];
         commands[0] = "/bin/bash";
         commands[1] = "-c";
-        commands[2] = "\"" + Utility.INFER_PATH + " run -o " + seedReportFolder.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
+        commands[2] = "python3 cmd.py " + "\"" + Utility.INFER_PATH + " run -o " + seedReportFolder.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
                 " -d " + CLASS_FOLDER.getAbsolutePath() + sep + seedFileName +
                 " -cp " + inferJarStr + " " + seedPath + "\"";
         if(!Invoker.invokeCommandsByZT(commands)) {
@@ -286,7 +286,7 @@ public class ComparisonEvaluation {
             }
             commands[0] = "/bin/bash";
             commands[1] = "-c";
-            commands[2] = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDER.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
+            commands[2] = "python3 cmd.py " + "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDER.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
                     " -d " + CLASS_FOLDER.getAbsolutePath() + sep + mutantFileName +
                     " -cp " + inferJarStr + " " + seedPath + "\"";;
             if(!Invoker.invokeCommandsByZT(commands)) {
