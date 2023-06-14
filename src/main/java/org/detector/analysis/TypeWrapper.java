@@ -586,7 +586,7 @@ public class TypeWrapper {
     }
 
     public static int transformedSeed = 0;
-    // 只是random location，没有random transformation
+    // Random location, not random transformation selection.
     public List<TypeWrapper> TransformByRandomLocation() {
         List<TypeWrapper> newWrappers = new ArrayList<>();
         transformedSeed++;

@@ -1,7 +1,5 @@
 package org.detector.report;
 
-import java.util.List;
-
 /**
  * Description:
  * Author: RainyD4y
@@ -9,6 +7,6 @@ import java.util.List;
  */
 public interface Report {
 
-    String getFilepath();
+    String getFilePath();
 
 }

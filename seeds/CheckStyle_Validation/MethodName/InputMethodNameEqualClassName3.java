@@ -20,7 +20,7 @@ package com.puppycrawl.tools.checkstyle.checks.naming.methodname;
 public class InputMethodNameEqualClassName3 {
 
   // illegal name
-  public int InputMethodNameEqualClassName1() { // violation
+  public int InputMethodNameEqualClassName3() { // violation
     return 0;
   }
 

@@ -21,15 +21,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
+import static org.detector.report.Infer_Report.readSingleInferResultFile;
 import static org.detector.report.SpotBugs_Report.readSingleSpotBugsResultFile;
-import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
-import static org.detector.util.Utility.JAVAC_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
-import static org.detector.util.Utility.PMD_SEED_PATH;
 import static org.detector.util.Utility.SEED_PATH;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
@@ -39,8 +38,6 @@ import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.getDirectFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.MUTANT_FOLDER;
-import static org.detector.util.Utility.readCheckStyleResultFile;
-import static org.detector.util.Utility.readInferResultFile;
 import static org.detector.util.Utility.readSinglePMDResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.REPORT_FOLDER;
@@ -269,11 +266,7 @@ public class ComparisonEvaluation {
         if(!Invoker.invokeCommandsByZT(commands)) {
             return;
         }
-        readInferResultFile(seedPath, seedReportPath);
-        if(!file2bugs.containsKey(seedPath)) {
-            System.out.println("Error Seed in Infer: " + seedPath);
-            return;
-        }
+        readSingleInferResultFile(seedPath, seedReportPath);
         Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
         int seedSum = 0;
         for(List<Integer> entry : source_bug2lines.values()) {
@@ -296,12 +289,8 @@ public class ComparisonEvaluation {
             if(!Invoker.invokeCommandsByZT(commands)) {
                 continue;
             }
-            readInferResultFile(mutantPath, mutantReportPath);
+            readSingleInferResultFile(mutantPath, mutantReportPath);
             int mutantSum = 0;
-            if(!file2bugs.containsKey(mutantPath)) {
-                System.out.println("Error Mutant in SpotBugs: " + mutantPath);
-                continue;
-            }
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);
             for(List<Integer> lines : mutant_bug2lines.values()) {
                 mutantSum += lines.size();
