@@ -49,7 +49,7 @@ public class LoopStatement {
             this.body = ((EnhancedForStatement) this.loopStatement).getBody();
         }
         if(tag == -1) {
-            System.err.println("This is not a Loop Statement!");
+            System.out.println("This is not a Loop Statement!");
         }
     }
 

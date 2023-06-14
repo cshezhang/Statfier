@@ -45,7 +45,7 @@ public class AddStaticAssignment extends Transform {
         TypeDeclaration clazz = (TypeDeclaration) oldFieldDeclaration.getParent();
         int pos = clazz.bodyDeclarations().indexOf(oldFieldDeclaration);
         if(pos == -1) {
-            System.err.println("Class and Type Declaration are not matched!");
+            System.out.println("Error: Class and Type Declaration are not matched!");
             System.exit(-1);
         }
         clazz.bodyDeclarations().add(pos + 1, newFieldDeclaration);

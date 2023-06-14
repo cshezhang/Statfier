@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static org.detector.report.SpotBugs_Report.readSingleSpotBugsResultFile;
 import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
@@ -124,11 +125,11 @@ public class ComparisonEvaluation {
                 + " -xml:withMessages" + " -output " + seedReportPath + " "
                 + seedClassFolder.getAbsolutePath();
         Invoker.invokeCommandsByZT(commands);
-        readSpotBugsResultFile(seedFile.getParent(), seedReportPath);
+        readSingleSpotBugsResultFile(seedFile, seedReportPath);
         if(!file2bugs.containsKey(seedPath)) {
             System.out.println("Error Seed in SpotBugs: " + seedPath);
             int a = 10;
-            readSpotBugsResultFile(seedFile.getParent(), seedReportPath);
+            readSingleSpotBugsResultFile(seedFile, seedReportPath);
         }
         Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
         int seedSum = 0;
@@ -154,11 +155,11 @@ public class ComparisonEvaluation {
                     + " -xml:withMessages" + " -output " + mutantReportPath + " "
                     + mutantClassFolder.getAbsolutePath();
             Invoker.invokeCommandsByZT(commands);
-            readSpotBugsResultFile(seedFile.getParent(), mutantReportPath);
+            readSingleSpotBugsResultFile(seedFile, mutantReportPath);
             int mutantSum = 0;
             if(!file2bugs.containsKey(mutantPath)) {
                 System.out.println("Error Mutant in SpotBugs: " + mutantPath);
-                readSpotBugsResultFile(seedFile.getParent(), mutantReportPath);
+                readSingleSpotBugsResultFile(seedFile, mutantReportPath);
                 System.exit(-1);
             }
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);

@@ -174,7 +174,7 @@ public class TypeWrapper {
         try {
             edits.apply(this.document);
         } catch (Exception e) {
-            System.err.println("Fail to Rewrite Java Document!");
+            System.out.println("Fail to Rewrite Java Document!");
             e.printStackTrace();
         }
         String newCode = this.document.get();
@@ -278,7 +278,7 @@ public class TypeWrapper {
                 }
             }
         } catch (IOException e) {
-            System.err.println("Fail to Write to Java File!");
+            System.out.println("Fail to Write to Java File!");
             e.printStackTrace();
             return false;
         }
@@ -498,7 +498,7 @@ public class TypeWrapper {
             Map<String, List<Integer>> source_bug2lines = file2bugs.get(this.parentPath);
             // Two if statements below are used to avoid 1 bug in parent and 0 bug in child, vice versa.
             if (mutant_bug2lines == null && source_bug2lines == null) {
-                System.err.println("Both reports don't have bugs!");
+                System.out.println("Both reports don't have bugs!");
                 System.exit(-1);
             }
             if (mutant_bug2lines == null) {
@@ -691,7 +691,7 @@ public class TypeWrapper {
                         if (newTargetNode == null) {
                             newMutant.searchNodeByPosition(targetNode, oldLineNumber1, oldColNumber1);
                             System.out.println(newMutant.getFilePath());
-                            System.err.println("Old and new ASTWrapper are not matched!");
+                            System.out.println("Old and new ASTWrapper are not matched!");
                             System.exit(-1);
                         }
                         // source node to extract from report
@@ -701,7 +701,7 @@ public class TypeWrapper {
                         if (newSrcNode == null) {
                             newMutant.searchNodeByPosition(candidateNode, oldRowNumber2, oldColNumber2);
                             System.out.println(newMutant.getFilePath());
-                            System.err.println("Old and new ASTWrapper are not matched!");
+                            System.out.println("Old and new ASTWrapper are not matched!");
                             System.exit(-1);
                         }
                         boolean hasMutated = transform.run(newTargetNode, newMutant, getFirstBrotherOfStatement(newSrcNode), newSrcNode);
@@ -745,7 +745,7 @@ public class TypeWrapper {
             }
         }
         if (clazz == null) {
-            System.err.println("Severe Error! No Parent Main Class is found in: " + this.filePath);
+            System.out.println("Severe Error! No Parent Main Class is found in: " + this.filePath);
             System.out.println("Src Path: " + this.initSeedPath);
             System.exit(-1);
         }
@@ -773,7 +773,7 @@ public class TypeWrapper {
     // This function is invoked by newWrapper
     public ASTNode searchNodeByPosition(ASTNode oldNode, int oldRowNumber, int oldColNumber) {
         if (oldNode == null) {
-            System.err.println("AST Node to be searched is NULL!");
+            System.out.println("AST Node to be searched is NULL!");
             System.exit(-1);
         }
         for (int i = 0; i < this.allNodes.size(); i++) { // 1: Statement-level search
@@ -1080,7 +1080,7 @@ public class TypeWrapper {
                 SingleVariableDeclaration svd = (SingleVariableDeclaration) parameter;
                 signature.append(":" + svd.getType().toString());
             } else {
-                System.err.println("What a Fucked Parameter: " + parameter);
+                System.out.println("What a Fucked Parameter: " + parameter);
                 System.exit(-1);
             }
         }
@@ -1116,7 +1116,7 @@ public class TypeWrapper {
         while (!(parent instanceof Statement)) {
             parent = parent.getParent();
             if (parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Brother Statement!");
+                System.out.println("Error in Finding Brother Statement!");
                 System.exit(-1);
             }
         }
@@ -1133,12 +1133,12 @@ public class TypeWrapper {
             parent = parent.getParent();
             currentStatement = currentStatement.getParent();
             if (parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Brother Statement!");
+                System.out.println("Error in Finding Brother Statement!");
                 System.exit(-1);
             }
         }
         if (!(currentStatement instanceof Statement)) {
-            System.err.println("Error: Current Statement cannot be casted to Statement!");
+            System.out.println("Error: Current Statement cannot be casted to Statement!");
         }
         return currentStatement;
     }
@@ -1149,7 +1149,7 @@ public class TypeWrapper {
             while (!(parent instanceof Block)) {
                 parent = parent.getParent();
                 if (parent == null || parent.equals(parent.getParent())) {
-                    System.err.println("Error in Finding Direct Block!");
+                    System.out.println("Error in Finding Direct Block!");
                     System.exit(-1);
                 }
             }
@@ -1216,7 +1216,7 @@ public class TypeWrapper {
         while (parent != null && !(parent instanceof TypeDeclaration)) {
             parent = parent.getParent();
             if (parent == null || parent.equals(parent.getParent())) {
-                System.err.println("Error in Finding Type!");
+                System.out.println("Error in Finding Type!");
                 System.exit(-1);
             }
         }

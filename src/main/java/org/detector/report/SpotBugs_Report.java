@@ -100,7 +100,7 @@ public class SpotBugs_Report implements Report {
         }
     }
 
-    public static void readSingleSpotBugsResultFile(String seedFolderPath, String reportPath) {
+    public static void readSingleSpotBugsResultFile(File seedFile, String reportPath) {
         if (DEBUG) {
             System.out.println("SpotBugs Detection Result FileName: " + reportPath);
         }
@@ -108,42 +108,44 @@ public class SpotBugs_Report implements Report {
         if(!reportFile.exists() || reportFile.length() == 0) {
             return;
         }
-        HashMap<String, SpotBugs_Report> path2report = new HashMap<>();
+        String seedPath = seedFile.getAbsolutePath();
+        String seedFolderPath = seedFile.getParent();
+        if (file2row.containsKey(seedPath)) {
+            System.out.println("Repeat process: " + seedPath);
+            System.out.println("Report Path: " + reportPath);
+            System.exit(-1);
+        }
+        file2row.put(seedPath, new ArrayList<>());
+        file2bugs.put(seedPath, new HashMap<>());
+        SpotBugs_Report report = new SpotBugs_Report(seedPath);
         SAXReader saxReader = new SAXReader();
         try {
-            Document report = saxReader.read(reportFile);
-            Element root = report.getRootElement();
+            Document document = saxReader.read(reportFile);
+            Element root = document.getRootElement();
             List<Element> bugInstances = root.elements("BugInstance");
             for (Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for (Element sourceLine : sourceLines) {
                     SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath, sourceLine, bugInstance.attribute("type").getText());
-                    String filepath = violation.getFilepath();
-                    if (path2report.containsKey(filepath)) {
-                        path2report.get(filepath).addViolation(violation);
-                    } else {
-                        SpotBugs_Report spotBugs_report = new SpotBugs_Report(filepath);
-                        spotBugs_report.addViolation(violation);
-                        path2report.put(filepath, spotBugs_report);
+                    String filePath = violation.getFilepath();
+                    if(!filePath.equals(seedPath)) {
+                        System.out.println("Seed Path: " + seedPath);
+                        System.out.println("File Path: " + filePath);
+                        System.out.println();
                     }
+                    report.addViolation(violation);
                 }
             }
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        for (SpotBugs_Report report : path2report.values()) {
-            if (!file2row.containsKey(report.getFilepath())) {
-                file2row.put(report.getFilepath(), new ArrayList<>());
-                file2bugs.put(report.getFilepath(), new HashMap<>());
+        for (SpotBugs_Violation violation : report.getViolations()) {
+            file2row.get(seedPath).add(violation.getBeginLine());
+            HashMap<String, List<Integer>> bug2cnt = file2bugs.get(seedPath);
+            if (!bug2cnt.containsKey(violation.getBugType())) {
+                bug2cnt.put(violation.getBugType(), new ArrayList<>());
             }
-            for (SpotBugs_Violation violation : report.getViolations()) {
-                file2row.get(report.getFilepath()).add(violation.getBeginLine());
-                HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilepath());
-                if (!bug2cnt.containsKey(violation.getBugType())) {
-                    bug2cnt.put(violation.getBugType(), new ArrayList<>());
-                }
-                bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
-            }
+            bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
         }
     }
 
