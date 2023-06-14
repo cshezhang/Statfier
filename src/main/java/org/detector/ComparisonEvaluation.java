@@ -293,6 +293,9 @@ public class ComparisonEvaluation {
                 continue;
             }
             readSingleInferResultFile(mutantPath, mutantReportPath);
+            if(!file2bugs.containsKey(mutantPath)) {
+                continue;
+            }
             int mutantSum = 0;
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);
             for(List<Integer> lines : mutant_bug2lines.values()) {
