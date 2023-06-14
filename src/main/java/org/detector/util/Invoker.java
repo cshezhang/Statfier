@@ -20,6 +20,9 @@ import org.detector.thread.PMD_InvokeThread;
 import org.detector.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
+import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
+import static org.detector.report.Infer_Report.readSingleInferResultFile;
+import static org.detector.report.PMD_Report.readPMDResultFile;
 import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.INFER_MUTATION;
@@ -35,9 +38,6 @@ import static org.detector.util.Utility.THREAD_COUNT;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.initThreadPool;
-import static org.detector.util.Utility.readCheckStyleResultFile;
-import static org.detector.util.Utility.readInferResultFile;
-import static org.detector.util.Utility.readPMDResultFile;
 import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
 import static org.detector.util.Utility.spotBugsJarStr;
@@ -350,7 +350,7 @@ public class Invoker {
         List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         for(String seedPath : seedPaths) {
             String reportPath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Path2Last(seedPath) + File.separator + "report.json";
-            readInferResultFile(seedPath, reportPath);
+            readSingleInferResultFile(seedPath, reportPath);
         }
     }
 
@@ -386,8 +386,8 @@ public class Invoker {
                         "-d", seedFolderPath  + File.separator + seedFolderName,
                         "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
                         "-f", "json",
-                        "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"
-//                        "--no-cache"
+                        "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json",
+                        "--no-cache"
                 };
                 PMD.runPmd(pmdConfig);
             }

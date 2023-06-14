@@ -9,6 +9,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.detector.report.PMD_Report.readPMDResultFile;
 import static org.detector.transform.Transform.singleLevelExplorer;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.SEARCH_DEPTH;
@@ -57,7 +58,7 @@ public class PMD_TransformThread implements Runnable {
                     "-r", resultFilePath
             };
             PMD.runPmd(pmdConfig); // detect mutants of level i
-            Utility.readPMDResultFile(resultFilePath);
+            readPMDResultFile(resultFilePath);
             List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
                 TypeWrapper head = wrappers.pollFirst();

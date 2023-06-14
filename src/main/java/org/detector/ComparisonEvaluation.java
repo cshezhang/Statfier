@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
 import static org.detector.report.Infer_Report.readSingleInferResultFile;
+import static org.detector.report.PMD_Report.readSinglePMDResultFile;
 import static org.detector.report.SpotBugs_Report.readSingleSpotBugsResultFile;
 import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
@@ -38,7 +39,6 @@ import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.getDirectFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.MUTANT_FOLDER;
-import static org.detector.util.Utility.readSinglePMDResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
@@ -68,7 +68,8 @@ public class ComparisonEvaluation {
                 "-d", seedPath,
                 "-R", "category/java/" + category + ".xml/" + bugType,
                 "-f", "json",
-                "-r", seedReportPath
+                "-r", seedReportPath,
+                "--no-cache"
         };
         PMD.runPmd(seedConfig);
         readSinglePMDResultFile(seedReportPath, seedPath);
@@ -84,7 +85,8 @@ public class ComparisonEvaluation {
                     "-d", mutantPath,
                     "-R", "category/java/" + category + ".xml/" + bugType,
                     "-f", "json",
-                    "-r", mutantReportPath
+                    "-r", mutantReportPath,
+                    "--no-cache"
             };
             PMD.runPmd(mutantConfig);
             readSinglePMDResultFile(mutantReportPath, mutantPath);
@@ -157,7 +159,7 @@ public class ComparisonEvaluation {
                     + " -xml:withMessages" + " -output " + mutantReportPath + " "
                     + mutantClassFolder.getAbsolutePath();
             Invoker.invokeCommandsByZT(commands);
-            readSingleSpotBugsResultFile(seedFile, mutantReportPath);
+            readSingleSpotBugsResultFile(mutantFile, mutantReportPath);
             int mutantSum = 0;
             if(!file2bugs.containsKey(mutantPath)) {
                 System.out.println("Error Mutant in SpotBugs: " + mutantPath);

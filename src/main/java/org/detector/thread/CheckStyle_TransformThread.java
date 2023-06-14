@@ -1,7 +1,6 @@
 package org.detector.thread;
 
 import org.detector.analysis.TypeWrapper;
-import org.detector.report.CheckStyle_Report;
 import org.detector.util.OSUtil;
 import org.detector.util.Invoker;
 import org.detector.util.Utility;
@@ -11,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
 import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.DEBUG;
@@ -71,7 +71,7 @@ public class CheckStyle_TransformThread implements Runnable {
                     System.out.println(invokeCommands[2]);
                 }
                 Invoker.invokeCommandsByZT(invokeCommands);
-                Utility.readCheckStyleResultFile(reportFilePath);
+                readCheckStyleResultFile(reportFilePath);
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {

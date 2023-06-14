@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.detector.report.SonarQube_Report.readSonarQubeResultFile;
 import static org.detector.util.Utility.readFileByLine;
 
 /**
@@ -25,8 +26,8 @@ public class DiffSQAnalysis {
     public static void analysis(String mappingPath, String reportPath1, String reportPath2) {
         System.out.println("Report Path1: " + reportPath1);
         System.out.println("Report Path2: " + reportPath2);
-        Utility.readSonarQubeResultFile(reportPath1);
-        Utility.readSonarQubeResultFile(reportPath2);
+        readSonarQubeResultFile(reportPath1);
+        readSonarQubeResultFile(reportPath2);
         List<String> lines = readFileByLine(mappingPath);
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);

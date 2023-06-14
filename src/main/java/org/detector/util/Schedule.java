@@ -1,6 +1,9 @@
 package org.detector.util;
 
 import static org.detector.analysis.TypeWrapper.failedParse;
+import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
+import static org.detector.report.Infer_Report.readSingleInferResultFile;
+import static org.detector.report.PMD_Report.readPMDResultFile;
 import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.transform.Transform.cnt1;
 import static org.detector.transform.Transform.cnt2;
@@ -33,15 +36,12 @@ import static org.detector.util.Utility.CLASS_FOLDER;
 import static org.detector.util.Utility.compactIssues;
 import static org.detector.util.Utility.failedCheckStyleExecution;
 import static org.detector.util.Utility.failedExecuteSpotBugs;
-import static org.detector.util.Utility.failedReport;
+import static org.detector.util.Utility.failedReportPaths;
 import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2row;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.MUTANT_FOLDER;
-import static org.detector.util.Utility.readCheckStyleResultFile;
-import static org.detector.util.Utility.readInferResultFile;
-import static org.detector.util.Utility.readPMDResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
@@ -410,7 +410,7 @@ public class Schedule {
                     invokeCommands[2] = "python3 cmd.py " + cmd;
                     Invoker.invokeCommandsByZT(invokeCommands);
                     String resultFilePath = REPORT_FOLDERPath + sep + "report.json";
-                    readInferResultFile(mutantPath, resultFilePath);
+                    readSingleInferResultFile(mutantPath, resultFilePath);
                     if(!mutantWrapper.isBuggy()) {
                         entry.getValue().add(mutantWrapper);
                     }
@@ -481,7 +481,7 @@ public class Schedule {
         }
         writeLinesToFile(EVALUATION_PATH + sep + "mutant2seed.log", mutant2seed);
         if (INFER_MUTATION) {
-            writeLinesToFile(EVALUATION_PATH + sep + "FailedReports.log", failedReport);
+            writeLinesToFile(EVALUATION_PATH + sep + "FailedReports.log", failedReportPaths);
         }
         if (SPOTBUGS_MUTATION) {
             writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);

@@ -10,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.detector.report.Infer_Report.readSingleInferResultFile;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.CLASS_FOLDER;
 import static org.detector.util.Utility.inferJarStr;
@@ -73,7 +74,7 @@ public class Infer_TransformThread extends Thread {
                 invokeCommands[2] = "python3 cmd.py " + cmd;
                 Invoker.invokeCommandsByZT(invokeCommands);
                 String resultFilePath = REPORT_FOLDERPath + File.separator + "report.json";
-                Utility.readInferResultFile(srcJavaPath, resultFilePath);
+                readSingleInferResultFile(srcJavaPath, resultFilePath);
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {
