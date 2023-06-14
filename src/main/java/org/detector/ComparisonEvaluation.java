@@ -254,7 +254,8 @@ public class ComparisonEvaluation {
         File seedFile = new File(seedPath);
         String folderName = seedFile.getParentFile().getName();
         String seedFileName = seedFile.getName().substring(0, seedFile.getName().lastIndexOf('.'));
-        String seedReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + seedFileName + "_Result.xml";
+        File seedReportFolder = new File(REPORT_FOLDER.getAbsolutePath() + sep + seedFileName);
+        String seedReportPath = seedReportFolder.getAbsolutePath() + sep + "report.json";
         File seedClassFolder = new File(CLASS_FOLDER + sep + folderName + sep + seedFileName);
         if(!seedClassFolder.exists()) {
             seedClassFolder.mkdir();
@@ -262,7 +263,7 @@ public class ComparisonEvaluation {
         String[] commands = new String[3];
         commands[0] = "/bin/bash";
         commands[1] = "-c";
-        commands[2] = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDER.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
+        commands[2] = "\"" + Utility.INFER_PATH + " run -o " + seedReportFolder.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
                 " -d " + CLASS_FOLDER.getAbsolutePath() + sep + seedFileName +
                 " -cp " + inferJarStr + " " + seedPath + "\"";
         if(!Invoker.invokeCommandsByZT(commands)) {
@@ -278,7 +279,7 @@ public class ComparisonEvaluation {
         for(String mutantPath : mutantPaths) {
             File mutantFile = new File(mutantPath);
             String mutantFileName = mutantFile.getName().substring(0, mutantFile.getName().lastIndexOf('.')); // no suffix
-            String mutantReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + mutantFileName + "_Result.xml";
+            String mutantReportPath = "";
             File mutantClassFolder = new File(CLASS_FOLDER.getAbsolutePath() + sep + folderName + sep + mutantFileName);
             if(!mutantClassFolder.exists()) {
                 mutantClassFolder.mkdir();

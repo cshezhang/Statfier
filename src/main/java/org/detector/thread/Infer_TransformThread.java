@@ -13,9 +13,16 @@ import java.util.List;
 import static org.detector.report.Infer_Report.readSingleInferResultFile;
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.CLASS_FOLDER;
+import static org.detector.util.Utility.INFER_PATH;
+import static org.detector.util.Utility.JAVAC_PATH;
+import static org.detector.util.Utility.MUTANT_FOLDER;
+import static org.detector.util.Utility.Path2Last;
+import static org.detector.util.Utility.SEARCH_DEPTH;
+import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.transform.Transform.singleLevelExplorer;
+import static org.detector.util.Utility.sep;
 
 /**
  * Description: Infer Transformation Thread
@@ -44,10 +51,10 @@ public class Infer_TransformThread extends Thread {
      */
     @Override
     public void run() {
-        for (int depth = 1; depth <= Utility.SEARCH_DEPTH; depth++) {
+        for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             singleLevelExplorer(this.wrappers, this.currentDepth++);
-            String MUTANT_FOLDERPath = Utility.MUTANT_FOLDER + File.separator + "iter" + depth;
-            List<String> filePaths = Utility.getFilenamesFromFolder(MUTANT_FOLDERPath, true);
+            String MUTANT_FOLDERPath = MUTANT_FOLDER + sep + "iter" + depth;
+            List<String> filePaths = getFilenamesFromFolder(MUTANT_FOLDERPath, true);
             if(DEBUG) {
                 System.out.println("Seed FolderName: " + this.seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
                 System.out.println(this.getName() + "-" + "Begin to Read Reports and File Size: " + filePaths.size());
@@ -55,10 +62,10 @@ public class Infer_TransformThread extends Thread {
             }
             for(int i = 0; i < filePaths.size(); i++) {
                 String srcJavaPath = filePaths.get(i);
-                String filename = Utility.Path2Last(srcJavaPath);
-                String REPORT_FOLDERPath = REPORT_FOLDER + File.separator + "iter" + depth + "_" + filename;
-                String cmd = Utility.INFER_PATH + " run -o " + "" + REPORT_FOLDERPath + " -- " + Utility.JAVAC_PATH +
-                        " -d " + CLASS_FOLDER.getAbsolutePath() + File.separator + filename +
+                String filename = Path2Last(srcJavaPath);
+                String reportFolderPath = REPORT_FOLDER + sep + "iter" + depth + "_" + filename;
+                String cmd = INFER_PATH + " run -o " + "" + reportFolderPath + " -- " + JAVAC_PATH +
+                        " -d " + CLASS_FOLDER.getAbsolutePath() + sep + filename +
                         " -cp " + inferJarStr + " " + srcJavaPath;
                 if(DEBUG) {
                     System.out.println(this.getName() + "-" + cmd);
@@ -73,7 +80,7 @@ public class Infer_TransformThread extends Thread {
                 }
                 invokeCommands[2] = "python3 cmd.py " + cmd;
                 Invoker.invokeCommandsByZT(invokeCommands);
-                String resultFilePath = REPORT_FOLDERPath + File.separator + "report.json";
+                String resultFilePath = reportFolderPath + sep + "report.json";
                 readSingleInferResultFile(srcJavaPath, resultFilePath);
             }
             List<TypeWrapper> validWrappers = new ArrayList<>();
