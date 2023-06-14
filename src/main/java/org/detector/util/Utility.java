@@ -702,7 +702,7 @@ public class Utility {
 
 
     // seedFolderPath has iter depth information
-    public static void readInferResultFile(String seedFilepath, String reportPath) {
+    public static void readInferResultFile(String seedPath, String reportPath) {
         HashMap<String, Infer_Report> name2report = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         File reportFile = new File(reportPath);
@@ -715,12 +715,12 @@ public class Utility {
             for (int i = 0; i < rootNode.size(); i++) {
                 JsonNode violationNode = rootNode.get(i);
                 Infer_Violation infer_violation = new Infer_Violation(violationNode);
-                if (name2report.containsKey(seedFilepath)) {
-                    name2report.get(seedFilepath).addViolation(infer_violation);
+                if (name2report.containsKey(seedPath)) {
+                    name2report.get(seedPath).addViolation(infer_violation);
                 } else {
-                    Infer_Report infer_report = new Infer_Report(seedFilepath);
+                    Infer_Report infer_report = new Infer_Report(seedPath);
                     infer_report.addViolation(infer_violation);
-                    name2report.put(seedFilepath, infer_report);
+                    name2report.put(seedPath, infer_report);
                 }
             }
         } catch (JsonProcessingException e) {

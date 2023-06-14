@@ -12,7 +12,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,7 @@ import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
+import static org.detector.util.Utility.JAVAC_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.PMD_SEED_PATH;
 import static org.detector.util.Utility.SEED_PATH;
@@ -35,6 +39,8 @@ import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.getDirectFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.MUTANT_FOLDER;
+import static org.detector.util.Utility.readCheckStyleResultFile;
+import static org.detector.util.Utility.readInferResultFile;
 import static org.detector.util.Utility.readSinglePMDResultFile;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.REPORT_FOLDER;
@@ -47,7 +53,7 @@ public class ComparisonEvaluation {
 
     public static void invokeUniversalMutator(String seedPath, String outputPath) {
         String[] invokeCommands = new String[3];
-        invokeCommands[0] = "/bin/sh";
+        invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
         invokeCommands[2] = "mutate --mutantDir " + outputPath + " " + seedPath;
         Invoker.invokeCommandsByZT(invokeCommands);
@@ -119,7 +125,7 @@ public class ComparisonEvaluation {
             return;
         }
         String[] commands = new String[3];
-        commands[0] = "/bin/sh";
+        commands[0] = "/bin/bash";
         commands[1] = "-c";
         commands[2] = SPOTBUGS_PATH + " -textui"
                 + " -xml:withMessages" + " -output " + seedReportPath + " "
@@ -128,8 +134,7 @@ public class ComparisonEvaluation {
         readSingleSpotBugsResultFile(seedFile, seedReportPath);
         if(!file2bugs.containsKey(seedPath)) {
             System.out.println("Error Seed in SpotBugs: " + seedPath);
-            int a = 10;
-            readSingleSpotBugsResultFile(seedFile, seedReportPath);
+            return;
         }
         Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
         int seedSum = 0;
@@ -149,7 +154,7 @@ public class ComparisonEvaluation {
             if(!isCompiled) {
                 continue;
             }
-            commands[0] = "/bin/sh";
+            commands[0] = "/bin/bash";
             commands[1] = "-c";
             commands[2] = SPOTBUGS_PATH + " -textui"
                     + " -xml:withMessages" + " -output " + mutantReportPath + " "
@@ -159,8 +164,7 @@ public class ComparisonEvaluation {
             int mutantSum = 0;
             if(!file2bugs.containsKey(mutantPath)) {
                 System.out.println("Error Mutant in SpotBugs: " + mutantPath);
-                readSingleSpotBugsResultFile(seedFile, mutantReportPath);
-                System.exit(-1);
+                continue;
             }
             Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);
             for(List<Integer> lines : mutant_bug2lines.values()) {
@@ -183,41 +187,139 @@ public class ComparisonEvaluation {
         }
     }
 
-    public static void invokeCheckStyle(String seedPath, String MUTANT_FOLDERPath) {
-        // Add a map: seed report -> mutant report -> Diff analysis
-        String reportPath = "";
-        String[] invokeCommands = new String[3];
-        invokeCommands[0] = "/bin/bash";
-        invokeCommands[1] = "-c";
-        invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + seedPath;
-        Invoker.invokeCommandsByZT(invokeCommands);
-        List<String> mutantPaths = getDirectFilenamesFromFolder(MUTANT_FOLDERPath, true);
+    public static void invokeCheckStyle(String seedPath, String mutantFolderPath) {
+        File seedFile = new File(seedPath);
+        String folderName = seedFile.getParentFile().getName();
+        String seedFileName = seedFile.getName().substring(0, seedFile.getName().lastIndexOf('.'));
+        String seedReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + seedFileName + "_Result.xml";
+        String[] commands = new String[3];
+        commands[0] = "/bin/bash";
+        commands[1] = "-c";
+        commands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + seedReportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + seedPath;
+        if(!Invoker.invokeCommandsByZT(commands)) {
+            return;
+        }
+        readCheckStyleResultFile(seedReportPath);
+        if(!file2bugs.containsKey(seedPath)) {
+            System.out.println("Error Seed in CheckStyle: " + seedPath);
+            Invoker.invokeCommandsByZT(commands);
+            readCheckStyleResultFile(seedReportPath);
+            return;
+        }
+        Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
+        int seedSum = 0;
+        for(List<Integer> entry : source_bug2lines.values()) {
+            seedSum += entry.size();
+        }
+        List<String> mutantPaths = getDirectFilenamesFromFolder(mutantFolderPath, true);
         for(String mutantPath : mutantPaths) {
-            reportPath = "";
-            invokeCommands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + reportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + mutantPath;
+            File mutantFile = new File(mutantPath);
+            String mutantFileName = mutantFile.getName().substring(0, mutantFile.getName().lastIndexOf('.')); // no suffix
+            String mutantReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + mutantFileName + "_Result.xml";
+            commands[0] = "/bin/bash";
+            commands[1] = "-c";
+            commands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + mutantReportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + seedPath;
+            if(!Invoker.invokeCommandsByZT(commands)) {
+                continue;
+            }
+            readCheckStyleResultFile(mutantReportPath);
+            int mutantSum = 0;
+            if(!file2bugs.containsKey(mutantPath)) {
+                System.out.println("Error Mutant in CheckStyle: " + mutantPath);
+                Invoker.invokeCommandsByZT(commands);
+                readCheckStyleResultFile(mutantReportPath);
+                continue;
+            }
+            Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);
+            for(List<Integer> lines : mutant_bug2lines.values()) {
+                mutantSum += lines.size();
+            }
+            if(mutantSum > seedSum) {
+                killedMutant++;
+                for(Map.Entry<String, List<Integer>> entry : mutant_bug2lines.entrySet()) {
+                    if(source_bug2lines.containsKey(entry.getKey())) {
+                        if(entry.getValue().size() > source_bug2lines.get(entry.getKey()).size()) {
+                            String bugType = entry.getKey();
+                            if(!bug2pairs.containsKey(bugType)) {
+                                bug2pairs.put(bugType, new ArrayList<>());
+                            }
+                            bug2pairs.get(bugType).add(new Pair(seedPath, mutantPath));
+                        }
+                    }
+                }
+            }
         }
     }
 
-    public static void invokeInfer(String seedPath, String MUTANT_FOLDERPath) {
-        List<String> mutantPaths = getDirectFilenamesFromFolder(MUTANT_FOLDERPath, true);;
-        String filename = Utility.Path2Last(seedPath);
-        String REPORT_FOLDERPath = REPORT_FOLDER + File.separator + filename;
-        String cmd = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDERPath + " -- " + Utility.JAVAC_PATH +
-                " -d " + CLASS_FOLDER.getAbsolutePath() + File.separator + filename +
+    public static void invokeInfer(String seedPath, String mutantFolderPath) {
+        File seedFile = new File(seedPath);
+        String folderName = seedFile.getParentFile().getName();
+        String seedFileName = seedFile.getName().substring(0, seedFile.getName().lastIndexOf('.'));
+        String seedReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + seedFileName + "_Result.xml";
+        File seedClassFolder = new File(CLASS_FOLDER + sep + folderName + sep + seedFileName);
+        if(!seedClassFolder.exists()) {
+            seedClassFolder.mkdir();
+        }
+        String[] commands = new String[3];
+        commands[0] = "/bin/bash";
+        commands[1] = "-c";
+        commands[2] = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDER.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
+                " -d " + CLASS_FOLDER.getAbsolutePath() + sep + seedFileName +
                 " -cp " + inferJarStr + " " + seedPath + "\"";
-        String[] invokeCommands = new String[3];
-        invokeCommands[0] = "/bin/bash";
-        invokeCommands[1] = "-c";
-        invokeCommands[2] = cmd;
+        if(!Invoker.invokeCommandsByZT(commands)) {
+            return;
+        }
+        readInferResultFile(seedPath, seedReportPath);
+        if(!file2bugs.containsKey(seedPath)) {
+            System.out.println("Error Seed in Infer: " + seedPath);
+            return;
+        }
+        Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
+        int seedSum = 0;
+        for(List<Integer> entry : source_bug2lines.values()) {
+            seedSum += entry.size();
+        }
+        List<String> mutantPaths = getDirectFilenamesFromFolder(mutantFolderPath, true);
         for(String mutantPath : mutantPaths) {
-            filename = Utility.Path2Last(seedPath);
-            REPORT_FOLDERPath = REPORT_FOLDER + File.separator + filename;
-            cmd = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDERPath + " -- " + Utility.JAVAC_PATH +
-                    " -d " + CLASS_FOLDER.getAbsolutePath() + File.separator + filename +
-                    " -cp " + inferJarStr + " " + seedPath + "\"";
-            invokeCommands[0] = "/bin/bash";
-            invokeCommands[1] = "-c";
-            invokeCommands[2] = cmd;
+            File mutantFile = new File(mutantPath);
+            String mutantFileName = mutantFile.getName().substring(0, mutantFile.getName().lastIndexOf('.')); // no suffix
+            String mutantReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + mutantFileName + "_Result.xml";
+            File mutantClassFolder = new File(CLASS_FOLDER.getAbsolutePath() + sep + folderName + sep + mutantFileName);
+            if(!mutantClassFolder.exists()) {
+                mutantClassFolder.mkdir();
+            }
+            commands[0] = "/bin/bash";
+            commands[1] = "-c";
+            commands[2] = "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDER.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
+                    " -d " + CLASS_FOLDER.getAbsolutePath() + sep + mutantFileName +
+                    " -cp " + inferJarStr + " " + seedPath + "\"";;
+            if(!Invoker.invokeCommandsByZT(commands)) {
+                continue;
+            }
+            readInferResultFile(mutantPath, mutantReportPath);
+            int mutantSum = 0;
+            if(!file2bugs.containsKey(mutantPath)) {
+                System.out.println("Error Mutant in SpotBugs: " + mutantPath);
+                continue;
+            }
+            Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);
+            for(List<Integer> lines : mutant_bug2lines.values()) {
+                mutantSum += lines.size();
+            }
+            if(mutantSum > seedSum) {
+                killedMutant++;
+                for(Map.Entry<String, List<Integer>> entry : mutant_bug2lines.entrySet()) {
+                    if(source_bug2lines.containsKey(entry.getKey())) {
+                        if(entry.getValue().size() > source_bug2lines.get(entry.getKey()).size()) {
+                            String bugType = entry.getKey();
+                            if(!bug2pairs.containsKey(bugType)) {
+                                bug2pairs.put(bugType, new ArrayList<>());
+                            }
+                            bug2pairs.get(bugType).add(new Pair(seedPath, mutantPath));
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -229,9 +331,21 @@ public class ComparisonEvaluation {
     }
 
     public static void main(String[] args) {
+        long startTimeStamp = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sd = sdf.format(new Date(Long.parseLong(String.valueOf(startTimeStamp))));
+        System.out.println("Start Time: " + sd);
+        String name = ManagementFactory.getRuntimeMXBean().getName();
+        String pid = name.split("@")[0];
+        System.out.println("Java Program PID: " + pid);
         Utility.initEnv();
         List<String> seedPaths = Utility.getFilenamesFromFolder(SEED_PATH, true);
-        for(String seedPath : seedPaths) {
+        System.out.println("Seed Path: " + SEED_PATH);
+        System.out.println("Seed Path Size: " + seedPaths.size());
+        for(int i = 0; i < seedPaths.size(); i++) {
+            String seedPath = seedPaths.get(i);
+            System.out.println("Index: " + i + " Seed Path: " + seedPath);
+            System.out.println("Killed Mutant: " + killedMutant);
             String seedFileName = Utility.Path2Last(seedPath);
             File mutantFolder = new File(MUTANT_FOLDER.getAbsolutePath() + sep + seedFileName);
             if(!mutantFolder.exists()) {

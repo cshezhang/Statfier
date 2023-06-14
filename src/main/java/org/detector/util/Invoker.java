@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 
 import net.sourceforge.pmd.PMD;
 import org.detector.report.SonarQube_Report;
+import org.eclipse.osgi.internal.debug.Debug;
 import org.json.JSONObject;
 import org.detector.thread.CheckStyle_InvokeThread;
 import org.detector.thread.Infer_InvokeThread;
@@ -20,6 +21,7 @@ import org.detector.thread.SpotBugs_InvokeThread;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
+import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.JAVAC_PATH;
 import static org.detector.util.Utility.PMD_MUTATION;
@@ -78,7 +80,26 @@ public class Invoker {
         try {
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
             int exitValue = new ProcessExecutor().command(cmdArgs).redirectError(errorStream).execute().getExitValue();
-            // CheckStyle Return value is the number of bugs, hence regard it.
+            if (CHECKSTYLE_MUTATION) {
+                String errorInfo = new String(errorStream.toByteArray());
+                if (argStr.toString().contains("javac")) {
+                    if (exitValue != 0) {
+                        failedCommands.add(argStr.toString());
+                        return false;
+                    }
+                }
+                if (argStr.toString().contains("/bin/bash")) {
+                    if (exitValue == 254) {
+                        if(DEBUG) {
+                            System.out.println(errorInfo);
+                        }
+                    }
+                    if (errorInfo.contains("Exception")) {
+                        failedCommands.add(argStr.toString());
+                        return false;
+                    }
+                }
+            }
             if(PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.out.println("Execute PMD Error!");
                 System.out.println(argStr);
