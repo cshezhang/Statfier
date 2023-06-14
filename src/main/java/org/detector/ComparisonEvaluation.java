@@ -270,6 +270,9 @@ public class ComparisonEvaluation {
             return;
         }
         readSingleInferResultFile(seedPath, seedReportPath);
+        if(!file2bugs.containsKey(seedPath)) {
+            return;
+        }
         Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
         int seedSum = 0;
         for(List<Integer> entry : source_bug2lines.values()) {
