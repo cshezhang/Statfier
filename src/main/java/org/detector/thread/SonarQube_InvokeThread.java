@@ -5,6 +5,7 @@ import org.detector.util.Invoker;
 import org.detector.util.Utility;
 
 import static org.detector.util.Utility.DEBUG;
+import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 
 import java.io.File;
 
@@ -32,7 +33,7 @@ public class SonarQube_InvokeThread implements Runnable {
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
         }
-        invokeCommands[2] = Utility.SONAR_SCANNER_PATH
+        invokeCommands[2] = SONAR_SCANNER_PATH
                 + " -Dsonar.projectKey=" + Utility.SONARQUBE_PROJECT_KEY
                 + " -Dsonar.sources=" + this.seedFolderPath
                 + " -Dsonar.host.url=http://localhost:9000"

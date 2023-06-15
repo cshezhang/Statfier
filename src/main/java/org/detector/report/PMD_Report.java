@@ -54,28 +54,30 @@ public class PMD_Report implements Report {
     public static List<String> errorList = new ArrayList<>();
 
     // Read PMD result file which includes only one seed file.
-    public static void readSinglePMDResultFile(final String reportPath, String seedPath) {
+    public static void readSinglePMDResultFile(final String reportPath, String detectionPath) {
         ObjectMapper mapper = new ObjectMapper();
         File reportFile = new File(reportPath);
         if(!reportFile.exists()) {
             System.err.println("Report not existed: " + reportPath);
             return;
         }
-        if(file2report.containsKey(seedPath)) {
+        if(file2report.containsKey(detectionPath)) {
             System.err.println("Repeat Process ReportPath: " + reportPath);
             return;
         }
-        PMD_Report report = new PMD_Report(seedPath);
-        file2report.put(report.getFilePath(), report);
+        PMD_Report report = new PMD_Report(detectionPath);
+        file2report.put(detectionPath, report);
+        file2row.put(detectionPath, new ArrayList<>());
+        file2bugs.put(detectionPath, new HashMap<>());
         try {
             JsonNode rootNode = mapper.readTree(reportFile);
             JsonNode reportNodes = rootNode.get("files");
             for (int i = 0; i < reportNodes.size(); i++) {
                 JsonNode reportNode = reportNodes.get(i);
                 String filePath = reportNode.get("filename").asText();
-                if(!filePath.equals(seedPath)) {
+                if(!filePath.equals(detectionPath)) {
                     System.err.println("Error ReportPath: " + reportPath);
-                    System.err.println("Error SeedPath: " + seedPath);
+                    System.err.println("Error SeedPath: " + detectionPath);
                     System.exit(-1);
                 }
                 JsonNode violationNodes = reportNode.get("violations");
@@ -96,13 +98,9 @@ public class PMD_Report implements Report {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (!file2row.containsKey(seedPath)) {
-            file2row.put(seedPath, new ArrayList<>());
-            file2bugs.put(seedPath, new HashMap<>());
-        }
         for (PMD_Violation violation : report.getViolations()) {
-            file2row.get(seedPath).add(violation.beginLine);
-            HashMap<String, List<Integer>> bug2cnt = file2bugs.get(seedPath);
+            file2row.get(detectionPath).add(violation.beginLine);
+            HashMap<String, List<Integer>> bug2cnt = file2bugs.get(detectionPath);
             if (!bug2cnt.containsKey(violation.getBugType())) {
                 bug2cnt.put(violation.getBugType(), new ArrayList<>());
             }

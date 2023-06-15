@@ -24,14 +24,22 @@ import java.util.concurrent.TimeUnit;
 import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
 import static org.detector.report.Infer_Report.readSingleInferResultFile;
 import static org.detector.report.PMD_Report.readSinglePMDResultFile;
+import static org.detector.report.SonarQube_Report.readSingleSonarQubeResultFile;
 import static org.detector.report.SpotBugs_Report.readSingleSpotBugsResultFile;
+import static org.detector.util.Invoker.createSonarQubeProject;
+import static org.detector.util.Invoker.deleteSonarQubeProject;
+import static org.detector.util.Invoker.invokeCommandsByZT;
+import static org.detector.util.Invoker.invokeCommandsByZTWithOutput;
 import static org.detector.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static org.detector.util.Utility.CHECKSTYLE_MUTATION;
 import static org.detector.util.Utility.CHECKSTYLE_PATH;
+import static org.detector.util.Utility.EVALUATION_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.PMD_MUTATION;
 import static org.detector.util.Utility.SEED_PATH;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
+import static org.detector.util.Utility.SONARQUBE_PROJECT_KEY;
+import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.CLASS_FOLDER;
@@ -42,6 +50,8 @@ import static org.detector.util.Utility.MUTANT_FOLDER;
 import static org.detector.util.Utility.reg_sep;
 import static org.detector.util.Utility.REPORT_FOLDER;
 import static org.detector.util.Utility.sep;
+import static org.detector.util.Utility.waitTaskEnd;
+import static org.detector.util.Utility.writeLinesToFile;
 
 public class ComparisonEvaluation {
 
@@ -53,7 +63,7 @@ public class ComparisonEvaluation {
         invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
         invokeCommands[2] = "mutate --mutantDir " + outputPath + " " + seedPath;
-        Invoker.invokeCommandsByZT(invokeCommands);
+        invokeCommandsByZT(invokeCommands);
     }
 
     public static void invokePMD(String seedPath, String MUTANT_FOLDERPath) {
@@ -129,7 +139,7 @@ public class ComparisonEvaluation {
         commands[2] = SPOTBUGS_PATH + " -textui"
                 + " -xml:withMessages" + " -output " + seedReportPath + " "
                 + seedClassFolder.getAbsolutePath();
-        Invoker.invokeCommandsByZT(commands);
+        invokeCommandsByZT(commands);
         readSingleSpotBugsResultFile(seedFile, seedReportPath);
         if(!file2bugs.containsKey(seedPath)) {
             System.out.println("Error Seed in SpotBugs: " + seedPath);
@@ -158,7 +168,7 @@ public class ComparisonEvaluation {
             commands[2] = SPOTBUGS_PATH + " -textui"
                     + " -xml:withMessages" + " -output " + mutantReportPath + " "
                     + mutantClassFolder.getAbsolutePath();
-            Invoker.invokeCommandsByZT(commands);
+            invokeCommandsByZT(commands);
             readSingleSpotBugsResultFile(mutantFile, mutantReportPath);
             int mutantSum = 0;
             if(!file2bugs.containsKey(mutantPath)) {
@@ -195,13 +205,13 @@ public class ComparisonEvaluation {
         commands[0] = "/bin/bash";
         commands[1] = "-c";
         commands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + seedReportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + seedPath;
-        if(!Invoker.invokeCommandsByZT(commands)) {
+        if(!invokeCommandsByZT(commands)) {
             return;
         }
         readCheckStyleResultFile(seedReportPath);
         if(!file2bugs.containsKey(seedPath)) {
             System.out.println("Error Seed in CheckStyle: " + seedPath);
-            Invoker.invokeCommandsByZT(commands);
+            invokeCommandsByZT(commands);
             readCheckStyleResultFile(seedReportPath);
             return;
         }
@@ -218,14 +228,14 @@ public class ComparisonEvaluation {
             commands[0] = "/bin/bash";
             commands[1] = "-c";
             commands[2] = "java -jar " + CHECKSTYLE_PATH + " -f" + " plain" + " -o " + mutantReportPath + " -c " + CHECKSTYLE_CONFIG_PATH +  " " + seedPath;
-            if(!Invoker.invokeCommandsByZT(commands)) {
+            if(!invokeCommandsByZT(commands)) {
                 continue;
             }
             readCheckStyleResultFile(mutantReportPath);
             int mutantSum = 0;
             if(!file2bugs.containsKey(mutantPath)) {
                 System.out.println("Error Mutant in CheckStyle: " + mutantPath);
-                Invoker.invokeCommandsByZT(commands);
+                invokeCommandsByZT(commands);
                 readCheckStyleResultFile(mutantReportPath);
                 continue;
             }
@@ -266,7 +276,7 @@ public class ComparisonEvaluation {
         commands[2] = "python3 cmd.py " + "\"" + Utility.INFER_PATH + " run -o " + seedReportFolder.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
                 " -d " + CLASS_FOLDER.getAbsolutePath() + sep + seedFileName +
                 " -cp " + inferJarStr + " " + seedPath + "\"";
-        if(!Invoker.invokeCommandsByZT(commands)) {
+        if(!invokeCommandsByZT(commands)) {
             return;
         }
         readSingleInferResultFile(seedPath, seedReportPath);
@@ -292,7 +302,7 @@ public class ComparisonEvaluation {
             commands[2] = "python3 cmd.py " + "\"" + Utility.INFER_PATH + " run -o " + REPORT_FOLDER.getAbsolutePath() + " -- " + Utility.JAVAC_PATH +
                     " -d " + CLASS_FOLDER.getAbsolutePath() + sep + mutantFileName +
                     " -cp " + inferJarStr + " " + seedPath + "\"";;
-            if(!Invoker.invokeCommandsByZT(commands)) {
+            if(!invokeCommandsByZT(commands)) {
                 continue;
             }
             readSingleInferResultFile(mutantPath, mutantReportPath);
@@ -321,10 +331,81 @@ public class ComparisonEvaluation {
         }
     }
 
-    public static void invokeSonarQube(String seedPath, String MUTANT_FOLDERPath) {
-        List<String> mutantPaths = getDirectFilenamesFromFolder(MUTANT_FOLDERPath, true);
+    public static void invokeSonarQube(String seedPath, String mutantFolderPath) {
+        File seedFile = new File(seedPath);
+        String folderName = seedFile.getParentFile().getName();
+        String seedFileName = seedFile.getName().substring(0, seedFile.getName().lastIndexOf('.'));
+        String seedReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + seedFileName + "_Result.json";
+        deleteSonarQubeProject(SONARQUBE_PROJECT_KEY);
+        createSonarQubeProject(SONARQUBE_PROJECT_KEY);
+        String[] invokeCommands = new String[3];
+        invokeCommands[0] = "/bin/bash";
+        invokeCommands[1] = "-c";
+        invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
+                + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "mutants"
+                + " -Dsonar.sources=" + seedFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
+                + " -Dsonar.login=admin -Dsonar.password=123456";
+        if (invokeCommandsByZT(invokeCommands)) {
+            waitTaskEnd();
+        } else {
+            return;
+        }
+        String[] curlCommands = new String[4];
+        curlCommands[0] = "curl";
+        curlCommands[1] = "-u";
+        curlCommands[2] = "admin:123456";
+        curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_KEY;
+        String output = invokeCommandsByZTWithOutput(curlCommands);
+        readSingleSonarQubeResultFile(seedPath, output);
+        writeLinesToFile(seedReportPath, output);
+        Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
+        if(!file2bugs.containsKey(seedPath)) {
+            readSingleSonarQubeResultFile(seedPath, output);
+        }
+        int seedSum = 0;
+        for(List<Integer> entry : source_bug2lines.values()) {
+            seedSum += entry.size();
+        }
+        List<String> mutantPaths = getDirectFilenamesFromFolder(mutantFolderPath, true);
         for(String mutantPath : mutantPaths) {
-
+            File mutantFile = new File(mutantPath);
+            String mutantFileName = mutantFile.getName().substring(0, mutantFile.getName().lastIndexOf('.')); // no suffix
+            String mutantReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + mutantFileName + "_Result.xml";
+            deleteSonarQubeProject(SONARQUBE_PROJECT_KEY);
+            createSonarQubeProject(SONARQUBE_PROJECT_KEY);
+            invokeCommands[0] = "/bin/bash";
+            invokeCommands[1] = "-c";
+            invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
+                    + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "mutants"
+                    + " -Dsonar.sources=" + mutantFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
+                    + " -Dsonar.login=admin -Dsonar.password=123456";
+            if (invokeCommandsByZT(invokeCommands)) {
+                waitTaskEnd();
+            } else {
+                continue;
+            }
+            output = invokeCommandsByZTWithOutput(curlCommands);
+            readSingleSonarQubeResultFile(mutantPath, output);
+            writeLinesToFile(mutantReportPath, output);
+            int mutantSum = 0;
+            Map<String, List<Integer>> mutant_bug2lines = file2bugs.get(mutantPath);
+            for(List<Integer> lines : mutant_bug2lines.values()) {
+                mutantSum += lines.size();
+            }
+            if(mutantSum > seedSum) {
+                killedMutant++;
+                for(Map.Entry<String, List<Integer>> entry : mutant_bug2lines.entrySet()) {
+                    if(source_bug2lines.containsKey(entry.getKey())) {
+                        if(entry.getValue().size() > source_bug2lines.get(entry.getKey()).size()) {
+                            String bugType = entry.getKey();
+                            if(!bug2pairs.containsKey(bugType)) {
+                                bug2pairs.put(bugType, new ArrayList<>());
+                            }
+                            bug2pairs.get(bugType).add(new Pair(seedPath, mutantPath));
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -383,7 +464,7 @@ public class ComparisonEvaluation {
                 bug.put("MutantPath", pair.second);
                 bugs.add(bug);
             }
-            File resultFile = new File(Utility.EVALUATION_PATH + File.separator + "results" + File.separator + entry.getKey() + ".json");
+            File resultFile = new File(EVALUATION_PATH + File.separator + "results" + File.separator + entry.getKey() + ".json");
             try {
                 if (!resultFile.exists()) {
                     resultFile.createNewFile();

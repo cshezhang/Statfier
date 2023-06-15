@@ -26,32 +26,18 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.json.JSONObject;
 import org.detector.analysis.TypeWrapper;
 
-import org.detector.report.CheckStyle_Report;
-import org.detector.report.CheckStyle_Violation;
-import org.detector.report.Infer_Report;
-import org.detector.report.Infer_Violation;
-import org.detector.report.PMD_Report;
-import org.detector.report.PMD_Violation;
 import org.detector.report.Report;
-import org.detector.report.SonarQube_Report;
-import org.detector.report.SonarQube_Violation;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -591,6 +577,42 @@ public class Utility {
         return false;
     }
 
+    public static void waitTaskEnd() {
+        boolean start = false;
+        long startTime = System.currentTimeMillis();
+        while (true) {
+            String[] curlCommands = new String[4];
+            curlCommands[0] = "curl";
+            curlCommands[1] = "-u";
+            curlCommands[2] = "admin:123456";
+            curlCommands[3] = "http://localhost:9000/api/ce/activity_status?component=" + SONARQUBE_PROJECT_KEY;
+            String output = invokeCommandsByZTWithOutput(curlCommands);
+            JSONObject root = new JSONObject(output);
+            int pending = root.getInt("pending");
+            int failing = root.getInt("failing");
+            int inProgress = root.getInt("inProgress");
+            if (pending > 0 || inProgress > 0) {
+                start = true;
+            }
+            if (start && pending == 0 && inProgress == 0 && failing == 0) {
+                break;
+            }
+            if (failing > 0) {
+                System.out.println("Failed CE!");
+                System.exit(-1);
+            }
+            long duration = System.currentTimeMillis() - startTime;
+            if (duration > 1000 * 6) {
+                break;
+            }
+        }
+        if (DEBUG) {
+            System.out.println("Wait Time: " + (double) (System.currentTimeMillis() - startTime) / 1000 + "(s)");
+        }
+    }
+
+
+    // Designed for SonarQube
     public static void waitTaskEnd(String projectKey) {
         boolean start = false;
         while(true) {

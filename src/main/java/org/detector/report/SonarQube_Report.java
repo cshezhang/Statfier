@@ -19,6 +19,7 @@ import java.util.Map;
 
 import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.EVALUATION_PATH;
+import static org.detector.util.Utility.MUTANT_FOLDER;
 import static org.detector.util.Utility.PROJECT_PATH;
 import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.file2report;
@@ -54,6 +55,66 @@ public class SonarQube_Report implements Report {
     @Override
     public String toString() {
         return "SQ Report: " + this.filePath + " Size: " + this.violations.size();
+    }
+
+    public static void readSingleSonarQubeResultFile(String filePath, String jsonContent) {
+        JSONObject root = new JSONObject(jsonContent);
+        int total = root.getInt("total");
+        if(total > 10000) {
+            System.out.println("Exceed the warning limitation!");
+            return;
+        }
+        if (file2report.containsKey(filePath)) {
+            System.out.println("Repeat process: " + filePath);
+            return;
+        }
+        SonarQube_Report report = new SonarQube_Report(filePath);
+        file2report.put(filePath, report);
+        file2row.put(filePath, new ArrayList<>());
+        file2bugs.put(filePath, new HashMap<>());
+        if(total == 0) {
+            return;
+        }
+        JSONArray issues = root.getJSONArray("issues");
+        for(int i = 0; i < issues.length(); i++) {
+            try {
+                JSONObject issue = (JSONObject) issues.get(i);
+                if(issue.has("component") && issue.has("textRange")) {
+                    String ruleName = issue.getString("rule");
+                    String component = issue.getString("component");
+                    String relativePath = component.split(":")[1];
+                    String readFilePath;
+                    // judge seed or mutant
+                    if(relativePath.startsWith("seeds_checker1" + sep) || relativePath.startsWith("seeds" + sep)) {
+                        readFilePath = PROJECT_PATH + sep + relativePath;
+                    } else {
+                        readFilePath = MUTANT_FOLDER.getAbsolutePath() + sep + relativePath;
+                    }
+                    if(!filePath.equals(readFilePath)) {
+                        System.out.println("Read Path: " + readFilePath);
+                        System.out.println("Error in: " + filePath);
+                        continue;
+                    }
+                    JSONObject textRange = (JSONObject) issue.get("textRange");
+                    int startLine = textRange.getInt("startLine");
+                    int endLine = textRange.getInt("endLine");
+                    int startOffset = textRange.getInt("startOffset");
+                    int endOffset = textRange.getInt("endOffset");
+                    SonarQube_Violation violation = new SonarQube_Violation(ruleName, startLine, endLine, startOffset, endOffset);
+                    report.addViolation(violation);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        for (SonarQube_Violation violation : report.getViolations()) {
+            file2row.get(filePath).add(violation.getBeginLine());
+            HashMap<String, List<Integer>> bug2cnt = file2bugs.get(filePath);
+            if (!bug2cnt.containsKey(violation.getBugType())) {
+                bug2cnt.put(violation.getBugType(), new ArrayList<>());
+            }
+            bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
+        }
     }
 
     public static void readSonarQubeResultFile(String ruleName, String jsonContent) {
@@ -121,7 +182,7 @@ public class SonarQube_Report implements Report {
         }
     }
 
-    // 这个应该是用CNES得出来的，新版已经用不了这个插件了，换成web api的
+    // Deprecated: This is a CNES version.
     public static void readSonarQubeResultFile(String reportPath) {
         if (DEBUG) {
             System.out.println("SonarQube Detection Result FileName: " + reportPath);
