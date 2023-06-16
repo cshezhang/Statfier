@@ -411,6 +411,7 @@ public class ComparisonEvaluation {
 
     public static void main(String[] args) {
         long startTimeStamp = System.currentTimeMillis();
+        List<String> output = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String sd = sdf.format(new Date(Long.parseLong(String.valueOf(startTimeStamp))));
         System.out.println("Start Time: " + sd);
@@ -421,7 +422,17 @@ public class ComparisonEvaluation {
         List<String> seedPaths = Utility.getFilenamesFromFolder(SEED_PATH, true);
         System.out.println("Seed Path: " + SEED_PATH);
         System.out.println("Seed Path Size: " + seedPaths.size());
+        output.add("Seed Path: " + SEED_PATH);
+        output.add("Seed Path Size: " + seedPaths.size());
         for(int i = 0; i < seedPaths.size(); i++) {
+            long timer = System.currentTimeMillis() - Utility.startTimeStamp;
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(timer);
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(timer) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timer));
+            System.out.println("Current execution time: " + String.format("%d min, %d sec", minutes, seconds));
+            if(minutes > 3600) {
+                System.out.println("Timeout!");
+                break;
+            }
             String seedPath = seedPaths.get(i);
             System.out.println("Index: " + i + " Seed Path: " + seedPath);
             System.out.println("Killed Mutant: " + killedMutant);
@@ -449,7 +460,9 @@ public class ComparisonEvaluation {
             }
         }
         System.out.println("Found bugs in " + bug2pairs.keySet().size() + " rules.");
+        output.add("Found bugs in " + bug2pairs.keySet().size() + " rules.");
         System.out.println("Killed Mutants: " + killedMutant);
+        output.add("Killed Mutants: " + killedMutant);
         int sumPair = 0;
         for(Map.Entry<String, List<Pair>> entry : bug2pairs.entrySet()) {
             ObjectMapper mapper = new ObjectMapper();
@@ -464,6 +477,7 @@ public class ComparisonEvaluation {
                 bug.put("MutantPath", pair.second);
                 bugs.add(bug);
             }
+            root.put("Bugs", bugs);
             File resultFile = new File(EVALUATION_PATH + File.separator + "results" + File.separator + entry.getKey() + ".json");
             try {
                 if (!resultFile.exists()) {
@@ -479,11 +493,16 @@ public class ComparisonEvaluation {
             }
         }
         System.out.println("Pair Size: " + sumPair);
+        output.add("Pair Size: " + sumPair);
         long executionTime = System.currentTimeMillis() - Utility.startTimeStamp;
         System.out.println(
             "Overall Execution Time is: " + String.format("%d min, %d sec",
             TimeUnit.MILLISECONDS.toMinutes(executionTime),
             TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))));
+        output.add("Overall Execution Time is: " + String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes(executionTime),
+                TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))));
+        writeLinesToFile(EVALUATION_PATH + sep + "Output.log", output);
     }
 
 }
