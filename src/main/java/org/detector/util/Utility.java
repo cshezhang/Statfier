@@ -101,7 +101,6 @@ public class Utility {
     public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION) ? true : false;
 
     public final static String SONARQUBE_PROJECT_KEY = getProperty("SONARQUBE_PROJECT_KEY");
-    public final static String SONARQUBE_LOGIN = getProperty("SONARQUBE_LOGIN");
 
     public final static String toolPath = getProperty("TOOL_PATH");
 

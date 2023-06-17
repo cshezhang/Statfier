@@ -36,8 +36,7 @@ public class SonarQube_InvokeThread implements Runnable {
         invokeCommands[2] = SONAR_SCANNER_PATH
                 + " -Dsonar.projectKey=" + Utility.SONARQUBE_PROJECT_KEY
                 + " -Dsonar.sources=" + this.seedFolderPath
-                + " -Dsonar.host.url=http://localhost:9000"
-                + " -Dsonar.login=" + Utility.SONARQUBE_LOGIN;
+                + " -Dsonar.host.url=http://localhost:9000";
         Invoker.invokeCommandsByZT(invokeCommands);
     }
 

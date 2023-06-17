@@ -343,7 +343,7 @@ public class ComparisonEvaluation {
         invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
         invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
-                + " -Dsonar.projectBaseDir=" + SEED_PATH
+                + " -Dsonar.projectBaseDir=" + PROJECT_PATH
                 + " -Dsonar.sources=" + seedFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
                 + " -Dsonar.login=admin -Dsonar.password=123456";
         if (invokeCommandsByZT(invokeCommands)) {
@@ -377,7 +377,7 @@ public class ComparisonEvaluation {
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
             invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
-                    + " -Dsonar.projectBaseDir=" + mutantFile.getParent()
+                    + " -Dsonar.projectBaseDir=" + MUTANT_FOLDER
                     + " -Dsonar.sources=" + mutantFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
                     + " -Dsonar.login=admin -Dsonar.password=123456";
             if (invokeCommandsByZT(invokeCommands)) {
