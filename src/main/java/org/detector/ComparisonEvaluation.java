@@ -429,7 +429,7 @@ public class ComparisonEvaluation {
             long minutes = TimeUnit.MILLISECONDS.toMinutes(timer);
             long seconds = TimeUnit.MILLISECONDS.toSeconds(timer) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timer));
             System.out.println("Current execution time: " + String.format("%d min, %d sec", minutes, seconds));
-            if(minutes > 3600) {
+            if(minutes > 360) {
                 System.out.println("Timeout!");
                 break;
             }
