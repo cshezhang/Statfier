@@ -199,14 +199,14 @@ public class Utility {
         if (SPOTBUGS_MUTATION) {
             SEED_PATH = SPOTBUGS_SEED_PATH;
         }
-        if (SONARQUBE_MUTATION) {
-            SEED_PATH = SONARQUBE_SEED_PATH;
-        }
         if (CHECKSTYLE_MUTATION) {
             SEED_PATH = CHECKSTYLE_SEED_PATH;
         }
         if (INFER_MUTATION) {
             SEED_PATH = INFER_SEED_PATH;
+        }
+        if (SONARQUBE_MUTATION) {
+            SEED_PATH = SONARQUBE_SEED_PATH;
         }
         if(SEED_PATH == null) {
             System.err.println("SEED_PATH is not initialized correctly!");

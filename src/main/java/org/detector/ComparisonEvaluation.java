@@ -36,6 +36,7 @@ import static org.detector.util.Utility.CHECKSTYLE_PATH;
 import static org.detector.util.Utility.EVALUATION_PATH;
 import static org.detector.util.Utility.INFER_MUTATION;
 import static org.detector.util.Utility.PMD_MUTATION;
+import static org.detector.util.Utility.PROJECT_PATH;
 import static org.detector.util.Utility.SEED_PATH;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SONARQUBE_PROJECT_KEY;
@@ -342,7 +343,7 @@ public class ComparisonEvaluation {
         invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
         invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
-                + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "mutants"
+                + " -Dsonar.projectBaseDir=" + SEED_PATH
                 + " -Dsonar.sources=" + seedFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
                 + " -Dsonar.login=admin -Dsonar.password=123456";
         if (invokeCommandsByZT(invokeCommands)) {
@@ -376,7 +377,7 @@ public class ComparisonEvaluation {
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
             invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
-                    + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "mutants"
+                    + " -Dsonar.projectBaseDir=" + mutantFile.getParent()
                     + " -Dsonar.sources=" + mutantFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
                     + " -Dsonar.login=admin -Dsonar.password=123456";
             if (invokeCommandsByZT(invokeCommands)) {
