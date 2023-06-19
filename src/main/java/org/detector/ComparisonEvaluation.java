@@ -63,7 +63,7 @@ public class ComparisonEvaluation {
         String[] invokeCommands = new String[3];
         invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
-        invokeCommands[2] = "mutate --mutantDir " + outputPath + " " + seedPath;
+        invokeCommands[2] = "mutate --noCheck --mutantDir " + outputPath + " " + seedPath;
         invokeCommandsByZT(invokeCommands);
     }
 
