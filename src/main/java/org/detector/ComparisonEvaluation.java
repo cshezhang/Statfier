@@ -335,6 +335,9 @@ public class ComparisonEvaluation {
     public static void invokeSonarQube(String seedPath, String mutantFolderPath) {
         File seedFile = new File(seedPath);
         String folderName = seedFile.getParentFile().getName();
+        if(seedFile.getName().length() == 0 || seedFile.getName().lastIndexOf('.') <= 0) {
+            System.out.println("Exception: " + seedFile.getAbsolutePath());
+        }
         String seedFileName = seedFile.getName().substring(0, seedFile.getName().lastIndexOf('.'));
         String seedReportPath = REPORT_FOLDER.getAbsolutePath() + sep + folderName + sep + seedFileName + "_Result.json";
         deleteSonarQubeProject(SONARQUBE_PROJECT_KEY);

@@ -1,12 +1,8 @@
-public class Foo {
-    public void method() {
-        String[] sa = {"a", "b"};
-        for (String s : sa) {}
-        for (String s : sa) {
-            s = "new string"; // violation
-        }
-        for(int i = 0; i < sa.size(); i++) {
-            s = "123";
+class Test {
+    int a = 0;
+    public static void main(String[] args) {
+        for (int i = 0; i <= 10; i++) {
+            a = a + 3;
         }
     }
 }

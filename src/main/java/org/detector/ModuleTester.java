@@ -16,6 +16,7 @@ public class ModuleTester {
     public void testPMD() {
         String[] pmdArgs = {
                 "-d", "./TestCase/Case1.java",
+                "-d", "./TestCase/Case2.java",
 //                "-d", "./src/test/java/ASTCase.java",
 //                "-R", "category/java/codestyle.xml/LocalVariableCouldBeFinal",
 //                "-R", "category/java/errorprone.xml/ProperCloneImplementation",
@@ -32,7 +33,7 @@ public class ModuleTester {
 //                "-R", "category/java/codestyle.xml/AvoidProtectedFieldInFinalClass",
 //                "-R", "category/java/errorprone.xml/CloseResource",
 //                "-R", "category/java/errorprone.xml/AssignmentInOperand",
-                "-R", "category/java/errorprone.xml/AvoidMultipleUnaryOperators",
+//                "-R", "category/java/errorprone.xml/AvoidMultipleUnaryOperators",
 //                "-R", "category/java/design.xml/SingularField",
 //                "-R", "category/java/design.xml/ClassWithOnlyPrivateConstructorsShouldBeFinal",
 //                "-R", "category/java/errorprone.xml/TestClassWithoutTestCases",
@@ -63,7 +64,7 @@ public class ModuleTester {
 //                "-R", "category/java/errorprone.xml/DetachedTestCase",
 //                "-R", "category/java/codestyle.xml/UnnecessaryLocalBeforeReturn",
 //                "-R", "category/java/documentation.xml/CommentSize",
-//                "-R", "category/java/bestpractices.xml/UnusedAssignment",
+                "-R", "category/java/bestpractices.xml/UnusedAssignment",
 //                "-R", "category/java/performance.xml/RedundantFieldInitializer",
 //                "-R", "category/java/performance.xml/UselessStringValueOf",
 //                "-R", "category/java/bestpractices.xml/SimplifiableTestAssertion",
@@ -103,6 +104,7 @@ public class ModuleTester {
 //                "-R", "category/java/errorprone.xml/AvoidFieldNameMatchingMethodName",
                 "-f", "json",
                 "-r", "./PMD_Result.json",
+                "--no-cache"
 //                "--debug",
         };
         PMD.main(pmdArgs);
