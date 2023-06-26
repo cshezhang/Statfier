@@ -22,8 +22,7 @@ public class SelectionAlgorithm {
         for(TypeWrapper mutant : mutants) {
             String transType = mutant.getTransSeq().toString();
             ASTNode node = mutant.getTransNodes().get(mutant.getTransNodes().size() - 1);
-//            int nodeType = node.getNodeType();
-            int nodeType = 0;
+            int nodeType = node.getNodeType();
             if(!code2exist.containsKey(transType + nodeType)) {
                 code2exist.put(transType + nodeType, true);
                 res.add(mutant);
@@ -34,12 +33,11 @@ public class SelectionAlgorithm {
 
     public static List<TypeWrapper> Random_Selection(List<TypeWrapper> mutants) {
         List<TypeWrapper> res = new ArrayList<>();
-        int cnt = 0;
-//        int limit = Div_Selection(mutants).size();
+//        int cnt = 0;
         for(TypeWrapper mutant : mutants) {
             if(random.nextDouble() > 0.5) {
                 res.add(mutant);
-                cnt++;
+//                cnt++;
 //                if(cnt >= limit) {
 //                    break;
 //                }
