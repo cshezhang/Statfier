@@ -23,7 +23,7 @@ import static org.detector.util.Utility.RANDOM_SELECTION;
 import static org.detector.util.Utility.SONARQUBE_MUTATION;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 
-/*
+/**
  * @Description: The General Class for Mutants.
  * @Author: RainyD4y
  * @Date: 2021-10-14 09:25:07

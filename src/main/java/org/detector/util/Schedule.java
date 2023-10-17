@@ -55,6 +55,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +69,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PMDConfiguration;
 import org.detector.analysis.TypeWrapper;
 import org.detector.report.SonarQube_Report;
 import org.json.JSONObject;
@@ -266,13 +268,17 @@ public class Schedule {
                     }
                     List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
                     String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-                    String MUTANT_FOLDERPath = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
-                    String[] pmdConfig = {
-                            "-d", MUTANT_FOLDERPath,
-                            "-R", "category/java/" + category + ".xml/" + bugType,
-                            "-f", "json",
-                            "-r", resultFilePath
-                    };
+                    String MUTANT_FOLDER_PATH = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
+                    PMDConfiguration pmdConfig = new PMDConfiguration();
+                    pmdConfig.setInputFilePath(Paths.get(MUTANT_FOLDER_PATH));
+                    pmdConfig.setRuleSets(new ArrayList<>() {
+                        {
+                            add("category/java/" + category + ".xml/" + bugType);
+                        }
+                    });
+                    pmdConfig.setReportFormat("json");
+                    pmdConfig.setReportFile(Paths.get(resultFilePath));
+                    pmdConfig.setIgnoreIncrementalAnalysis(true);
                     PMD.runPmd(pmdConfig); // detect mutants of level i
                     readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();

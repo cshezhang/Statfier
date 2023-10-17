@@ -24,6 +24,7 @@ public class SelectionAlgorithm {
             ASTNode node = mutant.getTransNodes().get(mutant.getTransNodes().size() - 1);
             int nodeType = node.getNodeType();
             if(!code2exist.containsKey(transType + nodeType)) {
+
                 code2exist.put(transType + nodeType, true);
                 res.add(mutant);
             }
