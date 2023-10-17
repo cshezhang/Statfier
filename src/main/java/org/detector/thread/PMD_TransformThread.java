@@ -1,10 +1,12 @@
 package org.detector.thread;
 
+import net.sourceforge.pmd.PMDConfiguration;
 import org.detector.analysis.TypeWrapper;
 import net.sourceforge.pmd.PMD;
 import org.detector.util.Utility;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import static org.detector.util.Utility.DEBUG;
 import static org.detector.util.Utility.SEARCH_DEPTH;
 import static org.detector.util.Utility.MUTANT_FOLDER;
 import static org.detector.util.Utility.REPORT_FOLDER;
+import static org.detector.util.Utility.getFilePathsFromFolder;
 
 /**
  * Description: This file is the MAIN class for testing PMD with multi threads
@@ -50,13 +53,16 @@ public class PMD_TransformThread implements Runnable {
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
             String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-            String MUTANT_FOLDERPath = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
-            String[] pmdConfig = {
-                    "-d", MUTANT_FOLDERPath,
-                    "-R", "category/java/" + this.ruleCategory + ".xml/" + this.ruleType,
-                    "-f", "json",
-                    "-r", resultFilePath
-            };
+            String MUTANT_FOLDER_PATH = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
+            PMDConfiguration pmdConfig = new PMDConfiguration();
+            pmdConfig.setInputPathList(getFilePathsFromFolder(MUTANT_FOLDER_PATH));
+            pmdConfig.setRuleSets(new ArrayList<>() {
+                {
+                    add("category/java/" + ruleCategory + ".xml/" + ruleType);
+                }
+            });
+            pmdConfig.setReportFormat("json");
+            pmdConfig.setReportFile(Paths.get(resultFilePath));
             PMD.runPmd(pmdConfig); // detect mutants of level i
             readPMDResultFile(resultFilePath);
             List<TypeWrapper> validWrappers = new ArrayList<>();

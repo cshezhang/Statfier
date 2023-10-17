@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.detector.util.Utility.REPORT_FOLDER;
+import static org.detector.util.Utility.getFilePathsFromFolder;
 
 /**
  * Description: Previous main process for testing PMD with multi thread
@@ -39,7 +40,7 @@ public class PMD_InvokeThread implements Runnable {
     @Override
     public void run() {
         PMDConfiguration pmdConfig = new PMDConfiguration();
-        pmdConfig.setInputFilePath(Paths.get(seedFolderPath  + File.separator + seedFolderName));
+        pmdConfig.setInputPathList(getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
         pmdConfig.setRuleSets(this.ruleList);
         pmdConfig.setReportFormat("json");
         pmdConfig.setReportFile(Paths.get(REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"));

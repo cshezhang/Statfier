@@ -39,6 +39,7 @@ import static org.detector.util.Utility.failedExecuteSpotBugs;
 import static org.detector.util.Utility.failedReportPaths;
 import static org.detector.util.Utility.failedT;
 import static org.detector.util.Utility.file2row;
+import static org.detector.util.Utility.getFilePathsFromFolder;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.MUTANT_FOLDER;
@@ -270,7 +271,7 @@ public class Schedule {
                     String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
                     String MUTANT_FOLDER_PATH = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
                     PMDConfiguration pmdConfig = new PMDConfiguration();
-                    pmdConfig.setInputFilePath(Paths.get(MUTANT_FOLDER_PATH));
+                    pmdConfig.setInputPathList(getFilePathsFromFolder(MUTANT_FOLDER_PATH));
                     pmdConfig.setRuleSets(new ArrayList<>() {
                         {
                             add("category/java/" + category + ".xml/" + bugType);

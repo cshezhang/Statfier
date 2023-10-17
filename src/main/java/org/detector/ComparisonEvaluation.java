@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PMDConfiguration;
 import org.detector.util.Invoker;
 import org.detector.util.Pair;
 import org.detector.util.Utility;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +48,7 @@ import static org.detector.util.Utility.SPOTBUGS_PATH;
 import static org.detector.util.Utility.CLASS_FOLDER;
 import static org.detector.util.Utility.file2bugs;
 import static org.detector.util.Utility.getDirectFilenamesFromFolder;
+import static org.detector.util.Utility.getFilePathsFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.MUTANT_FOLDER;
 import static org.detector.util.Utility.reg_sep;
@@ -75,13 +78,16 @@ public class ComparisonEvaluation {
         String bugType = seedFolderName.split("_")[1];
         List<String> mutantPaths = getDirectFilenamesFromFolder(MUTANT_FOLDERPath, true);
         String seedReportPath = REPORT_FOLDER.getAbsolutePath()  + File.separator + seedFileName + ".json";
-        String[] seedConfig = {
-                "-d", seedPath,
-                "-R", "category/java/" + category + ".xml/" + bugType,
-                "-f", "json",
-                "-r", seedReportPath,
-                "--no-cache"
-        };
+        PMDConfiguration seedConfig = new PMDConfiguration();
+        seedConfig.setInputPathList(getFilePathsFromFolder(seedPath));
+        seedConfig.setRuleSets(new ArrayList<>() {
+            {
+                add("category/java/" + category + ".xml/" + bugType);
+            }
+        });
+        seedConfig.setReportFormat("json");
+        seedConfig.setReportFile(Paths.get(seedReportPath));
+        seedConfig.setIgnoreIncrementalAnalysis(true);
         PMD.runPmd(seedConfig);
         readSinglePMDResultFile(seedReportPath, seedPath);
         Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
@@ -92,13 +98,16 @@ public class ComparisonEvaluation {
         for(String mutantPath : mutantPaths) {
             String mutantFileName = Utility.Path2Last(mutantPath);
             String mutantReportPath = REPORT_FOLDER.getAbsolutePath() + File.separator + mutantFileName + ".json";
-            String[] mutantConfig = {
-                    "-d", mutantPath,
-                    "-R", "category/java/" + category + ".xml/" + bugType,
-                    "-f", "json",
-                    "-r", mutantReportPath,
-                    "--no-cache"
-            };
+            PMDConfiguration mutantConfig = new PMDConfiguration();
+            mutantConfig.setInputPathList(getFilePathsFromFolder(mutantPath));
+            mutantConfig.setRuleSets(new ArrayList<>() {
+                {
+                    add("category/java/" + category + ".xml/" + bugType);
+                }
+            });
+            mutantConfig.setReportFormat("json");
+            mutantConfig.setReportFile(Paths.get(mutantPath));
+            mutantConfig.setIgnoreIncrementalAnalysis(true);
             PMD.runPmd(mutantConfig);
             readSinglePMDResultFile(mutantReportPath, mutantPath);
             int mutantSum = 0;

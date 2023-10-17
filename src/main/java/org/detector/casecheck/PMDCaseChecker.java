@@ -1,6 +1,7 @@
 package org.detector.casecheck;
 
 import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PMDConfiguration;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
@@ -10,12 +11,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.detector.util.Utility.PMD_SEED_PATH;
 import static org.detector.util.Utility.calculatePMDResultFile;
 import static org.detector.util.Utility.EVALUATION_PATH;
+import static org.detector.util.Utility.getFilePathsFromFolder;
 
 public class PMDCaseChecker {
 
@@ -109,14 +112,17 @@ public class PMDCaseChecker {
         String ruleType = tokens[1];
         String resultFileName = fileNameWithSuffix.substring(0, fileNameWithSuffix.length() - 5) + "_Result.json";
         String resultFilePath =  EVALUATION_PATH  + File.separator + "PMD_Case_Check"  + File.separator + resultFileName;
-        String[] pmdArgs = {
-            "-d", seedFolderPath  + File.separator + fileNameWithSuffix,
-            "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
-            "-f", "json",
-            "-r", resultFilePath,
-            "--no-cache"
-        };
-        PMD.runPmd(pmdArgs);
+        PMDConfiguration pmdConfig = new PMDConfiguration();
+        pmdConfig.setInputPathList(getFilePathsFromFolder(seedFolderPath  + File.separator + fileNameWithSuffix));
+        pmdConfig.setRuleSets(new ArrayList<>() {
+            {
+                add("category/java/" + ruleCategory + ".xml/" + ruleType);
+            }
+        });
+        pmdConfig.setReportFormat("json");
+        pmdConfig.setReportFile(Paths.get(resultFilePath));
+        pmdConfig.setIgnoreIncrementalAnalysis(true);
+        PMD.runPmd(pmdConfig);
         int bugCounter = calculatePMDResultFile(resultFilePath);
         return String.format("%d", bugCounter);
     }

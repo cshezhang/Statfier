@@ -6,13 +6,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PMDConfiguration;
 import org.detector.report.SonarQube_Report;
-import org.eclipse.osgi.internal.debug.Debug;
 import org.json.JSONObject;
 import org.detector.thread.CheckStyle_InvokeThread;
 import org.detector.thread.Infer_InvokeThread;
@@ -35,6 +37,7 @@ import static org.detector.util.Utility.SONAR_SCANNER_PATH;
 import static org.detector.util.Utility.SPOTBUGS_MUTATION;
 import static org.detector.util.Utility.SonarQubeRuleNames;
 import static org.detector.util.Utility.THREAD_COUNT;
+import static org.detector.util.Utility.getFilePathsFromFolder;
 import static org.detector.util.Utility.getFilenamesFromFolder;
 import static org.detector.util.Utility.inferJarStr;
 import static org.detector.util.Utility.initThreadPool;
@@ -379,15 +382,16 @@ public class Invoker {
             for(int i = 0; i < subSeedFolderNameList.size(); i++) {
                 String seedFolderName = subSeedFolderNameList.get(i);
                 String[] tokens = seedFolderName.split("_");
-                String ruleCategory = tokens[0];
-                String ruleType = tokens[1];
-                String[] pmdConfig = {
-                        "-d", seedFolderPath  + File.separator + seedFolderName,
-                        "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
-                        "-f", "json",
-                        "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json",
-                        "--no-cache"
-                };
+                PMDConfiguration pmdConfig = new PMDConfiguration();
+                pmdConfig.setInputPathList(getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
+                pmdConfig.setRuleSets(new ArrayList<>() {
+                    {
+                        add("category/java/" + tokens[0] + ".xml/" + tokens[1]);
+                    }
+                });
+                pmdConfig.setReportFormat("json");
+                pmdConfig.setReportFile(Paths.get(REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"));
+                pmdConfig.setIgnoreIncrementalAnalysis(true);
                 PMD.runPmd(pmdConfig);
             }
             for (int i = 0; i < subSeedFolderNameList.size(); i++) {

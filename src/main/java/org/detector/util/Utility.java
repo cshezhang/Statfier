@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -427,6 +429,27 @@ public class Utility {
             }
             return pureNames;
         }
+    }
+
+    public static List<Path> getFilePathsFromFolder(String path) {
+        LinkedList<Path> fileList = new LinkedList<>();
+        File dir = new File(path);
+        File[] files = dir.listFiles();
+        if (files == null) {
+            System.err.println("GetFileName cannot find: " + path);
+            System.exit(-1);
+        }
+        for (File file : files) {
+            if (file.getName().charAt(0) == '.') {
+                continue;
+            }
+            if (file.isDirectory()) {
+                fileList.addAll(getFilePathsFromFolder(file.getAbsolutePath()));
+            } else {
+                fileList.add(Paths.get(file.getAbsolutePath()));
+            }
+        }
+        return fileList;
     }
 
     // The list contains absolute paths.
