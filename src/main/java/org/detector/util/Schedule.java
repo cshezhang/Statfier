@@ -3,6 +3,7 @@ package org.detector.util;
 import static org.detector.analysis.TypeWrapper.failedParse;
 import static org.detector.report.CheckStyle_Report.readCheckStyleResultFile;
 import static org.detector.report.Infer_Report.readSingleInferResultFile;
+import static org.detector.report.PMD_Report.errorReportPaths;
 import static org.detector.report.PMD_Report.readPMDResultFile;
 import static org.detector.report.SpotBugs_Report.readSpotBugsResultFile;
 import static org.detector.transform.Transform.cnt1;
@@ -268,10 +269,10 @@ public class Schedule {
                         System.out.println("Seed FolderName: " + seedFolderName + " Depth: " + depth + " Wrapper Size: " + wrappers.size());
                     }
                     List<TypeWrapper> newWrappers = singleLevelExplorer(wrappers);
-                    String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-                    String MUTANT_FOLDER_PATH = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
+                    String resultFilePath = REPORT_FOLDER.getAbsolutePath() + sep + "iter" + depth + "_" + seedFolderName + "_Result.json";
+                    String mutantFolderPath = MUTANT_FOLDER + sep + "iter" + depth + sep + seedFolderName;
                     PMDConfiguration pmdConfig = new PMDConfiguration();
-                    pmdConfig.setInputPathList(getFilePathsFromFolder(MUTANT_FOLDER_PATH));
+                    pmdConfig.setInputPathList(getFilePathsFromFolder(mutantFolderPath));
                     pmdConfig.setRuleSets(new ArrayList<>() {
                         {
                             add("category/java/" + category + ".xml/" + bugType);
@@ -455,7 +456,7 @@ public class Schedule {
                 allValidVariantNumber += subEntry.getValue().size();
             }
             root.put("Results", bugs);
-            File jsonFile = new File(Utility.EVALUATION_PATH + File.separator + "results" + File.separator + rule + ".json");
+            File jsonFile = new File(Utility.EVALUATION_PATH + sep + "results" + sep + rule + ".json");
             try {
                 if (!jsonFile.exists()) {
                     jsonFile.createNewFile();
@@ -501,7 +502,12 @@ public class Schedule {
                         TimeUnit.MILLISECONDS.toSeconds(executionTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(executionTime))) + "\n")
         );
         writeLinesToFile(EVALUATION_PATH + sep + "Output.log", output);
-        writeLinesToFile(EVALUATION_PATH + sep + "FailedParse.log", failedParse);
+        if(failedParse.size() > 0) {
+            writeLinesToFile(EVALUATION_PATH + sep + "FailedParse.log", failedParse);
+        }
+        if(errorReportPaths.size() > 0) {
+            writeLinesToFile(EVALUATION_PATH + sep + "ErrorReportPaths.log", errorReportPaths);
+        }
     }
 
 }

@@ -51,7 +51,7 @@ public class PMD_Report implements Report {
         return out.toString();
     }
 
-    public static List<String> errorList = new ArrayList<>();
+    public static List<String> errorReportPaths = new ArrayList<>();
 
     // Read PMD result file which includes only one seed file.
     public static void readSinglePMDResultFile(final String reportPath, String detectionPath) {
@@ -90,7 +90,7 @@ public class PMD_Report implements Report {
             JsonNode processErrorNodes = rootNode.get("processingErrors");
             JsonNode configErrorNodes = rootNode.get("configurationErrors");
             if(processErrorNodes.size() > 0 || configErrorNodes.size() > 0) {
-                errorList.add(reportPath);
+                errorReportPaths.add(reportPath);
             }
         } catch (JsonProcessingException e) {
             System.err.println("Exceptional Json Path:" + reportPath);
@@ -129,7 +129,7 @@ public class PMD_Report implements Report {
             JsonNode processErrorNodes = rootNode.get("processingErrors");
             JsonNode configErrorNodes = rootNode.get("configurationErrors");
             if(processErrorNodes.size() > 0 || configErrorNodes.size() > 0) {
-                errorList.add(reportPath);
+                errorReportPaths.add(reportPath);
             }
         } catch (JsonProcessingException e) {
             System.err.println("Exceptional Json Path:" + reportPath);

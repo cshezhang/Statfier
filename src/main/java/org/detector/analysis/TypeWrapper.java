@@ -121,6 +121,7 @@ public class TypeWrapper {
     }
 
     public static List<String> failedParse = new ArrayList<>();
+
     public TypeWrapper(String filePath, String folderName) {
         this.depth = 0;
         this.expectedNumbers = 0;
