@@ -382,6 +382,12 @@ public class Invoker {
             for(int i = 0; i < subSeedFolderNameList.size(); i++) {
                 String seedFolderName = subSeedFolderNameList.get(i);
                 String[] tokens = seedFolderName.split("_");
+//                String[] pmdConfig = {
+//                        "-d", seedFolderPath  + File.separator + seedFolderName,
+//                        "-R", "category/java/" + tokens[0] + ".xml/" + tokens[1],
+//                        "-f", "json",
+//                        "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"
+//                };
                 PMDConfiguration pmdConfig = new PMDConfiguration();
                 pmdConfig.setInputPathList(getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
                 pmdConfig.setRuleSets(new ArrayList<>() {

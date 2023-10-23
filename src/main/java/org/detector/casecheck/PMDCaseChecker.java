@@ -122,6 +122,12 @@ public class PMDCaseChecker {
         pmdConfig.setReportFormat("json");
         pmdConfig.setReportFile(Paths.get(resultFilePath));
         pmdConfig.setIgnoreIncrementalAnalysis(true);
+//        String[] pmdConfig = {
+//                "-d", seedFolderPath  + File.separator + fileNameWithSuffix,
+//                "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
+//                "-f", "json",
+//                "-r", resultFilePath
+//        };
         PMD.runPmd(pmdConfig);
         int bugCounter = calculatePMDResultFile(resultFilePath);
         return String.format("%d", bugCounter);

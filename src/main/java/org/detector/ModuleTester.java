@@ -16,7 +16,7 @@ public class ModuleTester {
     public void testPMD() {
         String[] pmdArgs = {
                 "-d", "./TestCase/Case1.java",
-                "-d", "./TestCase/Case2.java",
+//                "-d", "./TestCase/Case2.java",
 //                "-d", "./src/test/java/ASTCase.java",
 //                "-R", "category/java/codestyle.xml/LocalVariableCouldBeFinal",
 //                "-R", "category/java/errorprone.xml/ProperCloneImplementation",
@@ -103,8 +103,7 @@ public class ModuleTester {
 //                "-R", "category/java/security.xml/InsecureCryptoIv",
 //                "-R", "category/java/errorprone.xml/AvoidFieldNameMatchingMethodName",
                 "-f", "json",
-                "-r", "./PMD_Result.json",
-                "--no-cache"
+                "-r", "./PMD_Result.json"
 //                "--debug",
         };
         PMD.main(pmdArgs);

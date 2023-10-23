@@ -254,10 +254,10 @@ public class Schedule {
         System.out.println("Initial Wrappers Size: " + initSeedWrapperSize);
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             for (Map.Entry<String, HashSet<String>> entry : category2bugTypes.entrySet()) {
-                String category = entry.getKey();
+                String ruleCategory = entry.getKey();
                 HashSet<String> bugTypes = entry.getValue();
                 for (String bugType : bugTypes) {
-                    String seedFolderName = category + "_" + bugType;
+                    String seedFolderName = ruleCategory + "_" + bugType;
                     List<TypeWrapper> wrappers = new ArrayList<>() {
                         {
                             addAll(bug2wrappers.get(seedFolderName));  // init by the wrappers in level 0
@@ -275,12 +275,18 @@ public class Schedule {
                     pmdConfig.setInputPathList(getFilePathsFromFolder(mutantFolderPath));
                     pmdConfig.setRuleSets(new ArrayList<>() {
                         {
-                            add("category/java/" + category + ".xml/" + bugType);
+                            add("category/java/" + ruleCategory + ".xml/" + bugType);
                         }
                     });
                     pmdConfig.setReportFormat("json");
                     pmdConfig.setReportFile(Paths.get(resultFilePath));
                     pmdConfig.setIgnoreIncrementalAnalysis(true);
+//                    String[] pmdConfig = {
+//                            "-d", seedFolderPath  + File.separator + mutantFolderPath,
+//                            "-R", "category/java/" + ruleCategory + ".xml/" + bugType,
+//                            "-f", "json",
+//                            "-r", resultFilePath
+//                    };
                     PMD.runPmd(pmdConfig); // detect mutants of level i
                     readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();

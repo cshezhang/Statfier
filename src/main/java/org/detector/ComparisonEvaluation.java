@@ -78,6 +78,12 @@ public class ComparisonEvaluation {
         String bugType = seedFolderName.split("_")[1];
         List<String> mutantPaths = getDirectFilenamesFromFolder(MUTANT_FOLDERPath, true);
         String seedReportPath = REPORT_FOLDER.getAbsolutePath()  + File.separator + seedFileName + ".json";
+//        String[] seedConfig = {
+//                "-d", seedPath,
+//                "-R", "category/java/" + tokens[0] + ".xml/" + tokens[1],
+//                "-f", "json",
+//                "-r", seedReportPath
+//        };
         PMDConfiguration seedConfig = new PMDConfiguration();
         seedConfig.setInputPathList(getFilePathsFromFolder(seedPath));
         seedConfig.setRuleSets(new ArrayList<>() {
@@ -106,8 +112,14 @@ public class ComparisonEvaluation {
                 }
             });
             mutantConfig.setReportFormat("json");
-            mutantConfig.setReportFile(Paths.get(mutantPath));
+            mutantConfig.setReportFile(Paths.get(mutantReportPath));
             mutantConfig.setIgnoreIncrementalAnalysis(true);
+//            String[] mutantConfig = {
+//                    "-d", mutantPath,
+//                    "-R", "category/java/" + tokens[0] + ".xml/" + tokens[1],
+//                    "-f", "json",
+//                    "-r", mutantReportPath
+//            };
             PMD.runPmd(mutantConfig);
             readSinglePMDResultFile(mutantReportPath, mutantPath);
             int mutantSum = 0;

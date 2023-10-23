@@ -45,6 +45,12 @@ public class PMD_InvokeThread implements Runnable {
         pmdConfig.setReportFormat("json");
         pmdConfig.setReportFile(Paths.get(REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"));
         pmdConfig.setIgnoreIncrementalAnalysis(true);
+//        String[] pmdConfig = {
+//                "-d", seedFolderPath  + File.separator + seedFolderName,
+//                "-R", this.ruleList.get(0),
+//                "-f", "json",
+//                "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
+//        };
         PMD.runPmd(pmdConfig);
     }
 

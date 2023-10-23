@@ -53,9 +53,16 @@ public class PMD_TransformThread implements Runnable {
             }
             singleLevelExplorer(this.wrappers, this.currentDepth++);
             String resultFilePath = REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + depth + "_" + seedFolderName + "_Result.json";
-            String MUTANT_FOLDER_PATH = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
+            String mutantFolderPath = MUTANT_FOLDER + File.separator + "iter" + depth + File.separator + seedFolderName;
+//            String[] pmdConfig = {
+//                    "-d", mutantFolderPath,
+//                    "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
+//                    "-f", "json",
+//                    "-r", resultFilePath,
+////                    "-t", "4"
+//            };
             PMDConfiguration pmdConfig = new PMDConfiguration();
-            pmdConfig.setInputPathList(getFilePathsFromFolder(MUTANT_FOLDER_PATH));
+            pmdConfig.setInputPathList(getFilePathsFromFolder(mutantFolderPath));
             pmdConfig.setRuleSets(new ArrayList<>() {
                 {
                     add("category/java/" + ruleCategory + ".xml/" + ruleType);
