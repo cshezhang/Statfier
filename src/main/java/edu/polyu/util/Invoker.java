@@ -12,11 +12,13 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 import edu.polyu.report.CheckStyle_Report;
+import edu.polyu.report.FindSecBugs_Report;
 import edu.polyu.report.Infer_Report;
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.SonarQube_Report;
 import edu.polyu.report.SpotBugs_Report;
 import edu.polyu.thread.CheckStyle_InvokeThread;
+import edu.polyu.thread.FindSecBugs_InvokeThread;
 import edu.polyu.thread.Infer_InvokeThread;
 import edu.polyu.thread.PMD_InvokeThread;
 import edu.polyu.thread.SpotBugs_InvokeThread;
@@ -24,9 +26,6 @@ import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
 import org.json.JSONObject;
 import org.zeroturnaround.exec.ProcessExecutor;
-
-import static edu.polyu.util.Utility.waitTaskEnd;
-import static edu.polyu.util.Utility.writeLinesToFile;
 
 
 /**
@@ -169,7 +168,7 @@ public class Invoker {
         cmd_list.add("-d");
         cmd_list.add(classFileFolder);  // Generated class files are saved in this folder.
         cmd_list.add("-cp");
-        if (Utility.SPOTBUGS_MUTATION) {
+        if (Utility.SPOTBUGS_MUTATION || Utility.FINDSECBUGS_MUTATION) {
             cmd_list.add(Utility.spotBugsJarStr.toString());
         }
         if(Utility.INFER_MUTATION) {
@@ -287,7 +286,7 @@ public class Invoker {
                 invokeCommands[0] = "/bin/bash";
                 invokeCommands[1] = "-c";
             }
-            invokeCommands[2] = Utility.SONAR_SCANNER_PATH + " -Dproject.settings=" + settingPath;
+            invokeCommands[2] = Utility.SONARSCANNER_PATH + " -Dproject.settings=" + settingPath;
             boolean hasExec = invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
             if(hasExec) {
                 Utility.waitTaskEnd(newProjectName);
@@ -361,12 +360,6 @@ public class Invoker {
             for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
                 String seedFolderName = Utility.subSeedFolderNameList.get(i);
                 String[] tokens = seedFolderName.split("_");
-//                String[] pmdConfig = {
-//                        "-d", seedFolderPath  + File.separator + seedFolderName,
-//                        "-R", "category/java/" + tokens[0] + ".xml/" + tokens[1],
-//                        "-f", "json",
-//                        "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"
-//                };
                 PMDConfiguration pmdConfig = new PMDConfiguration();
                 pmdConfig.setInputPathList(Utility.getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
                 pmdConfig.setRuleSets(new ArrayList<>() {
@@ -381,6 +374,31 @@ public class Invoker {
             }
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
                 PMD_Report.readPMDResultFile(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");
+            }
+        }
+    }
+
+    // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
+    // Generated class files are saved in CLASS_FOLDER
+    public static void invokeFindSecBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
+        if(seedFolderPath.endsWith(Utility.sep)) {
+            seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
+        }
+        if(Utility.DEBUG) {
+            System.out.println("Invoke FindSecBugs Path: " + seedFolderPath);
+        }
+        ExecutorService threadPool = Utility.initThreadPool();
+        for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+            String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
+            String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
+            List<String> seedFileNames = Utility.getFilenamesFromFolder(subSeedFolderPath, false);
+            threadPool.submit(new FindSecBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
+        }
+        Utility.waitThreadPoolEnding(threadPool);
+        for(String subSeedFolderName : Utility.subSeedFolderNameList) {
+            List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
+            for(String reportPath : reportPaths) {
+                FindSecBugs_Report.readFindSecBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
         }
     }

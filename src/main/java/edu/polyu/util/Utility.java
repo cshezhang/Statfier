@@ -98,6 +98,7 @@ public class Utility {
     public final static boolean INFER_MUTATION = Boolean.parseBoolean(getProperty("INFER_MUTATION"));
     public final static boolean CHECKSTYLE_MUTATION = Boolean.parseBoolean(getProperty("CHECKSTYLE_MUTATION"));
     public final static boolean SONARQUBE_MUTATION = Boolean.parseBoolean(getProperty("SONARQUBE_MUTATION"));
+    public final static boolean FINDSECBUGS_MUTATION = Boolean.parseBoolean(getProperty("FINDSECBUGS_MUTATION"));
     public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION) ? true : false;
 
     public final static String SONARQUBE_PROJECT_KEY = getProperty("SONARQUBE_PROJECT_KEY");
@@ -127,6 +128,7 @@ public class Utility {
     public final static String INFER_SEED_PATH = getProperty("INFER_SEED_PATH");
     public final static String CHECKSTYLE_SEED_PATH = getProperty("CHECKSTYLE_SEED_PATH");
     public final static String SONARQUBE_SEED_PATH = getProperty("SONARQUBE_SEED_PATH");
+    public final static String FINDSECBUGS_SEED_PATH = getProperty("FINDSECBUGS_SEED_PATH");
     public static String SEED_PATH = null;
 
     // mutants and results
@@ -142,7 +144,8 @@ public class Utility {
     public final static String CHECKSTYLE_PATH = getProperty("CHECKSTYLE_PATH");
     public final static String CHECKSTYLE_CONFIG_PATH = toolPath + sep + "CheckStyle_Configs";
     public final static String INFER_PATH = getProperty("INFER_PATH");
-    public final static String SONAR_SCANNER_PATH = getProperty("SONAR_SCANNER_PATH");
+    public final static String SONARSCANNER_PATH = getProperty("SONARSCANNER_PATH");
+    public final static String FINDSECBUGS_PATH = getProperty("FINDSECBUGS_PATH");
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + sep + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath + sep + "Infer_Dependency", true);
     public static List<String> subSeedFolderNameList;
@@ -157,6 +160,7 @@ public class Utility {
     public static ConcurrentHashMap<String, HashMap<String, List<TriTuple>>> compactIssues = new ConcurrentHashMap<>();
     public static List<String> failedReportPaths = new ArrayList<>();
     public static List<String> failedExecuteSpotBugs = new ArrayList<>();
+    public static List<String> failedExecuteFindSecBugs = new ArrayList<>();
     public static List<String> failedCheckStyleExecution = new ArrayList<>();
     public static Set<String> SonarQubeRuleNames;
 
@@ -207,13 +211,16 @@ public class Utility {
         if (SONARQUBE_MUTATION) {
             SEED_PATH = SONARQUBE_SEED_PATH;
         }
-        if(SEED_PATH == null) {
+        if (FINDSECBUGS_MUTATION) {
+            SEED_PATH = FINDSECBUGS_SEED_PATH;
+        }
+        if (SEED_PATH == null) {
             System.err.println("SEED_PATH is not initialized correctly!");
             System.exit(-1);
         }
         List<String> seedPaths = getFilenamesFromFolder(SEED_PATH, true);
-        for(String seedPath : seedPaths) {
-            if(seedPath.endsWith(".class")) {
+        for (String seedPath : seedPaths) {
+            if (seedPath.endsWith(".class")) {
                 System.out.println("Delete Class in Seed Folder: " + seedPath);
                 try {
                     FileUtils.delete(new File(seedPath));
@@ -224,12 +231,12 @@ public class Utility {
         }
         try {
             File file = new File(CHECKSTYLE_PATH);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 System.err.println("CheckStyle is not existed!");
                 System.exit(-1);
             }
             file = new File(SPOTBUGS_PATH);
-            if(!file.exists()) {
+            if (!file.exists()) {
                 System.err.println("SpotBugs is not existed");
                 System.exit(-1);
             }
@@ -287,13 +294,13 @@ public class Utility {
     public static Set<String> getSonarQubeRuleNames() {
         String ruleNamePath = PROJECT_PATH + sep + "tools" + sep + "SonarQube_Rules.txt";
         List<String> lines = readFileByLine(ruleNamePath);
-        if(lines.size() > 1) {
+        if (lines.size() > 1) {
             System.err.println("Expected line number is ONE!");
             System.exit(-1);
         }
         String[] ruleNames = lines.get(0).split(",");
         Set<String> ruleNameSet = new HashSet<>();
-        for(String ruleName : ruleNames) {
+        for (String ruleName : ruleNames) {
             ruleNameSet.add(ruleName);
         }
         return ruleNameSet;
@@ -520,7 +527,7 @@ public class Utility {
         }
         List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
         for (ASTNode m_node : modifiers) {
-            if(!(m_node instanceof Modifier)) { // Annotation
+            if (!(m_node instanceof Modifier)) { // Annotation
                 return false;
             }
             Modifier modifier = (Modifier) m_node;
@@ -537,7 +544,7 @@ public class Utility {
         }
         List<ASTNode> modifiers = (List<ASTNode>) type.modifiers();
         for (ASTNode node : modifiers) {
-            if(node instanceof Modifier) {
+            if (node instanceof Modifier) {
                 Modifier modifier = (Modifier) node;
                 if (modifier.isAbstract() || modifier.isNative()) {
                     return true;
@@ -548,6 +555,7 @@ public class Utility {
     }
 
     private static final ASTMatcher matcher = new ASTMatcher();
+
     public static boolean compareNode(ASTNode node1, ASTNode node2) {
         if (node1.toString().equals(node2.toString())) {
             return true;
@@ -635,7 +643,7 @@ public class Utility {
     // Designed for SonarQube
     public static void waitTaskEnd(String projectKey) {
         boolean start = false;
-        while(true) {
+        while (true) {
             String[] curlCommands = new String[4];
             curlCommands[0] = "curl";
             curlCommands[1] = "-u";
@@ -647,13 +655,13 @@ public class Utility {
             int pending = root.getInt("pending");
             int failing = root.getInt("failing");
             int inProgress = root.getInt("inProgress");
-            if(pending > 0 || inProgress > 0) {
+            if (pending > 0 || inProgress > 0) {
                 start = true;
             }
-            if(start && pending == 0 && inProgress == 0  && failing == 0) {
+            if (start && pending == 0 && inProgress == 0 && failing == 0) {
                 break;
             }
-            if(failing > 0) {
+            if (failing > 0) {
                 System.err.println("Failed CE!");
                 System.exit(-1);
             }
@@ -662,17 +670,17 @@ public class Utility {
 
     public static boolean hasStaticModifier(ASTNode node) {
         List<ASTNode> modifiers = null;
-        if(node instanceof FieldDeclaration) {
+        if (node instanceof FieldDeclaration) {
             modifiers = ((FieldDeclaration) node).modifiers();
         }
-        if(node instanceof VariableDeclarationStatement) {
+        if (node instanceof VariableDeclarationStatement) {
             modifiers = ((VariableDeclarationStatement) node).modifiers();
         }
-        if(modifiers == null) {
+        if (modifiers == null) {
             return false;
         }
-        for(ASTNode modifier : modifiers) {
-            if(modifier instanceof Modifier && ((Modifier) modifier).getKeyword().equals(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
+        for (ASTNode modifier : modifiers) {
+            if (modifier instanceof Modifier && ((Modifier) modifier).getKeyword().equals(Modifier.ModifierKeyword.STATIC_KEYWORD)) {
                 return true;
             }
         }

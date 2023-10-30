@@ -6,6 +6,8 @@ import java.lang.management.ManagementFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static edu.polyu.util.Utility.FINDSECBUGS_MUTATION;
+import static edu.polyu.util.Utility.Path2Last;
 import static edu.polyu.util.Utility.SEED_PATH;
 import static edu.polyu.util.Utility.initEnv;
 import static edu.polyu.util.Schedule.writeEvaluationResult;
@@ -32,6 +34,7 @@ public class AutomatedTester {
         System.out.println("Java Program PID: " + pid);
         initEnv();
         Schedule schedule = Schedule.getInstance();
+        System.out.println("Invoke Analyzer for " + SEED_PATH + " and Analysis Output Folder is: " + Path2Last(SEED_PATH) + ", Depth=0");
         if (PMD_MUTATION) {
             schedule.executePMDTransform(SEED_PATH);
         }
@@ -46,6 +49,9 @@ public class AutomatedTester {
         }
         if (SONARQUBE_MUTATION) {
             schedule.executeSonarQubeTransform(SEED_PATH);
+        }
+        if(FINDSECBUGS_MUTATION) {
+            schedule.executeFindSecBugsTransform(SEED_PATH);
         }
         writeEvaluationResult();
         long endTimeStamp = System.currentTimeMillis();

@@ -42,7 +42,7 @@ import static edu.polyu.util.Utility.PROJECT_PATH;
 import static edu.polyu.util.Utility.SEED_PATH;
 import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
 import static edu.polyu.util.Utility.SONARQUBE_PROJECT_KEY;
-import static edu.polyu.util.Utility.SONAR_SCANNER_PATH;
+import static edu.polyu.util.Utility.SONARSCANNER_PATH;
 import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
 import static edu.polyu.util.Utility.SPOTBUGS_PATH;
 import static edu.polyu.util.Utility.CLASS_FOLDER;
@@ -366,7 +366,7 @@ public class ComparisonEvaluation {
         String[] invokeCommands = new String[3];
         invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
-        invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
+        invokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
                 + " -Dsonar.projectBaseDir=" + PROJECT_PATH
                 + " -Dsonar.sources=" + seedFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
                 + " -Dsonar.login=admin -Dsonar.password=123456";
@@ -400,7 +400,7 @@ public class ComparisonEvaluation {
             createSonarQubeProject(SONARQUBE_PROJECT_KEY);
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
-            invokeCommands[2] = SONAR_SCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
+            invokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_KEY
                     + " -Dsonar.projectBaseDir=" + MUTANT_FOLDER
                     + " -Dsonar.sources=" + mutantFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
                     + " -Dsonar.login=admin -Dsonar.password=123456";

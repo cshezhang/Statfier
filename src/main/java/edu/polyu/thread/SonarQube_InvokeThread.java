@@ -5,7 +5,7 @@ import edu.polyu.util.Invoker;
 import edu.polyu.util.Utility;
 
 import static edu.polyu.util.Utility.DEBUG;
-import static edu.polyu.util.Utility.SONAR_SCANNER_PATH;
+import static edu.polyu.util.Utility.SONARSCANNER_PATH;
 
 import java.io.File;
 
@@ -33,7 +33,7 @@ public class SonarQube_InvokeThread implements Runnable {
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
         }
-        invokeCommands[2] = SONAR_SCANNER_PATH
+        invokeCommands[2] = SONARSCANNER_PATH
                 + " -Dsonar.projectKey=" + Utility.SONARQUBE_PROJECT_KEY
                 + " -Dsonar.sources=" + this.seedFolderPath
                 + " -Dsonar.host.url=http://localhost:9000";
