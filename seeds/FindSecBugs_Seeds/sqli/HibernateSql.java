@@ -5,6 +5,9 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 public class HibernateSql {
 
     public void testQueries(SessionFactory sessionFactory, String input) {
@@ -43,5 +46,28 @@ public class HibernateSql {
         criteria.add(Restrictions.sqlRestriction("param1  = ?",input, StandardBasicTypes.STRING));
         criteria.add(Restrictions.sqlRestriction("param1  = ? and param2 = ?", new String[] {input}, new Type[] {StandardBasicTypes.STRING}));
 
+    }
+}
+
+@Entity
+class UserEntity {
+    @Id
+    private Long id;
+    private String test;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

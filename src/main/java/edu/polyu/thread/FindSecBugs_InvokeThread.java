@@ -6,6 +6,7 @@ import edu.polyu.util.Utility;
 import java.io.File;
 import java.util.List;
 
+import static edu.polyu.util.Utility.CLASS_FOLDER;
 import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
@@ -28,11 +29,11 @@ public class FindSecBugs_InvokeThread implements Runnable {
             String seedFileNameWithSuffix = this.seedFileNamesWithSuffix.get(i);
             String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
             // seedFileName is used to specify class folder name
-            File CLASS_FOLDER = new File(Utility.CLASS_FOLDER.getAbsolutePath()  + File.separator + seedFileName);
-            if(!CLASS_FOLDER.exists()) {
-                CLASS_FOLDER.mkdirs();
+            File classFolder = new File(CLASS_FOLDER.getAbsolutePath()  + File.separator + seedFileName);
+            if(!classFolder.exists()) {
+                classFolder.mkdirs();
             }
-            Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, CLASS_FOLDER.getAbsolutePath());
+            Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
             String reportPath = REPORT_FOLDER.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
             if(DEBUG) {
                 System.out.println("Report: " + reportPath);
@@ -40,7 +41,7 @@ public class FindSecBugs_InvokeThread implements Runnable {
             String[] invokeCommands = new String[3];
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
-            invokeCommands[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + CLASS_FOLDER.getAbsolutePath();
+            invokeCommands[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + classFolder.getAbsolutePath();
             Invoker.invokeCommandsByZT(invokeCommands);
         }
     }

@@ -40,3 +40,18 @@ public class HardCodeSample {
         v.secretKey(pass);
     }
 }
+
+class Vault {
+
+    public void setPassword(String a) {
+    }
+
+    public void setParola(String b) {
+    }
+
+    public void setMotDePasse(String c) {
+    }
+
+    public void secretKey(String a) {
+    }
+}

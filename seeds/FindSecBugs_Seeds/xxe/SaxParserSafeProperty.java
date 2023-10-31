@@ -1,6 +1,5 @@
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import testcode.xxe.util.PrintHandler;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
@@ -56,5 +55,19 @@ public class SaxParserSafeProperty {
         safeIgnoredDtdDisable(); //Throw SAXParseException: DOCTYPE is disallowed when the feature [...]
         //safeSecureProcessing();
         //safeManualConfiguration();
+    }
+}
+
+class PrintHandler extends DefaultHandler {
+    public void startElement(String uri, String localName, String qName, Attributes attributes)
+            throws SAXException {
+        System.out.println("Node = " + qName);
+    }
+
+    public void characters(char ch[], int start, int length)
+            throws SAXException {
+
+        System.out.println("New content received");
+        System.out.println(new String(ch).substring(start, start + length));
     }
 }

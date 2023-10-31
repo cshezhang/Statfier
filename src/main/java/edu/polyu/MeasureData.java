@@ -1,5 +1,6 @@
 package edu.polyu;
 
+import edu.polyu.util.Invoker;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -7,9 +8,20 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.util.Utility;
 
+import java.io.File;
 import java.util.List;
 
+import static edu.polyu.util.Utility.CLASS_FOLDER;
+import static edu.polyu.util.Utility.DEBUG;
+import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
+import static edu.polyu.util.Utility.FINDSECBUGS_SEED_PATH;
+import static edu.polyu.util.Utility.REPORT_FOLDER;
+import static edu.polyu.util.Utility.SEED_PATH;
+import static edu.polyu.util.Utility.findSecBugsJarList;
+import static edu.polyu.util.Utility.findSecBugsJarStr;
+import static edu.polyu.util.Utility.getDirectFilenamesFromFolder;
 import static edu.polyu.util.Utility.readFileByLine;
+import static edu.polyu.util.Utility.sep;
 
 /**
  * Description:
@@ -88,8 +100,51 @@ public class MeasureData {
         System.out.println("Path: " + maxpath);
     }
 
+    // Evaluate the successful compilation ratio of FindSecBugs
+    public static void evaluateCompilationSuccessRatio() {
+        int succ = 0, fail = 0;
+        findSecBugsJarStr.append(".:");
+        for (int i = findSecBugsJarList.size() - 1; i >= 1; i--) {
+            findSecBugsJarStr.append(findSecBugsJarList.get(i) + ":");
+        }
+        findSecBugsJarStr.append(findSecBugsJarList.get(0));
+        System.out.println("FindSecBugs Depdency: " + findSecBugsJarStr);
+        List<String> subSeedFolderNameList = getDirectFilenamesFromFolder(FINDSECBUGS_SEED_PATH, false);
+        for(int i = 0; i < subSeedFolderNameList.size(); i++) {
+            System.out.println("Process: " + i);
+            String subSeedFolderName = subSeedFolderNameList.get(i);
+            String subSeedFolderPath = FINDSECBUGS_SEED_PATH + sep + subSeedFolderName;
+            List<String> seedFileNamesWithSuffix = Utility.getFilenamesFromFolder(subSeedFolderPath, false);
+            for(String seedFileNameWithSuffix : seedFileNamesWithSuffix) {
+                String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
+                // seedFileName is used to specify class folder name
+                File classFolder = new File(CLASS_FOLDER.getAbsolutePath()  + sep + seedFileName);
+                if(!classFolder.exists()) {
+                    classFolder.mkdirs();
+                }
+                boolean isCompiled = Invoker.compileJavaSourceFile(subSeedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
+                if(isCompiled) {
+                    succ++;
+                } else {
+                    fail++;
+                }
+//                String reportPath = REPORT_FOLDER.getAbsolutePath()  + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
+//                if(DEBUG) {
+//                    System.out.println("Report: " + reportPath);
+//                }
+//                String[] invokeCommands = new String[3];
+//                invokeCommands[0] = "/bin/bash";
+//                invokeCommands[1] = "-c";
+//                invokeCommands[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + classFolder.getAbsolutePath();
+//                Invoker.invokeCommandsByZT(invokeCommands);
+            }
+        }
+        System.out.println("Succ: " + succ + " Fail: " + fail);
+    }
+
     public static void main(String[] args) {
-        evaluateProgramElements("/Users/austin/projects/Statfier/seeds");
+//        evaluateProgramElements("/Users/austin/projects/Statfier/seeds");
+        evaluateCompilationSuccessRatio();
     }
 
 }

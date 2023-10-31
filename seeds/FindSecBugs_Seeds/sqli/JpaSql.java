@@ -1,10 +1,9 @@
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-
-
+import javax.persistence.Id;
+import javax.persistence.Entity;
 
 public class JpaSql {
-
 
     EntityManager em;
 
@@ -57,5 +56,28 @@ public class JpaSql {
         em.createNativeQuery(sql);
         em.createNativeQuery(sql,"testcode.sqli.UserEntity");
         em.createNativeQuery(sql, UserEntity.class);
+    }
+}
+
+@Entity
+class UserEntity {
+    @Id
+    private Long id;
+    private String test;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

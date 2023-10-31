@@ -1,5 +1,4 @@
 import org.apache.commons.codec.digest.DigestUtils;
-import testcode.util.HexUtil;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -70,4 +69,15 @@ public class WeakMessageDigest {
         System.out.println(HexUtil.toString(bytes));
     }
 
+}
+
+class HexUtil {
+
+    public static String toString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+        return sb.toString();
+    }
 }

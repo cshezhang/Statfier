@@ -1,5 +1,3 @@
-import testcode.util.HexUtil;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -50,5 +48,16 @@ public class CustomMessageDigest extends MessageDigest {
 
     private static void printHex(byte[] bytes) {
         System.out.println(HexUtil.toString(bytes));
+    }
+}
+
+class HexUtil {
+
+    public static String toString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+        return sb.toString();
     }
 }

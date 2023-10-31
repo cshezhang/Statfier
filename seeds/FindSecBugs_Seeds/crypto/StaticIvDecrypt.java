@@ -1,5 +1,3 @@
-import testcode.util.HexUtil;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -20,5 +18,16 @@ public class StaticIvDecrypt {
 
         byte[] data = cipher.doFinal();
         System.out.println(HexUtil.toString(data));
+    }
+}
+
+class HexUtil {
+
+    public static String toString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+        return sb.toString();
     }
 }

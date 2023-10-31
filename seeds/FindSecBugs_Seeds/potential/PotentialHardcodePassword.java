@@ -1,5 +1,4 @@
 import com.google.common.base.Optional;
-import testcode.password.customapi.Vault;
 
 import java.util.HashMap;
 import java.util.Properties;
@@ -30,4 +29,19 @@ public class PotentialHardcodePassword {
         v.setPassword(System.getProperty("password","4444444"));
     }
 
+}
+
+class Vault {
+
+    public void setPassword(String a) {
+    }
+
+    public void setParola(String b) {
+    }
+
+    public void setMotDePasse(String c) {
+    }
+
+    public void secretKey(String a) {
+    }
 }

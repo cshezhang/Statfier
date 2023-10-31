@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import javax.servlet.http.Cookie;
+
 public class BenchmarkTest00051 extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -45,3 +47,39 @@ public class BenchmarkTest00051 extends HttpServlet {
         }
     }
 }
+
+class SeparateClassRequest {
+    private HttpServletRequest request;
+
+
+    public SeparateClassRequest( HttpServletRequest request ) {
+        this.request = request;
+    }
+
+    public String getTheParameter(String p) {
+        return request.getParameter(p);
+    }
+
+    public String getTheCookie(String c) {
+        Cookie[] cookies = request.getCookies();
+
+        String value = "";
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(c)) {
+                    value = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        return value;
+    }
+
+    // This method is a 'safe' source.
+    public String getTheValue(String p) {
+        return "bar";
+    }
+}
+

@@ -1,7 +1,8 @@
-import testcode.sqli.UserEntity;
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+
+import javax.persistence.Id;
+import javax.persistence.Entity;
 
 public abstract class MethodUnknownSource {
 
@@ -29,4 +30,27 @@ public abstract class MethodUnknownSource {
 
     public abstract String unknownSource();
     public abstract String unknownEncoder(String value);
+}
+
+@Entity
+class UserEntity {
+    @Id
+    private Long id;
+    private String test;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

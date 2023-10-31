@@ -1,6 +1,7 @@
-import testcode.sqli.UserEntity;
-
 import javax.persistence.EntityManager;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 public class StringBuilderFalsePositive {
 
@@ -73,5 +74,28 @@ public class StringBuilderFalsePositive {
                 .setParameter("usernameParam", username)
                 .getSingleResult();
 
+    }
+}
+
+@Entity
+class UserEntity {
+    @Id
+    private Long id;
+    private String test;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

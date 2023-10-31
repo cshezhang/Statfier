@@ -1,7 +1,8 @@
 import org.apache.commons.io.input.ClassLoaderObjectInputStream;
-import testcode.sqli.UserEntity;
-
 import java.io.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 public class ObjectDeserialization {
 
@@ -24,5 +25,28 @@ public class ObjectDeserialization {
         finally {
             in.close();
         }
+    }
+}
+
+@Entity
+class UserEntity {
+    @Id
+    private Long id;
+    private String test;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

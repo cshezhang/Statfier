@@ -2,6 +2,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
+import javax.persistence.Entity;
 
 @Controller
 public class SpringEntityLeakController {
@@ -45,4 +46,38 @@ public class SpringEntityLeakController {
 	private List<SampleEntity> getData() { //FP (No request mapping annotation)
 	    return null;
     }
+}
+
+@Entity
+class SampleEntity {
+	private String test;
+
+	public SampleEntity(String test) {
+		this.test = test;
+	}
+
+	public String getTest() {
+		return test;
+	}
+
+	public void setTest(String test) {
+		this.test = test;
+	}
+}
+
+class SampleEntityTwo extends SampleEntity{
+	private String test;
+
+	public SampleEntityTwo(String test) {
+		super(test);
+		this.test = test;
+	}
+
+	public String getTest() {
+		return test;
+	}
+
+	public void setTest(String test) {
+		this.test = test;
+	}
 }

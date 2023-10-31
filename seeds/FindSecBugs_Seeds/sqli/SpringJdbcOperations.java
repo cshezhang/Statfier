@@ -3,6 +3,8 @@ import org.springframework.jdbc.core.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * Main interface of Spring JDBC
@@ -196,5 +198,28 @@ public class SpringJdbcOperations {
         public void processRow(ResultSet rs) throws SQLException {
 
         }
+    }
+}
+
+@Entity
+class UserEntity {
+    @Id
+    private Long id;
+    private String test;
+
+    public String getTest() {
+        return test;
+    }
+
+    public void setTest(String test) {
+        this.test = test;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

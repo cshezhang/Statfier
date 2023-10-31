@@ -36,6 +36,11 @@ public class MethodInvokeTypeProvider implements TypeProvider {
         Method method = ReflectionUtils.findMethod(this.provider.getType().getClass(), this.methodName);
         this.result = ReflectionUtils.invokeMethod(method, this.provider.getType());
     }
-
-
 }
+
+interface TypeProvider extends Serializable {
+    Type getType();
+
+    Object getSource();
+}
+
