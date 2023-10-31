@@ -1,5 +1,3 @@
-package testcode.command;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 public class MoreMethods implements InterfaceWithSink {

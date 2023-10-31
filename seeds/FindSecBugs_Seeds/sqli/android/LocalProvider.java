@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-package testcode.sqli.android;
 
 import android.content.UriMatcher;
 import android.content.*;

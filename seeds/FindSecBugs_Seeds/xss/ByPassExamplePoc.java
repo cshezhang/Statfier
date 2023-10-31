@@ -1,5 +1,3 @@
-package testcode.xss;
-
 import java.util.regex.Pattern;
 
 /**

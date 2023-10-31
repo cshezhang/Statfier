@@ -1,5 +1,3 @@
-package testcode.password;
-
 import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.net.PasswordAuthentication;

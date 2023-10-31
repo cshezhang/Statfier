@@ -1,5 +1,3 @@
-package testcode.android;
-
 /**
  * Dummy R generated class. The idea is just to produce "realistic" code sample.
  */

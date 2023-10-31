@@ -1,5 +1,3 @@
-package testcode.pages;
-
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.corelib.components.Form;

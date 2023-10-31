@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.InetAddress;

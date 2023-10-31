@@ -1,5 +1,3 @@
-package testcode.logging;
-
 public class SensitiveLogging {
 
     public void log4j() {

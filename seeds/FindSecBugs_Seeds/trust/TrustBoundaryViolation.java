@@ -1,5 +1,3 @@
-package testcode.trust;
-
 import javax.servlet.http.HttpServletRequest;
 
 public class TrustBoundaryViolation {

@@ -1,5 +1,3 @@
-package testcode.password.customapi;
-
 public class Vault {
 
     public void setPassword(String a) {

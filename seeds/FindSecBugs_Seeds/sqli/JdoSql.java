@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import javax.jdo.Extent;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;

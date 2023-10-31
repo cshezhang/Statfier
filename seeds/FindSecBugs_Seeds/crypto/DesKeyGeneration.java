@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import javax.crypto.KeyGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;

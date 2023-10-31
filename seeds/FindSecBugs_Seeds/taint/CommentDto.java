@@ -1,5 +1,3 @@
-package testcode.taint;
-
 public class CommentDto {
     private String user;
     private String email;

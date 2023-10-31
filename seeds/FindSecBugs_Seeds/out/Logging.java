@@ -1,5 +1,3 @@
-package testcode;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;

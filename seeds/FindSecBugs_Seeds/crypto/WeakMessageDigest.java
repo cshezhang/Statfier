@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import testcode.util.HexUtil;
 

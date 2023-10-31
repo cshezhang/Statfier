@@ -1,5 +1,3 @@
-package testcode.script.ognl;
-
 import com.opensymphony.xwork2.util.OgnlTextParser;
 import com.opensymphony.xwork2.util.TextParseUtil;
 import com.opensymphony.xwork2.util.TextParser;

@@ -1,5 +1,3 @@
-package testcode.crypto.ssldisabler;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 

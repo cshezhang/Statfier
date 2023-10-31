@@ -1,5 +1,3 @@
-package testcode.xpath;
-
 import org.apache.xpath.XPath;
 import org.apache.xpath.XPathAPI;
 import org.w3c.dom.Document;

@@ -1,5 +1,3 @@
-package testcode.password.customapi;
-
 public class HardCodeSample {
 
     public void hardcode1() {

@@ -1,5 +1,3 @@
-package testcode.script;
-
 import org.jboss.seam.log.Log;
 
 public class SeamLogging {

@@ -1,5 +1,3 @@
-package testcode.sqli.turbine;
-
 import org.apache.torque.util.BasePeer;
 
 public class TorqueSql {

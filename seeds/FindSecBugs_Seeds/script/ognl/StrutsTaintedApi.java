@@ -1,5 +1,3 @@
-package testcode.script.ognl;
-
 import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.dispatcher.HttpParameters;
 

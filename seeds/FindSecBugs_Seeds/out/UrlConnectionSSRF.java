@@ -1,5 +1,3 @@
-package testcode;
-
 import java.io.IOException;
 import java.net.*;
 

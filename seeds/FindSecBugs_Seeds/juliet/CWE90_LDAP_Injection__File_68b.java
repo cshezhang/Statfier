@@ -1,5 +1,3 @@
-package testcode.juliet;
-
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;

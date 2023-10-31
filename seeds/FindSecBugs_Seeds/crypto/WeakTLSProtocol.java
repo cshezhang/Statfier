@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.http.client.HttpClient;

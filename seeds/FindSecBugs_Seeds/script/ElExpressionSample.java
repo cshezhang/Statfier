@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
-package testcode.script;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;

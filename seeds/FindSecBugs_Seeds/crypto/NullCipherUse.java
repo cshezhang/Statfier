@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyException;

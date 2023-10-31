@@ -1,5 +1,3 @@
-package testcode.sqli.android;
-
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;

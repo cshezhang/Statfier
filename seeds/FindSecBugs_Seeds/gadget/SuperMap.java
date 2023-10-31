@@ -1,5 +1,3 @@
-package testcode.gadget;
-
 import testcode.gadget.cachedata.CacheData;
 
 import java.util.HashMap;

@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 

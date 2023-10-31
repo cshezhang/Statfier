@@ -1,5 +1,3 @@
-package testcode.util;
-
 public class HexUtil {
 
     public static String toString(byte[] bytes) {

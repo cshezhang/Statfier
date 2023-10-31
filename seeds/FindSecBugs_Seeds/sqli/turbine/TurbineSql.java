@@ -1,5 +1,3 @@
-package testcode.sqli.turbine;
-
 import org.apache.turbine.om.peer.BasePeer;
 import org.apache.turbine.om.security.peer.GroupPeer;
 

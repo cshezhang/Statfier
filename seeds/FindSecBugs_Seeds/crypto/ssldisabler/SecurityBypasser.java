@@ -1,5 +1,3 @@
-package testcode.crypto.ssldisabler;
-
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;

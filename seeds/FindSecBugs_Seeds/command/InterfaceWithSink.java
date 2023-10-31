@@ -1,5 +1,3 @@
-package testcode.command;
-
 import java.io.IOException;
 
 public interface InterfaceWithSink {

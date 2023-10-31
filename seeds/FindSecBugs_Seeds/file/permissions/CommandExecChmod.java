@@ -1,5 +1,3 @@
-package testcode.file.permissions;
-
 import java.io.IOException;
 
 public class CommandExecChmod {

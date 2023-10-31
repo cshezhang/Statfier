@@ -47,12 +47,6 @@ public abstract class Transform {
         if (DEBUG) {
             transforms.add(LoopConversion1.getInstance());
             transforms.add(LoopConversion2.getInstance());
-            if(INFER_MUTATION || SONARQUBE_MUTATION) {
-                // related to inter-procedural analysis
-                transforms.add(AddMethodCallToLiteral.getInstance());
-                transforms.add(TransferLocalVarToGlobal.getInstance());
-                transforms.add(TransferLocalVarToStaticGlobal.getInstance());
-            }
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
             transforms.add(CFWrapperWithForTrue1.getInstance());
@@ -90,9 +84,7 @@ public abstract class Transform {
             transforms.add(AnonymousClassWrapper.getInstance());
             transforms.add(CFWrapperWithDoWhile.getInstance());
             transforms.add(CFWrapperWithForTrue1.getInstance());
-            if(!SPOTBUGS_MUTATION) {
-                transforms.add(CFWrapperWithForTrue2.getInstance());
-            }
+            transforms.add(CFWrapperWithForTrue2.getInstance());
             transforms.add(CFWrapperWithIfTrue.getInstance());
             transforms.add(CFWrapperWithWhileTrue.getInstance());
             transforms.add(EnumClassWrapper.getInstance());

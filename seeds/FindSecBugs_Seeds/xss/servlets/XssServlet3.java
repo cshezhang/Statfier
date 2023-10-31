@@ -1,5 +1,3 @@
-package testcode.xss.servlets;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.owasp.esapi.ESAPI;
 

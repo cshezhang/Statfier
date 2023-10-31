@@ -1,5 +1,3 @@
-package testcode.command;
-
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.codecs.WindowsCodec;
 

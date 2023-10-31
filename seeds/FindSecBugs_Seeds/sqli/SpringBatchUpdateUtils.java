@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import org.springframework.jdbc.core.BatchUpdateUtils;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterBatchUpdateUtils;

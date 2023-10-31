@@ -1,5 +1,3 @@
-package testcode.spring;
-
 import javax.persistence.Entity;
 
 @Entity

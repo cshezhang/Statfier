@@ -1,5 +1,3 @@
-package testcode.permission;
-
 import java.lang.reflect.ReflectPermission;
 import java.security.CodeSource;
 import java.security.PermissionCollection;

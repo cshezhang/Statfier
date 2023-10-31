@@ -1,5 +1,3 @@
-package testcode.bugs;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;

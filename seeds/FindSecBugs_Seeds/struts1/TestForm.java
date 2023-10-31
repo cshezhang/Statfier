@@ -1,5 +1,3 @@
-package testcode.struts1;
-
 import org.apache.struts.action.ActionForm;
 
 public class TestForm extends ActionForm {

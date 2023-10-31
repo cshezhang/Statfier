@@ -1,5 +1,3 @@
-package testcode.password;
-
 public abstract class EqualsPasswordField {
 
     public boolean hardcodedLogin1(String username, String password) {

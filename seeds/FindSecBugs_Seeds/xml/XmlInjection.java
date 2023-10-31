@@ -1,5 +1,3 @@
-package testcode.xml;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.owasp.encoder.Encode;
 

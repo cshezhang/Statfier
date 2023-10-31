@@ -1,5 +1,3 @@
-package testcode.unicode;
-
 import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 

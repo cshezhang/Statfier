@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 

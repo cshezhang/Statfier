@@ -1,5 +1,3 @@
-package testcode.xxe.validator;
-
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;

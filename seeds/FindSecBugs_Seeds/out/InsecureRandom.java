@@ -1,5 +1,3 @@
-package testcode;
-
 import org.apache.commons.lang.math.JVMRandom;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang.RandomStringUtils;

@@ -1,5 +1,3 @@
-package testcode.graph;
-
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 

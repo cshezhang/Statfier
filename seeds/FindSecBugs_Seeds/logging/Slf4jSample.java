@@ -1,5 +1,3 @@
-package testcode.logging;
-
 import org.slf4j.Logger;
 
 public class Slf4jSample {

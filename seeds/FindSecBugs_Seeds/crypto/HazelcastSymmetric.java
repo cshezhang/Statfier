@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.NetworkConfig;

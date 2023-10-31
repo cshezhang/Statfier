@@ -1,5 +1,3 @@
-package testcode.serial.spring;
-
 import java.io.Serializable;
 import java.lang.reflect.Type;
 

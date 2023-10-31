@@ -1,6 +1,3 @@
-package testcode.xxe.xpathexpression;
-
-
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;

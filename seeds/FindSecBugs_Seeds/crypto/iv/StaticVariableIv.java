@@ -1,5 +1,3 @@
-package testcode.crypto.iv;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import testcode.util.HexUtil;
 

@@ -1,5 +1,3 @@
-package testcode;
-
 import static org.apache.commons.io.FilenameUtils.*;
 
 import java.io.File;

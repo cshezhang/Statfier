@@ -45,7 +45,7 @@ public class FindSecBugs_Report implements Report {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append("SpotBugs Report: " + this.filePath + "\n");
+        str.append("FindSecBugs Report: " + this.filePath + "\n");
         for(int i = 0; i < violations.size(); i++) {
             str.append(violations.get(i) + "\n");
         }
@@ -56,7 +56,7 @@ public class FindSecBugs_Report implements Report {
     // seedFolderPath is the absolute path
     public static void readFindSecBugsResultFile(String seedFolderPath, String reportPath) {
         if (DEBUG) {
-            System.out.println("SpotBugs Detection Result FileName: " + reportPath);
+            System.out.println("FindSecBugs Detection Result FileName: " + reportPath);
         }
         File reportFile = new File(reportPath);
         if(!reportFile.exists() || reportFile.length() == 0) {
@@ -103,7 +103,7 @@ public class FindSecBugs_Report implements Report {
 
     public static void readSingleFindSecBugsResultFile(File seedFile, String reportPath) {
         if (DEBUG) {
-            System.out.println("SpotBugs Detection Result FileName: " + reportPath);
+            System.out.println("FindSecBugs Detection Result FileName: " + reportPath);
         }
         File reportFile = new File(reportPath);
         if(!reportFile.exists() || reportFile.length() == 0) {

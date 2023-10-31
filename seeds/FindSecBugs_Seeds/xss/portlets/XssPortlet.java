@@ -1,5 +1,3 @@
-package testcode.xss.portlets;
-
 import javax.portlet.GenericPortlet;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;

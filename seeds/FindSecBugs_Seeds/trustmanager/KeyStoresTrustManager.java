@@ -1,5 +1,3 @@
-package testcode.trustmanager;
-
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;

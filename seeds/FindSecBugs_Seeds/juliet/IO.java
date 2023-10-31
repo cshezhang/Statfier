@@ -1,5 +1,3 @@
-package testcode.juliet;
-
 import java.util.logging.Logger;
 
 public class IO {

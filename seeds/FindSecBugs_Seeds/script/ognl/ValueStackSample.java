@@ -1,5 +1,3 @@
-package testcode.script.ognl;
-
 import com.opensymphony.xwork2.util.ValueStack;
 
 public class ValueStackSample {

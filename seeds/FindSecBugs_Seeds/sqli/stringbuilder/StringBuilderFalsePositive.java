@@ -1,5 +1,3 @@
-package testcode.sqli.stringbuilder;
-
 import testcode.sqli.UserEntity;
 
 import javax.persistence.EntityManager;

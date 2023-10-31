@@ -1,5 +1,3 @@
-package testcode.xss.encoder;
-
 import org.apache.commons.lang.StringEscapeUtils;
 
 import javax.servlet.ServletException;

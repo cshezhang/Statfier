@@ -1,5 +1,3 @@
-package testcode.gadget;
-
 import testcode.gadget.cachedata.SpecialCacheData;
 
 public class MaliciousPayload {

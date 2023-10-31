@@ -1,5 +1,3 @@
-package testcode.xsl;
-
 import org.apache.commons.io.IOUtils;
 
 import javax.xml.transform.*;

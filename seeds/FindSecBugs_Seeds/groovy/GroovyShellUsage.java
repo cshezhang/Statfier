@@ -1,5 +1,3 @@
-package testcode.groovy;
-
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
 import groovy.lang.GroovyShell;

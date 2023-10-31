@@ -1,5 +1,3 @@
-package testcode.xpath;
-
 import org.apache.xml.security.utils.JDKXPathAPI;
 import org.apache.xml.security.utils.XPathAPI;
 import org.apache.xml.security.utils.XalanXPathAPI;

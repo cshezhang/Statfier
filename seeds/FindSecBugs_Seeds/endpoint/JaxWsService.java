@@ -1,5 +1,3 @@
-package testcode.endpoint;
-
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 

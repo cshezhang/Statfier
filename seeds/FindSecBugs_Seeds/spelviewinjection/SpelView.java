@@ -1,5 +1,3 @@
-package testcode.spelviewinjection;
-
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

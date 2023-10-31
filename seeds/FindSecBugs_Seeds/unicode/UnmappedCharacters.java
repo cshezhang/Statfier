@@ -1,5 +1,3 @@
-package testcode.unicode;
-
 import org.apache.commons.codec.Charsets;
 
 import java.nio.ByteBuffer;

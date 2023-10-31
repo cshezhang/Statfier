@@ -1,5 +1,3 @@
-package testcode;
-
 import javax.validation.constraints.Pattern;
 
 public class RedosInPatternAnnotation {

@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.crypto.CipherText;
 import org.owasp.esapi.crypto.PlainText;

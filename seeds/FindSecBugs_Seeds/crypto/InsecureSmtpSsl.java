@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.commons.mail.MultiPartEmail;

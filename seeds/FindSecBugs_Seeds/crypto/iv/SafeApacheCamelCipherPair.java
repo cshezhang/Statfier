@@ -1,7 +1,3 @@
-package testcode.crypto.iv;
-
-
-
 import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.security.SecureRandom;

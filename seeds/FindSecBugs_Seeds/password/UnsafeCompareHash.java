@@ -1,5 +1,3 @@
-package testcode.password;
-
 import java.security.MessageDigest;
 import java.util.Arrays;
 

@@ -1,5 +1,3 @@
-package testcode.xss.servlets;
-
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.ServletException;

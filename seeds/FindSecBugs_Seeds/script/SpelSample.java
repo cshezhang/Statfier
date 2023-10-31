@@ -1,6 +1,3 @@
-package testcode.script;
-
-
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.common.TemplateAwareExpressionParser;

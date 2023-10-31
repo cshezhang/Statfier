@@ -1,5 +1,3 @@
-package testcode.xxe.transformerfactory;
-
 import javax.xml.XMLConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.Source;

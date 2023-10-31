@@ -1,5 +1,3 @@
-package testcode.serial.groovy;
-
 import groovy.lang.Closure;
 import org.codehaus.groovy.runtime.ConversionHandler;
 

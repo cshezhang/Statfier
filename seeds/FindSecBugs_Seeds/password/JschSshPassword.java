@@ -1,5 +1,3 @@
-package testcode.password;
-
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 

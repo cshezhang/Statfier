@@ -1,5 +1,3 @@
-package testcode.cookie;
-
 import javax.servlet.http.Cookie;
 
 /**

@@ -1,5 +1,3 @@
-package testcode.endpoint;
-
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

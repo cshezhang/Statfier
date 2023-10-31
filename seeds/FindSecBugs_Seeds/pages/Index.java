@@ -1,5 +1,3 @@
-package testcode.pages;
-
 /**
  * Tapestry support plain POJO.
  */

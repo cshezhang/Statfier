@@ -1,5 +1,3 @@
-package testcode.xss;
-
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

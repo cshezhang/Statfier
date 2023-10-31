@@ -1,5 +1,3 @@
-package testcode.endpoint;
-
 import javax.ws.rs.Path;
 
 @Path("/test")

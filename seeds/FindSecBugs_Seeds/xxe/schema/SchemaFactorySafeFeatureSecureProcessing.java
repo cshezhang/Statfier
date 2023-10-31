@@ -1,5 +1,3 @@
-package testcode.xxe.schema;
-
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;

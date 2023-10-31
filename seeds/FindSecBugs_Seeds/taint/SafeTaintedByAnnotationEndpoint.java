@@ -1,5 +1,3 @@
-package testcode.taint;
-
 import org.hibernate.SessionFactory;
 import org.jboss.seam.log.Log;
 import org.springframework.beans.factory.annotation.Autowired;

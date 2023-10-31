@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import javax.crypto.Cipher;
 
 public class CipherNoIntegrity {

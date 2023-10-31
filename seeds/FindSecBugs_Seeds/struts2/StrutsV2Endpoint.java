@@ -1,5 +1,3 @@
-package testcode.struts2;
-
 import java.util.logging.Logger;
 
 /**

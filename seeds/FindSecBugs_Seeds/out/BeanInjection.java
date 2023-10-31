@@ -1,5 +1,3 @@
-package testcode;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import java.util.HashMap;

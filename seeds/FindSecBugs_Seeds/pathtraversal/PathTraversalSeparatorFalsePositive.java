@@ -1,5 +1,3 @@
-package testcode.pathtraversal;
-
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;

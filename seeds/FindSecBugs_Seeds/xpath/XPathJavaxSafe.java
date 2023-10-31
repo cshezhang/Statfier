@@ -1,5 +1,3 @@
-package testcode.xpath;
-
 import org.owasp.esapi.ESAPI;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;

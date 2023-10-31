@@ -1,5 +1,3 @@
-package testcode.template;
-
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.VelocityContext;
 

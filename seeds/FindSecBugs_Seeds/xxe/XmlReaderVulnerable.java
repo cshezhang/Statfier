@@ -1,5 +1,3 @@
-package testcode.xxe;
-
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;

@@ -1,5 +1,3 @@
-package testcode.googlemaps;
-
 /**
  * Source: http://stackoverflow.com/a/4265472/89769
  *

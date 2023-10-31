@@ -1,5 +1,3 @@
-package testcode;
-
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -57,10 +57,7 @@ public class FindSecBugs_TransformThread implements Runnable {
                     invokeCmds[0] = "/bin/bash";
                     invokeCmds[1] = "-c";
                 }
-                invokeCmds[2] = FINDSECBUGS_PATH + " -textui"
-//                            + " -include " + configPath
-                        + " -xml:withMessages" + " -output " + reportPath + " "
-                        + CLASS_FOLDER.getAbsolutePath();
+                invokeCmds[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + CLASS_FOLDER.getAbsolutePath();
                 boolean hasExec = Invoker.invokeCommandsByZT(invokeCmds);
                 if (hasExec) {
                     String report_path = REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";

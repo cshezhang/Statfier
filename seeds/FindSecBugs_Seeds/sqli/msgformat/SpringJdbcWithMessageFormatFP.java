@@ -1,5 +1,3 @@
-package testcode.sqli.msgformat;
-
 import java.text.MessageFormat;
 import org.springframework.jdbc.core.JdbcTemplate;
 

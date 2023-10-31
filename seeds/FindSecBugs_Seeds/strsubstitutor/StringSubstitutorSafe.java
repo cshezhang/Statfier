@@ -1,5 +1,3 @@
-package testcode.strsubstitutor;
-
 import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

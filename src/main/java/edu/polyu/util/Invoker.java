@@ -88,13 +88,15 @@ public class Invoker {
             }
             if(Utility.SPOTBUGS_MUTATION && exitValue != 0) {
                 failedCommands.add(argStr.toString());
+                System.out.println("Invoke SpotBugs Error Value: " + exitValue);
+                System.out.println(argStr);
+                System.out.println("Error Msg: " + new String(errorStream.toByteArray()));
                 return false;
             }
             if(Utility.INFER_MUTATION && exitValue != 0) {
                 System.out.println("Invoke Infer Error Value: " + exitValue);
                 System.out.println(argStr);
                 System.out.println("Error Msg: " + new String(errorStream.toByteArray()));
-                System.exit(-1);
                 return false;
             }
             if(Utility.SONARQUBE_MUTATION && exitValue != 0) {
@@ -102,6 +104,13 @@ public class Invoker {
                 System.err.println(argStr);
                 System.err.println("Error Msg: " + new String(errorStream.toByteArray()));
                 System.exit(-1);
+                return false;
+            }
+            if(Utility.FINDSECBUGS_MUTATION && exitValue != 0) {
+                failedCommands.add(argStr.toString());
+                System.out.println("Invoke FindSecBugs Error Value: " + exitValue);
+                System.out.println(argStr);
+                System.out.println("Error Msg: " + new String(errorStream.toByteArray()));
                 return false;
             }
         } catch (Exception e) {
@@ -168,11 +177,14 @@ public class Invoker {
         cmd_list.add("-d");
         cmd_list.add(classFileFolder);  // Generated class files are saved in this folder.
         cmd_list.add("-cp");
-        if (Utility.SPOTBUGS_MUTATION || Utility.FINDSECBUGS_MUTATION) {
+        if (Utility.SPOTBUGS_MUTATION) {
             cmd_list.add(Utility.spotBugsJarStr.toString());
         }
         if(Utility.INFER_MUTATION) {
             cmd_list.add(Utility.inferJarStr.toString());
+        }
+        if(Utility.FINDSECBUGS_MUTATION) {
+            cmd_list.add(Utility.findSecBugsJarStr.toString());
         }
         cmd_list.add(srcFolderPath  + File.separator + fileName + ".java");
         boolean tag = invokeCommandsByZT(cmd_list.toArray(new String[cmd_list.size()]));

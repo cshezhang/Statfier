@@ -1,5 +1,3 @@
-package testcode.serial;
-
 import org.bouncycastle.asn1.ASN1InputStream;
 
 import java.io.IOException;

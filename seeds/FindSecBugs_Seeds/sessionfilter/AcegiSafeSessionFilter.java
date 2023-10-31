@@ -1,5 +1,3 @@
-package testcode.sessionfilter;
-
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.HttpSessionContextIntegrationFilter;
 import org.acegisecurity.context.SecurityContext;

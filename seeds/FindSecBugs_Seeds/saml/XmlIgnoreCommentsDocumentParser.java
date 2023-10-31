@@ -1,6 +1,3 @@
-package testcode.saml;
-
-
 import java.io.*;
 import java.util.Arrays;
 

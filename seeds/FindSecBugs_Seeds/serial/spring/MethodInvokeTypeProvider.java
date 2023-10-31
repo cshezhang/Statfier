@@ -1,5 +1,3 @@
-package testcode.serial.spring;
-
 import org.springframework.util.ReflectionUtils;
 
 import java.io.IOException;

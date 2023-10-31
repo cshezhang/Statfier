@@ -1,5 +1,3 @@
-package testcode.sqli.android;
-
 public class AndroidContentProviderUsage {
 
     public void detect(LocalProvider localProvider, String input) {

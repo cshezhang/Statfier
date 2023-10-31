@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import java.security.*;
 import java.security.spec.RSAKeyGenParameterSpec;
 

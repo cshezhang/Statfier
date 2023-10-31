@@ -1,5 +1,3 @@
-package testcode.permission;
-
 import java.security.CodeSource;
 import java.security.PermissionCollection;
 import java.security.SecureClassLoader;

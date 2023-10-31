@@ -1,5 +1,3 @@
-package testcode;
-
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;

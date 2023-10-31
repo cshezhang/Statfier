@@ -1,5 +1,3 @@
-package testcode.graph;
-
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

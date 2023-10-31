@@ -1,5 +1,3 @@
-package testcode.oauth;
-
 import io.vertx.ext.auth.oauth2.OAuth2Options;
 
 import java.util.Properties;

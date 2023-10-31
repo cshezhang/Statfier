@@ -1,5 +1,3 @@
-package testcode.modify_validate;
-
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.util.regex.Matcher;

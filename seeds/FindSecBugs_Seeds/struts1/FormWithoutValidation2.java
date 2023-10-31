@@ -1,5 +1,3 @@
-package testcode.struts1;
-
 import org.apache.struts.validator.ValidatorForm;
 
 public class FormWithoutValidation2 extends ValidatorForm {

@@ -1,5 +1,3 @@
-package testcode.template;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;

@@ -1,5 +1,3 @@
-package testcode.spring;
-
 public class SampleEntityTwo extends SampleEntity{
 	private String test;
 

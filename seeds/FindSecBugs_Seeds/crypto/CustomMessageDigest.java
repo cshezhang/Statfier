@@ -1,5 +1,3 @@
-package testcode.crypto;
-
 import testcode.util.HexUtil;
 
 import java.io.ByteArrayOutputStream;

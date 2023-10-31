@@ -1,5 +1,3 @@
-package testcode.ldap;
-
 import com.sun.jndi.ldap.LdapCtx;
 
 import javax.naming.Context;

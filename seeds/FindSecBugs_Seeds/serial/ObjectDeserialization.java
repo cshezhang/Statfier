@@ -1,5 +1,3 @@
-package testcode.serial;
-
 import org.apache.commons.io.input.ClassLoaderObjectInputStream;
 import testcode.sqli.UserEntity;
 

@@ -1,5 +1,3 @@
-package testcode.file;
-
 import java.io.IOException;
 import org.apache.struts.action.ActionForward;
 import org.springframework.web.servlet.ModelAndView;

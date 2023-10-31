@@ -1,5 +1,3 @@
-package testcode.unicode;
-
 import java.net.IDN;
 import java.net.URI;
 import java.net.URISyntaxException;

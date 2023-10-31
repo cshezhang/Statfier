@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.SqlParameter;
 

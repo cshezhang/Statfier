@@ -1,5 +1,3 @@
-package testcode.bugs;
-
 import java.util.Arrays;
 
 public class OutOfBoundMutableSample {

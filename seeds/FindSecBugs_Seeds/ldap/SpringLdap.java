@@ -1,5 +1,3 @@
-package testcode.ldap;
-
 import org.springframework.ldap.core.DefaultNameClassPairMapper;
 import org.springframework.ldap.core.DirContextProcessor;
 import org.springframework.ldap.core.LdapEntryIdentificationContextMapper;

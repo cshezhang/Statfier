@@ -1,5 +1,3 @@
-package testcode.potential;
-
 import com.google.common.base.Optional;
 import testcode.password.customapi.Vault;
 

@@ -40,9 +40,7 @@ public class FindSecBugs_InvokeThread implements Runnable {
             String[] invokeCommands = new String[3];
             invokeCommands[0] = "/bin/bash";
             invokeCommands[1] = "-c";
-            invokeCommands[2] = FINDSECBUGS_PATH + " -textui"
-                    + " -xml:withMessages" + " -output " + reportPath + " "
-                    + CLASS_FOLDER.getAbsolutePath();
+            invokeCommands[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + CLASS_FOLDER.getAbsolutePath();
             Invoker.invokeCommandsByZT(invokeCommands);
         }
     }

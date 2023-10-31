@@ -244,6 +244,7 @@ public class Schedule {
     }
 
     public static Map<String, String> file2config = new HashMap<>();  // source file -> config index
+
     public void executeCheckStyleTransform(String initSeedFolderPath) {
         invokeCheckStyle(initSeedFolderPath);
         List<String> seedFilePaths = getFilenamesFromFolder(initSeedFolderPath, true);
@@ -471,7 +472,7 @@ public class Schedule {
                     String[] invokeCommands = new String[3];
                     invokeCommands[0] = "/bin/bash";
                     invokeCommands[1] = "-c";
-                    invokeCommands[2] = FINDSECBUGS_PATH + " -xml" + " -output " + reportPath + " " + mutantClassFolder.getAbsolutePath();
+                    invokeCommands[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + mutantClassFolder.getAbsolutePath();
                     boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
                         String report_path = REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";

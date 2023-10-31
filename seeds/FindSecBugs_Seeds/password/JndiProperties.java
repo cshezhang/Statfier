@@ -1,5 +1,3 @@
-package testcode.password;
-
 import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;

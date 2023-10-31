@@ -1,5 +1,3 @@
-package testcode.serial.commonscollections4;
-
 import org.apache.commons.collections4.Transformer;
 
 import java.io.Serializable;

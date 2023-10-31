@@ -1,5 +1,3 @@
-package testcode.potential;
-
 import javax.crypto.Cipher;
 import java.util.Properties;
 

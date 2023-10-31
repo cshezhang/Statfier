@@ -1,5 +1,3 @@
-package testcode.bugs;
-
 public enum SomeEnum {
 
     A("a"),

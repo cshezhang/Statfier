@@ -1,5 +1,3 @@
-package testcode.xxe.xpathexpression;
-
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 

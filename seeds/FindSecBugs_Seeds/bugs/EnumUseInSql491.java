@@ -1,5 +1,3 @@
-package testcode.bugs;
-
 import testcode.sqli.UserEntity;
 
 import javax.persistence.EntityManager;

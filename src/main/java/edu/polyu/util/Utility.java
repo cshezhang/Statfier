@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.json.JSONObject;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -99,7 +100,7 @@ public class Utility {
     public final static boolean CHECKSTYLE_MUTATION = Boolean.parseBoolean(getProperty("CHECKSTYLE_MUTATION"));
     public final static boolean SONARQUBE_MUTATION = Boolean.parseBoolean(getProperty("SONARQUBE_MUTATION"));
     public final static boolean FINDSECBUGS_MUTATION = Boolean.parseBoolean(getProperty("FINDSECBUGS_MUTATION"));
-    public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION) ? true : false;
+    public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION || FINDSECBUGS_MUTATION) ? true : false;
 
     public final static String SONARQUBE_PROJECT_KEY = getProperty("SONARQUBE_PROJECT_KEY");
 
@@ -120,7 +121,7 @@ public class Utility {
     public static final long RANDOM_SEED5 = 1762725600;
     public static int failedT = 0;
     public static int successfulT = 0;
-    public static AtomicInteger mutantCounter = new AtomicInteger(0);
+    public static int mutantCounter = 0; // If only one thread is used, AtomicInteger is not needed.
 
     // seeds
     public final static String PMD_SEED_PATH = getProperty("PMD_SEED_PATH");
@@ -148,9 +149,12 @@ public class Utility {
     public final static String FINDSECBUGS_PATH = getProperty("FINDSECBUGS_PATH");
     public static List<String> spotBugsJarList = getFilenamesFromFolder(toolPath + sep + "SpotBugs_Dependency", true);
     public static List<String> inferJarList = getFilenamesFromFolder(toolPath + sep + "Infer_Dependency", true);
+    public static List<String> findSecBugsJarList = getFilenamesFromFolder(toolPath + sep + "FindSecBugs_Dependency", true);
+
     public static List<String> subSeedFolderNameList;
     public static StringBuilder spotBugsJarStr = new StringBuilder(); // This is used to save dependency jar files for SpotBugs
     public static StringBuilder inferJarStr = new StringBuilder();
+    public static StringBuilder findSecBugsJarStr = new StringBuilder();
 
     public static HashMap<String, List<Integer>> file2row = new HashMap<>(); // String: filename -> List: row numbers of different bugs
     public static HashMap<String, Report> file2report = new HashMap<>();
@@ -171,16 +175,30 @@ public class Utility {
         } else { // Linux, Mac OS
             sp = ":";
         }
+
         spotBugsJarStr.append("." + sp);
         for (int i = spotBugsJarList.size() - 1; i >= 1; i--) {
             spotBugsJarStr.append(spotBugsJarList.get(i) + sp);
         }
         spotBugsJarStr.append(spotBugsJarList.get(0));
+
+
         inferJarStr.append("." + sp);
         for (int i = inferJarList.size() - 1; i >= 1; i--) {
             inferJarStr.append(inferJarList.get(i) + sp);
         }
         inferJarStr.append(inferJarList.get(0));
+
+        findSecBugsJarStr.append("." + sp);
+        for (int i = findSecBugsJarList.size() - 1; i >= 1; i--) {
+            findSecBugsJarStr.append(findSecBugsJarList.get(i) + sp);
+        }
+        findSecBugsJarStr.append(findSecBugsJarList.get(0));
+
+        if(SEED_INDEX < 1 || SEED_INDEX > 5) {
+            System.out.println("Error Seed Index is Provided!");
+            System.exit(-1);
+        }
         if (SEED_INDEX == 1) {
             random.setSeed(RANDOM_SEED1);
         }
@@ -381,6 +399,7 @@ public class Utility {
         return true;
     }
 
+    // Rewrite the source file
     public static boolean writeLinesToFile(String outputPath, List<String> lines) {
         try {
             FileOutputStream fos = new FileOutputStream(outputPath);

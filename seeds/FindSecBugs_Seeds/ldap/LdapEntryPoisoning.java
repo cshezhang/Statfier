@@ -1,5 +1,3 @@
-package testcode.ldap;
-
 import javax.naming.directory.SearchControls;
 
 public class LdapEntryPoisoning {

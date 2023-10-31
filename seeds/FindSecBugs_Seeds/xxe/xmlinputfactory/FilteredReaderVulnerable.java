@@ -1,5 +1,3 @@
-package testcode.xxe.xmlinputfactory;
-
 import javax.xml.stream.EventFilter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;

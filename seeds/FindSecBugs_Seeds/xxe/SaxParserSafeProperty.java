@@ -1,5 +1,3 @@
-package testcode.xxe;
-
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import testcode.xxe.util.PrintHandler;

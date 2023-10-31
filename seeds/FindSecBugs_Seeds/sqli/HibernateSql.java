@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

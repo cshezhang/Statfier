@@ -1,5 +1,3 @@
-package testcode;
-
 import java.util.Formatter;
 import java.util.Locale;
 import java.io.IOException;

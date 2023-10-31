@@ -1,5 +1,3 @@
-package testcode.crypto.iv;
-
 import testcode.util.HexUtil;
 
 import javax.crypto.Cipher;

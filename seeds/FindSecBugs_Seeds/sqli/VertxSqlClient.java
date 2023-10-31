@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import io.vertx.sqlclient.SqlClient;
 import io.vertx.sqlclient.SqlConnection;
 

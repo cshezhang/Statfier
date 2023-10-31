@@ -1,5 +1,3 @@
-package testcode.xmldecoder;
-
 import java.beans.XMLDecoder;
 import java.io.InputStream;
 

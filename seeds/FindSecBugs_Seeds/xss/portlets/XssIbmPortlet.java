@@ -1,5 +1,3 @@
-package testcode.xss.portlets;
-
 import org.apache.jetspeed.portlet.PortletAdapter;
 import org.apache.jetspeed.portlet.PortletConfig;
 import org.apache.jetspeed.portlet.PortletException;

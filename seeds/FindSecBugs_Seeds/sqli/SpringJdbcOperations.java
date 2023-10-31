@@ -1,5 +1,3 @@
-package testcode.sqli;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.*;
 

@@ -1,5 +1,3 @@
-package testcode.gadget.cachedata;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 

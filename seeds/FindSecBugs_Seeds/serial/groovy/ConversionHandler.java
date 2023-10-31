@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
-package testcode.serial.groovy;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;

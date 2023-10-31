@@ -627,7 +627,7 @@ public class TypeWrapper {
             for(Transform transform : Transform.getTransforms()) {
                 List<ASTNode> targetNodes = transform.check(this, candidateNode);
                 for (ASTNode targetNode : targetNodes) {
-                    String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
+                    String mutantFilename = "mutant_" + mutantCounter++;
                     String mutantPath = MUTANT_FOLDER + File.separator + mutantFilename + ".java";
                     String content = this.document.get();
                     TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
@@ -681,7 +681,7 @@ public class TypeWrapper {
                 for (Transform transform : Transform.getTransforms()) {
                     List<ASTNode> targetNodes = transform.check(this, candidateNode);
                     for (ASTNode targetNode : targetNodes) {
-                        String mutantFilename = "mutant_" + mutantCounter.getAndAdd(1);
+                        String mutantFilename = "mutant_" + mutantCounter++;
                         String mutantPath = MUTANT_FOLDER + File.separator + mutantFilename + ".java";
                         String content = this.document.get();
                         TypeWrapper newMutant = new TypeWrapper(mutantFilename, mutantPath, content, this);
