@@ -446,7 +446,7 @@ public class Schedule {
             }
             bug2wrappers.get(seedWrapper.getFolderName()).add(seedWrapper);
         }
-        System.out.println("Initial Valid Wrappers Size: " + initValidSeedWrapperSize);
+        System.out.println("Size of Initial Valid Wrappers: " + initValidSeedWrapperSize);
         for (int depth = 1; depth <= SEARCH_DEPTH; depth++) {
             for (Map.Entry<String, List<TypeWrapper>> entry : bug2wrappers.entrySet()) {
                 List<TypeWrapper> seedWrappers = new ArrayList<>();

@@ -168,7 +168,7 @@ public class Utility {
     public static List<String> failedCheckStyleExecution = new ArrayList<>();
     public static Set<String> SonarQubeRuleNames;
 
-    public static void initEnv() {
+    public static void initCompileDependency() {
         String sp;
         if (OSUtil.isWindows()) {
             sp = ";";
@@ -194,7 +194,10 @@ public class Utility {
             findSecBugsJarStr.append(findSecBugsJarList.get(i) + sp);
         }
         findSecBugsJarStr.append(findSecBugsJarList.get(0));
+    }
 
+    public static void initEnv() {
+        initCompileDependency();
         if(SEED_INDEX < 1 || SEED_INDEX > 5) {
             System.out.println("Error Seed Index is Provided!");
             System.exit(-1);

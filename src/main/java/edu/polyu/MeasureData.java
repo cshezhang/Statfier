@@ -1,6 +1,7 @@
 package edu.polyu;
 
 import edu.polyu.util.Invoker;
+import edu.polyu.util.OSUtil;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
@@ -17,9 +18,11 @@ import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
 import static edu.polyu.util.Utility.FINDSECBUGS_SEED_PATH;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
 import static edu.polyu.util.Utility.SEED_PATH;
+import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
 import static edu.polyu.util.Utility.findSecBugsJarList;
 import static edu.polyu.util.Utility.findSecBugsJarStr;
 import static edu.polyu.util.Utility.getDirectFilenamesFromFolder;
+import static edu.polyu.util.Utility.initCompileDependency;
 import static edu.polyu.util.Utility.readFileByLine;
 import static edu.polyu.util.Utility.sep;
 
@@ -41,6 +44,7 @@ public class MeasureData {
         return true;
     }
 
+    /** Evaluate the seed size */
     public static void evaluateProgramElements(String seedFolderPath) {
         List<String> seedPaths = Utility.getFilenamesFromFolder(seedFolderPath, true);
         long sumField = 0, sumMethod = 0, sumClass = 0, sumLines = 0;
@@ -100,18 +104,12 @@ public class MeasureData {
         System.out.println("Path: " + maxpath);
     }
 
-    // Evaluate the successful compilation ratio of FindSecBugs
+    // Evaluate the successful compilation ratio of SpotBugs, Infer, or FindSecBugs
     public static void evaluateCompilationSuccessRatio() {
         int succ = 0, fail = 0;
-        findSecBugsJarStr.append(".:");
-        for (int i = findSecBugsJarList.size() - 1; i >= 1; i--) {
-            findSecBugsJarStr.append(findSecBugsJarList.get(i) + ":");
-        }
-        findSecBugsJarStr.append(findSecBugsJarList.get(0));
-        System.out.println("FindSecBugs Depdency: " + findSecBugsJarStr);
+        initCompileDependency();
         List<String> subSeedFolderNameList = getDirectFilenamesFromFolder(FINDSECBUGS_SEED_PATH, false);
         for(int i = 0; i < subSeedFolderNameList.size(); i++) {
-            System.out.println("Process: " + i);
             String subSeedFolderName = subSeedFolderNameList.get(i);
             String subSeedFolderPath = FINDSECBUGS_SEED_PATH + sep + subSeedFolderName;
             List<String> seedFileNamesWithSuffix = Utility.getFilenamesFromFolder(subSeedFolderPath, false);

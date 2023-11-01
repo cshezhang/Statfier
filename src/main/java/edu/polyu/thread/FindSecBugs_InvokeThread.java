@@ -1,15 +1,15 @@
 package edu.polyu.thread;
 
 import edu.polyu.util.Invoker;
-import edu.polyu.util.Utility;
 
 import java.io.File;
 import java.util.List;
 
-import static edu.polyu.util.Utility.CLASS_FOLDER;
 import static edu.polyu.util.Utility.DEBUG;
-import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
+import static edu.polyu.util.Utility.CLASS_FOLDER;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
+import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
+
 
 public class FindSecBugs_InvokeThread implements Runnable {
 
@@ -33,7 +33,10 @@ public class FindSecBugs_InvokeThread implements Runnable {
             if(!classFolder.exists()) {
                 classFolder.mkdirs();
             }
-            Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
+            boolean isCompiled = Invoker.compileJavaSourceFile(this.seedFolderPath, seedFileNameWithSuffix, classFolder.getAbsolutePath());
+            if(!isCompiled) {
+                continue;
+            }
             String reportPath = REPORT_FOLDER.getAbsolutePath()  + File.separator + this.seedFolderName + File.separator + seedFileName + "_Result.xml";
             if(DEBUG) {
                 System.out.println("Report: " + reportPath);

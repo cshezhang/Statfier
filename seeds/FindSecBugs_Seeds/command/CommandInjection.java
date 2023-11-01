@@ -9,6 +9,59 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import javax.servlet.http.HttpServletRequest;
+
+interface InterfaceWithSink {
+
+    void sink2(String param) throws IOException;
+}
+
+class MoreMethods implements InterfaceWithSink {
+    public static HttpServletRequest req;
+    public static String tainted() {
+        return req.getParameter("input");
+    }
+
+    public String safe() {
+        return "safe";
+    }
+
+    public static void sink(String param) throws IOException {
+        Runtime.getRuntime().exec(param);
+    }
+
+    @Override
+    public void sink2(String param) throws IOException {
+        Runtime.getRuntime().exec(param);
+    }
+
+    public void sink3(String param) throws IOException {
+        Runtime.getRuntime().exec(param);
+    }
+
+    public static String tainted2() {
+        return req.getParameter("var2");
+    }
+
+    public String safeParentparametricChild(String param) {
+        return "safe parent";
+    }
+}
+
+class SubClass extends MoreMethods {
+    HttpServletRequest req;
+    public void method() throws IOException {
+        Runtime.getRuntime().exec(safe());
+        Runtime.getRuntime().exec(tainted());
+        Runtime.getRuntime().exec(tainted2());
+        sink3(req.getParameter("dangerZone"));
+    }
+
+    @Override
+    public String safeParentparametricChild(String param) {
+        return param;
+    }
+}
+
 public abstract class CommandInjection {
     public static HttpServletRequest req; //Could be override at any time. (tainted)
     public static void main(String[] args) throws IOException {

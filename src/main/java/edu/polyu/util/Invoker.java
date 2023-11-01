@@ -71,7 +71,7 @@ public class Invoker {
                 }
                 if (argStr.toString().contains("/bin/bash")) {
                     if (exitValue == 254) {
-                        if(Utility.DEBUG) {
+                        if (Utility.DEBUG) {
                             System.out.println(errorInfo);
                         }
                     }
@@ -81,32 +81,32 @@ public class Invoker {
                     }
                 }
             }
-            if(Utility.PMD_MUTATION && exitValue != 4 && exitValue != 0) {
+            if (Utility.PMD_MUTATION && exitValue != 4 && exitValue != 0) {
                 System.out.println("Execute PMD Error!");
                 System.out.println(argStr);
                 return false;
             }
-            if(Utility.SPOTBUGS_MUTATION && exitValue != 0) {
+            if (Utility.SPOTBUGS_MUTATION && exitValue != 0) {
                 failedCommands.add(argStr.toString());
                 System.out.println("Invoke SpotBugs Error Value: " + exitValue);
                 System.out.println(argStr);
                 System.out.println("Error Msg: " + new String(errorStream.toByteArray()));
                 return false;
             }
-            if(Utility.INFER_MUTATION && exitValue != 0) {
+            if (Utility.INFER_MUTATION && exitValue != 0) {
                 System.out.println("Invoke Infer Error Value: " + exitValue);
                 System.out.println(argStr);
                 System.out.println("Error Msg: " + new String(errorStream.toByteArray()));
                 return false;
             }
-            if(Utility.SONARQUBE_MUTATION && exitValue != 0) {
+            if (Utility.SONARQUBE_MUTATION && exitValue != 0) {
                 System.err.println("Invoke SonarQube Error and Return Value: " + exitValue);
                 System.err.println(argStr);
                 System.err.println("Error Msg: " + new String(errorStream.toByteArray()));
                 System.exit(-1);
                 return false;
             }
-            if(Utility.FINDSECBUGS_MUTATION && exitValue != 0) {
+            if (Utility.FINDSECBUGS_MUTATION && exitValue != 0) {
                 failedCommands.add(argStr.toString());
                 System.out.println("Invoke FindSecBugs Error Value: " + exitValue);
                 System.out.println(argStr);
@@ -123,7 +123,7 @@ public class Invoker {
 
     public static boolean invokeCommands(String[] cmdArgs) {
         StringBuilder args = new StringBuilder();
-        for(int i = 0; i < cmdArgs.length; i++) {
+        for (int i = 0; i < cmdArgs.length; i++) {
             args.append(cmdArgs[i] + " ");
         }
         InputStream in;
@@ -133,12 +133,12 @@ public class Invoker {
             BufferedReader read = new BufferedReader(new InputStreamReader(in, "UTF-8"));
             String line;
             StringBuilder builder = new StringBuilder();
-            while((line = read.readLine()) != null) {
+            while ((line = read.readLine()) != null) {
                 System.out.println(line);
                 builder.append(line);
             }
             int exitValue = process.waitFor();
-            if(exitValue != 4 && exitValue != 0) {
+            if (exitValue != 4 && exitValue != 0) {
                 if (Utility.SPOTBUGS_MUTATION) {
                     failedCommands.add(args.toString());
                 } else {
@@ -164,10 +164,10 @@ public class Invoker {
 
     // folderPath is purely folder path and doesn't contain java file name.
     public static boolean compileJavaSourceFile(String srcFolderPath, String fileName, String classFileFolder) {
-        if(Utility.DEBUG) {
+        if (Utility.DEBUG) {
             System.out.println("Compiling: " + fileName);
         }
-        if(!fileName.endsWith(".java")) {
+        if (!fileName.endsWith(".java")) {
             System.err.println("File: " + fileName + " is not ended by .java");
             System.exit(-1);
         }
@@ -180,13 +180,13 @@ public class Invoker {
         if (Utility.SPOTBUGS_MUTATION) {
             cmd_list.add(Utility.spotBugsJarStr.toString());
         }
-        if(Utility.INFER_MUTATION) {
+        if (Utility.INFER_MUTATION) {
             cmd_list.add(Utility.inferJarStr.toString());
         }
-        if(Utility.FINDSECBUGS_MUTATION) {
+        if (Utility.FINDSECBUGS_MUTATION) {
             cmd_list.add(Utility.findSecBugsJarStr.toString());
         }
-        cmd_list.add(srcFolderPath  + File.separator + fileName + ".java");
+        cmd_list.add(srcFolderPath + File.separator + fileName + ".java");
         boolean tag = invokeCommandsByZT(cmd_list.toArray(new String[cmd_list.size()]));
         return tag;
     }
@@ -194,14 +194,14 @@ public class Invoker {
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in CLASS_FOLDER
     public static void invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
-        if(seedFolderPath.endsWith(Utility.sep)) {
+        if (seedFolderPath.endsWith(Utility.sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
-        if(Utility.DEBUG) {
+        if (Utility.DEBUG) {
             System.out.println("Invoke SpotBugs Path: " + seedFolderPath);
         }
         ExecutorService threadPool = Utility.initThreadPool();
-        for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+        for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             List<String> seedFileNames = Utility.getFilenamesFromFolder(subSeedFolderPath, false);
@@ -210,9 +210,9 @@ public class Invoker {
         Utility.waitThreadPoolEnding(threadPool);
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
-        for(String subSeedFolderName : Utility.subSeedFolderNameList) {
+        for (String subSeedFolderName : Utility.subSeedFolderNameList) {
             List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
-            for(String reportPath : reportPaths) {
+            for (String reportPath : reportPaths) {
                 SpotBugs_Report.readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
         }
@@ -232,11 +232,11 @@ public class Invoker {
         contents.add("sonar.sources=" + seedFolderPath);
         contents.add("sonar.java.source=11");
         File dummyFolder = new File(seedFolderPath + Utility.sep + "dummy-binaries");
-        if(!dummyFolder.exists()) {
+        if (!dummyFolder.exists()) {
             dummyFolder.mkdir();
         }
         File dummyFile = new File(seedFolderPath + Utility.sep + "dummy-binaries" + Utility.sep + "dummy.txt");
-        if(!dummyFile.exists()) {
+        if (!dummyFile.exists()) {
             try {
                 dummyFile.createNewFile();
             } catch (IOException e) {
@@ -246,7 +246,7 @@ public class Invoker {
         contents.add("sonar.java.binaries=" + dummyFolder.getAbsolutePath());
         contents.add("sonar.java.test.binaries=" + dummyFolder.getAbsolutePath());
         File settingFile = new File(settingFilePath);
-        if(!settingFile.exists()) {
+        if (!settingFile.exists()) {
             Utility.writeLinesToFile(settingFilePath, contents);
         }
     }
@@ -275,23 +275,23 @@ public class Invoker {
 
     // First level process
     public static void invokeSonarQube(String seedFolderPath) {
-        for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+        for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
-            if(Utility.DEBUG) {
+            if (Utility.DEBUG) {
                 System.out.println("Seed path: " + subSeedFolderPath);
             }
             String newProjectName = "iter0_" + subSeedFolderName;
             deleteSonarQubeProject(newProjectName);
             boolean isCreated = createSonarQubeProject(newProjectName);
-            if(!isCreated) {
+            if (!isCreated) {
                 System.err.println("NewProjectName: " + newProjectName + " is not created!");
                 continue;
             }
             String settingPath = subSeedFolderPath + Utility.sep + "settings";
             writeSettingFile(subSeedFolderPath, settingPath, newProjectName);
             String[] invokeCommands = new String[3];
-            if(OSUtil.isWindows()) {
+            if (OSUtil.isWindows()) {
                 invokeCommands[0] = "cmd.exe";
                 invokeCommands[1] = "/c";
             } else {
@@ -300,7 +300,7 @@ public class Invoker {
             }
             invokeCommands[2] = Utility.SONARSCANNER_PATH + " -Dproject.settings=" + settingPath;
             boolean hasExec = invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
-            if(hasExec) {
+            if (hasExec) {
                 Utility.waitTaskEnd(newProjectName);
             } else {
                 return;
@@ -308,7 +308,7 @@ public class Invoker {
             List<String> ruleNames = new ArrayList<>(Utility.SonarQubeRuleNames);
             String[] curlCommands = new String[4];
             for (String ruleName : ruleNames) {
-                if(Utility.DEBUG) {
+                if (Utility.DEBUG) {
                     System.out.println("Request rule: " + ruleName);
                 }
                 curlCommands[0] = "curl";
@@ -334,13 +334,13 @@ public class Invoker {
 
     public static void invokeInfer(String seedFolderPath) {
         ExecutorService threadPool = Utility.initThreadPool();
-        for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+        for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             threadPool.submit(new Infer_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
         }
         Utility.waitThreadPoolEnding(threadPool);
         System.out.println("Infer Result Folder: " + Utility.REPORT_FOLDER.getAbsolutePath());
         List<String> seedPaths = Utility.getFilenamesFromFolder(seedFolderPath, true);
-        for(String seedPath : seedPaths) {
+        for (String seedPath : seedPaths) {
             String reportPath = Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.Path2Last(seedPath) + File.separator + "report.json";
             Infer_Report.readSingleInferResultFile(seedPath, reportPath);
         }
@@ -348,18 +348,18 @@ public class Invoker {
 
     public static void invokeCheckStyle(String seedFolderPath) {
         ExecutorService threadPool = Utility.initThreadPool();
-        for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+        for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             threadPool.submit(new CheckStyle_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
         }
         Utility.waitThreadPoolEnding(threadPool);
         List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath(), true);
-        for(int i = 0; i < reportPaths.size(); i++) {
+        for (int i = 0; i < reportPaths.size(); i++) {
             CheckStyle_Report.readCheckStyleResultFile(reportPaths.get(i));
         }
     }
 
     public static void invokePMD(String seedFolderPath) {
-        if(Utility.THREAD_COUNT > 1) {
+        if (Utility.THREAD_COUNT > 1) {
             ExecutorService threadPool = Utility.initThreadPool();
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
                 threadPool.submit(new PMD_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
@@ -369,18 +369,18 @@ public class Invoker {
                 PMD_Report.readPMDResultFile(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");
             }
         } else {
-            for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+            for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
                 String seedFolderName = Utility.subSeedFolderNameList.get(i);
                 String[] tokens = seedFolderName.split("_");
                 PMDConfiguration pmdConfig = new PMDConfiguration();
-                pmdConfig.setInputPathList(Utility.getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
+                pmdConfig.setInputPathList(Utility.getFilePathsFromFolder(seedFolderPath + File.separator + seedFolderName));
                 pmdConfig.setRuleSets(new ArrayList<>() {
                     {
                         add("category/java/" + tokens[0] + ".xml/" + tokens[1]);
                     }
                 });
                 pmdConfig.setReportFormat("json");
-                pmdConfig.setReportFile(Paths.get(Utility.REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"));
+                pmdConfig.setReportFile(Paths.get(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"));
                 pmdConfig.setIgnoreIncrementalAnalysis(true);
                 PMD.runPmd(pmdConfig);
             }
@@ -393,23 +393,23 @@ public class Invoker {
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in CLASS_FOLDER
     public static void invokeFindSecBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
-        if(seedFolderPath.endsWith(Utility.sep)) {
+        if (seedFolderPath.endsWith(Utility.sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
-        if(Utility.DEBUG) {
+        if (Utility.DEBUG) {
             System.out.println("Invoke FindSecBugs Path: " + seedFolderPath);
         }
         ExecutorService threadPool = Utility.initThreadPool();
-        for(int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
+        for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             List<String> seedFileNames = Utility.getFilenamesFromFolder(subSeedFolderPath, false);
             threadPool.submit(new FindSecBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
         Utility.waitThreadPoolEnding(threadPool);
-        for(String subSeedFolderName : Utility.subSeedFolderNameList) {
+        for (String subSeedFolderName : Utility.subSeedFolderNameList) {
             List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
-            for(String reportPath : reportPaths) {
+            for (String reportPath : reportPaths) {
                 FindSecBugs_Report.readFindSecBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
         }

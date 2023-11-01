@@ -1,13 +1,13 @@
 # Customized Directories and Files
-target/
-tools/
-PMD_Cache.bin
-PMD_Result.html
+run.sh
+compare.sh
 config.properties
 .vscode/
 .DS_Store
 .scannerwork/
 .settings/
+target/
+tools/
 .project
 .classpath
 *.prefs
