@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static edu.polyu.util.Utility.CHECKSTYLE_MUTATION;
+import static edu.polyu.util.Utility.FINDSECBUGS_MUTATION;
 import static edu.polyu.util.Utility.GOOGLE_FORMAT_PATH;
 import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
@@ -265,7 +266,7 @@ public class TypeWrapper {
             FileWriter fileWriter = new FileWriter(this.filePath);
             fileWriter.write(code);
             fileWriter.close();
-            if(PMD_MUTATION || SPOTBUGS_MUTATION || CHECKSTYLE_MUTATION) {
+            if(PMD_MUTATION || SPOTBUGS_MUTATION || CHECKSTYLE_MUTATION || FINDSECBUGS_MUTATION) {
                 String[] invokeCommands = new String[5];
                 invokeCommands[0] = "java";
                 invokeCommands[1] = "-jar";

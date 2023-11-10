@@ -27,11 +27,9 @@ import static edu.polyu.util.Utility.SPOTBUGS_PATH;
 import static edu.polyu.util.Utility.SonarQubeRuleNames;
 import static edu.polyu.util.Utility.CLASS_FOLDER;
 import static edu.polyu.util.Utility.compactIssues;
-import static edu.polyu.util.Utility.failedCheckStyleExecution;
-import static edu.polyu.util.Utility.failedExecuteFindSecBugs;
-import static edu.polyu.util.Utility.failedExecuteSpotBugs;
 import static edu.polyu.util.Utility.failedReportPaths;
 import static edu.polyu.util.Utility.failedT;
+import static edu.polyu.util.Utility.failedToolExecution;
 import static edu.polyu.util.Utility.file2row;
 import static edu.polyu.util.Utility.getFilePathsFromFolder;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
@@ -64,6 +62,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.report.CheckStyle_Report;
+import edu.polyu.report.FindSecBugs_Report;
 import edu.polyu.report.Infer_Report;
 import edu.polyu.report.PMD_Report;
 import edu.polyu.report.SonarQube_Report;
@@ -154,12 +153,6 @@ public class Schedule {
                     pmdConfig.setReportFormat("json");
                     pmdConfig.setReportFile(Paths.get(resultFilePath));
                     pmdConfig.setIgnoreIncrementalAnalysis(true);
-//                    String[] pmdConfig = {
-//                            "-d", seedFolderPath  + File.separator + mutantFolderPath,
-//                            "-R", "category/java/" + ruleCategory + ".xml/" + bugType,
-//                            "-f", "json",
-//                            "-r", resultFilePath
-//                    };
                     PMD.runPmd(pmdConfig); // detect mutants of level i
                     PMD_Report.readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();
@@ -236,7 +229,7 @@ public class Schedule {
                             entry.getValue().add(mutantWrapper);
                         }
                     } else {
-                        failedExecuteSpotBugs.add(invokeCommands[2]);
+                        failedToolExecution.add(invokeCommands[2]);
                     }
                 }
             }
@@ -291,7 +284,7 @@ public class Schedule {
                         System.out.println(invokeCommands[2]);
                     }
                     if (!reportFile.exists() || reportFile.length() == 0) {
-                        failedCheckStyleExecution.add(invokeCommands[2]);
+                        failedToolExecution.add(invokeCommands[2]);
                     }
                     CheckStyle_Report.readCheckStyleResultFile(reportFile.getAbsolutePath());
                     if (!wrapper.isBuggy()) {
@@ -459,7 +452,7 @@ public class Schedule {
                     String seedFileNameWithSuffix = tokens[tokens.length - 1];
                     String subSeedFolderName = tokens[tokens.length - 2];
                     String seedFileName = seedFileNameWithSuffix.substring(0, seedFileNameWithSuffix.length() - 5);
-                    // Filename is used to specify class folder name
+                    // File Name is used to specify class folder name
                     File mutantClassFolder = new File(CLASS_FOLDER.getAbsolutePath() + sep + seedFileName);
                     if (!mutantClassFolder.exists()) {
                         mutantClassFolder.mkdirs();
@@ -476,12 +469,12 @@ public class Schedule {
                     boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
                         String report_path = REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
-                        SpotBugs_Report.readSpotBugsResultFile(mutantWrapper.getFolderPath(), report_path);
+                        FindSecBugs_Report.readFindSecBugsResultFile(mutantWrapper.getFolderPath(), report_path);
                         if (!mutantWrapper.isBuggy()) {
                             entry.getValue().add(mutantWrapper);
                         }
                     } else {
-                        failedExecuteFindSecBugs.add(invokeCommands[2]);
+                        failedToolExecution.add(invokeCommands[2]);
                     }
                 }
             }
@@ -555,7 +548,7 @@ public class Schedule {
         }
         if (SPOTBUGS_MUTATION) {
             writeLinesToFile(EVALUATION_PATH + sep + "FailedCommands.log", failedCommands);
-            writeLinesToFile(EVALUATION_PATH + sep + "FailedSpotBugsExecution.log", failedExecuteSpotBugs);
+            writeLinesToFile(EVALUATION_PATH + sep + "FailedToolExecution.log", failedToolExecution);
         }
         long executionTime = System.currentTimeMillis() - Utility.startTimeStamp;
         output.add(String.format(
