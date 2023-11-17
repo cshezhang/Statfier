@@ -27,7 +27,6 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 import org.json.JSONObject;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

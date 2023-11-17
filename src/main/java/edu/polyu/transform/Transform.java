@@ -66,7 +66,7 @@ public abstract class Transform {
             if(!CHECKSTYLE_MUTATION) {
                 transforms.add(AddBrackets.getInstance());
                 transforms.add(AddArgAssignment.getInstance());
-                transforms.add(AddControlBranch.getInstance());
+//                transforms.add(AddControlBranch.getInstance());
                 transforms.add(AddStaticModifier.getInstance());
                 transforms.add(AddLocalAssignment.getInstance());
                 transforms.add(AddStaticAssignment.getInstance());
@@ -100,7 +100,7 @@ public abstract class Transform {
             if(!CHECKSTYLE_MUTATION) {
                 transforms.add(AddBrackets.getInstance());
                 transforms.add(AddArgAssignment.getInstance());
-                transforms.add(AddControlBranch.getInstance());
+//                transforms.add(AddControlBranch.getInstance());
                 transforms.add(AddStaticModifier.getInstance());
                 transforms.add(AddLocalAssignment.getInstance());
                 transforms.add(AddStaticAssignment.getInstance());
