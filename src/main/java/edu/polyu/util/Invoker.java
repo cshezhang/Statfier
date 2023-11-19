@@ -18,19 +18,21 @@ import edu.polyu.report.PMDReport;
 import edu.polyu.report.Report;
 import edu.polyu.report.SonarQubeReport;
 import edu.polyu.report.SpotBugsReport;
-import edu.polyu.thread.CheckStyle_InvokeThread;
-import edu.polyu.thread.FindSecBugs_InvokeThread;
-import edu.polyu.thread.Infer_InvokeThread;
-import edu.polyu.thread.PMD_InvokeThread;
-import edu.polyu.thread.SpotBugs_InvokeThread;
+import edu.polyu.thread.CheckStyleInvokeThread;
+import edu.polyu.thread.FindSecBugsInvokeThread;
+import edu.polyu.thread.InferInvokeThread;
+import edu.polyu.thread.PMDInvokeThread;
+import edu.polyu.thread.SpotBugsInvokeThread;
 import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
 import org.json.JSONObject;
 import org.zeroturnaround.exec.ProcessExecutor;
 
 import static edu.polyu.util.Utility.EVALUATION_PATH;
+import static edu.polyu.util.Utility.SEED_PATH;
 import static edu.polyu.util.Utility.SONARQUBE_PROJECT_NAME;
 import static edu.polyu.util.Utility.SONARSCANNER_PATH;
+import static edu.polyu.util.Utility.SonarQubeRuleNames;
 import static edu.polyu.util.Utility.getDirectFilenamesFromFolder;
 import static edu.polyu.util.Utility.getFilePathsFromFolder;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
@@ -216,7 +218,7 @@ public class Invoker {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
-            threadPool.submit(new SpotBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
+            threadPool.submit(new SpotBugsInvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
         Utility.waitThreadPoolEnding(threadPool);
         // Here we want to invoke SpotBugs one time and get all analysis results
@@ -354,46 +356,42 @@ public class Invoker {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + sep + subSeedFolderName;
             List<String> seedPaths = getFilenamesFromFolder(subSeedFolderPath, true);
+            String[] invokeCommands = new String[3];
+            invokeCommands[0] = "/bin/bash";
+            invokeCommands[1] = "-c";
+            String[] curlCommands = new String[4];
+            curlCommands[0] = "curl";
+            curlCommands[1] = "-u";
+            curlCommands[2] = "admin:123456";
             for(String seedPath : seedPaths) {
                 if (Utility.DEBUG) {
                     System.out.println("Seed path: " + subSeedFolderPath);
                 }
-                String newProjectName = "iter0_" + subSeedFolderName;
-                deleteSonarQubeProject(newProjectName);
-                if (!createSonarQubeProject(newProjectName)) {
-                    System.err.println("New ProjectName: " + newProjectName + " is not created!");
+                deleteSonarQubeProject(SONARQUBE_PROJECT_NAME);
+                if (!createSonarQubeProject(SONARQUBE_PROJECT_NAME)) {
+                    System.err.println("Project Name: " + SONARQUBE_PROJECT_NAME + " is not created!");
                     continue;
                 }
-                String[] invokeCommands = new String[3];
-                invokeCommands[0] = "/bin/bash";
-                invokeCommands[1] = "-c";
                 invokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_NAME
-                        + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "decompile"
-                        + " -Dsonar.sources=" + seedPath + " -Dsonar.host.url=http://localhost:9000"
+                        + " -Dsonar.projectBaseDir=" + SEED_PATH
+                        + " -Dsonar.sources=" + seedPath
+                        + " -Dsonar.host.url=http://localhost:9000"
                         + " -Dsonar.login=admin -Dsonar.password=123456";
                 boolean hasExec = invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
                 if (hasExec) {
-                    waitTaskEnd(newProjectName);
+                    waitTaskEnd(SONARQUBE_PROJECT_NAME);
                 } else {
                     return;
                 }
-                List<String> ruleNames = new ArrayList<>(Utility.SonarQubeRuleNames);
-                String[] curlCommands = new String[4];
-                for (String ruleName : ruleNames) {
-                    curlCommands[0] = "curl";
-                    curlCommands[1] = "-u";
-                    curlCommands[2] = "admin:123456";
-                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
+                for (String ruleName : SonarQubeRuleNames) {
+                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME + "&rules=java:" + ruleName;
                     String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
                     SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
                     JSONObject root = new JSONObject(jsonContent);
                     int total = root.getInt("total");
                     int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
                     for (int p = 2; p <= count; p++) {
-                        curlCommands[0] = "curl";
-                        curlCommands[1] = "-u";
-                        curlCommands[2] = "admin:123456";
-                        curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
+                        curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME + "&rules=java:" + ruleName;
                         jsonContent = invokeCommandsByZTWithOutput(curlCommands);
                         SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
                     }
@@ -405,7 +403,7 @@ public class Invoker {
     public static void invokeInfer(String seedFolderPath) {
         ExecutorService threadPool = Utility.initThreadPool();
         for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new Infer_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
+            threadPool.submit(new InferInvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
         }
         Utility.waitThreadPoolEnding(threadPool);
         System.out.println("Infer Result Folder: " + Utility.REPORT_FOLDER.getAbsolutePath());
@@ -419,7 +417,7 @@ public class Invoker {
     public static void invokeCheckStyle(String seedFolderPath) {
         ExecutorService threadPool = Utility.initThreadPool();
         for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
-            threadPool.submit(new CheckStyle_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
+            threadPool.submit(new CheckStyleInvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
         }
         Utility.waitThreadPoolEnding(threadPool);
         List<String> reportPaths = getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath(), true);
@@ -432,7 +430,7 @@ public class Invoker {
         if (Utility.THREAD_COUNT > 1) {
             ExecutorService threadPool = Utility.initThreadPool();
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
-                threadPool.submit(new PMD_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
+                threadPool.submit(new PMDInvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
             }
             Utility.waitThreadPoolEnding(threadPool);
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
@@ -474,7 +472,7 @@ public class Invoker {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
             List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
-            threadPool.submit(new FindSecBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
+            threadPool.submit(new FindSecBugsInvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
         Utility.waitThreadPoolEnding(threadPool);
         for (String subSeedFolderName : Utility.subSeedFolderNameList) {

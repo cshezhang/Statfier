@@ -42,6 +42,7 @@ import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -305,10 +306,6 @@ public class Utility {
                 subSeedFolder.mkdir();
             }
         }
-        SonarQubeRuleNames = getSonarQubeRuleNames();
-    }
-
-    public static Set<String> getSonarQubeRuleNames() {
         String ruleNamePath = PROJECT_PATH + sep + "tools" + sep + "SonarQube_Rules.txt";
         List<String> lines = readFileByLine(ruleNamePath);
         if (lines.size() > 1) {
@@ -316,12 +313,9 @@ public class Utility {
             System.exit(-1);
         }
         String[] ruleNames = lines.get(0).split(",");
-        Set<String> ruleNameSet = new HashSet<>();
-        for (String ruleName : ruleNames) {
-            ruleNameSet.add(ruleName);
-        }
-        return ruleNameSet;
+        SonarQubeRuleNames = new HashSet<>(Arrays.asList(ruleNames));
     }
+
 
     public static ExecutorService initThreadPool() {
         ExecutorService threadPool;

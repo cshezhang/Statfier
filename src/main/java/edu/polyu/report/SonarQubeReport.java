@@ -180,6 +180,7 @@ public class SonarQubeReport extends Report {
     }
 
     // Deprecated: This is a CNES version.
+    @Deprecated
     public static void readSonarQubeResultFile(String reportPath) {
         if (DEBUG) {
             System.out.println("SonarQube Detection Result FileName: " + reportPath);
