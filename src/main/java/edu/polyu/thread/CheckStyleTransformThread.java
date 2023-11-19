@@ -11,22 +11,21 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.report.CheckStyle_Report.readCheckStyleResultFile;
+import static edu.polyu.report.CheckStyleReport.readCheckStyleResultFile;
 import static edu.polyu.util.Utility.CHECKSTYLE_CONFIG_PATH;
 import static edu.polyu.util.Utility.CHECKSTYLE_PATH;
 import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.Path2Last;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
-import static edu.polyu.transform.Transform.singleLevelExplorer;
 
-public class CheckStyle_TransformThread implements Runnable {
+public class CheckStyleTransformThread implements Runnable {
 
     private int currentDepth;
     private String seedFolderName; // equal to rule type
     private ArrayDeque<TypeWrapper> wrappers;
     private String configPath;
 
-    public CheckStyle_TransformThread(TypeWrapper initWrapper, String seedFolderName, String configPath) {
+    public CheckStyleTransformThread(TypeWrapper initWrapper, String seedFolderName, String configPath) {
         this.currentDepth = 0;
         this.seedFolderName = seedFolderName;
         this.wrappers = new ArrayDeque<>() {

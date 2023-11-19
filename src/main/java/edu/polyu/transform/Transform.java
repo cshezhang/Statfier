@@ -21,7 +21,6 @@ import static edu.polyu.util.Utility.PMD_MUTATION;
 import static edu.polyu.util.Utility.RANDOM_LOCATION;
 import static edu.polyu.util.Utility.RANDOM_SELECTION;
 import static edu.polyu.util.Utility.SONARQUBE_MUTATION;
-import static edu.polyu.util.Utility.SPOTBUGS_MUTATION;
 
 /**
  * @Description: The General Class for Mutants.

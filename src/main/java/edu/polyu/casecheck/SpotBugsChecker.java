@@ -12,8 +12,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static edu.polyu.report.SpotBugs_Report.readSpotBugsResultFile;
-import static edu.polyu.util.Utility.*;
+import static edu.polyu.report.SpotBugsReport.readSpotBugsResultFile;
+import static edu.polyu.util.Utility.EVALUATION_PATH;
+import static edu.polyu.util.Utility.SPOTBUGS_SEED_PATH;
+import static edu.polyu.util.Utility.getFilenamesFromFolder;
+import static edu.polyu.util.Utility.reg_sep;
+import static edu.polyu.util.Utility.sep;
+import static edu.polyu.util.Utility.toolPath;
 
 public class SpotBugsChecker {
 
@@ -59,7 +64,7 @@ public class SpotBugsChecker {
     }
 
     public static void main(String[] args) {
-        List<String> allSeedList = Utility.getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
+        List<String> allSeedList = getFilenamesFromFolder(SPOTBUGS_SEED_PATH, true);
         HashMap<String, List<String>> rule2seedlist = new HashMap<>();
 //        compileFirstIterJavaFiles(allSeedList);
         HashSet<String> ruleCounter = new HashSet<>();

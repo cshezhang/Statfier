@@ -10,13 +10,13 @@ import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.SPOTBUGS_PATH;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
 
-public class SpotBugs_InvokeThread implements Runnable {
+public class SpotBugsInvokeThread implements Runnable {
 
     private String seedFolderPath;
     private String seedFolderName;
     private List<String> seedFileNamesWithSuffix;
 
-    public SpotBugs_InvokeThread(String seedFolderPath, String seedFolderName, List<String> seedFileNamesWithSuffix) {
+    public SpotBugsInvokeThread(String seedFolderPath, String seedFolderName, List<String> seedFileNamesWithSuffix) {
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;
         this.seedFileNamesWithSuffix = seedFileNamesWithSuffix;  // only name, not path

@@ -11,13 +11,13 @@ import static edu.polyu.util.Utility.REPORT_FOLDER;
 import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
 
 
-public class FindSecBugs_InvokeThread implements Runnable {
+public class FindSecBugsInvokeThread implements Runnable {
 
     private String seedFolderPath;
     private String seedFolderName;
     private List<String> seedFileNamesWithSuffix;
 
-    public FindSecBugs_InvokeThread(String seedFolderPath, String seedFolderName, List<String> seedFileNamesWithSuffix) {
+    public FindSecBugsInvokeThread(String seedFolderPath, String seedFolderName, List<String> seedFileNamesWithSuffix) {
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;
         this.seedFileNamesWithSuffix = seedFileNamesWithSuffix;  // only name, not path

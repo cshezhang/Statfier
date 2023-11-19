@@ -9,12 +9,12 @@ import static edu.polyu.util.Utility.SONARSCANNER_PATH;
 
 import java.io.File;
 
-public class SonarQube_InvokeThread implements Runnable {
+public class SonarQubeInvokeThread implements Runnable {
 
     private String seedFolderPath;
     private String seedFolderName;
 
-    public SonarQube_InvokeThread(String seedFolderPath, String seedFolderName) {
+    public SonarQubeInvokeThread(String seedFolderPath, String seedFolderName) {
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;
     }
@@ -34,7 +34,7 @@ public class SonarQube_InvokeThread implements Runnable {
             invokeCommands[1] = "-c";
         }
         invokeCommands[2] = SONARSCANNER_PATH
-                + " -Dsonar.projectKey=" + Utility.SONARQUBE_PROJECT_KEY
+                + " -Dsonar.projectKey=" + Utility.SONARQUBE_PROJECT_NAME
                 + " -Dsonar.sources=" + this.seedFolderPath
                 + " -Dsonar.host.url=http://localhost:9000";
         Invoker.invokeCommandsByZT(invokeCommands);

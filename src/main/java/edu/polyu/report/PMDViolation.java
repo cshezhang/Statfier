@@ -7,16 +7,14 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Author: RainyD4y
  * Date: 2021/9/23 7:30 PM
  */
-public class PMD_Violation implements Violation {
+public class PMDViolation extends Violation {
 
-    public int beginLine;
     public int endLine;
     public int beginCol;
     public int endCol;
-    public String bugType;
     public String description;
 
-    PMD_Violation(int beginLine, int endLine, int beginCol, int endCol, String bugType) {
+    public PMDViolation(int beginLine, int endLine, int beginCol, int endCol, String bugType) {
         this.beginLine = beginLine;
         this.endLine = endLine;
         this.beginCol = beginCol;
@@ -24,7 +22,7 @@ public class PMD_Violation implements Violation {
         this.bugType = bugType;
     }
 
-    public PMD_Violation(JsonNode reportNode) {
+    public PMDViolation(JsonNode reportNode) {
         this.beginLine = reportNode.get("beginline").asInt();
         this.endLine = reportNode.get("endline").asInt();
         this.beginCol = reportNode.get("begincolumn").asInt() - 1;
@@ -56,8 +54,8 @@ public class PMD_Violation implements Violation {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof PMD_Violation) {
-            PMD_Violation rhs = (PMD_Violation) o;
+        if(o instanceof PMDViolation) {
+            PMDViolation rhs = (PMDViolation) o;
             if(rhs.beginLine == this.beginLine && rhs.beginCol == this.beginCol
                     && rhs.endLine == this.endLine && rhs.endCol == this.endCol
                     && rhs.bugType == this.bugType) {

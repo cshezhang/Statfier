@@ -8,12 +8,12 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SonarQube_TransformThread implements Runnable {
+public class SonarQubeTransformThread implements Runnable {
 
     private int currentDepth;
     private ArrayDeque<TypeWrapper> wrappers;
 
-    public SonarQube_TransformThread(List<TypeWrapper> initWrappers) {
+    public SonarQubeTransformThread(List<TypeWrapper> initWrappers) {
         this.currentDepth = 0;
         this.wrappers = new ArrayDeque<>() {
             {

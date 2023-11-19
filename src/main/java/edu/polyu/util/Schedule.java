@@ -61,12 +61,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.report.CheckStyle_Report;
-import edu.polyu.report.FindSecBugs_Report;
-import edu.polyu.report.Infer_Report;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.SonarQube_Report;
-import edu.polyu.report.SpotBugs_Report;
+import edu.polyu.report.CheckStyleReport;
+import edu.polyu.report.FindSecBugsReport;
+import edu.polyu.report.InferReport;
+import edu.polyu.report.PMDReport;
+import edu.polyu.report.SonarQubeReport;
+import edu.polyu.report.SpotBugsReport;
 import edu.polyu.transform.Transform;
 import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
@@ -154,7 +154,7 @@ public class Schedule {
                     pmdConfig.setReportFile(Paths.get(resultFilePath));
                     pmdConfig.setIgnoreIncrementalAnalysis(true);
                     PMD.runPmd(pmdConfig); // detect mutants of level i
-                    PMD_Report.readPMDResultFile(resultFilePath);
+                    PMDReport.readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();
                     for (int i = 0; i < newWrappers.size(); i++) {
                         TypeWrapper newWrapper = newWrappers.get(i);
@@ -224,7 +224,7 @@ public class Schedule {
                     boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
                         String report_path = REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
-                        SpotBugs_Report.readSpotBugsResultFile(mutantWrapper.getFolderPath(), report_path);
+                        SpotBugsReport.readSpotBugsResultFile(mutantWrapper.getFolderPath(), report_path);
                         if (!mutantWrapper.isBuggy()) {
                             entry.getValue().add(mutantWrapper);
                         }
@@ -286,7 +286,7 @@ public class Schedule {
                     if (!reportFile.exists() || reportFile.length() == 0) {
                         failedToolExecution.add(invokeCommands[2]);
                     }
-                    CheckStyle_Report.readCheckStyleResultFile(reportFile.getAbsolutePath());
+                    CheckStyleReport.readCheckStyleResultFile(reportFile.getAbsolutePath());
                     if (!wrapper.isBuggy()) {
                         bug2wrappers.get(entry.getKey()).add(wrapper);
                     }
@@ -335,7 +335,7 @@ public class Schedule {
                     invokeCommands[2] = "python3 cmd.py " + cmd;
                     Invoker.invokeCommandsByZT(invokeCommands);
                     String resultFilePath = REPORT_FOLDERPath + sep + "report.json";
-                    Infer_Report.readSingleInferResultFile(mutantPath, resultFilePath);
+                    InferReport.readSingleInferResultFile(mutantPath, resultFilePath);
                     if (!mutantWrapper.isBuggy()) {
                         entry.getValue().add(mutantWrapper);
                     }
@@ -395,7 +395,7 @@ public class Schedule {
                     curlCommands[2] = "admin:123456";
                     curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
                     String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                    SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
+                    SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
                     JSONObject root = new JSONObject(jsonContent);
                     int total = root.getInt("total");
                     int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
@@ -405,7 +405,7 @@ public class Schedule {
                         curlCommands[2] = "admin:123456";
                         curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
                         jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                        SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
+                        SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
                     }
                 }
             }
@@ -469,7 +469,7 @@ public class Schedule {
                     boolean hasExec = Invoker.invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
                         String report_path = REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName + sep + seedFileName + "_Result.xml";
-                        FindSecBugs_Report.readFindSecBugsResultFile(mutantWrapper.getFolderPath(), report_path);
+                        FindSecBugsReport.readFindSecBugsResultFile(mutantWrapper.getFolderPath(), report_path);
                         if (!mutantWrapper.isBuggy()) {
                             entry.getValue().add(mutantWrapper);
                         }
@@ -560,8 +560,8 @@ public class Schedule {
         if (TypeWrapper.failedParse.size() > 0) {
             writeLinesToFile(EVALUATION_PATH + sep + "FailedParse.log", TypeWrapper.failedParse);
         }
-        if (PMD_Report.errorReportPaths.size() > 0) {
-            writeLinesToFile(EVALUATION_PATH + sep + "ErrorReportPaths.log", PMD_Report.errorReportPaths);
+        if (PMDReport.errorReportPaths.size() > 0) {
+            writeLinesToFile(EVALUATION_PATH + sep + "ErrorReportPaths.log", PMDReport.errorReportPaths);
         }
     }
 

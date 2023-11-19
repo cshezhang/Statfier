@@ -5,15 +5,13 @@ package edu.polyu.report;
  * Author: RainyD4y
  * Date: 2022/8/29 15:22
  */
-public class SonarQube_Violation implements Violation {
+public class SonarQubeViolation extends Violation {
 
-    private String bugType;
-    private int beginLine;
     private int endLine;
     private int startOffset;
     private int endOffset;
 
-    public SonarQube_Violation(String bugType, int beginLine, int endLine, int startOffset, int endOffset) {
+    public SonarQubeViolation(String bugType, int beginLine, int endLine, int startOffset, int endOffset) {
         this.bugType = bugType;
         this.beginLine = beginLine;
         this.endLine = endLine;
@@ -43,7 +41,7 @@ public class SonarQube_Violation implements Violation {
 
     @Override
     public boolean equals(Object rhs) {
-        if(rhs instanceof SonarQube_Report) {
+        if(rhs instanceof SonarQubeReport) {
             if(this.hashCode() == rhs.hashCode()) {
                 return true;
             }

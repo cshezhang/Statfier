@@ -16,13 +16,13 @@ import static edu.polyu.util.Utility.REPORT_FOLDER;
  * @Author: RainyD4y
  * @Date: 2022-04-13 13:09
  */
-public class Infer_InvokeThread implements Runnable {
+public class InferInvokeThread implements Runnable {
 
     private int iterDepth;
     private String seedFolderPath;
     private String seedFolderName; // equal to rule type
 
-    public Infer_InvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
+    public InferInvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
         this.iterDepth = iterDepth;
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;

@@ -15,13 +15,13 @@ import static edu.polyu.util.Utility.reg_sep;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
 import static edu.polyu.util.Utility.sep;
 
-public class CheckStyle_InvokeThread implements Runnable {
+public class CheckStyleInvokeThread implements Runnable {
 //    private int iterDepth;
     private String seedFolderPath;
     private String seedFolderName; // equal to rule type
 
 
-    public CheckStyle_InvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
+    public CheckStyleInvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
 //        this.iterDepth = iterDepth;
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;

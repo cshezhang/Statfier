@@ -20,26 +20,13 @@ import static edu.polyu.util.Utility.file2row;
  * @Author: RainyD4y
  * @Date: 2021-10-18 11:21:22
  */
-public class SpotBugs_Report implements Report {
+public class SpotBugsReport extends Report {
 
     private String filePath;
-    private List<SpotBugs_Violation> violations;
-    
-    public SpotBugs_Report(String filePath) {
-        this.filePath = filePath;
-        this.violations = new ArrayList<>();
-    }
+    private List<Violation> violations;
 
-    public void addViolation(SpotBugs_Violation newViolation) {
-        this.violations.add(newViolation);
-    }
-
-    public String getFilePath() {
-        return this.filePath;
-    }
-
-    public List<SpotBugs_Violation> getViolations() {
-        return this.violations;
+    public SpotBugsReport(String filePath) {
+        super(filePath);
     }
 
     @Override
@@ -52,6 +39,7 @@ public class SpotBugs_Report implements Report {
         return str.toString();
     }
 
+
     // Variable seedFolderPath contains sub seed folder name
     // seedFolderPath is the absolute path
     public static void readSpotBugsResultFile(String seedFolderPath, String reportPath) {
@@ -62,35 +50,35 @@ public class SpotBugs_Report implements Report {
         if(!reportFile.exists() || reportFile.length() == 0) {
             return;
         }
-        HashMap<String, SpotBugs_Report> path2report = new HashMap<>();
+        HashMap<String, Report> path2report = new HashMap<>();
         SAXReader saxReader = new SAXReader();
         try {
-            Document report = saxReader.read(reportFile);
-            Element root = report.getRootElement();
+            Document document = saxReader.read(reportFile);
+            Element root = document.getRootElement();
             List<Element> bugInstances = root.elements("BugInstance");
             for (Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for (Element sourceLine : sourceLines) {
-                    SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath, sourceLine, bugInstance.attribute("type").getText());
-                    String filepath = violation.getFilepath();
-                    if (path2report.containsKey(filepath)) {
-                        path2report.get(filepath).addViolation(violation);
+                    Violation violation = new SpotBugsViolation(sourceLine, bugInstance.attribute("type").getText());
+                    String filePath = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
+                    if (path2report.containsKey(filePath)) {
+                        path2report.get(filePath).addViolation(violation);
                     } else {
-                        SpotBugs_Report spotBugs_report = new SpotBugs_Report(filepath);
-                        spotBugs_report.addViolation(violation);
-                        path2report.put(filepath, spotBugs_report);
+                        Report report = new SpotBugsReport(filePath);
+                        report.addViolation(violation);
+                        path2report.put(filePath, report);
                     }
                 }
             }
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        for (SpotBugs_Report report : path2report.values()) {
+        for (Report report : path2report.values()) {
             if (!file2row.containsKey(report.getFilePath())) {
                 file2row.put(report.getFilePath(), new ArrayList<>());
                 file2bugs.put(report.getFilePath(), new HashMap<>());
             }
-            for (SpotBugs_Violation violation : report.getViolations()) {
+            for (Violation violation : report.getViolations()) {
                 file2row.get(report.getFilePath()).add(violation.getBeginLine());
                 HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilePath());
                 if (!bug2cnt.containsKey(violation.getBugType())) {
@@ -118,7 +106,7 @@ public class SpotBugs_Report implements Report {
         }
         file2row.put(seedPath, new ArrayList<>());
         file2bugs.put(seedPath, new HashMap<>());
-        SpotBugs_Report report = new SpotBugs_Report(seedPath);
+        Report report = new SpotBugsReport(seedPath);
         file2report.put(seedPath, report);
         SAXReader saxReader = new SAXReader();
         try {
@@ -128,8 +116,8 @@ public class SpotBugs_Report implements Report {
             for (Element bugInstance : bugInstances) {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for (Element sourceLine : sourceLines) {
-                    SpotBugs_Violation violation = new SpotBugs_Violation(seedFolderPath, sourceLine, bugInstance.attribute("type").getText());
-                    String filePath = violation.getFilepath();
+                    Violation violation = new SpotBugsViolation(sourceLine, bugInstance.attribute("type").getText());
+                    String filePath = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
                     if(!filePath.equals(seedPath)) {
                         System.out.println("Seed Path: " + seedPath);
                         System.out.println("File Path: " + filePath);
@@ -141,7 +129,7 @@ public class SpotBugs_Report implements Report {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        for (SpotBugs_Violation violation : report.getViolations()) {
+        for (Violation violation : report.getViolations()) {
             file2row.get(seedPath).add(violation.getBeginLine());
             HashMap<String, List<Integer>> bug2cnt = file2bugs.get(seedPath);
             if (!bug2cnt.containsKey(violation.getBugType())) {

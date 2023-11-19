@@ -17,14 +17,14 @@ import static edu.polyu.util.Utility.getFilePathsFromFolder;
  * Date: 2021/11/30 10:03
  */
 
-public class PMD_InvokeThread implements Runnable {
+public class PMDInvokeThread implements Runnable {
 
     private int iterDepth;
     private String seedFolderPath;
     private String seedFolderName;
     private List<String> ruleList;
 
-    public PMD_InvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
+    public PMDInvokeThread(int iterDepth, String seedFolderPath, String seedFolderName) {
         this.iterDepth = iterDepth;
         this.seedFolderPath = seedFolderPath;
         this.seedFolderName = seedFolderName;

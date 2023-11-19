@@ -13,30 +13,14 @@ import static edu.polyu.util.Utility.file2bugs;
 import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.util.Utility.file2row;
 
-public class CheckStyle_Report implements Report {
+public class CheckStyleReport extends Report {
 
-    private String filePath;
-    private List<CheckStyle_Violation> violations;
-
-    public CheckStyle_Report(String filePath) {
-        this.filePath = filePath;
-        this.violations = new ArrayList<>();
-    }
-
-    public void addViolation(CheckStyle_Violation violation) {
-        this.violations.add(violation);
-    }
-
-    public String getFilePath() {
-        return this.filePath;
-    }
-
-    public List<CheckStyle_Violation> getViolations() {
-        return this.violations;
+    public CheckStyleReport(String filePath) {
+        super(filePath);
     }
 
     public static void readCheckStyleResultFile(String reportPath) { // Actually, this is readSingleCheckStyleResultFile
-        HashMap<String, CheckStyle_Report> name2report = new HashMap<>();
+        HashMap<String, Report> name2report = new HashMap<>();
         File reportFile = new File(reportPath);
         if (!reportFile.exists()) {
             return;
@@ -80,35 +64,30 @@ public class CheckStyle_Report implements Report {
                 }
             }
             filepath = content.substring(0, index1);
-            int row = 0, col = -1;
+            int row = 0;
             try {
                 row = Integer.parseInt(content.substring(index1 + 1, index2));
-//                    if (index2 < content.length() - 1) {
-//                        col = Integer.parseInt(content.substring(index2 + 1, content.length() - 1));
-//                    }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            CheckStyle_Violation violation = new CheckStyle_Violation(filepath);
-            violation.setBeginLine(row);
             index1 = errorInstance.lastIndexOf('[');
             String bugType = errorInstance.substring(index1 + 1, errorInstance.length() - 1);
-            violation.setBugType(bugType);
+            Violation violation = new CheckStyleViolation(filepath, row, bugType);
             if (name2report.containsKey(filepath)) {
                 name2report.get(filepath).addViolation(violation);
             } else {
-                CheckStyle_Report newReport = new CheckStyle_Report(filepath);
+                Report newReport = new CheckStyleReport(filepath);
                 newReport.addViolation(violation);
                 name2report.put(filepath, newReport);
             }
         }
-        for (CheckStyle_Report report : name2report.values()) {
+        for (Report report : name2report.values()) {
             file2report.put(report.getFilePath(), report);
             if (!file2row.containsKey(report.getFilePath())) {
                 file2row.put(report.getFilePath(), new ArrayList<>());
                 file2bugs.put(report.getFilePath(), new HashMap<>());
             }
-            for (CheckStyle_Violation violation : report.getViolations()) {
+            for (Violation violation : report.getViolations()) {
                 file2row.get(report.getFilePath()).add(violation.getBeginLine());
                 HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilePath());
                 if (!bug2cnt.containsKey(violation.getBugType())) {

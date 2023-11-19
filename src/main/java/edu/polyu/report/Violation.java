@@ -5,11 +5,18 @@ package edu.polyu.report;
  * Author: RainyD4y
  * Date: 2022/7/28 21:25
  */
-public interface Violation {
+public abstract class Violation {
 
-    // Do not need filepath, filepath is saved in Report of Violation
-    String getBugType();
-    int getBeginLine();
+    protected String bugType;
+    protected int beginLine;
+
+    public String getBugType() {
+        return this.bugType;
+    }
+
+    public int getBeginLine() {
+        return this.beginLine;
+    }
 
 }
 

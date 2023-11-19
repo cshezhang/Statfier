@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.report.SpotBugs_Report.readSpotBugsResultFile;
+import static edu.polyu.report.SpotBugsReport.readSpotBugsResultFile;
 import static edu.polyu.util.Utility.DIV_SELECTION;
 import static edu.polyu.util.Utility.GUIDED_LOCATION;
 import static edu.polyu.util.Utility.NO_SELECTION;
@@ -22,7 +22,7 @@ import static edu.polyu.util.Utility.SPOTBUGS_PATH;
 import static edu.polyu.util.Utility.reg_sep;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
 
-public class SpotBugs_Exec {
+public class SpotBugsExec {
 
     public static void run(List<TypeWrapper> initWrappers) {
         // initWrapper: -> iter1 mutants -> transform -> compile -> detect -> iter2 mutants...

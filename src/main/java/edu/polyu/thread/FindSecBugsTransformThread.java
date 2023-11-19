@@ -11,17 +11,17 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.report.SpotBugs_Report.readSpotBugsResultFile;
+import static edu.polyu.report.SpotBugsReport.readSpotBugsResultFile;
 import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
 
-public class FindSecBugs_TransformThread implements Runnable {
+public class FindSecBugsTransformThread implements Runnable {
 
     private int currentDepth;
     private ArrayDeque<TypeWrapper> wrappers;
 
     // initWrappers contains different seedFolderPaths and seedFolderNames, so we can get them from wrappers
-    public FindSecBugs_TransformThread(List<TypeWrapper> initWrappers) {
+    public FindSecBugsTransformThread(List<TypeWrapper> initWrappers) {
         this.currentDepth = 0;
         this.wrappers = new ArrayDeque<>() {
             {

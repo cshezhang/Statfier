@@ -9,15 +9,13 @@ import java.io.File;
  * @Author: RainyD4y
  * @Date: 2021-10-30 15:08:30
  */
-public class FindSecBugs_Violation implements Violation {
+public class FindSecBugsViolation extends Violation {
 
-    private String filepath;
     private int beginLine;
     private int endLine;
     private String bugType;
 
-    public FindSecBugs_Violation(String seedFolderPath, Element sourceLine, String bugType) {
-        this.filepath = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
+    public FindSecBugsViolation(Element sourceLine, String bugType) {
         if(sourceLine.attribute("start") != null) {
             this.beginLine = Integer.parseInt(sourceLine.attribute("start").getText());
         } else {
@@ -31,10 +29,6 @@ public class FindSecBugs_Violation implements Violation {
         this.bugType = bugType; // Consider the category attribute of BugInstance element
     }
 
-    public String getFilepath() {
-        return this.filepath;
-    }
-
     public int getBeginLine() {
         return this.beginLine;
     }
@@ -45,7 +39,7 @@ public class FindSecBugs_Violation implements Violation {
 
     @Override
     public String toString() {
-        return this.filepath + ": [" + this.bugType + "] between [" + this.beginLine + ", " + this.endLine + "]";
+        return "[" + this.bugType + "] between [" + this.beginLine + ", " + this.endLine + "]";
     }
 
 }

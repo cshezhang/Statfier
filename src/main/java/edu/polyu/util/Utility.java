@@ -101,7 +101,7 @@ public class Utility {
     public final static boolean FINDSECBUGS_MUTATION = Boolean.parseBoolean(getProperty("FINDSECBUGS_MUTATION"));
     public final static boolean COMPILE = (SPOTBUGS_MUTATION || INFER_MUTATION || FINDSECBUGS_MUTATION) ? true : false;
 
-    public final static String SONARQUBE_PROJECT_KEY = getProperty("SONARQUBE_PROJECT_KEY");
+    public final static String SONARQUBE_PROJECT_NAME = getProperty("SONARQUBE_PROJECT_NAME");
 
     public final static String toolPath = getProperty("TOOL_PATH");
 
@@ -178,7 +178,6 @@ public class Utility {
             spotBugsJarStr.append(spotBugsJarList.get(i) + sp);
         }
         spotBugsJarStr.append(spotBugsJarList.get(0));
-
 
         inferJarStr.append("." + sp);
         for (int i = inferJarList.size() - 1; i >= 1; i--) {
@@ -632,7 +631,7 @@ public class Utility {
             curlCommands[0] = "curl";
             curlCommands[1] = "-u";
             curlCommands[2] = "admin:123456";
-            curlCommands[3] = "http://localhost:9000/api/ce/activity_status?component=" + SONARQUBE_PROJECT_KEY;
+            curlCommands[3] = "http://localhost:9000/api/ce/activity_status?component=" + SONARQUBE_PROJECT_NAME;
             String output = invokeCommandsByZTWithOutput(curlCommands);
             JSONObject root = new JSONObject(output);
             int pending = root.getInt("pending");

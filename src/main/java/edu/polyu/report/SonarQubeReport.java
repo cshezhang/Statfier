@@ -26,25 +26,21 @@ import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.util.Utility.file2row;
 import static edu.polyu.util.Utility.sep;
 
-public class SonarQube_Report implements Report {
+public class SonarQubeReport extends Report {
 
-    private String filePath;
-    private List<SonarQube_Violation> violations;
-
-    public SonarQube_Report(String filePath) {
-        this.filePath = filePath;
-        this.violations = new ArrayList<>();
+    public SonarQubeReport(String filePath) {
+        super(filePath);
     }
 
-    public void addViolation(SonarQube_Violation violation) {
+    public void addViolation(Violation violation) {
         this.violations.add(violation);
     }
 
-    public void addViolations(List<SonarQube_Violation> violations) {
+    public void addViolations(List<Violation> violations) {
         this.violations.addAll(violations);
     }
 
-    public List<SonarQube_Violation> getViolations() {
+    public List<Violation> getViolations() {
         return this.violations;
     }
 
@@ -57,23 +53,23 @@ public class SonarQube_Report implements Report {
         return "SQ Report: " + this.filePath + " Size: " + this.violations.size();
     }
 
-    public static void readSingleSonarQubeResultFile(String filePath, String jsonContent) {
+    public static Report readSingleResultFile(String filePath, String jsonContent) {
+        SonarQubeReport report = new SonarQubeReport(filePath);
         JSONObject root = new JSONObject(jsonContent);
         int total = root.getInt("total");
         if(total > 10000) {
             System.out.println("Exceed the warning limitation!");
-            return;
+            return report;
         }
         if (file2report.containsKey(filePath)) {
             System.out.println("Repeat process: " + filePath);
-            return;
+            return report;
         }
-        SonarQube_Report report = new SonarQube_Report(filePath);
         file2report.put(filePath, report);
         file2row.put(filePath, new ArrayList<>());
         file2bugs.put(filePath, new HashMap<>());
         if(total == 0) {
-            return;
+            return report;
         }
         JSONArray issues = root.getJSONArray("issues");
         for(int i = 0; i < issues.length(); i++) {
@@ -100,14 +96,14 @@ public class SonarQube_Report implements Report {
                     int endLine = textRange.getInt("endLine");
                     int startOffset = textRange.getInt("startOffset");
                     int endOffset = textRange.getInt("endOffset");
-                    SonarQube_Violation violation = new SonarQube_Violation(ruleName, startLine, endLine, startOffset, endOffset);
+                    SonarQubeViolation violation = new SonarQubeViolation(ruleName, startLine, endLine, startOffset, endOffset);
                     report.addViolation(violation);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        for (SonarQube_Violation violation : report.getViolations()) {
+        for (Violation violation : report.getViolations()) {
             file2row.get(filePath).add(violation.getBeginLine());
             HashMap<String, List<Integer>> bug2cnt = file2bugs.get(filePath);
             if (!bug2cnt.containsKey(violation.getBugType())) {
@@ -115,10 +111,11 @@ public class SonarQube_Report implements Report {
             }
             bug2cnt.get(violation.getBugType()).add(violation.getBeginLine());
         }
+        return report;
     }
 
     public static void readSonarQubeResultFile(String ruleName, String jsonContent) {
-        Map<String, SonarQube_Report> path2report = new HashMap<>();
+        Map<String, SonarQubeReport> path2report = new HashMap<>();
         JSONObject root = new JSONObject(jsonContent);
         int total = root.getInt("total");
         if(total > 10000) {
@@ -145,14 +142,14 @@ public class SonarQube_Report implements Report {
                     int endLine = textRange.getInt("endLine");
                     int startOffset = textRange.getInt("startOffset");
                     int endOffset = textRange.getInt("endOffset");
-                    SonarQube_Report report;
+                    SonarQubeReport report;
                     if (path2report.containsKey(filePath)) {
                         report = path2report.get(filePath);
                     } else {
-                        report = new SonarQube_Report(filePath);
+                        report = new SonarQubeReport(filePath);
                         path2report.put(filePath, report);
                     }
-                    SonarQube_Violation violation = new SonarQube_Violation(ruleName, startLine, endLine, startOffset, endOffset);
+                    SonarQubeViolation violation = new SonarQubeViolation(ruleName, startLine, endLine, startOffset, endOffset);
                     report.addViolation(violation);
                 }
             } catch (JSONException e) {
@@ -160,9 +157,9 @@ public class SonarQube_Report implements Report {
                 e.printStackTrace();
             }
         }
-        for (SonarQube_Report report : path2report.values()) {
+        for (SonarQubeReport report : path2report.values()) {
             if(file2report.containsKey(report.getFilePath())) {
-                SonarQube_Report r = (SonarQube_Report) file2report.get(report.getFilePath());
+                SonarQubeReport r = (SonarQubeReport) file2report.get(report.getFilePath());
                 r.addViolations(report.getViolations());
             } else {
                 file2report.put(report.getFilePath(), report);
@@ -171,7 +168,7 @@ public class SonarQube_Report implements Report {
                 file2row.put(report.getFilePath(), new ArrayList<>());
                 file2bugs.put(report.getFilePath(), new HashMap<>());
             }
-            for (SonarQube_Violation violation : report.getViolations()) {
+            for (Violation violation : report.getViolations()) {
                 file2row.get(report.getFilePath()).add(violation.getBeginLine());
                 HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilePath());
                 if (!bug2cnt.containsKey(violation.getBugType())) {
@@ -187,7 +184,7 @@ public class SonarQube_Report implements Report {
         if (DEBUG) {
             System.out.println("SonarQube Detection Result FileName: " + reportPath);
         }
-        HashMap<String, SonarQube_Report> name2report = new HashMap<>();
+        HashMap<String, SonarQubeReport> name2report = new HashMap<>();
 //        final String[] FILE_HEADER = {"severity", "updateDate", "comments",	"line", "author", "rule", "project", "effort", "message",
 //                "creationDate", "type",	"tags", "component", "flows", "scope", "textRange",	"debt", "key",	"hash", "status"};
         File reportFile = new File(reportPath);
@@ -257,24 +254,24 @@ public class SonarQube_Report implements Report {
                 filepath = EVALUATION_PATH + sep + file.substring(file.indexOf(":") + 1);
             }
             if (!name2report.containsKey(filepath)) {
-                SonarQube_Report report = new SonarQube_Report(filepath);
+                SonarQubeReport report = new SonarQubeReport(filepath);
                 name2report.put(filepath, report);
             }
-            SonarQube_Report report = name2report.get(filepath);
+            SonarQubeReport report = name2report.get(filepath);
             if (lineNumber.contains(".0")) {
                 lineNumber = lineNumber.substring(0, lineNumber.length() - 2);
             }
-//            SonarQube_Violation violation = new SonarQube_Violation(bugType, Integer.parseInt(lineNumber));
+//            SonarQubeViolation violation = new SonarQubeViolation(bugType, Integer.parseInt(lineNumber));
 //            report.addViolation(violation);
         }
 
-        for (SonarQube_Report report : name2report.values()) {
+        for (SonarQubeReport report : name2report.values()) {
             file2report.put(report.getFilePath(), report);
             if (!file2row.containsKey(report.getFilePath())) {
                 file2row.put(report.getFilePath(), new ArrayList<>());
                 file2bugs.put(report.getFilePath(), new HashMap<>());
             }
-            for (SonarQube_Violation violation : report.getViolations()) {
+            for (Violation violation : report.getViolations()) {
                 file2row.get(report.getFilePath()).add(violation.getBeginLine());
                 HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilePath());
                 if (!bug2cnt.containsKey(violation.getBugType())) {

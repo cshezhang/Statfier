@@ -11,12 +11,13 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
-import edu.polyu.report.CheckStyle_Report;
-import edu.polyu.report.FindSecBugs_Report;
-import edu.polyu.report.Infer_Report;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.SonarQube_Report;
-import edu.polyu.report.SpotBugs_Report;
+import edu.polyu.report.CheckStyleReport;
+import edu.polyu.report.FindSecBugsReport;
+import edu.polyu.report.InferReport;
+import edu.polyu.report.PMDReport;
+import edu.polyu.report.Report;
+import edu.polyu.report.SonarQubeReport;
+import edu.polyu.report.SpotBugsReport;
 import edu.polyu.thread.CheckStyle_InvokeThread;
 import edu.polyu.thread.FindSecBugs_InvokeThread;
 import edu.polyu.thread.Infer_InvokeThread;
@@ -26,6 +27,16 @@ import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
 import org.json.JSONObject;
 import org.zeroturnaround.exec.ProcessExecutor;
+
+import static edu.polyu.util.Utility.EVALUATION_PATH;
+import static edu.polyu.util.Utility.SONARQUBE_PROJECT_NAME;
+import static edu.polyu.util.Utility.SONARSCANNER_PATH;
+import static edu.polyu.util.Utility.getDirectFilenamesFromFolder;
+import static edu.polyu.util.Utility.getFilePathsFromFolder;
+import static edu.polyu.util.Utility.getFilenamesFromFolder;
+import static edu.polyu.util.Utility.sep;
+import static edu.polyu.util.Utility.waitTaskEnd;
+import static edu.polyu.util.Utility.writeLinesToFile;
 
 
 /**
@@ -194,7 +205,7 @@ public class Invoker {
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in CLASS_FOLDER
     public static void invokeSpotBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
-        if (seedFolderPath.endsWith(Utility.sep)) {
+        if (seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
         if (Utility.DEBUG) {
@@ -204,16 +215,16 @@ public class Invoker {
         for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
-            List<String> seedFileNames = Utility.getFilenamesFromFolder(subSeedFolderPath, false);
+            List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
             threadPool.submit(new SpotBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
         Utility.waitThreadPoolEnding(threadPool);
         // Here we want to invoke SpotBugs one time and get all analysis results
         // But it seems we cannot process identical class in different folders, this can lead to many FPs or FNs
         for (String subSeedFolderName : Utility.subSeedFolderNameList) {
-            List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
+            List<String> reportPaths = getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
             for (String reportPath : reportPaths) {
-                SpotBugs_Report.readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
+                SpotBugsReport.readSpotBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
         }
     }
@@ -231,11 +242,11 @@ public class Invoker {
         contents.add("sonar.cpd.exclusions=**/*");
         contents.add("sonar.sources=" + seedFolderPath);
         contents.add("sonar.java.source=11");
-        File dummyFolder = new File(seedFolderPath + Utility.sep + "dummy-binaries");
+        File dummyFolder = new File(seedFolderPath + sep + "dummy-binaries");
         if (!dummyFolder.exists()) {
             dummyFolder.mkdir();
         }
-        File dummyFile = new File(seedFolderPath + Utility.sep + "dummy-binaries" + Utility.sep + "dummy.txt");
+        File dummyFile = new File(seedFolderPath + sep + "dummy-binaries" + sep + "dummy.txt");
         if (!dummyFile.exists()) {
             try {
                 dummyFile.createNewFile();
@@ -247,7 +258,7 @@ public class Invoker {
         contents.add("sonar.java.test.binaries=" + dummyFolder.getAbsolutePath());
         File settingFile = new File(settingFilePath);
         if (!settingFile.exists()) {
-            Utility.writeLinesToFile(settingFilePath, contents);
+            writeLinesToFile(settingFilePath, contents);
         }
     }
 
@@ -273,60 +284,119 @@ public class Invoker {
         return invokeCommandsByZT(curlPostCommands);
     }
 
+    private static void runSonarQube() {
+        List<String> ruleNames = getDirectFilenamesFromFolder(EVALUATION_PATH + sep + "decompile", false);
+        String[] curlCommands = new String[4];
+        curlCommands[0] = "curl";
+        curlCommands[1] = "-u";
+        curlCommands[2] = "admin:123456";
+        for(int i = 0; i < ruleNames.size(); i++) {
+            String ruleName = ruleNames.get(i);
+            List<String> mutantNames = getDirectFilenamesFromFolder(EVALUATION_PATH + sep + "decompile" + sep + ruleName, false);
+            for(String mutantName : mutantNames) {
+                File dstFolder = new File(EVALUATION_PATH + sep + "decompile" + sep + ruleName + sep + mutantName);
+                List<String> dstFilePaths = getFilenamesFromFolder(dstFolder.getAbsolutePath(), true);
+                if(dstFilePaths.size() != 1) {
+                    continue;
+                }
+                File dstFile = new File(dstFilePaths.get(0));
+                File srcFile = new File(EVALUATION_PATH + sep + "mutants" + sep + ruleName + sep + mutantName + ".java");
+                deleteSonarQubeProject(SONARQUBE_PROJECT_NAME);
+                createSonarQubeProject(SONARQUBE_PROJECT_NAME);
+                String[] srcInvokeCommands = new String[3];
+                srcInvokeCommands[0] = "/bin/bash";
+                srcInvokeCommands[1] = "-c";
+                srcInvokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_NAME
+                        + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "mutants"
+                        + " -Dsonar.sources=" + srcFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
+                        + " -Dsonar.login=admin -Dsonar.password=123456";
+                boolean srcHasExec = invokeCommandsByZT(srcInvokeCommands);
+                if (srcHasExec) {
+                    waitTaskEnd();
+                } else {
+                    return;
+                }
+                curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME;
+                String srcOutput = invokeCommandsByZTWithOutput(curlCommands);
+                String mutantNameNoSuffix = dstFile.getName().substring(0, dstFile.getName().length() - 5);
+                writeLinesToFile(srcOutput, EVALUATION_PATH + sep + "results" + sep + mutantName + "_src.json");
+                deleteSonarQubeProject(SONARQUBE_PROJECT_NAME);
+                createSonarQubeProject(SONARQUBE_PROJECT_NAME);
+                String[] dstInvokeCommands = new String[3];
+                dstInvokeCommands[0] = "/bin/bash";
+                dstInvokeCommands[1] = "-c";
+                dstInvokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_NAME
+                        + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "decompile"
+                        + " -Dsonar.sources=" + dstFile.getAbsolutePath() + " -Dsonar.host.url=http://localhost:9000"
+                        + " -Dsonar.login=admin -Dsonar.password=123456";
+                boolean dstHasExec = invokeCommandsByZT(dstInvokeCommands);
+                if (dstHasExec) {
+                    waitTaskEnd();
+                } else {
+                    return;
+                }
+                curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME;
+                String dstOutput = invokeCommandsByZTWithOutput(curlCommands);
+                writeLinesToFile(dstOutput, EVALUATION_PATH + sep + "results" + sep + mutantNameNoSuffix + "_dst.json");
+                Report srcReport = SonarQubeReport.readSingleResultFile(srcFile.getAbsolutePath(), srcOutput);
+                Report dstReport = SonarQubeReport.readSingleResultFile(dstFile.getAbsolutePath(), dstOutput);
+                if (srcReport.getViolations().size() == dstReport.getViolations().size()) {
+                    continue;
+                }
+//                diffAnalysis(srcReport, dstReport, filepath2annotation.get(srcReport.getFilePath()));
+            }
+        }
+    }
+
     // First level process
     public static void invokeSonarQube(String seedFolderPath) {
         for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
-            String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
-            if (Utility.DEBUG) {
-                System.out.println("Seed path: " + subSeedFolderPath);
-            }
-            String newProjectName = "iter0_" + subSeedFolderName;
-            deleteSonarQubeProject(newProjectName);
-            boolean isCreated = createSonarQubeProject(newProjectName);
-            if (!isCreated) {
-                System.err.println("NewProjectName: " + newProjectName + " is not created!");
-                continue;
-            }
-            String settingPath = subSeedFolderPath + Utility.sep + "settings";
-            writeSettingFile(subSeedFolderPath, settingPath, newProjectName);
-            String[] invokeCommands = new String[3];
-            if (OSUtil.isWindows()) {
-                invokeCommands[0] = "cmd.exe";
-                invokeCommands[1] = "/c";
-            } else {
+            String subSeedFolderPath = seedFolderPath + sep + subSeedFolderName;
+            List<String> seedPaths = getFilenamesFromFolder(subSeedFolderPath, true);
+            for(String seedPath : seedPaths) {
+                if (Utility.DEBUG) {
+                    System.out.println("Seed path: " + subSeedFolderPath);
+                }
+                String newProjectName = "iter0_" + subSeedFolderName;
+                deleteSonarQubeProject(newProjectName);
+                if (!createSonarQubeProject(newProjectName)) {
+                    System.err.println("New ProjectName: " + newProjectName + " is not created!");
+                    continue;
+                }
+                String[] invokeCommands = new String[3];
                 invokeCommands[0] = "/bin/bash";
                 invokeCommands[1] = "-c";
-            }
-            invokeCommands[2] = Utility.SONARSCANNER_PATH + " -Dproject.settings=" + settingPath;
-            boolean hasExec = invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
-            if (hasExec) {
-                Utility.waitTaskEnd(newProjectName);
-            } else {
-                return;
-            }
-            List<String> ruleNames = new ArrayList<>(Utility.SonarQubeRuleNames);
-            String[] curlCommands = new String[4];
-            for (String ruleName : ruleNames) {
-                if (Utility.DEBUG) {
-                    System.out.println("Request rule: " + ruleName);
+                invokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_NAME
+                        + " -Dsonar.projectBaseDir=" + EVALUATION_PATH + sep + "decompile"
+                        + " -Dsonar.sources=" + seedPath + " -Dsonar.host.url=http://localhost:9000"
+                        + " -Dsonar.login=admin -Dsonar.password=123456";
+                boolean hasExec = invokeCommandsByZT(invokeCommands); // invoke SonarQube to detect target folder
+                if (hasExec) {
+                    waitTaskEnd(newProjectName);
+                } else {
+                    return;
                 }
-                curlCommands[0] = "curl";
-                curlCommands[1] = "-u";
-                curlCommands[2] = "admin:123456";
-                curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
-                String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
-                JSONObject root = new JSONObject(jsonContent);
-                int total = root.getInt("total");
-                int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
-                for (int p = 2; p <= count; p++) {
+                List<String> ruleNames = new ArrayList<>(Utility.SonarQubeRuleNames);
+                String[] curlCommands = new String[4];
+                for (String ruleName : ruleNames) {
                     curlCommands[0] = "curl";
                     curlCommands[1] = "-u";
                     curlCommands[2] = "admin:123456";
-                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
-                    jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                    SonarQube_Report.readSonarQubeResultFile(ruleName, jsonContent);
+                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
+                    String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
+                    SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
+                    JSONObject root = new JSONObject(jsonContent);
+                    int total = root.getInt("total");
+                    int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
+                    for (int p = 2; p <= count; p++) {
+                        curlCommands[0] = "curl";
+                        curlCommands[1] = "-u";
+                        curlCommands[2] = "admin:123456";
+                        curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
+                        jsonContent = invokeCommandsByZTWithOutput(curlCommands);
+                        SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
+                    }
                 }
             }
         }
@@ -339,10 +409,10 @@ public class Invoker {
         }
         Utility.waitThreadPoolEnding(threadPool);
         System.out.println("Infer Result Folder: " + Utility.REPORT_FOLDER.getAbsolutePath());
-        List<String> seedPaths = Utility.getFilenamesFromFolder(seedFolderPath, true);
+        List<String> seedPaths = getFilenamesFromFolder(seedFolderPath, true);
         for (String seedPath : seedPaths) {
             String reportPath = Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.Path2Last(seedPath) + File.separator + "report.json";
-            Infer_Report.readSingleInferResultFile(seedPath, reportPath);
+            InferReport.readSingleInferResultFile(seedPath, reportPath);
         }
     }
 
@@ -352,9 +422,9 @@ public class Invoker {
             threadPool.submit(new CheckStyle_InvokeThread(0, seedFolderPath, Utility.subSeedFolderNameList.get(i)));
         }
         Utility.waitThreadPoolEnding(threadPool);
-        List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath(), true);
+        List<String> reportPaths = getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath(), true);
         for (int i = 0; i < reportPaths.size(); i++) {
-            CheckStyle_Report.readCheckStyleResultFile(reportPaths.get(i));
+            CheckStyleReport.readCheckStyleResultFile(reportPaths.get(i));
         }
     }
 
@@ -366,7 +436,7 @@ public class Invoker {
             }
             Utility.waitThreadPoolEnding(threadPool);
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
-                PMD_Report.readPMDResultFile(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");
+                PMDReport.readPMDResultFile(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");
             }
         } else {
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
@@ -385,7 +455,7 @@ public class Invoker {
                 PMD.runPmd(pmdConfig);
             }
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
-                PMD_Report.readPMDResultFile(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");
+                PMDReport.readPMDResultFile(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");
             }
         }
     }
@@ -393,7 +463,7 @@ public class Invoker {
     // seedFolderName is seed folder name (last token of folderPath), like: SpotBugs_Seeds, iter1, iter2...
     // Generated class files are saved in CLASS_FOLDER
     public static void invokeFindSecBugs(String seedFolderPath) { // seedFolderPath is the java source code folder (seed path), like: /path/to/SingleTesting
-        if (seedFolderPath.endsWith(Utility.sep)) {
+        if (seedFolderPath.endsWith(sep)) {
             seedFolderPath = seedFolderPath.substring(0, seedFolderPath.length() - 1);
         }
         if (Utility.DEBUG) {
@@ -403,14 +473,14 @@ public class Invoker {
         for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
             String subSeedFolderName = Utility.subSeedFolderNameList.get(i);
             String subSeedFolderPath = seedFolderPath + File.separator + subSeedFolderName;
-            List<String> seedFileNames = Utility.getFilenamesFromFolder(subSeedFolderPath, false);
+            List<String> seedFileNames = getFilenamesFromFolder(subSeedFolderPath, false);
             threadPool.submit(new FindSecBugs_InvokeThread(subSeedFolderPath, subSeedFolderName, seedFileNames));
         }
         Utility.waitThreadPoolEnding(threadPool);
         for (String subSeedFolderName : Utility.subSeedFolderNameList) {
-            List<String> reportPaths = Utility.getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
+            List<String> reportPaths = getFilenamesFromFolder(Utility.REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName, true);
             for (String reportPath : reportPaths) {
-                FindSecBugs_Report.readFindSecBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
+                FindSecBugsReport.readFindSecBugsResultFile(seedFolderPath + File.separator + subSeedFolderName, reportPath);
             }
         }
     }

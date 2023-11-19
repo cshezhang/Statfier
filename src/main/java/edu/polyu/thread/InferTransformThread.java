@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.report.Infer_Report.readSingleInferResultFile;
+import static edu.polyu.report.InferReport.readSingleInferResultFile;
 import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.CLASS_FOLDER;
 import static edu.polyu.util.Utility.INFER_PATH;
@@ -20,7 +20,6 @@ import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.getFilenamesFromFolder;
 import static edu.polyu.util.Utility.inferJarStr;
 import static edu.polyu.util.Utility.REPORT_FOLDER;
-import static edu.polyu.transform.Transform.singleLevelExplorer;
 import static edu.polyu.util.Utility.sep;
 
 /**
@@ -28,13 +27,13 @@ import static edu.polyu.util.Utility.sep;
  * Author: RainyD4y
  * Date: 2022/2/4 1:23 PM
  */
-public class Infer_TransformThread extends Thread {
+public class InferTransformThread extends Thread {
 
     private int currentDepth;
     private String seedFolderName;
     private ArrayDeque<TypeWrapper> wrappers;
 
-    public Infer_TransformThread(List<TypeWrapper> initWrappers, String seedFolderName) {
+    public InferTransformThread(List<TypeWrapper> initWrappers, String seedFolderName) {
         this.currentDepth = 0;
         this.seedFolderName = seedFolderName;
         this.wrappers = new ArrayDeque<>() {

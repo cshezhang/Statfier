@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static edu.polyu.report.SonarQube_Report.readSonarQubeResultFile;
+import static edu.polyu.report.SonarQubeReport.readSonarQubeResultFile;
 import static edu.polyu.util.Utility.readFileByLine;
 
 /**

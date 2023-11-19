@@ -19,33 +19,17 @@ import static edu.polyu.util.Utility.file2row;
  * Author: RainyD4y
  * Date: 2021/9/23 7:30
  */
-public class PMD_Report implements Report {
+public class PMDReport extends Report {
 
-    private String filePath;
-    private List<PMD_Violation> violations;
-
-    public PMD_Report(String filePath) {
-        this.filePath = filePath;
-        this.violations = new ArrayList<>();
-    }
-
-    public void addViolation(PMD_Violation pmd_violation) {
-        this.violations.add(pmd_violation);
-    }
-
-    public String getFilePath() {
-        return this.filePath;
-    }
-
-    public List<PMD_Violation> getViolations() {
-        return this.violations;
+    public PMDReport(String filePath) {
+        super(filePath);
     }
 
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
         out.append("PMD_Report Path: " + this.filePath + "\n");
-        for(PMD_Violation pmd_violation : this.violations) {
+        for(Violation pmd_violation : this.violations) {
             out.append(pmd_violation.toString() + "\n");
         }
         return out.toString();
@@ -65,7 +49,7 @@ public class PMD_Report implements Report {
             System.err.println("Repeat Process ReportPath: " + reportPath);
             return;
         }
-        PMD_Report report = new PMD_Report(detectionPath);
+        Report report = new PMDReport(detectionPath);
         file2report.put(detectionPath, report);
         file2row.put(detectionPath, new ArrayList<>());
         file2bugs.put(detectionPath, new HashMap<>());
@@ -83,7 +67,7 @@ public class PMD_Report implements Report {
                 JsonNode violationNodes = reportNode.get("violations");
                 for (int j = 0; j < violationNodes.size(); j++) {
                     JsonNode violationNode = violationNodes.get(j);
-                    PMD_Violation violation = new PMD_Violation(violationNode);
+                    Violation violation = new PMDViolation(violationNode);
                     report.addViolation(violation);
                 }
             }
@@ -98,7 +82,7 @@ public class PMD_Report implements Report {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (PMD_Violation violation : report.getViolations()) {
+        for (Violation violation : report.getViolations()) {
             file2row.get(detectionPath).add(violation.beginLine);
             HashMap<String, List<Integer>> bug2cnt = file2bugs.get(detectionPath);
             if (!bug2cnt.containsKey(violation.getBugType())) {
@@ -109,7 +93,7 @@ public class PMD_Report implements Report {
     }
 
     public static void readPMDResultFile(final String reportPath) {
-        List<PMD_Report> pmd_reports = new ArrayList<>();
+        List<Report> reports = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
         File jsonFile = new File(reportPath);
         try {
@@ -117,14 +101,14 @@ public class PMD_Report implements Report {
             JsonNode reportNodes = rootNode.get("files");
             for (int i = 0; i < reportNodes.size(); i++) {
                 JsonNode reportNode = reportNodes.get(i);
-                PMD_Report newReport = new PMD_Report(reportNode.get("filename").asText());
+                Report report = new PMDReport(reportNode.get("filename").asText());
                 JsonNode violationNodes = reportNode.get("violations");
                 for (int j = 0; j < violationNodes.size(); j++) {
                     JsonNode violationNode = violationNodes.get(j);
-                    PMD_Violation violation = new PMD_Violation(violationNode);
-                    newReport.addViolation(violation);
+                    Violation violation = new PMDViolation(violationNode);
+                    report.addViolation(violation);
                 }
-                pmd_reports.add(newReport);
+                reports.add(report);
             }
             JsonNode processErrorNodes = rootNode.get("processingErrors");
             JsonNode configErrorNodes = rootNode.get("configurationErrors");
@@ -137,13 +121,13 @@ public class PMD_Report implements Report {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (PMD_Report report : pmd_reports) {
+        for (Report report : reports) {
             file2report.put(report.getFilePath(), report);
             if (!file2row.containsKey(report.getFilePath())) {
                 file2row.put(report.getFilePath(), new ArrayList<>());
                 file2bugs.put(report.getFilePath(), new HashMap<>());
             }
-            for (PMD_Violation violation : report.getViolations()) {
+            for (Violation violation : report.getViolations()) {
                 file2row.get(report.getFilePath()).add(violation.beginLine);
                 HashMap<String, List<Integer>> bug2cnt = file2bugs.get(report.getFilePath());
                 if (!bug2cnt.containsKey(violation.getBugType())) {

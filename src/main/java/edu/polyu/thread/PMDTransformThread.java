@@ -11,8 +11,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.polyu.report.PMD_Report.readPMDResultFile;
-import static edu.polyu.transform.Transform.singleLevelExplorer;
+import static edu.polyu.report.PMDReport.readPMDResultFile;
 import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.MUTANT_FOLDER;
@@ -24,7 +23,7 @@ import static edu.polyu.util.Utility.getFilePathsFromFolder;
  * Author: RainyD4y
  * Date: 2021/11/30 10:03
  */
-public class PMD_TransformThread implements Runnable {
+public class PMDTransformThread implements Runnable {
 
     private int currentDepth = 0;
     private String seedFolderName;
@@ -32,7 +31,7 @@ public class PMD_TransformThread implements Runnable {
     private String ruleType;
     private ArrayDeque<TypeWrapper> wrappers;
 
-    public PMD_TransformThread(List<TypeWrapper> initWrappers, String seedFolderName) {
+    public PMDTransformThread(List<TypeWrapper> initWrappers, String seedFolderName) {
         this.seedFolderName = seedFolderName;
         String[] tokens = seedFolderName.split("_");
         this.ruleCategory = tokens[0];

@@ -1,9 +1,10 @@
 package edu.polyu.transform;
 
 import edu.polyu.analysis.TypeWrapper;
-import edu.polyu.report.PMD_Report;
-import edu.polyu.report.PMD_Violation;
+import edu.polyu.report.PMDReport;
+import edu.polyu.report.PMDViolation;
 import edu.polyu.report.Report;
+import edu.polyu.report.Violation;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
@@ -24,9 +25,6 @@ import edu.polyu.util.Utility;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static edu.polyu.analysis.TypeWrapper.getChildrenNodes;
-
 
 /**
  * Description:
@@ -120,10 +118,11 @@ public class AddMethodCallToLiteral extends Transform {
             for (ASTNode targetNode : nodes) {
                 int col = cu.getColumnNumber(targetNode.getStartPosition()), row = cu.getLineNumber(targetNode.getStartPosition());
                 Report report = Utility.file2report.get(wrapper.getFilePath());
-                if (report instanceof PMD_Report) {
-                    PMD_Report pmd_report = (PMD_Report) report;
-                    List<PMD_Violation> violations = pmd_report.getViolations();
-                    for (PMD_Violation violation : violations) {
+                if (report instanceof PMDReport) {
+                    PMDReport pmdReport = (PMDReport) report;
+                    List<Violation> violations = pmdReport.getViolations();
+                    for (Violation tmp : violations) {
+                        PMDViolation violation = (PMDViolation) tmp;
                         if (violation.getBeginLine() == row) {
                             candidateNodes.add(targetNode);
                             if (col >= violation.getBeginCol() - 1 && col <= violation.getEndCol() + 1) {
