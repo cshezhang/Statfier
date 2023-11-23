@@ -6,58 +6,57 @@ import java.util.Arrays;
 
 public class CustomMessageDigest extends MessageDigest {
 
-    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+  private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-    protected CustomMessageDigest() {
-        super("WEAK");
+  protected CustomMessageDigest() {
+    super("WEAK");
+  }
+
+  @Override
+  protected void engineUpdate(byte input) {
+    buffer.write(input);
+  }
+
+  @Override
+  protected void engineUpdate(byte[] input, int offset, int len) {
+    try {
+      buffer.write(input);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    protected void engineUpdate(byte input) {
-        buffer.write(input);
-    }
+  @Override
+  protected byte[] engineDigest() {
+    byte[] content = buffer.toByteArray();
+    return Arrays.copyOf(content, 8);
+  }
 
-    @Override
-    protected void engineUpdate(byte[] input, int offset, int len) {
-        try {
-            buffer.write(input);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+  @Override
+  protected void engineReset() {
+    buffer.reset();
+  }
 
-    @Override
-    protected byte[] engineDigest() {
-        byte[] content = buffer.toByteArray();
-        return Arrays.copyOf(content, 8);
-    }
+  public static void main(String[] args) throws NoSuchAlgorithmException {
 
-    @Override
-    protected void engineReset() {
-        buffer.reset();
-    }
+    MessageDigest dig = new CustomMessageDigest();
+    dig.update("This is a test!".getBytes());
+    byte[] result = dig.digest();
+    printHex(result);
+  }
 
-
-    public static void main(String[] args) throws NoSuchAlgorithmException {
-
-        MessageDigest dig = new CustomMessageDigest();
-        dig.update("This is a test!".getBytes());
-        byte[] result = dig.digest();
-        printHex(result);
-    }
-
-    private static void printHex(byte[] bytes) {
-        System.out.println(HexUtil.toString(bytes));
-    }
+  private static void printHex(byte[] bytes) {
+    System.out.println(HexUtil.toString(bytes));
+  }
 }
 
 class HexUtil {
 
-    public static String toString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02X ", b));
-        }
-        return sb.toString();
+  public static String toString(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    for (byte b : bytes) {
+      sb.append(String.format("%02X ", b));
     }
+    return sb.toString();
+  }
 }

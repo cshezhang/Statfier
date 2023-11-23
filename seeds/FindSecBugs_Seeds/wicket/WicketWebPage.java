@@ -3,7 +3,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class WicketWebPage extends WebPage {
 
-    public WicketWebPage(PageParameters parameters) {
-        Long productId = parameters.getAsLong("id");
-    }
+  public WicketWebPage(PageParameters parameters) {
+    Long productId = parameters.getAsLong("id");
+  }
 }

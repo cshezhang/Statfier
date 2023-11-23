@@ -5,29 +5,29 @@ import java.util.Scanner;
 
 public class FileCacheData implements CacheData {
 
-    public String filePath;
-    public String value;
+  public String filePath;
+  public String value;
 
-    public FileCacheData(String filePath) {
-        this.filePath = filePath;
+  public FileCacheData(String filePath) {
+    this.filePath = filePath;
+  }
+
+  @Override
+  public void refresh() {
+
+    try {
+      value = readFile(filePath);
+    } catch (IOException e) {
     }
+  }
 
-    @Override
-    public void refresh() {
+  private String readFile(String filePath) throws FileNotFoundException {
+    Scanner scanner = new Scanner(new File(filePath));
+    return scanner.useDelimiter("\\A").next();
+  }
 
-        try {
-            value = readFile(filePath);
-        } catch (IOException e) {
-        }
-    }
-
-    private String readFile(String filePath) throws FileNotFoundException {
-        Scanner scanner = new Scanner( new File(filePath) );
-        return scanner.useDelimiter("\\A").next();
-    }
-
-    @Override
-    public String getValue() {
-        return value;
-    }
+  @Override
+  public String getValue() {
+    return value;
+  }
 }

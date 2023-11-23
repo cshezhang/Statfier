@@ -1,22 +1,12 @@
 public class SensitiveLogging {
 
-    public void log4j() {
+  public void log4j() {}
 
-    }
+  public void logback() {}
 
-    public void logback() {
+  public void slf4j() {}
 
-    }
+  public void commonLogging() {}
 
-    public void slf4j() {
-
-    }
-
-    public void commonLogging() {
-
-    }
-
-    public void javaUtilLogging() {
-
-    }
+  public void javaUtilLogging() {}
 }

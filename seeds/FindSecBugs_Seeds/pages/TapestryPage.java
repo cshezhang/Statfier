@@ -3,17 +3,16 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.corelib.components.Form;
 
 public class TapestryPage {
-    @Persist
-    protected String username;
+  @Persist protected String username;
 
-    protected String password;
+  protected String password;
 
-    protected Form loginForm;
+  protected Form loginForm;
 
-    @OnEvent(value = "validate", component = "loginForm")
-    void onValidateFromLoginForm() {
-        if (!("admin".equals(username) && "god".equals(password))) {
-            loginForm.recordError("Invalid user name or password.");
-        }
+  @OnEvent(value = "validate", component = "loginForm")
+  void onValidateFromLoginForm() {
+    if (!("admin".equals(username) && "god".equals(password))) {
+      loginForm.recordError("Invalid user name or password.");
     }
+  }
 }

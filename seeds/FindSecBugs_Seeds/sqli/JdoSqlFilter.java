@@ -2,82 +2,75 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 public class JdoSqlFilter {
 
-    private static final PersistenceManagerFactory pmfInstance =
-            JDOHelper.getPersistenceManagerFactory("transactions-optional");
+  private static final PersistenceManagerFactory pmfInstance =
+      JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
-    public static PersistenceManager getPM() {
-        return pmfInstance.getPersistenceManager();
-    }
+  public static PersistenceManager getPM() {
+    return pmfInstance.getPersistenceManager();
+  }
 
-    //Risky..
-    public void testJdoUnsafeFilter(String filterValue) {
-        PersistenceManager pm = getPM();
-        Query q = pm.newQuery(UserEntity.class);
-        q.setFilter("id == "+filterValue);
-    }
+  // Risky..
+  public void testJdoUnsafeFilter(String filterValue) {
+    PersistenceManager pm = getPM();
+    Query q = pm.newQuery(UserEntity.class);
+    q.setFilter("id == " + filterValue);
+  }
 
-    //OK!
-    public void testJdoSafeFilter(String filterValue) {
-        PersistenceManager pm = getPM();
-        Query q = pm.newQuery(UserEntity.class);
-        q.setFilter("id == 1");
-    }
+  // OK!
+  public void testJdoSafeFilter(String filterValue) {
+    PersistenceManager pm = getPM();
+    Query q = pm.newQuery(UserEntity.class);
+    q.setFilter("id == 1");
+  }
 
-    //OK!
-    public void testJdoSafeFilter2(String filterValue) {
-        PersistenceManager pm = getPM();
-        Query q = pm.newQuery(UserEntity.class);
-        q.setFilter("id == userId");
-        q.declareParameters("int userId");
+  // OK!
+  public void testJdoSafeFilter2(String filterValue) {
+    PersistenceManager pm = getPM();
+    Query q = pm.newQuery(UserEntity.class);
+    q.setFilter("id == userId");
+    q.declareParameters("int userId");
+  }
 
-    }
+  private static final String FIELD_TEST = "test";
 
+  // Risky..
+  public void testJdoUnsafeGrouping(String groupByField) {
+    PersistenceManager pm = getPM();
+    Query q = pm.newQuery(UserEntity.class);
+    q.setGrouping(groupByField);
+  }
 
-
-    private static final String FIELD_TEST = "test";
-
-    //Risky..
-    public void testJdoUnsafeGrouping(String groupByField) {
-        PersistenceManager pm = getPM();
-        Query q = pm.newQuery(UserEntity.class);
-        q.setGrouping(groupByField);
-    }
-
-    //OK!
-    public void testJdoSafeGrouping() {
-        PersistenceManager pm = getPM();
-        Query q = pm.newQuery(UserEntity.class);
-        q.setGrouping(FIELD_TEST);
-    }
-
-
+  // OK!
+  public void testJdoSafeGrouping() {
+    PersistenceManager pm = getPM();
+    Query q = pm.newQuery(UserEntity.class);
+    q.setGrouping(FIELD_TEST);
+  }
 }
 
 @Entity
 class UserEntity {
-    @Id
-    private Long id;
-    private String test;
+  @Id private Long id;
+  private String test;
 
-    public String getTest() {
-        return test;
-    }
+  public String getTest() {
+    return test;
+  }
 
-    public void setTest(String test) {
-        this.test = test;
-    }
+  public void setTest(String test) {
+    this.test = test;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 }

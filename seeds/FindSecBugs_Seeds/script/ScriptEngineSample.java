@@ -4,24 +4,22 @@ import javax.script.ScriptException;
 
 public class ScriptEngineSample {
 
+  public static void scripting(String userInput) throws ScriptException {
 
+    ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension("js");
 
-    public static void scripting(String userInput) throws ScriptException {
+    Object result = scriptEngine.eval("test=1;" + userInput);
+  }
 
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-        ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension("js");
+  // The potential injection will require manual review of the code flow but some false positive can
+  // be avoid.
+  public static void scriptingSafe() throws ScriptException {
 
-        Object result = scriptEngine.eval("test=1;" + userInput);
+    ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension("js");
 
-    }
-
-    //The potential injection will require manual review of the code flow but some false positive can be avoid.
-    public static void scriptingSafe() throws ScriptException {
-
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-        ScriptEngine scriptEngine = scriptEngineManager.getEngineByExtension("js");
-
-        String code = "var test=3;test=test*2;";
-        Object result = scriptEngine.eval(code);
-    }
+    String code = "var test=3;test=test*2;";
+    Object result = scriptEngine.eval(code);
+  }
 }

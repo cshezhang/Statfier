@@ -5,20 +5,19 @@ import android.webkit.WebView;
 
 public class WebViewJavascriptEnabledActivity extends Activity {
 
+  @Override
+  protected void onCreate(Bundle b) {
+    super.onCreate(b);
 
-    @Override
-    protected void onCreate(Bundle b) {
-        super.onCreate(b);
+    WebView myWebView = (WebView) findViewById(R.id.webView);
+    WebSettings webSettings = myWebView.getSettings();
+    webSettings.setJavaScriptEnabled(true);
 
-        WebView myWebView = (WebView) findViewById(R.id.webView);
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+    disableJavaScriptEnabled(webSettings);
+  }
 
-        disableJavaScriptEnabled(webSettings);
-    }
-
-    private void disableJavaScriptEnabled(WebSettings webSettings) {
-        //Should not rise an alert
-        webSettings.setJavaScriptEnabled(false);
-    }
+  private void disableJavaScriptEnabled(WebSettings webSettings) {
+    // Should not rise an alert
+    webSettings.setJavaScriptEnabled(false);
+  }
 }

@@ -1,85 +1,83 @@
+import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import javax.servlet.http.Cookie;
 
 public class BenchmarkTest00051 extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    doPost(request, response);
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    // some code
+    response.setContentType("text/html;charset=UTF-8");
+
+    SeparateClassRequest scr = new SeparateClassRequest(request);
+    String param = scr.getTheValue("BenchmarkTest00051");
+
+    String a1 = "";
+    String a2 = "";
+    String osName = System.getProperty("os.name");
+    if (osName.indexOf("Windows") != -1) {
+      a1 = "cmd.exe";
+      a2 = "/c";
+    } else {
+      a1 = "sh";
+      a2 = "-c";
     }
+    String[] args = {a1, a2, "echo " + param};
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // some code
-        response.setContentType("text/html;charset=UTF-8");
+    ProcessBuilder pb = new ProcessBuilder(args);
 
-
-        SeparateClassRequest scr = new SeparateClassRequest( request );
-        String param = scr.getTheValue("BenchmarkTest00051");
-
-
-        String a1 = "";
-        String a2 = "";
-        String osName = System.getProperty("os.name");
-        if (osName.indexOf("Windows") != -1) {
-            a1 = "cmd.exe";
-            a2 = "/c";
-        } else {
-            a1 = "sh";
-            a2 = "-c";
-        }
-        String[] args = {a1, a2, "echo " + param};
-
-        ProcessBuilder pb = new ProcessBuilder(args);
-
-        try {
-            Process p = pb.start();
-        } catch (IOException e) {
-            System.out.println("Problem executing cmdi - java.lang.ProcessBuilder(java.lang.String[]) Test Case");
-            throw new ServletException(e);
-        }
+    try {
+      Process p = pb.start();
+    } catch (IOException e) {
+      System.out.println(
+          "Problem executing cmdi - java.lang.ProcessBuilder(java.lang.String[]) Test Case");
+      throw new ServletException(e);
     }
+  }
 }
 
 class SeparateClassRequest {
-    private HttpServletRequest request;
+  private HttpServletRequest request;
 
+  public SeparateClassRequest(HttpServletRequest request) {
+    this.request = request;
+  }
 
-    public SeparateClassRequest( HttpServletRequest request ) {
-        this.request = request;
-    }
+  public String getTheParameter(String p) {
+    return request.getParameter(p);
+  }
 
-    public String getTheParameter(String p) {
-        return request.getParameter(p);
-    }
+  public String getTheCookie(String c) {
+    Cookie[] cookies = request.getCookies();
 
-    public String getTheCookie(String c) {
-        Cookie[] cookies = request.getCookies();
+    String value = "";
 
-        String value = "";
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(c)) {
-                    value = cookie.getValue();
-                    break;
-                }
-            }
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals(c)) {
+          value = cookie.getValue();
+          break;
         }
-
-        return value;
+      }
     }
 
-    // This method is a 'safe' source.
-    public String getTheValue(String p) {
-        return "bar";
-    }
+    return value;
+  }
+
+  // This method is a 'safe' source.
+  public String getTheValue(String p) {
+    return "bar";
+  }
 }
-

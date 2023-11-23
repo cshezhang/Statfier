@@ -4,8 +4,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class XssWicketExamplePage extends WebPage {
 
-    public XssWicketExamplePage(PageParameters pageParameters) {
+  public XssWicketExamplePage(PageParameters pageParameters) {
 
-        add(new Label("test").setEscapeModelStrings(false));
-    }
+    add(new Label("test").setEscapeModelStrings(false));
+  }
 }

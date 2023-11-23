@@ -1,6 +1,4 @@
-/**
- * Tapestry support plain POJO.
- */
+/** Tapestry support plain POJO. */
 public class Index {
-    protected String input;
+  protected String input;
 }

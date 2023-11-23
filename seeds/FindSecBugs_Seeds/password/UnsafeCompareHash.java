@@ -3,65 +3,67 @@ import java.util.Arrays;
 
 public abstract class UnsafeCompareHash {
 
-    public boolean unsafeLogin1(String username, String hash) {
+  public boolean unsafeLogin1(String username, String hash) {
 
-        if(hash.equals(getHash(username))) {
-            return true;
-        }
-
-        return false;
+    if (hash.equals(getHash(username))) {
+      return true;
     }
 
-    public boolean unsafeLogin2(String username, String hash) {
+    return false;
+  }
 
-        if(getHash(username).equals(hash)) {
-            return true;
-        }
+  public boolean unsafeLogin2(String username, String hash) {
 
-        return false;
+    if (getHash(username).equals(hash)) {
+      return true;
     }
 
-    public boolean unsafeLogin3(String username, byte[] md5) {
+    return false;
+  }
 
-        if(Arrays.equals(getHashBytes(username), md5)) {
-            return true;
-        }
+  public boolean unsafeLogin3(String username, byte[] md5) {
 
-        return false;
+    if (Arrays.equals(getHashBytes(username), md5)) {
+      return true;
     }
 
-    public boolean unsafeLogin4(String username, byte[] sha1) {
+    return false;
+  }
 
-        if(Arrays.equals(sha1, getHashBytes(username))) {
-            return true;
-        }
+  public boolean unsafeLogin4(String username, byte[] sha1) {
 
-        return false;
+    if (Arrays.equals(sha1, getHashBytes(username))) {
+      return true;
     }
 
-    public boolean safeLogin1(String username, byte[] hash) {
+    return false;
+  }
 
-        if(MessageDigest.isEqual(hash, getHash(username).getBytes())) {
-            return true;
-        }
+  public boolean safeLogin1(String username, byte[] hash) {
 
-        return false;
+    if (MessageDigest.isEqual(hash, getHash(username).getBytes())) {
+      return true;
     }
 
-    /**
-     * Function that contains the keyword Share or Shared should not be confused as SHA hash functions.
-     */
-    public boolean fpKeyword1(String sharedProperty, String info) {
+    return false;
+  }
 
-        if(sharedProperty.equals(info)) {
-            return true;
-        }
+  /**
+   * Function that contains the keyword Share or Shared should not be confused as SHA hash
+   * functions.
+   */
+  public boolean fpKeyword1(String sharedProperty, String info) {
 
-        return false;
+    if (sharedProperty.equals(info)) {
+      return true;
     }
 
-    public abstract String getHash(String username);
-    public abstract byte[] getHashBytes(String username);
-    public abstract byte[] getSharedProperty(String username);
+    return false;
+  }
 
+  public abstract String getHash(String username);
+
+  public abstract byte[] getHashBytes(String username);
+
+  public abstract byte[] getSharedProperty(String username);
 }

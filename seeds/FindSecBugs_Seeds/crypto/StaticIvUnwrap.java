@@ -4,19 +4,23 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class StaticIvUnwrap {
-    public Key extractSecretKey(
-        String keyEncryptionAlgorithmId,
-        byte[] keyEncryptionAlgorithmParameters,
-        String contentEncryptionAlgorithmId,
-        byte[] derivedKey,
-        byte[] encryptedContentEncryptionKey
-    ) throws Exception {
-        Cipher keyEncryptionCipher = Cipher.getInstance(keyEncryptionAlgorithmId);
+  public Key extractSecretKey(
+      String keyEncryptionAlgorithmId,
+      byte[] keyEncryptionAlgorithmParameters,
+      String contentEncryptionAlgorithmId,
+      byte[] derivedKey,
+      byte[] encryptedContentEncryptionKey)
+      throws Exception {
+    Cipher keyEncryptionCipher = Cipher.getInstance(keyEncryptionAlgorithmId);
 
-        IvParameterSpec ivSpec = new IvParameterSpec(keyEncryptionAlgorithmParameters);
+    IvParameterSpec ivSpec = new IvParameterSpec(keyEncryptionAlgorithmParameters);
 
-        keyEncryptionCipher.init(Cipher.UNWRAP_MODE, new SecretKeySpec(derivedKey, keyEncryptionCipher.getAlgorithm()), ivSpec);
+    keyEncryptionCipher.init(
+        Cipher.UNWRAP_MODE,
+        new SecretKeySpec(derivedKey, keyEncryptionCipher.getAlgorithm()),
+        ivSpec);
 
-        return keyEncryptionCipher.unwrap(encryptedContentEncryptionKey, contentEncryptionAlgorithmId, Cipher.SECRET_KEY);
-    }
+    return keyEncryptionCipher.unwrap(
+        encryptedContentEncryptionKey, contentEncryptionAlgorithmId, Cipher.SECRET_KEY);
+  }
 }

@@ -1,3 +1,5 @@
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -5,69 +7,74 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 public class HibernateSql {
 
-    public void testQueries(SessionFactory sessionFactory, String input) {
+  public void testQueries(SessionFactory sessionFactory, String input) {
 
-        Session session = sessionFactory.openSession();
+    Session session = sessionFactory.openSession();
 
-        Criteria criteria = session.createCriteria(UserEntity.class);
+    Criteria criteria = session.createCriteria(UserEntity.class);
 
-        //The following would need to be audited
+    // The following would need to be audited
 
-        criteria.add(Restrictions.sqlRestriction("test=1234" + input));
+    criteria.add(Restrictions.sqlRestriction("test=1234" + input));
 
-        session.createQuery("select t from UserEntity t where id = " + input);
+    session.createQuery("select t from UserEntity t where id = " + input);
 
-        session.createSQLQuery(String.format("select * from TestEntity where id = %s ", input));
+    session.createSQLQuery(String.format("select * from TestEntity where id = %s ", input));
 
-        //More sqlRestriction signatures
+    // More sqlRestriction signatures
 
-        criteria.add(Restrictions.sqlRestriction("param1  = ? and param2 = " + input,input, StandardBasicTypes.STRING));
-        criteria.add(Restrictions.sqlRestriction("param1  = ? and param2 = " + input,new String[] {input}, new Type[] {StandardBasicTypes.STRING}));
+    criteria.add(
+        Restrictions.sqlRestriction(
+            "param1  = ? and param2 = " + input, input, StandardBasicTypes.STRING));
+    criteria.add(
+        Restrictions.sqlRestriction(
+            "param1  = ? and param2 = " + input,
+            new String[] {input},
+            new Type[] {StandardBasicTypes.STRING}));
 
-        //OK nothing risky here..
+    // OK nothing risky here..
 
-        criteria.add(Restrictions.sqlRestriction("test=1234"));
+    criteria.add(Restrictions.sqlRestriction("test=1234"));
 
-        final String localSafe = "where id=1337";
+    final String localSafe = "where id=1337";
 
-        session.createQuery("select t from UserEntity t " + localSafe);
+    session.createQuery("select t from UserEntity t " + localSafe);
 
-        final String localSql = "select * from TestEntity " + localSafe;
+    final String localSql = "select * from TestEntity " + localSafe;
 
-        session.createSQLQuery(localSql);
+    session.createSQLQuery(localSql);
 
-        //More sqlRestriction signatures (with safe binding)
+    // More sqlRestriction signatures (with safe binding)
 
-        criteria.add(Restrictions.sqlRestriction("param1  = ?",input, StandardBasicTypes.STRING));
-        criteria.add(Restrictions.sqlRestriction("param1  = ? and param2 = ?", new String[] {input}, new Type[] {StandardBasicTypes.STRING}));
-
-    }
+    criteria.add(Restrictions.sqlRestriction("param1  = ?", input, StandardBasicTypes.STRING));
+    criteria.add(
+        Restrictions.sqlRestriction(
+            "param1  = ? and param2 = ?",
+            new String[] {input},
+            new Type[] {StandardBasicTypes.STRING}));
+  }
 }
 
 @Entity
 class UserEntity {
-    @Id
-    private Long id;
-    private String test;
+  @Id private Long id;
+  private String test;
 
-    public String getTest() {
-        return test;
-    }
+  public String getTest() {
+    return test;
+  }
 
-    public void setTest(String test) {
-        this.test = test;
-    }
+  public void setTest(String test) {
+    this.test = test;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 }

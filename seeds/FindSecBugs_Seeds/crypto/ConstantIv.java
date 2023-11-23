@@ -5,73 +5,75 @@ import javax.crypto.spec.IvParameterSpec;
 
 public class ConstantIv {
 
-    public static void encryptIvNotInitialize1(String message) throws Exception {
+  public static void encryptIvNotInitialize1(String message) throws Exception {
 
-        byte[] iv = new byte[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16}; //Oups. Static
+    byte[] iv = new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}; // Oups. Static
 
-        //IV
-        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+    // IV
+    IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
-        //Key
-        KeyGenerator generator = KeyGenerator.getInstance("AES");
-        generator.init(128);
-        SecretKey secretKey = generator.generateKey();
+    // Key
+    KeyGenerator generator = KeyGenerator.getInstance("AES");
+    generator.init(128);
+    SecretKey secretKey = generator.generateKey();
 
-        //Encrypt
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-        cipher.update(message.getBytes());
+    // Encrypt
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+    cipher.update(message.getBytes());
 
-        byte[] data = cipher.doFinal();
-        System.out.println(HexUtil.toString(data));
-    }
+    byte[] data = cipher.doFinal();
+    System.out.println(HexUtil.toString(data));
+  }
 
-    public static void encryptIvNotInitialize2(String message) throws Exception {
+  public static void encryptIvNotInitialize2(String message) throws Exception {
 
-        //IV
-        IvParameterSpec ivSpec = new IvParameterSpec(new byte[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16});  //Oups. Static
+    // IV
+    IvParameterSpec ivSpec =
+        new IvParameterSpec(
+            new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}); // Oups. Static
 
-        //Key
-        KeyGenerator generator = KeyGenerator.getInstance("AES");
-        generator.init(128);
-        SecretKey secretKey = generator.generateKey();
+    // Key
+    KeyGenerator generator = KeyGenerator.getInstance("AES");
+    generator.init(128);
+    SecretKey secretKey = generator.generateKey();
 
-        //Encrypt
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-        cipher.update(message.getBytes());
+    // Encrypt
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+    cipher.update(message.getBytes());
 
-        byte[] data = cipher.doFinal();
-        System.out.println(HexUtil.toString(data));
-    }
+    byte[] data = cipher.doFinal();
+    System.out.println(HexUtil.toString(data));
+  }
 
-    public static void encryptIvNotInitialize3(String message) throws Exception {
+  public static void encryptIvNotInitialize3(String message) throws Exception {
 
-        //IV
-        IvParameterSpec ivSpec = new IvParameterSpec(new byte[16]);  //Oups. All 0s
+    // IV
+    IvParameterSpec ivSpec = new IvParameterSpec(new byte[16]); // Oups. All 0s
 
-        //Key
-        KeyGenerator generator = KeyGenerator.getInstance("AES");
-        generator.init(128);
-        SecretKey secretKey = generator.generateKey();
+    // Key
+    KeyGenerator generator = KeyGenerator.getInstance("AES");
+    generator.init(128);
+    SecretKey secretKey = generator.generateKey();
 
-        //Encrypt
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-        cipher.update(message.getBytes());
+    // Encrypt
+    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+    cipher.update(message.getBytes());
 
-        byte[] data = cipher.doFinal();
-        System.out.println(HexUtil.toString(data));
-    }
+    byte[] data = cipher.doFinal();
+    System.out.println(HexUtil.toString(data));
+  }
 }
 
 class HexUtil {
 
-    public static String toString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02X ", b));
-        }
-        return sb.toString();
+  public static String toString(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    for (byte b : bytes) {
+      sb.append(String.format("%02X ", b));
     }
+    return sb.toString();
+  }
 }

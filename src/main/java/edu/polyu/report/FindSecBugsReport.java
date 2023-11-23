@@ -14,6 +14,7 @@ import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.file2bugs;
 import static edu.polyu.util.Utility.file2report;
 import static edu.polyu.util.Utility.file2row;
+import static edu.polyu.util.Utility.sep;
 
 /**
  * @Description:
@@ -39,6 +40,9 @@ public class FindSecBugsReport extends Report {
     // Variable seedFolderPath contains sub seed folder name
     // seedFolderPath is the absolute path
     public static void readFindSecBugsResultFile(String seedFolderPath, String reportPath) {
+        if(reportPath.contains("mutant_10")) {
+            int a = 10;
+        }
         if (DEBUG) {
             System.out.println("FindSecBugs Detection Result FileName: " + reportPath);
         }
@@ -56,7 +60,7 @@ public class FindSecBugsReport extends Report {
                 List<Element> sourceLines = bugInstance.elements("SourceLine");
                 for (Element sourceLine : sourceLines) {
                     Violation violation = new FindSecBugsViolation(sourceLine, bugInstance.attribute("type").getText());
-                    String filePath = seedFolderPath  + File.separator + sourceLine.attribute("sourcefile").getText();
+                    String filePath = seedFolderPath  + sep + sourceLine.attribute("sourcefile").getText();
                     if (path2report.containsKey(filePath)) {
                         path2report.get(filePath).addViolation(violation);
                     } else {

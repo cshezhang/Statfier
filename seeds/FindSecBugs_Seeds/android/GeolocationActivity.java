@@ -4,19 +4,21 @@ import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-public class GeolocationActivity  extends Activity {
+public class GeolocationActivity extends Activity {
 
-    WebView wv = null; //..
+  WebView wv = null; // ..
 
-    @Override
-    protected void onCreate(Bundle b) {
-        super.onCreate(b);
+  @Override
+  protected void onCreate(Bundle b) {
+    super.onCreate(b);
 
-        wv.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                callback.invoke(origin, true, false);
-            }
+    wv.setWebChromeClient(
+        new WebChromeClient() {
+          @Override
+          public void onGeolocationPermissionsShowPrompt(
+              String origin, GeolocationPermissions.Callback callback) {
+            callback.invoke(origin, true, false);
+          }
         });
-    }
+  }
 }

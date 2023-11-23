@@ -1,2 +1,1 @@
-public @interface Pattern {
-}
+public @interface Pattern {}
