@@ -378,7 +378,7 @@ public class Utility {
 
     public static boolean writeLinesToFile(String outputPath, String content) {
         try {
-            FileOutputStream fos = new FileOutputStream(new File(outputPath));
+            FileOutputStream fos = new FileOutputStream(outputPath);
             OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
             BufferedWriter bw = new BufferedWriter(osw);
             bw.write(content + "\n");
@@ -651,10 +651,9 @@ public class Utility {
         }
     }
 
-
-    // Designed for SonarQube
     public static void waitTaskEnd(String projectKey) {
         boolean start = false;
+        long startTime = System.currentTimeMillis();
         while (true) {
             String[] curlCommands = new String[4];
             curlCommands[0] = "curl";
@@ -663,7 +662,6 @@ public class Utility {
             curlCommands[3] = "http://localhost:9000/api/ce/activity_status?component=" + projectKey;
             String output = invokeCommandsByZTWithOutput(curlCommands);
             JSONObject root = new JSONObject(output);
-            // {"pending":0,"failing":0,"inProgress":0}
             int pending = root.getInt("pending");
             int failing = root.getInt("failing");
             int inProgress = root.getInt("inProgress");
@@ -676,6 +674,10 @@ public class Utility {
             if (failing > 0) {
                 System.err.println("Failed CE!");
                 System.exit(-1);
+            }
+            long duration = System.currentTimeMillis() - startTime;
+            if (duration > 1000 * 6) {
+                break;
             }
         }
     }

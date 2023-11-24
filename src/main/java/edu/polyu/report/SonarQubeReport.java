@@ -114,12 +114,12 @@ public class SonarQubeReport extends Report {
         return report;
     }
 
-    public static void readSonarQubeResultFile(String ruleName, String jsonContent) {
-        Map<String, SonarQubeReport> path2report = new HashMap<>();
+    public static void readSonarQubeResultFile(String filePath, String jsonContent) {
+        Map<String, Report> path2report = new HashMap<>();
         JSONObject root = new JSONObject(jsonContent);
         int total = root.getInt("total");
         if(total > 10000) {
-            System.err.println("Error in rule: " + ruleName);
+            System.err.println("Error in rule: " + filePath);
             return;
         }
         if(total == 0) {
@@ -129,27 +129,19 @@ public class SonarQubeReport extends Report {
         for(int i = 0; i < issues.length(); i++) {
             try {
                 JSONObject issue = (JSONObject) issues.get(i);
-                if(issue.has("component") && issue.has("textRange")) {
-                    String component = issue.getString("component");
-                    String filePath;
-                    if(component.startsWith("iter0")) {
-                        filePath = PROJECT_PATH + sep + component.split(":")[1];
-                    } else {
-                        filePath = EVALUATION_PATH + sep + component.split(":")[1];
-                    }
+                if(issue.has("rule") && issue.has("textRange")) {
+                    String ruleType = issue.getString("rule");
                     JSONObject textRange = (JSONObject) issue.get("textRange");
                     int startLine = textRange.getInt("startLine");
                     int endLine = textRange.getInt("endLine");
                     int startOffset = textRange.getInt("startOffset");
                     int endOffset = textRange.getInt("endOffset");
-                    SonarQubeReport report;
-                    if (path2report.containsKey(filePath)) {
-                        report = path2report.get(filePath);
-                    } else {
-                        report = new SonarQubeReport(filePath);
-                        path2report.put(filePath, report);
+                    if (!path2report.containsKey(filePath)) {
+                        Report newReport = new SonarQubeReport(filePath);
+                        path2report.put(filePath, newReport);
                     }
-                    SonarQubeViolation violation = new SonarQubeViolation(ruleName, startLine, endLine, startOffset, endOffset);
+                    Report report = path2report.get(filePath);
+                    SonarQubeViolation violation = new SonarQubeViolation(ruleType, startLine, endLine, startOffset, endOffset);
                     report.addViolation(violation);
                 }
             } catch (JSONException e) {
@@ -157,7 +149,7 @@ public class SonarQubeReport extends Report {
                 e.printStackTrace();
             }
         }
-        for (SonarQubeReport report : path2report.values()) {
+        for (Report report : path2report.values()) {
             if(file2report.containsKey(report.getFilePath())) {
                 SonarQubeReport r = (SonarQubeReport) file2report.get(report.getFilePath());
                 r.addViolations(report.getViolations());

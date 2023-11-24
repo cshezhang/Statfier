@@ -19,6 +19,8 @@ import static edu.polyu.util.Utility.FINDSECBUGS_PATH;
 import static edu.polyu.util.Utility.INFER_MUTATION;
 import static edu.polyu.util.Utility.INFER_PATH;
 import static edu.polyu.util.Utility.JAVAC_PATH;
+import static edu.polyu.util.Utility.Path2Last;
+import static edu.polyu.util.Utility.RESULT_FOLDER;
 import static edu.polyu.util.Utility.SEARCH_DEPTH;
 import static edu.polyu.util.Utility.DEBUG;
 import static edu.polyu.util.Utility.SEED_PATH;
@@ -356,7 +358,6 @@ public class Schedule {
             wrappers.add(wrapper);
         }
         System.out.println("All Initial Wrappers Size: " + wrappers.size());
-        int currentDepth = 0;
         String[] invokeCommands = new String[3];
         invokeCommands[0] = "/bin/bash";
         invokeCommands[1] = "-c";
@@ -367,53 +368,50 @@ public class Schedule {
         for (int iter = 1; iter <= SEARCH_DEPTH; iter++) {
             // Before invocation: wrappers includes type wrappers in iter
             // After invocation: wrappers includes type wrappers in iter + 1
-            Transform.singleLevelExplorer(wrappers, currentDepth++);
+            Transform.singleLevelExplorer(wrappers, iter);
             for (String subSeedFolderName : subSeedFolderNameList) {
                 String subSeedFolderPath = MUTANT_FOLDER + sep + "iter" + iter + sep + subSeedFolderName;
-                List<String> seedPaths = getFilenamesFromFolder(subSeedFolderPath, true);
-                for(String seedPath : seedPaths) {
+                File resultFolder = new File(REPORT_FOLDER.getAbsolutePath() + sep + subSeedFolderName);
+                if(!resultFolder.exists()) {
+                    resultFolder.mkdir();
+                }
+                List<String> mutantPaths = getFilenamesFromFolder(subSeedFolderPath, true);
+                for(String mutantPath : mutantPaths) {
                     if (DEBUG) {
-                        System.out.println("Seed path: " + subSeedFolderPath);
+                        System.out.println("Analyzed Mutant Path: " + mutantPath);
                     }
-                    String settingPath = subSeedFolderPath + sep + "settings";
-                    String newProjectName = "iter" + iter + "_" + subSeedFolderName;
-                    deleteSonarQubeProject(newProjectName);
-                    boolean isCreated = createSonarQubeProject(newProjectName);
+                    deleteSonarQubeProject(SONARQUBE_PROJECT_NAME);
+                    boolean isCreated = createSonarQubeProject(SONARQUBE_PROJECT_NAME);
                     if (!isCreated) {
-                        System.out.println("ProjectName: " + newProjectName + " is not created!");
-                        continue;
+                        System.out.println("ProjectName is not created!");
+                        System.out.println("Mutant is not Detected: " + mutantPath);
+                        System.exit(-1);
                     }
-                    writeSettingFile(subSeedFolderPath, settingPath, newProjectName);
                     invokeCommands[2] = SONARSCANNER_PATH + " -Dsonar.projectKey=" + SONARQUBE_PROJECT_NAME
-                            + " -Dsonar.projectBaseDir=" + SEED_PATH
-                            + " -Dsonar.sources=" + seedPath
+                            + " -Dsonar.projectBaseDir=" + MUTANT_FOLDER.getAbsolutePath()
+                            + " -Dsonar.sources=" + mutantPath
                             + " -Dsonar.host.url=http://localhost:9000"
                             + " -Dsonar.login=admin -Dsonar.password=123456";
                     boolean hasExec = invokeCommandsByZT(invokeCommands);
                     if (hasExec) {
-                        waitTaskEnd(newProjectName);
+                        waitTaskEnd(SONARQUBE_PROJECT_NAME);
                     } else {
                         return;
                     }
-                    for (String ruleName : SonarQubeRuleNames) {
-                        if (DEBUG) {
-                            System.out.println("Request rule: " + ruleName);
-                        }
-                        curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + newProjectName
-                                + "&rules=java:" + ruleName;
-                        String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                        SonarQubeReport.readSingleResultFile(ruleName, jsonContent);
-                        JSONObject root = new JSONObject(jsonContent);
-                        int total = root.getInt("total");
-                        int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
-                        for (int p = 2; p <= count; p++) {
-                            curlCommands[0] = "curl";
-                            curlCommands[1] = "-u";
-                            curlCommands[2] = "admin:123456";
-                            curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + newProjectName + "&rules=java:" + ruleName;
-                            jsonContent = invokeCommandsByZTWithOutput(curlCommands);
-                            SonarQubeReport.readSonarQubeResultFile(ruleName, jsonContent);
-                        }
+                    curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME;
+                    String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
+                    writeLinesToFile(resultFolder.getAbsolutePath() + sep + Path2Last(mutantPath) + ".json", jsonContent);
+                    SonarQubeReport.readSingleResultFile(mutantPath, jsonContent);
+                    JSONObject root = new JSONObject(jsonContent);
+                    int total = root.getInt("total");
+                    int count = total % 500 == 0 ? total / 500 : total / 500 + 1;
+                    for (int p = 2; p <= count; p++) {
+                        curlCommands[0] = "curl";
+                        curlCommands[1] = "-u";
+                        curlCommands[2] = "admin:123456";
+                        curlCommands[3] = "http://localhost:9000/api/issues/search?p=" + p + "&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME;
+                        jsonContent = invokeCommandsByZTWithOutput(curlCommands);
+                        SonarQubeReport.readSonarQubeResultFile(mutantPath, jsonContent);
                     }
                 }
             }

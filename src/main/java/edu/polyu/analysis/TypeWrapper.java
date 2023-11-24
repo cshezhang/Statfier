@@ -490,9 +490,6 @@ public class TypeWrapper {
     }
 
     public boolean isBuggy() {
-        if(this.filePath.contains("mutant_10.java")) {
-            int a = 10;
-        }
         boolean buggy = false;
         if(this.parentPath.equals("initSeed")) {
             return false;
