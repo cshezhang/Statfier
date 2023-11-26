@@ -401,7 +401,7 @@ public class Schedule {
                     curlCommands[3] = "http://localhost:9000/api/issues/search?p=1&ps=500&componentKeys=" + SONARQUBE_PROJECT_NAME;
                     String jsonContent = invokeCommandsByZTWithOutput(curlCommands);
                     writeLinesToFile(resultFolder.getAbsolutePath() + sep + Path2Last(mutantPath) + ".json", jsonContent);
-                    SonarQubeReport.readSingleResultFile(mutantPath, jsonContent);
+                    SonarQubeReport.readSonarQubeResultFile(mutantPath, jsonContent);
                     JSONObject root = new JSONObject(jsonContent);
                     int total = root.getInt("total");
                     int count = total % 500 == 0 ? total / 500 : total / 500 + 1;

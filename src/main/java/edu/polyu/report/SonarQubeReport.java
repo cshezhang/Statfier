@@ -53,6 +53,7 @@ public class SonarQubeReport extends Report {
         return "SQ Report: " + this.filePath + " Size: " + this.violations.size();
     }
 
+    @Deprecated
     public static Report readSingleResultFile(String filePath, String jsonContent) {
         SonarQubeReport report = new SonarQubeReport(filePath);
         JSONObject root = new JSONObject(jsonContent);
@@ -130,7 +131,10 @@ public class SonarQubeReport extends Report {
             try {
                 JSONObject issue = (JSONObject) issues.get(i);
                 if(issue.has("rule") && issue.has("textRange")) {
-                    String ruleType = issue.getString("rule");
+                    String ruleType = issue.getString("rule").strip();
+                    if(ruleType.startsWith("java:")) {
+                        ruleType = ruleType.substring(5);
+                    }
                     JSONObject textRange = (JSONObject) issue.get("textRange");
                     int startLine = textRange.getInt("startLine");
                     int endLine = textRange.getInt("endLine");
