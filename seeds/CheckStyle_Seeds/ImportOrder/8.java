@@ -1,0 +1,4 @@
+// violation
+
+public class InputEclipseStaticImportsOrder {}
+
