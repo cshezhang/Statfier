@@ -49,16 +49,16 @@ public class FindSecBugsTransformThread implements Runnable {
                 }
                 Invoker.compileJavaSourceFile(seedFolderPath, seedFileNameWithSuffix, CLASS_FOLDER.getAbsolutePath());
                 String reportPath = REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
-                String[] invokeCmds = new String[3];
+                String[] commands = new String[3];
                 if (OSUtil.isWindows()) {
-                    invokeCmds[0] = "cmd.exe";
-                    invokeCmds[1] = "/c";
+                    commands[0] = "cmd.exe";
+                    commands[1] = "/c";
                 } else {
-                    invokeCmds[0] = "/bin/bash";
-                    invokeCmds[1] = "-c";
+                    commands[0] = "/bin/bash";
+                    commands[1] = "-c";
                 }
-                invokeCmds[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + CLASS_FOLDER.getAbsolutePath();
-                boolean hasExec = Invoker.invokeCommandsByZT(invokeCmds);
+                commands[2] = FINDSECBUGS_PATH + " -xml -output " + reportPath + " " + CLASS_FOLDER.getAbsolutePath();
+                boolean hasExec = Invoker.invokeCommandsByZT(commands);
                 if (hasExec) {
                     String report_path = REPORT_FOLDER.getAbsolutePath() + File.separator + subSeedFolderName + File.separator + seedFileName + "_Result.xml";
                     readSpotBugsResultFile(wrapper.getFolderPath(), report_path);

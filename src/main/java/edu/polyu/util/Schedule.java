@@ -81,10 +81,7 @@ public class Schedule {
 
     // Implement singleton pattern
     private static final Schedule tester = new Schedule();
-
-    private Schedule() {
-    }
-
+    private Schedule() {}
     public static Schedule getInstance() {
         return tester;
     }
