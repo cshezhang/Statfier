@@ -1,9 +1,9 @@
 #!/bin/bash
 echo "Building process start..."
 
-JAR_PATH=/home/rainyd4y/projects/SAMutator/target/dependency
+JAR_PATH=/home/huaien/projects/SAMutator/target/dependency
 BIN_PATH=bin
-SRC_PATH=/home/rainyd4y/projects/SAMutator/src
+SRC_PATH=/home/huaien/projects/SAMutator/src
  
 # Path to the java file list
 SRC_FILE_LIST_PATH=src/sources.list
@@ -31,4 +31,4 @@ javac -encoding UTF-8  -d $BIN_PATH/ -cp $jarfile @$SRC_FILE_LIST_PATH
  
 #Add GC monitor, not suitable for production environment
 # /usr/bin/java -Xms40G -Xmx50G -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -verbose:gc -Xloggc:/tmp/gc.log -cp $BIN_PATH$jarfile edu.polyu.AutomatedTester &
-java -Xms16G -Xmx25G -cp $BIN_PATH$jarfile edu.polyu.AutomatedTester &
+java -Xms32G -Xmx160G -cp $BIN_PATH$jarfile edu.polyu.AutomatedTester &
