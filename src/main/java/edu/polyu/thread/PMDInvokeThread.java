@@ -1,7 +1,7 @@
 package edu.polyu.thread;
 
-import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
+import net.sourceforge.pmd.PmdAnalysis;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -39,19 +39,15 @@ public class PMDInvokeThread implements Runnable {
     // seedFolderPath can be java source file or a folder contains source files
     @Override
     public void run() {
-        PMDConfiguration pmdConfig = new PMDConfiguration();
-        pmdConfig.setInputPathList(getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
-        pmdConfig.setRuleSets(this.ruleList);
-        pmdConfig.setReportFormat("json");
-        pmdConfig.setReportFile(Paths.get(REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"));
-        pmdConfig.setIgnoreIncrementalAnalysis(true);
-//        String[] pmdConfig = {
-//                "-d", seedFolderPath  + File.separator + seedFolderName,
-//                "-R", this.ruleList.get(0),
-//                "-f", "json",
-//                "-r", REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"
-//        };
-        PMD.runPmd(pmdConfig);
+        PMDConfiguration config = new PMDConfiguration();
+        config.setInputPathList(getFilePathsFromFolder(seedFolderPath  + File.separator + seedFolderName));
+        config.setRuleSets(this.ruleList);
+        config.setReportFormat("json");
+        config.setReportFile(Paths.get(REPORT_FOLDER.getAbsolutePath()  + File.separator + "iter" + iterDepth + "_" + seedFolderName + "_Result.json"));
+        config.setIgnoreIncrementalAnalysis(true);
+        try (PmdAnalysis pmd = PmdAnalysis.create(config)) {
+            pmd.performAnalysis();
+        }
     }
 
 }

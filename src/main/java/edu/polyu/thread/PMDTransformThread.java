@@ -3,7 +3,7 @@ package edu.polyu.thread;
 import edu.polyu.analysis.TypeWrapper;
 import edu.polyu.transform.Transform;
 import net.sourceforge.pmd.PMDConfiguration;
-import net.sourceforge.pmd.PMD;
+import net.sourceforge.pmd.PmdAnalysis;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -69,7 +69,9 @@ public class PMDTransformThread implements Runnable {
             });
             pmdConfig.setReportFormat("json");
             pmdConfig.setReportFile(Paths.get(resultFilePath));
-            PMD.runPmd(pmdConfig); // detect mutants of level i
+            try (PmdAnalysis pmd = PmdAnalysis.create(pmdConfig)) {
+                pmd.performAnalysis();
+            }
             readPMDResultFile(resultFilePath);
             List<TypeWrapper> validWrappers = new ArrayList<>();
             while (!wrappers.isEmpty()) {

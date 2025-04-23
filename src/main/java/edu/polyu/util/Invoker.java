@@ -23,8 +23,8 @@ import edu.polyu.thread.FindSecBugsInvokeThread;
 import edu.polyu.thread.InferInvokeThread;
 import edu.polyu.thread.PMDInvokeThread;
 import edu.polyu.thread.SpotBugsInvokeThread;
-import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
+import net.sourceforge.pmd.PmdAnalysis;
 import org.json.JSONObject;
 import org.zeroturnaround.exec.ProcessExecutor;
 
@@ -394,7 +394,9 @@ public class Invoker {
                 pmdConfig.setReportFormat("json");
                 pmdConfig.setReportFile(Paths.get(REPORT_FOLDER.getAbsolutePath() + File.separator + "iter" + 0 + "_" + seedFolderName + "_Result.json"));
                 pmdConfig.setIgnoreIncrementalAnalysis(true);
-                PMD.runPmd(pmdConfig);
+                try (PmdAnalysis pmd = PmdAnalysis.create(pmdConfig)) {
+                    pmd.performAnalysis();
+                }
             }
             for (int i = 0; i < Utility.subSeedFolderNameList.size(); i++) {
                 PMDReport.readPMDResultFile(REPORT_FOLDER.getAbsolutePath() + File.separator + "iter0_" + Utility.subSeedFolderNameList.get(i) + "_Result.json");

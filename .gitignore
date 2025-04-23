@@ -8,6 +8,7 @@ config.properties
 .settings/
 target/
 tools/
+reports/
 src/sources.list
 .project
 .classpath

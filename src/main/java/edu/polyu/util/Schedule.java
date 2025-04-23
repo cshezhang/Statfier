@@ -68,8 +68,8 @@ import edu.polyu.report.PMDReport;
 import edu.polyu.report.SonarQubeReport;
 import edu.polyu.report.SpotBugsReport;
 import edu.polyu.transform.Transform;
-import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
+import net.sourceforge.pmd.PmdAnalysis;
 import org.json.JSONObject;
 
 /**
@@ -150,7 +150,10 @@ public class Schedule {
                     pmdConfig.setReportFormat("json");
                     pmdConfig.setReportFile(Paths.get(resultFilePath));
                     pmdConfig.setIgnoreIncrementalAnalysis(true);
-                    PMD.runPmd(pmdConfig); // detect mutants of level i
+                    // detect mutants of level i
+                    try (PmdAnalysis pmd = PmdAnalysis.create(pmdConfig)) {
+                        pmd.performAnalysis();
+                    }
                     PMDReport.readPMDResultFile(resultFilePath);
                     List<TypeWrapper> validWrappers = new ArrayList<>();
                     for (int i = 0; i < newWrappers.size(); i++) {

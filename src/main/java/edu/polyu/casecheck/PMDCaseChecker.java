@@ -1,7 +1,7 @@
 package edu.polyu.casecheck;
 
-import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
+import net.sourceforge.pmd.PmdAnalysis;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
@@ -122,13 +122,9 @@ public class PMDCaseChecker {
         pmdConfig.setReportFormat("json");
         pmdConfig.setReportFile(Paths.get(resultFilePath));
         pmdConfig.setIgnoreIncrementalAnalysis(true);
-//        String[] pmdConfig = {
-//                "-d", seedFolderPath  + File.separator + fileNameWithSuffix,
-//                "-R", "category/java/" + ruleCategory + ".xml/" + ruleType,
-//                "-f", "json",
-//                "-r", resultFilePath
-//        };
-        PMD.runPmd(pmdConfig);
+        try (PmdAnalysis pmd = PmdAnalysis.create(pmdConfig)) {
+            pmd.performAnalysis();
+        }
         int bugCounter = calculatePMDResultFile(resultFilePath);
         return String.format("%d", bugCounter);
     }

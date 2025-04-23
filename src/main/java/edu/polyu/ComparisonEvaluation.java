@@ -3,11 +3,11 @@ package edu.polyu;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.PMDConfiguration;
 import edu.polyu.util.Invoker;
 import edu.polyu.util.Pair;
 import edu.polyu.util.Utility;
+import net.sourceforge.pmd.PmdAnalysis;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -94,7 +94,9 @@ public class ComparisonEvaluation {
         seedConfig.setReportFormat("json");
         seedConfig.setReportFile(Paths.get(seedReportPath));
         seedConfig.setIgnoreIncrementalAnalysis(true);
-        PMD.runPmd(seedConfig);
+        try (PmdAnalysis pmd = PmdAnalysis.create(seedConfig)) {
+            pmd.performAnalysis();
+        }
         readSinglePMDResultFile(seedReportPath, seedPath);
         Map<String, List<Integer>> source_bug2lines = file2bugs.get(seedPath);
         int seedSum = 0;
@@ -114,13 +116,9 @@ public class ComparisonEvaluation {
             mutantConfig.setReportFormat("json");
             mutantConfig.setReportFile(Paths.get(mutantReportPath));
             mutantConfig.setIgnoreIncrementalAnalysis(true);
-//            String[] mutantConfig = {
-//                    "-d", mutantPath,
-//                    "-R", "category/java/" + tokens[0] + ".xml/" + tokens[1],
-//                    "-f", "json",
-//                    "-r", mutantReportPath
-//            };
-            PMD.runPmd(mutantConfig);
+            try (PmdAnalysis pmd = PmdAnalysis.create(mutantConfig)) {
+                pmd.performAnalysis();
+            }
             readSinglePMDResultFile(mutantReportPath, mutantPath);
             int mutantSum = 0;
             if (!file2bugs.containsKey(mutantPath)) {
